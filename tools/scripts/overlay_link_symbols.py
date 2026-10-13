@@ -20,6 +20,14 @@ Anything left over (a main address that main does not name, a name main does
 not define, an address in somebody else's window that the ABI file does not
 list) fails the build: give main the symbol, rename the reference to the name
 main defines, or list the address in the ABI file with its owner.
+
+Addresses in the ABI file and the catalogues are retail addresses (the ABI
+file writes them as `OVERLAY_WINDOW_x + offset`). Every one inside the
+overlay window block is emitted as its window plus offset, and the window
+symbols are taken from the built main.elf, which places the block after
+main, the field engine and the boot work area
+(linkers/USA/overlay_windows.txt). When main grows, the whole block and
+every overlay address in it move by the same amount.
 """
 
 from __future__ import annotations
@@ -30,6 +38,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from tools.scripts import overlay_windows  # noqa: E402
 
 NM = "mipsel-none-elf-nm"
 OBJDUMP = "mipsel-none-elf-objdump"
@@ -46,7 +56,8 @@ SYMBOL_ADDR_RE = re.compile(
     r")$"
 )
 ASSIGN_RE = re.compile(
-    r"^\s*(?://\s*provide:\s*)?(?:PROVIDE\s*\(\s*)?([A-Za-z_.$][\w.$]*)\s*=\s*(0x[0-9A-Fa-f]+)\s*\)?\s*;")
+    r"^\s*(?://\s*provide:\s*)?(?:PROVIDE\s*\(\s*)?([A-Za-z_.$][\w.$]*)\s*=\s*"
+    r"(0x[0-9A-Fa-f]+|OVERLAY_WINDOW_\w+\s*\+\s*0x[0-9A-Fa-f]+)\s*\)?\s*;")
 SEGMENT_RE = re.compile(
     r"^  - name: \S+\n(?:    .*\n)*?    start: (0x[0-9A-Fa-f]+)\n(?:    .*\n)*?    vram: (0x[0-9A-Fa-f]+)",
     re.M)
@@ -85,16 +96,26 @@ def linked_objects(ld_script: Path, build_dir: Path) -> list[Path]:
     return sorted({Path(path) for path in found})
 
 
-def read_assignments(path: Path) -> dict[str, int]:
-    """name -> address from a symbol file or linker script (first wins)."""
+def read_assignments(path: Path, table: overlay_windows.WindowTable | None = None) -> dict[str, int]:
+    """name -> retail address from a symbol file or linker script (first
+    wins); `OVERLAY_WINDOW_x + offset` needs the window TABLE."""
     found: dict[str, int] = {}
     if not path.exists():
         return found
     text = re.sub(r"/\*.*?\*/", "", path.read_text(), flags=re.S)
     for line in text.splitlines():
         match = ASSIGN_RE.match(line)
-        if match:
-            found.setdefault(match.group(1), int(match.group(2), 16))
+        if not match:
+            continue
+        rhs = match.group(2)
+        if rhs.startswith("0x"):
+            value = int(rhs, 16)
+        else:
+            value = table.evaluate(rhs) if table else None
+            if value is None:
+                raise SystemExit(f"{path}: {match.group(1)} = {rhs}: not a window of "
+                                 f"{overlay_windows.TABLE.name}")
+        found.setdefault(match.group(1), value)
     return found
 
 
@@ -161,6 +182,10 @@ def main() -> int:
     parser.add_argument("--main-elf", type=Path, required=True)
     parser.add_argument("--abi", type=Path, required=True,
                         help="loader and cross-overlay ABI addresses")
+    parser.add_argument("--windows", type=Path, default=overlay_windows.TABLE,
+                        help="the overlay window table")
+    parser.add_argument("--main-config", type=Path, default=overlay_windows.MAIN_CONFIG,
+                        help="main's splat config (the block's retail address)")
     parser.add_argument("--catalogue", type=Path, action="append", default=[],
                         help="address catalogue for the overlay's own window "
                              "(splat auto files, the overlay symbol file)")
@@ -179,13 +204,21 @@ def main() -> int:
         if not args.pin_defined:
             defined.update(defined_symbols(obj))
 
-    abi = read_assignments(args.abi)
+    table = overlay_windows.load(args.windows, args.main_config)
+    abi = read_assignments(args.abi, table)
     main_syms = main_symbols(args.main_elf)
+    missing_windows = [w for w in (overlay_windows.BASE_SYMBOL, *table.symbols) if w not in main_syms]
+    if missing_windows:
+        sys.exit(f"{args.main_elf} does not define {', '.join(missing_windows)}: "
+                 "rebuild main (make split build)")
+    # main.elf places the block; the configs and catalogues hold retail addresses.
+    delta = main_syms[overlay_windows.BASE_SYMBOL] - table.retail_base
     own = config_windows(args.config)
     every_window = [w for cfg in sorted(args.configs.glob("*.yaml")) for w in config_windows(cfg)]
+    main_windows = [(lo + delta, hi + delta) for lo, hi in every_window]
     catalogue: dict[str, int] = {}
     for path in args.catalogue:
-        for name, addr in read_assignments(path).items():
+        for name, addr in read_assignments(path, table).items():
             catalogue.setdefault(name, addr)
 
     from_abi, from_main, from_own, missing = [], [], [], []
@@ -194,7 +227,7 @@ def main() -> int:
             from_abi.append((symbol, abi[symbol]))
             continue
         addr = main_syms.get(symbol)
-        if addr is not None and not inside(addr, every_window):
+        if addr is not None and not inside(addr, main_windows):
             from_main.append((symbol, addr))
             continue
         addr = symbol_address(symbol)
@@ -214,13 +247,20 @@ def main() -> int:
                   f"symbol nor in {args.abi}", file=sys.stderr)
         return 1
 
+    def value(addr: int) -> str:
+        """A retail address: window plus offset inside the block, else literal."""
+        return table.expression(addr) if table.contains(addr) else f"0x{addr:08X}"
+
     lines = ["/* Generated by tools/scripts/overlay_link_symbols.py. */"]
+    lines.append("/* The overlay window block, placed by the built main executable "
+                 "(linkers/USA/overlay_windows.txt). */")
+    lines += [f"{name} = 0x{main_syms[name]:08X};" for name in table.symbols]
     lines.append("/* From the built main executable. */")
     lines += [f"{name} = 0x{addr:08X};" for name, addr in from_main]
     lines.append("/* Loader and cross-overlay ABI (linkers/USA/overlay_abi.txt). */")
-    lines += [f"{name} = 0x{addr:08X};" for name, addr in from_abi]
+    lines += [f"{name} = {value(addr)};" for name, addr in from_abi]
     lines.append("/* The overlay's own window, hardware and kernel. */")
-    lines += [f"{name} = 0x{addr:08X};" for name, addr in from_own]
+    lines += [f"{name} = {value(addr)};" for name, addr in from_own]
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(lines) + "\n")
     return 0

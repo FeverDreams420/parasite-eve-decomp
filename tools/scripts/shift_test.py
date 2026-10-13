@@ -19,11 +19,14 @@ the same content in the shifted image (address + PAD):
 
 Sections placed at a fixed VMA in the linker script cannot follow the shift.
 The test first links with the script unchanged to show which sections pin the
-layout, then rebases those sections (and `_gp`) by PAD in the scratch copy so
-the comparison can run over the whole image. The overlay window block is
-fixed on purpose (a disc ABI, ABI_SECTIONS): it is reported as an anchor with
-the room main has before it (`overlay_windows_HEADROOM`), and the unchanged
-script is expected to fail when PAD exceeds that room.
+layout (none: the overlay window block follows the boot work area since it
+floats), then rebases any such sections (and `_gp`) by PAD in the scratch
+copy so the comparison can run over the whole image. The room left before
+the image reaches the initial stack (`PSX_EXE_HEADROOM`) is reported; the
+unchanged script is expected to fail when PAD exceeds it.
+
+The overlays are not relinked here; tools/scripts/shift_full_test.py does
+that and compares every retail and shifted image.
 """
 from __future__ import annotations
 
@@ -47,15 +50,13 @@ LD = tool("mipsel-none-elf-ld")
 OBJCOPY = tool("mipsel-none-elf-objcopy")
 FIXED_VMA_RE = re.compile(r"^(\s*)(\.[\w.]+)\s+(0x[0-9A-Fa-f]+)(\s*(?:\(NOLOAD\))?\s*:)", re.M)
 GP_RE = re.compile(r"^(\s*_gp\s*=\s*)(0x[0-9A-Fa-f]+)(\s*;)", re.M)
-# Fixed on purpose: the overlays in PE.IMG are linked for these addresses
-# (configs/USA/main.yaml, tools/scripts/ld_postpass.py).
-ABI_SECTIONS = (".overlay_windows",)
+HEADROOM_SYMBOL = "PSX_EXE_HEADROOM"  # room before the initial stack (ld_postpass.py)
 
 
 def pad_script(text: str, pad: int, rebase: bool) -> tuple[str, list[str]]:
     """Insert PAD at the start of .main; optionally rebase fixed VMAs and _gp.
 
-    The returned list names the fixed placements, ABI anchors included."""
+    The returned list names the fixed placements."""
     marker = re.search(r"^(\s*\.main\s+0x[0-9A-Fa-f]+\s*:[^\n]*\n\s*\{\n\s*FILL\([^)]*\);\n)", text, re.M)
     if not marker:
         raise SystemExit("could not find the start of .main in the linker script")
@@ -233,12 +234,6 @@ HIDDEN = ("pinned_symbol_reference", "gprel_to_pinned", "literal_data_word", "li
           "relocated_unchanged_other")
 
 
-def split_anchors(placements: list[str]) -> tuple[list[str], list[str]]:
-    """(fixed placements that should not be fixed, ABI anchors)."""
-    anchored = [p for p in placements if p.split(" @ ")[0] in ABI_SECTIONS]
-    return [p for p in placements if p not in anchored], anchored
-
-
 def symbol_value(elf_path: Path, name: str) -> int | None:
     from elftools.elf.elffile import ELFFile
 
@@ -250,9 +245,8 @@ def symbol_value(elf_path: Path, name: str) -> int | None:
 @dataclass
 class Measurement:
     base_identical: bool
-    pinned: list[str]  # fixed placements other than the ABI anchors
-    anchored: list[str]  # ABI_SECTIONS placements
-    headroom: int | None  # room before the first ABI anchor in the base link
+    pinned: list[str]  # fixed placements in the linker script
+    headroom: int | None  # room before the initial stack in the base link
     plain_errors: list[str] | None  # None when the unchanged script links
     shifted_error: str | None
     counts: Counter
@@ -277,9 +271,8 @@ def measure(pad: int, scratch: Path) -> Measurement:
     same = (scratch / "base.exe").read_bytes() == retail
 
     # 1. shift with the layout as written: which sections pin it?
-    plain, placements = pad_script(text, pad, rebase=False)
-    pinned, anchored = split_anchors(placements)
-    headroom = symbol_value(base_elf, "overlay_windows_HEADROOM")
+    plain, pinned = pad_script(text, pad, rebase=False)
+    headroom = symbol_value(base_elf, HEADROOM_SYMBOL)
     (scratch / "plain.ld").write_text(plain)
     res = link(scratch / "plain.ld", scratch / "plain.elf", extra)
     plain_errors = None
@@ -292,26 +285,25 @@ def measure(pad: int, scratch: Path) -> Measurement:
     (scratch / "shifted.ld").write_text(rebased)
     res = link(scratch / "shifted.ld", scratch / "shifted.elf", extra)
     if res.returncode:
-        return Measurement(same, pinned, anchored, headroom, plain_errors,
+        return Measurement(same, pinned, headroom, plain_errors,
                            "\n".join(res.stderr.splitlines()[:20]), Counter(), {})
     base = load_image(base_elf)
     shifted = load_image(scratch / "shifted.elf")
     layout = Layout(parse_map_sections((scratch / "base.map").read_text()))
     counts, findings = compare(base, shifted, pad, layout)
-    return Measurement(same, pinned, anchored, headroom, plain_errors, None, counts, findings)
+    return Measurement(same, pinned, headroom, plain_errors, None, counts, findings)
 
 
 def run(pad: int, scratch: Path, verbose: int) -> int:
     m = measure(pad, scratch)
     print(f"base relink identical to build/USA/main.exe: {m.base_identical}")
     print(f"fixed placements in the script: {', '.join(m.pinned) or 'none'}")
-    if m.anchored:
-        room = "unknown" if m.headroom is None else f"0x{m.headroom:X}"
-        print(f"ABI anchors: {', '.join(m.anchored)}; room before them: {room}")
+    room = "unknown" if m.headroom is None else f"0x{m.headroom:X}"
+    print(f"room before the image reaches the initial stack ({HEADROOM_SYMBOL}): {room}")
     if m.plain_errors is not None:
         expected = m.headroom is not None and pad > m.headroom and not m.pinned
         print("shift with the script unchanged: link FAILS"
-              + (" (as expected: the pad exceeds the room before the ABI anchor)" if expected else ""))
+              + (" (as expected: the pad exceeds the room before the stack)" if expected else ""))
         for line in m.plain_errors[:6]:
             print(f"  {line}")
     else:
@@ -343,11 +335,13 @@ def run(pad: int, scratch: Path, verbose: int) -> int:
                 print(f"    {a:08X} {sym:40} {info}")
 
     # The header is not part of an allocated program section.
-    header = (BUILD / "main.exe").read_bytes()[:0x800]
-    pc = int.from_bytes(header[0x10:0x14], "little")
-    size = int.from_bytes(header[0x1C:0x20], "little")
-    print(f"\nPS-X EXE header (asm/USA/main/header.s): initial PC 0x{pc:08X} and text size 0x{size:X}"
-          " are literals; they do not follow the shift (size-dependent fields).")
+    header = ROOT / "asm" / "USA" / "main" / "header.s"
+    text = header.read_text() if header.exists() else ""
+    fields = re.findall(r"^\.word (\S+)\s*/\* (.*?) \*/", text, re.M)
+    literal = [f"{c} {v}" for v, c in fields if v.startswith("0x") and int(v, 16)]
+    linked = [f"{c} = {v}" for v, c in fields if not v.startswith("0x")]
+    print(f"\nPS-X EXE header (asm/USA/main/header.s): from the link: {', '.join(linked) or 'none'}; "
+          f"literals: {', '.join(literal) or 'none'}.")
     return 0
 
 

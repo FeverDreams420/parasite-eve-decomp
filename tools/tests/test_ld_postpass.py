@@ -46,13 +46,23 @@ SECTIONS
 
     overlay_windows_ROM_START = __romPos;
     overlay_windows_VRAM = ADDR(.overlay_windows);
-    .overlay_windows 0x8010BCF8 : AT(overlay_windows_ROM_START) SUBALIGN(4)
+    .overlay_windows field_engine_VRAM_END : AT(overlay_windows_ROM_START) SUBALIGN(4)
     {
         build/w.o(.data*);
     }
     __romPos += SIZEOF(.overlay_windows);
     overlay_windows_ROM_END = __romPos;
+    overlay_windows_VRAM_END = .;
 }
+"""
+
+HEADER = """\
+.ascii "PS-X EXE"      /* Magic number */
+.word 0x80072534       /* Initial PC */
+.word 0x80010000       /* .text start */
+.word 0x001EE000       /* .text size */
+.word 0x801FFFF0       /* Initial $sp/r29 & $fp/r30 base */
+.word 0x00000000       /* Initial $sp/r29 & $fp/r30 offset */
 """
 
 
@@ -70,21 +80,28 @@ class RewriteTests(unittest.TestCase):
         self.assertIn("main_bss_VRAM = main_BSS_START;", out)
         self.assertIn("ASSERT(SIZEOF(.field_engine_bss) == 0,", out)
 
-    def test_overlay_windows_anchored_with_assertions(self):
+    def test_overlay_windows_follow_the_engine_with_the_table_and_stack_limit(self):
         out = lp.rewrite(SCRIPT)
-        windows = out[out.index("/* ld_postpass: overlay windows"):]
-        self.assertIn(".overlay_windows 0x8010BCF8 : "
-                      "AT(main_ROM_START + (ADDR(.overlay_windows) - ADDR(.main))) SUBALIGN(4)", windows)
-        self.assertNotIn("overlay_windows_ROM_START = __romPos;", out)
-        order = ["build/w.o(.data*);", "overlay_windows_ROM_START = LOADADDR(.overlay_windows);",
-                 "ASSERT(field_engine_VRAM_END <= overlay_windows_VRAM,",
-                 "ASSERT(field_engine_ROM_END <= overlay_windows_ROM_START,",
-                 "overlay_windows_HEADROOM = ABSOLUTE(overlay_windows_VRAM - field_engine_VRAM_END);",
-                 "__romPos = overlay_windows_ROM_START + SIZEOF(.overlay_windows);",
-                 "overlay_windows_ROM_END = __romPos;"]
+        self.assertIn(".overlay_windows field_engine_VRAM_END : AT(overlay_windows_ROM_START)", out)
+        windows = out[out.index("    overlay_windows_VRAM_END = .;"):]
+        order = ["INCLUDE linkers/USA/overlay_windows.txt",
+                 "PSX_EXE_STACK_TOP = 0x801FFFF0;",
+                 "PSX_EXE_TEXT_SIZE = ABSOLUTE(overlay_windows_VRAM_END - main_VRAM);",
+                 "ASSERT(overlay_windows_VRAM_END <= PSX_EXE_STACK_TOP,",
+                 "ASSERT(overlay_windows_ROM_END - main_ROM_START == PSX_EXE_TEXT_SIZE,",
+                 "PSX_EXE_HEADROOM = ABSOLUTE(PSX_EXE_STACK_TOP - overlay_windows_VRAM_END);"]
         positions = [windows.index(s) for s in order]
         self.assertEqual(positions, sorted(positions))
-        self.assertLess(out.index("field_engine_VRAM_END = .;"), out.index("/* ld_postpass: overlay windows"))
+        self.assertNotIn("0x8010BCF8", out)
+
+    def test_header_takes_size_and_stack_from_the_link(self):
+        out = lp.rewrite_header(HEADER)
+        self.assertIn(".word PSX_EXE_TEXT_SIZE       /* .text size */", out)
+        self.assertIn(".word PSX_EXE_STACK_TOP       /* Initial $sp/r29 & $fp/r30 base */", out)
+        self.assertIn(".word 0x80072534       /* Initial PC */", out)
+        self.assertEqual(lp.rewrite_header(out), out)
+        with self.assertRaises(lp.PostPassError):
+            lp.rewrite_header(HEADER.replace("/* .text size */", "/* size */"))
 
     def test_idempotent(self):
         once = lp.rewrite(SCRIPT)
@@ -97,10 +114,10 @@ class RewriteTests(unittest.TestCase):
             lp.rewrite(SCRIPT.replace("build/b.o(.bss*);", "build/b.o(.sbss*);"))
         with self.assertRaises(lp.PostPassError):
             lp.rewrite(SCRIPT.replace("    __romPos += SIZEOF(.main);\n", ""))
-        with self.assertRaises(lp.PostPassError):  # no fixed window segment
-            lp.rewrite(SCRIPT.replace(".overlay_windows 0x8010BCF8 :", ".overlay_windows field_engine_VRAM_END :"))
+        with self.assertRaises(lp.PostPassError):  # the window block at a fixed address
+            lp.rewrite(SCRIPT.replace(".overlay_windows field_engine_VRAM_END :", ".overlay_windows 0x8010BCF8 :"))
         with self.assertRaises(lp.PostPassError):
-            lp.rewrite(SCRIPT.replace("    __romPos += SIZEOF(.overlay_windows);\n", ""))
+            lp.rewrite(SCRIPT.replace("    overlay_windows_VRAM_END = .;\n", ""))
         with self.assertRaises(lp.PostPassError):
             lp.rewrite(SCRIPT.replace("    field_engine_VRAM_END = .;\n", ""))
 
@@ -127,6 +144,7 @@ probe_sbss:
 WORK_AREA = "build/USA/asm/USA/main/data/engine/boot_work_area.data.s.o(.data*);"
 WORK_AREA_SIZE = 0x18800
 WINDOW = 0x8010BCF8
+HEADROOM = 0x1FF0  # retail image end 0x801FE000, initial $sp 0x801FFFF0
 
 
 def small_work_area(size: int) -> str:
@@ -173,33 +191,32 @@ class BuiltLayoutTests(unittest.TestCase):
             m = st.measure(0x10, Path(tmp))
         self.assertTrue(m.base_identical)
         self.assertEqual(m.pinned, [])
-        self.assertEqual(m.anchored, [f".overlay_windows @ 0x{WINDOW:X}"])
-        self.assertEqual(m.headroom, 0)
-        # retail leaves no room before the windows: the unchanged script fails loudly
-        self.assertTrue(any("run into the first overlay window" in l for l in m.plain_errors or []),
-                        m.plain_errors)
+        self.assertEqual(m.headroom, HEADROOM)
+        self.assertIsNone(m.plain_errors)  # nothing is fixed: the windows move too
         self.assertIsNone(m.shifted_error)
         self.assertEqual(m.counts["unexplained_difference"], 0)
         self.assertEqual(m.counts["unexplained_relocated"], 0)
 
-    def test_growth_past_the_window_fails(self):
+    def test_growth_past_the_stack_fails(self):
+        big = ("    .section .data, \"aw\"\n    .globl probe_big_table\n"
+               f"probe_big_table:\n    .space 0x{HEADROOM + 4:X}\n")
         with tempfile.TemporaryDirectory(prefix="ld_growth_") as tmp:
             tmp = Path(tmp)
-            res, _ = self.run_link(tmp, [self.assemble(tmp, "probe", GROWTH_PROBE)])
+            obj = self.assemble(tmp, "big", big)
+            text = (LINKERS / "main.ld").read_text().replace(
+                "        *(COMMON)\n", f"        *(COMMON)\n        {obj}(.data*);\n", 1)
+            (tmp / "main.ld").write_text(text)
+            res, _ = self.run_link(tmp, [], tmp / "main.ld")
         self.assertNotEqual(res.returncode, 0)
-        self.assertIn("main, the field engine and the boot work area run into the first overlay window",
-                      res.stderr)
+        self.assertIn("runs into the initial stack", res.stderr)
 
-    def test_new_globals_link_and_main_grows(self):
+    def test_new_globals_link_and_everything_after_main_moves(self):
         growth = 4 + 8 + 4 + 4 + 64  # sdata word, two loads, sbss, small, big
-        room = 0x100
         with tempfile.TemporaryDirectory(prefix="ld_growth_") as tmp:
             tmp = Path(tmp)
             base = self.link(tmp, [])
-            # Give the layout ROOM bytes of headroom by shortening the work area.
-            script = self.with_work_area(tmp, WORK_AREA_SIZE - room)
-            roomy = self.link(tmp, [], script)
-            grown = self.link(tmp, [self.assemble(tmp, "probe", GROWTH_PROBE)], script)
+            grown = self.link(tmp, [self.assemble(tmp, "probe", GROWTH_PROBE)])
+            shorter = self.link(tmp, [], self.with_work_area(tmp, WORK_AREA_SIZE - 0x100))
         self.assertEqual(base["_end"], base["main_VRAM_END"])
         self.assertEqual(base["__bss_start"], base["_edata"])
         # small data stays in the gp window, before BSS or with the small pool
@@ -210,21 +227,30 @@ class BuiltLayoutTests(unittest.TestCase):
         self.assertGreaterEqual(grown["probe_big"], grown["main_BSS_START"])
         self.assertLess(grown["probe_big"], grown["_end"])
         self.assertEqual(grown["_end"] - base["_end"], growth)
-        # the field engine and the work area follow main in the file and in memory
-        for syms in (base, roomy, grown):
+        # the field engine, the work area and the window block follow main in
+        # the file and in memory, as one unit
+        for syms in (base, grown, shorter):
             self.assertEqual(syms["field_engine_VRAM"], syms["_end"])
             self.assertEqual(syms["field_engine_ROM_START"],
                              syms["field_engine_VRAM"] - 0x80010000 + syms["main_ROM_START"])
-        for name in ("field_engine_VRAM", "FieldFx_TurnToward", "g_FieldFxSlotTable", "g_BootWorkArea"):
+            self.assertEqual(syms["overlay_windows_VRAM"], syms["field_engine_VRAM_END"])
+            self.assertEqual(syms["overlay_windows_ROM_START"],
+                             syms["overlay_windows_VRAM"] - 0x80010000 + syms["main_ROM_START"])
+            self.assertEqual(syms["PSX_EXE_TEXT_SIZE"], syms["overlay_windows_VRAM_END"] - 0x80010000)
+            self.assertEqual(syms["OVERLAY_WINDOW_ROOM"] - syms["overlay_windows_VRAM"], 0x832F0)
+        for name in ("field_engine_VRAM", "FieldFx_TurnToward", "g_FieldFxSlotTable", "g_BootWorkArea",
+                     "overlay_windows_VRAM", "OVERLAY_WINDOW_MDEC_DIAG", "OVERLAY_WINDOW_ROOM",
+                     "OVERLAY_WINDOW_TASK_PROGRAM", "g_StrFileDirArea", "g_PmTaskProgramArea",
+                     "D_801F1F38", "overlay_windows_VRAM_END"):
             self.assertEqual(grown[name] - base[name], growth, name)
-        # the overlay windows stay at their ABI address and file offset
-        for syms in (base, roomy, grown):
-            self.assertEqual(syms["overlay_windows_VRAM"], WINDOW)
-            self.assertEqual(syms["overlay_windows_ROM_START"], WINDOW - 0x80010000 + syms["main_ROM_START"])
-            self.assertEqual(syms["g_StrFileDirArea"], base["g_StrFileDirArea"])
-        self.assertEqual(base["overlay_windows_HEADROOM"], 0)
-        self.assertEqual(roomy["overlay_windows_HEADROOM"], room)
-        self.assertEqual(grown["overlay_windows_HEADROOM"], room - growth)
+            self.assertEqual(shorter[name] - base[name], -0x100 if name not in (
+                "field_engine_VRAM", "FieldFx_TurnToward", "g_FieldFxSlotTable", "g_BootWorkArea") else 0,
+                name)
+        self.assertEqual(base["overlay_windows_VRAM"], WINDOW)
+        self.assertEqual(base["PSX_EXE_TEXT_SIZE"], 0x1EE000)
+        self.assertEqual(base["PSX_EXE_HEADROOM"], HEADROOM)
+        self.assertEqual(grown["PSX_EXE_HEADROOM"], HEADROOM - growth)
+        self.assertEqual(shorter["PSX_EXE_HEADROOM"], HEADROOM + 0x100)
 
 
 if __name__ == "__main__":

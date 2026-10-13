@@ -404,6 +404,10 @@ def relocation_audit(elf_path: Path, layout: Layout):
             if not isinstance(sec, RelocationSection):
                 continue
             target = elf.get_section(sec["sh_info"])
+            if target.name == ".header":
+                # PS-X EXE header fields (text size, initial $sp) are layout
+                # values the link computes, not references into the program.
+                continue
             for rel in sec.iter_relocations():
                 relocated[target.name].add(rel["r_offset"])
                 sym = symtab.get_symbol(rel["r_info_sym"])
@@ -440,6 +444,23 @@ def relocation_audit(elf_path: Path, layout: Layout):
 
 # --------------------------------------------------------------------------
 # (d) overlays
+
+
+def resolve_window_offsets(assigns: list[Assignment], table) -> int:
+    """Give `OVERLAY_WINDOW_x + offset` assignments their retail address.
+
+    Overlays write every address inside the floating window block as a window
+    of linkers/USA/overlay_windows.txt plus an offset; it is still a fixed
+    place inside the block (the disc ABI), so it is classified like the
+    retail address it stands for. Returns how many were resolved."""
+    resolved = 0
+    for a in assigns:
+        if a.value is None:
+            value = table.evaluate(a.rhs)
+            if value is not None:
+                a.value = value
+                resolved += 1
+    return resolved
 
 
 def classify_overlay_assignment(a: Assignment, referenced: set[str], defined: set[str],
@@ -482,6 +503,14 @@ def classify_overlay_assignment(a: Assignment, referenced: set[str], defined: se
     return "outside_image"
 
 
+def overlay_window_table():
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    from tools.scripts import overlay_windows
+
+    return overlay_windows.load()
+
+
 def overlay_audit(main_syms: dict[str, int], windows) -> dict:
     """How each overlay learns main's (and other overlays') addresses.
 
@@ -495,14 +524,18 @@ def overlay_audit(main_syms: dict[str, int], windows) -> dict:
     per_overlay = {}
     main_addrs = set(main_syms.values())
     main_abs = absolute_symbol_values()
+    table = overlay_window_table()
     abi_path = LINKERS / "overlay_abi.txt"
-    abi = {a.name: a.value for a in parse_assignments(abi_path.read_text())} if abi_path.exists() else {}
+    abi_assigns = parse_assignments(abi_path.read_text()) if abi_path.exists() else []
+    resolve_window_offsets(abi_assigns, table)
+    abi = {a.name: a.value for a in abi_assigns}
     stats["abi_file_entries"] = len(abi)
     main_targets: set[int] = set()
     for cfg in sorted(OVERLAY_CONFIGS.glob("*.yaml")):
         name = cfg.stem
         path = LINKERS / "overlays" / f"link_symbols.{name}.txt"
         assigns = parse_assignments(path.read_text(), path.name) if path.exists() else []
+        stats["window_offsets"] += resolve_window_offsets(assigns, table)
         files["link_symbols"] += len(assigns)
         objdir = BUILD / "overlays" / name
         objects = sorted(objdir.rglob("*.o")) if objdir.exists() else []
@@ -769,7 +802,7 @@ def render(report: dict) -> str:
 # categories that lack main's name, so moving a reference to main's own name
 # (main_same_name) is not a regression.
 UNCOUNTED = {"unreferenced", "overlays_built", "overlays_not_built", "provide_unused",
-             "main_same_name"}
+             "main_same_name", "window_offsets"}
 BASELINE = ROOT / "tools" / "shift_baseline.json"
 
 

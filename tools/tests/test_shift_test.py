@@ -24,14 +24,11 @@ class ShiftTestHelpers(unittest.TestCase):
         self.assertIn("_gp = (0x8009CD70 + 0x10);", rebased)
         self.assertIn(".main 0x80010000 :", rebased)
 
-    def test_overlay_windows_are_an_abi_anchor_not_a_pin(self):
-        script = self.SCRIPT + "    .overlay_windows 0x8010BCF8 : AT(main_ROM_START) SUBALIGN(4)\n"
+    def test_a_following_section_is_not_a_placement(self):
+        script = self.SCRIPT + "    .overlay_windows field_engine_VRAM_END : AT(overlay_windows_ROM_START) SUBALIGN(4)\n"
         rebased, placements = st.pad_script(script, 0x10, rebase=True)
-        pinned, anchored = st.split_anchors(placements)
-        self.assertEqual(pinned, [".field_engine @ 0x800C1CA0", "_gp = 0x8009CD70"])
-        self.assertEqual(anchored, [".overlay_windows @ 0x8010BCF8"])
-        # the scratch rebase still moves the windows so the comparison covers them
-        self.assertIn(".overlay_windows (0x8010BCF8 + 0x10) :", rebased)
+        self.assertEqual(placements, [".field_engine @ 0x800C1CA0", "_gp = 0x8009CD70"])
+        self.assertIn(".overlay_windows field_engine_VRAM_END :", rebased)
 
     def test_explained_relocation_fields(self):
         self.assertTrue(st.explained(st.R_MIPS_32, 0x80012000, 0x80012010, 0x10))

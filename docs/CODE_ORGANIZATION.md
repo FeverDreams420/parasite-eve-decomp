@@ -2082,12 +2082,18 @@ and changes 35919 words in 189 of the 190 overlays, every one of them at a
 relocation against a symbol that moved.
 
 Fixed layout: `.main` at 0x80010000 (the PS-X EXE load address, a loader
-contract) and the header literals in `asm/USA/main/header.s` (initial PC 0x80072534, text size
-0x1EE000, stack 0x801FFFF0). Main's BSS, heap and every overlay load window
-live inside the zero-filled `dtail_*` data blobs, so the executable covers
-0x80010000 to 0x801FE000 with no layout of its own for those regions. Since
-2026-10-13 `_gp` is `_ramsize` (the first `.sdata` word) and `.field_engine`
-follows `main_VRAM_END`, so a padded relink links without rebasing anything.
+contract), the initial stack pointer 0x801FFFF0 (`PSX_EXE_STACK_TOP`) and the
+initial PC literal in `asm/USA/main/header.s`. The header's text size is
+`PSX_EXE_TEXT_SIZE`, computed by the link (retail 0x1EE000). Since
+2026-10-13 `_gp` is `_ramsize` (the first `.sdata` word), `.field_engine`
+follows `main_VRAM_END`, and the overlay window block (every overlay load
+window and the runtime buffers in them) follows the boot work area as a
+unit: the windows are offsets from its start
+(`linkers/USA/overlay_windows.txt`), overlays link at those offsets from the
+built main, and the link fails only when the image reaches the initial stack
+pointer (0x1FF0 bytes of room). `tools/scripts/shift_full_test.py` (`make
+shift-full-test`) relinks main and all 190 overlays with main shifted and
+shows that every differing word is an address field moved by the shift.
 The plan for main's data (phase 3: pins, BSS ownership, COMMON, ABI list and
 the work list) is [SHIFTABILITY_PLAN.md](SHIFTABILITY_PLAN.md).
 
@@ -2144,8 +2150,9 @@ gp-relative offsets, 21 literal data words and 17 literal `lui` halves.
 
 Unavoidable, by design: hardware registers and the scratchpad, the kernel and
 BIOS addresses (LIBCARD patch, `0x80000000` vectors), the `.main` load address
-and stack top, and the overlay load addresses (0x8018EFE8 for rooms and the
-other windows): the disc loader and the data on the disc depend on them.
+and stack top, and the layout inside the overlay window block (the windows'
+offsets), which the overlays prelinked in the retail `PE.IMG` depend on; the
+block itself moves with main (SHIFTABILITY_PLAN.md section 6).
 
 ### Soft debt and remaining crutches in render, scene, sys, boot, cdrom, entity and memcard (2026-10-12, zero-debt batch 3)
 

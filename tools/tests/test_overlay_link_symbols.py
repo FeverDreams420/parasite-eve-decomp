@@ -60,6 +60,22 @@ class AssignmentTests(unittest.TestCase):
                                  "g_Other": 0x80190020})
 
 
+class WindowOffsetTests(unittest.TestCase):
+    def test_window_offsets_read_as_retail_addresses(self):
+        table = overlay_link_symbols.overlay_windows.WindowTable(
+            (("OVERLAY_WINDOW_A", 0x0), ("OVERLAY_WINDOW_ROOM", 0x832F0)), 0x8010BCF8, 0x801FE000)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = pathlib.Path(tmp) / "abi.txt"
+            path.write_text("D_80190000 = OVERLAY_WINDOW_ROOM + 0x1018; /* room_x */\n"
+                            "func_8010BD4C = OVERLAY_WINDOW_A + 0x54;\n")
+            found = overlay_link_symbols.read_assignments(path, table)
+            path.write_text("D_1 = OVERLAY_WINDOW_NOPE + 0x4;\n")
+            with self.assertRaises(SystemExit):
+                overlay_link_symbols.read_assignments(path, table)
+
+        self.assertEqual(found, {"D_80190000": 0x80190000, "func_8010BD4C": 0x8010BD4C})
+
+
 class RegionTests(unittest.TestCase):
     def test_hardware_and_kernel_are_outside_the_program(self):
         self.assertTrue(overlay_link_symbols.outside_program(0x1F801070))

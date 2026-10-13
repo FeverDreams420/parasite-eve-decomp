@@ -24,6 +24,8 @@ SHARED_INPUTS = (
     ROOT / "tools" / "scripts" / "cc.sh",
     ROOT / "tools" / "scripts" / "overlay_link_symbols.py",
     ROOT / "linkers" / "USA" / "overlay_abi.txt",
+    ROOT / "linkers" / "USA" / "overlay_windows.txt",
+    ROOT / "tools" / "scripts" / "overlay_windows.py",
     ROOT / "tools" / "scripts" / "parallel_overlay_make.py",
 )
 

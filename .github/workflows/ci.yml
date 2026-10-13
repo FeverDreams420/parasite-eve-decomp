@@ -171,7 +171,7 @@ jobs:
             asm/USA/overlays
             build/USA/overlays
             linkers/USA/overlays
-          key: overlays-v4-${{ hashFiles('configs/USA/overlays/**', 'configs/USA/sym.main.txt', 'src/overlays/**', 'include/**', 'tools/m2c/**', 'tools/scripts/cc.sh', 'tools/scripts/overlay_link_symbols.py', 'linkers/USA/overlay_abi.txt', 'tools/scripts/parallel_overlay_make.py', 'Makefile', 'requirements.txt') }}
+          key: overlays-v4-${{ hashFiles('configs/USA/overlays/**', 'configs/USA/sym.main.txt', 'src/overlays/**', 'include/**', 'tools/m2c/**', 'tools/scripts/cc.sh', 'tools/scripts/overlay_link_symbols.py', 'linkers/USA/overlay_abi.txt', 'linkers/USA/overlay_windows.txt', 'tools/scripts/overlay_windows.py', 'tools/scripts/parallel_overlay_make.py', 'Makefile', 'requirements.txt') }}
           restore-keys: |
             overlays-v4-
 

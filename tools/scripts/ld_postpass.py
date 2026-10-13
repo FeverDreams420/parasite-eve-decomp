@@ -21,12 +21,15 @@ file and memory, so this pass rewrites `linkers/USA/main.ld`
 - an assertion that the field engine has no NOLOAD BSS: its zero data is the
   in-image blob `engine_bss_800E21A8`, followed by Boot_InitMemoryLayout's
   work area (plan 3.4);
-- the overlay windows anchored at their ABI address: the `overlay_windows`
-  segment keeps its fixed VMA, its file offset follows from that VMA (not
-  from the end of the engine, so a shorter engine leaves a zero gap in the
-  file instead of moving the windows), and the link fails when main, the
-  engine and the work area reach the window. `overlay_windows_HEADROOM` is
-  the room left (0 in the retail layout).
+- the overlay window block floats: the `overlay_windows` segment follows
+  the boot work area in memory and in the file (splat `vram_symbol`), the
+  window table `linkers/USA/overlay_windows.txt` is INCLUDEd so main.elf
+  defines every window as an offset from `overlay_windows_VRAM`, and the
+  link fails when the image reaches the initial stack pointer
+  (`PSX_EXE_STACK_TOP`). `PSX_EXE_HEADROOM` is the room left (0x1FF0 in the
+  retail layout) and `PSX_EXE_TEXT_SIZE` the header's text size (0x1EE000);
+- the PS-X EXE header (`asm/USA/main/header.s`, second argument) takes its
+  text size and initial $sp from those symbols instead of literals.
 
 The catch-alls come after every explicit input of their kind, because ld
 gives an input section to the first statement in the script that matches it.
@@ -34,7 +37,7 @@ Every rewrite checks the exact shape it expects and fails otherwise, so a
 splat upgrade or a manifest change cannot silently produce a different link.
 The pass is idempotent.
 
-Usage: ld_postpass.py [linker_script]
+Usage: ld_postpass.py [linker_script [header.s]]
 """
 from __future__ import annotations
 
@@ -44,6 +47,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT = ROOT / "linkers/USA/main.ld"
+DEFAULT_HEADER = ROOT / "asm/USA/main/header.s"
+WINDOW_TABLE = "linkers/USA/overlay_windows.txt"
+# The BIOS convention for the initial $sp (the header field); the image must
+# load below it (docs/SHIFTABILITY_PLAN.md 6).
+STACK_TOP = 0x801FFFF0
 MARKER = "/* ld_postpass: in-image BSS */"
 
 BSS_BLOCK = re.compile(
@@ -68,13 +76,14 @@ ENGINE_BSS_END = ("        field_engine_BSS_SIZE = ABSOLUTE(field_engine_BSS_END
 WINDOWS_START = re.compile(
     r"    overlay_windows_ROM_START = __romPos;\n"
     r"    overlay_windows_VRAM = ADDR\(\.overlay_windows\);\n"
-    r"    \.overlay_windows (?P<vram>0x[0-9A-Fa-f]+) : AT\(overlay_windows_ROM_START\) SUBALIGN\(4\)\n")
-WINDOWS_END = re.compile(
-    r"    \}\n"
-    r"    __romPos \+= SIZEOF\(\.overlay_windows\);\n")
+    r"    \.overlay_windows (?P<vram>\S+) : AT\(overlay_windows_ROM_START\) SUBALIGN\(4\)\n")
+WINDOWS_END = "    overlay_windows_VRAM_END = .;\n"
 ENGINE_END = "    field_engine_VRAM_END = .;\n"
-WINDOW_MESSAGE = ("main, the field engine and the boot work area run into the first overlay "
-                  "window{} (docs/SHIFTABILITY_PLAN.md 3.4)")
+HEADER_FIELDS = (
+    # (comment splat writes, symbol the link defines)
+    (".text size", "PSX_EXE_TEXT_SIZE"),
+    ("Initial $sp/r29 & $fp/r30 base", "PSX_EXE_STACK_TOP"),
+)
 
 
 class PostPassError(Exception):
@@ -102,10 +111,12 @@ def rewrite(text: str) -> str:
         raise PostPassError("expected one .field_engine_bss section")
     windows = list(WINDOWS_START.finditer(text))
     if len(windows) != 1:
-        raise PostPassError("expected one `overlay_windows` segment at a fixed vram (configs/USA/main.yaml)")
-    windows_end = WINDOWS_END.search(text, windows[0].end())
-    if not windows_end:
-        raise PostPassError("the `overlay_windows` section is not followed by its __romPos advance")
+        raise PostPassError("expected one `overlay_windows` segment (configs/USA/main.yaml)")
+    if windows[0].group("vram") != "field_engine_VRAM_END":
+        raise PostPassError("the `overlay_windows` segment must follow the engine "
+                            "(vram_symbol: field_engine_VRAM_END), not sit at a fixed vram")
+    if text.count(WINDOWS_END) != 1 or text.index(WINDOWS_END) < windows[0].end():
+        raise PostPassError("expected one overlay_windows_VRAM_END after the `overlay_windows` section")
     if text.count(ENGINE_END) != 1 or not text.index(ENGINE_END) < windows[0].start():
         raise PostPassError("the field engine must end before the `overlay_windows` segment")
 
@@ -118,25 +129,23 @@ def rewrite(text: str) -> str:
         "        main_BSS_END = .;\n"
         "        main_BSS_SIZE = ABSOLUTE(main_BSS_END - main_BSS_START);\n"
         "        _end = .;\n")
-    # The window block's VMA is the ABI; its file offset follows from it. The
-    # assertions compare against the section's own address, so a scratch
-    # relink that rebases the window (shift_test.py) stays consistent.
-    win_start, win_end = windows[0], windows_end
-    text = (text[:win_start.start()]
-            + "    /* ld_postpass: overlay windows at their ABI address */\n"
-            "    overlay_windows_VRAM = ADDR(.overlay_windows);\n"
-            f"    .overlay_windows {win_start.group('vram')} : "
-            "AT(main_ROM_START + (ADDR(.overlay_windows) - ADDR(.main))) SUBALIGN(4)\n"
-            + text[win_start.end():win_end.start()]
-            + "    }\n"
-            "    overlay_windows_ROM_START = LOADADDR(.overlay_windows);\n"
-            "    ASSERT(field_engine_VRAM_END <= overlay_windows_VRAM,\n"
-            f"        \"{WINDOW_MESSAGE.format('')}\")\n"
-            "    ASSERT(field_engine_ROM_END <= overlay_windows_ROM_START,\n"
-            f"        \"{WINDOW_MESSAGE.format(' in the file')}\")\n"
-            "    overlay_windows_HEADROOM = ABSOLUTE(overlay_windows_VRAM - field_engine_VRAM_END);\n"
-            "    __romPos = overlay_windows_ROM_START + SIZEOF(.overlay_windows);\n"
-            + text[win_end.end():])
+    # The window block follows the engine; what stays fixed is the layout
+    # inside it (the window table) and the stack the image must end below.
+    text = text.replace(
+        WINDOWS_END,
+        WINDOWS_END
+        + "    /* ld_postpass: the overlay windows are offsets from the floating block */\n"
+        f"    INCLUDE {WINDOW_TABLE}\n"
+        "    /* PS-X EXE header fields: the image runs from .main to the end of the\n"
+        "     * window block and must load below the initial stack pointer. */\n"
+        f"    PSX_EXE_STACK_TOP = 0x{STACK_TOP:08X};\n"
+        "    PSX_EXE_TEXT_SIZE = ABSOLUTE(overlay_windows_VRAM_END - main_VRAM);\n"
+        "    ASSERT(overlay_windows_VRAM_END <= PSX_EXE_STACK_TOP,\n"
+        "        \"the image (main, field engine, boot work area, overlay window block) "
+        "runs into the initial stack (docs/SHIFTABILITY_PLAN.md 6)\")\n"
+        "    ASSERT(overlay_windows_ROM_END - main_ROM_START == PSX_EXE_TEXT_SIZE,\n"
+        "        \"the image is not contiguous in the file\")\n"
+        "    PSX_EXE_HEADROOM = ABSOLUTE(PSX_EXE_STACK_TOP - overlay_windows_VRAM_END);\n")
     data_end = ends[-1]
     text = (text[:data_end.start()] + data_end.group(1) + in_image + data_end.group(2)
             + "    main_bss_VRAM = main_BSS_START;\n" + text[block.end():])
@@ -151,14 +160,26 @@ def rewrite(text: str) -> str:
     return text
 
 
+def rewrite_header(text: str) -> str:
+    """The header's text size and initial $sp become the link's symbols."""
+    for comment, symbol in HEADER_FIELDS:
+        pattern = re.compile(r"^\.word \S+(\s*/\* " + re.escape(comment) + r" \*/)$", re.M)
+        if len(pattern.findall(text)) != 1:
+            raise PostPassError(f"expected one `{comment}` word in the PS-X EXE header")
+        text = pattern.sub(lambda m: f".word {symbol}{m.group(1)}", text)
+    return text
+
+
 def main(argv: list[str]) -> int:
     path = Path(argv[1]) if len(argv) > 1 else DEFAULT
-    try:
-        new = rewrite(path.read_text())
-    except PostPassError as exc:
-        print(f"ld_postpass: {path}: {exc}", file=sys.stderr)
-        return 1
-    path.write_text(new)
+    header = Path(argv[2]) if len(argv) > 2 else DEFAULT_HEADER
+    for target, fn in ((path, rewrite), (header, rewrite_header)):
+        try:
+            new = fn(target.read_text())
+        except PostPassError as exc:
+            print(f"ld_postpass: {target}: {exc}", file=sys.stderr)
+            return 1
+        target.write_text(new)
     return 0
 
 

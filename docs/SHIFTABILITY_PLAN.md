@@ -356,6 +356,8 @@ keep rebases trivial) and every C rename those symbols need.
 
 Wave 0b status (3.4): done, byte-identical. `dtail_0D0860` is split into `engine/engine_data_800E0060`, `engine/engine_bss_800E21A8` and `engine/boot_work_area` (all in `.field_engine`, moving with main) and a new `overlay_windows` segment anchored at 0x8010BCF8 (VMA and file offset fixed; `ld_postpass.py` asserts that main and the engine end before it and defines `overlay_windows_HEADROOM`). The "free gap" is not free: 0x800F34F8..0x8010BCF8 is `g_BootWorkArea` (was `D_800F34F8`), the 0x18800-byte area `Boot_InitMemoryLayout` carves at 0x1800/0x6000/0x14000, so the retail headroom is 0 and main can grow only by shrinking it (`test_ld_postpass.py` shows growth past the window failing and growth into 0x100 bytes of room moving the engine and work area as a unit).
 
+Floating window block status: done, byte-identical. The `overlay_windows` segment follows the boot work area; its six windows are offsets in `linkers/USA/overlay_windows.txt`, overlays link at them from the built main, the header's text size and `$sp` come from the link and the limit is the initial stack (0x1FF0 bytes of room). `make shift-full-test` relinks main and all 190 overlays shifted by a pad and explains every differing word (section 6).
+
 Wave 1 status: done, byte-identical; 18 function pins, `g_DsReadStatusBlock`, 3 `fieldfx/burst` labels and 4 `FieldFx_*` symbolic aliases gone (pinned words 6253 to 6140); `D_800C20C8` (`_end`) is left to wave 0, `func_800119CC` (rodata) to the data package.
 
 Within a package, work from the least shared symbols to the most shared. A
@@ -534,51 +536,90 @@ high risk, then by size. `script/sfx_queue` (pilot) is done.
 
 ## 6. What cannot shift: disc and external ABI
 
-These addresses are fixed on purpose. Each needs a named constant in one
-documented place (an ABI symbol file), not literals spread through the code.
+Since the floating window block (below), no program address of the build is
+fixed except the load address. Everything else in this table is either
+outside the program (BIOS, hardware, disc positions) or the prelinked
+overlays on the retail disc.
 
-| item | address(es) | owner in the code | why fixed |
+| item | value | stated in | why fixed |
 | --- | --- | --- | --- |
-| PS-X EXE load address | `.main` at 0x80010000 | `asm/USA/main/header.s`, manifest | BIOS loader contract |
-| Initial stack | 0x801FFFF0 (header), `_ramsize` 2 MiB | header, `snmain.c` | BIOS/loader convention; `_ramsize` and `_stacksize` are data, not addresses |
-| Image end | 0x801FE000 (text size 0x1EE000) | header | the image covers the overlay windows below the stack |
-| Room, scene and field effect overlay window | 0x8018EFE8 (`fx_common` at 0x8018EFF0) | `Scene_LoadRoom` and the asset loaders; `g_StrFileDirBuffer` literal | 185 overlays in `PE.IMG` are linked there |
-| Other overlay windows | `mdec_diag` 0x8010BCF8, `menu_memcard` 0x80120D00, `boot_display` 0x80122FA4, `fx_common_sector17` 0x80170000 | their loaders | linked for those addresses |
-| Runtime buffers inside the windows | e.g. 0x801ED7F8 task program buffer (`g_PmTaskProgramBuffer` literal), 0x801F1xxx process slots, 0x801235DC/0x801909B4/0x8019234C used by `boot/main` | `pm/process`, `pm/disc_tables`, `boot/main`, `script/actor_opcodes`, `boot/frame_loop` | share the window space with the overlays |
-| Overlay code in `PE.IMG` | every main address an overlay calls or reads (389 distinct) | overlays | the shipped binaries are prelinked against retail main; ABI until overlays link against the built main and `PE.IMG` is repacked (section 3.7) |
-| `PE.IMG` sector layout | sector numbers in main's tables (e.g. the special-scene table at 0x80094048, `g_SceneSectorDirectory`) | `Asset_OpenPeImage`, `Scene_LoadRoom` | disc positions, not program addresses; unaffected by a shift |
+| PS-X EXE load address | `.main` at 0x80010000 | `configs/USA/main.yaml`, header `.text start` | BIOS loader contract |
+| Initial stack pointer | 0x801FFFF0, `PSX_EXE_STACK_TOP` | `tools/scripts/ld_postpass.py`, header `$sp` field | BIOS convention; the startup then sets `$sp` to `_ramsize - 8` and reserves `_stacksize` (0x2000) below it |
+| Image size | `PSX_EXE_TEXT_SIZE` = end of the window block - 0x80010000 (retail 0x1EE000) | header `.text size` | not fixed: computed by the link |
+| Overlay window layout | 6 windows as offsets from `overlay_windows_VRAM` | `linkers/USA/overlay_windows.txt` | the 190 overlays in the retail `PE.IMG` are prelinked at these offsets from the retail base 0x8010BCF8; the build relinks them for any base (below) |
+| Retail window base 0x8010BCF8 | `vram:` of the `overlay_windows` segment | `configs/USA/main.yaml` (disassembly only) | the loader window base the shipped overlays were linked for; the link does not use it |
+| `PE.IMG` sector layout | sector numbers and sizes in main's tables (the special-scene table at 0x80094048, `g_SceneSectorDirectory`, `D_800930D8`) | data in main | disc positions, not program addresses; a shift does not change any overlay's size, so rebuilt overlays fit their sectors |
 | Save files | card file: 0x100-byte header + 0x12E4-byte copy of `g_SaveRuntimeState` | `memcard/save_flow`, `save/game_data` | the layout is the ABI; no typed field holds a program address, the untyped `inventory` (0x1064) and `remainder` (0x20C) parts still need checking |
 | Kernel and BIOS | 0x80000000 vectors, 0xA000xxxx, LIBCARD's kernel patch at 0xDFFC | PsyQ LIBAPI/LIBCARD | BIOS contract |
 | Hardware and scratchpad | 0x1F80xxxx | GPU, SPU, CD, pad drivers | hardware |
 | External cheat devices | e.g. JP debug flag 0x8009CD3C | none | not ours; a shifted build breaks GameShark codes, accepted |
 
-Main's own references to fixed window addresses (wave 0b scan of every
-main object's undefined symbols that resolve at or above 0x8010BCF8). All are
-labels in the `overlay_windows` segment, so they keep their addresses when
-main grows, and none lies below the first window, so a grown main cannot
-collide with them as long as the window assertion holds:
+### The floating window block
 
-| addresses | referenced by | what |
-| --- | --- | --- |
-| `D_8010BCF8`, `D_80120D00`, `g_StrFileDirArea` (0x8018EFF0), `g_PmTaskProgramArea` (0x801ED7F8) | `rodata_001E0C` words | window bases (+8 for the last two) |
-| `D_8010BD00`, `D_80120D08`, `D_801ED800` | `Boot_InitMemoryLayout` (`asset/game_state`, `pm/disc_tables`) | OT, render and scene-load buffers inside the mdec_diag, menu_memcard and task-program windows |
-| `func_801216C4`, `func_80121C04`, `func_801223A8`; `func_80121A00`, `func_80122040` | `script/actor_opcodes`; `boot/frame_loop` | menu_memcard overlay entry points |
-| `func_801235DC`; `func_801909B4`, `func_8019234C` | `boot/main` | boot_display and room-window entry points |
-| `D_801F1BD8`..`D_801F1EF0` (7); `D_801F1F38` | `pm/process`; `battle/attack` | process slots above the task program buffer |
+The `overlay_windows` segment (0x8010BCF8..0x801FE000 in retail: the
+mdec_diag, menu_memcard, boot_display, fx_common_sector17, room/scene/field
+effect and task-program windows and the runtime buffers inside them) follows
+`g_BootWorkArea` (`vram_symbol: field_engine_VRAM_END`), in memory and in the
+file. One table names the windows:
 
-`g_BootWorkArea` (0x800F34F8, 0x18800 bytes) is below the windows and moves
-with the engine; the entity texture read at its +0x14000 (`Scene_LoadEntityTextures`
-case 4) can run past 0x8010BCF8 in retail (the `D_800930D8` sector table
-allows reads of up to 0x20 sectors from index 0x16), so the first window
-buffer is probably time-shared with it; a RAM trace would settle how much of
-the work area is really needed. 137 unreferenced catalogue assignments in
-`undefined_syms_manual.txt` lie in the engine and window range; no main
-object uses them.
+| window | offset | retail |
+| --- | ---: | --- |
+| `OVERLAY_WINDOW_MDEC_DIAG` | 0x0 | 0x8010BCF8 |
+| `OVERLAY_WINDOW_MENU_MEMCARD` | 0x15008 | 0x80120D00 |
+| `OVERLAY_WINDOW_BOOT_DISPLAY` | 0x172AC | 0x80122FA4 |
+| `OVERLAY_WINDOW_FX_SECTOR17` | 0x64308 | 0x80170000 |
+| `OVERLAY_WINDOW_ROOM` | 0x832F0 | 0x8018EFE8 (fx_common at +8) |
+| `OVERLAY_WINDOW_TASK_PROGRAM` | 0xE1B00 | 0x801ED7F8 |
 
-Not in the list because the scan found none: data in `PE.IMG` (room
-directories, scripts, TIM, AKAO) holding a 32-bit pointer into main. The room
-directory is relocated into `g_GameState` by offsets, not by absolute
-addresses.
+- Main: `main.ld` INCLUDEs the table (`ld_postpass.py`), so `main.elf`
+  defines the window symbols. Main's own references into the block are
+  labels of the `main/overlay_windows` blob (`D_8010BCF8`, `D_80120D00`,
+  `g_StrFileDirArea`, `g_PmTaskProgramArea`, `D_8010BD00`, `D_801ED800`,
+  the menu_memcard and boot entry points, the process slots
+  `D_801F1BD8`..`D_801F1F38`), so they move with the block.
+- Overlays: `make overlay-split` rewrites each overlay's linker script so
+  every section VMA is `(OVERLAY_WINDOW_x + offset)`
+  (`tools/scripts/overlay_windows.py rebase-ld`); `overlay_link_symbols.py`
+  writes the window values from the built `main.elf` and every ABI or
+  own-window address as window plus offset; `linkers/USA/overlay_abi.txt`
+  states its 465 entries the same way. The overlay configs keep retail
+  `vram`s for the disassembly; `overlay_windows.py check` (and its test)
+  holds them to the table.
+- Header and limit: the text size is `PSX_EXE_TEXT_SIZE`, the initial `$sp`
+  `PSX_EXE_STACK_TOP`; the link fails when the image would end above the
+  initial stack pointer. `PSX_EXE_HEADROOM` is the room: 0x1FF0 bytes in the
+  retail layout. Two softer limits: the startup's stack area starts at
+  0x801FDFF8, 8 bytes below the retail image end, and the highest block
+  address any object (main or overlay) refers to is 0x801F1F3A, so the
+  referenced window memory can move 0xC0BE bytes before it reaches that stack
+  area; and the BIOS loads the image while running on its own stack near the
+  top of RAM, so a growth close to the full 0x1FF0 is untested on hardware.
+
+Proof: `make shift-full-test` (`tools/scripts/shift_full_test.py`) relinks
+main with a pad at the start of `.main` and all 190 overlays against the
+shifted main, into a scratch directory, and compares every image with the
+retail one. With pad 0x10: no fixed placement, the block and every window
+symbol move by 0x10, all 190 base relinks are byte-identical to the built
+overlays, every overlay section moves by 0x10, and every differing word is a
+relocated address field moved by the pad (23818 in main plus the header's
+text size; 87922 in the overlays); nothing else differs. The 10 relocated
+words of main that did not move are main's remaining pins
+(`jtbl_80010000`, `g_ScriptCameraBytes`), and the 10 literal words are the
+register block and non-addresses of section 2. The same holds for pad
+0x1FF0, and 0x1FF4 fails the link at the stack assertion.
+
+What a shifted build still lacks to boot from a disc is the repack: the ISO
+target reuses the retail `PE.IMG`, whose overlays are linked for the retail
+base. Writing the rebuilt overlays into their sectors (same sizes) is wave 6.
+
+`g_BootWorkArea` (0x800F34F8, 0x18800 bytes) sits before the block and moves
+with the engine; the entity texture read at its +0x14000
+(`Scene_LoadEntityTextures` case 4) can run past 0x8010BCF8 in retail (the
+`D_800930D8` sector table allows reads of up to 0x20 sectors from index
+0x16), so the first window buffer is probably time-shared with it; a RAM
+trace would settle how much of the work area is really needed. Data in
+`PE.IMG` (room directories, scripts, TIM, AKAO) holds no 32-bit pointer into
+main; the room directory is relocated into `g_GameState` by offsets.
 
 ## 7. Pilot: `script/sfx_queue`
 

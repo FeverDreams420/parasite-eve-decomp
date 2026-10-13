@@ -68,7 +68,7 @@ OBJS := $(ASM_OBJS) $(C_OBJS)
 C_DEPS := $(C_OBJS:.o=.o.d)
 -include $(C_DEPS)
 
-.PHONY: expected objdiff-config progress-audit report report-audit all build check check-sources source-policy-check ci verify verify-clean clean diff distclean overlay-build overlay-build-all overlay-check overlay-check-all overlay-clean overlay-extract overlay-split permute progress debt debt-check debt-baseline organization-check organization-baseline test drop-pins drop-barriers drop-aliases shift-audit shift-test shift-check shift-baseline split split-if-needed tools
+.PHONY: expected objdiff-config progress-audit report report-audit all build check check-sources source-policy-check ci verify verify-clean clean diff distclean overlay-build overlay-build-all overlay-check overlay-check-all overlay-clean overlay-extract overlay-split permute progress debt debt-check debt-baseline organization-check organization-baseline test drop-pins drop-barriers drop-aliases shift-audit shift-test shift-full-test shift-check shift-baseline split split-if-needed tools
 
 all: verify
 
@@ -76,7 +76,7 @@ split:
 	rm -rf $(ASM_DIR) $(LD_SCRIPT) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_ALIASES)
 	@$(PY) -m splat split $(SPLAT_CFG)
 	@find $(ASM_DIR) -name '*.data.s' -o -name '*.rodata.s' | xargs $(PY) tools/scripts/collapse_zero_data.py
-	@$(PY) tools/scripts/ld_postpass.py $(LD_SCRIPT)
+	@$(PY) tools/scripts/ld_postpass.py $(LD_SCRIPT) $(ASM_DIR)/header.s
 	@grep -rl 'INCLUDE_ASM(' src/main --include='*.c' 2>/dev/null | xargs touch 2>/dev/null || true
 
 split-if-needed:
@@ -194,6 +194,11 @@ shift-audit:
 	@$(PY) tools/scripts/shift_audit.py
 shift-test:
 	@$(PY) tools/scripts/shift_test.py $(if $(PAD),--pad $(PAD),)
+# Main and all overlays relinked with main shifted by PAD (default 0x10):
+# every image difference must be an address field moved by PAD. Needs
+# `make build overlay-build-all`; writes only to a temporary directory.
+shift-full-test:
+	@$(PY) tools/scripts/shift_full_test.py $(if $(PAD),--pad $(PAD),) --jobs $(OVERLAY_JOBS)
 
 # Shiftability ratchet: fail when a fixed-address count grows past
 # tools/shift_baseline.json. Needs `make build`; the overlay counts are only
@@ -260,6 +265,9 @@ overlay-split: overlay-extract
 	@# every one of them as outside the overlay's segments. Keep that in a log.
 	@$(PY) -m splat split $(OVERLAY_CFG) > $(OVERLAY_BUILD)/splat.log 2>&1 || \
 	    { cat $(OVERLAY_BUILD)/splat.log; exit 1; }
+	@# The overlay links at offsets from the floating window block, whose
+	@# window symbols come from the built main (linkers/USA/overlay_windows.txt).
+	@$(PY) tools/scripts/overlay_windows.py rebase-ld $(OVERLAY_LD)
 	@find $(OVERLAY_ASM_DIR) \( -name '*.data.s' -o -name '*.rodata.s' -o -path '*/data/*.s' \) \
 	    | xargs $(PY) tools/scripts/collapse_zero_data.py
 
