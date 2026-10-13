@@ -20,18 +20,18 @@ void GameTime_InitCounter2(void) {
     int value;
 
     value = 1;
-    g_PlayTimeSeconds = 0;
-    g_PlayTimeLimit = 0;
-    g_PlayTimeFlags = value;
+    g_GameTimers[2].current = 0;
+    g_GameTimers[2].limit = 0;
+    g_GameTimers[2].flags = value;
 }
 
 void GameTime_InitCounter1(void) {
     int value;
 
     value = 1;
-    g_GameTimer1Current[0] = 0;
-    g_GameTimer1Limit = 0;
-    g_GameTimer1Flags = value;
+    g_GameTimers[1].current = 0;
+    g_GameTimers[1].limit = 0;
+    g_GameTimers[1].flags = value;
 }
 
 /* Packed clock word with 20/6/6-bit fields, each filled from src[1]. */

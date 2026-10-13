@@ -520,18 +520,18 @@ int Script_ComputeAudioTimer(int **arg0) {
     int *dst;
     int value;
 
-    dst = g_CombatTimerCurrent;
+    dst = &g_GameTimers[3].current;
     value = (*arg0[0] + *arg0[1]) * 216000;
     value += *arg0[2] * 60;
     *dst = value;
     if (*arg0[3] == 1) {
-        D_800A76CC = 0;
-        g_CombatModeFlags |= 2;
+        g_GameTimers[3].limit = 0;
+        g_GameTimers[3].flags |= 2;
     } else {
         *dst = 0;
     }
     {
-        int *flags = &g_CombatModeFlags;
+        int *flags = (int *)&g_GameTimers[3].flags;
 
         *flags = (*flags | 1) & ~4;
     }
@@ -539,7 +539,7 @@ int Script_ComputeAudioTimer(int **arg0) {
 }
 
 int Script_GetCombatModeFlag(int **arg0) {
-    if (g_CombatModeFlags & 4) {
+    if (g_GameTimers[3].flags & 4) {
         *arg0[0] = 1;
     } else {
         *arg0[0] = 0;
@@ -549,7 +549,7 @@ int Script_GetCombatModeFlag(int **arg0) {
 }
 
 int Script_SetCombatModeFlag(void) {
-    int *ptr = &g_CombatModeFlags;
+    int *ptr = (int *)&g_GameTimers[3].flags;
 
     *ptr |= 4;
     return 1;

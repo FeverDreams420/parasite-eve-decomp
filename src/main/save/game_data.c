@@ -1012,10 +1012,10 @@ void Save_InitMetadataState(void) {
     g_InventoryRuntime.specialStorage[0] = 515;
     g_AyaSaveState.blend_color = 0x404040;
     Draw_BlendColor(0x404040);
-    D_800A76A4[0] = 0;
-    g_GameTimer1Current[0] = 0;
-    D_800A76BC[0] = 0;
-    g_CombatTimerCurrent[0] = 0;
+    g_GameTimers[0].current = 0;
+    g_GameTimers[1].current = 0;
+    g_GameTimers[2].current = 0;
+    g_GameTimers[3].current = 0;
     Draw_SetBaseOffsetPosition(0, 8 - Draw_GetBaseY());
     MenuWidget_SetColumnLayoutMode(0);
     Menu_SetActionSubmenuSelection(1);

@@ -48,8 +48,8 @@ extern unsigned char g_SaveOverlayTimer;
 extern void *D_8009D1F8;
 void Menu_SaveOverlayDraw(void);
 
-/* Leading values of the four runtime timer records reset at new game. */
-extern unsigned int D_800A76A4[], g_GameTimer1Current[], D_800A76BC[], g_CombatTimerCurrent[];
+/* g_GameTimers[0].current as its own word: the item seed reads it there. */
+extern unsigned int D_800A76A4[];
 extern unsigned char g_CursorRenderDataBlock[], D_800C20B4[];
 
 /* The save-title formatter consumes four numeric fields and two variant

@@ -7,7 +7,9 @@
  * frame by Scene_TickTimers and read and written by the scene scripts.
  * flags bit 0 runs the timer, bit 1 counts down instead of up, bit 2 marks
  * that the limit was reached. Timer 0 is the game clock, timer 2 the play
- * time saved in the memory card header. */
+ * time saved in the memory card header (in frames), timer 3
+ * the combat countdown that Script_ComputeAudioTimer arms with the frames
+ * left in current and a limit of 0. */
 typedef struct GameTimerEntry {
     /* 0x00 */ u32 flags;
     /* 0x04 */ int current;
@@ -22,15 +24,11 @@ extern GameTimerEntry g_GameTimers[4];
  * cleared and the running value. */
 extern volatile u32 D_800A76A0;
 
-/* Interior symbols for the single words the reset routines write. Retail
- * stores the game clock limit twice on reset; the qualifier keeps both. */
+/* Interior symbols for the game clock words GameTime_InitCounter0 writes.
+ * Retail stores the game clock limit twice on reset; the qualifier keeps
+ * both. */
 extern int g_GameTimeTable;
 extern volatile int g_GameClockLimit;
-extern u32 g_GameTimer1Flags;
-extern int g_GameTimer1Limit;
-extern u32 g_PlayTimeFlags;
-extern int g_PlayTimeSeconds;
-extern int g_PlayTimeLimit;
 #define GAME_TIME_COUNTER(index) (g_GameTimers[index].current)
 
 /* Frames played; Save_ClassifyPlaytime buckets it for the save header. */
