@@ -551,3 +551,5 @@ address,overlay,old_name,new_name,evidence
 0x8018F710,room_m023_theater,func_8018F710,RoomM023_JointGlow,"selects joint 8 (variant 0, plays sounds 0x5AE/0x5AF) or joint 16 (variant 1) in mode 0, then draws ring and flare glows on that joint until state 3; slot 1 of effect set D_80190720"
 0x8018FC14,room_m023_theater,func_8018FC14,RoomM023_JointBeacon,"source comment: joint beacon riding a model joint, swelling in, pulsing, flickering and collapsing, tagging the player once on contact; slot 2 of effect set D_80190720"
 0x80190720,room_m023_theater,D_80190720,g_RoomM023Effects,"effect set table: slots 0..2 RoomM023_ScatterEmitter, RoomM023_JointGlow, RoomM023_JointBeacon"
+0x8018F00C,room_m272_liberty,func_8018F00C,RoomM272_Nop_8018F00C,returns 0 immediately; the same empty stub shape as the neighbouring RoomM272_Nop_8018F188..8018F1A0
+0x801991C8,room_m272_liberty,D_801991C8,g_RoomM272Phase,written by RoomM272_SetPhase (argument d) and compared with 0 and 1 in RoomM272_Cinematic to select the store/move or load/display step

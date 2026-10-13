@@ -8,3 +8,5 @@ RoomM272_BlobA = 0x8018EFF4;
 RoomM272_BlobB = 0x8018EFFC;
 RoomM272_BlobC = 0x8018F004;
 RoomM272_Rec = 0x8018F1C8;
+RoomM272_Nop_8018F00C = 0x8018F00C; // type:func
+g_RoomM272Phase = 0x801991C8;
