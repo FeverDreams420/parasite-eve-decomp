@@ -1054,7 +1054,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
   `g_FieldActorListHead`), the player (`D_8009D254` as a `BattleEntity`
   pointer, `g_PlayerEntity` as a `FieldActor` pointer), `g_ActiveActor`,
   `g_ActiveDrawSlot`/`D_8009CDDC`, `g_GameStateFlags`/`D_8009D1A0`,
-  `g_FieldPadPressed`, `D_8009D2E8` and the task script cursor `D_8009CE00`.
+  `g_FieldPadPressed`, `D_8009D2E8` and the task script cursor `g_ScriptCursor`.
   The symbol alias pass applied it to `Battle_EscapeAndPhaseInitFlow`,
   `Battle_DrawStatusPanel`, `Battle_InitEntityColors`,
   `Inv_InitMaxLevelInventory`, the three `-G8` capacity units and the `-G4`
@@ -1256,7 +1256,7 @@ Still open:
     inlined `Scene_LinkContactTask` calls is not cross-jumped (lev 128).
   - `Entity_TriggerAnimEvent` keeps its three pins (lev 81 without: retail
     copies `entity` to `$a2` first). `Script_RunEntityCommand` needs no pins:
-    the plain `g_ScriptNodePool->active = 1; g_SceneDataTable0 -= 0x10;`
+    the plain `g_ScriptNodePool->active = 1; g_ScriptCursorAddress -= 0x10;`
     tail allocates `$a1`/`$a0` as retail does.
     `Entity_RelocateSceneData` keeps the `$v0` pin on the loaded block
     (lev 15) and adds region offsets to the database word through the

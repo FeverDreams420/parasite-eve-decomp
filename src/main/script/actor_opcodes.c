@@ -45,9 +45,9 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-u32 *D_8009CE00;
+u32 *g_ScriptCursor;
 ScriptNode *g_ScriptNodePool;
-int g_SceneDataTable0;
+int g_ScriptCursorAddress;
 
 /* Adjacent field-actor query and distance routines share one compiled unit. */
 #define NULL ((void *)0)
@@ -203,7 +203,7 @@ s32 Entity_GetDistanceComponents(s32 *args[]) {
 #undef NULL
 
 #define NULL ((void *)0)
-s32 g_SceneDataTable0;
+s32 g_ScriptCursorAddress;
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, memcard_init_phase) == 0xF4,
                   memcard_init_phase_offset);
@@ -256,7 +256,7 @@ s32 Boot_MemCardStepInit(u8 **arg0) {
     default:
         return 1;
     }
-    g_SceneDataTable0 -= 0xC;
+    g_ScriptCursorAddress -= 0xC;
     g_ScriptNodePool->active = 1;
     return 0;
 }
@@ -461,7 +461,7 @@ int Render_CameraTrackRelativeOffset(int **args) {
         camera_state->flags &= 0xFFDF;
         return 1;
     } else {
-        D_8009CE00 -= 5;
+        g_ScriptCursor -= 5;
         g_ScriptNodePool->active = 1;
         return 0;
     }
@@ -527,7 +527,7 @@ s32 Render_CameraStepAngleFade(s32 **arg0) {
         g_ScriptNodePool->flags &= 0xFFDF;
         return 1;
     }
-    g_SceneDataTable0 -= 0x10;
+    g_ScriptCursorAddress -= 0x10;
     g_CurrentEntity->rot_y += step;
     g_ScriptNodePool->active = 1;
     return 0;
@@ -661,7 +661,7 @@ int Script_PlayEntityAnim(s16 **args) {
         }
     }
 
-    D_8009CE00 -= 3;
+    g_ScriptCursor -= 3;
     g_ScriptNodePool->active = 1;
     return 0;
 }
@@ -813,10 +813,10 @@ int Script_SetGteMatrix(int **args) {
     } else {
         if ((flags & 0x08000000) == 0) {
         result = 0;
-        script_ptr = D_8009CE00;
+        script_ptr = g_ScriptCursor;
         flag_actor->flags = flags | 0x08000000;
         script_state = g_ScriptNodePool;
-        D_8009CE00 = script_ptr - 5;
+        g_ScriptCursor = script_ptr - 5;
         script_state->active = 1;
         return result;
         }
@@ -825,7 +825,7 @@ int Script_SetGteMatrix(int **args) {
     return 1;
 }
 
-int g_SceneDataTable0;
+int g_ScriptCursorAddress;
 
 int Boot_CheckModeSwitch(void) {
     int mode = g_RenderStateFlags & 7;
@@ -840,6 +840,8 @@ int Boot_CheckModeSwitch(void) {
     g_SceneDataTable0 = cursor;
     node->active = 1;
     return 0;
+        int cursor = g_ScriptCursorAddress;
+        g_ScriptCursorAddress = cursor;
 }
 
 #define NULL ((void *)0)
@@ -1030,10 +1032,10 @@ int Script_OpenMemCardDialog(void) {
         flags = *node_flags;
         if (!(flags & 0x20)) {
             *node_flags = flags | 0x20;
-            cursor = g_SceneDataTable0;
+            cursor = g_ScriptCursorAddress;
             node->active = 1;
             cursor -= 8;
-            g_SceneDataTable0 = cursor;
+            g_ScriptCursorAddress = cursor;
             return 0;
         }
         Render_BeginSceneLoad();
@@ -1067,10 +1069,10 @@ int Script_ShowReceivedItem(int **arg0) {
     flags = *node_flags;
     if (!(flags & 0x20)) {
     *node_flags = flags | 0x20;
-    cursor = g_SceneDataTable0;
+    cursor = g_ScriptCursorAddress;
     node->active = 1;
     cursor -= 0xC;
-    g_SceneDataTable0 = cursor;
+    g_ScriptCursorAddress = cursor;
     return 0;
 
     }
@@ -1119,7 +1121,7 @@ int Script_RunInvCommand(ScriptInvCommandArgs *args) {
         } else {
             g_GameStateFlags |= 4;
         }
-        g_SceneDataTable0 -= 0x1C;
+        g_ScriptCursorAddress -= 0x1C;
         g_ScriptNodePool->active = 1;
         return 0;
     }
@@ -1170,7 +1172,7 @@ typedef struct AkaoStackLocals {
     u8 pad12[8];
 } AkaoStackLocals;
 
-u32 *D_8009CE00;
+u32 *g_ScriptCursor;
 
 int Akao_Cmd_19_Then_C0(u8 *data, int value);
 
@@ -1207,7 +1209,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         status = CdRom_SeekToTrack(*args->arg1, 1, 0, &locals.slot,
                                 *args->arg2 == 0);
         if (status == 1) {
-            D_8009CE00 -= 8;
+            g_ScriptCursor -= 8;
             g_ScriptNodePool->active = status;
             return 0;
         }
@@ -1222,7 +1224,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         status = CdRom_SeekToTrack(*args->arg1, 1, 1, &locals.slot,
                                 *args->arg3 == 0);
         if (status == 1) {
-            D_8009CE00 -= 8;
+            g_ScriptCursor -= 8;
             g_ScriptNodePool->active = status;
             return 0;
         }
@@ -1245,7 +1247,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         if (status != wait_one) {
             break;
         }
-        D_8009CE00 -= 8;
+        g_ScriptCursor -= 8;
         g_ScriptNodePool->active = status;
         return 0;
     case 0xCC:
@@ -1441,14 +1443,14 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         status = CdRom_SeekToTrack(*args->arg1, 1, 1, &locals.slot,
                                *args->arg2 == 0);
         if (status == 1) {
-            D_8009CE00 -= 8;
+            g_ScriptCursor -= 8;
             g_ScriptNodePool->active = status;
             return 0;
         }
         }
         else
         {
-        D_8009CE00 -= 8;
+        g_ScriptCursor -= 8;
         g_ScriptNodePool->active = status;
         return 0;
         }

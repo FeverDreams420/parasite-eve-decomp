@@ -24,7 +24,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, target18) == 0x18,
 ScriptNode *g_ScriptNodeFreeListHead;
 u16 g_ScriptNodeSeqCounter[1];
 ScriptNode *g_ScriptNodePool;
-int g_SceneDataTable0;
+int g_ScriptCursorAddress;
 
 int Script_SpawnChildNode(int **args) {
     ScriptNode *node = g_ScriptNodePool;
@@ -152,10 +152,10 @@ int Script_SetEntityActionAndWait(int **arg0) {
     }
 
     {
-        int cursor = g_SceneDataTable0;
+        int cursor = g_ScriptCursorAddress;
         ScriptNode *active_node = g_ScriptNodePool;
         cursor -= 0xC;
-        g_SceneDataTable0 = cursor;
+        g_ScriptCursorAddress = cursor;
         active_node->active = 1;
         return 0;
     }
@@ -218,7 +218,7 @@ int Script_WaitAnimRange(void) {
         }
     }
 
-    g_SceneDataTable0 -= 8;
+    g_ScriptCursorAddress -= 8;
     return 0;
 }
 
@@ -297,7 +297,7 @@ int Script_TurnTowardPointStep(int **arg0) {
         stepped &= 0xFFF;
         g_CurrentEntity->rot_y = stepped;
         if (stepped != angle) {
-            g_SceneDataTable0 -= 0x14;
+            g_ScriptCursorAddress -= 0x14;
             g_ScriptNodePool->active = 1;
             return 0;
         }
@@ -423,7 +423,7 @@ int Script_MoveTowardPoint(int **args) {
         g_ScriptNodePool->flags &= 0xFFDF;
         return 1;
     } else {
-        g_SceneDataTable0 -= 0x14;
+        g_ScriptCursorAddress -= 0x14;
         g_ScriptNodePool->active = 1;
         return 0;
     }
@@ -533,7 +533,7 @@ int Render_CameraTrackEntityAngle(int **args) {
         camera_state->flags &= 0xFFDF;
         return 1;
     } else {
-        g_SceneDataTable0 -= 0x14;
+        g_ScriptCursorAddress -= 0x14;
         g_ScriptNodePool->active = 1;
         return 0;
     }
@@ -626,7 +626,7 @@ int Render_CameraSnapToEntity(int **args) {
         next_angle &= 0xFFF;
         g_CurrentEntity->rot_y = next_angle;
         if (next_angle != target_angle) {
-            g_SceneDataTable0 -= 0x14;
+            g_ScriptCursorAddress -= 0x14;
             g_ScriptNodePool->active = 1;
             return 0;
         }
@@ -779,7 +779,7 @@ int Render_CameraTrackEntityZoom(int **args) {
         camera_state->flags &= 0xFFDF;
         return 1;
     } else {
-        g_SceneDataTable0 -= 0x14;
+        g_ScriptCursorAddress -= 0x14;
         g_ScriptNodePool->active = 1;
         return 0;
     }

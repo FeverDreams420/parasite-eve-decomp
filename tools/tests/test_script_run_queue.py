@@ -33,8 +33,9 @@ class ScriptRunQueueTests(unittest.TestCase):
         self.assertEqual(images[0][offset:offset+0x27C], images[1][offset:offset+0x27C])
         self.assertEqual(images[0][0xE90:0xEA4], images[1][0xE90:0xEA4])
         syms = {name: int(name[2:], 16) for name in (
-            'D_8009D300', 'D_8009CE00', 'D_8009D2F0', 'D_8009D254',
-            'D_8009D1A0', 'g_ScriptQueueOpcodeHandlers', 'g_ScriptVariableBank', 'D_8009DF70', 'D_800B6A80')}
+            'D_8009D300', 'D_8009D2F0', 'D_8009D254', 'D_8009D1A0', 'D_8009DF70', 'D_800B6A80')}
+        syms.update(g_ScriptCursor=0x8009CE00, g_ScriptQueueOpcodeHandlers=0x800910A0,
+                    g_ScriptVariableBank=0x800A77F0)
         nodes=0x80100000;actors=0x80101000;programs=(0x80110000,0x80111000,0x80112000)
         behaviors=(0,1,3,4,9,15)
         cases=[(f,e,g,a,t,6,5,b) for f,e,g,a,t,b in itertools.product((0,0x10,0x40,0x80),(0,0x1000),(0,0x100),(False,True),(0,1,2,0xFFFFFFFF),behaviors)]
@@ -57,7 +58,7 @@ class ScriptRunQueueTests(unittest.TestCase):
                 actual.append((hooks[address],pointers))
                 first=len(actual)==1
                 if first:
-                    if behavior&2:word(syms['D_8009CE00'],programs[2])
+                    if behavior&2:word(syms['g_ScriptCursor'],programs[2])
                     if behavior&4:word(syms['D_8009D300'],nodes+0x80)
                     if behavior&8:word(syms['D_8009D2F0'],actors+0x300)
                 for reg in ('V1','A0','A1','A2','A3','T0','T1','T2','T3','T4','T5','T6','T7','T8','T9'):
@@ -72,7 +73,7 @@ class ScriptRunQueueTests(unittest.TestCase):
                     word(nodes+i*0x40,programs[min(i,2)]);word(nodes+i*0x40+8,flags if i==0 else 0x80)
                     word(nodes+i*0x40+0x10,ticks if i==0 else (1 if i==1 else 13))
                     word(nodes+i*0x40+0x24,nodes+0x40 if i==0 else 0)
-                word(syms['D_8009D300'],nodes);word(syms['D_8009CE00'],0x8011F000)
+                word(syms['D_8009D300'],nodes);word(syms['g_ScriptCursor'],0x8011F000)
                 word(syms['D_8009D2F0'],actors);word(syms['D_8009D254'],actors if is_active else actors+0x300)
                 word(syms['D_8009D1A0'],global_flags)
                 records={};modes=[pattern if pattern<5 else i%5 for i in range(argc)]
@@ -118,7 +119,7 @@ class ScriptRunQueueTests(unittest.TestCase):
                 assert actual==expected,(case,actual,expected)
                 assert read(nodes,0xC0)==expected_nodes,case
                 assert read(actors,0x600)==actor_guard and all(read(p,0x200)==guard for p,guard in program_guards.items()),case
-                assert getword(syms['D_8009D300'])==0 and getword(syms['D_8009CE00'])==cursor and getword(syms['D_8009D2F0'])==entity,case
+                assert getword(syms['D_8009D300'])==0 and getword(syms['g_ScriptCursor'])==cursor and getword(syms['D_8009D2F0'])==entity,case
                 assert m.reg_read(R.UC_MIPS_REG_PC)==0x80010000 and m.reg_read(R.UC_MIPS_REG_SP)==0x801F0000 and m.reg_read(R.UC_MIPS_REG_GP)==0x8009CD70,case
                 for i,r in enumerate(saved):assert m.reg_read(r)==0xABCD0000+i,case
             print('candidate' if candidate else 'retail','verified',len(cases))

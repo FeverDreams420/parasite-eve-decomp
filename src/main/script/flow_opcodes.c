@@ -29,10 +29,10 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-u32 *D_8009CE00;
+u32 *g_ScriptCursor;
 ScriptNode *g_ScriptNodePool;
 u8 g_ScriptCameraBytes[3];
-int g_SceneDataTable0;
+int g_ScriptCursorAddress;
 
 typedef struct ScriptArgParts {
     s16 low;
@@ -159,7 +159,7 @@ int Script_DispatchScriptCmd(ScriptCmdArgs *args)
     case 3100:
         status = Asset_LoadTimTextures(1);
         if (status == 1) {
-            D_8009CE00 -= 10;
+            g_ScriptCursor -= 10;
             g_ScriptNodePool->active = status;
             return 0;
         }
@@ -196,10 +196,10 @@ int Script_BeginSceneTransition(int **arg0) {
     flags = *node_flags;
     if ((flags & 0x20) == 0) {
         *node_flags = flags | 0x20;
-        cursor = g_SceneDataTable0;
+        cursor = g_ScriptCursorAddress;
         node->active = 1;
         cursor -= 0xC;
-        g_SceneDataTable0 = cursor;
+        g_ScriptCursorAddress = cursor;
         return 0;
     }
 
@@ -248,10 +248,10 @@ int Script_OpenSaveLoadMenu(int **arg0) {
             tail_node->flags = tail_flags;
         }
     } else {
-        cursor = g_SceneDataTable0;
+        cursor = g_ScriptCursorAddress;
         node->flags = flags | 0x20;
         cursor -= 0xC;
-        g_SceneDataTable0 = cursor;
+        g_ScriptCursorAddress = cursor;
     }
 
     {
@@ -277,7 +277,7 @@ int Script_GetPlayerInputFlag(int **args) {
 }
 
 /* Script interpreter main loop and the jump-to-actor-script opcode; a
- * contiguous -G8 pair sharing the script cursor D_8009CE00. */
+ * contiguous -G8 pair sharing the script cursor g_ScriptCursor. */
 
 PE1_STATIC_ASSERT(sizeof(ScriptNode) == 0x2C, interpreter_script_node_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, current) == 0, interpreter_script_offset);
@@ -286,7 +286,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, active) == 0x10, interpreter_wait_off
 /* Tentative COMMON declarations preserve small-data metadata for stock
  * maspsx. Storage remains at the existing data/linker addresses. */
 ScriptNode *g_ScriptNodePool;
-u32 *D_8009CE00;
+u32 *g_ScriptCursor;
 
 void Script_RunQueue(void)
 {
@@ -309,17 +309,17 @@ void Script_RunQueue(void)
         if (node->active == 0) continue;
         node->active--;
         if (node->active != 0) continue;
-        D_8009CE00 = node->current.script;
+        g_ScriptCursor = node->current.script;
         do {
-            header = *D_8009CE00;
-            D_8009CE00++;
-            values = D_8009CE00 + 1;
-            tail = *D_8009CE00;
+            header = *g_ScriptCursor;
+            g_ScriptCursor++;
+            values = g_ScriptCursor + 1;
+            tail = *g_ScriptCursor;
             modes = header >> 17;
             opcode = header & 0x1FFF;
             header >>= 13;
             header &= 15;
-            D_8009CE00 = values + header;
+            g_ScriptCursor = values + header;
             for (i = 0; i < header; i++) {
                 switch (modes & 7) {
                 case 0: args[i] = &values[i]; break;
@@ -336,7 +336,7 @@ void Script_RunQueue(void)
             }
         } while (g_ScriptQueueOpcodeHandlers[opcode](args));
         /* Handlers may replace both the current node and the script cursor. */
-        g_ScriptNodePool->current.script = D_8009CE00;
+        g_ScriptNodePool->current.script = g_ScriptCursor;
     } while ((g_ScriptNodePool = g_ScriptNodePool->next) != 0);
 }
 
@@ -346,7 +346,7 @@ typedef struct {
 
 int Script_JumpToEntityOffset(ScriptJumpOffsetEntry **arg0)
 {
-    D_8009CE00 = (u32 *)(((FieldActor *)D_8009D2F0[0])->script_base + ((*arg0)->value * 2));
+    g_ScriptCursor = (u32 *)(((FieldActor *)D_8009D2F0[0])->script_base + ((*arg0)->value * 2));
     return 1;
 }
 
@@ -367,7 +367,7 @@ int Entity_MarkCurrentNodeFree(void) {
 
 int Script_JumpIfZero(int **arg0) {
     if (*arg0[0] == 0) {
-        g_SceneDataTable0 = (int)(g_CurrentEntity->script_base + (*arg0[1] * 2));
+        g_ScriptCursorAddress = (int)(g_CurrentEntity->script_base + (*arg0[1] * 2));
     }
     return 1;
 }
@@ -433,7 +433,7 @@ int Entity_YieldWhileMoving(void) {
         return 1;
     }
 
-    g_SceneDataTable0 -= 8;
+    g_ScriptCursorAddress -= 8;
     g_ScriptNodePool->active = 1;
     return ret;
 }
@@ -533,7 +533,7 @@ int Script_GetNodeTarget14(int **arg0) {
 
 int Script_YieldWhileTableEntrySet(short **arg0) {
     if ((Draw_GetTextboxPageState(*arg0[0]) << 24) != 0) {
-        g_SceneDataTable0 -= 0xC;
+        g_ScriptCursorAddress -= 0xC;
         g_ScriptNodePool->active = 1;
         return 0;
     }
@@ -688,8 +688,8 @@ int Script_WaitAnimFrameMatch(void) {
         return ret;
     }
 
-    stack = g_SceneDataTable0;
+    stack = g_ScriptCursorAddress;
     stack -= 8;
-    g_SceneDataTable0 = stack;
+    g_ScriptCursorAddress = stack;
     return ret;
 }

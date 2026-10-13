@@ -29,7 +29,7 @@
  * snapshot-diff A->B->A):
  *   g_CollisionDb  collision DB pointer        (see field_collision.h)
  *   g_RegionHeightTable  region-height table
- *   D_8009CE00 / g_SceneDataTable1 / g_SceneDataTable2 / g_TextboxMessageSource  scene-data table pointers
+ *   g_ScriptCursor / g_SceneDataTable1 / g_SceneDataTable2 / g_TextboxMessageSource  scene-data table pointers
  *   g_PlayerEntity  player actor (re-allocated each room)
  *   0x8009D300.. scene task/entity node cluster (rebuilt)
  * Returning to a room reloads its data deterministically to the SAME addresses.

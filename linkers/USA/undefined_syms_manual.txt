@@ -46,7 +46,7 @@ g_ActiveDrawSlotRecord = g_ActiveDrawSlot;
  * keeps apart because each view compiles to the retail code (a scalar
  * small-data view next to an indexed array view, or a byte cursor next to a
  * word cursor). They follow their blob label. */
-D_8009CE00 = g_SceneDataTable0;
+g_ScriptCursor = g_ScriptCursorAddress;
 D_8009D090 = g_InvSavedSelectionIndex;
 D_8009D098 = g_InvSavedSelectionFromStorage;
 D_8009D14C = g_DrawBlendColor;
