@@ -11,7 +11,6 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *matrix, const GteShortVector *v,
     register int r2 asm("$10") = m->r22_r23;
     register int r3 asm("$11") = m->r31_r32;
     register int r4 asm("$12") = m->r33_pad;
-    register int ir1 asm("$8");
     register int ir2 asm("$9");
     register int ir3 asm("$10");
     GteShortVector *ret;
@@ -24,10 +23,10 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *matrix, const GteShortVector *v,
     gte_lwc2_1_4(v);
     gte_cop2_hazard_slot();
     gte_mvmva_rotation_v0_sf12();
-    gte_mfc2_9(ir1);
+    gte_mfc2_9(r0);
     gte_mfc2_10(ir2);
     gte_mfc2_11(ir3);
-    out->x = ir1;
+    out->x = r0;
     out->y = ir2;
     out->z = ir3;
     asm volatile("" ::: "memory");
