@@ -489,9 +489,9 @@ int func_8019360C(int event) {
             {
                 SweepTrapFlowInstance *current = ANIM_OWNER_AS(RoomM350ControllerChannel)->instance;
                 Asset_Find08w(0x5C6,current->owner->soundMode,
-                    *(short *)&current->transforms->position[0],
-                    *(short *)&current->transforms->position[1],
-                    *(short *)&current->transforms->position[2]);
+                    (short)current->transforms->position[0],
+                    (short)current->transforms->position[1],
+                    (short)current->transforms->position[2]);
             }
         }
     }
