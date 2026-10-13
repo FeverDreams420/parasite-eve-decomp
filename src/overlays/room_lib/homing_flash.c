@@ -63,7 +63,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
             }
             if (D_800E27EC & 1) {
                 pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
-                child = (RoomHomingSpark *)func_800CE610(pool);
+                child = func_800CE610(pool);
                 if (child) {
                     child->x = spark->x;
                     child->y = spark->y;
