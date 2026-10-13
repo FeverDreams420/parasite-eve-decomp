@@ -998,7 +998,7 @@ int func_801949EC(int mode) {
             unsigned short value = state->value26;
             if (state->value22 >= 4 && (short)value < 4) {
                 RoomM273PointerPoolEffect *effect = (RoomM273PointerPoolEffect *)func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
-                if (effect) effect->position = (u8 *)g_PlayerEntity->render_object.matrices->translation;
+                if (effect) effect->position = g_PlayerEntity->render_object.matrices->translation;
             }
         }
         func_800CE688(D_8019AE94);
@@ -1754,7 +1754,7 @@ int func_801969D8(int mode) {
         Player *player;
         int dx,dy,dz,x,y,z; short spread; short angle;
         if(*stopped) return 2;
-        player=(Player *)g_PlayerEntity;
+        player=g_PlayerEntity;
         playerPosition.x=x=((Pe1Fixed16_16 *)&player->pos_x)->parts.integer;
         dx=x-D_8019AEFC.x;
         playerPosition.y=y=((Pe1Fixed16_16 *)&player->pos_y)->parts.integer;
