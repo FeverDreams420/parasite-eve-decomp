@@ -32,7 +32,7 @@ int Asset_SearchByKeyType(int type)
     TimPackedImage *image;
     u32 xMask, x832, yMask, y256;
 
-    blob = (void *)g_LoadedSceneAssetBlock[0];
+    blob = g_LoadedSceneAssetBlock[0];
     key = 0x73DECD80;
     xMask = 0x7FF << 10;
     x832 = 832 << 10;
