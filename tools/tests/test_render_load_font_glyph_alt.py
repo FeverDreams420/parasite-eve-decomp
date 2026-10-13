@@ -32,7 +32,7 @@ class RenderLoadFontGlyphAltTests(unittest.TestCase):
             subprocess.run(["tools/scripts/cc.sh", "src/main/render/font.c", str(obj)],
                            cwd=ROOT, check=True, capture_output=True)
             symbols = {
-                "D_800B0DD8": STATE, "g_PeImageSectorTable": RANGE - 79 * 2, "D_800B0E6C": BUFFER_PTR,
+                "g_DiscLoadState": STATE, "g_PeImageSectorTable": RANGE - 79 * 2, "D_800B0E6C": BUFFER_PTR,
                 "g_FontActiveGlyphTable": TABLE, "D_8009ECDB": TABLE + 3, "D_8009EE24": CODES,
                 "g_DiscLoadState": STATE, "D_80093176": RANGE, "D_800B0E6C": BUFFER_PTR,
                 "g_FontGlyphCodeSequence": CODES - 2,
