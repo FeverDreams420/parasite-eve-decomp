@@ -38,7 +38,7 @@ typedef struct SceneSpinRayChannel {
     char *pool; /* 0x08 */
 } SceneSpinRayChannel;
 
-extern GteRotation g_SceneE19_D_8018F210;
+extern GteRotation g_SceneE19RollTilt;
 extern RenderColor g_SceneE19SpinRayColor;
 extern RenderColor g_SceneE19SpinRayBladeHeadColor;
 extern RenderColor g_SceneE19SpinRayBladeTailColor;

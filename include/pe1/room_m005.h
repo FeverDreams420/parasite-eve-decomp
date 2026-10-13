@@ -43,7 +43,6 @@ typedef struct RoomM005Seed8 {
     u8 bytes[8];
 } RoomM005Seed8;
 
-extern RoomM005Seed8 g_RoomM005_D_8018EFF4;
 extern RoomM005Seed8 g_RoomM005OrbiterJointAnchor;
 /* One-field views of RoomM005_Dialog (g_RoomScriptRecord): the orbiter takes
  * the anchor pointer (+0x04) and the fade block (+0x0C) with their own
@@ -58,7 +57,6 @@ extern GteShortVector g_RoomM005BeaconOffset; /* drift offset, written by the jo
 extern GteShortVector g_RoomM005BeaconCenter;
 
 /* Cross flare (RoomM005_CrossFlare): two joint templates and the flash track. */
-extern RoomM005Seed8 g_RoomM005_D_8018EFFC;
 extern RoomM005Seed8 g_RoomM005CrossFlareFlashAnchor;
 extern RoomM005Seed8 g_RoomM005CrossFlareTwinAnchor;
 extern u8 g_RoomM005CrossFlareColorTrack[];

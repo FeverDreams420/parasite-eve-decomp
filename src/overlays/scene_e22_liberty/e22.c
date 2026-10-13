@@ -39,7 +39,6 @@ int SceneE22_RingBurstParticleCallback(int mode, RoomOrbitTrailParticle *p) {
     int glow;
     int radius;
 
-    seed = g_SceneE22_D_8018F1CC;
     seed = g_SceneE22RingBurstTriangleColor;
     switch (mode) {
     case 1:
@@ -136,8 +135,6 @@ int SceneE22_RingBurstParticleCallback(int mode, RoomOrbitTrailParticle *p) {
  * ring while it fades; the anchor is published as the orbit centre. */
 int SceneE22_RingBurst(int mode, RoomOrbitRingBurst *burst) {
     GteRotation tilt;
-    RenderColor ringColor = g_SceneE22_D_8018F1D0;
-    RenderColor haloColor = g_SceneE22_D_8018F1D4;
     RenderColor ringColor = g_SceneE22RingBurstRingColor;
     RenderColor haloColor = g_SceneE22RingBurstHaloColor;
     RoomOrbitTrailParticle *child;
@@ -328,10 +325,6 @@ int SceneE22_LinkBeam(int mode, SceneE22LinkBeam *beam) {
     GteShortVector middle;
     GteShortVector last;
     GteShortVector heading;
-    GteShortVector offset0 = g_SceneE22_D_8018F1D8;
-    GteShortVector offset1 = g_SceneE22_D_8018F1E0;
-    RenderColor color0 = g_SceneE22_D_8018F1E8;
-    RenderColor color2 = g_SceneE22_D_8018F1F0;
     GteShortVector offset0 = g_SceneE22JointOrigin;
     GteShortVector offset1 = g_SceneE22JointAnchor;
     RenderColor color0 = g_SceneE22LinkBeamTailColor;
@@ -410,8 +403,6 @@ int SceneE22_LinkBeam(int mode, SceneE22LinkBeam *beam) {
  * sideways speed decays (state 0 slowly, state 1 quickly while falling),
  * and a wide glow pulses in place (state 2). */
 int SceneE22_EmberDriftParticleCallback(int mode, RoomOrbitTrailParticle *p) {
-    GteRotation turn = g_SceneE22_D_8018F1FC;
-    RenderColor color = g_SceneE22_D_8018F204;
     GteRotation spin = g_SceneE22ZeroSpin;
     GteRotation turn = g_SceneE22FlatTilt;
     RenderColor color = g_SceneE22EmberParticleColor;
@@ -552,7 +543,6 @@ int SceneE22_EmberDriftParticleCallback(int mode, RoomOrbitTrailParticle *p) {
  * the actor to the scene script; then it fades. While it glows it draws a
  * flickering halo and ring. */
 int SceneE22_EmberDrift(int mode, SceneE22EmberBurst *burst) {
-    RenderColor ringColor = g_SceneE22_D_8018F208;
     RenderColor ringColor = g_SceneE22EmberDriftRingColor;
     RenderColor haloColor = g_SceneE22EmberDriftHaloColor;
     RoomOrbitTrailParticle *child;
@@ -693,7 +683,6 @@ int SceneE22_EmberDrift(int mode, SceneE22EmberBurst *burst) {
  * 2); each draws as a turning glow. */
 int SceneE22_EmberColumnParticleCallback(int mode, RoomOrbitTrailParticle *p) {
     GteRotation spin;
-    RenderColor color = g_SceneE22_D_8018F204;
     RenderColor color = g_SceneE22EmberParticleColor;
     int fall;
     int bounce;
@@ -836,10 +825,8 @@ int SceneE22_EmberColumnParticleCallback(int mode, RoomOrbitTrailParticle *p) {
  * frames) slow sparks; at frame 29 it hands the actor to the scene
  * script. It draws a flare, a halo and a floor ring while it burns. */
 int SceneE22_EmberColumn(int mode, GteShortVector *anchor) {
-    GteRotation spin = g_SceneE22_D_8018F1FC;
     GteRotation spin = g_SceneE22FlatTilt;
     GteShortVector position;
-    RenderColor color = g_SceneE22_D_8018F210;
     RenderColor color = g_SceneE22EmberColumnColor;
     RenderColor shade;
     RoomOrbitTrailParticle *child;
@@ -1052,10 +1039,8 @@ int SceneE22_SwirlRingParticleCallback(int mode, RoomOrbitTrailParticle *p) {
  * bursts eight swirling glows and fades for 20 frames. It draws a halo
  * and a spinning flare while it swells, a flashing ring while it fades. */
 int SceneE22_SwirlRing(int mode, SceneE22SwirlRing *swirl) {
-    GteShortVector offset = g_SceneE22_D_8018F1E0;
     GteShortVector offset = g_SceneE22JointAnchor;
     GteShortVector position;
-    RenderColor color = g_SceneE22_D_8018F214;
     GteRotation spin = g_SceneE22ZeroSpin;
     RenderColor color = g_SceneE22SwirlRingColor;
     RoomOrbitTrailParticle *child;
@@ -1271,12 +1256,10 @@ int SceneE22_TwistTrailCallback(int mode, RoomOrbitTrailParticle *p) {
  * twisting trail particle per frame. It draws as a spinning model, plus
  * glows and flares while it advances. */
 int SceneE22_TwistModel(int mode, SceneE22TwistModel *bolt) {
-    RenderColor color = g_SceneE22_D_8018F218;
     RenderColor color = g_SceneE22BoltColor;
     GteShortVector position;
     GteShortVector step;
     GteRotation rotation;
-    GteShortVector offset = g_SceneE22_D_8018F1E0;
     GteRotation spin = g_SceneE22ZeroSpin;
     GteShortVector offset = g_SceneE22JointAnchor;
     RoomOrbitTrailParticle *child;
@@ -1522,8 +1505,6 @@ int SceneE22_TwistBeamCallback(int mode, RoomOrbitTrailParticle *p) {
     GteRotation spin = g_SceneE22ZeroSpin;
     GteShortVector offset;
     RenderColor color;
-    RenderColor colorA = g_SceneE22_D_8018F21C;
-    RenderColor colorB = g_SceneE22_D_8018F220;
     RenderColor colorA = g_SceneE22TwistBeamColorA;
     RenderColor colorB = g_SceneE22TwistBeamColorB;
     int angle;
@@ -1624,13 +1605,10 @@ int SceneE22_TwistBeamCallback(int mode, RoomOrbitTrailParticle *p) {
  * the screen and spraying sparks. It draws as a spinning model with a glow,
  * a halo and a ring. */
 int SceneE22_SweepBolt(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
-    RenderColor color = g_SceneE22_D_8018F218;
-    RenderColor haloColor = g_SceneE22_D_8018F224;
     RenderColor color = g_SceneE22BoltColor;
     RenderColor haloColor = g_SceneE22SweepBoltHaloColor;
     GteShortVector tip;
     GteRotation rotation;
-    GteRotation tilt = g_SceneE22_D_8018F1FC;
     GteRotation spin = g_SceneE22ZeroSpin;
     GteRotation tilt = g_SceneE22FlatTilt;
     RoomOrbitTrailParticle *child;
@@ -1917,7 +1895,6 @@ int SceneE22_QuakeSparkCallback(int mode, SceneE22Effect *effect) {
  * that spread from the blast. */
 int SceneE22_QuakeBlast(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target) {
     GteShortVector position;
-    GteRotation tilt = g_SceneE22_D_8018F1FC;
     GteRotation tilt = g_SceneE22FlatTilt;
     GteRotation rotation;
     SceneE22QuakeColor color;

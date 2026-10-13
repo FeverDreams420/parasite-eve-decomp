@@ -7,7 +7,6 @@
 #include "pe1/field_color.h"
 
 extern struct BattleEntity *D_8009D254;
-extern char g_RoomM318_D_8018F1CC[];
 extern char g_RoomM318GetMayaPosErrorFormat[];
 extern char g_RoomM318FanSweepTrailColorTrack[];
 extern s32 rand(void);
@@ -16,7 +15,6 @@ extern int g_RoomM318StarFlarePhase;
 extern char g_RoomM318StarFlareColorTrackA[], g_RoomM318StarFlareColorTrackB[];
 extern char g_RoomM318ShakeBurstParticleColorTrack[];
 extern int rand(void);
-extern RenderColor g_RoomM318_D_8018F1FC;
 extern RenderColor g_RoomM318EmberParticleColor;
 extern u8 g_RoomM318EmberBurstParticleColorTrack[];
 extern int g_RoomM318ActorParams[2];

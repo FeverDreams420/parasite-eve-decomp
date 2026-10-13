@@ -180,8 +180,6 @@ int RoomM086_SeekerCallback(int mode, RoomM086Seeker *seeker, RoomM086SeekerPara
 int RoomM086_SeekerController(int mode, RoomM086SeekerController *state, RoomM086ControllerParams *params) {
     GteShortVector rotation;
     GteShortVector position;
-    RoomM086Offset anchor = g_RoomM086_D_8018EFF4;
-    RoomM086Offset drift = g_RoomM086_D_8018EFFC;
     RoomM086Offset anchor = g_RoomM086JointAnchor;
     RoomM086Offset drift = g_RoomM086LaunchVelocity;
     GteMatrix matrix;
@@ -509,7 +507,6 @@ s32 RoomM086_BounceGlint(s32 mode, RoomBounceGlint *ent) {
     s32 i;
     s32 value;
 
-    blob = g_RoomM086_D_8018EFF4;
     blob = g_RoomM086JointAnchor;
 
     if (mode != 1) {
@@ -673,7 +670,6 @@ int *RoomM086_SetBounceGlintParams(int arg0, int arg1, int arg2, int arg3) {
         int *base = g_RoomM086BounceGlintParams;
 
         base[0] = arg1;
-        g_RoomM086_D_80190B94 = arg3;
         base[1] = arg2;
         base[2] = arg3;
         base[0] = 0x1000;

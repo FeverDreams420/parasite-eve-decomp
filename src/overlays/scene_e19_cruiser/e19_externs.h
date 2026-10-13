@@ -9,10 +9,8 @@
 #include "pe1/room_orbit_trail.h"
 #include "pe1/room_spark.h"
 
-extern GteRotation g_SceneE19_D_8018F1CC;
 extern GteRotation g_SceneE19ZeroSpin;
 extern int g_SceneE19BlastGlow;
-extern GteRotation g_SceneE19_D_8018F210;
 extern GteRotation g_SceneE19RollTilt;
 extern RenderColor g_SceneE19HomingParticleColor;
 extern void FieldFx_DrawPulledSprite(GteShortVector *, int, int, int,

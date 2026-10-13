@@ -26,8 +26,8 @@ typedef struct SceneE22BurstChannel {
 } SceneE22BurstChannel;
 
 extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
-extern RenderColor g_SceneE22_D_8018F1D0;
-extern RenderColor g_SceneE22_D_8018F1D4;
+extern RenderColor g_SceneE22RingBurstRingColor;
+extern RenderColor g_SceneE22RingBurstHaloColor;
 extern RenderColor g_SceneE22RingBurstRingColor;
 extern RenderColor g_SceneE22RingBurstHaloColor;
 extern GteShortVector g_SceneE22BurstAnchor;
@@ -36,7 +36,6 @@ extern int SceneE22_RingBurstParticleCallback(int mode, RoomOrbitTrailParticle *
 
 /* Orbit ring trail particle (SceneE22_RingBurstParticleCallback): its colour seed and trail
  * track, and the trail strip renderer. */
-extern RenderColor g_SceneE22_D_8018F1CC;
 extern RenderColor g_SceneE22RingBurstTriangleColor;
 extern u8 g_SceneE22RingBurstParticleColorTrack[];
 extern void FieldFx_DrawGlowLine(void *, void *, void *, void *, int, int, int);
@@ -53,8 +52,8 @@ extern void FieldFx_OffsetPointByAngles(void *, void *, int, void *, int, int);
 
 /* Twist beam particle (SceneE22_TwistBeamCallback): its colours, trail track, the beam
  * release flag and the beam sprite colour row. */
-extern RenderColor g_SceneE22_D_8018F21C;
-extern RenderColor g_SceneE22_D_8018F220;
+extern RenderColor g_SceneE22TwistBeamColorA;
+extern RenderColor g_SceneE22TwistBeamColorB;
 extern RenderColor g_SceneE22TwistBeamColorA;
 extern RenderColor g_SceneE22TwistBeamColorB;
 extern u8 g_SceneE22TwistBeamColorTrack[];

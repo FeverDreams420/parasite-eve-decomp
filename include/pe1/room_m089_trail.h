@@ -19,8 +19,8 @@ typedef struct RoomM089SpiralTrail {
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM089SpiralTrail, rise) == 0x36,
                   room_m089_spiral_trail_rise_offset);
 
-extern RenderColor g_RoomM089_D_8018F1CC;
-extern RenderColor g_RoomM089_D_8018F1D0;
+extern RenderColor g_RoomM089TrailHeadColor;
+extern RenderColor g_RoomM089TrailTailColor;
 extern RenderColor g_RoomM089TrailHeadColor;
 extern RenderColor g_RoomM089TrailTailColor;
 void FieldFx_DrawGlowLine(void *, void *, void *, void *, int, int, int);

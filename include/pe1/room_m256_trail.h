@@ -31,7 +31,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM256TrailEffect, frame) == 0x16,
 
 extern const RenderColor g_RoomM256_D_8018F218, g_RoomM256_D_8018F21C;
 extern const GteRotation g_RoomM256_D_8018F220;
-extern GteRotation g_RoomM256_D_8018F1CC;
+extern GteRotation g_RoomM256SpriteTilt;
 extern const RenderColor g_RoomM256TrailColor, g_RoomM256TrailDarkColor;
 extern const GteRotation g_RoomM256TrailAnchor;
 extern GteRotation g_RoomM256SpriteTilt;

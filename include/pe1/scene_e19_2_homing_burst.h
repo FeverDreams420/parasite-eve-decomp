@@ -48,8 +48,8 @@ typedef struct SceneHomingBurstEvent {
     /* 0x0D */ u8 active;
 } SceneHomingBurstEvent;
 
-extern GteRotation g_SceneE19_D_8018F210;
-extern GteRotation g_SceneE19_D_8018F1CC;
+extern GteRotation g_SceneE19RollTilt;
+extern GteRotation g_SceneE19ZeroSpin;
 extern GteRotation g_SceneE19RollTilt;
 extern GteRotation g_SceneE19ZeroSpin;
 extern RenderColor g_SceneE19HomingBurstFlashColor;

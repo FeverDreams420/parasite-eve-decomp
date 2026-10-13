@@ -51,9 +51,9 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOrbitTrailParticle, timer) ==
                       PE1_OFFSETOF(RoomTwinRibbonPulse, age),
                   room_twin_ribbon_pulse_age_view);
 
-extern GteShortVector g_RoomM318_D_8018F214;
-extern GteShortVector g_RoomM318_D_8018F21C;
-extern GteShortVector g_RoomM318_D_8018F224;
+extern GteShortVector g_RoomM318TwinRibbonRoot;
+extern GteShortVector g_RoomM318TwinRibbonTip;
+extern GteShortVector g_RoomM318TwinRibbonFork;
 extern GteShortVector g_RoomM318TwinRibbonRoot;
 extern GteShortVector g_RoomM318TwinRibbonTip;
 extern GteShortVector g_RoomM318TwinRibbonFork;

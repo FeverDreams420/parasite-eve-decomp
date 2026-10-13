@@ -11,8 +11,8 @@ and `conflicting` otherwise. Rules for resolving the conflicting names are in
 
 | Class | Names |
 | --- | ---: |
-| Global names defined by any overlay | 3458 |
-| Defined in more than one overlay, identical | 962 |
+| Global names defined by any overlay | 3459 |
+| Defined in more than one overlay, identical | 961 |
 | Defined in more than one overlay, conflicting | 25 |
 | - of which already non-auto names | 25 |
 |   - room interface (a shared source names it) | 24 |

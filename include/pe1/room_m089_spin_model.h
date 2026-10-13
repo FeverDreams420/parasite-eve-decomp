@@ -18,7 +18,6 @@ typedef struct RoomM089SpinModel {
     /* 0x02 */ s16 stage;
 } RoomM089SpinModel;
 
-extern RenderColor g_RoomM089_D_8018F1D4;
 extern RenderColor g_RoomM089SpinGlowColor;
 extern u8 *g_RoomM089CoreModel;
 

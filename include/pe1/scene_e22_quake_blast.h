@@ -95,7 +95,6 @@ extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
 extern void *g_SceneE22QuakeModel0;
 extern void *g_SceneE22QuakeModel1;
 extern u8 g_SceneE22QuakeColorTrack[];
-extern GteRotation g_SceneE22_D_8018F1FC;
 extern GteRotation g_SceneE22FlatTilt;
 extern RenderColor g_SceneE22QuakeFlashColor;
 

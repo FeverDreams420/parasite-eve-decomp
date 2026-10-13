@@ -107,7 +107,6 @@ extern void FieldFx_ModelSetTexture(int tpage, int clut);
 /* Flash burst controller (RoomM318_FlashBurst): its particle callback, colour
  * seed, glow track and the helpers it calls. */
 extern int RoomM318_FlashBurstParticleCallback(int mode, RoomOrbitTrailParticle *p);
-extern RenderColor g_RoomM318_D_8018F210;
 extern RenderColor g_RoomM318FlashBurstColor;
 extern u8 g_RoomM318FlashBurstColorTrack[];
 
@@ -129,7 +128,6 @@ typedef struct RoomRisingColumnParams {
 
 extern GteShortVector g_RoomM318RisingColumnAnchor;
 extern int RoomM318_RisingColumnParticleCallback(int mode, RoomOrbitTrailParticle *p);
-extern GteRotation g_RoomM318_D_8018F208;
 extern GteRotation g_RoomM318FlatTilt;
 extern u8 g_RoomM318RisingColumnParticleColorTrack[];
 extern u16 g_FieldFxTpageSlot10;
@@ -152,7 +150,6 @@ typedef struct RoomCrossFlashParticle {
 
 extern GteShortVector g_RoomM318CrossFlashAnchor;
 extern int RoomM318_CrossFlashParticleCallback(int mode, RoomCrossFlashParticle *p);
-extern RenderColor g_RoomM318_D_8018F1FC;
 extern RenderColor g_RoomM318EmberParticleColor;
 extern u8 g_RoomM318CrossFlashParticleColorTrack[];
 

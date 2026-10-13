@@ -107,7 +107,6 @@ int RoomM023_DriftPulseCallback(int mode, RoomDriftPulseState *state) {
 /* Every `interval` frames emits a particle with a random velocity, either
  * from the tracked model joint or from a random point of a wide band. */
 int RoomM023_ScatterEmitter(int mode, RoomM023ScatterState *state) {
-    RoomM023Template template = g_RoomM023_D_8018EFF4;
     RoomM023Template template = g_RoomM023JointAnchor;
     s16 position[4];
     RoomM023Particle *particle;
@@ -171,9 +170,6 @@ int RoomM023_ScatterEmitter(int mode, RoomM023ScatterState *state) {
 int RoomM023_JointGlow(int mode, RoomM023JointGlow *glow) {
     GteShortVector position;
     GteRotation rotation;
-    RoomM023Template template = g_RoomM023_D_8018EFF4;
-    RenderColor ring = g_RoomM023_D_8018EFFC;
-    RenderColor flare = g_RoomM023_D_8018F000;
     RoomM023Template template = g_RoomM023JointAnchor;
     RenderColor ring = g_RoomM023RingBandColor;
     RenderColor flare = g_RoomM023StarFanColor;
@@ -279,7 +275,6 @@ int RoomM023_JointBeacon(int mode, RoomM023Beacon *state) {
     GteVector scale;
     GteShortVector position;
     GteShortVector rotation;
-    RoomM023Template offset = g_RoomM023_D_8018EFF4;
     RoomM023Template offset = g_RoomM023JointAnchor;
     GteMatrix matrix;
     GteMatrix spin;

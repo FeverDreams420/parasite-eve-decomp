@@ -15,8 +15,6 @@
 
 int RoomM089_SpiralTrailCallback(int mode, RoomM089SpiralTrail *trail, GteShortVector *anchor) {
     GteRotation rotation;
-    RenderColor head = g_RoomM089_D_8018F1CC;
-    RenderColor tail = g_RoomM089_D_8018F1D0;
     RenderColor head = g_RoomM089TrailHeadColor;
     RenderColor tail = g_RoomM089TrailTailColor;
     RenderMatrixSlot *matrixSlot;
@@ -208,7 +206,6 @@ int RoomM089_SpiralTrail(int mode, unsigned short *dst, unsigned short *src) {
 int RoomM089_SpinModel(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
     GteShortVector position;
     GteShortVector rotation;
-    RenderColor color = g_RoomM089_D_8018F1D4;
     RenderColor color = g_RoomM089SpinGlowColor;
     GteMatrix matrix;
     GteVector scale;
@@ -344,7 +341,6 @@ int RoomM089_SwirlRiseSprite(int mode, RoomSwirlRiseState *state,
     RenderMatrixSlot *matrixSlot;
     int intensity;
 
-    color = g_RoomM089_D_8018F1D8;
     color = g_RoomM089SwirlSpriteColor;
     switch (mode) {
     case 1:
@@ -632,7 +628,6 @@ int RoomM089_ModelPulse(int mode, RoomM089ModelPulse *state, GteShortVector *anc
 
 short *RoomM089_SetAnchor(int arg0, short arg1, short arg2, short arg3) {
     if (arg0 == 1) {
-        g_RoomM089_D_80194164 = arg3;
         g_RoomM089Anchor[0] = arg1;
         g_RoomM089Anchor[1] = arg2;
         g_RoomM089Anchor[2] = arg3;

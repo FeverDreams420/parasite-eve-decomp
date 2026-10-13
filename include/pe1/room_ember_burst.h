@@ -33,8 +33,8 @@ typedef struct RoomEmberBurstParams {
 
 typedef RoomOrbitTrailPoolChannel RoomEmberBurstChannel;
 
-extern char g_RoomM318_D_8018F1CC[];
-extern RenderColor g_RoomM318_D_8018F204;
+extern char g_RoomM318GetMayaPosErrorFormat[];
+extern RenderColor g_RoomM318EmberHaloColor;
 extern char g_RoomM318GetMayaPosErrorFormat[];
 extern RenderColor g_RoomM318EmberRingColor;
 extern RenderColor g_RoomM318EmberHaloColor;
@@ -99,7 +99,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFanSweepSpark, radius) == 0x0C,
 PE1_STATIC_ASSERT(sizeof(RoomFanSweepSpark) == 0x10,
                   room_fan_sweep_spark_size);
 
-extern RenderColor g_RoomM318_D_8018F1F0;
+extern RenderColor g_RoomM318FanSweepSparkColor;
 extern void *g_RoomM318FanSweepSparkPool;
 extern RenderColor g_RoomM318FanSweepSparkColor;
 extern GteShortVector g_RoomM318FanSweepAnchor;
@@ -181,7 +181,6 @@ static inline void RoomEffect_AttachToActor(int subId, int typeId, void *anchor)
             return;
         }
     }
-    printf(g_RoomM318_D_8018F1CC, subId, typeId);
     printf(g_RoomM318GetMayaPosErrorFormat, subId, typeId);
 }
 

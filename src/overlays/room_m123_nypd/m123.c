@@ -48,8 +48,6 @@ typedef struct RoomM123Burst {
 
 int RoomM123_JointTriangleCallback(int mode, RoomM123JointTriangle *triangle) {
     GteShortVector corners[4];
-    GteShortVector offset = g_RoomM123_D_8018F1CC;
-    GteShortVector tip = g_RoomM123_D_8018F1D4;
     GteShortVector offset = g_RoomM123JointOffset;
     GteShortVector tip = g_RoomM123JointOrigin;
     RenderColor color = g_RoomM123TriangleColor;
@@ -228,7 +226,6 @@ int RoomM123_GlowBurstParticleCallback(int mode, RoomM123PulsingParticle *partic
  * stores, and the palette read-back follows the block's stores. */
 
 int RoomM123_GlowBurst(int mode, RoomM123GlowBurst *burst) {
-    GteShortVector template = g_RoomM123_D_8018F1E0;
     GteShortVector template = g_RoomM123JointAnchor;
     GteShortVector position;
     GteRotation rotation;
@@ -365,7 +362,6 @@ int RoomM123_JointBeacon(int mode, RoomM123Beacon *state) {
     GteVector scale;
     GteShortVector position;
     GteShortVector rotation;
-    RoomM123BeaconOffset offset = g_RoomM123_D_8018F1E8;
     RoomM123BeaconOffset offset = g_RoomM123BeaconAnchor;
     GteMatrix matrix;
     GteMatrix spin;
@@ -685,7 +681,6 @@ int RoomM123_JointSwirlParticleCallback(int mode, RoomM123Particle *particle) {
 
 int RoomM123_JointSwirl(int mode)
 {
-    GteShortVector seed = g_RoomM123_D_8018F1E0;
     GteShortVector seed = g_RoomM123JointAnchor;
     GteShortVector output;
     RoomM123Particle *particle;
@@ -763,7 +758,6 @@ ret0:
 int RoomM123_PulseRingCallback(int mode, RoomPulseParticle *particle, int *reference)
 {
     int color[2];
-    GteShortVector position = g_RoomM123_D_8018F1F0;
     GteShortVector position = g_RoomM123PulseRingTilt;
     GteShortVector *positionPtr;
     GteMatrix **matrixSlot;
@@ -896,7 +890,6 @@ int RoomM123_WaveCallback(int mode, RoomM123Wave *wave) {
 }
 
 int RoomM123_WaveBurst(int mode, RoomM123Burst *burst, int *choice) {
-    GteShortVector position = g_RoomM123_D_8018F1CC;
     GteShortVector position = g_RoomM123JointOffset;
     RoomM123Wave *child;
     int value;

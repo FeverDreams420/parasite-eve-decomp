@@ -42,7 +42,6 @@ FieldActor *RoomM318_FindActorPosition(int type_id, int sub_id, s16 *position) {
         actor = actor->next;
     }
 
-    printf(g_RoomM318_D_8018F1CC, type_id, sub_id);
     printf(g_RoomM318GetMayaPosErrorFormat, type_id, sub_id);
     return 0;
 }
@@ -73,7 +72,6 @@ s32 RoomM318_FanSweepTrailCallback(s32 mode, s16 *pos) {
 }
 
 #define ROOM_FAN_SWEEP_SPARK_NAME RoomM318_FanSweepSpark
-#define ROOM_FAN_SWEEP_SPARK_COLOR g_RoomM318_D_8018F1F0
 #define ROOM_FAN_SWEEP_SPARK_COLOR g_RoomM318FanSweepSparkColor
 #define ROOM_FAN_SWEEP_SPARK_ANCHOR g_RoomM318FanSweepAnchor
 #define ROOM_FAN_SWEEP_SPARK_TRAIL g_RoomM318FanSweepSparkPool
@@ -646,7 +644,6 @@ int RoomM318_ShakeBurst(int mode, RoomShakeBurstPoint *anchor) {
 int RoomM318_EmberBurstParticleCallback(int mode, RoomOrbitTrailParticle *p) {
     GteRotation spin = g_RoomM318ZeroSpin;
     GteShortVector offset;
-    RenderColor color = g_RoomM318_D_8018F1FC;
     RenderColor color = g_RoomM318EmberParticleColor;
     int fall;
     int bounce;
@@ -774,7 +771,6 @@ int RoomM318_EmberBurstParticleCallback(int mode, RoomOrbitTrailParticle *p) {
  * orbiting sparks, embers on odd frames and smoke on even ones, then fades;
  * while it glows it draws a flickering halo and a ring. */
 int RoomM318_EmberBurst(int mode, RoomEmberBurst *burst, RoomEmberBurstParams *params) {
-    RenderColor haloColor = g_RoomM318_D_8018F204;
     RenderColor ringColor = g_RoomM318EmberRingColor;
     RenderColor haloColor = g_RoomM318EmberHaloColor;
     RoomOrbitTrailParticle *child;
@@ -897,7 +893,6 @@ int RoomM318_EmberBurst(int mode, RoomEmberBurst *burst, RoomEmberBurstParams *p
 /* Rising column particle: rings pulse at the column centre while sparks
  * drift and bounce on the floor; both draw with the column's glow track. */
 int RoomM318_RisingColumnParticleCallback(int mode, RoomOrbitTrailParticle *p) {
-    GteRotation spin = g_RoomM318_D_8018F208;
     GteRotation spin = g_RoomM318FlatTilt;
     RenderColor color;
     int fall;
@@ -1152,7 +1147,6 @@ int RoomM318_FlashBurstParticleCallback(int mode, RoomOrbitTrailParticle *p) {
  * fades a glow sprite, halo and ring over 32 frames. */
 int RoomM318_FlashBurst(int mode, RoomShakeBurstPoint *burst) {
     RenderColor glowColor;
-    RenderColor color = g_RoomM318_D_8018F210;
     RenderColor color = g_RoomM318FlashBurstColor;
     RoomOrbitTrailParticle *child;
     void **soundSlot;
@@ -1280,7 +1274,6 @@ int RoomM318_FlashBurst(int mode, RoomShakeBurstPoint *burst) {
 int RoomM318_CrossFlashParticleCallback(int mode, RoomCrossFlashParticle *p) {
     GteShortVector origin;
     RenderColor glowColor;
-    RenderColor color = g_RoomM318_D_8018F1FC;
     RenderColor color = g_RoomM318EmberParticleColor;
     int angle;
     int size;
@@ -1515,9 +1508,6 @@ int RoomM318_TwinRibbonPulseCallback(int mode, RoomM318Pulse *pulse) {
 int RoomM318_TwinRibbon(int mode, RoomTwinRibbon *ribbon, RoomTwinRibbonParams *params) {
     GteShortVector from;
     GteShortVector to;
-    GteShortVector root = g_RoomM318_D_8018F214;
-    GteShortVector tip = g_RoomM318_D_8018F21C;
-    GteShortVector fork = g_RoomM318_D_8018F224;
     GteShortVector root = g_RoomM318TwinRibbonRoot;
     GteShortVector tip = g_RoomM318TwinRibbonTip;
     GteShortVector fork = g_RoomM318TwinRibbonFork;

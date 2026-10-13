@@ -324,7 +324,6 @@ int SceneE19_GrabNop6(void) {
 }
 
 int SceneE19_BlastGlowCallback(int mode, SceneE19Effect *effect) {
-    GteRotation position = g_SceneE19_D_8018F1CC;
     GteRotation position = g_SceneE19ZeroSpin;
     int angle, cosine, sine, brightness, palette, kind;
     u16 clut;
@@ -1064,7 +1063,6 @@ int FieldFx_GetDistanceNonZero(s16 *from, s16 *to);
 
 int SceneE19_HomingParticleCallback(int mode, SceneE19HomingParticle *particle)
 {
-    GteRotation templatePoint = g_SceneE19_D_8018F210;
     GteRotation templatePoint = g_SceneE19RollTilt;
     GteShortVector temporaryPosition;
     GteShortVector rotation;
@@ -1330,8 +1328,6 @@ timer_return_one:
 int SceneE19_HomingBurst(int mode, SceneHomingBurst *burst)
 {
     GteShortVector position;
-    GteRotation rotation = g_SceneE19_D_8018F210;
-    GteRotation tilt = g_SceneE19_D_8018F1CC;
     GteRotation rotation = g_SceneE19RollTilt;
     GteRotation tilt = g_SceneE19ZeroSpin;
     RenderColor flashColor = g_SceneE19HomingBurstFlashColor;
@@ -1579,7 +1575,6 @@ int SceneE19_SpinRayCallback(int mode, SceneSpinRay *ray)
  * two rings there. */
 int SceneE19_SpinRayBurst(int mode, SceneSpinRayBurst *burst)
 {
-    GteRotation tilt = g_SceneE19_D_8018F210;
     GteRotation tilt = g_SceneE19RollTilt;
     GteShortVector position;
     RenderColor color;
@@ -1708,7 +1703,6 @@ int SceneE19_SpinRayBurst(int mode, SceneSpinRayBurst *burst)
  * sideways speed decays (state 0 slowly, state 1 quickly while falling),
  * and a wide flare pulses in place (state 2). */
 int SceneE19_EmberFlareParticleCallback(int mode, RoomOrbitTrailParticle *p) {
-    GteRotation spin = g_SceneE19_D_8018F1CC;
     GteRotation spin = g_SceneE19ZeroSpin;
     GteRotation turn = g_SceneE19FlatTilt;
     RenderColor color = g_SceneE19EmberParticleColor;
@@ -2844,7 +2838,6 @@ int SceneE19_TwinGlow(int mode, SceneTwinGlow *glow)
 /* Spark that drifts with damped velocity, jitters and spins for 8 frames
  * while drawing an animated sprite scaled by its size field. */
 int SceneE19_JitterSparkCallback(int mode, RoomJitterSpark *spark) {
-    GteRotation rotation = g_SceneE19_D_8018F1CC;
     GteRotation rotation = g_SceneE19ZeroSpin;
     int fall;
     int bounce;
