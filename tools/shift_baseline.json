@@ -3,7 +3,7 @@
   "exe:relocs_to_absolute_program": 7499,
   "exe:unrelocated:data_word": 3,
   "exe:unrelocated:lui": 7,
-  "overlays:abi_loader_contract": 447,
+  "overlays:abi_loader_contract": 458,
   "overlays:distinct_main_addresses": 327,
   "overlays:main_references": 7287,
   "overlays:own_overlay_pinned": 161,
