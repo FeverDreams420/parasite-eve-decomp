@@ -1916,71 +1916,122 @@ Rules for source that aims at shiftability:
 
 `tools/scripts/shift_audit.py` (read-only, needs `make build` and, for the
 overlay table, `make overlay-build-all`) prints the inventory below;
-`--json` gives the same data and `--check BASELINE` fails when a count grows.
-`tools/scripts/shift_test.py` is the acceptance test. It relinks main from
-the built objects into a temporary directory, with `--emit-relocs`, once as
-is and once with `--pad` bytes (default 0x10) inserted at the start of
-`.main`, and compares every word of the two images. A relocated word that
-moved by the pad is an explained address field. A relocated word that did not
-move refers to an absolute linker pin, a gp-relative offset that changed
-refers to a pinned small-data symbol, and an unrelocated word shaped like a
-program address (data word, `lui` upper half, `j`/`jal` target) is a literal
-address. The repository is never written; the base relink must equal
-`build/USA/main.exe`.
+`--json` gives the same data. `tools/scripts/shift_test.py` is the
+acceptance test. It relinks main from the built objects into a temporary
+directory, with `--emit-relocs`, once as is and once with `--pad` bytes
+(default 0x10) inserted at the start of `.main`, and compares every word of
+the two images. A relocated word that moved by the pad is an explained
+address field. A relocated word that did not move refers to an absolute
+linker pin, a gp-relative offset that changed refers to a pinned small-data
+symbol, and an unrelocated word shaped like a program address (data word,
+`lui` upper half, `j`/`jal` target) is a literal address. The repository is
+never written; the base relink must equal `build/USA/main.exe`.
 
-### Inventory (2026-10-05, after removing the shadowing pins)
+The ratchet is `make shift-check` (`shift_audit.py --check`): it fails when
+any counted category grows past `tools/shift_baseline.json`. It counts the
+linked absolute assignments of main by category, every fixed-address column
+of the C scan, the unrelocated words and absolute relocations of the
+executable, the overlay pins and the hidden-address counts of the shift test
+(pinned words, gp-relative offsets to pins, literal data words, `lui`
+halves and jump targets, unexplained differences). Overlay pins are counted
+as distinct addresses per overlay, so a second name for an address that is
+already pinned is not growth; references into main are one total plus the
+categories without main's own name. Unreferenced catalogue entries and
+PROVIDEs that a definition overrides are not counted. `make verify` runs the
+check after the build (the overlay counts are only complete once
+`make overlay-build-all` has run), CI runs it with `SHIFT_REQUIRE_OVERLAYS=1`
+after verifying every overlay, and `make shift-baseline` writes the lowered
+baseline to commit with the change that lowered it.
+
+### Inventory (2026-10-13)
 
 Linked absolute assignments for main, by what the address is:
 
 | category | manual | generated aliases | remedy |
 | --- | ---: | ---: | --- |
-| unreferenced by any main object | 1546 | 0 | catalogue only; move to a symbol file or drop |
-| bss inside a zero-filled asm blob (295 of them already labelled there) | 298 | 1 | own the variable in a C unit's `.bss`/`.sbss` |
-| tentative COMMON pinned (no BSS placement yet) | 111 | 0 | place BSS/SBSS in the manifest |
-| initialised data inside an asm blob, labelled there | 108 | 1 | name the blob label, or move the data into C |
-| function address that a linked object already names | 48 | 9 | reference the defining name |
-| data inside a C unit's section | 15 | 26 | point at the owning symbol plus offset, or split the definition |
+| unreferenced by any main object | 1549 | 0 | catalogue only; move to a symbol file or drop |
+| bss inside a zero-filled asm blob (196 of them already labelled there) | 199 | 4 | own the variable in a C unit's `.bss`/`.sbss` |
+| tentative COMMON pinned (no BSS placement yet) | 138 | 0 | place BSS/SBSS in the manifest |
+| initialised data inside an asm blob, labelled there | 96 | 2 | name the blob label, or move the data into C |
+| function address that a linked object already names | 10 | 8 | reference the defining name |
+| data inside a C unit's section | 19 | 23 | point at the owning symbol plus offset, or split the definition |
+| a definition at the same address | 2 | 0 | drop the pin |
 | hardware (I/O registers) | 10 | 0 | unavoidable |
 | kernel/BIOS RAM (0x80000000, 0xA000xxxx, 0xDFFC) | 4 | 1 | unavoidable (BIOS contract) |
-| symbolic aliases (`a = b;`) | 5 | 0 | not fixed; rename callers eventually |
+| symbolic aliases (`a = b;`) | 4 | 0 | not fixed; rename callers eventually |
 
-`undefined_syms_auto.main.txt` (517) and `undefined_funcs_auto.main.txt`
+`undefined_syms_auto.main.txt` (506) and `undefined_funcs_auto.main.txt`
 (empty) are splat catalogues and are not linked.
 
-Fixed addresses in C (comments stripped): 446 alias declarations
-(`asm("name")`) whose target is an absolute pin (350 in `src/main`, 49 in
-`include`, 47 in overlays), 33 integer-to-pointer casts of literal program
-addresses (18 main, 15 overlays) and 5 other literal program addresses. A
-further 390 address-named aliases point at symbols an object defines and do
-not pin anything. The crutch ratchet's `pointer_integer_casts` (547 main, 82
-overlays) is a plain `(s32)`/`(u32)` cast regex; almost all of those are
-integer casts and do not bind an address.
+Fixed addresses in C (comments stripped): 10 alias declarations
+(`asm("name")`) whose target is pinned somewhere (none in `src/main`, 6 in
+`include`, 4 in overlays) and 6 integer-to-pointer casts of literal program
+addresses, all in `src/main/draw`; there is no other literal program
+address. The crutch ratchet's `pointer_integer_casts` regex matches 7 casts
+in main, 11 in `include` and 74 in overlays; they do not bind an address.
+What is left, and why:
 
-Built main executable: 7147 relocations resolve to 618 absolute
-program-range symbols (5655 address words and 1491 gp-relative offsets in the
-shift test), 21 data words and 17 `lui` halves hold a program address with no
-relocation at all. The literals are LIBCD BIOS state pointers
-(`g_CdBiosHardwareState`), a `0x800E0xxx` function table in
-`dtail_gp_pre_s016`, two string-directory buffer pointers, the
-`Draw_InitGpuHwRegs`/`Draw_FlushPrimQueue` register-block pointers at
-0x80070E0x, and `0x800Axxxx` upper halves in a few CD, memory card, menu
-and GPU units. A few of the 21 data words (`0x80017FFF`) are probably two
-halfwords rather than an address.
+- `Draw_InitGpuHwRegs` and `Draw_FlushPrimQueue` (`draw/gpu_regs.c`,
+  `draw/prim_queue.c`) load the register block at 0x80070E04..0x80070E50 (a
+  0x50-byte gap in `.text` after `Draw_PackPrimColor`) with `lui`/`ori`. A
+  symbol reference assembles to `lui`/`addiu`, and an `ori` with a `%lo`
+  relocation would be wrong for a low half of 0x8000 or more, so the
+  addresses stay literal until the block is placed and the encoding can
+  change.
+- Three `cdrom.h` views of `D_800B0E08`, `g_GameStateBlock`
+  (`D_8009D1A0`) and `g_ActiveDrawSlot` (`D_8009CDDC`, also in the
+  boot_display overlay) are second names that keep retail's reloads (see
+  "Still open" above). In main they bind to the label the data blob
+  defines; they count because overlays pin the same label. Giving the label
+  the C name moves every overlay reference to a name main lacks until
+  overlays link against main's symbols (step 3 below).
+- fx_common's views of main data (`g_FxTextureSetup`, `g_FxCommonSceneIds`,
+  `g_FxCommonGameFlags` on `D_80091648`, `D_800A77F4`, `D_800B0CD8`) have
+  types that differ from main's declarations (signed fields, a record over a
+  word), so they wait for the same step.
+- `psyq_cd.h`'s halfword view of `g_CdStreamReady` (memory card overlay)
+  is a type view of a named symbol, not an address.
+
+Built main executable: 7756 relocations resolve to 502 absolute
+program-range symbols (6490 address words and 1265 gp-relative offsets in
+the shift test). 3 data words and 7 `lui` halves look like program addresses
+without a relocation. None of the data words is an address: two are the
+halfword pairs 0x7FFF/0x8001 of a table in `dtail_gp_post_dsfile`
+(`0x80017FFF`) and one sits in a table of random-looking words
+(`D_8009BE78+0x5C`). Of the `lui` halves, six are the register-block loads
+above and one is the multiplier 0x80010003 of a division by 0x7FFF in
+`Render_LoadFontGlyphAlt`.
+
+The literals removed on 2026-10-13: the LIBCD BIOS descriptor in
+`libcd/bios_4.c` points at the `g_CdBiosState` fields, its own event bytes,
+`D_800A3460` and the bios.c version string; `DsReadCallback` stores
+`g_CdReadCompleteCallback` by name; and six data words in the asm blobs
+assemble as symbol references. `configs/USA/sym.main.txt` labels what they
+point at (`g_StrFileDirArea`, `g_PmTaskProgramArea`,
+`g_ErrorSeverityFatalName`, the LIBETC/LIBGPU/LIBCD version strings), and
+`configs/USA/rel.main.txt` gives the memory card wildcard path as
+`g_MemCardSaveSupportData + 0x10`. A data word in a splat blob takes a symbol
+the same way: a `sym.main.txt` name at the target address, or a
+`rel.main.txt` line (`rom:<file offset> reloc:MIPS_32 symbol:<name>
+addend:<n>`) when the target is a field of a larger object. In overlays the
+fx_common buffers past the end of its image, the boot display image buffers
+and the memory card screen views are named in the overlay symbol files
+instead of address aliases, and the MDEC wait loops pass their message
+strings by symbol.
 
 Overlays never see the built main executable. Each overlay links three
 generated scripts (`undefined_funcs_auto`, `undefined_syms_auto` from splat,
-`undefined_extra` from `overlay_extra_undefineds.py` using
-`configs/USA/sym.main.txt`), all holding retail addresses. Across the 190
-overlays 8073 referenced assignments point into main (399 distinct
-addresses): 6086 already match a symbol of the same name and address in the
-built main ELF, 1672 match an address main names differently and 314 have
-no main symbol. Overlays also pin 7539 references to their own definitions
-(the same shadowing as main's, through address-named `func_`/`D_` labels) and
-988 own-window addresses no object defines; 518 point into overlay windows
-used as runtime buffers. Since 2026-10-06 `overlay_extra_undefineds.py` reads
-only the objects the overlay's linker script links and skips every name one
-of them defines: `undefined_extra` dropped from 12915 entries (4622 hard
-assignments) to 1369 (471). The two overlays with copied foreign-VMA code
+`undefined_extra` from `overlay_extra_undefineds.py` using the overlay's
+symbol file and `configs/USA/sym.main.txt`), all holding retail addresses.
+Counted as distinct addresses per overlay, the 190 overlays pin 7349
+addresses in main (389 distinct across all overlays): 6249 by the name main
+uses, 711 that main names differently, 140 that main itself pins and 299
+that main has no symbol for. They also pin 90 own definitions (splat's
+cross-segment symbols), 114 own-window addresses no object defines, 375
+addresses in other overlays' windows used as runtime buffers and 14 symbols
+of other overlays. Since 2026-10-06 `overlay_extra_undefineds.py` reads only
+the objects the overlay's linker script links and skips every name one of
+them defines. The two overlays with copied foreign-VMA code
 (`OVERLAY_VMA_OVERLAP`, `boot_display` and `menu_memcard`) keep those pins
 (`--pin-defined`). The splat `undefined_*_auto` scripts still pin.
 
@@ -1995,20 +2046,21 @@ live inside the zero-filled `dtail_*` data blobs, so the executable covers
 
 With the script unchanged a shift does not link: `.field_engine` at its fixed
 VMA overlaps the grown `.main`. With `.field_engine` and `_gp` rebased in the
-scratch copy, a 0x10 shift gives 20930 explained address fields, 5655 words
-still pointing at pinned symbols (464 symbols; most used `g_CurrentEntity`,
-`g_AkaoCmd`, `g_AkaoCurTrack`, `g_GameState`, `_spu_RXX`), 1491 gp-relative
-offsets to pinned small data, 21 literal data words, 17 literal `lui`
-halves, 28 hardware references and no unexplained difference. The header
-fields do not follow the shift. Before the shadowing pins were removed the
-same run reported 15105 pinned words and 1947 gp-relative offsets.
+scratch copy, a 0x10 shift gives 20568 explained address fields, 6490 words
+still pointing at pinned symbols (388 symbols; most used `g_CurrentEntity`,
+`g_GameState`, `g_AkaoCmd`, `g_AkaoCurTrack`, `_spu_RXX`), 1265
+gp-relative offsets to pinned small data, 3 data words and 7 `lui` halves
+that look like addresses (none of the words is one, see above), 28 hardware
+references and no unexplained difference. The header fields do not follow
+the shift. On 2026-10-05 the same run reported 5655 pinned words, 1491
+gp-relative offsets, 21 literal data words and 17 literal `lui` halves.
 
 ### Removal order
 
 1. Done: 931 manual assignments that duplicated a definition at the same
    address in a linked object. Byte-identical; they only hid the object's
    ownership.
-2. Unreferenced manual entries (1546): no object needs them; their names
+2. Unreferenced manual entries (1549): no object needs them; their names
    feed `gen_expected.py`'s label table, so move the useful names into
    `configs/USA/sym.main.txt` (or drop generic ones) and check the expected
    split. Mechanical, about one commit.
@@ -2016,21 +2068,24 @@ same run reported 15105 pinned words and 1947 gp-relative offsets.
    main ELF, or generated assignments taken from `build/USA/main.map`), and
    `overlay_extra_undefineds.py` stops pinning names the overlay defines
    itself (done for `undefined_extra` outside the VMA-overlap overlays).
-   Clears the 8073 main references and 7539 self-shadowing pins; needs a
+   Clears the 7349 pinned main addresses and the self-shadowing pins; needs a
    check for names that exist in both main and an overlay.
 4. References that a linked object already names under another label (57
    function pins, about 400 data pins into asm blobs): give the blob label the
    C name through `sym.main.txt`, or change the C reference. Mechanical per
    symbol, byte-identical.
-5. Alias declarations onto pins (446) and integer-to-pointer literals (33):
-   replace by the owning symbol once steps 4 and 6 give it one.
+5. Alias declarations onto pins (10 left) and integer-to-pointer literals
+   (6 left, the register block): replace by the owning symbol once steps 3,
+   4 and 6 give it one.
 6. BSS ownership: the zero blobs and the 111 COMMON pins become `.bss`/`.sbss`
    definitions in their units with a manifest placement. This is the large
    step (several hundred variables) and is what lets `_gp` and
    `.field_engine` be derived (`ADDR(.sdata) + 0x8000`, end of `.main`)
    instead of fixed.
-7. Literal words and `lui` halves (38): rewrite the C as symbol references,
-   relabel the asm data words.
+7. Done except the register block: literal words and `lui` halves became
+   symbol references (C, `sym.main.txt` labels, `rel.main.txt` relocations);
+   the 10 address-shaped words left are the register block and four values
+   that are not addresses.
 8. Header: initial PC from the entry symbol, text size from the section end.
 
 Unavoidable, by design: hardware registers and the scratchpad, the kernel and
