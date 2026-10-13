@@ -448,8 +448,8 @@ void *Inv_LookupActiveListDisplayData(s32 index) {
 
 void Inv_RebuildSelectionBitset(void) {
     ItemDataRecord *entry;
-    register ItemDataRecord *limit_tmp asm("$3");
-    register ItemDataRecord *end asm("$5");
+    register ItemDataRecord *limit_tmp;
+    register ItemDataRecord *end;
     short *list;
     InventorySlotRange *range;
     short *range_stop_ptr;
