@@ -217,6 +217,17 @@ name is the configured overlay name.
   exceptions, left until their overlay declarations agree with the main
   image's types. Template parameter macros take the template's
   prefix in upper case (`ROOMLIB_`, `ROOMEFFECT_`, `MENUCARD_`).
+- **Global names stay unique across overlays:** the overlays link into one
+  executable in the port, so a global that only one overlay's own code uses
+  carries that overlay's prefix: `RoomMNNN_`/`SceneENN_` for functions and
+  `g_RoomMNNN`/`g_SceneENN` for data (`g_RoomM318ScriptArg2`,
+  `g_SceneE08OrbScript`), never a bare `g_Room...` or an address name that
+  another overlay also defines for different content. The exceptions are the
+  room interface (a name a shared source in `src/overlays/room_lib` or
+  `include/pe1` refers to, `g_RoomScript`, `g_RoomDrawList`, ...), which every
+  room defines under the one spelling, and symbols whose content is
+  identical in every overlay. `make overlay-collision-check` enforces this
+  (`docs/OVERLAY_SYMBOL_COLLISIONS.md`, `docs/CODE_ORGANIZATION.md`).
 
 ## Headers
 

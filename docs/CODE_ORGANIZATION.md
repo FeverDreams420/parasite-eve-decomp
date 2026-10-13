@@ -1951,6 +1951,38 @@ represented by the manifest and linker script. This is explicit layout debt;
 ordinary text/data definitions become object-owned automatically and cannot be
 silently shadowed by the complete splat catalogues.
 
+## Overlay symbol uniqueness (2026-10-13)
+
+The 190 overlays share one load window and link on their own, so a global
+name may be defined by several of them. A single-executable port needs every
+global name to be unique per meaning. `tools/scripts/overlay_symbol_collisions.py`
+(`make overlay-collisions`, ratchet `make overlay-collision-check`, baseline
+`tools/overlay_collisions_baseline.json`, report
+`docs/OVERLAY_SYMBOL_COLLISIONS.md`) reads the built overlay objects and sorts
+every name defined in more than one overlay:
+
+- `identical`: same section kind, size, bytes with relocated words masked and
+  the same relocation targets. This is the shared source (`room_lib`,
+  `fx_common`) compiled into each room: one definition can serve all.
+- `conflicting`: different content under one name. Split by cause:
+  *auto* (`func_`/`D_`/`__D_..._databin` names at an address several overlays
+  use for different things; they disappear as the auto names get role names),
+  *room interface* (a name a shared source refers to and every room defines:
+  `g_RoomScript`, `g_RoomDrawList`, `RoomLib_SlotTable`, ...), *main* (a main
+  symbol placed inside the overlay window, `g_StrFileDirArea`), and *private*
+  (a named symbol used only by one overlay's own code).
+- `overlay_vs_main`: an overlay global that `main.elf` defines too.
+
+Rule: a symbol private to one overlay takes that overlay's prefix
+(`docs/CONVENTIONS.md`, Overlays). The check fails on any private conflicting
+name, on any new conflicting name and on any new overlay/main collision.
+Room-interface names keep their spelling in the source, because renaming them
+per overlay would mean editing the shared unit that names them; the
+single-executable link gives each overlay's definition its own name instead
+(`overlay_symbol_collisions.py --rename-map FILE` lists `overlay old new`
+with `new = old__<overlay>`). Moving those names behind per-overlay macros is
+a source change and is left until the port's link design needs it.
+
 ## Review contract
 
 Each change must state which claim it makes: binary match, semantic recovery,
