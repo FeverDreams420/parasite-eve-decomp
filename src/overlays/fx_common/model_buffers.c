@@ -2046,7 +2046,7 @@ void func_8019BF8C(void **);
 void ClearOTagR(void *, int);
 
 void func_8019BD78(void) {
-    char *base = (char *)&D_8019C1F8;
+    char *base = &D_8019C1F8;
     s16 rect[4];
 
     SetDispMask(0);
