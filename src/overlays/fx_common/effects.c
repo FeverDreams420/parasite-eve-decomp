@@ -29,84 +29,84 @@ void FxCommon_EndSequence(void)
     fade = 1;
     night = g_ScriptVariableBank[SCRIPT_VAR_FLAGS] & 0x2000;
     g_ScriptVariableBank[SCRIPT_VAR_ROOM] = 999;
-    D_8009D280 = 0xA9400048;
+    g_SceneDispatchToken = 0xA9400048;
     room = g_ScriptVariableBank[SCRIPT_VAR_AREA];
     if (room == 0x80) {
-        D_8009D280 = 0xA80650C8;
+        g_SceneDispatchToken = 0xA80650C8;
     } else if (room == 0x78) {
-        D_8009D280 = 0xA8003348;
+        g_SceneDispatchToken = 0xA8003348;
         fade = 0;
     } else if (room == 0x208) {
-        D_8009D280 = 0xA80032C8;
+        g_SceneDispatchToken = 0xA80032C8;
         fade = 0;
     } else if (room == 0x210) {
         if (night)
-            D_8009D280 = 0xA8029148;
+            g_SceneDispatchToken = 0xA8029148;
         else
-            D_8009D280 = 0xA80290C8;
+            g_SceneDispatchToken = 0xA80290C8;
     } else {
         switch (D_8019CA68) {
         case 0:
-            D_8009D280 = 0xA80281C8;
+            g_SceneDispatchToken = 0xA80281C8;
             break;
         case 1:
-            D_8009D280 = 0xA80260C8;
+            g_SceneDispatchToken = 0xA80260C8;
             break;
         case 2:
-            D_8009D280 = 0xA8009348;
+            g_SceneDispatchToken = 0xA8009348;
             break;
         case 3:
-            D_8009D280 = 0xA8046048;
+            g_SceneDispatchToken = 0xA8046048;
             break;
         case 4:
             if (room == 0x1C0) {
-                D_8009D280 = 0xA80034C8;
+                g_SceneDispatchToken = 0xA80034C8;
                 fade = 0;
             } else if (night) {
-                D_8009D280 = 0xA80222C8;
+                g_SceneDispatchToken = 0xA80222C8;
             } else {
-                D_8009D280 = 0xA80630C8;
+                g_SceneDispatchToken = 0xA80630C8;
             }
             break;
         case 5:
-            D_8009D280 = 0xA8049048;
+            g_SceneDispatchToken = 0xA8049048;
             break;
         case 6:
-            D_8009D280 = 0xA8002248;
+            g_SceneDispatchToken = 0xA8002248;
             break;
         case 7:
             if (room == 0xD0) {
-                D_8009D280 = 0xA80033C8;
+                g_SceneDispatchToken = 0xA80033C8;
                 fade = 0;
             } else if (room == 0x178) {
-                D_8009D280 = 0xA80033C8;
+                g_SceneDispatchToken = 0xA80033C8;
                 fade = 0;
             } else {
                 band = room - 0x180;
                 if (band < 0x88)
-                    D_8009D280 = 0xA80201C8;
+                    g_SceneDispatchToken = 0xA80201C8;
                 else
-                    D_8009D280 = 0xA8004348;
+                    g_SceneDispatchToken = 0xA8004348;
             }
             break;
         case 8:
             if (room == 0xE0) {
-                D_8009D280 = 0xA80034C8;
+                g_SceneDispatchToken = 0xA80034C8;
                 fade = 0;
             } else if (room >= 0x128) {
-                D_8009D280 = 0xA8005448;
+                g_SceneDispatchToken = 0xA8005448;
             } else {
-                D_8009D280 = 0xA8067248;
+                g_SceneDispatchToken = 0xA8067248;
             }
             break;
         case 9:
             if (room == 0xB8 || room == 0x148) {
-                D_8009D280 = 0xA8003448;
+                g_SceneDispatchToken = 0xA8003448;
                 fade = 0;
             } else if (night) {
-                D_8009D280 = 0xA8029148;
+                g_SceneDispatchToken = 0xA8029148;
             } else {
-                D_8009D280 = 0xA80290C8;
+                g_SceneDispatchToken = 0xA80290C8;
             }
             break;
         }
@@ -128,7 +128,7 @@ void FxCommon_EndSequence(void)
         VSync(0);
     if (fade == 1) {
         g_SceneAudioSlot0Key = -1;
-        D_800B0DB2 = -1;
+        g_GameState.scene_audio.tracks.banks[0] = -1;
         D_800B0CD8 &= ~0x40;
         Akao_Cmd_F0();
     }
@@ -381,7 +381,7 @@ void FxCommon_DrawSceneNodes(void)
 
     for (i = 0; i < D_8019C020 >> 1; i++) {
         g_FxCommonDepthBias = 0;
-        if (D_800A77FC & 0x2000) {
+        if (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] & 0x2000) {
             D_801EA264[0] = 60;
             D_801EA264[1] = 60;
             D_801EA264[2] = 40;

@@ -823,7 +823,7 @@ void FxCommon_SelectRoomVariant(void)
         D_8019C008 = 0;
     else
         D_8019C008 = 0xFF;
-    if (D_800B0CD8 & 0x40000000) {
+    if (g_GameState.flags & 0x40000000) {
         D_8019C008 = 0xFF;
         Menu_SetEquipSlotIndex(1);
     } else {
@@ -927,7 +927,7 @@ void FxCommon_SelectRoomVariant(void)
 }
 
 void FxCommon_LoadEffectSectors(void) {
-    FxAssetSource *resource = (FxAssetSource *)&D_800B0CD8;
+    FxAssetSource *resource = (FxAssetSource *)&g_GameState;
     u16 *range;
     int result;
 
@@ -980,8 +980,8 @@ void FxCommon_SetAkao3dVolumeRange(int extended)
         g_Akao3dVolumeMin = 0x10;
         g_Akao3dVolumeMax = 0x40;
     }
-    D_800B0DD0 = 0;
-    D_800B0DD2 = 0xFFF;
+    g_GameState.bank_value_f8 = 0;
+    g_GameState.bank_value_fa = 0xFFF;
 }
 
 int FxCommon_SendTableCommand3d(int id, s32 *state)

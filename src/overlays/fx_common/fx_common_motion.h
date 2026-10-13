@@ -19,6 +19,7 @@ extern FxCommonShortVec3 g_FxCommonMotionTarget0;
 /* Ordinary counter views; legacy callers use volatile scheduling declarations. */
 extern s16 g_FxCommonMotionRemaining0;
 extern s16 g_FxCommonMotionRemaining1;
+extern u32 D_800B0CD8;
 extern u32 D_8009D1F4;
 extern u32 g_FieldPadBits;
 extern s8 g_SceneAudioSlot0Handle;
@@ -56,7 +57,6 @@ extern FxCommonFrame g_FxCommonFrames[2];
 extern s32 g_ActiveDrawSlot;
 extern u8 D_8019C00E;
 extern s32 D_8019CC14;
-extern u32 D_8009D280;
 /* Plain views of the camera position and its look-at target. */
 extern FxCommonVec3 g_FxCommonCameraPosition;
 extern FxCommonVec3 g_FxCommonCameraTarget;
@@ -67,7 +67,6 @@ extern FxCommonTransformNode *g_FxCommonPathNodes[6];
  * the absolute address in a register as retail does. */
 extern GteShortVector g_FxCommonCameraAngles[];
 extern RoomSpriteMatrix g_FxCommonCameraMatrix;
-extern s8 D_800B0DB2;
 extern s8 g_SceneAudioSlot0Key;
 
 void Akao_Cmd_C1_WithSlot(int channel, int value, int mode);

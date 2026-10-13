@@ -3,13 +3,13 @@
 
 #include "pe1/boot_services.h"
 #include "pe1/field_bg_load.h"
+#include "pe1/game_state.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/script_queue.h"
 
 #include "fx_common.h"
 
-extern u32 D_800A77FC;
 
-extern u32 D_800B0CD8;
 extern s32 D_8019C000;
 extern s32 D_8019C004;
 int Save_GetMetadataWindowIndex(void);

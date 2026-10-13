@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -fno-expensive-optimizations */
 
+#include "fx_common_motion.h"
 #include "fx_common_setup.h"
 
 #define SET_RGB(color, r, g, b) \
@@ -196,7 +197,7 @@ void FxCommon_InitScene(void)
     g_FxCommonEffectSetup[0].rotation = 0;
     g_FxCommonEffectSetup[0].value25 = 9;
     g_FxCommonEffectSetup[1].variant = 0x19;
-    g_FxCommonEffectSetup[0].enabled = (D_800A77FC >> 0x16) & 1;
+    g_FxCommonEffectSetup[0].enabled = (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] >> 0x16) & 1;
     g_FxCommonEffectSetup[1].type = 0x1A;
     g_FxCommonEffectSetup[1].motionIndices[0] = 0xB;
     g_FxCommonEffectSetup[1].motionIndices[2] = 0x1F;
@@ -208,7 +209,7 @@ void FxCommon_InitScene(void)
     g_FxCommonEffectSetup[1].parameter3c = 0x9C4;
     g_FxCommonEffectSetup[1].value22 = 2;
     g_FxCommonEffectSetup[1].value23 = 0;
-    g_FxCommonEffectSetup[1].enabled = (D_800A77FC >> 0x14) & 1;
+    g_FxCommonEffectSetup[1].enabled = (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] >> 0x14) & 1;
     g_FxCommonEffectSetup[1].value28 = 0x10;
     g_FxCommonEffectSetup[2].subtype = 0xF;
     g_FxCommonEffectSetup[1].value2c = 0x20;
@@ -230,7 +231,7 @@ void FxCommon_InitScene(void)
     g_FxCommonEffectSetup[2].motionIndices[3] = 0x2C;
     g_FxCommonEffectSetup[2].value2c = 0x20;
     g_FxCommonEffectSetup[2].value30 = 0x27;
-    g_FxCommonEffectSetup[2].enabled = (D_800A77FC >> 0x12) & 1;
+    g_FxCommonEffectSetup[2].enabled = (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] >> 0x12) & 1;
     g_FxCommonEffectSetup[2].rotation = 0;
     g_FxCommonEffectSetup[2].value25 = 5;
     g_FxCommonEffectSetup[3].type = 0x1D;
@@ -248,7 +249,7 @@ void FxCommon_InitScene(void)
     g_FxCommonEffectSetup[3].value23 = 2;
     g_FxCommonEffectSetup[3].value28 = -0x40;
     g_FxCommonEffectSetup[3].value30 = 0x1E;
-    g_FxCommonEffectSetup[3].enabled = (D_800A77FC >> 0x15) & 1;
+    g_FxCommonEffectSetup[3].enabled = (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] >> 0x15) & 1;
     g_FxCommonEffectSetup[3].value2c = 0x10;
     g_FxCommonEffectSetup[4].subtype = 9;
     g_FxCommonEffectSetup[3].rotation = 0;
@@ -266,7 +267,7 @@ void FxCommon_InitScene(void)
     g_FxCommonEffectSetup[4].value2c = -0x10;
     g_FxCommonEffectSetup[4].rotation = 0xC00;
     g_FxCommonEffectSetup[4].value30 = 0x24;
-    g_FxCommonEffectSetup[4].enabled = (D_800A77FC >> 0x13) & 1;
+    g_FxCommonEffectSetup[4].enabled = (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] >> 0x13) & 1;
     g_FxCommonEffectSetup[4].value22 = 0;
     g_FxCommonEffectSetup[4].value23 = 5;
     g_FxCommonEffectSetup[4].value28 = 0x10;
@@ -282,7 +283,7 @@ void FxCommon_InitScene(void)
     g_FxCommonEffectSetup[5].parameter3c = 0xFA0;
     g_FxCommonEffectSetup[5].value28 = 0x30;
     g_FxCommonEffectSetup[5].value2c = -0x25;
-    g_FxCommonEffectSetup[5].enabled = (D_800A77FC >> 0x17) & 1;
+    g_FxCommonEffectSetup[5].enabled = (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] >> 0x17) & 1;
     g_FxCommonEffectSetup[5].value0c = 0x54;
     g_FxCommonEffectSetup[5].value10 = 0x161;
     g_FxCommonEffectSetup[5].value22 = 4;
@@ -302,7 +303,7 @@ void FxCommon_InitScene(void)
     g_FxCommonEffectSetup[6].value2c = 5;
     g_FxCommonEffectSetup[6].rotation = 0x800;
     g_FxCommonEffectSetup[6].value30 = 0x32;
-    g_FxCommonEffectSetup[6].enabled = (D_800A77FC >> 0xE) & 1;
+    g_FxCommonEffectSetup[6].enabled = (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] >> 0xE) & 1;
     g_FxCommonEffectSetup[6].value10 = 0x161;
     g_FxCommonEffectSetup[6].parameter38 = 0x1388;
     g_FxCommonEffectSetup[6].parameter3c = 0x9C4;
@@ -318,7 +319,7 @@ void FxCommon_InitScene(void)
     g_FxCommonEffectSetup[7].motionIndices[2] = 0x2B;
     g_FxCommonEffectSetup[7].motionIndices[3] = 0x2A;
     g_FxCommonEffectSetup[7].value0c = 0x53;
-    g_FxCommonEffectSetup[7].enabled = (D_800A77FC >> 0xF) & 1;
+    g_FxCommonEffectSetup[7].enabled = (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] >> 0xF) & 1;
     g_FxCommonEffectSetup[7].parameter38 = 0x1388;
     g_FxCommonEffectSetup[7].parameter3c = 0x9C4;
     g_FxCommonEffectSetup[7].value22 = 5;
@@ -345,7 +346,7 @@ void FxCommon_InitScene(void)
     g_FxCommonEffectSetup[8].value2c = -0x30;
     g_FxCommonEffectSetup[8].rotation = 0;
     g_FxCommonEffectSetup[8].value30 = 0x35;
-    g_FxCommonEffectSetup[8].enabled = (D_800A77FC >> 0x11) & 1;
+    g_FxCommonEffectSetup[8].enabled = (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] >> 0x11) & 1;
     g_FxCommonEffectSetup[8].value25 = 4;
     g_FxCommonEffectSetup[9].subtype = 6;
     g_FxCommonEffectSetup[9].variant = 7;
@@ -365,7 +366,7 @@ void FxCommon_InitScene(void)
     g_FxCommonEffectSetup[9].value23 = 6;
     g_FxCommonEffectSetup[9].value25 = 3;
     g_FxCommonEffectSetup[9].value30 = 0x5B;
-    g_FxCommonEffectSetup[9].enabled = (D_800A77FC >> 0x10) & 1;
+    g_FxCommonEffectSetup[9].enabled = (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] >> 0x10) & 1;
     for (; pointIndex < 10; ++pointIndex) {
         setupCursor->position[0] = pointList->x;
         *yCursor = (s16) (u16)pointList->y;
@@ -571,17 +572,17 @@ void FxCommon_InitScene(void)
         FxCommon_SamplePath(0, selectedMotion + 1, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion);
         /* Shared volatile is scheduling debt in other callers; this store is ordinary. */
         *(s16 *)&D_8019C054 = 0;
-        D_8019C810 = motion.vector.x;
-        D_8019C814 = motion.vector.y;
-        D_8019C818 = motion.vector.z;
+        g_FxCommonCameraTarget.x = motion.vector.x;
+        g_FxCommonCameraTarget.y = motion.vector.y;
+        g_FxCommonCameraTarget.z = motion.vector.z;
         motionCount = FxCommon_SamplePath(0, selectedMotion, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion) - 2;
         D_8019C050 = 0;
         D_8019C040 = motionCount;
         D_8019C041 = 0;
         D_8019C042 = selectedMotion;
         g_FxCommonMarkerFade = 0;
-        D_8019C330 = motion.vector.x;
-        D_8019C334 = motion.vector.y;
-        D_8019C338 = motion.vector.z;
+        g_FxCommonCameraPosition.x = motion.vector.x;
+        g_FxCommonCameraPosition.y = motion.vector.y;
+        g_FxCommonCameraPosition.z = motion.vector.z;
     }
 }

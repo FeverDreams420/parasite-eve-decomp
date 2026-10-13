@@ -2,6 +2,7 @@
 #include "pe1/gte_types.h"
 
 #include "fx_common.h"
+#include "fx_common_motion.h"
 #include "fx_common_setup.h"
 #include "fx_common_vectors.h"
 
@@ -18,16 +19,16 @@ void FxCommon_StepCameraPath(void)
         lookup = Draw_GetTimTableEntry(&g_FxCommonTimTable, 2);
         FxCommon_SamplePath(D_8019C041 << 8, D_8019C042 + 1,
                        lookup, &point, &scratch);
-        D_8019C810 = point.x;
-        D_8019C814 = point.y;
-        D_8019C818 = point.z;
+        g_FxCommonCameraTarget.x = point.x;
+        g_FxCommonCameraTarget.y = point.y;
+        g_FxCommonCameraTarget.z = point.z;
 
         lookup = Draw_GetTimTableEntry(&g_FxCommonTimTable, 2);
         FxCommon_SamplePath(D_8019C041 << 8, D_8019C042,
                        lookup, &point, &scratch);
-        D_8019C330 = point.x;
-        D_8019C334 = point.y;
-        D_8019C338 = point.z;
+        g_FxCommonCameraPosition.x = point.x;
+        g_FxCommonCameraPosition.y = point.y;
+        g_FxCommonCameraPosition.z = point.z;
     }
 }
 
@@ -44,9 +45,9 @@ void FxCommon_InitCameraPath(int index, int unused1, int unused2, int source)
     shortIndex = savedIndex;
     FxCommon_SamplePath(source, shortIndex + 1, lookup, &point, &scratch);
     D_8019C054 = 0;
-    D_8019C810 = point.x;
-    D_8019C814 = point.y;
-    D_8019C818 = point.z;
+    g_FxCommonCameraTarget.x = point.x;
+    g_FxCommonCameraTarget.y = point.y;
+    g_FxCommonCameraTarget.z = point.z;
 
     lookup = Draw_GetTimTableEntry(&g_FxCommonTimTable, 2);
     result = FxCommon_SamplePath(source, shortIndex, lookup, &point, &scratch);
@@ -55,7 +56,7 @@ void FxCommon_InitCameraPath(int index, int unused1, int unused2, int source)
     D_8019C041 = 0;
     D_8019C042 = savedIndex;
     g_FxCommonMarkerFade = 0;
-    D_8019C330 = point.x;
-    D_8019C334 = point.y;
-    D_8019C338 = point.z;
+    g_FxCommonCameraPosition.x = point.x;
+    g_FxCommonCameraPosition.y = point.y;
+    g_FxCommonCameraPosition.z = point.z;
 }

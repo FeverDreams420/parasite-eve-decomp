@@ -218,8 +218,6 @@ typedef struct FxCommonResourceState {
 extern s16 g_FxCommonMotionBlendFrames;
 extern u8 D_8019BFCC;
 extern GteMatrix D_8018F014;
-extern s32 D_8019C810, D_8019C814, D_8019C818;
-extern s32 D_8019C330, D_8019C334, D_8019C338;
 extern volatile s32 D_8019C08C, D_8019C090, D_8019C094;
 extern volatile s32 D_8019C05C, D_8019C060, D_8019C064;
 extern volatile s32 D_8019C09C, D_8019C0A0, D_8019C0A4;
@@ -248,9 +246,6 @@ extern FxCommonIndexLink g_FxCommonIndexLinks[];
 
 extern u8 g_Akao3dVolumeMin;
 extern u8 g_Akao3dVolumeMax;
-extern s16 D_800B0DD0;
-extern s16 D_800B0DD2;
-extern FxCommonBufferRegion *D_800B0E4C;
 extern u8 D_8019C1F8;
 extern u8 D_8019C1F0;
 extern s16 g_FxCommonMarkerFade;

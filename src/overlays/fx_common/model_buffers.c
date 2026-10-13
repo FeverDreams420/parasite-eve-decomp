@@ -2057,8 +2057,8 @@ void FxCommon_InitDisplay(void) {
 
     FxCommon_SelectBufferAllocation((void **)base);
     FxCommon_SelectBufferAllocation((void **)(base + 0x78));
-    D_8019C1FC = D_800B0E38.ordering[0];
-    D_8019C274 = D_800B0E3C;
+    D_8019C1FC = g_OtBufferTable[0];
+    D_8019C274 = g_RenderOtBufferBaseAlt[0];
     ClearOTagR(D_8019C1FC, 0x1000);
     ClearOTagR(D_8019C274, 0x1000);
 
@@ -2102,9 +2102,9 @@ void FxCommon_ClearActiveOrdering(void)
 void FxCommon_SelectBufferAllocation(void **buffer)
 {
     if (buffer == (void **)&D_8019C1F8) {
-        *buffer = D_800B0E4C;
+        *buffer = (FxCommonBufferRegion *)g_RenderScratchBufferBase[0];
     } else {
-        *buffer = D_800B0E4C + 1;
+        *buffer = (FxCommonBufferRegion *)g_RenderScratchBufferBase[0] + 1;
     }
 }
 
