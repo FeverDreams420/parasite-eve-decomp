@@ -333,7 +333,7 @@ int RoomEffect_HomingProjectileThrow(int mode, RoomHomingModel *model) {
         model->damping = g_RoomHomingLaunch.damping;
     } else if (mode == 1) {
         if (model->released == 0) {
-            if (actor->core == 0 || Battle_GetEnemyContextField(actor, 0x2C) <= 0) {
+            if (actor->core == 0 || Battle_GetEnemyContextField((struct FieldActor *)actor, 0x2C) <= 0) {
                 model->released = 1;
             } else if ((actor->core->flags & 0x1800) != 0) {
                 model->released = 1;

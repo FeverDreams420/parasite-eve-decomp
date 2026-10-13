@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/asset_find.h"
+#include "pe1/battle_context.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/fieldfx_callback_list.h"
@@ -111,8 +112,6 @@ extern struct BattleEntity *D_8009D254;
 extern void Akao_Cmd_21(int handle, int arg);
 extern int Scene_LoadRoomAssets(int id, void *actor);
 extern void Pm_SendCmd(int handle, int, int index, int value, int, int);
-/* Battle_GetEnemyContextField in main. */
-extern int Battle_GetEnemyContextField(void *actor, int field);
 
 /* The projectile's constant seeds: the spark sprite's rotation and colour,
  * the model words reported to the scene script, and the floor ring's

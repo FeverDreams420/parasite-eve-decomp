@@ -4,6 +4,7 @@
 #define ROOM_LIB_H
 
 #include "common.h"
+#include "pe1/battle_context.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_script_context.h"
@@ -111,7 +112,6 @@ extern void FieldFx_Spawn6(int a, int b, int c, int d, int e, int f);
 extern void FieldFx_Register(void *o, void *table);
 extern int FieldFx_UpdateSlots(void *o, void *table);
 extern int FieldFx_RunScript(void *o, void *tableA, void *tableB);
-extern int Battle_GetEnemyContextField(void *o, int arg);
 extern int func_80192BFC();
 
 typedef struct RoomRenderNode {
