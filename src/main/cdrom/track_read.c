@@ -296,7 +296,7 @@ int CdRom_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
     /* Group 1 copies into the second bank work bound. */
     selected.state = state;
     selected.word += bankIndex * 4;
-    directory = SceneAsset_ResolveOffset(*D_800B0E64, (*D_800B0E64)->directoryOffset);
+    directory = SceneAsset_ResolveOffset(*g_LoadedSceneAssetBlock, (*g_LoadedSceneAssetBlock)->directoryOffset);
     do {
         switch (state->cd_track_phase) {
         case 0: {

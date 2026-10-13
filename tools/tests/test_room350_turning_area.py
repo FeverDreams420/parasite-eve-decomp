@@ -83,7 +83,7 @@ typedef char f[OFF(Instance,render_object.matrices)==0x238 && OFF(Actor,instance
         harness = prefix + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;
 FieldActor *g_PlayerEntity;
-struct SceneAssetBlob *D_800B0E64[1];
+struct SceneAssetBlob *g_LoadedSceneAssetBlock[1];
 short g_RoomM350AreaConfigYaw[1];
 GteSineWord rcossin_tbl[4097];
 unsigned char g_RoomM350AreaTrackPlayer,g_RoomM350AreaPlayerInside,g_RoomM350AreaEntered;
@@ -131,7 +131,7 @@ static void reset(void) {
     clears=scaled=models=sprites=drawStage=0; mutate=0; outsideAt=-1;
 }
 void *Asset_FindTable08ByU32Key(void *base,int id) {
-    assert(mode==0 && calls++==0 && base==D_800B0E64[0] && id==(int)0xC54E0704);
+    assert(mode==0 && calls++==0 && base==g_LoadedSceneAssetBlock[0] && id==(int)0xC54E0704);
     return &assets[0];
 }
 void FieldFx_ModelScrollUv(union FieldTexturedModel *asset,u8 a,u8 b) {
@@ -306,7 +306,7 @@ int main(void) {
     static const int distances[]={INT_MIN,-1,0,511,512,1536,1537,32767,32768,65535};
     static const int angles0[]={0,511,512,2048,3584,3585,4095,0x12348000,-1};
     static const int yaws[]={INT_MIN,INT_MAX,0,-256,0x12345678};
-    reset(); mode=0; D_800B0E64[0]=(struct SceneAssetBlob *)&assets[7]; before=state;
+    reset(); mode=0; g_LoadedSceneAssetBlock[0]=(struct SceneAssetBlob *)&assets[7]; before=state;
     assert(RoomM350_AreaZoneEmitter(0,&state)==0 && calls==2);
     before.asset=&assets[0]; before.size=0; before.initialized=0; before.yaw=-8388608;
     assert(memcmp(&state,&before,sizeof(state))==0);

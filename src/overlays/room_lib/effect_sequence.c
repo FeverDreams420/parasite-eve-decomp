@@ -362,7 +362,7 @@ void RoomEffect_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxM
     RoomEffectSequenceSprite *primary;
 
     FieldFx_SetScriptContext(state);
-    g_EffectSequenceModel = Asset_FindTable08ByU32Key(D_800B0E64[0], 0x498704);
+    g_EffectSequenceModel = Asset_FindTable08ByU32Key(g_LoadedSceneAssetBlock[0], 0x498704);
     link = ent->link;
     state->link = link;
     matrix = link->p238;

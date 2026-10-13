@@ -31,7 +31,7 @@ typedef char layout[sizeof(Entry)==8 &&
         source = '#include <assert.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 RenderEffectParameters g_FieldFxSpriteParams;
 #define memset __builtin_memset
-struct SceneAssetBlob *D_800B0E64[1];
+struct SceneAssetBlob *g_LoadedSceneAssetBlock[1];
 void *D_8019AF6C;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 EmitterState D_8019AF84;
@@ -60,7 +60,7 @@ void *FieldFx_AcquireCallbackSlot(char *p) {
 }
 int main(void) {
     int mask,fail,i,next,successful,expectedCalls,stopped;
-    D_800B0E64[0]=(struct SceneAssetBlob *)&context;
+    g_LoadedSceneAssetBlock[0]=(struct SceneAssetBlob *)&context;
     g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
     for(initResult=-1;initResult<=1;++initResult) {
         stage=0; context.pool=0;

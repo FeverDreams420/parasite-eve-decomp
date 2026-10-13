@@ -153,7 +153,7 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
                                 0x100, 0, 0x1C0, 2, (s8 **)&renderSetup,
                                 allocateFull);
     } else {
-        archive = *D_800B0E64;
+        archive = *g_LoadedSceneAssetBlock;
         directory = SceneAsset_ResolveOffset(archive, archive->directoryOffset);
         entry = directory->bankRootEntries;
         bankRows = SceneAsset_ResolveOffset(archive, entry & 0x3FFFFF);
