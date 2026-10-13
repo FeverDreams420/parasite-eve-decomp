@@ -258,8 +258,7 @@ void Inv_BuildStorageDisplay(void) {
     RestoreList(D_8009D098);
     *LookupTrackedItem(D_8009D090) = g_InvSavedSelectionRecord0;
     RestoreList(g_InvSavedSelectionFromStorage1);
-    *LookupTrackedItem(g_InvSavedSelectionIndex1) = D_800A206C;
-    *LookupTrackedItem(D_8009D094) = g_InvSavedSelectionRecord1;
+    *LookupTrackedItem(g_InvSavedSelectionIndex1) = g_InvSavedSelectionRecord1;
 }
 
 static inline ItemDataRecord *LookupActiveItem(int index) {
