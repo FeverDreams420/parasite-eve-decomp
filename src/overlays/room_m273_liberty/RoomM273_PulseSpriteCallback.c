@@ -10,7 +10,6 @@ typedef struct {
 
 int RoomM273_PulseSpriteCallback(int mode, RoomM273PaletteSpriteState *state) {
     register int frame asm("$3");
-    register int special asm("$3");
     int size, shade, kind, palette;
     u16 clut;
     int sample, sizeSample, sizeOffset, shadeOffset;
@@ -26,13 +25,13 @@ int RoomM273_PulseSpriteCallback(int mode, RoomM273PaletteSpriteState *state) {
         sizeSample = ((RoomM273TrigEntry *)((char *)D_800966EC + sizeOffset))->low;
         asm volatile("" : : "r"(sizeSample));
         sample = *(int *)((char *)D_800966EC + shadeOffset);
-        special = 4;
+        frame = 4;
         asm volatile("" : "=r"(sample) : "0"(sample));
         size = sizeSample * 2 + 4096;
         shade = (s16)sample >> 5;
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
-        if (kind == special && D_800F3428) {
+        if (kind == frame && D_800F3428) {
             palette += 8;
         } else {
             palette += 4;
