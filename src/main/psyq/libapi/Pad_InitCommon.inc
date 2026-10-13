@@ -16,7 +16,6 @@ int PAD_INIT_COMMON_NAME(void *buffer0, int size0, void *buffer1, int size1) {
     Sys_SetInterruptHandler();
     PAD_INIT_COMMON_CALL(buffer0, size0, buffer1, size1);
     g_InitPadFlag = 1;
-    PE1_COMPILER_MEMORY_BARRIER();
     return 1;
 }
 
