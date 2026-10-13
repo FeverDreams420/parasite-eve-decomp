@@ -1047,7 +1047,7 @@ s32 Battle_StepAyaAction(void)
         player->rotationX = transfer;
         transfer = g_AyaSavedRotation.facing;
         player->facingAngle = transfer;
-        scratch = (u16)g_AyaSavedRotation.z;
+        scratch = g_AyaSavedRotation.z;
         player->rotationZ = scratch;
         transfer = player->posZ.parts.integer;
         Asset_Find08Alt(effect, 0, x, y, transfer);
