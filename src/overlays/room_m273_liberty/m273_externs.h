@@ -40,7 +40,7 @@ typedef struct {
 
 extern FieldActor *g_PlayerEntity;
 void func_80192838(RoomSelectionState *state);
-void func_80192D50(char *obj);
+void func_80192D50(RoomSelectionState *state);
 extern struct BattleEntity *D_8009D254;
 extern u8 D_8019A8C8[];
 extern s32 Inv_ScrambleGrid(void);

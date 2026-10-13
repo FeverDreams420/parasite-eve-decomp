@@ -536,7 +536,6 @@ extern void func_801921A0(RoomEnt *obj);
 extern void func_80192268(RoomEnt *obj);
 extern void func_8019261C(RoomEnt *obj);
 extern void func_80192B38(RoomEnt *obj);
-extern void func_80192D50(RoomEnt *obj);
 extern void func_80193258(RoomEnt *obj);
 extern void func_80193260(RoomEnt *obj);
 extern void func_80195894(RoomEnt *obj);

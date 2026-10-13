@@ -253,11 +253,11 @@ void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
     }
 }
 
-void func_80192D50(char *obj) {
-    FieldActor *slot = ((RoomSelectionState *)obj)->actor;
+void func_80192D50(RoomSelectionState *state) {
+    FieldActor *slot = state->actor;
 
     if (slot->anim.parts.integer >= 0x3B) {
-        func_80192D8C((RoomSelectionState *)obj);
+        func_80192D8C(state);
     }
 }
 
