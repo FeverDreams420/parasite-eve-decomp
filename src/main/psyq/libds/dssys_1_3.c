@@ -21,8 +21,8 @@ void DS_close(void) {
 }
 
 int DS_cw(u8 command, void *parameter) {
-    register int *base asm("$6");
-    register int *prev asm("$7");
+    register int *base;
+    register int *prev;
 
     base = &g_CdRomCmdTimeout;
     asm volatile("" : "=r"(base) : "0"(base));
