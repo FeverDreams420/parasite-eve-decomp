@@ -357,7 +357,7 @@ int func_80192F5C(RoomOscillationEffect *effect) {
         int period = effect->params.period;
         int phase = ((frame << 12) / period - 2048) & 4095;
         register int sine asm("$2");
-        register int half asm("$4");
+        register int half;
         FieldActor *target;
 
         effect->params.frame = frame + 1;
