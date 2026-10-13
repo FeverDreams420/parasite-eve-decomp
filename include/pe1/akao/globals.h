@@ -65,14 +65,6 @@ extern int g_AkaoSeqLoopCounter;
 extern unsigned int g_AkaoSfxAllocatedVoiceMask;
 extern unsigned int D_800BCD64;
 
-/* Fields of the first sound-effect channel (g_AkaoVoiceChannelTable[0]),
- * where the per-channel loops start their biased cursors:
- * pitch_offset_duration, panpot_duration, panpot_slide_duration and
- * update_flags. */
-extern char D_800BC070[];
-extern char D_800BC074[];
-extern char D_800BC078[];
-extern char g_SpuVoiceControlTable[];
 /* update_flags of the sequencer tracks. */
 extern AkaoTrackUpdateSlot g_AkaoTrackStateArray[];
 

@@ -1231,7 +1231,7 @@ void Spu_SetAllVoiceVolumeImmediate(int *arg0) {
     active = g_SpuActiveVoiceMask;
     i = 0;
     block_flag = 0x02000000;
-    voice = g_SpuVoiceControlTable;
+    voice = (char *)&g_AkaoVoiceChannelTable[0].update_flags;
 
     do {
             AkaoTrack *parameters = (AkaoTrack *)(voice - 0xF4);
@@ -1266,7 +1266,7 @@ void Spu_SlideAllVoiceVolume(int *arg0) {
     active = g_SpuActiveVoiceMask;
     i = 0;
     block_flag = 0x02000000;
-    voice = D_800BC074;
+    voice = (char *)&g_AkaoVoiceChannelTable[0].panpot_duration;
 
     do {
             AkaoTrack *parameters = (AkaoTrack *)(voice - 0x74);
@@ -1416,7 +1416,7 @@ void Spu_SetAllVoicePanImmediate(int *arg0) {
     active = g_SpuActiveVoiceMask;
     i = 0;
     block_flag = 0x02000000;
-    voice = g_SpuVoiceControlTable;
+    voice = (char *)&g_AkaoVoiceChannelTable[0].update_flags;
 
     do {
             AkaoTrack *parameters = (AkaoTrack *)(voice - 0xF4);
@@ -1450,7 +1450,7 @@ void Spu_SlideAllVoicePan(int *arg0) {
     active = g_SpuActiveVoiceMask;
     i = 0;
     block_flag = 0x02000000;
-    voice = D_800BC078;
+    voice = (char *)&g_AkaoVoiceChannelTable[0].panpot_slide_duration;
 
     do {
             AkaoTrack *parameters = (AkaoTrack *)(voice - 0x78);
@@ -1600,7 +1600,7 @@ void Spu_SetAllVoicePitchImmediate(int *arg0) {
     active = g_SpuActiveVoiceMask;
     i = 0;
     block_flag = 0x02000000;
-    voice = g_SpuVoiceControlTable;
+    voice = (char *)&g_AkaoVoiceChannelTable[0].update_flags;
 
     do {
             AkaoTrack *parameters = (AkaoTrack *)(voice - 0xF4);
@@ -1634,7 +1634,7 @@ void Spu_SlideAllVoicePitch(int *arg0) {
     active = g_SpuActiveVoiceMask;
     i = 0;
     block_flag = 0x02000000;
-    voice = D_800BC070;
+    voice = (char *)&g_AkaoVoiceChannelTable[0].pitch_offset_duration;
 
     do {
             AkaoTrack *parameters = (AkaoTrack *)(voice - 0x70);
@@ -1969,7 +1969,7 @@ void Spu_RestoreStoppedVoices(void) {
 
     if (pending != 0) {
         mask = AKAO_SPU_VOICE_SFX_START_MASK;
-        slot = (AkaoTrackUpdateSlot *)g_SpuVoiceControlTable;
+        slot = (AkaoTrackUpdateSlot *)&g_AkaoVoiceChannelTable[0].update_flags;
         do {
             if (pending & mask) {
                 pending &= ~mask;

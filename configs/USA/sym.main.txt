@@ -2462,7 +2462,6 @@ g_AkaoVoiceStateTable = 0x800B8AC0;
 g_AkaoTrackStateArray = 0x800B8BB4;
 g_AkaoVoiceStateTable2 = 0x800BA560;
 g_AkaoVoiceChannelTable = 0x800BC000;
-g_SpuVoiceControlTable = 0x800BC0F4;
 g_SpuActiveVoiceMask = 0x800BCD50;
 g_AkaoVoiceMaskScratch = 0x800BCD54;
 g_SpuPendingKeyOffMask = 0x800BCD5C;
