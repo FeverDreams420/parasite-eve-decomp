@@ -47,7 +47,7 @@ typedef union FieldShadedQuadLink {
 
 /* Ordering-table entry `depth` of the active buffer. */
 #define SHADED_QUAD_OT(depth) \
-    ((RenderGpuTag *)(D_800B0E38.ordering[D_8009CDDC] + (depth)))
+    ((RenderGpuTag *)(D_800B0E38.ordering[g_ActiveDrawSlot] + (depth)))
 
 void func_800C608C(int scale, u8 *src, u8 *dst);
 

@@ -57,9 +57,9 @@ void Draw_PrintTextById(unsigned int textId);
  * TEXT CURSOR (pen position):
  *   g_TextCursorX (0x8009D124)  cursor X (live: 8 inside the dialogue box)
  *   g_TextCursorY (0x8009D128)  cursor Y (live: 32)
- *   D_8009D12C  cursor stack pointer; bounds g_TextCursorStackBottom .. g_TextCursorStackTop
+ *   g_TextCursorStackPtr  cursor stack pointer; bounds g_TextCursorStackBottom .. g_TextCursorStackTop
  *               (top). Printers push {X,Y} (8 bytes) then pop to restore.
- *   D_8009D0D8  text mode/variant flag read by the quad allocator.
+ *   g_TextRenderMode  text mode/variant flag read by the quad allocator.
  *
  * FONT (image glyphs, not a vector/ASCII font):
  *   Glyph bitmaps are streamed from PE.IMG by code (Render_LoadFontGlyph /

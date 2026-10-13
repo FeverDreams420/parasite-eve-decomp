@@ -26,7 +26,7 @@ u32 D_8009D280;
 int D_8009D1C4;
 unsigned int g_GameStateFlags;
 u32 D_8009D1A0;
-u32 D_8009CDA4[1];
+u32 g_GlobalFrameCounter[1];
 
 /* Field frame loop and its scene flush: Boot_FlushSceneFast is the exit tail
  * that Boot_RunFrame repeats after its loop. Contiguous -G8 pair. */
@@ -106,7 +106,7 @@ void Boot_RunFrame(void)
             flags = D_8009D1A0;
             D_8009D1A0 = flags & ~0x30u;
 
-            if (!(GAME_STATE_OF_SCENE_FLAGS(scene_flags)->flags & 0x8000) && D_8009CDA4[0] &&
+            if (!(GAME_STATE_OF_SCENE_FLAGS(scene_flags)->flags & 0x8000) && g_GlobalFrameCounter[0] &&
                 (D_8009D1F4 & 4) &&
                 !(D_8009D238 & 0xB0002380u)) {
                 D_8009D1A0 =
@@ -121,7 +121,7 @@ void Boot_RunFrame(void)
                 /* The draw slot steps the state one word per slot, so the
                  * ordering table is read from the shifted state. */
                 slot.state = state;
-                slot.word += D_8009CDDC << 2;
+                slot.word += g_ActiveDrawSlot << 2;
                 ClearOTagR((u32 *)slot.state->shared_buffers.ordering_tables[0],
                            0x1000);
             }
@@ -146,7 +146,7 @@ void Boot_RunFrame(void)
                 }
                 Draw_RenderFrame();
                 /* A finished fade to white reloads fade colour 15. */
-                if (!D_8009CDA4[0] && fade->packed.red_green == 0xFF00FFu &&
+                if (!g_GlobalFrameCounter[0] && fade->packed.red_green == 0xFF00FFu &&
                     fade->packed.blue == 0xFF) {
                     if (fade->colour.fade_mode & 0x40) {
                         Render_SetFadeColour(15);
@@ -164,7 +164,7 @@ void Boot_RunFrame(void)
             if (!(state->flags & 0x100)) {
                 Boot_FinishFrame();
             }
-            D_8009CDA4[0]++;
+            g_GlobalFrameCounter[0]++;
             if ((D_8009D1A0 & 0x2000) && (state->flags & 0x800)) {
                 break;
             }

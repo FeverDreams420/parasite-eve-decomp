@@ -98,16 +98,16 @@ extern unsigned char g_MenuBlendColorPanelPoints[];
  *               bit 0x04 SET while a modal menu is open (clear in plain field).
  *               Also read by battle (Battle_IsActive / Battle_GetStateFlag1);
  *               Boot_RunFrame masks bits 0x30. This is the central mode bitfield.
- *   D_8009D154  MenuWidget node-pool pointer : NULL in field -> 0x800a25b0 in menu
- *   D_8009D15C  MenuWidget node-pool pointer : NULL in field -> 0x800a2370 in menu
- *   D_8009D158  active widget/draw pointer    : 0x800a22e0  -> 0x800a2640
+ *   g_MenuWidgetActiveListHead  MenuWidget node-pool pointer : NULL in field -> 0x800a25b0 in menu
+ *   g_MenuWidgetCurrentNode  MenuWidget node-pool pointer : NULL in field -> 0x800a2370 in menu
+ *   g_MenuWidgetFreeListHead  active widget/draw pointer    : 0x800a22e0  -> 0x800a2640
  *   g_MenuDrawPhase  menu draw phase / step        : field 0x01  -> menu 0x08
  *   D_8009D100  active draw buffer pointer     : switches with the layer
- *   (The D_8009D150..D_8009D160 cluster is the MenuWidget pool head/free/tail,
+ *   (The g_DrawScratchBuffer..g_MenuWidgetSavedNode cluster is the MenuWidget pool head/free/tail,
  *    managed by MenuWidget_InitPool / MenuWidget_CreateNode; non-null only
  *    while a menu owns it -> a clean "is a menu open?" test.)
  *
- * OPEN  : MenuWidget_InitPool() allocates the node pool (D_8009D154/15C != NULL),
+ * OPEN  : MenuWidget_InitPool() allocates the node pool (g_MenuWidgetActiveListHead/15C != NULL),
  *         D_8009D1A0 |= 0x04, g_MenuDrawPhase set; the inventory root step begins
  *         (Menu_StepInventoryRoot via Menu_InitCategoryTabs).
  * CLOSE : the pool is torn down (pointers NULL), D_8009D1A0 &= ~0x04, phase

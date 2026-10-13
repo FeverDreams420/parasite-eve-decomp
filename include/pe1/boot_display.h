@@ -104,7 +104,7 @@ extern volatile u16 D_80172CFA;
 extern char *D_80172D00;
 extern volatile s32 D_80172CF4;
 extern char *D_80125B48;
-extern s32 g_ActiveDrawSlot __asm__("D_8009CDDC");
+extern s32 g_ActiveDrawSlot;
 
 void SetSemiTrans(void *primitive, s32 code);
 void ResetGraph(s32 value);

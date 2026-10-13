@@ -406,7 +406,7 @@ void Menu_DrawTextboxEntries(void) {
 
     sectionIndex = 0;
     backgroundDrawn = 0;
-    temp_a0 = D_8009CDDC * 4;
+    temp_a0 = g_ActiveDrawSlot * 4;
     {
         TextboxTableAddress buffers;
 
@@ -422,13 +422,13 @@ void Menu_DrawTextboxEntries(void) {
         ordering.pointer = initialBufferTable;
         ordering.address = ordering.address + temp_a0 - 0xC;
         AddPrim(*ordering.ordering + 2,
-                (unsigned int *)((D_8009CDDC * 0x18) + (u8 *)D_8009ECA8));
+                (unsigned int *)((g_ActiveDrawSlot * 0x18) + (u8 *)D_8009ECA8));
     }
     textboxIndex = 0;
     sectionMask = 0xFFF0FFFF;
     do {
         if (g_TextboxEntries[textboxIndex].state != 0) {
-            orderingTable = ((u32 *)D_800B0E38.ordering[D_8009CDDC]) + 1;
+            orderingTable = ((u32 *)D_800B0E38.ordering[g_ActiveDrawSlot]) + 1;
             textbox = &g_TextboxEntries[textboxIndex];
             glyphWidth = 12;
             stopDrawing = 0;
@@ -482,8 +482,8 @@ void Menu_DrawTextboxEntries(void) {
             } else {
                 if ((textbox->background != 0) && (backgroundDrawn == 0) && (g_ScriptCollisionFlag == 0)) {
                     backgroundDrawn = 1;
-                    AddPrim(((u32 *)D_800B0E38.ordering[D_8009CDDC]) + 2,
-                            (unsigned int *)((D_8009CDDC * 0x18) + (u8 *)D_8009ECA8));
+                    AddPrim(((u32 *)D_800B0E38.ordering[g_ActiveDrawSlot]) + 2,
+                            (unsigned int *)((g_ActiveDrawSlot * 0x18) + (u8 *)D_8009ECA8));
                 }
             }
             numberStart = textbox->numbers;
@@ -746,7 +746,7 @@ void Menu_DrawTextboxEntries(void) {
                             g_MenuEquipSlotIndex = g_DialogueChoiceCursor;
                         }
                         stream++;
-                        selectionFrame = D_8009CDDC;
+                        selectionFrame = g_ActiveDrawSlot;
                         selectionOffset = selectionFrame * 0x1C;
                         selectionOrderingOffset = selectionFrame * 4;
                         selectionSprite =

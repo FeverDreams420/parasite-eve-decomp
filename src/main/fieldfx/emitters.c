@@ -136,7 +136,7 @@ void func_800DB25C(GteShortVector *position, int x, int y, int angle,
     GteShortVector center, p0, p1, p2, p3;
     RenderLinePacket *line;
     int r, g, b, dx, dy;
-    line = (RenderLinePacket *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    line = (RenderLinePacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += 64;
     gte_lwc2_0_0(position);
     gte_lwc2_1_4(position);
@@ -165,7 +165,7 @@ void func_800DB25C(GteShortVector *position, int x, int y, int angle,
     line->r = r; line->g = g; line->b = b; \
     line->x0 = a.x; line->y0 = a.y; \
     line->x1 = z.x; line->y1 = z.y; \
-    func_800CF6F8(D_800B0E38.ordering[D_8009CDDC] + 4, line, depth)
+    func_800CF6F8(D_800B0E38.ordering[g_ActiveDrawSlot] + 4, line, depth)
     EDGE(p0, p1);
     line++;
     EDGE(p1, p2);

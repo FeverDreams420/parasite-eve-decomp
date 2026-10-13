@@ -13,12 +13,12 @@
  * through $gp, every other extern stays absolute. */
 unsigned char *D_8009D100;
 unsigned char *D_8009D104;
-int D_8009D10C;
-int D_8009D110;
-int D_8009D114;
+int g_DrawTextDimmed;
+unsigned int g_DrawPrimColor;
+unsigned int g_DrawColorShaded;
 unsigned int *D_8009D11C;
-int D_8009D124;
-int D_8009D128;
+int g_TextCursorX;
+int g_TextCursorY;
 u16 *g_DrawVertexWritePtr;
 int g_TextCursorX;
 int g_TextCursorY;
@@ -89,8 +89,8 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
     if (pair != 0 && pair < pair + 1) {
         prim = &pair->first;
         do {
-            if (D_8009D10C) prim->color.word = D_8009D114;
-            else prim->color.word = D_8009D110;
+            if (g_DrawTextDimmed) prim->color.word = g_DrawColorShaded;
+            else prim->color.word = g_DrawPrimColor;
             prim->tag.bytes.length = 4;
             prim->color.bytes.code = 0x20;
             prim++;
@@ -305,10 +305,10 @@ void Draw_AllocColorGradient(int width, int height, u8 *points, int textured)
 
         DRAW_ALLOC_PACKET(sprite, sizeof(RenderSpritePacket));
         if (sprite.word) {
-            if (D_8009D10C)
-                sprite.sprite->color.word = D_8009D114;
+            if (g_DrawTextDimmed)
+                sprite.sprite->color.word = g_DrawColorShaded;
             else
-                sprite.sprite->color.word = D_8009D110;
+                sprite.sprite->color.word = g_DrawPrimColor;
             sprite.sprite->tag.bytes.length = 4;
             sprite.sprite->color.bytes.code = 0x64;
         }
@@ -354,10 +354,10 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         Inv_BoundsCheckAssertStub(1);
     }
     if (tile != 0) {
-        if (D_8009D10C != 0) {
-            tile->color.word = D_8009D114;
+        if (g_DrawTextDimmed != 0) {
+            tile->color.word = g_DrawColorShaded;
         } else {
-            tile->color.word = D_8009D110;
+            tile->color.word = g_DrawPrimColor;
         }
         tile->tag.bytes.length = 3;
         tile->color.bytes.code = 0x60;
@@ -377,7 +377,7 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         u32 *color = &tile->color.word;
 
         *color &= 0xFF000000;
-        *color |= D_8009D114 & 0xFFFFFF;
+        *color |= g_DrawColorShaded & 0xFFFFFF;
     }
 
     {
@@ -400,8 +400,8 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         tile->h = h;
         code |= 2;
         tile->color.bytes.code = code;
-        y = D_8009D128;
-        x = D_8009D124;
+        y = g_TextCursorY;
+        x = g_TextCursorX;
         tile->y0 = y + 2;
         ot = D_8009D11C;
         tile->x0 = x + 2;

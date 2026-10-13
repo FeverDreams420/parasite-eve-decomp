@@ -43,7 +43,7 @@ void Save_LoadMetadataWindowText(void);
 /* Save-notification state and screen-layout selector. These globals are
  * shared with older frontend/battle callers under their retail names. */
 extern unsigned char D_8009D1CE;
-extern unsigned char D_8009CE80;
+extern unsigned char g_MenuActiveMode;
 extern unsigned char D_8009CE88;
 extern void *D_8009D1F8;
 void Menu_SaveOverlayDraw(void);

@@ -21,8 +21,8 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-char *g_SceneDataTable2;
-short g_FieldCollisionTriIndex;
+RampEdge *g_SceneDataTable2;
+u16 g_FieldCollisionTriIndex;
 unsigned short g_WallPolygonVertexCount;
 PolygonVertex *g_WallPolygonVertices;
 
@@ -196,9 +196,9 @@ void Entity_SetAction(BattleEntity *arg0, int arg1) {
  * relocating the loaded database's offsets into pointers. */
 
 unsigned short D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
-short g_EntityCollisionMoveDelta;
+unsigned short g_CollisionRadius;
 short g_EntityCollisionWallParam;
-CollisionRegionEntry *g_RegionHeightTable;
+CollisionRegionTable g_RegionHeightTable;
 struct CollisionPlane *g_CollisionPlaneTable;
 CollisionDatabase *g_CollisionDb;
 short *g_EntityCollisionWallSlot;
@@ -210,7 +210,7 @@ void Entity_ResetStateGlobals(void) {
     unsigned int count;
     unsigned int *ptr;
 
-    g_RegionHeightTable = 0;
+    g_RegionHeightTable.entries = 0;
 
     for (i = 0; i < 8; i += 4) {
         *(short *)&((char *)&D_8009CE0C)[i] = 0;
@@ -232,7 +232,7 @@ void Entity_ResetStateGlobals(void) {
     D_8009CE24 = 0;
     D_8009CE20 = 0;
     D_8009CE1C = 0;
-    g_EntityCollisionMoveDelta = 0;
+    g_CollisionRadius = 0;
     g_CollisionPlaneTable = 0;
     g_CollisionDb = 0;
     g_EntityCollisionWallSlot = 0;
@@ -258,7 +258,7 @@ void Entity_RelocateSceneData(void) {
 
         planes = base->planes.pointer;
         heights = base->regions;
-        g_RegionHeightTable = heights;
+        g_RegionHeightTable.entries = heights;
         g_CollisionPlaneTable = planes;
         return;
     }
@@ -289,10 +289,10 @@ void Entity_RelocateSceneData(void) {
         wordCount >>= 5;
         g_CollisionPlaneTable = (struct CollisionPlane *)cursor;
         regionCountAddress = &actor.db->regionCount;
-        g_RegionHeightTable = (CollisionRegionEntry *)dst;
+        g_RegionHeightTable.entries = (CollisionRegionEntry *)dst;
         count = *regionCountAddress;
         wordCount++;
-        g_SceneDataTable2 = (char *)entry;
+        g_SceneDataTable2 = (RampEdge *)entry;
         actor.db->visitedWordCount = wordCount;
 
         if (count != 0) {
@@ -360,9 +360,9 @@ void Entity_FindFloor(BattleEntity *actor)
     do {
         if (D_8009D1D8 == 0) {
             /* The slot offset is summed with the table address as integers;
-             * D_8009CE08.entries[floor_index] swaps $v0 and $v1. */
+             * g_RegionHeightTable.entries[floor_index] swaps $v0 and $v1. */
             slot.address = floor_index << 2;
-            slot.address += D_8009CE08.address;
+            slot.address += g_RegionHeightTable.address;
             floor_data = (u8 *)slot.entries->flat;
             triangle_index = 0;
             floor_value = ((CollisionFlatRegion *)floor_data)->height;
@@ -384,7 +384,7 @@ void Entity_FindFloor(BattleEntity *actor)
             }
         } else {
             slot.address = floor_index << 2;
-            slot.address += D_8009CE08.address;
+            slot.address += g_RegionHeightTable.address;
             floor_data = (u8 *)slot.entries->plane;
             triangle_index = 0;
             triangle_count = ((CollisionPlaneRegion *)floor_data)->triangleCount;
@@ -440,7 +440,7 @@ void Entity_ResolvePosition(BattleEntity *actor, int index) {
         entry = (CollisionTriangleHeader *)&((CollisionTriangleXZ *)base)[idx];
         actor_s2->collisionFace = entry;
         actor_s2->collisionFaceMirror = entry;
-        table = g_RegionHeightTable;
+        table = g_RegionHeightTable.entries;
         value = table[entry->region].flat->height;
         arg_y = actor_s2->posX.parts.integer;
         arg_z = actor_s2->posZ.parts.integer;
@@ -585,13 +585,13 @@ void Entity_UpdateAndRender(BattleEntity *actor)
         z = actor->posZ.parts.integer;
         for (j = 0; j < D_8009D1FC->visitedWordCount; j++)
             D_8009DFB0[j] = 0;
-        saved = D_8009CE18;
+        saved = g_FieldCollisionTriIndex;
         i = Geo_ClipToFloorBoundary(x, z, face);
         if (!i) {
-            if (saved == D_8009CE18) {
+            if (saved == g_FieldCollisionTriIndex) {
                 for (j = 0; j < D_8009D1FC->visitedWordCount; j++)
                     D_8009DFB0[j] = 0;
-                D_8009DFB0[D_8009CE18 >> 5] = 1 << (D_8009CE18 & 0x1F);
+                D_8009DFB0[g_FieldCollisionTriIndex >> 5] = 1 << (g_FieldCollisionTriIndex & 0x1F);
                 i = Geo_ClipToFloorBoundary(x, z, face);
                 if (i) {
                     Entity_RevertMove(actor);
@@ -641,7 +641,7 @@ void Entity_UpdateAndRender(BattleEntity *actor)
         CollisionTriangleHeader *floor = face;
         u8 region = floor->region;
         u32 flags = actor->entityFlags;
-        int height = D_8009CE08.entries[region].flat->height;
+        int height = g_RegionHeightTable.entries[region].flat->height;
 
         if (flags & 2) {
             if (actor->posY.fixed >= height && actor->baseY < height) {
@@ -674,22 +674,21 @@ void Entity_UpdateAndRender(BattleEntity *actor)
  * data/linker addresses. */
 FloorEdgePoint D_8009CE0C;
 FloorEdgePoint D_8009CE10;
-RampEdge *D_8009CE14;
-u16 D_8009CE18;
+RampEdge *g_SceneDataTable2;
+u16 g_FieldCollisionTriIndex;
 u16 D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
 unsigned short g_CollisionRadius;
 CollisionDatabase *D_8009D1FC;
 CollisionPlane *D_8009D1D8;
-CollisionRegionTable D_8009CE08;
+CollisionRegionTable g_RegionHeightTable;
 struct CollisionPlane *g_CollisionPlaneTable;
 CollisionDatabase *g_CollisionDb;
-CollisionRegionEntry *g_RegionHeightTable;
 
 /* Tests the circle of radius g_CollisionRadius around (x, z) against the edges of
  * a walkable triangle (flat XZ format when there is no plane table, sloped
  * XYZ format otherwise). An edge the circle touches without a walkable
  * neighbour is published as the blocking boundary (D_8009CE0C..D_8009CE28,
- * edge id in D_8009CE18) and 0 is returned; touched edges with a neighbour
+ * edge id in g_FieldCollisionTriIndex) and 0 is returned; touched edges with a neighbour
  * queue that triangle, which is then walked recursively. Every edge is
  * tested once per query (D_8009DFB0 bitmap). Returns 1 when nothing
  * blocks. */
@@ -749,7 +748,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                 dz = pz - (s16)nextZ;
                 dx = px - (s16)nextX;
                 edgeId = tri->layout.links.edgeIds[slot];
-                d = D_8009CE14[edgeId].length.parts.integer;
+                d = g_SceneDataTable2[edgeId].length.parts.integer;
                 d = (dz * ((s16)prevX - (s16)nextX)
                      - dx * ((s16)prevZ - (s16)nextZ)) / d;
                 if (d < 0)
@@ -757,14 +756,14 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                 if (d > r)
                     continue;
                 if (nextIndex < prevIndex) {
-                    d = Math_FixedMul(D_8009CE14[edgeId].directionX, dx << 16);
-                    d += Math_FixedMul(D_8009CE14[edgeId].directionZ, dz << 16);
+                    d = Math_FixedMul(g_SceneDataTable2[edgeId].directionX, dx << 16);
+                    d += Math_FixedMul(g_SceneDataTable2[edgeId].directionZ, dz << 16);
                     if (d < 0) {
                         d = dx * dx + dz * dz;
                         if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
-                    if (D_8009CE14[edgeId].length.fixed < d) {
+                    if (g_SceneDataTable2[edgeId].length.fixed < d) {
                         int ex = px - (s16)prevX;
                         int ez = pz - (s16)prevZ;
 
@@ -776,14 +775,14 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                     int ex = px - (s16)prevX;
                     int ez = pz - (s16)prevZ;
 
-                    d = Math_FixedMul(D_8009CE14[edgeId].directionX, ex << 16);
-                    d += Math_FixedMul(D_8009CE14[edgeId].directionZ, ez << 16);
+                    d = Math_FixedMul(g_SceneDataTable2[edgeId].directionX, ex << 16);
+                    d += Math_FixedMul(g_SceneDataTable2[edgeId].directionZ, ez << 16);
                     if (d < 0) {
                         d = ex * ex + ez * ez;
                         if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
-                    if (D_8009CE14[edgeId].length.fixed < d) {
+                    if (g_SceneDataTable2[edgeId].length.fixed < d) {
                         d = dx * dx + dz * dz;
                         if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
@@ -812,7 +811,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                             D_8009CE24 = prevZ;
                             D_8009CE28 = nextZ;
                         }
-                        D_8009CE18 = edgeId;
+                        g_FieldCollisionTriIndex = edgeId;
                         return 0;
                     }
                     neighbours.index[slot] = neighbour;
@@ -870,7 +869,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                 dz = pz - (s16)nextZ;
                 dx = px - (s16)nextX;
                 edgeId = tri->layout.links.edgeIds[slot];
-                d = D_8009CE14[edgeId].length.parts.integer;
+                d = g_SceneDataTable2[edgeId].length.parts.integer;
                 d = (dz * ((s16)prevX - (s16)nextX)
                      - dx * ((s16)prevZ - (s16)nextZ)) / d;
                 if (d < 0)
@@ -878,14 +877,14 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                 if (d > r)
                     continue;
                 if (nextIndex < prevIndex) {
-                    d = Math_FixedMul(D_8009CE14[edgeId].directionX, dx << 16);
-                    d += Math_FixedMul(D_8009CE14[edgeId].directionZ, dz << 16);
+                    d = Math_FixedMul(g_SceneDataTable2[edgeId].directionX, dx << 16);
+                    d += Math_FixedMul(g_SceneDataTable2[edgeId].directionZ, dz << 16);
                     if (d < 0) {
                         d = dx * dx + dz * dz;
                         if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
-                    if (D_8009CE14[edgeId].length.fixed < d) {
+                    if (g_SceneDataTable2[edgeId].length.fixed < d) {
                         int ex = px - (s16)prevX;
                         int ez = pz - (s16)prevZ;
 
@@ -897,14 +896,14 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                     int ex = px - (s16)prevX;
                     int ez = pz - (s16)prevZ;
 
-                    d = Math_FixedMul(D_8009CE14[edgeId].directionX, ex << 16);
-                    d += Math_FixedMul(D_8009CE14[edgeId].directionZ, ez << 16);
+                    d = Math_FixedMul(g_SceneDataTable2[edgeId].directionX, ex << 16);
+                    d += Math_FixedMul(g_SceneDataTable2[edgeId].directionZ, ez << 16);
                     if (d < 0) {
                         d = ex * ex + ez * ez;
                         if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
-                    if (D_8009CE14[edgeId].length.fixed < d) {
+                    if (g_SceneDataTable2[edgeId].length.fixed < d) {
                         d = dx * dx + dz * dz;
                         if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
@@ -933,7 +932,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                             D_8009CE24 = prevZ;
                             D_8009CE28 = nextZ;
                         }
-                        D_8009CE18 = edgeId;
+                        g_FieldCollisionTriIndex = edgeId;
                         return 0;
                     }
                     neighbours.index[slot] = neighbour;
@@ -1150,8 +1149,8 @@ void Entity_SlideOnRamp(BattleEntity *entity)
     s32 x = entity->baseX;
     s32 z = entity->baseZ;
     s32 deltaX = entity->posX.fixed - x;
-    s32 directionX = D_8009CE14[D_8009CE18].directionX;
-    s32 directionZ = D_8009CE14[D_8009CE18].directionZ;
+    s32 directionX = g_SceneDataTable2[g_FieldCollisionTriIndex].directionX;
+    s32 directionZ = g_SceneDataTable2[g_FieldCollisionTriIndex].directionZ;
     s32 projection, numerator;
     u32 loopEdgeX, loopEdgeZ;
     s32 edgeX, edgeZ;
@@ -1170,7 +1169,7 @@ void Entity_SlideOnRamp(BattleEntity *entity)
     edgeZ = D_8009CE10.point.z - D_8009CE0C.point.z;
     numerator = ((z >> 16) - D_8009CE0C.point.z) * edgeX
                 - ((x >> 16) - D_8009CE0C.point.x) * edgeZ;
-    projection = D_8009CE14[D_8009CE18].length.parts.integer;
+    projection = g_SceneDataTable2[g_FieldCollisionTriIndex].length.parts.integer;
     projection = numerator / projection;
     if (projection < 0)
         projection = -projection;
@@ -1195,7 +1194,7 @@ void Entity_SlideOnRamp(BattleEntity *entity)
             loopEdgeZ = D_8009CE10.point.z - D_8009CE0C.point.z;
             numerator = ((directionZ >> 16) - D_8009CE0C.point.z) * loopEdgeX
                         - ((directionX >> 16) - D_8009CE0C.point.x) * loopEdgeZ;
-            projection = D_8009CE14[D_8009CE18].length.parts.integer;
+            projection = g_SceneDataTable2[g_FieldCollisionTriIndex].length.parts.integer;
             projection = numerator / projection;
             if (projection < 0)
                 projection = -projection;

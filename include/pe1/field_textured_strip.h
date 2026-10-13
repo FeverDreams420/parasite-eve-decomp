@@ -49,7 +49,7 @@ typedef union FieldStripLink {
 } FieldStripLink;
 
 #define STRIP_OT(depth) \
-    ((RenderGpuTag *)(D_800B0E38.ordering[D_8009CDDC] + (depth)))
+    ((RenderGpuTag *)(D_800B0E38.ordering[g_ActiveDrawSlot] + (depth)))
 
 extern char *D_800B0E58[];
 

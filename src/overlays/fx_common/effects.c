@@ -146,7 +146,7 @@ void func_8019234C(void)
     int i;
     FxCommonAddress current;
 
-    D_8009CDDC = 0;
+    g_ActiveDrawSlot = 0;
     D_8019C00E = 0;
     last = 0;
     func_80196498();
@@ -217,7 +217,7 @@ void func_8019234C(void)
         if (D_8019C9C0 == next)
             next = &g_FxCommonFrames[1].buffer;
         D_8019C9C0 = next;
-        D_8009CDDC ^= 1;
+        g_ActiveDrawSlot ^= 1;
         ClearOTagR(next->allocation, 0x1000);
         func_8019BF8C((void **)D_8019C9C0);
     }

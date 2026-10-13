@@ -10,7 +10,7 @@
  * every other word stays absolute. */
 u8 D_8009CE39;
 u8 D_8009CE3B;
-u8 D_8009CE3C;
+u8 g_BattleActionQueueCount;
 u8 D_8009D1D4;
 int D_8009D200;
 s16 D_8009D27C;
@@ -71,7 +71,7 @@ void Battle_UpdatePlayerTurn(void)
         }
 
         D_8009D1D4++;
-        if (D_8009D1D4 != D_8009CE3C) return;
+        if (D_8009D1D4 != g_BattleActionQueueCount) return;
         if (D_8009D278->action->actionCode.actionId != 8)
             Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
         {

@@ -29,8 +29,6 @@
  * through $gp, every other extern stays absolute. */
 int D_8009CF4C;
 int D_8009CFA4;
-int D_8009CFFC;
-int D_8009D004;
 int g_InvItemUsableFlag;
 int g_InvSelectedItemIndex;
 ItemDataRecord *g_MenuActionItemData;
@@ -865,7 +863,7 @@ void Menu_StepItemGrid2(void) {
 
     if (MenuWidget_FindByModeAndSelectedBase(1, 0x28) == 0) {
         Menu_CreateNotificationDialog(MemCard_GetActivePort() + 0x47, 0x49);
-        D_8009CFFC = (int)MemCard_ClearActivePrompt;
+        g_MenuDeferredCallback = MemCard_ClearActivePrompt;
     }
 }
 
@@ -1048,7 +1046,7 @@ int Menu_StepNameEntry(MenuWidgetNode *parent, unsigned int flags)
                 blank &= *end++ == 0x0F;
             if (end > text && !blank) {
                 Inv_SetActiveList(9, 0);
-                if (!D_8009D004)
+                if (!g_MenuRenameTargetRecord)
                     Menu_CopyPromptCodes((unsigned char *)Save_GetActiveMetadataBuffer());
                 D_800B0CD8 &= ~0x8000;
                 Menu_PlayConfirmSound();
@@ -1111,7 +1109,7 @@ int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input) {
 
             if (end > text && !blank) {
                 Inv_SetActiveList(9, 0);
-                if (D_8009D004 == 0) {
+                if (g_MenuRenameTargetRecord == 0) {
                     Menu_CopyPromptCodes((unsigned char *)Save_GetActiveMetadataBuffer());
                 }
                 D_800B0CD8 &= 0xFFFF7FFF;
@@ -1222,7 +1220,7 @@ int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input) {
 
             if (end > text && !blank) {
                 Inv_SetActiveList(9, 0);
-                if (D_8009D004 == 0) {
+                if (g_MenuRenameTargetRecord == 0) {
                     Menu_CopyPromptCodes((unsigned char *)Save_GetActiveMetadataBuffer());
                 }
                 D_800B0CD8 &= 0xFFFF7FFF;

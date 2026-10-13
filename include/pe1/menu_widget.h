@@ -172,7 +172,7 @@ extern MenuWidgetNode *g_MenuWidgetSavedNode;
 
 /* MENU TAB / LIST NAVIGATION (verified live via DuckStation GDB while moving the
  * cursor and switching tabs):
- *   D_8009D15C  = the currently FOCUSED node == the active tab/list.
+ *   g_MenuWidgetCurrentNode  = the currently FOCUSED node == the active tab/list.
  *                 Switching tabs moves this pointer to a different node; moving
  *                 inside a list changes that node's cursor.
  *   Each tab/category is its own MenuWidgetNode with mode==2 and a distinct

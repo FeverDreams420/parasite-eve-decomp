@@ -159,21 +159,21 @@ void Menu_MainUpdate(s32 arg0) {
             var_a1 = 0x13;
             {
             do { } while (0);
-            var_v1 = D_8009CDDC;
+            var_v1 = g_ActiveDrawSlot;
             do { } while (0);
             var_a0 = 1;
             *(&D_800B0158[0] + (var_v1 * 0x48)) = var_t1;
             }
-            *(&D_800B0159[0] + (D_8009CDDC * 0x48)) = var_t0.value;
-            *(&D_800B015A[0] + (D_8009CDDC * 0x48)) = var_a3;
-            *(&D_800B0160[0] + (D_8009CDDC * 0x48)) = var_a2;
-            *(&D_800B0161[0] + (D_8009CDDC * 0x48)) = var_a1;
-            *(&D_800B0162[0] + (D_8009CDDC * 0x48)) = var_a0;
-            *(&D_800B0168[0] + (D_8009CDDC * 0x48)) = var_t1;
-            *(&D_800B0169[0] + (D_8009CDDC * 0x48)) = var_t0.value;
-            *(&D_800B016A[0] + (D_8009CDDC * 0x48)) = var_a3;
-            *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
-            *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
+            *(&D_800B0159[0] + (g_ActiveDrawSlot * 0x48)) = var_t0.value;
+            *(&D_800B015A[0] + (g_ActiveDrawSlot * 0x48)) = var_a3;
+            *(&D_800B0160[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+            *(&D_800B0161[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+            *(&D_800B0162[0] + (g_ActiveDrawSlot * 0x48)) = var_a0;
+            *(&D_800B0168[0] + (g_ActiveDrawSlot * 0x48)) = var_t1;
+            *(&D_800B0169[0] + (g_ActiveDrawSlot * 0x48)) = var_t0.value;
+            *(&D_800B016A[0] + (g_ActiveDrawSlot * 0x48)) = var_a3;
+            *(&D_800B0170[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+            *(&D_800B0171[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
             var_v0_3 = g_ActiveDrawSlotRecord.slot;
             *(&D_800B0172[0] + ((var_v0_3 * 9) * 8)) = var_a0;
         }
@@ -182,21 +182,21 @@ void Menu_MainUpdate(s32 arg0) {
             var_a1 = 0x28;
             {
             do { } while (0);
-            var_v1 = D_8009CDDC;
+            var_v1 = g_ActiveDrawSlot;
             do { } while (0);
             var_a0 = 0x41;
             *(&D_800B0158[0] + (var_v1 * 0x48)) = var_a2;
             }
-            *(&D_800B0159[0] + (D_8009CDDC * 0x48)) = var_a1;
-            *(&D_800B015A[0] + (D_8009CDDC * 0x48)) = var_a0;
-            *(&D_800B0160[0] + (D_8009CDDC * 0x48)) = var_a2;
-            *(&D_800B0161[0] + (D_8009CDDC * 0x48)) = var_a1;
-            *(&D_800B0162[0] + (D_8009CDDC * 0x48)) = var_a0;
-            *(&D_800B0168[0] + (D_8009CDDC * 0x48)) = var_a2;
-            *(&D_800B0169[0] + (D_8009CDDC * 0x48)) = var_a1;
-            *(&D_800B016A[0] + (D_8009CDDC * 0x48)) = var_a0;
-            *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
-            *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
+            *(&D_800B0159[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+            *(&D_800B015A[0] + (g_ActiveDrawSlot * 0x48)) = var_a0;
+            *(&D_800B0160[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+            *(&D_800B0161[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+            *(&D_800B0162[0] + (g_ActiveDrawSlot * 0x48)) = var_a0;
+            *(&D_800B0168[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+            *(&D_800B0169[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+            *(&D_800B016A[0] + (g_ActiveDrawSlot * 0x48)) = var_a0;
+            *(&D_800B0170[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+            *(&D_800B0171[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
             var_v0_3 = g_ActiveDrawSlotRecord.slot;
             *(&D_800B0172[0] + ((var_v0_3 * 9) * 8)) = var_a0;
         }
@@ -208,21 +208,21 @@ void Menu_MainUpdate(s32 arg0) {
             var_a1 = 0x3D;
             {
             do { } while (0);
-            var_v1 = D_8009CDDC;
+            var_v1 = g_ActiveDrawSlot;
             do { } while (0);
             var_a0 = 0x81;
             *(&D_800B0158[0] + (var_v1 * 0x48)) = var_t1;
             }
-            *(&D_800B0159[0] + (D_8009CDDC * 0x48)) = var_t0.value;
-            *(&D_800B015A[0] + (D_8009CDDC * 0x48)) = var_a3;
-            *(&D_800B0160[0] + (D_8009CDDC * 0x48)) = var_a2;
-            *(&D_800B0161[0] + (D_8009CDDC * 0x48)) = var_a1;
-            *(&D_800B0162[0] + (D_8009CDDC * 0x48)) = var_a0;
-            *(&D_800B0168[0] + (D_8009CDDC * 0x48)) = var_t1;
-            *(&D_800B0169[0] + (D_8009CDDC * 0x48)) = var_t0.value;
-            *(&D_800B016A[0] + (D_8009CDDC * 0x48)) = var_a3;
-            *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
-            *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
+            *(&D_800B0159[0] + (g_ActiveDrawSlot * 0x48)) = var_t0.value;
+            *(&D_800B015A[0] + (g_ActiveDrawSlot * 0x48)) = var_a3;
+            *(&D_800B0160[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+            *(&D_800B0161[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+            *(&D_800B0162[0] + (g_ActiveDrawSlot * 0x48)) = var_a0;
+            *(&D_800B0168[0] + (g_ActiveDrawSlot * 0x48)) = var_t1;
+            *(&D_800B0169[0] + (g_ActiveDrawSlot * 0x48)) = var_t0.value;
+            *(&D_800B016A[0] + (g_ActiveDrawSlot * 0x48)) = var_a3;
+            *(&D_800B0170[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+            *(&D_800B0171[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
             var_v0_3 = g_ActiveDrawSlotRecord.slot;
             *(&D_800B0172[0] + ((var_v0_3 * 9) * 8)) = var_a0;
         }
@@ -233,22 +233,22 @@ void Menu_MainUpdate(s32 arg0) {
             var_a1 = 0x28;
             {
             do { } while (0);
-            var_v1 = D_8009CDDC;
+            var_v1 = g_ActiveDrawSlot;
             do { } while (0);
             var_a0 = 0x41;
             *(&D_800B0158[0] + (var_v1 * 0x48)) = var_a2;
             }
-            *(&D_800B0159[0] + (D_8009CDDC * 0x48)) = var_a1;
-            *(&D_800B015A[0] + (D_8009CDDC * 0x48)) = var_a0;
-            *(&D_800B0160[0] + (D_8009CDDC * 0x48)) = var_a2;
-            *(&D_800B0161[0] + (D_8009CDDC * 0x48)) = var_a1;
-            *(&D_800B0162[0] + (D_8009CDDC * 0x48)) = var_a0;
-            *(&D_800B0168[0] + (D_8009CDDC * 0x48)) = var_a2;
-            *(&D_800B0169[0] + (D_8009CDDC * 0x48)) = var_a1;
-            *(&D_800B016A[0] + (D_8009CDDC * 0x48)) = var_a0;
-            *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
-            *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
-            var_v0_3 = D_8009CDDC;
+            *(&D_800B0159[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+            *(&D_800B015A[0] + (g_ActiveDrawSlot * 0x48)) = var_a0;
+            *(&D_800B0160[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+            *(&D_800B0161[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+            *(&D_800B0162[0] + (g_ActiveDrawSlot * 0x48)) = var_a0;
+            *(&D_800B0168[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+            *(&D_800B0169[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+            *(&D_800B016A[0] + (g_ActiveDrawSlot * 0x48)) = var_a0;
+            *(&D_800B0170[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+            *(&D_800B0171[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+            var_v0_3 = g_ActiveDrawSlot;
             *(&D_800B0172[0] + ((var_v0_3 * 9) * 8)) = var_a0;
         }
         }
@@ -315,21 +315,21 @@ void Menu_MainUpdate(s32 arg0) {
                     var_a1 = 0xFF;
                     {
                     do { } while (0);
-                    var_v1 = D_8009CDDC;
+                    var_v1 = g_ActiveDrawSlot;
                     do { } while (0);
                     var_a0_2 = 0x3B;
                     *(&D_800B0134[0] + (var_v1 * 0x48)) = 0;
                     }
-                    *(&D_800B0135[0] + (D_8009CDDC * 0x48)) = var_t0.value;
-                    *(&D_800B0136[0] + (D_8009CDDC * 0x48)) = var_a3;
-                    *(&D_800B013C[0] + (D_8009CDDC * 0x48)) = var_a2;
-                    *(&D_800B013D[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    *(&D_800B013E[0] + (D_8009CDDC * 0x48)) = 0x3B;
-                    *(&D_800B0144[0] + (D_8009CDDC * 0x48)) = 0;
-                    *(&D_800B0145[0] + (D_8009CDDC * 0x48)) = var_t0.value;
-                    *(&D_800B0146[0] + (D_8009CDDC * 0x48)) = var_a3;
-                    *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = var_a2;
-                    *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
+                    *(&D_800B0135[0] + (g_ActiveDrawSlot * 0x48)) = var_t0.value;
+                    *(&D_800B0136[0] + (g_ActiveDrawSlot * 0x48)) = var_a3;
+                    *(&D_800B013C[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+                    *(&D_800B013D[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+                    *(&D_800B013E[0] + (g_ActiveDrawSlot * 0x48)) = 0x3B;
+                    *(&D_800B0144[0] + (g_ActiveDrawSlot * 0x48)) = 0;
+                    *(&D_800B0145[0] + (g_ActiveDrawSlot * 0x48)) = var_t0.value;
+                    *(&D_800B0146[0] + (g_ActiveDrawSlot * 0x48)) = var_a3;
+                    *(&D_800B014C[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+                    *(&D_800B014D[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
                     var_v0_4 = g_ActiveDrawSlotRecord.slot;
                     *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
@@ -338,21 +338,21 @@ void Menu_MainUpdate(s32 arg0) {
                     var_a1 = 0xC1;
                     {
                     do { } while (0);
-                    var_v1 = D_8009CDDC;
+                    var_v1 = g_ActiveDrawSlot;
                     do { } while (0);
                     var_a0_2 = 0x39;
                     *(&D_800B0134[0] + (var_v1 * 0x48)) = var_a2;
                     }
-                    *(&D_800B0135[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    *(&D_800B0136[0] + (D_8009CDDC * 0x48)) = var_a0_2;
-                    *(&D_800B013C[0] + (D_8009CDDC * 0x48)) = var_a2;
-                    *(&D_800B013D[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    *(&D_800B013E[0] + (D_8009CDDC * 0x48)) = var_a0_2;
-                    *(&D_800B0144[0] + (D_8009CDDC * 0x48)) = var_a2;
-                    *(&D_800B0145[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    *(&D_800B0146[0] + (D_8009CDDC * 0x48)) = var_a0_2;
-                    *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = var_a2;
-                    *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
+                    *(&D_800B0135[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+                    *(&D_800B0136[0] + (g_ActiveDrawSlot * 0x48)) = var_a0_2;
+                    *(&D_800B013C[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+                    *(&D_800B013D[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+                    *(&D_800B013E[0] + (g_ActiveDrawSlot * 0x48)) = var_a0_2;
+                    *(&D_800B0144[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+                    *(&D_800B0145[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+                    *(&D_800B0146[0] + (g_ActiveDrawSlot * 0x48)) = var_a0_2;
+                    *(&D_800B014C[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+                    *(&D_800B014D[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
                     var_v0_4 = g_ActiveDrawSlotRecord.slot;
                     *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
@@ -363,21 +363,21 @@ void Menu_MainUpdate(s32 arg0) {
                     var_a1 = 0x82;
                     {
                     do { } while (0);
-                    var_v1 = D_8009CDDC;
+                    var_v1 = g_ActiveDrawSlot;
                     do { } while (0);
                     var_a0_2 = 0x36;
                     *(&D_800B0134[0] + (var_v1 * 0x48)) = var_t0.value;
                     }
-                    *(&D_800B0135[0] + (D_8009CDDC * 0x48)) = var_a3;
-                    *(&D_800B0136[0] + (D_8009CDDC * 0x48)) = var_a2;
-                    *(&D_800B013C[0] + (D_8009CDDC * 0x48)) = 0;
-                    *(&D_800B013D[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    *(&D_800B013E[0] + (D_8009CDDC * 0x48)) = var_a0_2;
-                    *(&D_800B0144[0] + (D_8009CDDC * 0x48)) = var_t0.value;
-                    *(&D_800B0145[0] + (D_8009CDDC * 0x48)) = var_a3;
-                    *(&D_800B0146[0] + (D_8009CDDC * 0x48)) = var_a2;
-                    *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = 0;
-                    *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
+                    *(&D_800B0135[0] + (g_ActiveDrawSlot * 0x48)) = var_a3;
+                    *(&D_800B0136[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+                    *(&D_800B013C[0] + (g_ActiveDrawSlot * 0x48)) = 0;
+                    *(&D_800B013D[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+                    *(&D_800B013E[0] + (g_ActiveDrawSlot * 0x48)) = var_a0_2;
+                    *(&D_800B0144[0] + (g_ActiveDrawSlot * 0x48)) = var_t0.value;
+                    *(&D_800B0145[0] + (g_ActiveDrawSlot * 0x48)) = var_a3;
+                    *(&D_800B0146[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+                    *(&D_800B014C[0] + (g_ActiveDrawSlot * 0x48)) = 0;
+                    *(&D_800B014D[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
                     var_v0_4 = g_ActiveDrawSlotRecord.slot;
                     *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
@@ -386,22 +386,22 @@ void Menu_MainUpdate(s32 arg0) {
                     var_a1 = 0xC1;
                     {
                     do { } while (0);
-                    var_v1 = D_8009CDDC;
+                    var_v1 = g_ActiveDrawSlot;
                     do { } while (0);
                     var_a0_2 = 0x39;
                     *(&D_800B0134[0] + (var_v1 * 0x48)) = var_a2;
                     }
-                    *(&D_800B0135[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    *(&D_800B0136[0] + (D_8009CDDC * 0x48)) = var_a0_2;
-                    *(&D_800B013C[0] + (D_8009CDDC * 0x48)) = var_a2;
-                    *(&D_800B013D[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    *(&D_800B013E[0] + (D_8009CDDC * 0x48)) = var_a0_2;
-                    *(&D_800B0144[0] + (D_8009CDDC * 0x48)) = var_a2;
-                    *(&D_800B0145[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    *(&D_800B0146[0] + (D_8009CDDC * 0x48)) = var_a0_2;
-                    *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = var_a2;
-                    *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    var_v0_4 = D_8009CDDC;
+                    *(&D_800B0135[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+                    *(&D_800B0136[0] + (g_ActiveDrawSlot * 0x48)) = var_a0_2;
+                    *(&D_800B013C[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+                    *(&D_800B013D[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+                    *(&D_800B013E[0] + (g_ActiveDrawSlot * 0x48)) = var_a0_2;
+                    *(&D_800B0144[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+                    *(&D_800B0145[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+                    *(&D_800B0146[0] + (g_ActiveDrawSlot * 0x48)) = var_a0_2;
+                    *(&D_800B014C[0] + (g_ActiveDrawSlot * 0x48)) = var_a2;
+                    *(&D_800B014D[0] + (g_ActiveDrawSlot * 0x48)) = var_a1;
+                    var_v0_4 = g_ActiveDrawSlot;
                     *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
                 if (D_8009D278->exp_or_acc < D_8009D278->maxAtk) {

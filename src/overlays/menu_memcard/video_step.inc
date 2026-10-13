@@ -68,7 +68,7 @@ s32 MENUCARD_STEP_VIDEO_NAME(void) {
         flip = &MENUCARD_VIDEO_FLIP;
         finished = 0;
         if (*flip == 2) {
-            MENUCARD_VIDEO_SET_DISPLAY(D_8009CDDC ^ 1, D_800B0DBB);
+            MENUCARD_VIDEO_SET_DISPLAY(g_ActiveDrawSlot ^ 1, D_800B0DBB);
             *flip = 0;
         }
         MENUCARD_VIDEO_RESTART = MENUCARD_VIDEO_FILE.pos;

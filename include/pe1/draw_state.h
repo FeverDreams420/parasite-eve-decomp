@@ -47,23 +47,19 @@ typedef union DrawPrimLink {
 extern unsigned char *D_8009D100;
 extern unsigned char *D_8009D104;
 extern int g_DrawBufferIndex;
-extern int D_8009D10C;
-extern int D_8009D110;
-extern int D_8009D114;
+extern unsigned int g_DrawPrimColor;
+extern unsigned int g_DrawColorShaded;
 extern unsigned int *D_8009D11C;
-extern int *D_8009D12C;
-extern int D_8009D124;
-extern int D_8009D128;
 
 #define g_DrawPacketCursor D_8009D100
 #define g_DrawPacketArenaBase D_8009D104
-#define g_DrawColorSelect D_8009D10C
-#define g_DrawPrimaryColor D_8009D110
-#define g_DrawAlternateColor D_8009D114
+#define g_DrawColorSelect g_DrawTextDimmed
+#define g_DrawPrimaryColor g_DrawPrimColor
+#define g_DrawAlternateColor g_DrawColorShaded
 #define g_DrawOrderingTableEntry D_8009D11C
-#define g_TextCursorStack D_8009D12C
-#define g_DrawSpriteX D_8009D124
-#define g_DrawSpriteY D_8009D128
+#define g_TextCursorStack g_TextCursorStackPtr
+#define g_DrawSpriteX g_TextCursorX
+#define g_DrawSpriteY g_TextCursorY
 
 extern int g_TextCursorStackBottom[], g_TextCursorStackTop[];
 extern int *g_TextCursorStackPtr;
@@ -116,12 +112,7 @@ void Draw_EmitWipeBarRect(int width, int height, int mode);
 
 extern signed char D_800B0DB0[];
 extern s32 g_DrawBufferIndex;
-extern int D_8009CDB0;
-extern int D_8009D0D8;
 extern int g_DrawTextBoxWidth;
-extern int D_8009D13C;
-extern int D_8009D140;
-extern int D_8009D144;
 extern u32 D_8009D14C[];
 extern GpuDrawEnabledFlag g_DrawEnabled;
 extern short g_SeqElapsed;

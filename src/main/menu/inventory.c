@@ -27,7 +27,6 @@
  * through $gp, every other extern stays absolute. */
 int g_MenuInventoryViewMode;
 int g_MenuEquipSwapItem;
-int D_8009CEF4;
 int g_InvSelectedItemIndex;
 int g_InvSwapTargetIndex;
 ItemDataRecord *g_MenuActionItemData;
@@ -201,7 +200,7 @@ void Menu_OpenInventoryScreen(void) {
 void Menu_DrawEquipListContainer(void *node) {
     int count;
 
-    D_8009CEF4 = (int)node;
+    g_MenuActiveWidget = node;
     MenuWidget_DrawList(node, Menu_DrawEquipSlotListItem);
     Draw_SetTextDimmed(1);
 
@@ -408,7 +407,7 @@ void Menu_DrawSkillSelectionList(int arg0) {
  * swap source; returning from the equip screen reopens the inventory. */
 
 int g_MenuEquipSwapSource;
-int g_MenuSwapReturnPending;
+int g_MenuEquipSwapSkipRestore;
 
 s32 Menu_HandleAyaInventorySelectionInput(s32 arg0, s32 arg1)
 {
@@ -441,14 +440,14 @@ s32 Menu_HandleAyaInventorySelectionInput(s32 arg0, s32 arg1)
 
 void Menu_SetSwapReturnFlag(void) {
     if (g_MenuEquipSwapSource != 0) {
-        g_MenuSwapReturnPending = 1;
+        g_MenuEquipSwapSkipRestore = 1;
     }
 }
 
 void Menu_ProcessSwapReturnIfPending(void) {
-    if (g_MenuSwapReturnPending != 0) {
+    if (g_MenuEquipSwapSkipRestore != 0) {
         Menu_OpenInventoryScreen();
-        g_MenuSwapReturnPending = 0;
+        g_MenuEquipSwapSkipRestore = 0;
     }
 }
 #undef NULL

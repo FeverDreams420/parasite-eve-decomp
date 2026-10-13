@@ -27,7 +27,7 @@ typedef union RampEdgeLength {
     } parts;
 } RampEdgeLength;
 
-/* Floor edge record (D_8009CE14, one per edge id): 16.16 length and unit
+/* Floor edge record (g_SceneDataTable2, one per edge id): 16.16 length and unit
  * direction in the X/Z plane. */
 typedef struct RampEdge {
     RampEdgeLength length;
@@ -36,8 +36,8 @@ typedef struct RampEdge {
 } RampEdge;
 
 #include "pe1/floor_edge_point.h"
-extern RampEdge *D_8009CE14;
-extern u16 D_8009CE18;
+extern RampEdge *g_SceneDataTable2;
+extern u16 g_FieldCollisionTriIndex;
 void Entity_SlideOnRamp(struct BattleEntity *entity);
 
 PE1_STATIC_ASSERT(sizeof(RampEdge) == 12, ramp_edge_size);
@@ -83,7 +83,7 @@ typedef union CollisionRegionTable {
     CollisionRegionEntry *entries;
     u32 address;
 } CollisionRegionTable;
-extern CollisionRegionTable D_8009CE08;
+extern CollisionRegionTable g_RegionHeightTable;
 /* Bounding box of the ramp edge the player last crossed. */
 extern u16 D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
 /* One bit per triangle already visited by the floor search. */
@@ -111,17 +111,17 @@ PE1_STATIC_ASSERT(sizeof(CollisionTriangleXYZ) == 28, collision_triangle_xyz_siz
  *     +0x18  vertex table  (vertices: u16 x@+0, u16 z; stride 6 plane-mode / 4 flat-mode)
  *     +0x1C  triangle/region entry table (stride 28 plane-mode / 22 flat-mode)
  *   D_8009D1D8  plane-equation table, OR 0 -> selects the height mode (see below)
- *   D_8009CE08  region -> height table (flat mode only)
+ *   g_RegionHeightTable  region -> height table (flat mode only)
  *
  * Entry (one per walkable triangle/region):
- *   +0x01  u8   region/height id        (flat mode: index into D_8009CE08)
+ *   +0x01  u8   region/height id        (flat mode: index into g_RegionHeightTable)
  *   +0x02  u16  plane id                (plane mode: index into D_8009D1D8)
  *   +0x04  s32  plane D term            (plane mode)
  *   +0x02/+0x06/+0x08/+0x0C  vertex/neighbor indices walked by Geo_PointInTri
  *
  * TWO HEIGHT MODES (chosen by D_8009D1D8):
  *   1) FLAT / region mode  (D_8009D1D8 == 0)  [this map]:
- *        Y = D_8009CE08[entry[1]] << 16     (per-region constant height; here Y=0)
+ *        Y = g_RegionHeightTable[entry[1]] << 16     (per-region constant height; here Y=0)
  *   2) SLOPED / plane mode (D_8009D1D8 != 0):
  *        plane[id] = D_8009D1D8 + id*12 : { s32 A@+0, s32 invB@+4, s32 C@+8 }
  *        Y = FixedMul( entryD - FixedMul(A, pos_x) - FixedMul(C, pos_z), invB )

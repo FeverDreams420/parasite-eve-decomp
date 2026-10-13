@@ -165,7 +165,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
         gte_ldtransmatrix(matrixSlot->value);
         if (state->color != 0) {
             RoomLineBurstLinePacket *line =
-                (RoomLineBurstLinePacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
+                (RoomLineBurstLinePacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
             D_8009CDD8 += 0x10;
             gte_ldv3(state, &state->ex, state);
             gte_rtpt_padded();
@@ -177,7 +177,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             gte_stszotz(&otz);
             if ((u32)(otz - 1) < 0xFFF) {
                 gte_stsxy3(&line->x0, &line->x1, &weight);
-                func_800CF6F8(D_800B0E58[D_8009CDDC - 8] + otz * 4, line, 1);
+                func_800CF6F8(D_800B0E58[g_ActiveDrawSlot - 8] + otz * 4, line, 1);
             }
         }
         D_800F3368.parameter00 = 0x20;

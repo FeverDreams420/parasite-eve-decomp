@@ -801,19 +801,19 @@ int Script_SetGteMatrix(int **args) {
     Render_TransformSkinnedVertices(&g_CurrentEntity->render_object, D_800B89F8);
     Render_DrawObject(&g_CurrentEntity->render_object, D_800BEA40.words);
     Render_UpdateClutTable(&g_CurrentEntity->render_object, 1,
-                           (s16)D_8009CDDC);
+                           (s16)g_ActiveDrawSlot);
 
     flags = (flag_actor = g_CurrentEntity)->flags;
     if ((flags & 0x10000000) != 0) {
-        first_draw_slot = D_8009CDDC;
+        first_draw_slot = g_ActiveDrawSlot;
         first_draw_slot ^= 1;
-        D_8009CDDC = first_draw_slot;
+        g_ActiveDrawSlot = first_draw_slot;
         Render_DrawObject(&flag_actor->render_object, D_800BEA40.words);
         Render_UpdateClutTable(&g_CurrentEntity->render_object, 1,
-                               (s16)D_8009CDDC);
-        second_draw_slot = D_8009CDDC;
+                               (s16)g_ActiveDrawSlot);
+        second_draw_slot = g_ActiveDrawSlot;
         second_draw_slot ^= 1;
-        D_8009CDDC = second_draw_slot;
+        g_ActiveDrawSlot = second_draw_slot;
     } else {
         if ((flags & 0x08000000) == 0) {
         result = 0;

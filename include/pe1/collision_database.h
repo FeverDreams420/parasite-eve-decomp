@@ -30,7 +30,7 @@ typedef struct CollisionTriangleHeader {
 /* Sloped triangle prefix. Only kind and region are shared with flat triangles. */
 typedef struct CollisionFace {
     u8 kind;
-    u8 region;    /* flat mode: index into D_8009CE08 */
+    u8 region;    /* flat mode: index into g_RegionHeightTable */
     u16 plane;    /* sloped mode: index into D_8009D1D8 */
     s32 distance; /* sloped mode: plane D term */
 } CollisionFace;
@@ -130,7 +130,6 @@ extern CollisionDatabase *g_CollisionDb;
 extern char *D_800B1620[];
 /* Active views published by the scene-data relocator. */
 extern struct CollisionPlane *g_CollisionPlaneTable;
-extern CollisionRegionEntry *g_RegionHeightTable;
 
 PE1_STATIC_ASSERT(sizeof(CollisionTriangleHeader) == 2, collision_triangle_header_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(CollisionTriangleHeader, region) == 1,

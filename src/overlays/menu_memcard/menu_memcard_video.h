@@ -51,7 +51,7 @@ extern s16 D_801227E8, D_80122418[2];
 extern u8 D_801223F5;
 
 extern u8 D_801D0DC0;
-extern s32 D_8009CDDC;
+extern s32 g_ActiveDrawSlot;
 extern void StCdInterrupt(void),func_8010C01C(void *,s32),func_801918F8(s8,s8);
 
 void MenuCard_UploadVideoSlice(void);

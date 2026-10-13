@@ -837,7 +837,7 @@ int Render_TickObject(RenderObjectEntity *object) {
     }
     D_8009CDA0 = (object->fade_blue << 16) | (object->fade_green << 8) | object->fade_red;
     Render_DrawObject(object, &D_800BEA40);
-    if (!(object->flags_9C & 8)) Render_UpdateClutTable(object, 0, (s16)D_8009CDDC);
+    if (!(object->flags_9C & 8)) Render_UpdateClutTable(object, 0, (s16)g_ActiveDrawSlot);
     D_8009CDA0 = 0x808080;
     object->fade_red += object->fade_red_step;
     object->fade_green += object->fade_green_step;
@@ -883,7 +883,7 @@ int Render_ColorEntity(RenderObjectEntity *object) {
     }
     D_8009CDA0 = (object->fade_blue << 16) | (object->fade_green << 8) | object->fade_red;
     Render_DrawObject(object, &D_800BEA40);
-    if (!(object->flags_9C & 8)) Render_UpdateClutTable(object, 0, (s16)D_8009CDDC);
+    if (!(object->flags_9C & 8)) Render_UpdateClutTable(object, 0, (s16)g_ActiveDrawSlot);
     D_8009CDA0 = 0x808080;
     object->fade_remaining--;
     return 0;
@@ -895,7 +895,7 @@ void Render_FadeEntityColor(RenderObjectEntity *object, int r, int g, int b) {
     u8 *prim;
     u32 color;
     int i;
-    int slot = D_8009CDDC;
+    int slot = g_ActiveDrawSlot;
     u8 opcode;
 
     if (!object->header || !object->draw_count) {
@@ -962,7 +962,7 @@ static inline void setPrimitiveBlend(u8 *command, int enabled) {
 }
 
 void Render_SetEntityBlendMode(RenderObjectEntity *object, int mode) {
-    int slot = D_8009CDDC;
+    int slot = g_ActiveDrawSlot;
     s16 savedMode = mode;
     int i;
     u8 *prim;
@@ -1259,7 +1259,7 @@ int Render_SetupEntityPrims(RenderObjectEntity *obj, RenderObjectHeader *model,
     obj->primitive_blue = 0x80;
     obj->flags_9C = 0;
     obj->variant_visible = 1;
-    obj->reserved9f = D_8009CDDC;
+    obj->reserved9f = g_ActiveDrawSlot;
     obj->animation_state = 0;
     obj->animation_source = 0;
     obj->animation_id = 0;

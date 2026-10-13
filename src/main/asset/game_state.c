@@ -126,10 +126,10 @@ retryFog:
     rect.w = 320;
     rect.h = 224;
     DrawSync(0);
-    PutDispEnv(&D_800BCE80[D_8009CDDC]);
+    PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
     SetDispMask(1);
     while (!done) {
-        ClearOTagR((u32 *)D_800B0E38.ordering[D_8009CDDC], 0x1000);
+        ClearOTagR((u32 *)D_800B0E38.ordering[g_ActiveDrawSlot], 0x1000);
         switch (state) {
         case 0:
             if (DsSystemStatus() == 1 && DsQueueLen() == 0) {
@@ -245,11 +245,11 @@ retryFog:
         DrawSync(0);
         VSync(0);
         ResetGraph(1);
-        PutDispEnv(&D_800BCE80[D_8009CDDC]);
-        PutDrawEnv(&D_800BCDC8[D_8009CDDC]);
-        MoveImage(&rect, 0, D_8009CDDC ? 224 : 0);
-        DrawOTag((u32 *)D_800B0E38.ordering[D_8009CDDC] + 0xFFF);
-        D_8009CDDC ^= 1;
+        PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
+        PutDrawEnv(&D_800BCDC8[g_ActiveDrawSlot]);
+        MoveImage(&rect, 0, g_ActiveDrawSlot ? 224 : 0);
+        DrawOTag((u32 *)D_800B0E38.ordering[g_ActiveDrawSlot] + 0xFFF);
+        g_ActiveDrawSlot ^= 1;
     }
     VSync(0);
     SetDispMask(0);

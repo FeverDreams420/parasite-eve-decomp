@@ -218,7 +218,7 @@ void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
     SetRotMatrix(&sp->matrix);
     header = &model->header;
     tri = header->tris;
-    ft3 = (FieldModelFt3Packet *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    ft3 = (FieldModelFt3Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     for (i = 0; i < header->flatTris; i++, tri++) {
         v0 = MODEL_VERTEX(model, tri->vertex[0]);
         v1 = MODEL_VERTEX(model, tri->vertex[1]);

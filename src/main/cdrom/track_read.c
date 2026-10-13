@@ -422,7 +422,7 @@ retry:
                 if (state->flags & 4) {
                     int zero = 0;
                     int duration = 60;
-                    int now = *D_8009CDA4;
+                    int now = *g_GlobalFrameCounter;
                     g_CdFadeStartTime = now;
                     Akao_Cmd_C1_WithSlot(zero, duration, 0);
                 }
@@ -434,7 +434,7 @@ retry:
                 if (state->flags & 0x40) {
                     int zero = 0;
                     int duration = 60;
-                    int now = *D_8009CDA4;
+                    int now = *g_GlobalFrameCounter;
                     g_CdFadeStartTime = now;
                     Akao_Cmd_C1_WithSlot(zero, duration, 0);
                 }
@@ -449,7 +449,7 @@ retry:
             changing = flags & 4;
             if (changing) {
                 if (flags & 0x40) {
-                    g_CdFadeFramesLeft = 60 - (*D_8009CDA4 - g_CdFadeStartTime);
+                    g_CdFadeFramesLeft = 60 - (*g_GlobalFrameCounter - g_CdFadeStartTime);
                     if (g_CdFadeFramesLeft > 8) {
                         g_CdFadeFramesLeft = 8;
                         Akao_Cmd_C1_WithSlot(0, 16, 0);
@@ -509,7 +509,7 @@ retry:
                                state->scene_load_scratch, 0x21, 0) == 1)
                 return 1;
             if (state->flags & 4) {
-                g_CdFadeFramesLeft = 60 - (*D_8009CDA4 - g_CdFadeStartTime);
+                g_CdFadeFramesLeft = 60 - (*g_GlobalFrameCounter - g_CdFadeStartTime);
                 if (g_CdFadeFramesLeft > 8) {
                     g_CdFadeFramesLeft = 8;
                     Akao_Cmd_C1_WithSlot(0, 16, 0);

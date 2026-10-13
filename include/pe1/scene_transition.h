@@ -12,7 +12,7 @@
  *               (0xA8000000) appears to be area/disc flags; the low half is the
  *               room within the area.
  *   D_8009D1C4  mirror of the current room id (same value).
- *   NOTE: D_8009CDDC is NOT the room id (a transient transition flag/counter
+ *   NOTE: g_ActiveDrawSlot is NOT the room id (a transient transition flag/counter
  *         that did not revert on return; ignore it for room identity).
  *
  * LOAD PATH:
@@ -28,8 +28,8 @@
  * PER-ROOM DATA reloaded on every transition (all confirmed reverting in the
  * snapshot-diff A->B->A):
  *   D_8009D1FC  collision DB pointer        (see field_collision.h)
- *   D_8009CE08  region-height table
- *   D_8009CE00 / D_8009CE04 / D_8009CE14 / D_8009CE90  scene-data table pointers
+ *   g_RegionHeightTable  region-height table
+ *   D_8009CE00 / g_SceneDataTable1 / g_SceneDataTable2 / D_8009CE90  scene-data table pointers
  *   g_PlayerEntity  player actor (re-allocated each room)
  *   0x8009D300.. scene task/entity node cluster (rebuilt)
  * Returning to a room reloads its data deterministically to the SAME addresses.

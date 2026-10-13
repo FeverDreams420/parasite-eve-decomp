@@ -12,7 +12,6 @@ typedef struct InventorySlotRange {
 } InventorySlotRange;
 
 extern signed char g_AyaEquippedArmorSlot[];
-extern int D_8009D04C;
 extern s16 D_800C0EAA[];
 extern s16 D_800C1F7E[];
 extern s16 D_800C2022[];
@@ -23,14 +22,12 @@ extern s32 D_8009D0A4;
 extern u16 *g_InvSortListBase;
 extern s32 g_InvSortListCount;
 extern s32 D_8009D0A8;
-extern s32 g_InvSortRankTableA[];
-extern s32 D_80092428[];
-extern s32 D_80092440[];
-extern s32 g_InvTypeRankTableA[];
-extern s32 g_InvTypeRankTableB[];
-extern s32 *g_InvSortRankTable;
-extern s32 *g_InvSortTypeRankTable;
-extern s32 D_80092410[];
+extern unsigned char g_InvSortRankTableA[];
+extern unsigned char D_80092428[];
+extern unsigned char D_80092440[];
+extern unsigned char g_InvTypeRankTableA[];
+extern unsigned char g_InvTypeRankTableB[];
+extern unsigned char D_80092410[];
 extern u16 g_InvItemArray[];
 extern u8 g_ItemCodeRemapTable[];
 extern unsigned char g_ItemDropRngXorKeyHigh[];

@@ -163,7 +163,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderBufferPrefix, packets) == 0x20,
 PE1_STATIC_ASSERT(sizeof(RenderBufferPrefix) == 0x28,
                   render_buffer_prefix_size);
 extern RenderBufferPrefix D_800B0E38;
-extern int D_8009CDD8, D_8009CDDC;
+extern int D_8009CDD8, g_ActiveDrawSlot;
 void SetLineF2(RenderLinePacket *packet);
 void SetDrawTPage(void *packet, int drawTexture, int dither, int tpage);
 void func_800CF6F8(void *ordering, void *packet, int mode);

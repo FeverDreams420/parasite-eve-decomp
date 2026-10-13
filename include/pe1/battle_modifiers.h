@@ -12,7 +12,7 @@ struct BattleAttributes;
 extern struct BattleAttributes g_BattleEquipStateBlock;
 void Inv_BuildArmorList(struct BattleAttributes *out);
 
-extern int D_8009D018;
+extern int g_InvBonusSlotCount;
 /* Existing byte-array view of the equipped armor index in Aya's save state. */
 extern signed char D_800C0E22[];
 

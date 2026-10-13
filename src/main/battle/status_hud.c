@@ -337,7 +337,7 @@ void Battle_DrawStatusOverlay(RenderObjectEntity *object, int mode, int outOfRan
     if ((s8)modeArg != 8) {
         register int modeMinusOne asm("$2") = modeArg - 1;
         if ((u8)modeMinusOne < 2) {
-            u32 slot = D_8009CDDC;
+            u32 slot = g_ActiveDrawSlot;
             D_8009E358[slot * 3].x0 = 0x78;
             D_8009E358[slot * 3].y0 = 0x68;
         } else {
@@ -363,7 +363,7 @@ void Battle_DrawStatusOverlay(RenderObjectEntity *object, int mode, int outOfRan
             RenderSpritePacket *packet;
             u8 *packetTagBase;
             Battle_LayoutStatusPrimRow(0x1C);
-            slot = D_8009CDDC;
+            slot = g_ActiveDrawSlot;
             packetOffset = slot * 28;
             packetBase = (u8 *)&D_8009E730[0].sprite;
             packet = (RenderSpritePacket *)(packetBase + packetOffset);
@@ -390,7 +390,7 @@ void Battle_DrawStatusOverlay(RenderObjectEntity *object, int mode, int outOfRan
             break;
         }
     } else {
-        u32 slot = D_8009CDDC;
+        u32 slot = g_ActiveDrawSlot;
         D_8009E358[slot * 3].x0 = 0x78;
         D_8009E358[slot * 3].y0 = 0x6C;
         Battle_LayoutStatusPrimRow(0x18);
@@ -819,10 +819,10 @@ void Battle_DrawStatusSymbol(s8 which) {
     b = second.data.bytes + index;
     packetBase = D_8009E930;
     thirdBase = third.data.bytes;
-    D_8009E93C[D_8009CDDC * 28] = a[0];
+    D_8009E93C[g_ActiveDrawSlot * 28] = a[0];
     c = thirdBase + index;
-    D_8009E93D[D_8009CDDC * 28] = a[1];
-    slot = D_8009CDDC;
+    D_8009E93D[g_ActiveDrawSlot * 28] = a[1];
+    slot = g_ActiveDrawSlot;
     packetOffset = slot * 28;
     packet = packetBase + packetOffset;
     ((RenderSpritePacket *)packet)->width = b[0];
@@ -979,7 +979,7 @@ int Battle_DrawDecimalNumber(void *buffer, short x, short y, short value, short 
 
 /* Digit sprite i of the current draw buffer and panel slot. Every use
  * indexes again: the byte stores make GCC reload both indices. */
-#define PANEL_DIGIT(i) (&g_BattlePanelDigits[D_8009CDDC][g_BattleStatusPanelSlot][i].sprite)
+#define PANEL_DIGIT(i) (&g_BattlePanelDigits[g_ActiveDrawSlot][g_BattleStatusPanelSlot][i].sprite)
 
 /* Draw a floating damage/recovery number, or the enemy MISS label.
  * Each frame has ten panel slots (0x578 / 0x8C), each with five 28-byte
@@ -1007,7 +1007,7 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
     panelValue = panel->value;
     number = panelValue;
     if ((panelValue < 0) && (number = 0, ((mode & 0xFF) == 1))) {
-        register s32 frame asm("$2") = D_8009CDDC;
+        register s32 frame asm("$2") = g_ActiveDrawSlot;
         register s32 slotIndex asm("$4") = g_BattleStatusPanelSlot;
         register s32 x asm("$6") = panel->x;
         register s32 y asm("$7");
@@ -1019,12 +1019,12 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
         asm("" : : "r"(screenX));
         timer -= 30;
         screenY = y + timer;
-        *(D_800B01CD + ((g_BattleStatusPanelSlot * 0x8C) + (D_8009CDDC * 0x578))) = 0;
-        *(D_800B01CE + ((g_BattleStatusPanelSlot * 0x8C) + (D_8009CDDC * 0x578))) = 0;
-        *(D_800B01D4 + ((g_BattleStatusPanelSlot * 0x8C) + (D_8009CDDC * 0x578))) = 0x50;
-        *(D_800B01D5 + ((g_BattleStatusPanelSlot * 0x8C) + (D_8009CDDC * 0x578))) = 0xE0;
+        *(D_800B01CD + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0;
+        *(D_800B01CE + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0;
+        *(D_800B01D4 + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0x50;
+        *(D_800B01D5 + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0xE0;
         {
-            register s32 slot asm("$7") = D_8009CDDC;
+            register s32 slot asm("$7") = g_ActiveDrawSlot;
             missFrameOffset = slot * 0x578;
             panelOffset = g_BattleStatusPanelSlot * 0x8C;
             missSprite = (RenderSpritePacket *)(missFrameOffset + panelOffset + ((u8 *)D_800B01C8));
@@ -1078,7 +1078,7 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
             PANEL_DIGIT(n)->y = screenY;
             PANEL_DIGIT(n)->width = 8;
             PANEL_DIGIT(n)->height = 8;
-            AddPrim(D_800B0E38.ordering[D_8009CDDC] + 7, (u32 *)&g_BattlePanelDigits[D_8009CDDC][g_BattleStatusPanelSlot][n]);
+            AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 7, (u32 *)&g_BattlePanelDigits[g_ActiveDrawSlot][g_BattleStatusPanelSlot][n]);
         }
     }
     g_BattleStatusPanelSlot += 1;
@@ -1345,10 +1345,10 @@ void Battle_DrawActiveStatus(void)
     atbWidth = (D_8009D278->hpAlive * 0x38) / 9000;
     peWidth = peProduct / (s16)(D_8009D278->maxAtk >> 16);
     if (D_8009D1A0 & 2) {
-        atbTrack = &g_BattleAtbTracks[D_8009CDDC];
+        atbTrack = &g_BattleAtbTracks[g_ActiveDrawSlot];
         atbTrack->x0 = g_HudOrigin.x + 8;
         atbTrack->y0 = g_HudOrigin.y + 4;
-        atbFill = &g_BattleAtbGauges[D_8009CDDC];
+        atbFill = &g_BattleAtbGauges[g_ActiveDrawSlot];
         atbFill->x0 = g_HudOrigin.x + 8;
         atbFill->y0 = g_HudOrigin.y + 4;
         atbFill->x1 = g_HudOrigin.x + 8 + atbWidth;
@@ -1357,19 +1357,19 @@ void Battle_DrawActiveStatus(void)
         atbFill->y2 = g_HudOrigin.y + 7;
         atbFill->x3 = g_HudOrigin.x + 8 + atbWidth;
         atbFill->y3 = g_HudOrigin.y + 7;
-        atbMarker = &g_BattleAtbMarkers[D_8009CDDC].sprite;
-        atbMarker->x = g_BattleAtbGauges[D_8009CDDC].x1;
-        atbMarker->y = g_BattleAtbGauges[D_8009CDDC].y1 - 2;
-        atbLabel = &g_BattleAtbLabels[D_8009CDDC].sprite;
+        atbMarker = &g_BattleAtbMarkers[g_ActiveDrawSlot].sprite;
+        atbMarker->x = g_BattleAtbGauges[g_ActiveDrawSlot].x1;
+        atbMarker->y = g_BattleAtbGauges[g_ActiveDrawSlot].y1 - 2;
+        atbLabel = &g_BattleAtbLabels[g_ActiveDrawSlot].sprite;
         atbLabel->x = g_HudOrigin.x + 0x44;
         atbLabel->y = g_HudOrigin.y + 3;
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 6, (u32 *)atbTrack);
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&g_BattleAtbGauges[D_8009CDDC]);
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 4, (u32 *)&g_BattleAtbMarkers[D_8009CDDC]);
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 4, (u32 *)&g_BattleAtbLabels[D_8009CDDC]);
+        AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 6, (u32 *)atbTrack);
+        AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 5, (u32 *)&g_BattleAtbGauges[g_ActiveDrawSlot]);
+        AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 4, (u32 *)&g_BattleAtbMarkers[g_ActiveDrawSlot]);
+        AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 4, (u32 *)&g_BattleAtbLabels[g_ActiveDrawSlot]);
     }
     if (Menu_GetItemContextFlag() & 2) {
-        peFill = &g_BattlePeGauges[D_8009CDDC][0];
+        peFill = &g_BattlePeGauges[g_ActiveDrawSlot][0];
         peFill->x0 = g_HudOrigin.x + 8;
         peFill->y0 = g_HudOrigin.y + 0x19;
         peFill->x1 = g_HudOrigin.x + 8 + peWidth;
@@ -1378,56 +1378,56 @@ void Battle_DrawActiveStatus(void)
         peFill->y2 = g_HudOrigin.y + 0x1C;
         peFill->x3 = g_HudOrigin.x + 8 + peWidth;
         peFill->y3 = g_HudOrigin.y + 0x1C;
-        peRemainder = &g_BattlePeGauges[D_8009CDDC][1];
-        peRemainder->x0 = g_BattlePeGauges[D_8009CDDC][0].x1;
+        peRemainder = &g_BattlePeGauges[g_ActiveDrawSlot][1];
+        peRemainder->x0 = g_BattlePeGauges[g_ActiveDrawSlot][0].x1;
         peRemainder->y0 = g_HudOrigin.y + 0x19;
-        peRemainder->x1 = (u16)g_BattlePeGauges[D_8009CDDC][0].x1 + 0x38 - peWidth;
+        peRemainder->x1 = (u16)g_BattlePeGauges[g_ActiveDrawSlot][0].x1 + 0x38 - peWidth;
         peRemainder->y1 = g_HudOrigin.y + 0x19;
-        peRemainder->x2 = g_BattlePeGauges[D_8009CDDC][0].x1;
+        peRemainder->x2 = g_BattlePeGauges[g_ActiveDrawSlot][0].x1;
         peRemainder->y2 = g_HudOrigin.y + 0x1C;
-        peLabel = &g_BattlePeLabels[D_8009CDDC].sprite;
-        peRemainder->x3 = (u16)g_BattlePeGauges[D_8009CDDC][0].x1 + 0x38 - peWidth;
+        peLabel = &g_BattlePeLabels[g_ActiveDrawSlot].sprite;
+        peRemainder->x3 = (u16)g_BattlePeGauges[g_ActiveDrawSlot][0].x1 + 0x38 - peWidth;
         peRemainder->y3 = g_HudOrigin.y + 0x1C;
         peLabel->x = g_HudOrigin.x + 0x44;
         peLabel->y = g_HudOrigin.y + 0x18;
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)peFill);
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&g_BattlePeGauges[D_8009CDDC][1]);
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 4, (u32 *)&g_BattlePeLabels[D_8009CDDC]);
+        AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 5, (u32 *)peFill);
+        AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 5, (u32 *)&g_BattlePeGauges[g_ActiveDrawSlot][1]);
+        AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 4, (u32 *)&g_BattlePeLabels[g_ActiveDrawSlot]);
         if (D_8009D1A0 & 2) {
             tiles = D_8009E070;
-            tiles[D_8009CDDC].tile.x0 = g_HudOrigin.x;
-            tiles[D_8009CDDC].tile.y0 = g_HudOrigin.y;
-            tiles[D_8009CDDC].tile.w = 0x54;
-            tiles[D_8009CDDC].tile.h = 0x20;
+            tiles[g_ActiveDrawSlot].tile.x0 = g_HudOrigin.x;
+            tiles[g_ActiveDrawSlot].tile.y0 = g_HudOrigin.y;
+            tiles[g_ActiveDrawSlot].tile.w = 0x54;
+            tiles[g_ActiveDrawSlot].tile.h = 0x20;
         } else {
             tiles = D_8009E070;
-            tiles[D_8009CDDC].tile.x0 = g_HudOrigin.x;
-            tiles[D_8009CDDC].tile.y0 = g_HudOrigin.y + 7;
-            tiles[D_8009CDDC].tile.w = 0x54;
-            tiles[D_8009CDDC].tile.h = 0x19;
+            tiles[g_ActiveDrawSlot].tile.x0 = g_HudOrigin.x;
+            tiles[g_ActiveDrawSlot].tile.y0 = g_HudOrigin.y + 7;
+            tiles[g_ActiveDrawSlot].tile.w = 0x54;
+            tiles[g_ActiveDrawSlot].tile.h = 0x19;
         }
     } else if (D_8009D1A0 & 2) {
         tiles = D_8009E070;
-        tiles[D_8009CDDC].tile.x0 = g_HudOrigin.x;
-        tiles[D_8009CDDC].tile.y0 = g_HudOrigin.y;
-        tiles[D_8009CDDC].tile.w = 0x54;
-        tiles[D_8009CDDC].tile.h = 0x19;
+        tiles[g_ActiveDrawSlot].tile.x0 = g_HudOrigin.x;
+        tiles[g_ActiveDrawSlot].tile.y0 = g_HudOrigin.y;
+        tiles[g_ActiveDrawSlot].tile.w = 0x54;
+        tiles[g_ActiveDrawSlot].tile.h = 0x19;
     } else {
         tiles = D_8009E070;
-        tiles[D_8009CDDC].tile.x0 = g_HudOrigin.x;
-        tiles[D_8009CDDC].tile.y0 = g_HudOrigin.y + 7;
-        tiles[D_8009CDDC].tile.w = 0x54;
-        tiles[D_8009CDDC].tile.h = 0x12;
+        tiles[g_ActiveDrawSlot].tile.x0 = g_HudOrigin.x;
+        tiles[g_ActiveDrawSlot].tile.y0 = g_HudOrigin.y + 7;
+        tiles[g_ActiveDrawSlot].tile.w = 0x54;
+        tiles[g_ActiveDrawSlot].tile.h = 0x12;
     }
-    AddPrim(D_800B0E38.ordering[D_8009CDDC] + 7, (u32 *)&g_BattleStatusBackgrounds[D_8009CDDC]);
+    AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 7, (u32 *)&g_BattleStatusBackgrounds[g_ActiveDrawSlot]);
     Battle_DrawEnemyHP(D_8009D278->maxHP, D_8009D278->curHP);
     Draw_StatusIcons();
 }
 
 /* Digit sprites of the current draw buffer. Every use indexes again: the
  * byte stores to the packets make GCC reload the draw slot. */
-#define MAX_HP_DIGIT(i) (&D_8009E1D8[D_8009CDDC][i].sprite)
-#define CURRENT_HP_DIGIT(i) (&D_8009E0F8[D_8009CDDC][i].sprite)
+#define MAX_HP_DIGIT(i) (&D_8009E1D8[g_ActiveDrawSlot][i].sprite)
+#define CURRENT_HP_DIGIT(i) (&D_8009E0F8[g_ActiveDrawSlot][i].sprite)
 
 /* Draw current/maximum HP from reversed decimal digits and the HP label.
  * The maximum is drawn right to left after a slash, the current value is
@@ -1476,7 +1476,7 @@ void Battle_DrawEnemyHP(s16 maximum, s16 current)
             MAX_HP_DIGIT(n)->color.bytes.b = 128;
         }
         x += 6;
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&g_BattleMaxHpDigits[D_8009CDDC][n]);
+        AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 5, (u32 *)&g_BattleMaxHpDigits[g_ActiveDrawSlot][n]);
     }
 
     x = g_HudOrigin.x - (last * 2 + 1) * 6 + 62;
@@ -1510,12 +1510,12 @@ void Battle_DrawEnemyHP(s16 maximum, s16 current)
             CURRENT_HP_DIGIT(n)->color.bytes.b = 128;
         }
         x += 6;
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&g_BattleHpDigits[D_8009CDDC][n]);
+        AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 5, (u32 *)&g_BattleHpDigits[g_ActiveDrawSlot][n]);
     }
 
     /* Place the HP label after the number pair. */
     {
-        s32 frame = D_8009CDDC;
+        s32 frame = g_ActiveDrawSlot;
         RenderSpritePacket *sprites = &g_BattleHpLabels[0].sprite;
 
         /* Step the sprite pointer by whole packets. */

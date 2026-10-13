@@ -73,7 +73,7 @@ int Render_DrawSpriteEntry(GeomEntry *input)
     register s32 screen_src asm("$3");
     char frame_pad[9];
 
-    active = D_8009CDDC;
+    active = g_ActiveDrawSlot;
     entry = input;
     sprite = (RenderTilePacket *)entry->u30.prim;
     count = entry->prim_count;

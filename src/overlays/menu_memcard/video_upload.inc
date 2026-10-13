@@ -40,7 +40,7 @@ void MENUCARD_UPLOAD_VIDEO_SLICE_NAME(void) {
             } else {
                 MENUCARD_VIDEO_DISPLAY.rect.w = 16;
             }
-            MENUCARD_VIDEO_SET_DISPLAY(D_8009CDDC ^ 1, D_800B0DBB);
+            MENUCARD_VIDEO_SET_DISPLAY(g_ActiveDrawSlot ^ 1, D_800B0DBB);
             MENUCARD_VIDEO_FLIP = 2;
         }
     }

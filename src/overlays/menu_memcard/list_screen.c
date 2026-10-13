@@ -300,7 +300,7 @@ s32 func_801909B4(void) {
             D_801D11BC[0]->draw.isbg = 0;
             g_MemcardSecondScreen.value->draw.isbg = 0;
             D_801D11BC[0]->dirty.w = g_MemcardSecondScreen.value->dirty.w = 0;
-            D_801D11C8 = D_8009CDDC;
+            D_801D11C8 = g_ActiveDrawSlot;
             D_801D11BC[0]->overlay.w = g_MemcardSecondScreen.value->overlay.w = 0;
             rect.x = 0;
             rect.y = 0;

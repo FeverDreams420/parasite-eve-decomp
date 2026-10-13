@@ -104,6 +104,5 @@ extern u8 D_80092354[];
 extern u8 D_80092380[];
 extern u8 D_800923A0[];
 extern u8 *g_MenuItemIconGlyphTable;
-extern int D_8009D004;
 
 #endif

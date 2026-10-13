@@ -5,8 +5,8 @@
 
 extern int g_InvSortStatIndex;
 extern ItemDataRecord *(*g_InvSortLookup)(int index);
-extern unsigned char *D_8009D0B8;
-extern unsigned char *D_8009D0BC;
+extern unsigned char *g_InvSortRankTable;
+extern unsigned char *g_InvSortTypeRankTable;
 
 int Inv_CompareItemsByStatForSort(const void *leftElement, const void *rightElement);
 int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement);

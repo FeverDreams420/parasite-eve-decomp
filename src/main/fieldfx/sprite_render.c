@@ -172,7 +172,7 @@ void func_800C3324(FieldOrientedSprite *sprite)
     FieldStripPacket *packet;
     FieldStripLink link;
 
-    packet = (FieldStripPacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
     D_800F33B4 = FIELDFX_SCRATCH;
     D_800F33B4->v = sprite->cell & 0xF0;
     D_800F33B4->u = (sprite->cell - D_800F33B4->v) << 4;
@@ -319,7 +319,7 @@ void func_800C3B04(FieldBillboard *board)
         (height << 5) * distance / (D_800E284C->depth * 4 + distance);
     halfWidth = projectedWidth >> 1;
     halfHeight = projectedHeight >> 1;
-    packet = (FieldStripPacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
     packet->tag.length = 9;
     packet->code = 0x2C;
     /* PSY-Q setSemiTrans(packet, D_800F337A). */
@@ -410,7 +410,7 @@ void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
     s32 flag;
     FieldStripLink link;
 
-    packet = (FieldStripPacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
     D_800F33B4 = FIELDFX_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
@@ -520,7 +520,7 @@ void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
     s32 flag;
     FieldShadedQuadLink link;
 
-    packet = (FieldShadedQuadPacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldShadedQuadPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
     D_800F33B4 = FIELDFX_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
@@ -665,9 +665,9 @@ void func_800C4FC4(FieldShadedRing *ring, GteMatrix *placement, u8 mode)
     func_800C608C(ring->intensity, ring->color0, inner);
     points = ring->source;
     for (i = 0; i < ring->mode; i++) {
-        packet = (FieldRingPacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
+        packet = (FieldRingPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
         D_8009CDD8 += sizeof(FieldRingPacket);
-        drawMode = D_800B0E58[D_8009CDDC] + D_8009CDD8;
+        drawMode = D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8;
         D_8009CDD8 += 8;
         SetDrawTPage(drawMode, 0, 0, (D_800E224C & 3) << 5);
         next = (i + 1) % ring->mode;
@@ -795,7 +795,7 @@ void func_800C5A40(FieldTexturedStrip *strip)
     node = strip->nodes;
     i = 0;
     D_800F33B4 = FIELDFX_SCRATCH;
-    packet = (FieldStripPacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
     D_800F33B4->clutX = strip->clut << 4;
     D_800F33B4->clutY = strip->clut >> 4;
     while (i < strip->count - 1) {

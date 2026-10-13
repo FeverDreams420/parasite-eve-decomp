@@ -31,9 +31,9 @@ typedef union DrawPacketAddress {
 
 extern u8 *D_8009D100;                  /* packet cursor address */
 extern u8 *D_8009D104;                  /* packet arena base address */
-extern int D_8009D10C;                 /* colour select */
-extern int D_8009D110;                 /* primary colour */
-extern int D_8009D114;                 /* alternate colour */
+extern int g_DrawTextDimmed;                 /* colour select */
+extern unsigned int g_DrawPrimColor;                 /* primary colour */
+extern unsigned int g_DrawColorShaded;                 /* alternate colour */
 extern u32 *D_8009D11C;                 /* ordering-table entry */
 
 #include "pe1/bounds_check.h"

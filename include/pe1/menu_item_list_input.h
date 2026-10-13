@@ -22,8 +22,6 @@ int Menu_GetItemSlotAvailability(int index);
 
 /* Bonus point allocation view is open. */
 extern int g_MenuBattleStatusOverlayActive;
-/* Item-use confirmation dialog: selected option and confirm callback. */
-extern int D_8009CFA0;
 /* Pending stat bonus: item index (negative when none), stat and amount. */
 extern int D_8009CFD4;
 /* Copy of the item record being modified. */

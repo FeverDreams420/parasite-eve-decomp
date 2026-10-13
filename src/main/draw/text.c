@@ -11,20 +11,20 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-int D_8009CDB0;
-int D_8009D0D8;
+int g_DrawGlyphAdvance;
+int g_TextRenderMode;
 unsigned char *D_8009D100;
 unsigned char *D_8009D104;
-int D_8009D10C;
-int D_8009D110;
-int D_8009D114;
+int g_DrawTextDimmed;
+unsigned int g_DrawPrimColor;
+unsigned int g_DrawColorShaded;
 unsigned int *D_8009D11C;
-int D_8009D124;
-int D_8009D128;
-int *D_8009D12C;
-int D_8009D13C;
-int D_8009D140;
-int D_8009D144;
+int g_TextCursorX;
+int g_TextCursorY;
+int *g_TextCursorStackPtr;
+int g_DrawDigitFontTpageClut;
+int g_DrawDigitFontBaseTexU;
+int g_DrawDigitFontBaseTexV;
 int g_DrawBufferIndex;
 int g_DrawDigitFontBaseTexU;
 int g_DrawDigitFontBaseTexV;
@@ -92,29 +92,29 @@ void Draw_StatePop(void) {
     }
 }
 
-/* The glyph renderers move the cursor at D_8009D124/D_8009D128 and save it on
+/* The glyph renderers move the cursor at g_TextCursorX/g_TextCursorY and save it on
  * the same stack as Draw_StatePush. */
 static inline void SetCursor(int x, int y)
 {
-    D_8009D124 = x;
-    D_8009D128 = y;
+    g_TextCursorX = x;
+    g_TextCursorY = y;
 }
 
 /* Moves the cursor right by `dx`, rewriting y as the stored pair. */
 static inline void AdvanceCursor(int dx)
 {
-    int x = D_8009D124;
-    int y = D_8009D128;
+    int x = g_TextCursorX;
+    int y = g_TextCursorY;
 
-    D_8009D124 = x + dx;
-    D_8009D128 = y;
+    g_TextCursorX = x + dx;
+    g_TextCursorY = y;
 }
 
 static inline void PushCursor(void)
 {
     DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
     if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
-        int x = D_8009D124, y = D_8009D128;
+        int x = g_TextCursorX, y = g_TextCursorY;
         g_TextCursorStack = (int *)(stack + 1);
         stack->x = x;
         stack->y = y;
@@ -433,10 +433,10 @@ static inline RenderTexturedQuad *AllocBarQuad(void)
         Inv_BoundsCheckAssertStub(1);
     }
     if (prim != 0) {
-        if (D_8009D10C != 0)
-            prim->color.word = D_8009D114;
+        if (g_DrawTextDimmed != 0)
+            prim->color.word = g_DrawColorShaded;
         else
-            prim->color.word = D_8009D110;
+            prim->color.word = g_DrawPrimColor;
         prim->tag.bytes.length = 9;
         prim->color.bytes.code = 0x2C;
     }
@@ -447,13 +447,13 @@ static inline int DecodeGlyph(int input) {
     register int code asm("$4") = input;
     int glyph;
     glyph = (u8)code;
-    if (D_8009D0D8) {
-        int page = D_8009D0D8 << 8;
+    if (g_TextRenderMode) {
+        int page = g_TextRenderMode << 8;
         glyph += page;
-        D_8009D0D8 = 0;
+        g_TextRenderMode = 0;
     }
     if ((u8)code >= 250) {
-        D_8009D0D8 = (u8)code - 250;
+        g_TextRenderMode = (u8)code - 250;
         glyph = -1;
     }
     return glyph;
@@ -478,14 +478,14 @@ void Draw_AllocTexturedQuad(int code) {
     DrawPrimLink link;
 
     current = raw & 0xFF;
-    if (D_8009D0D8 != 0) {
-        current += D_8009D0D8 << 8;
-        D_8009D0D8 = 0;
+    if (g_TextRenderMode != 0) {
+        current += g_TextRenderMode << 8;
+        g_TextRenderMode = 0;
     }
 
     low = raw & 0xFF;
     if ((unsigned int)low >= 0xFA) {
-        D_8009D0D8 = low - 0xFA;
+        g_TextRenderMode = low - 0xFA;
         current = -1;
     }
 
@@ -519,10 +519,10 @@ void Draw_AllocTexturedQuad(int code) {
         Inv_BoundsCheckAssertStub(1);
     }
     if (prim != 0) {
-        if (D_8009D10C != 0) {
-            prim->color.word = D_8009D114;
+        if (g_DrawTextDimmed != 0) {
+            prim->color.word = g_DrawColorShaded;
         } else {
-            prim->color.word = D_8009D110;
+            prim->color.word = g_DrawPrimColor;
         }
         prim->tag.bytes.length = 9;
         prim->color.bytes.code = 0x2C;
@@ -545,10 +545,10 @@ void Draw_AllocTexturedQuad(int code) {
         register int cursorX asm("$6");
         int cursorY;
         arg0 = 0;
-        cursorX = D_8009D124;
-        cursorY = D_8009D128;
+        cursorX = g_TextCursorX;
+        cursorY = g_TextCursorY;
         spacing++;
-        D_8009CDB0 = spacing;
+        g_DrawGlyphAdvance = spacing;
 
         prim->u2 = u;
         prim->u0 = u;
@@ -586,7 +586,7 @@ void Draw_AllocTexturedQuad(int code) {
         link.packet = prim;
         ot->link.address = link.word;
     }
-    AdvanceCursor(width + D_8009CDB0);
+    AdvanceCursor(width + g_DrawGlyphAdvance);
 }
 
 inline int Draw_MeasureTextWidth(u8 *text) {
@@ -598,9 +598,9 @@ inline int Draw_MeasureTextWidth(u8 *text) {
         if (glyph >= 0) {
             int narrow = 0;
             if (glyph < 10 || glyph == 15) narrow = 1;
-            D_8009CDB0 = narrow + 1;
+            g_DrawGlyphAdvance = narrow + 1;
             if (glyph >= 256) glyph -= 19;
-            width += ((Draw_LookupGlyphMetrics(glyph) >> 4) & 15) + D_8009CDB0;
+            width += ((Draw_LookupGlyphMetrics(glyph) >> 4) & 15) + g_DrawGlyphAdvance;
         }
     }
     return width;
@@ -619,7 +619,7 @@ void Draw_PrintRawText(u8 *text) {
 /* Draws text from the current cursor position without saving it first. */
 static inline void PrintTextHere(u8 *text) {
     if (text) {
-        SaveCursor(D_8009D124, D_8009D128);
+        SaveCursor(g_TextCursorX, g_TextCursorY);
         while (*text != 255) {
             Draw_AllocTexturedQuad(*text++);
         }
@@ -632,7 +632,7 @@ void Draw_PrintCenteredTextInWidth(u8 *text, int width) {
 
     PushCursor();
     measured = Draw_MeasureTextWidth(text) + 4;
-    SetCursor(D_8009D124 + ((width - measured) >> 1), D_8009D128);
+    SetCursor(g_TextCursorX + ((width - measured) >> 1), g_TextCursorY);
     PrintTextHere(text);
     PopCursor();
 }
@@ -656,10 +656,10 @@ void Draw_PrintTextById(unsigned int textId) {
 void Draw_PrintTextWrapped(u8 *text, int width) {
     while (*text != 0xFF) {
         int used;
-        DrawTextCursorPair *stack = (DrawTextCursorPair *)D_8009D12C;
+        DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStackPtr;
         if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
             int x = g_DrawSpriteX, y = g_DrawSpriteY;
-            D_8009D12C = (int *)(stack + 1);
+            g_TextCursorStackPtr = (int *)(stack + 1);
             stack->x = x;
             stack->y = y;
         } else Inv_BoundsCheckAssertStub(2);
@@ -687,10 +687,10 @@ void Draw_PrintTextWrapped(u8 *text, int width) {
             }
         }
         {
-            DrawTextCursorPair *restore = (DrawTextCursorPair *)D_8009D12C;
+            DrawTextCursorPair *restore = (DrawTextCursorPair *)g_TextCursorStackPtr;
             if ((DrawTextCursorPair *)g_TextCursorStackBottom < restore) {
                 int x = restore[-1].x, y = restore[-1].y;
-                D_8009D12C = (int *)(restore - 1);
+                g_TextCursorStackPtr = (int *)(restore - 1);
                 g_DrawSpriteX = x;
                 g_DrawSpriteY = y;
             } else Inv_BoundsCheckAssertStub(3);
@@ -706,9 +706,9 @@ void Draw_PrintTextWrapped(u8 *text, int width) {
 }
 
 void Draw_SetFontVariant(int variant) {
-    D_8009D13C = variant != 0 ? 0x3A1C : 0x395D;
-    D_8009D140 = variant != 0 ? 0xCC : 0x84;
-    D_8009D144 = 0xA4;
+    g_DrawDigitFontTpageClut = variant != 0 ? 0x3A1C : 0x395D;
+    g_DrawDigitFontBaseTexU = variant != 0 ? 0xCC : 0x84;
+    g_DrawDigitFontBaseTexV = 0xA4;
 }
 
 void Draw_EmitDigitSprite(int digit) {
@@ -899,9 +899,9 @@ void Draw_PrintTimeValue(int value, int flag) {
     if (value > 360000) {
         value = 359999;
     }
-    D_8009D13C = flag != 0 ? 0x3A1C : 0x395D;
-    D_8009D140 = flag != 0 ? 0xCC : 0x84;
-    D_8009D144 = 0xA4;
+    g_DrawDigitFontTpageClut = flag != 0 ? 0x3A1C : 0x395D;
+    g_DrawDigitFontBaseTexU = flag != 0 ? 0xCC : 0x84;
+    g_DrawDigitFontBaseTexV = 0xA4;
 
     Draw_EmitDigitSprite(value / 36000);
     AdvanceCursor(5);
@@ -929,9 +929,9 @@ void Draw_PrintTimeValue(int value, int flag) {
     AdvanceCursor(5);
     Draw_EmitDigitSprite(value);
 
-    D_8009D13C = 0x395D;
-    D_8009D140 = 0x84;
-    D_8009D144 = 0xA4;
+    g_DrawDigitFontTpageClut = 0x395D;
+    g_DrawDigitFontBaseTexU = 0x84;
+    g_DrawDigitFontBaseTexV = 0xA4;
 }
 
 static inline void PrintSign(u8 *text)
@@ -975,7 +975,7 @@ void Draw_AllocTexturedRect(int value, int width)
             width--;
         }
         PrintSign(Text_LookupTable4(0x70));
-        SetCursor(D_8009D124 + 9u, D_8009D128);
+        SetCursor(g_TextCursorX + 9u, g_TextCursorY);
     }
     for (i = 0; i < width; i++) {
         Draw_AllocTexturedQuad(Digit(i < width - 1, value / divisor));
@@ -1030,7 +1030,7 @@ static inline void PushCursorAt(int x, int y)
         u32 *ot; \
         quad = AllocBarQuad(); \
         quad->x0 = quad->x2 = left; \
-        quad->y0 = quad->y1 = D_8009D128 + 1; \
+        quad->y0 = quad->y1 = g_TextCursorY + 1; \
         quad->x1 = quad->x3 = right_from_x0; \
         quad->y2 = quad->y3 = quad->y0 + glyph->height; \
         quad->u0 = quad->u2 = glyph->u + (u_offset); \
@@ -1058,26 +1058,26 @@ void Draw_AllocTexturedRectAlt(int value, int width)
     u32 *ot;
 
     PushCursor();
-    PushCursorAt(D_8009D124, D_8009D128 + 2);
-    SetCursor(D_8009D124 + 0x27, D_8009D128 - 2);
+    PushCursorAt(g_TextCursorX, g_TextCursorY + 2);
+    SetCursor(g_TextCursorX + 0x27, g_TextCursorY - 2);
     Draw_PrintNumberWidth2Unk(value);
-    D_8009D110 = 0x808080;
-    D_8009D114 = 0x404040;
+    g_DrawPrimColor = 0x808080;
+    g_DrawColorShaded = 0x404040;
     PopCursor();
     Draw_AllocSprite(0x49);
 
     if (width < 0x2F)
-        DRAW_BAR_SEGMENT(D_8009D124 + 1, quad->x0 + 1, 0);
+        DRAW_BAR_SEGMENT(g_TextCursorX + 1, quad->x0 + 1, 0);
     if (width < 0x2E)
-        DRAW_BAR_SEGMENT(D_8009D124 + 2, (s16)quad->x0 + 0x2E - width, 1);
+        DRAW_BAR_SEGMENT(g_TextCursorX + 2, (s16)quad->x0 + 0x2E - width, 1);
     if (width < 0x30)
-        DRAW_BAR_SEGMENT(D_8009D124 + 0x30 - width, quad->x0 + 1, 2);
+        DRAW_BAR_SEGMENT(g_TextCursorX + 0x30 - width, quad->x0 + 1, 2);
     if (width > 0)
-        DRAW_BAR_SEGMENT(D_8009D124 + 0x31 - width, quad->x0 + 1, 3);
+        DRAW_BAR_SEGMENT(g_TextCursorX + 0x31 - width, quad->x0 + 1, 3);
     if (width >= 3)
-        DRAW_BAR_SEGMENT(D_8009D124 + 0x32 - width, (s16)quad->x0 - 1 + width, 4);
+        DRAW_BAR_SEGMENT(g_TextCursorX + 0x32 - width, (s16)quad->x0 - 1 + width, 4);
     if (width >= 2)
-        DRAW_BAR_SEGMENT(D_8009D124 + 0x31, quad->x0 + 1, 5);
+        DRAW_BAR_SEGMENT(g_TextCursorX + 0x31, quad->x0 + 1, 5);
     PopCursor();
 
     drawMode = glyph->mode;

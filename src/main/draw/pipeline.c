@@ -21,7 +21,7 @@
  * lowering, so the light-matrix element stores keep their own absolute
  * addresses; only its COMMON words below are gp-relative. */
 
-s32 g_GlobalFrameCounter;
+u32 g_GlobalFrameCounter[1];
 int g_SceneDispatchToken;
 unsigned int g_GameStateFlags;
 
@@ -138,7 +138,7 @@ void Draw_InitPipeline(void) {
     Render_SetupFogLayer(geom);
     Script_DrawSyncAndFlush();
     func_800E0060();
-    g_GlobalFrameCounter = 0;
+    g_GlobalFrameCounter[0] = 0;
     g_RoomFloorY->y = 0;
     DrawSync(0);
     SetDispMask(1);

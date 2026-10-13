@@ -19,7 +19,7 @@
  */
 
 extern u16 D_800930D8[];
-extern s32 D_8009CDDC;
+extern s32 g_ActiveDrawSlot;
 /* Ordering table of each draw slot (Boot_InitMemoryLayout). */
 extern RenderBufferPrefix D_800B0E38;
 extern u8 D_800B0DCD;

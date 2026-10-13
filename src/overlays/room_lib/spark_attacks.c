@@ -810,7 +810,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         if (fx->brightness != 0) {
-            line = (RoomBeamLinePacket *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+            line = (RoomBeamLinePacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
             D_8009CDD8 += 0x10;
             gte_ldv3(fx, &fx->tipX, fx);
             gte_rtpt_padded();
@@ -822,7 +822,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
             gte_stszotz(&depth);
             if ((u32)(depth - 1) < 0xFFF) {
                 gte_stsxy3(&line->x0, &line->x1, &scratch);
-                func_800CF6F8(D_800B0E38.ordering[D_8009CDDC] + depth, line, 1);
+                func_800CF6F8(D_800B0E38.ordering[g_ActiveDrawSlot] + depth, line, 1);
             }
         }
         D_800F3368.parameter00 = 0x40;

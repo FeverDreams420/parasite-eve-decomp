@@ -38,7 +38,7 @@ u8 D_8009CE38[4];
 u8 D_8009CE39;
 u8 D_8009CE3A;
 u8 D_8009CE3B;
-u8 D_8009CE3C;
+u8 g_BattleActionQueueCount;
 u8 D_8009D1D4;
 s32 D_8009D208;
 s32 D_8009D258;
@@ -112,16 +112,16 @@ void Battle_AdvancePhase(void) {
     temp_s2 = &D_800BE830[temp_a2 & 0xFF];
     if (var_a0 == 0) {
         var_s0 = temp_a2;
-        if ((temp_a2 & 0xFF) < (u8) D_8009CE3C) {
+        if ((temp_a2 & 0xFF) < (u8) g_BattleActionQueueCount) {
             do {
                 temp_a0 = (u16)D_800BE830[var_s0 & 0xFF].command;
                 if (temp_a0 - 3U < 0x180U) {
                     Inv_AddItem((s16) temp_a0 - 3);
                 }
                 var_s0 += 1;
-            } while ((var_s0 & 0xFFU) < (u8) D_8009CE3C);
+            } while ((var_s0 & 0xFFU) < (u8) g_BattleActionQueueCount);
         }
-        D_8009CE3C = 0;
+        g_BattleActionQueueCount = 0;
         D_8009D1D4 = 0;
         D_8009D1A0 = D_8009D1A0 & ~0x100;
         return;
@@ -382,7 +382,7 @@ block_55:
             if (((u16)D_800BE830[temp_v0_6 & 0xFF].command - 3U >= 0x194U) || ((u8) D_8009D254->actionMode < 4U)) {
                 D_8009D1A0 = D_8009D1A0 & ~0x100;
             }
-            temp_a0_4 = (u8)D_8009CE3C;
+            temp_a0_4 = (u8)g_BattleActionQueueCount;
             for (var_s0_4 = D_8009D1D4; (var_s0_4 & 0xFFU) < (unsigned)temp_a0_4; var_s0_4++) {
                 if ((u16)D_800BE830[var_s0_4 & 0xFF].command - 1U < 2U) {
                     Battle_DispatchEntityEffect();

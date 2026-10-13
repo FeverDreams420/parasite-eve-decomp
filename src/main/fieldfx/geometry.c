@@ -304,7 +304,7 @@ void func_800CEE20(GteShortVector *position, GteRotation *rotation,
     gte_cop2_hazard_slot();
     gte_cop2_hazard_slot();
     gte_mvmva_rotation_v0_translation_sf12();
-    packet = (FieldStripPacket *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldStripPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += D_800E1210[D_800F3368.parameter0A] * sizeof(FieldStripPacket);
     bias = (u16)D_800F3368.depth;
     RotMatrixYXZ(rotation, &matrix);
@@ -523,7 +523,7 @@ void func_800CF6F8(void *ordering, void *packet, int mode)
 {
     void *drawMode;
     if (mode != 255) {
-        drawMode = D_800B0E38.packets[D_8009CDDC] + D_8009CDD8;
+        drawMode = D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8;
         D_8009CDD8 += 8;
         SetDrawTPage(drawMode, 0, 1, GetTPage(0, mode, 0, 0));
         if (packet) {
@@ -898,7 +898,7 @@ void func_800D004C(GteShortVector *position, int width, int height, int segments
     template.r2 = template.r1 = rim.r;
     template.g2 = template.g1 = rim.g;
     template.b2 = template.b1 = rim.b;
-    packet = (FieldG3Packet *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldG3Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += segments * sizeof(FieldG3Packet);
     vertices[0].x = vertices[0].y = vertices[0].z = vertices[1].z = vertices[2].z = 0;
     radii[0] = width;
@@ -952,9 +952,9 @@ void func_800D004C(GteShortVector *position, int width, int height, int segments
         depth -= bias;
         if (depth >= 0x1000)
             return;
-        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
+        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
         if (mode != 0xFF) {
-            drawMode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+            drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
             D_8009CDD8 += sizeof(RenderTintMode);
             SetDrawTPage((char *)drawMode, 0, 1, GetTPage(0, mode, 0, 0));
             if (packet) {
@@ -1055,7 +1055,7 @@ void func_800D0728(GteShortVector *position, int inner, int outer, int segments,
     template.r3 = innerColor.r;
     template.g3 = innerColor.g;
     template.b3 = innerColor.b;
-    packet = (FieldG4Packet *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldG4Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += segments * sizeof(FieldG4Packet);
     vertices[0].z = vertices[1].z = vertices[2].z = vertices[3].z = 0;
     for (i = 0; i < segments; i++, packet++) {
@@ -1113,10 +1113,10 @@ void func_800D0728(GteShortVector *position, int inner, int outer, int segments,
         if (depth >= 0x1000)
             return;
         gte_stsxy2(&packet->x3);
-        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
+        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
         entry = ot.tag;
         if (mode != 0xFF) {
-            drawMode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+            drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
             D_8009CDD8 += sizeof(RenderTintMode);
             SetDrawTPage((char *)drawMode, 0, 1, GetTPage(0, mode, 0, 0));
             if (packet) {
@@ -1156,7 +1156,7 @@ void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
     bias = (u16)D_800F3368.depth;
     /* Keep intensity in s6 without pinning the later draw-mode lifetime. */
     
-    packet = (FieldG3Packet *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldG3Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += sizeof(FieldG3Packet);
     view = D_800BCFA4.value;
     {
@@ -1217,9 +1217,9 @@ void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
         gte_stszotz(&depth);
         depth -= bias;
         if (depth < 0x1000) {
-            TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
+            TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
             if (mode != 0xFF) {
-                drawMode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+                drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
                 D_8009CDD8 += sizeof(RenderTintMode);
                 SetDrawTPage(drawMode, 0, 1, GetTPage(0, mode, 0, 0));
                 if (packet) {
@@ -1297,7 +1297,7 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 count,
         history[0].tail.vector.y = history[1].tail.vector.y;
         history[0].tail.vector.z = history[1].tail.vector.z;
     }
-    packet = (FieldG4Packet *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldG4Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += count * sizeof(FieldG4Packet);
     if (color0 == 0) {
         headColor[0] = headColor[1] = headColor[2] = 0;
@@ -1353,9 +1353,9 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 count,
             packet->r3 = tailColor[0] * fade1 / 128;
             packet->g3 = tailColor[1] * fade1 / 128;
             packet->b3 = tailColor[2] * fade1 / 128;
-            TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
+            TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
             if (mode != 0xFF) {
-                drawMode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+                drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
                 D_8009CDD8 += sizeof(RenderTintMode);
                 SetDrawTPage(drawMode, 0, 1, GetTPage(0, mode, 0, 0));
                 if (packet) {
@@ -1380,7 +1380,7 @@ void func_800D1AE0(u8 *color, int scale, int abr, u32 depth)
     FieldTileAddress ot;
     FieldTileAddress link;
 
-    tile = (RenderTintTile *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    tile = (RenderTintTile *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += sizeof(RenderTintTile);
     SetTile(tile);
     tile->r = color[0] * scale / 128;
@@ -1391,9 +1391,9 @@ void func_800D1AE0(u8 *color, int scale, int abr, u32 depth)
         tile->y = 0;
         tile->width = 320;
         tile->height = 240;
-        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
+        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
         if (abr != 0xFF) {
-            mode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+            mode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
             D_8009CDD8 += sizeof(RenderTintMode);
             SetDrawTPage(mode, 0, 1, GetTPage(0, abr, 0, 0));
             if (tile) {
@@ -1440,9 +1440,9 @@ void func_800D1DEC(void *position, void *colorArg, int scale, int abr)
     FieldTileAddress link;
     u32 depth;
 
-    point = (FieldTilePoint *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    point = (FieldTilePoint *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += sizeof(FieldTilePoint);
-    glow = (RenderTintTile *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    glow = (RenderTintTile *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += sizeof(RenderTintTile);
     gte_lwc2_0_0(position);
     gte_lwc2_1_4(position);
@@ -1466,10 +1466,10 @@ void func_800D1DEC(void *position, void *colorArg, int scale, int abr)
         glow->y = point->y - 1;
         glow->height = 3;
         glow->width = 3;
-        AddPrim((u32 *)D_800B0E38.ordering[D_8009CDDC] + depth, (u32 *)point);
-        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
+        AddPrim((u32 *)D_800B0E38.ordering[g_ActiveDrawSlot] + depth, (u32 *)point);
+        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
         if (abr != 0xFF) {
-            mode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+            mode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
             D_8009CDD8 += sizeof(RenderTintMode);
             SetDrawTPage(mode, 0, 1, GetTPage(0, abr, 0, 0));
             if (glow) {
@@ -1495,7 +1495,7 @@ void func_800D2104(GteShortVector *position, u8 *color, int scale, int abr)
     FieldTileAddress link;
     u32 depth;
 
-    tile = (FieldTilePoint *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    tile = (FieldTilePoint *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += sizeof(FieldTilePoint);
     gte_lwc2_0_0(position);
     gte_lwc2_1_4(position);
@@ -1513,9 +1513,9 @@ void func_800D2104(GteShortVector *position, u8 *color, int scale, int abr)
     }
     depth -= (u16)D_800F3368.depth;
     if (depth < 0x1000) {
-        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
+        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
         if (abr != 0xFF) {
-            mode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+            mode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
             D_8009CDD8 += sizeof(RenderTintMode);
             SetDrawTPage(mode, 0, 1, GetTPage(0, abr, 0, 0));
             if (tile) {
@@ -1554,7 +1554,7 @@ void func_800D2370(GteShortVector *position, GteRotation *rotation,
     scale = intensity;
     bias = (u16)D_800F3368.depth;
     black = D_800C22A0;
-    packet = (FieldGt4Packet *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldGt4Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += sizeof(FieldGt4Packet);
     SetPolyGT4(packet);
     if (mode == 0xFF) {
@@ -1637,7 +1637,7 @@ void func_800D2370(GteShortVector *position, GteRotation *rotation,
             packet->v0 = packet->v2 = v;
             packet->v1 = packet->v3 = v + texture_height - 1;
             gte_stsxy2(&packet->x3);
-            AddPrim((unsigned int *)D_800B0E38.ordering[D_8009CDDC] + depth,
+            AddPrim((unsigned int *)D_800B0E38.ordering[g_ActiveDrawSlot] + depth,
                     (unsigned int *)packet);
         }
     }
@@ -1663,9 +1663,9 @@ void func_800D27FC(int x, int y, void *color, int scale, int mode)
     offset.x = x;
     offset.y = 0;
     offset.z = 0;
-    point = (FieldTilePoint *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    point = (FieldTilePoint *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += sizeof(FieldTilePoint);
-    glow = (RenderTintTile *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    glow = (RenderTintTile *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += sizeof(RenderTintTile);
     matrix.m[0][0] = matrix.m[1][1] = matrix.m[2][2] = 0x1000;
     matrix.m[0][1] = matrix.m[0][2] = matrix.m[1][0] = matrix.m[1][2] =
@@ -1693,9 +1693,9 @@ void func_800D27FC(int x, int y, void *color, int scale, int mode)
         glow->y = point->y - 1;
         glow->height = 3;
         glow->width = 3;
-        AddPrim((u32 *)D_800B0E38.ordering[D_8009CDDC] + depth, (u32 *)point);
-        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
-        blend = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+        AddPrim((u32 *)D_800B0E38.ordering[g_ActiveDrawSlot] + depth, (u32 *)point);
+        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
+        blend = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
         D_8009CDD8 += sizeof(RenderTintMode);
         SetDrawTPage(blend, 0, 1, GetTPage(0, 1, 0, 0));
         if (glow) {
@@ -1725,9 +1725,9 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
     int along;
     int alongY;
 
-    line = (FieldLineG2Packet *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    line = (FieldLineG2Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += sizeof(FieldLineG2Packet);
-    glow = (FieldGlowQuadPacket *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    glow = (FieldGlowQuadPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += sizeof(FieldGlowQuadPacket);
     gte_ldv0(from);
     gte_cop2_hazard_slot();
@@ -1759,9 +1759,9 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
     gte_stsxy2(&line->x1);
     depth[0] = (int)(depth[0] + depth[1]) / 2 - (u16)D_800F3368.depth;
     if (depth[0] < 0x1000) {
-        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth[0]);
+        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth[0]);
         if (mode != 0xFF) {
-            drawMode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+            drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
             D_8009CDD8 += sizeof(RenderTintMode);
             SetDrawTPage(drawMode, 0, 1, GetTPage(0, mode, 0, 0));
             if (line) {
@@ -1815,7 +1815,7 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
         glow->r3 = line->r1;
         glow->g3 = line->g1;
         glow->b3 = line->b1;
-        AddPrim((unsigned int *)D_800B0E38.ordering[D_8009CDDC] + depth[0],
+        AddPrim((unsigned int *)D_800B0E38.ordering[g_ActiveDrawSlot] + depth[0],
                 (unsigned int *)glow);
     }
 }
@@ -1852,7 +1852,7 @@ void func_800D3114(GteShortVector *points, s16 count, int width, int u, int v,
     int angle;
     int joint;
 
-    packet = (FieldRibbonPacket *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldRibbonPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += count * sizeof(FieldRibbonPacket);
     bias = (u16)D_800F3368.depth;
     color0Scaled.bytes.rgb[0] = color0->r * scale / 128;
@@ -1933,7 +1933,7 @@ void func_800D3114(GteShortVector *points, s16 count, int width, int u, int v,
             packet[-1].v3 = v + height;
             packet[-1].u2 = packet[-1].u3 = u + du * i / count;
             gte_stsxy3(&packet[-1].p2, &packet[-1].p3, &unused);
-            AddPrim((unsigned int *)D_800B0E38.ordering[D_8009CDDC] + previousDepth,
+            AddPrim((unsigned int *)D_800B0E38.ordering[g_ActiveDrawSlot] + previousDepth,
                     (unsigned int *)&packet[-1]);
             packet->p0.word = packet[-1].p2.word;
             packet->p1.word = packet[-1].p3.word;
@@ -1963,7 +1963,7 @@ void func_800D3114(GteShortVector *points, s16 count, int width, int u, int v,
             packet[-1].v3 = v + height;
             packet[-1].u2 = packet[-1].u3 = u + du * i / count;
             gte_stsxy3(&packet[-1].p2, &packet[-1].p3, &unused);
-            AddPrim((unsigned int *)D_800B0E38.ordering[D_8009CDDC] + previousDepth,
+            AddPrim((unsigned int *)D_800B0E38.ordering[g_ActiveDrawSlot] + previousDepth,
                     (unsigned int *)&packet[-1]);
             packet->p0.word = packet[-1].p2.word;
             packet->p1.word = packet[-1].p3.word;
@@ -1989,7 +1989,7 @@ void func_800D3114(GteShortVector *points, s16 count, int width, int u, int v,
             packet->u2 = packet->u3 = u + du;
             packet->v3 = v + height;
             gte_stsxy3(&packet->p2, &packet->p3, &unused);
-            AddPrim((unsigned int *)D_800B0E38.ordering[D_8009CDDC] + depth,
+            AddPrim((unsigned int *)D_800B0E38.ordering[g_ActiveDrawSlot] + depth,
                     (unsigned int *)packet);
         }
         point++;
@@ -2052,7 +2052,7 @@ void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
     asm volatile("" : : : "$6");
     center.x = 0xA0;
     center.y = 0x78;
-    packet = (FieldStripPacket *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    packet = (FieldStripPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
     D_8009CDD8 += sizeof(FieldStripPacket);
     if (color == 0) {
         r = g = b = intensity;

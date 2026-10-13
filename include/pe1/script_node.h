@@ -1,7 +1,7 @@
 #ifndef PE1_SCRIPT_NODE_H
 #define PE1_SCRIPT_NODE_H
 
-/* Task/scene node: elements of the free list (D_8009CDFC), the current-node
+/* Task/scene node: elements of the free list (g_ScriptNodeFreeListHead), the current-node
  * pointer (g_ScriptNodePool @ 0x8009D300), and the per-entity bucket lists
  * (FieldActor.script_node_lists @ 0xA0). Doubly-linked via next/prev. Size 0x2C. */
 typedef union ScriptNodeTarget18 {

@@ -15,8 +15,8 @@
  * through $gp, every other extern stays absolute. */
 unsigned char *D_8009D100;
 unsigned char *D_8009D104;
-int D_8009D110;
-int D_8009D114;
+unsigned int g_DrawPrimColor;
+unsigned int g_DrawColorShaded;
 unsigned int *D_8009D11C;
 int g_DrawTextPosX;
 int D_8009D168;
@@ -833,8 +833,8 @@ static inline u32 Dimension(u32 size, u32 count)
 
 static inline void RowMoveCursor(u32 dx, u32 dy)
 {
-    D_8009D124 = D_8009D124 + dx;
-    D_8009D128 = D_8009D128 + dy;
+    g_TextCursorX = g_TextCursorX + dx;
+    g_TextCursorY = g_TextCursorY + dy;
 }
 
 static inline void RowPopCursor(void)
@@ -842,8 +842,8 @@ static inline void RowPopCursor(void)
     CursorPair *stack = (CursorPair *)g_TextCursorStack;
     if ((CursorPair *)g_TextCursorStackBottom < stack) {
         g_TextCursorStack = (int *)(stack - 1);
-        D_8009D124 = stack[-1].x;
-        D_8009D128 = stack[-1].y;
+        g_TextCursorX = stack[-1].x;
+        g_TextCursorY = stack[-1].y;
     } else {
         Inv_BoundsCheckAssertStub(3);
     }
@@ -862,13 +862,13 @@ void MenuWidget_DrawListRow(MenuWidgetNode *node,
 
     if (stack < (CursorPair *)g_TextCursorStackTop) {
         g_TextCursorStack = (int *)(stack + 1);
-        stack->x = D_8009D124;
-        stack->y = D_8009D128;
+        stack->x = g_TextCursorX;
+        stack->y = g_TextCursorY;
     } else {
         Inv_BoundsCheckAssertStub(2);
     }
-    D_8009D124 += 2;
-    D_8009D128 += 2;
+    g_TextCursorX += 2;
+    g_TextCursorY += 2;
     for (x = 0; x < node->grid_width; x++) {
         select_callback = node->selectionAvailable;
         enabled = 1;
@@ -882,16 +882,16 @@ void MenuWidget_DrawListRow(MenuWidgetNode *node,
         if (!enabled || (draw_cursor &&
             (x != node->cursor_x || row + node->scroll_y != node->cursor_y)))
             dimmed = 1;
-        D_8009D10C = dimmed;
+        g_DrawTextDimmed = dimmed;
         if (draw_callback)
             draw_callback(node->grid_width * (node->scroll_y + row) + x);
         if ((VSync(-1) & 8) && x == node->appearance.cursorTargetX &&
             row + node->scroll_y == node->target_y) {
-            D_8009D124 -= 2;
-            D_8009D128 -= 2;
+            g_TextCursorX -= 2;
+            g_TextCursorY -= 2;
             Draw_AllocColorTri(node->draw_state, node->disabled, 0);
-            D_8009D124 += 2;
-            D_8009D128 += 2;
+            g_TextCursorX += 2;
+            g_TextCursorY += 2;
         }
         RowMoveCursor(node->draw_state, 0);
     }
@@ -911,13 +911,13 @@ void Draw_AllocPrimWithMask(MenuWidgetNode *node)
 
 static inline void SetCursor(u32 x, u32 y)
 {
-    D_8009D124 = x;
-    D_8009D128 = y;
+    g_TextCursorX = x;
+    g_TextCursorY = y;
 }
 
 static inline void MoveCursor(u32 dx, u32 dy)
 {
-    SetCursor(D_8009D124 + dx, D_8009D128 + dy);
+    SetCursor(g_TextCursorX + dx, g_TextCursorY + dy);
 }
 
 static inline void PushCursor(void)
@@ -925,7 +925,7 @@ static inline void PushCursor(void)
     DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
     if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
         /* Capture both coordinates before writing into the shared stack. */
-        int x = D_8009D124, y = D_8009D128;
+        int x = g_TextCursorX, y = g_TextCursorY;
         g_TextCursorStack = (int *)(stack + 1);
         stack->x = x;
         stack->y = y;
@@ -998,8 +998,8 @@ void MenuWidget_DrawList(MenuWidgetNode *node, void (*draw_callback)(int))
     if (node->cursor_x >= 0 && node->cursor_y >= node->scroll_y &&
         node->cursor_y < node->scroll_y + node->visible_rows) {
         PushCursor();
-        D_8009D124 += Product(node->draw_state, node->cursor_x);
-        D_8009D128 += Product(node->disabled, Difference(node->cursor_y, node->scroll_y));
+        g_TextCursorX += Product(node->draw_state, node->cursor_x);
+        g_TextCursorY += Product(node->disabled, Difference(node->cursor_y, node->scroll_y));
         highlight = 0;
         if (!(node->layout_flags & 0x80) && g_MenuWidgetCurrentNode == node) {
             int blink = g_MenuInputActive && (Draw_RemapStatusFlags() & 0x20);
@@ -1590,13 +1590,13 @@ void MenuWidget_DrawCenteredTableText(int text_id) {
 void Draw_AllocColorTri(int width, int height, int arg2);
 
 void Draw_DropShadow(void) {
-    D_8009D110 = 0xFF4000;
-    D_8009D114 = 0x7F2000;
+    g_DrawPrimColor = 0xFF4000;
+    g_DrawColorShaded = 0x7F2000;
     g_DrawSpriteX -= 2;
     g_DrawSpriteY -= 2;
     Draw_AllocColorTri(g_DrawTextPosX, D_8009D168, 0);
-    D_8009D110 = 0x808080;
-    D_8009D114 = 0x404040;
+    g_DrawPrimColor = 0x808080;
+    g_DrawColorShaded = 0x404040;
     g_DrawSpriteX += 2;
     g_DrawSpriteY += 2;
 }

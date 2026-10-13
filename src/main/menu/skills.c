@@ -24,7 +24,7 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-int D_8009CFA0;
+int g_MenuItemPrimListHandles[2];
 int g_InvSelectedItemIndex;
 int g_InvSwapTargetIndex;
 int g_MenuActionSubmenuOpen;
@@ -222,7 +222,7 @@ reserved:
         dialog_text = g_MenuItemLabelBuffer;
         dialog_text[0] = 0xFF;
         Text_AppendFFTerminatedBytes(dialog_text, (void *)Text_LookupTable4(0));
-        D_8009CFA0 = 0;
+        g_MenuItemPrimListHandles[0] = 0;
         callback = Menu_OnEquipConfirm;
         first_width = Draw_MeasureTextWidth(dialog_text);
         if (first_width < 0x78) {
@@ -321,7 +321,7 @@ void Menu_CreateSkillActionScreen(MenuWidgetNode *arg0) {
 
 void Menu_StepItemDetailPanel2(void);
 
-int g_MenuBattleSelectedItem;
+int g_MenuSelectedSpell;
 
 s32 Menu_SkillActionHandler(MenuWidgetNode *node, s32 flags) {
     MenuWidgetNode *child;
@@ -383,7 +383,7 @@ void Menu_StepItemDetailPanel2(void) {
         suffix = Text_LookupTable4(0x1A);
         text_buf = g_MenuItemLabelBuffer;
         Text_AppendFFTerminatedBytes(text_buf, suffix);
-        D_8009CFA0 = 0;
+        g_MenuItemPrimListHandles[0] = 0;
         text_buf = g_MenuItemLabelBuffer;
         width = Draw_MeasureTextWidth(text_buf);
         if (width < 0x78) {
@@ -408,7 +408,7 @@ void Menu_OnBattleCommandConfirm(MenuWidgetNode *arg0, int arg1) {
         if (Menu_GetBattleEquipMode() != 0) {
             MenuWidget_NavScrollTo(8);
         }
-        Battle_UseItem(g_MenuBattleSelectedItem);
+        Battle_UseItem(g_MenuSelectedSpell);
     }
 }
 

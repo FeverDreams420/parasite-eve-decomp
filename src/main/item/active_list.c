@@ -39,7 +39,6 @@ s32 g_InvPendingCompactCount;
 int g_SaveMetadataWindowIndex;
 s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
-int D_8009D04C;
 int g_AkaoPendingBgmVolumeFade;
 int g_MemCardDialogState;
 unsigned int g_MenuActionSubmenuSel;
@@ -314,7 +313,7 @@ void Inv_BuildItemGridFromCategory(void)
         clear--;
     } while (i >= 0);
 
-    D_8009D04C = 0;
+    g_InvActiveListOverride = 0;
 }
 
 void Inv_SelectActiveList(int useOverride) {

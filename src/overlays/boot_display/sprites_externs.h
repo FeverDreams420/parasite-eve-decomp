@@ -1,6 +1,6 @@
 #ifndef PE1_EXT_SPRITES
 #define PE1_EXT_SPRITES
-extern s32 g_ActiveDrawSlot __asm__("D_8009CDDC");
+extern s32 g_ActiveDrawSlot;
 extern u16 D_80093168;
 extern void ClearOTagR(void *, s32);
 extern void *D_80125BA4[];

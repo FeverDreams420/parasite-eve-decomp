@@ -31,14 +31,12 @@ s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
 s32 D_8009D0A4;
 s32 D_8009D0A8;
-unsigned char *D_8009D0B8;
-unsigned char *D_8009D0BC;
+unsigned char *g_InvSortRankTable;
+unsigned char *g_InvSortTypeRankTable;
 u16 *g_InvSortListBase;
 s32 g_InvSortListCount;
 ItemDataRecord *(*g_InvSortLookup)(int index);
-s32 *g_InvSortRankTable;
 int g_InvSortStatIndex;
-s32 *g_InvSortTypeRankTable;
 
 static inline ItemDataRecord *LookupOldArmor(int index) {
     int value, saved;
@@ -505,10 +503,10 @@ int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement) {
 
     left = lookup(leftItem);
     right = g_InvSortLookup(rightItem);
-    leftKind = D_8009D0B8[left->kind];
-    rightKind = D_8009D0B8[right->kind];
-    leftSubtype = D_8009D0BC[((unsigned char *)left)[0xE] & 0xF];
-    rightSubtype = D_8009D0BC[((unsigned char *)right)[0xE] & 0xF];
+    leftKind = g_InvSortRankTable[left->kind];
+    rightKind = g_InvSortRankTable[right->kind];
+    leftSubtype = g_InvSortTypeRankTable[((unsigned char *)left)[0xE] & 0xF];
+    rightSubtype = g_InvSortTypeRankTable[((unsigned char *)right)[0xE] & 0xF];
 
     if (left != 0) {
         if (right == 0) {

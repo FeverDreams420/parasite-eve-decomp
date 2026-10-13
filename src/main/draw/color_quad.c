@@ -12,9 +12,9 @@
  * through $gp, every other extern stays absolute. */
 unsigned char *D_8009D100;
 unsigned char *D_8009D104;
-int D_8009D10C;
-int D_8009D110;
-int D_8009D114;
+int g_DrawTextDimmed;
+unsigned int g_DrawPrimColor;
+unsigned int g_DrawColorShaded;
 unsigned int *D_8009D11C;
 
 void Draw_AllocColorQuad(int width, int height) {
@@ -181,9 +181,9 @@ void Draw_AllocColorQuad(int width, int height) {
     packet->y3 = secondBottom;
     packet->y2 = packet->y3;
 
-    D_8009D110 = darkColor;
-    D_8009D114 = darkerColor;
-    D_8009D10C = 0;
+    g_DrawPrimColor = darkColor;
+    g_DrawColorShaded = darkerColor;
+    g_DrawTextDimmed = 0;
     tileMask24 = 0xFF000000;
     ot = D_8009D11C;
     packet->tag = (secondTag & tileMask24) | (*ot & mask24);
@@ -201,10 +201,10 @@ void Draw_AllocColorQuad(int width, int height) {
         Inv_BoundsCheckAssertStub(1);
     }
     if (tile != 0) {
-        if (D_8009D10C != 0) {
-            *(u32 *)&tile->r0 = D_8009D114;
+        if (g_DrawTextDimmed != 0) {
+            *(u32 *)&tile->r0 = g_DrawColorShaded;
         } else {
-            *(u32 *)&tile->r0 = D_8009D110;
+            *(u32 *)&tile->r0 = g_DrawPrimColor;
         }
         ((RenderPacketTag *)&tile->tag)->bytes.length = 3;
         tile->code = 0x60;
@@ -246,8 +246,8 @@ void Draw_AllocColorQuad(int width, int height) {
     modeTag = drawMode->tag;
     modeOt = D_8009D11C;
     modeColor2 |= 0x4040;
-    D_8009D110 = modeColor1;
-    D_8009D114 = modeColor2;
+    g_DrawPrimColor = modeColor1;
+    g_DrawColorShaded = modeColor2;
     drawMode->tag = (modeTag & modeMaskTop) | (*modeOt & modeMask24);
     link.packet = drawMode;
     *modeOt = (*modeOt & modeMaskTop) | (link.word & modeMask24);

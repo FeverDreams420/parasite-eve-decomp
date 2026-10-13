@@ -50,7 +50,7 @@ typedef struct FxCommonFrame {
 } FxCommonFrame;
 typedef PsxSignedRect FxCommonRect;
 extern FxCommonFrame g_FxCommonFrames[2];
-extern s32 D_8009CDDC;
+extern s32 g_ActiveDrawSlot;
 extern u8 D_8019C00E;
 extern s32 D_8019CC14;
 extern u32 D_8009D280;

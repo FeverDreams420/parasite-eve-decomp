@@ -35,7 +35,4 @@ void Menu_DrawMainMenuList(MenuWidgetNode *node);
 void Menu_DrawActionSubmenuList(MenuWidgetNode *node);
 void Menu_DrawCursorModeList(MenuWidgetNode *node);
 
-/* The equip list node whose grid cell the row drawers compare against. */
-extern int D_8009CEF4;
-
 #endif

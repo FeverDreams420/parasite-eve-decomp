@@ -24,7 +24,7 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 int g_BonusPointSpendCurrentValue;
-int D_8009CFA0;
+int g_MenuItemPrimListHandles[2];
 int D_8009CFC4;
 int D_8009CFC8;
 int D_8009CFD4;
@@ -1221,7 +1221,7 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
                 Inv_SelectActiveList(g_MenuActiveItemList);
                 g_MenuItemLabelBuffer[0] = 0xFF;
                 Text_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Text_LookupTable4(0x61));
-                D_8009CFA0 = 0;
+                g_MenuItemPrimListHandles[0] = 0;
                 action = Menu_ItemUseAction;
                 if (Draw_MeasureTextWidth(g_MenuItemLabelBuffer) < 0x78)
                     width = 0x78;

@@ -293,7 +293,7 @@ void Entity_UpdateTimers(void) {
         (*state_flags) = ((*state_flags) & ~AYA_BARRIER);
     }
     if ((*state_flags) & AYA_GENE_HEAL) {
-        if (D_8009CDDC != 0) {
+        if (g_ActiveDrawSlot != 0) {
             current_hp = (s16) D_8009D278->curHP;
             if (current_hp < (s16) D_8009D278->maxHP) {
                 D_8009D278->curHP = (s16) (current_hp + 1);

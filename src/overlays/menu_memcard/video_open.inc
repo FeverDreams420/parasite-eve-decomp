@@ -73,7 +73,7 @@ static inline void MenuCard_OpenSetDecodeEnv(VideoDisplay *dec, s16 x0, s16 y0, 
     dec->regions[0].y = y0;
     dec->regions[1].x = x1;
     dec->regions[1].y = y1;
-    dec->region = D_8009CDDC;
+    dec->region = g_ActiveDrawSlot;
     dec->rect.x = dec->regions[dec->region].x;
     dec->rect.y = dec->regions[dec->region].y;
     if (D_800B0DBB) {

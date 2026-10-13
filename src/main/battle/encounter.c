@@ -238,7 +238,7 @@ void Battle_StartEncounter(int mode) {
 }
 
 #define BATTLE_HUD_SLOT_BYTE(symbol, stride) \
-    (*(&(symbol)[0] +(D_8009CDDC * (stride))))
+    (*(&(symbol)[0] +(g_ActiveDrawSlot * (stride))))
 
 void Battle_Update(void) {
     /* Retail reserves 0x1A0 unused bytes; original local layout is unknown. */
@@ -855,11 +855,11 @@ void Battle_StepPostBattle(void)
         top = 122;
         asm volatile("" : : "r"(top));
         brightness -= g_BattleEndTimer * 4;
-        g_BattleEndPanels[D_8009CDDC].color.bytes.r = brightness;
-        g_BattleEndPanels[D_8009CDDC].color.bytes.g = brightness;
-        g_BattleEndPanels[D_8009CDDC].color.bytes.b = brightness;
+        g_BattleEndPanels[g_ActiveDrawSlot].color.bytes.r = brightness;
+        g_BattleEndPanels[g_ActiveDrawSlot].color.bytes.g = brightness;
+        g_BattleEndPanels[g_ActiveDrawSlot].color.bytes.b = brightness;
         base = g_BattleEndPanels;
-        frame = D_8009CDDC;
+        frame = g_ActiveDrawSlot;
         expandingPanel = &base[frame];
         timer = g_BattleEndTimer;
         asm volatile("" : "=r"(expandingPanel) : "0"(expandingPanel));
@@ -892,12 +892,12 @@ void Battle_StepPostBattle(void)
         if ((u8) g_BattleEndTimer >= 0x1AU) {
             u8 pulse = rcos((g_BattleEndTimer - 16) * 16) * 11U >> 11;
             RenderTexturedQuad *panels = g_BattleEndPanels;
-            RenderTexturedQuad *panel = &panels[D_8009CDDC];
+            RenderTexturedQuad *panel = &panels[g_ActiveDrawSlot];
             BATTLE_SET_QUAD_XY(*panel, 100, 122 - pulse, 220, 122 - pulse, 100, 124, 220, 124);
         }
         else {
             RenderTexturedQuad *panels = g_BattleEndPanels;
-            RenderTexturedQuad *panel = &panels[D_8009CDDC];
+            RenderTexturedQuad *panel = &panels[g_ActiveDrawSlot];
             BATTLE_SET_QUAD_XY(*panel, 100, 100, 220, 100, 100, 124, 220, 124);
         }
         countdown = g_BattleEndTimer;
@@ -928,7 +928,7 @@ void Battle_StepPostBattle(void)
         base = g_BattleEndPanels;
         right = 220;
         fadeBrightness = g_BattleEndTimer * 2;
-        fadingPanel = &base[D_8009CDDC];
+        fadingPanel = &base[g_ActiveDrawSlot];
         fadingPanel->color.bytes.r = fadeBrightness;
         fadingPanel->x0 = 0x64;
         fadingPanel->y0 = 0x64;
@@ -938,8 +938,8 @@ void Battle_StepPostBattle(void)
         fadingPanel->y2 = 0x7C;
         fadingPanel->x3 = right;
         fadingPanel->y3 = 0x7C;
-        base[D_8009CDDC].color.bytes.g = fadeBrightness;
-        base[D_8009CDDC].color.bytes.b = fadeBrightness;
+        base[g_ActiveDrawSlot].color.bytes.g = fadeBrightness;
+        base[g_ActiveDrawSlot].color.bytes.b = fadeBrightness;
         g_BattleEndTimer--;
         break;
     }
@@ -949,8 +949,8 @@ void Battle_StepPostBattle(void)
         Boot_Shutdown();
         break;
     }
-    AddPrim((u32 *)(D_800B0E38.ordering[D_8009CDDC] + 4),
-    (u32 *)&g_BattleEndPanels[D_8009CDDC]);
+    AddPrim((u32 *)(D_800B0E38.ordering[g_ActiveDrawSlot] + 4),
+    (u32 *)&g_BattleEndPanels[g_ActiveDrawSlot]);
 }
 
 void Battle_StepEscapeOrDeath(void)
@@ -1042,7 +1042,7 @@ void Battle_StepEscapeOrDeath(void)
 
 #define BATTLE_HUD_BYTE(symbol) ((symbol)[0])
 #define BATTLE_HUD_SLOT_BYTE(symbol, stride) \
-    (*(&BATTLE_HUD_BYTE(symbol) + (D_8009CDDC * (stride))))
+    (*(&BATTLE_HUD_BYTE(symbol) + (g_ActiveDrawSlot * (stride))))
 
 /* Initialize the enemy turn and wait for HUD, animation and texture work. */
 void Battle_PhaseInitEnemyTurn(void) {

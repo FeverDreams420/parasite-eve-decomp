@@ -26,7 +26,6 @@ u8 D_8009CE39;
 u8 D_8009CE3A;
 u8 D_8009CE3B;
 s8 D_8009CE40;
-u8 D_8009CE44;
 u8 D_8009CE60;
 u8 D_8009D1DC;
 int D_8009D200;
@@ -189,7 +188,7 @@ void Battle_Init(void)
 
     action = &D_8009D278->action;
     config0 = *action;
-    D_8009CE44 = 0;
+    g_BattleTargetIndex = 0;
     D_8009CE40 = 0;
     D_8009D294 = 0;
     config1 = *action;
@@ -542,7 +541,7 @@ void Battle_SyncEnemyAttributes(void) {
  * script sound cursor and count supply the small-data metadata of the two
  * $gp-relative bytes. */
 u8 D_8009D1D4;
-u8 D_8009CE3C;
+u8 g_BattleActionQueueCount;
 
 void Battle_FlushScriptSounds(void) {
     unsigned int index;
@@ -551,7 +550,7 @@ void Battle_FlushScriptSounds(void) {
     int item;
 
     index = D_8009D1D4;
-    while ((index & 0xFF) < D_8009CE3C) {
+    while ((index & 0xFF) < g_BattleActionQueueCount) {
         item = (u16)D_800BE830[index & 0xFF].command;
         if ((unsigned int)(item - 3) < 0x180) {
             Inv_AddItem((short)item - 3);
@@ -562,7 +561,7 @@ void Battle_FlushScriptSounds(void) {
 
     flags = g_GameStateFlags;
     mask = -0x101;
-    D_8009CE3C = 0;
+    g_BattleActionQueueCount = 0;
     D_8009D1D4 = 0;
     g_GameStateFlags = flags & mask;
 }
@@ -573,7 +572,7 @@ void Battle_StepScriptEntry(void)
     BattleEntity *entity;
     int command;
 
-    if (D_8009D1D4 < D_8009CE3C) {
+    if (D_8009D1D4 < g_BattleActionQueueCount) {
         entry = &D_800BE830[D_8009D1D4];
         entity = D_8009D254;
         entity->motionX = 0;
@@ -602,6 +601,6 @@ void Battle_StepScriptEntry(void)
         }
     } else {
         D_8009D1D4 = 0;
-        D_8009CE3C = 0;
+        g_BattleActionQueueCount = 0;
     }
 }

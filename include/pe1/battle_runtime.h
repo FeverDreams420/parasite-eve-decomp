@@ -34,7 +34,6 @@ typedef struct BattleEnemySlot {
 extern int D_8009D2FC;
 extern int D_8009D258;
 extern int D_8009D208;
-extern u8 D_8009CE44;
 extern s8 D_8009CE40; /* item target mode: 0, or 4..7 while picking */
 extern u8 D_8009D2D8;
 extern u8 D_8009D1DC;
@@ -49,7 +48,7 @@ extern s8 g_BattleSaveOverlayActive;
 extern s16 g_ActorEffectFlag100Timer;
 extern u8 D_8009CE60;
 extern u8 D_8009D1D4;
-extern u8 D_8009CE3C;
+extern u8 g_BattleActionQueueCount;
 extern unsigned int D_8009D2E8;
 extern int D_8009D28C;
 /* Action record the battle menu fills in (Menu_RunFrameWithArg). Its packed
@@ -146,11 +145,11 @@ PE1_STATIC_ASSERT(sizeof(BattleEnemySlot) == 0xDC, battle_enemy_slot_size);
 extern u8 D_8009D25C;
 extern s8 g_AyaAttackStep;
 /* The BattleEvasionOutcome Battle_CheckEvasion fills for the current hit.
- * g_EvasionStatus and g_EvasionReaction name its two bytes for units whose
- * assembler (ASPSX 2.56) only addresses whole small-data symbols through
- * $gp; Battle_StepAyaAction writes the record itself. */
+ * g_EvasionReaction names its second byte for units whose assembler
+ * (ASPSX 2.56) only addresses whole small-data symbols through $gp; the
+ * status byte is the record's first field and is read through the record.
+ * Battle_StepAyaAction writes the record itself. */
 extern BattleEvasionOutcome g_EvasionOutcome;
-extern s8 g_EvasionStatus;
 extern s8 g_EvasionReaction;
 extern s16 g_AyaActionTimer;
 /* Aya's world position (16.16) saved before an action moves her. */

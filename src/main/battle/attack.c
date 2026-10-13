@@ -22,7 +22,7 @@
 u8 D_8009CE38[4];
 u8 D_8009CE39;
 u8 D_8009CE3A;
-u8 D_8009CE3C;
+u8 g_BattleActionQueueCount;
 u8 D_8009D1D4;
 u8 D_8009D1DC;
 int D_8009D200;
@@ -171,7 +171,7 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         { register int offset asm("$5") = nextIndexB << 3;
         { int nextCode = D_800BE830[nextIndexB].command;
         D_8009D1DC = 0;
-        if (nextCode >= 3 || nextIndexB == D_8009CE3C) {
+        if (nextCode >= 3 || nextIndexB == g_BattleActionQueueCount) {
             Entity_SetActionMode(D_8009D254, active->actionMode12);
             D_8009D278->stateFlags |= 0x200000;
             { u8 animMode = D_8009D278->action->animMode[0]; D_8009CE38[0] = animMode; }
@@ -256,7 +256,7 @@ asm volatile("" : : "r"(enemy));
         if (D_800BE830[indexDefault].command == 0x189)
             break;
         D_8009D1D4 = indexDefault + 1;
-        if ((u8)(indexDefault + 1) != D_8009CE3C)
+        if ((u8)(indexDefault + 1) != g_BattleActionQueueCount)
             break;
         if (D_8009D200 < 0)
             break;
@@ -271,9 +271,9 @@ asm volatile("" : : "r"(enemy));
 /* COMMON supplies small-data metadata to stock MASPSX. Existing retail
  * data/linker symbols provide storage; these do not allocate new globals. */
 u8 D_8009D274, D_8009D1D4, D_8009D294;
-s8 g_EvasionStatus, g_EvasionReaction;
+s8 g_EvasionReaction;
 
-/* Apply the evasion outcome Battle_CheckEvasion left in g_EvasionStatus and
+/* Apply the evasion outcome Battle_CheckEvasion left in g_EvasionOutcome and
  * g_EvasionReaction to one target: a resolved hit sets the hit state, the
  * weapon category and the reaction in the core flags; an unresolved one
  * opens the floating panel.
@@ -282,14 +282,14 @@ s8 g_EvasionStatus, g_EvasionReaction;
 static inline void ApplyEvasionOutcome(BattleEntity *target)
 {
     EnemyCombatant *core = target->core;
-    if (g_EvasionStatus == 1)
+    if (g_EvasionOutcome.status == 1)
     {
         EnemyCoreFlagBits *bits = (EnemyCoreFlagBits *)&core->coreFlags;
         bits->hitState = 1;
         bits->category = D_8009D278->action->attackWord >> 20;
         bits->reaction = ((BattleEvasionReaction *)&g_EvasionReaction)->value;
     }
-    else if (g_EvasionStatus == 0)
+    else if (g_EvasionOutcome.status == 0)
     {
         core->panelC_val = -1;
         core->panelC_timer = 0x1E;
@@ -317,8 +317,8 @@ void Battle_ResolveHitOnTimer(void)
     actionId = action->actionCode.actionId;
     if (actionId == 8)
     {
-        Battle_CheckEvasion(selectedSlot->actor, (BattleEvasionOutcome *)&g_EvasionStatus, 0);
-        if (g_EvasionStatus == 1)
+        Battle_CheckEvasion(selectedSlot->actor, &g_EvasionOutcome, 0);
+        if (g_EvasionOutcome.status == 1)
         {
             BattleEntity *thief = selectedSlot->actor;
             Asset_Find08Alt(0x46D, 0, thief->renderObject.target_x, thief->renderObject.target_y, thief->renderObject.target_z);
@@ -354,10 +354,10 @@ void Battle_ResolveHitOnTimer(void)
     else if (actionId == 6)
     {
         s16 reaction;
-        Battle_CheckEvasion(selectedSlot->actor, (BattleEvasionOutcome *)&g_EvasionStatus, 0);
+        Battle_CheckEvasion(selectedSlot->actor, &g_EvasionOutcome, 0);
         ApplyEvasionOutcome(selectedSlot->actor);
         reaction = g_EvasionReaction;
-        if (g_EvasionStatus == 1)
+        if (g_EvasionOutcome.status == 1)
         {
             for (target = (BattleEntity *)g_FieldActorListHead; target != 0; target = target->next)
             {
@@ -371,7 +371,7 @@ void Battle_ResolveHitOnTimer(void)
                 flags = target->entityFlags;
                 if (((flags & 0x2040) != 0x40) && !(flags & 0x4000) && (core->hpAlive > 0) && (target != selectedSlot->actor))
                 {
-                    Battle_CheckEvasion(target, (BattleEvasionOutcome *)&g_EvasionStatus, reaction);
+                    Battle_CheckEvasion(target, &g_EvasionOutcome, reaction);
                     ApplyEvasionOutcome(target);
                 }
             }
@@ -432,14 +432,14 @@ void Battle_ResolveHitOnTimer(void)
                     if ((s16)angle < upper && lower < (s16)angle)
                         continue;
                 }
-                Battle_CheckEvasion(target, (BattleEvasionOutcome *)&g_EvasionStatus, 0);
+                Battle_CheckEvasion(target, &g_EvasionOutcome, 0);
                 ApplyEvasionOutcome(target);
             } while ((target = target->next) != 0);
         }
     }
     else if (selectedSlot->actor != 0)
     {
-        Battle_CheckEvasion(selectedSlot->actor, (BattleEvasionOutcome *)&g_EvasionStatus, 0);
+        Battle_CheckEvasion(selectedSlot->actor, &g_EvasionOutcome, 0);
         ApplyEvasionOutcome(selectedSlot->actor);
     }
     D_8009D294 = 0;

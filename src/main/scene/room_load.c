@@ -323,7 +323,7 @@ retry6:
     DrawSync(0);
     ResetGraph(1);
     VSync(0);
-    PutDispEnv(&D_800BCE80[D_8009CDDC]);
+    PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
     SetDispMask(1);
     state->field_bg_cache_id = -1;
     state->loaded_entity_bank = 0;

@@ -56,7 +56,7 @@ typedef union RenderModelCursor {
     RenderTriTexture *tri;
 } RenderModelCursor;
 
-extern int D_8009CDDC;
+extern int g_ActiveDrawSlot;
 void Anim_SetInterpRate(RenderObjectEntity *object, int rate);
 void Render_InitPrimBlock(RenderObjectEntity *object, s16 x, s16 y, int unused,
                           unsigned int palette_row);

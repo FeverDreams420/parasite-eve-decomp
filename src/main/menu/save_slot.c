@@ -9,7 +9,7 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-unsigned char D_8009CE80;
+unsigned char g_MenuActiveMode;
 unsigned char D_8009CE88;
 u8 D_8009D1CE;
 void *D_8009D1F8;
@@ -36,7 +36,7 @@ void Save_DrawSlotMetadata(void)
         colors[1] = (*D_8009D1A8.summary)->secondaryValue;
         colors[2] = 0;
         Draw_ResetTextboxes();
-        Menu_SetTextCursorRect(Save_GetMetadataWindowIndex() != 0 ? 0x14 : 0x61, D_8009CE80 < 2 ? 0xF : 0xC3, 0, 0);
+        Menu_SetTextCursorRect(Save_GetMetadataWindowIndex() != 0 ? 0x14 : 0x61, g_MenuActiveMode < 2 ? 0xF : 0xC3, 0, 0);
         Render_SetupColorTable(0, 2, colors);
         prompt = (D_8009D1A8.prompt.word >> 10) & 3;
         if (prompt != 0) {
@@ -87,7 +87,7 @@ void Save_DrawSlotMetadata(void)
         break;
     }
     D_8009D1A8.prompt.timer--;
-    Draw_SetCursor(0, D_8009CE80 < 2 ? 0xB : 0xBF);
+    Draw_SetCursor(0, g_MenuActiveMode < 2 ? 0xB : 0xBF);
     Draw_AllocColorGradient(0x140, 0x14, 0, 0);
 }
 
@@ -101,7 +101,7 @@ void Menu_SaveOverlayDraw(void)
         color = -1;
         Draw_ResetTextboxes();
         value = Save_GetMetadataWindowIndex() ? 20 : 97;
-        y = D_8009CE80 < 2 ? 15 : 195;
+        y = g_MenuActiveMode < 2 ? 15 : 195;
         Menu_SetTextCursorRect(value, y, 0, 0);
         Render_SetupColorTable(0, 2, &color);
         value = D_8009D1CE;
@@ -120,6 +120,6 @@ void Menu_SaveOverlayDraw(void)
         break;
     }
     --D_8009CE88;
-    Draw_SetCursor(0, D_8009CE80 < 2 ? 11 : 191);
+    Draw_SetCursor(0, g_MenuActiveMode < 2 ? 11 : 191);
     Draw_AllocColorGradient(320, 20, 0, 0);
 }
