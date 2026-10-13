@@ -106,6 +106,8 @@ int RoomM256_SwingNop6(void) {
 int RoomM256_ScatterDropCallback(int mode, RoomM256Drop *drop) {
     GteRotation rotation = g_RoomM256_D_8018F1CC;
     RoomM256DropColor color = g_RoomM256_D_8018F1D4;
+    GteRotation rotation = g_RoomM256SpriteTilt;
+    RoomM256DropColor color = g_RoomM256DropColor;
     RoomM256Drop *child;
     RenderMatrixSlot *slot;
     int width;
@@ -310,9 +312,15 @@ const RoomM256Template g_RoomM256_D_8018F210 = {{0, 0xFFBA}};
 const RenderColor g_RoomM256_D_8018F218 = {0xC8, 0xBE, 0x18, 0};
 const RenderColor g_RoomM256_D_8018F21C = {0x0A, 0x80, 0xF0, 0};
 const GteRotation g_RoomM256_D_8018F220 = {0, 0, -10, 0};
+const RoomOrbitPairTemplate8 g_RoomM256ScatterDropAnchor = {{0, 0xFFE2}};
+const RoomM256Template g_RoomM256SwirlSparkAnchor = {{0, 0xFFBA}};
+const RenderColor g_RoomM256TrailColor = {0xC8, 0xBE, 0x18, 0};
+const RenderColor g_RoomM256TrailDarkColor = {0x0A, 0x80, 0xF0, 0};
+const GteRotation g_RoomM256TrailAnchor = {0, 0, -10, 0};
 
 int RoomM256_ScatterDropEmitter(int mode, u16 *counter) {
     RoomOrbitPairTemplate8 template = g_RoomM256_D_8018F208;
+    RoomOrbitPairTemplate8 template = g_RoomM256ScatterDropAnchor;
     s16 position[4];
     s16 target[4];
     s16 angles[4];
@@ -480,6 +488,7 @@ int RoomM256_SwirlSparkCallback(int mode, RoomM256SwirlSpark *spark) {
  * rotating counter; mode 2 sets the sprite parameters. */
 int RoomM256_SwirlSparkEmitter(int mode, s16 *counter) {
     RoomM256Template template = g_RoomM256_D_8018F210;
+    RoomM256Template template = g_RoomM256SwirlSparkAnchor;
     GteShortVector position;
     GteShortVector base;
     GteShortVector angles;
@@ -492,7 +501,7 @@ int RoomM256_SwirlSparkEmitter(int mode, s16 *counter) {
     switch (mode) {
     case 0:
         *counter = 0;
-        soundSlot = D_800B0E64;
+        soundSlot = g_LoadedSceneAssetBlock;
         if (*soundSlot != 0) {
             volume = 0x7F;
             time = FieldFx_GetOwnerProgress();
@@ -593,6 +602,10 @@ s32 RoomM256_TrailCallback(int mode, void *effect) {
     RenderColor darkColor = g_RoomM256_D_8018F21C;
     GteRotation initialRotation = g_RoomM256_D_8018F220;
     GteRotation spriteRotation = g_RoomM256_D_8018F1CC;
+    RenderColor color = g_RoomM256TrailColor;
+    RenderColor darkColor = g_RoomM256TrailDarkColor;
+    GteRotation initialRotation = g_RoomM256TrailAnchor;
+    GteRotation spriteRotation = g_RoomM256SpriteTilt;
     RoomM256TrailEffect *particle;
     GteShortVector delta;
     GteShortVector angles;
@@ -687,7 +700,7 @@ s32 RoomM256_TrailCallback(int mode, void *effect) {
             state->motionY = angles.y;
             state->motionZ = angles.z;
             state->motionY = (u16) (state->motionY + 0x800);
-            FieldFx_UpdatePointHistory(&D_80195EFC[state->index], historyCount, historyPosition, 1);
+            FieldFx_UpdatePointHistory(&g_RoomM256TrailHistory[state->index], historyCount, historyPosition, 1);
             state->speed = (s16) ((rand() & 7) + 8);
             state->angle = 0;
             particle = FieldFx_AcquireCallbackSlot(g_FieldFxActiveTaskSlot->end);
@@ -706,7 +719,7 @@ s32 RoomM256_TrailCallback(int mode, void *effect) {
             return 0;
         case 1:
             state->frame = (s16) ((u16) state->frame + 1);
-            history = &D_80195EFC[state->index];
+            history = &g_RoomM256TrailHistory[state->index];
             FieldFx_GetActorPosition((char *)g_PlayerEntity, 1, &delta.x);
             FieldFx_CalculateLookAngles(state, &delta.x, &angles.x);
             ending = state->ending;
@@ -720,7 +733,7 @@ s32 RoomM256_TrailCallback(int mode, void *effect) {
                         state->angle = 0x800;
                     }
                 }
-                turnBlend = rsin(state->angle) * D_80195EF0;
+                turnBlend = rsin(state->angle) * g_RoomM256TrailTurnScale;
                 if (turnBlend < 0) {
                     turnBlend += 0xFFF;
                 }
@@ -777,13 +790,13 @@ s32 RoomM256_TrailCallback(int mode, void *effect) {
                     if (particle != 0) {
                         random = rand();
                         historyIndexX = state->index;
-                        particle->x = (u16) *(s16 *)(D_80195F1C + (((historyIndexX * 0x11) + (random & 3)) * 8));
+                        particle->x = (u16) *(s16 *)(g_RoomM256TrailPoint4X + (((historyIndexX * 0x11) + (random & 3)) * 8));
                         random = rand();
                         historyIndexY = state->index;
-                        particle->y = (u16) *(s16 *)(D_80195F1E + (((historyIndexY * 0x11) + (random & 3)) * 8));
+                        particle->y = (u16) *(s16 *)(g_RoomM256TrailPoint4Y + (((historyIndexY * 0x11) + (random & 3)) * 8));
                         random = rand();
                         historyIndexZ = state->index;
-                        particle->z = (u16) *(s16 *)(D_80195F20 + (((historyIndexZ * 0x11) + (random & 3)) * 8));
+                        particle->z = (u16) *(s16 *)(g_RoomM256TrailPoint4Z + (((historyIndexZ * 0x11) + (random & 3)) * 8));
                         particle->x = (u16) (particle->x - 0x40 + (rand() & 0x7F));
                         particle->y = (u16) (particle->y - 0x40 + (rand() & 0x7F));
                         particle->z = (u16) (particle->z - 0x40 + (rand() & 0x7F));
@@ -909,10 +922,10 @@ checkLifetime:
             if ((D_800F336C == 4) && (g_FieldFxAltPaletteFlag != 0)) {
                 trailClutY += 4;
             }
-            FieldFx_DrawTexturedRibbon(D_80195EFC[state->index].point, 0x10, 0xF0, 0, 0x60, 0xFF, 0xF, (s32) g_FieldFxTpageTable[g_FieldFxTpageSlot3], GetClut(0x30, trailClutY) & 0xFFFF, 0x80, (RenderColor *)&color.r, (RenderColor *)&darkColor.r, 1);
+            FieldFx_DrawTexturedRibbon(g_RoomM256TrailHistory[state->index].point, 0x10, 0xF0, 0, 0x60, 0xFF, 0xF, (s32) g_FieldFxTpageTable[g_FieldFxTpageSlot3], GetClut(0x30, trailClutY) & 0xFFFF, 0x80, (RenderColor *)&color.r, (RenderColor *)&darkColor.r, 1);
             fade = ((g_FieldFxCurrentAge & 1) << 5) + 0x60;
             FieldFx_DrawStarFan((GteShortVector *)state, 0x190, 0x190, 8, 0, 0x1000, 0x1000, (RenderColor *)&color.r, 0, fade, 1);
-            historySample = D_80195EFC[0].point + (rand() & 7);
+            historySample = g_RoomM256TrailHistory[0].point + (rand() & 7);
             FieldFx_DrawStarFan((void *)((unsigned)(state->index * 0x88) + (unsigned)historySample), 0x1F4, 0x1F4, 6, 0, 0x1000, 0x1000, (RenderColor *)&color.r, 0, (u32)fade >> 1, 1);
             return 0;
         case 1:
@@ -1009,11 +1022,11 @@ checkLifetime:
             scale.z = 0x2AA;
             transform.t[2] = translationZ;
             ScaleMatrix(&transform, &scale.x);
-            FieldFx_ModelSaveColors((char *)D_80195EF8);
-            FieldFx_ModelSetColors((char *)D_80195EF8, darkColor.r, darkColor.g, darkColor.b);
-            FieldFx_ModelScaleColors((char *)D_80195EF8, fade & 0xFFFF);
-            FieldFx_ModelDraw((union FieldTexturedModel *)D_80195EF8, &transform);
-            FieldFx_ModelRestoreColors((char *)D_80195EF8);
+            FieldFx_ModelSaveColors((char *)g_RoomM256TrailModel);
+            FieldFx_ModelSetColors((char *)g_RoomM256TrailModel, darkColor.r, darkColor.g, darkColor.b);
+            FieldFx_ModelScaleColors((char *)g_RoomM256TrailModel, fade & 0xFFFF);
+            FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM256TrailModel, &transform);
+            FieldFx_ModelRestoreColors((char *)g_RoomM256TrailModel);
             return 0;
         case 3:
             pulseSine = rsin(state->frame << 6);
@@ -1094,8 +1107,8 @@ int RoomM256_TrailEmitter(int mode, u16 *out) {
     case 0:
 
         *out = (u16)g_FieldFxTaskContext->variables[0];
-        D_80195EF8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5887704);
-        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80195EF8, 0, 0);
+        g_RoomM256TrailModel = Asset_FindTable08ByU32Key(g_LoadedSceneAssetBlock[0], 0xC5887704);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)g_RoomM256TrailModel, 0, 0);
         if (g_FieldFxTaskContext->flags) {
             actor = g_FieldFxOwner->actor;
             if (actor) {
@@ -1184,7 +1197,7 @@ int RoomM256_ModelPulseParticleCallback(int mode, RoomModelPulseParticle *partic
  * the branch that splits the scheduling block before the /40 division (its
  * empty jump is only removed after scheduling). */
 int RoomM256_ModelPulse(int mode, s16 *state) {
-    GteRotation rotation = D_8018F258;
+    GteRotation rotation = g_RoomM256PulseAnchor;
     GteShortVector position;
     GteRotation spin;
     RenderColor color;
@@ -1200,7 +1213,7 @@ int RoomM256_ModelPulse(int mode, s16 *state) {
     switch (mode) {
     case 0:
         *state = 0;
-        g_RoomM256PulseModel = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5487704);
+        g_RoomM256PulseModel = Asset_FindTable08ByU32Key(g_LoadedSceneAssetBlock[0], 0xC5487704);
         FieldFx_ModelScrollUv(g_RoomM256PulseModel, 0, 0);
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 8, 0x10,
                              (FieldFxCallbackListCallback)RoomM256_ModelPulseParticleCallback);
@@ -1321,6 +1334,6 @@ void *RoomM256_SetTrailTurnScale(void *arg0, int value) {
         value = 0x200;
     }
 
-    D_80195EF0 = value;
+    g_RoomM256TrailTurnScale = value;
     return D_80195EF4;
 }

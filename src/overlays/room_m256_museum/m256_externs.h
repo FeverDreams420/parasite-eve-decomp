@@ -7,6 +7,6 @@
 extern short D_800966EE[];
 int RoomM256_SwingRelease(RoomM256Swing *obj);
 extern char g_RoomM256ScatterConfig[];
-extern int D_80195EF0;
+extern int g_RoomM256TrailTurnScale;
 extern char D_80195EF4[];
 #endif /* PE1_EXT_M256 */

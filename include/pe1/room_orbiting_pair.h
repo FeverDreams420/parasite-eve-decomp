@@ -56,6 +56,7 @@ PE1_STATIC_ASSERT(sizeof(RoomOrbitPairParticle) == 0x14,
 extern int rand(void);
 
 extern const RoomOrbitPairTemplate8 g_RoomM256_D_8018F208;
+extern const RoomOrbitPairTemplate8 g_RoomM256ScatterDropAnchor;
 int RoomM256_ScatterDropEmitter(int mode, u16 *counter);
 
 #endif

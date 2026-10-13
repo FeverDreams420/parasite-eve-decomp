@@ -24,6 +24,7 @@ typedef struct RoomM256Template {
 } __attribute__((packed)) RoomM256Template;
 
 extern const RoomM256Template g_RoomM256_D_8018F210;
+extern const RoomM256Template g_RoomM256SwirlSparkAnchor;
 
 int RoomM256_SwirlSparkCallback(int mode, RoomM256SwirlSpark *spark);
 
