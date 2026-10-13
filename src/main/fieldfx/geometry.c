@@ -127,7 +127,7 @@ int FieldFx_IsPlayerInSegmentBand(s16 *a, s16 *b, int radius) {
     int dx;
     int dz;
     int x;
-    register int z asm("$6");
+    int z;
 
     dx = b[0] - a[0];
     dz = b[2] - a[2];
@@ -137,14 +137,15 @@ int FieldFx_IsPlayerInSegmentBand(s16 *a, s16 *b, int radius) {
 
     /* Both trig calls are complete; reuse the angle scratch for the X offset. */
     angle = x;
+    dz = z;
     points[0].x = a[0] - angle;
-    points[0].z = a[2] - z;
+    points[0].z = a[2] - dz;
     points[1].x = a[0] + angle;
-    points[1].z = a[2] + z;
+    points[1].z = a[2] + dz;
     points[2].x = b[0] - angle;
-    points[2].z = b[2] - z;
+    points[2].z = b[2] - dz;
     points[3].x = b[0] + angle;
-    points[3].z = b[2] + z;
+    points[3].z = b[2] + dz;
 
     return FieldFx_IsPlayerInQuadXZ(points);
 }
