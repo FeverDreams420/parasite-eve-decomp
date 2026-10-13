@@ -15,9 +15,8 @@ extern struct { MemcardScreenBuffer *value; } g_MemcardSecondScreen;
 extern MemcardScreenBuffer *D_801D11C0;
 extern MemcardScreenBuffer *g_MemcardFirstDrawScreen;
 
-extern DISPENV D_800BCE94, D_801D1550, D_801D1564;
-extern DRAWENV D_800BCE24, D_801D1498, D_801D14F4;
-extern u16 D_800BCE8A, D_800BCE9E;
+extern DISPENV D_801D1550, D_801D1564;
+extern DRAWENV D_801D1498, D_801D14F4;
 extern u8 D_800B0DCD;
 extern s32 D_8009D1BC, g_ActiveDrawSlot;
 extern u8 *g_CdLoadAreaBase, *D_800B0E3C, *D_800B0E50, *D_800B0E54;

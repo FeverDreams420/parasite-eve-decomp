@@ -236,10 +236,10 @@ s32 func_801909B4(void) {
 
     /* Save both display pages before borrowing their backing memory. */
     D_801D1550 = g_RenderDispEnvArray[0];
-    D_801D1564 = D_800BCE94;
+    D_801D1564 = g_RenderDispEnvArray[1];
     titleMode = D_800B0DCD & 1;
     D_801D1498 = g_RenderDrawEnvArray[0];
-    D_801D14F4 = D_800BCE24;
+    D_801D14F4 = g_RenderDrawEnvArray[1];
     firstMemory = g_CdLoadAreaBase;
     secondMemory = firstMemory + 0x1C080;
     D_800B0E50 = firstMemory + 0x4080;
@@ -293,9 +293,9 @@ s32 func_801909B4(void) {
                 } while (waitFrames < 0x3C);
             }
             D_801D11BC[0]->draw = g_RenderDrawEnvArray[0];
-            g_MemcardSecondScreen.value->draw = D_800BCE24;
+            g_MemcardSecondScreen.value->draw = g_RenderDrawEnvArray[1];
             D_801D11BC[0]->disp = g_RenderDispEnvArray[0];
-            g_MemcardSecondScreen.value->disp = D_800BCE94;
+            g_MemcardSecondScreen.value->disp = g_RenderDispEnvArray[1];
             D_801D11BC[0]->draw.isbg = 0;
             g_MemcardSecondScreen.value->draw.isbg = 0;
             D_801D11BC[0]->dirty.w = g_MemcardSecondScreen.value->dirty.w = 0;
@@ -515,19 +515,19 @@ s32 func_801909B4(void) {
                 rect.h = 0x1E0;
                 ClearImage(&rect, 0, 0, 0);
                 DrawSync(0);
-                screenYRestore = (s16)D_800BCE8A;
+                screenYRestore = g_RenderDispEnvArray[0].screen.y;
             }
         }
     } while (result < 0);
     g_RenderDrawEnvArray[0] = D_801D1498;
-    D_800BCE24 = D_801D14F4;
+    g_RenderDrawEnvArray[1] = D_801D14F4;
     g_RenderDispEnvArray[0] = D_801D1550;
-    D_800BCE94 = D_801D1564;
+    g_RenderDispEnvArray[1] = D_801D1564;
     {
         /* Color processing is complete; reuse its scratch for display Y. */
         packedColor = screenYRestore;
-        D_800BCE9E = packedColor;
-        D_800BCE8A = packedColor;
+        g_RenderDispEnvArray[1].screen.y = packedColor;
+        g_RenderDispEnvArray[0].screen.y = packedColor;
     }
     MemCard_SetDialogActive(0);
     Draw_SetPresentEnabled(0);

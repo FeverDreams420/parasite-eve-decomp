@@ -15,7 +15,13 @@ Left unnamed on purpose:
 
 - symbols that are fields of a larger object (`g_GameState` at 0x800B0CD8,
   `g_GeomScroll` at 0x800BCF88 and its tint block, `g_SaveRuntimeState`,
-  `D_800F3368`, the pad packet): they need a struct definition, not a name;
+  `D_800F3368`, the pad packet): they need a struct definition, not a name.
+  Where C used them, they are now reached as members of their owner
+  (`g_GeomScroll`, `g_ScreenTint`, `g_GameState`, `g_GameTimers`,
+  `g_PadPackets`, `g_BattleAtbMarkers`, `g_AkaoVoiceChannelTable`,
+  `g_FieldFxCellQuad`, `g_TextboxChoiceCursor`, the draw and display
+  environment arrays), except where the record compiles differently; the
+  aliases left are commented at their declarations;
 - `unsure` rows, which have no reader that supports a role;
 - 540 symbols the proposers could not explain.
 
