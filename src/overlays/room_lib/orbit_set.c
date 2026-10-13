@@ -185,7 +185,7 @@ void RoomEffect_DrawOrbitParticles(
     owner = FieldFx_GetScriptContext();
 
     i = 0;
-    depthSlot = (unsigned short *)&g_RoomOrbitParticlePacket.depth;
+    depthSlot = &g_RoomOrbitParticlePacket.depth;
     func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
@@ -211,7 +211,7 @@ void RoomEffect_DrawOrbitParticles(
     scratchScale = scale;
     ScaleMatrix(&matrix, &scratchScale);
 
-    position = (s16 *)&fx->position[0].x;
+    position = &fx->position[0].x;
     while (i < 8) {
         matrix.t[0] = position[0];
         matrix.t[1] = position[1];
