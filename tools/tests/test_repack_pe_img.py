@@ -137,16 +137,33 @@ class RepackTests(unittest.TestCase):
         self.assertIn("room_a: built 0x1004 bytes, slice holds 0x1000 (0x4 too large)", problems)
         self.assertIn("tail: built 0x101 bytes, slice holds 0x100 (0x1 too large)", problems)
 
-    def test_overlapping_slices_must_agree(self):
+    def test_a_view_inside_a_slice_follows_the_slice_it_copies(self):
         with tempfile.TemporaryDirectory() as tmp:
             img = SyntheticImage(Path(tmp))
             data = bytearray(img.parts["room_b"][3])
             data[SECTOR + 7] ^= 0xFF
             img.build("room_b", bytes(data))
+            slots = rp.read_slots(img.configs)
+            warnings = []
+            out, _ = rp.repack(img.image, slots, img.built(slots), warnings)
+        self.assertEqual(out[4 * SECTOR:7 * SECTOR], bytes(data))
+        self.assertEqual(warnings, ["room_b_copy is a view of room_b and differs from its rebuilt "
+                                    "bytes at 0x2807; room_b's bytes are written"])
+
+    def test_partly_overlapping_slices_must_agree(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            img = SyntheticImage(Path(tmp))
+            (img.configs / "straddle.yaml").write_text(
+                CONFIG.format(name="straddle", bs=SECTOR, skip=3, count=2))
+            img.build("straddle", img.image[3 * SECTOR:5 * SECTOR])
+            self.assertEqual(img.repack()[0], img.image)
+            data = bytearray(img.parts["room_a"][3])
+            data[SECTOR + 7] ^= 0xFF
+            img.build("room_a", bytes(data))
             with self.assertRaises(rp.RepackError) as caught:
                 img.repack()
         self.assertEqual(caught.exception.problems,
-                         ["room_b and room_b_copy overlap at 0x2800..0x3000 and differ at 0x2807"])
+                         ["room_a and straddle overlap at 0x1800..0x2000 and differ at 0x1807"])
 
     def test_a_missing_build_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -162,15 +179,56 @@ class RepackTests(unittest.TestCase):
             source = Path(tmp) / "PE.IMG"
             source.write_bytes(img.image)
             out = Path(tmp) / "out" / "PE.IMG"
+            pointers = Path(tmp) / "pointers.txt"
+            pointers.write_text("# offset count stride what\n")
             sha = rp.sha1(img.image)
             argv = ["--pe-img", str(source), "--configs", str(img.configs), "--out", str(out),
-                    "--input-sha1", sha, "--expect-sha1", sha]
+                    "--pointers", str(pointers), "--input-sha1", sha, "--expect-sha1", sha]
             with contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(rp.main(argv), 0)
             self.assertEqual(out.read_bytes(), img.image)
             img.build("tail", b"\x55" * 0x100)
             with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
                 self.assertEqual(rp.main(argv), 1)
+
+
+class PointerTests(unittest.TestCase):
+    BLOCK = (0x8010BCF8, 0x801FE000)
+
+    def image_with(self, words: dict[int, int]) -> bytes:
+        data = bytearray(0x200)
+        for at, value in words.items():
+            struct.pack_into("<I", data, at, value)
+        return bytes(data)
+
+    def test_listed_words_follow_the_block(self):
+        image = self.image_with({0x40: 0x8018F2D4, 0x54: 0x8018F2C4, 0x48: 0x12345678})
+        table = rp.PointerTable(0x40, 2, 0x14, "video names")
+        out = rp.relocate_pointers(image, [table], [], self.BLOCK, 0x10)
+        self.assertEqual(struct.unpack_from("<3I", out, 0x40)[0], 0x8018F2E4)
+        self.assertEqual(struct.unpack_from("<I", out, 0x54)[0], 0x8018F2D4)
+        self.assertEqual(struct.unpack_from("<I", out, 0x48)[0], 0x12345678)
+        self.assertEqual(rp.relocate_pointers(image, [table], [], self.BLOCK, 0), image)
+
+    def test_a_word_outside_the_block_or_inside_a_slice_fails(self):
+        image = self.image_with({0x40: 0x80010000, 0x80: 0x8018F2D4})
+        slot = rp.Slot("room", 0x80, 0x10, Path("room.bin"))
+        with self.assertRaises(rp.RepackError) as caught:
+            rp.relocate_pointers(image, [rp.PointerTable(0x40, 1, 4, ""), rp.PointerTable(0x80, 1, 4, "")],
+                                 [slot], self.BLOCK, 0x10)
+        self.assertEqual(caught.exception.problems, [
+            "pointer at 0x40 holds 0x80010000, outside the window block 0x8010BCF8..0x801FE000",
+            "pointer at 0x80 lies in the rebuilt slice of room"])
+
+    def test_the_manifest_lists_offset_count_stride(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "p.txt"
+            path.write_text("# comment\n0x22AE10  47  0x14  video table\n")
+            self.assertEqual(rp.read_pointer_tables(path), [rp.PointerTable(0x22AE10, 47, 0x14, "video table")])
+
+    def test_the_retail_manifest_addresses_the_block(self):
+        tables = rp.read_pointer_tables(rp.POINTERS)
+        self.assertEqual(sum(t.count for t in tables), 47 + 715)
 
 
 class TableTests(unittest.TestCase):

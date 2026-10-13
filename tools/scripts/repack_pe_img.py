@@ -10,9 +10,18 @@ its size, so no sector number anywhere changes.
 - A built overlay larger than its slice fails the repack (all of them are
   listed, with the excess). A smaller one is padded with zero bytes up to the
   end of its slice.
-- Slices may overlap (`fx_common_sector17` is a copy of one sector of
-  `fx_common`); the overlapping bytes of both builds must agree.
+- Slices may overlap; the overlapping bytes of both builds must agree. The
+  one exception is a slice that lies inside a larger one, a view of its
+  bytes (`fx_common_sector17` is a data copy of one sector of `fx_common`):
+  the disc holds one copy, so the containing overlay's bytes are written and
+  a view that differs (a relinked `fx_common` at a shifted base, while the
+  view stays literal data) is reported as a warning.
 - The report gives the slack of every slice (slice size minus built size).
+- Data outside the slices that holds addresses inside the overlay window
+  block (`linkers/USA/pe_img_pointers.txt`: the menu video table and the
+  credits line table) follows the block: with `--main-elf`, every listed
+  word is moved by the distance between the ELF's block base and the retail
+  one (zero for the retail layout). Each must hold a retail block address.
 
 With `--main-elf` it also reads the sector tables of the built executable
 that describe PE.IMG, checks that they still cover the image end to end, and
@@ -41,6 +50,9 @@ from pathlib import Path
 
 import yaml
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from tools.scripts import overlay_windows  # noqa: E402
+
 
 SECTOR = 2048  # CD-ROM mode 2 form 1 user data; PE.IMG is addressed in sectors
 
@@ -61,6 +73,8 @@ TABLE_SYMBOLS = {
     "room": ("g_RoomSectorTable", "D_80093378"),
 }
 ROOM_PARTS = (("scratch", 0, 8), ("texture", 8, 12), ("room", 20, 12))
+POINTERS = Path(__file__).resolve().parents[2] / "linkers" / "USA" / "pe_img_pointers.txt"
+BLOCK_BASE_SYMBOL = "overlay_windows_VRAM"
 
 
 class RepackError(Exception):
@@ -139,8 +153,11 @@ def read_slots(config_dir: Path) -> list[Slot]:
 
 # --- repack ----------------------------------------------------------------
 
-def repack(image: bytes, slots: list[Slot], built: dict[str, bytes]) -> tuple[bytes, list[SlotResult]]:
-    """The image with every slot replaced by its built bytes, zero padded."""
+def repack(image: bytes, slots: list[Slot], built: dict[str, bytes],
+           warnings: list[str] | None = None) -> tuple[bytes, list[SlotResult]]:
+    """The image with every slot replaced by its built bytes, zero padded.
+    WARNINGS collects the views that differ from the slice they lie in."""
+    warnings = [] if warnings is None else warnings
     problems: list[str] = []
     results: list[SlotResult] = []
     padded: dict[str, bytes] = {}
@@ -161,6 +178,7 @@ def repack(image: bytes, slots: list[Slot], built: dict[str, bytes]) -> tuple[by
         padded[slot.name] = data + bytes(slot.size - len(data))
 
     by_offset = [slot for slot in slots if slot.name in padded]
+    views = set()
     for i, first in enumerate(by_offset):
         for second in by_offset[i + 1:]:
             if second.offset >= first.end:
@@ -168,17 +186,98 @@ def repack(image: bytes, slots: list[Slot], built: dict[str, bytes]) -> tuple[by
             lo, hi = second.offset, min(first.end, second.end)
             a = padded[first.name][lo - first.offset:hi - first.offset]
             b = padded[second.name][lo - second.offset:hi - second.offset]
-            if a != b:
-                diff = next(k for k in range(hi - lo) if a[k] != b[k])
-                problems.append(f"{first.name} and {second.name} overlap at 0x{lo:X}..0x{hi:X} "
-                                f"and differ at 0x{lo + diff:X}")
+            if a == b:
+                continue
+            if second.end <= first.end and first.size > second.size:
+                # A slice inside a larger one is a byte view of it
+                # (fx_common_sector17 of fx_common): the disc holds one copy,
+                # the containing overlay's. A view built as literal data
+                # cannot follow a relink of the overlay that owns the bytes.
+                views.add(second.name)
+                warnings.append(f"{second.name} is a view of {first.name} and differs from its "
+                                f"rebuilt bytes at 0x{lo + _first_difference(a, b):X}; "
+                                f"{first.name}'s bytes are written")
+                continue
+            problems.append(f"{first.name} and {second.name} overlap at 0x{lo:X}..0x{hi:X} "
+                            f"and differ at 0x{lo + _first_difference(a, b):X}")
     if problems:
         raise RepackError(problems)
 
     out = bytearray(image)
     for slot in by_offset:
-        out[slot.offset:slot.end] = padded[slot.name]
+        if slot.name not in views:
+            out[slot.offset:slot.end] = padded[slot.name]
     return bytes(out), results
+
+
+def _first_difference(a: bytes, b: bytes) -> int:
+    return next(k for k in range(len(a)) if a[k] != b[k])
+
+
+# --- block pointers in data outside the slices ---------------------------------
+
+@dataclass(frozen=True)
+class PointerTable:
+    """COUNT words, STRIDE bytes apart from OFFSET, each a block address."""
+
+    offset: int
+    count: int
+    stride: int
+    what: str
+
+    def offsets(self) -> range:
+        return range(self.offset, self.offset + self.count * self.stride, self.stride)
+
+
+def read_pointer_tables(path: Path) -> list[PointerTable]:
+    tables = []
+    for number, line in enumerate(path.read_text().splitlines(), 1):
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        fields = line.split(None, 3)
+        if len(fields) < 3:
+            raise RepackError([f"{path}:{number}: expected `offset count stride [what]`"])
+        tables.append(PointerTable(int(fields[0], 0), int(fields[1], 0), int(fields[2], 0),
+                                   fields[3] if len(fields) > 3 else ""))
+    return tables
+
+
+def relocate_pointers(image: bytes, tables: list[PointerTable], slots: list[Slot],
+                      block: tuple[int, int], move: int) -> bytes:
+    """IMAGE with every listed word moved by MOVE; BLOCK is the retail
+    [start, end) of the window block, which every listed word must address."""
+    problems = []
+    out = bytearray(image)
+    for table in tables:
+        for at in table.offsets():
+            if at % 4 or at + 4 > len(image):
+                problems.append(f"pointer at 0x{at:X} is not an aligned word of the image")
+                continue
+            inside = [slot.name for slot in slots if slot.offset < at + 4 and at < slot.end]
+            if inside:
+                problems.append(f"pointer at 0x{at:X} lies in the rebuilt slice of {inside[0]}")
+                continue
+            value = struct.unpack_from("<I", image, at)[0]
+            if not block[0] <= value < block[1]:
+                problems.append(f"pointer at 0x{at:X} holds 0x{value:08X}, "
+                                f"outside the window block 0x{block[0]:08X}..0x{block[1]:08X}")
+                continue
+            struct.pack_into("<I", out, at, value + move)
+    if problems:
+        raise RepackError(problems)
+    return bytes(out)
+
+
+def block_move(elf_path: Path, retail_base: int) -> int:
+    """How far the ELF's overlay window block lies from the retail one."""
+    from elftools.elf.elffile import ELFFile
+
+    with open(elf_path, "rb") as fh:
+        found = ELFFile(fh).get_section_by_name(".symtab").get_symbol_by_name(BLOCK_BASE_SYMBOL)
+    if not found:
+        raise RepackError([f"{elf_path}: {BLOCK_BASE_SYMBOL} is not defined"])
+    return found[0]["st_value"] - retail_base
 
 
 # --- main's sector tables ----------------------------------------------------
@@ -351,7 +450,15 @@ def run(args: argparse.Namespace) -> int:
         raise RepackError([f"{args.pe_img}: SHA-1 {sha1(image)}, expected the retail {args.input_sha1}"])
     slots = read_slots(args.configs)
     built = {slot.name: slot.built.read_bytes() for slot in slots if slot.built.exists()}
-    out, results = repack(image, slots, built)
+    warnings: list[str] = []
+    out, results = repack(image, slots, built, warnings)
+    for warning in warnings:
+        print(f"warning: {warning}")
+
+    windows = overlay_windows.load()
+    block = (windows.retail_base, windows.retail_end)
+    move = block_move(args.main_elf, windows.retail_base) if args.main_elf else 0
+    out = relocate_pointers(out, read_pointer_tables(args.pointers), slots, block, move)
 
     if args.main_elf:
         lines, problems = table_report(results, built, read_main_tables(args.main_elf, len(image) // SECTOR),
@@ -391,7 +498,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--configs", type=Path, default=Path("configs/USA/overlays"),
                         help="overlay config directory")
     parser.add_argument("--out", type=Path, help="where to write the repacked image")
-    parser.add_argument("--main-elf", type=Path, help="built executable; checks its PE.IMG sector tables")
+    parser.add_argument("--main-elf", type=Path,
+                        help="built executable; checks its PE.IMG sector tables and places the block pointers")
+    parser.add_argument("--pointers", type=Path, default=POINTERS,
+                        help="block pointers in data outside the slices")
     parser.add_argument("--input-sha1", help="required SHA-1 of the original image")
     parser.add_argument("--expect-sha1", help="required SHA-1 of the repacked image")
     parser.add_argument("-v", "--verbose", action="store_true", help="one line per overlay")

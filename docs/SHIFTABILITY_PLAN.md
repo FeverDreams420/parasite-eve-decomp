@@ -303,6 +303,19 @@ slack per slice. `make pe-img-check` compares the result with the retail
 SHA-1 (`PE_IMG_SHA`); the retail build gives back the original image. Every
 retail slice is full (slack 0), so today an overlay can change but not grow.
 
+A shifted repack (the window block at another base) has two more cases.
+`fx_common_sector17` is a byte copy of one `fx_common` sector, built as
+literal data: the disc holds one copy, so the relinked `fx_common` bytes are
+written and the difference is a warning. And data outside every slice can
+hold addresses inside the block: assets read into a window next to an
+overlay. `linkers/USA/pe_img_pointers.txt` lists the ones proven so far (the
+second video player's file table read with asset[70], the credits line
+table of asset[71]); `repack_pe_img.py` moves each listed word by the
+block's move (`overlay_windows_VRAM` of `--main-elf` minus the retail base,
+zero for the retail build). The list is evidence-based, not a scan: the
+image holds about 15000 block-shaped words outside the slices, most of them
+not addresses.
+
 Sizes recorded outside the overlays. Three main tables describe the whole
 image, contiguously: the u16 boundaries at `D_800930D8` (sectors 0..2224),
 `g_SceneSectorDirectory` (base 2224 plus u16 offsets, to 8945) and the room
