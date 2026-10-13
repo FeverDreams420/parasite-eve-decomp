@@ -14,7 +14,7 @@
     "gotos": 141,
     "include_asm": 0,
     "original_asm_units": 70,
-    "pins": 557,
+    "pins": 556,
     "pointer_integer_casts": 8,
     "postpass": 0,
     "raw_offset_dereferences": 2,

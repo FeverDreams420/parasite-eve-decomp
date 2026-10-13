@@ -1178,7 +1178,7 @@ void Draw_QueuePrimitive(void) {
 void Draw_StatusIcons(void) {
     Combatant *s1;
     int s0;
-    register int s2 asm("$18");
+    int s2;
     register int s3 asm("$19");
     s32 *s4;
     u8 mode;
