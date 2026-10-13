@@ -126,7 +126,7 @@ int RoomLib_ConfigureHandlerD(RoomEnt *o, int query, unsigned int op, int arg0, 
         state->variant = arg0;
         state->active = arg1;
         state->mirrorPosition = arg2;
-        state->callback = (void (*)(void))RoomLib_ArmHandlerD;
+        state->callback = RoomLib_ArmHandlerD;
         break;
     case 11:
         state->optionB = arg0;
@@ -626,7 +626,7 @@ int RoomLib_ConfigureHandlerE(RoomEnt *o, int query, unsigned int op, int arg0, 
         state->variant = arg0;
         state->active = arg1;
         state->mirrorPosition = arg2;
-        state->callback = (void (*)(void))RoomLib_ArmHandlerE;
+        state->callback = RoomLib_ArmHandlerE;
         break;
     case 11:
         state->optionB = arg0;
@@ -940,7 +940,7 @@ int RoomLib_ConfigureHandlerB(RoomEnt *o, int query, unsigned int op, int arg0, 
     case 10:
         state->variant = arg0;
         state->active = arg1;
-        state->callback = (void (*)(void))RoomLib_ArmHandlerB;
+        state->callback = RoomLib_ArmHandlerB;
         break;
     case 11:
         state->optionB = arg0;
@@ -951,7 +951,7 @@ int RoomLib_ConfigureHandlerB(RoomEnt *o, int query, unsigned int op, int arg0, 
         break;
     case 18:
         if (o->flag3 == 2) {
-            state->callback = (void (*)(void))RoomLib_AdvanceArcToTarget;
+            state->callback = RoomLib_AdvanceArcToTarget;
             state->phaseValue = arg0;
             o->flag3 = 3;
         }
@@ -1092,7 +1092,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
 
     scratch->landed = 0;
     if (state->finished == 0) {
-        switch (((int (*)(RoomEnt *))func_800DFB78)(self)) {
+        switch (func_800DFB78(self)) {
         case 0:
             break;
         case 1:
@@ -1161,7 +1161,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
             delta = previousValue ^ a0;
 
             if (delta < 0) {
-                state->callback = (void (*)(void))RoomLib_HandlerBPhase;
+                state->callback = RoomLib_HandlerBPhase;
                 state->started = 0;
                 self->flag3 = 2;
             }
@@ -1277,7 +1277,7 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
 
     ((RoomLibArcWork *)scratch)->landed = 0;
     if (((RoomLibHandlerBState *)state)->finished == 0) {
-        switch (((int (*)(RoomEnt *))func_800DFB78)(self)) {
+        switch (func_800DFB78(self)) {
         case 0:
             break;
         case 1:
@@ -1427,7 +1427,7 @@ int RoomLib_ConfigureHandlerC(RoomEnt *o, int query, unsigned int op, int arg0, 
         state->variant = arg0;
         state->active = arg1;
         if (o->flag3 == 1) {
-            state->callback = (void (*)(void))RoomLib_ArmHandlerC;
+            state->callback = RoomLib_ArmHandlerC;
         }
         break;
     case 11:
@@ -1441,7 +1441,7 @@ int RoomLib_ConfigureHandlerC(RoomEnt *o, int query, unsigned int op, int arg0, 
         break;
     case 18:
         if (o->flag3 == 2) {
-            state->callback = (void (*)(void))RoomLib_AdvanceArcToTargetY;
+            state->callback = RoomLib_AdvanceArcToTargetY;
             state->phaseValue = arg0;
             o->flag3 = 3;
         }
@@ -1566,7 +1566,7 @@ void RoomLib_HandlerC(RoomEnt *obj) {
 
     ((RoomLibArcWork *)scratch)->landed = 0;
     if ((state)->finished == 0) {
-        switch (((int (*)(RoomEnt *))func_800DFB78)(self)) {
+        switch (func_800DFB78(self)) {
         case 0:
             break;
         case 1:
@@ -1713,7 +1713,7 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
 
     ((RoomLibArcWork *)scratch)->landed = 0;
     if (((RoomLibHandlerCState *)state)->finished == 0) {
-        switch (((int (*)(RoomEnt *))func_800DFB78)(self)) {
+        switch (func_800DFB78(self)) {
         case 0:
             break;
         case 1:
@@ -1816,7 +1816,7 @@ int RoomLib_ConfigureHandlerA(RoomEnt *o, int arg1, unsigned int op, int arg3, i
     {
 case10:
     o->t16 = arg3;
-    o->sub.cb = (void (*)(void))RoomLib_RearmHandlerA;
+    o->sub.cb = RoomLib_RearmHandlerA;
     }
 done:
     return 0;
