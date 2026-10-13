@@ -399,7 +399,7 @@ done:
 
 void Battle_BuildTargetList(void) {
     s32 entityFlags;
-    register s32 nextIndex asm("$5");
+    s32 nextIndex;
     register s32 finalCount asm("$2");
     s32 pad_[2];
     s32 distance;
@@ -429,7 +429,8 @@ void Battle_BuildTargetList(void) {
                                 D_8009D254->posZ.parts.integer);
                         nextIndex = g_BattleTargetIndex + 1;
                         g_BattleTargetList[g_BattleTargetIndex].angle = angle;
-                        g_BattleTargetIndex = nextIndex;
+                        angle = nextIndex;
+                        g_BattleTargetIndex = angle;
                     }
                 }
             }
