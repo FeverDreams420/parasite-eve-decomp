@@ -149,7 +149,7 @@ retry:
         }
     }
     EnterCriticalSection(); FlushCache(); ExitCriticalSection();
-    buffer=D_80011610+((g_SceneAssetLbaTbl[0]-g_SceneInitLbaTbl1)<<11);
+    buffer=D_80011610+((g_SceneAssetLbaTbl[0]-g_SceneInitLbaTbl1[0])<<11);
     MenuCard_InitVideoBuffers(1,&buffer);
     MenuCard_OpenVideo((s16)entry);
     {

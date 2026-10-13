@@ -8,10 +8,12 @@
 #include "pe1/display_env.h"
 #include "pe1/game_state.h"
 #include "pe1/gpu_image.h"
+#include "pe1/psyq_bios.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_press.h"
+#include "pe1/script_state.h"
 
 typedef struct VideoFrame { u32 reserved[2], time, reserved0c; u16 width, height; } VideoFrame;
 /* One entry of a video table: file name, colour depth and playback layout. */
@@ -72,12 +74,9 @@ extern DRAWENV D_80122814[2];
 
 typedef struct VideoDiscRange { u16 start,end; } VideoDiscRange;
 extern VideoEntry D_801D0E00[];
-extern u16 g_SceneInitLbaTbl0[];
-extern u16 g_SceneInitLbaTbl1;
-extern u16 g_SceneAssetLbaTbl[];
 extern u32 g_FieldPadBits;
 s32 MenuCard_StepVideo(void);
-extern void SetDispMask(s32), ResetGraph(s32), EnterCriticalSection(void), FlushCache(void), ExitCriticalSection(void), Field_HandleStateTransition(void), StUnSetRing(void), Draw_RenderFrame(void);
+extern void SetDispMask(s32), ResetGraph(s32), Field_HandleStateTransition(void), StUnSetRing(void), Draw_RenderFrame(void);
 
 s32 MenuCard_PlayVideo(s32 index);
 
