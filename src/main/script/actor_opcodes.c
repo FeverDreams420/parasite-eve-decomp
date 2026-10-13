@@ -834,14 +834,12 @@ int Boot_CheckModeSwitch(void) {
 
     if (mode == 4 || mode == 0)
         return 1;
-    cursor = g_SceneDataTable0;
+    cursor = g_ScriptCursorAddress;
     node = g_ScriptNodePool;
     cursor -= 8;
-    g_SceneDataTable0 = cursor;
+    g_ScriptCursorAddress = cursor;
     node->active = 1;
     return 0;
-        int cursor = g_ScriptCursorAddress;
-        g_ScriptCursorAddress = cursor;
 }
 
 #define NULL ((void *)0)
