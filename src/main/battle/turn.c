@@ -845,7 +845,7 @@ u8 g_BattleFadeLevel;
 
 int Battle_ProcessActionSlot(BattleEntity *actor)
 {
-    EnemyCombatant *state = (EnemyCombatant *)actor->core;
+    EnemyCombatant *state = actor->core;
     int phase = state->coreFlags & 0x6000;
     s8 result = 1;
 
