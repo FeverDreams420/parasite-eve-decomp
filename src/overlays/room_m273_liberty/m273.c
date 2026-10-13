@@ -120,7 +120,7 @@ void RoomLib_GrabOnApproach(SceneGrabHead *head) {
 
     *((RoomSelectionState *)stateBytes)->signal = 3;
     ((RoomSelectionState *)stateBytes)->callback =
-        (void (*)(RoomSelectionState *))func_80192D50;
+        func_80192D50;
 }
 
 void func_80192838(RoomSelectionState *state) {
@@ -2666,7 +2666,7 @@ int func_801996C4(int mode)
 
     switch (mode) {
     case 0:
-        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 24, (int (*)())func_80199568);
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 24, func_80199568);
     case 1:
         stop = &D_8019AFA2;
         if (*stop) return 2;
