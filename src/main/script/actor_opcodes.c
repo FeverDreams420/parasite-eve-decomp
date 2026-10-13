@@ -977,7 +977,7 @@ int Script_SetFloorByEntityRoll(u8 **args) {
     if (!(Menu_IsEquipSlotActive() & 0xFF)) {
         Render_LoadFontGlyphAlt();
     }
-    selection = ((int (*)(int))Render_SetFontGlyphByCode)(**args) & 0xFF;
+    selection = Render_SetFontGlyphByCode(**args) & 0xFF;
 
     if (selection == 0xFF) {
         if ((u8)Menu_GetEquipSlotStateOrIndex() < 2) {
