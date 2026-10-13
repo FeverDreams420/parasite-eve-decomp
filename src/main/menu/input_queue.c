@@ -98,7 +98,7 @@ inline void Queue_DequeueByMask(int mask, MenuQueueEntry *out_arg) {
             }
 
             {
-                MenuQueueEntry *oldFree = (MenuQueueEntry *)g_MenuEventQueueFreeList;
+                MenuQueueEntry *oldFree = g_MenuEventQueueFreeList;
                 g_MenuEventQueueFreeList = entry;
                 entry->next = oldFree;
             }
