@@ -57,6 +57,7 @@ typedef union RenderLinkAddress {
 int Render_DrawSpriteEntry(GeomEntry *input)
 {
     register u32 *position_cursor asm("$10");
+    register s32 modulus_y asm("$2");
     GeomEntry *entry;
     s32 active;
     RenderTilePacket *sprite;
@@ -173,10 +174,10 @@ int Render_DrawSpriteEntry(GeomEntry *input)
                             s32 y = scroll_y + ((word_y >> 12) & 0x3FF);
                             draw_y = y;
                             if ((s16)y >= 224) {
-                                register s32 modulus_y asm("$2") = entry->anim_mod_y;
+                                modulus_y = entry->anim_mod_y;
                                 draw_y = y - modulus_y;
                             } else if ((s16)y < -15) {
-                                register s32 modulus_y asm("$2") = entry->anim_mod_y;
+                                modulus_y = entry->anim_mod_y;
                                 draw_y = modulus_y + y;
                             }
                         }
