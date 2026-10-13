@@ -462,15 +462,15 @@ void Menu_OpenMemCardSelectDialog(s32 arg0) {
 
     temp_v0 = MenuWidget_CreateSimpleNode(0x24, MenuWidget_GetCurrentNode(), 0, 0);
     temp_a0 = MenuWidget_CreateNode(0x24, temp_v0, temp_v0);
-    temp_v0->update = (void (*)(void))Menu_MemCardPortSelectHandler;
-    temp_a0->draw = (void (*)(void))Menu_DrawMemCardPortList;
+    temp_v0->update = Menu_MemCardPortSelectHandler;
+    temp_a0->draw = Menu_DrawMemCardPortList;
     temp_a0->selectionAvailable = Menu_IsMemCardSlotSelectable;
     if (temp_a0->cursor_y == 2) {
         temp_a0->cursor_y = 0;
     }
     MenuWidget_SetCurrentNode(temp_a0);
     if (MenuWidget_FindByModeAndSelectedBase(1, 0x13) == NULL) {
-        MenuWidget_CreateSimpleNode(0x13, 0, 0, 0)->draw = (void (*)(void))Menu_DrawContextHelpText;
+        MenuWidget_CreateSimpleNode(0x13, 0, 0, 0)->draw = Menu_DrawContextHelpText;
     }
     MenuWidget_FindByModeAndSelectedBase(1, 0x13)->visible_rows = 0x24;
     g_McDialogMode = arg0;
@@ -493,17 +493,17 @@ void Menu_OpenStartupMemCardDialog(void) {
     child = MenuWidget_CreateNode(0x24, parent, parent);
     callback_2c = Menu_MemCardPortSelectHandler;
     callback_30 = Menu_DrawMemCardPortList;
-    parent->update = (void (*)(void))callback_2c;
-    child->draw = (void (*)(void))callback_30;
+    parent->update = callback_2c;
+    child->draw = callback_30;
     callback_8c = Menu_IsMemCardSlotSelectable;
-    child->selectionAvailable = (int (*)(int))callback_8c;
+    child->selectionAvailable = callback_8c;
     one = 1;
     if (child->cursor_y == 2) {
         child->cursor_y = 0;
     }
     MenuWidget_SetCurrentNode(child);
     if (MenuWidget_FindByModeAndSelectedBase(1, 0x13) == NULL) {
-        MenuWidget_CreateSimpleNode(0x13, 0, 0, 0)->draw = (void (*)(void))Menu_DrawContextHelpText;
+        MenuWidget_CreateSimpleNode(0x13, 0, 0, 0)->draw = Menu_DrawContextHelpText;
     }
     MenuWidget_FindByModeAndSelectedBase(1, 0x13)->visible_rows = 0x24;
     g_McDialogMode = one;
@@ -586,8 +586,8 @@ s32 Menu_CreateSaveSlotListView(s32 arg0, s32 arg1) {
     temp_v0 = MenuWidget_CreateSimpleNode(temp_s0_2, MenuWidget_FindByModeAndSelectedBase(2, 0x24), 0, 0);
     temp_s2 = MenuWidget_CreateNode(temp_s0_2, temp_v0, temp_v0);
     temp_a0 = temp_s2;
-    temp_v0->update = (void (*)())Menu_StepSaveSelect;
-    temp_s2->draw = (void (*)())Menu_DrawSaveSlotList;
+    temp_v0->update = Menu_StepSaveSelect;
+    temp_s2->draw = Menu_DrawSaveSlotList;
     temp_s2->selectionAvailable = Menu_IsMemCardSlotCompatible;
     Draw_SetPrimCallback(temp_a0, arg1);
     temp_s0 = MenuWidget_GridCellIndex(temp_s2);
@@ -597,7 +597,7 @@ s32 Menu_CreateSaveSlotListView(s32 arg0, s32 arg1) {
     } else {
         temp_s2->cursor_x = -1;
     }
-    MenuWidget_CreateSimpleNode(0x3F, temp_s2, 0, 0)->draw = (void (*)())Menu_DrawSaveSlotPortLabel;
+    MenuWidget_CreateSimpleNode(0x3F, temp_s2, 0, 0)->draw = Menu_DrawSaveSlotPortLabel;
     MenuInput_InitQueue();
     g_SaveSelectedSlot = arg0;
     return temp_s0;
@@ -675,9 +675,9 @@ s32 Menu_StepSaveSelect(MenuWidgetNode *arg0, s32 arg1) {
                         if (D_8009CF4C != MEMCARD_SLOT_EMPTY) {
                             temp_v0_3 = MenuWidget_CreateSimpleNode(0x29, temp_s2, 0, 1);
                             temp_s2_2 = MenuWidget_CreateNode(0x29, temp_v0_3, temp_v0_3);
-                            temp_v0_3->draw = (void (*)())Menu_DrawItemLabel;
-                            temp_v0_3->update = (void (*)())Menu_ConfirmDialogHandler;
-                            temp_s2_2->draw = (void (*)())Menu_DrawActionOptionList;
+                            temp_v0_3->draw = Menu_DrawItemLabel;
+                            temp_v0_3->update = Menu_ConfirmDialogHandler;
+                            temp_s2_2->draw = Menu_DrawActionOptionList;
                             g_MenuActionTextBase = 0x6C;
                             MenuWidget_SetCurrentNode(temp_s2_2);
                             temp_a0 = g_MenuActiveItemList;
@@ -910,7 +910,7 @@ void Menu_OpenRenameScreen(s32 arg0) {
     MenuWidgetNode *var_a3;
 
     temp_v0 = MenuWidget_CreateSimpleNode(0x17, 0, 0, 0);
-    (temp_v0)->update = (void (*)())Menu_StepNameEntryAlt;
+    (temp_v0)->update = Menu_StepNameEntryAlt;
     temp_v0_5 = Save_GetMetadataWindowIndex();
     var_v1 = D_80092354;
     if (temp_v0_5 != 0) {
@@ -933,7 +933,7 @@ void Menu_OpenRenameScreen(s32 arg0) {
     (var_a3)->cursor_x = -1;
     temp_v0 = MenuWidget_CreateSimpleNode(0x11, MenuWidget_FindByModeAndSelectedBase(2, 0x17), 0, 0);
     var_a3 = MenuWidget_CreateNode(0x11, temp_v0, temp_v0);
-    (temp_v0)->update = (void (*)())Menu_StepNameEntry;
+    (temp_v0)->update = Menu_StepNameEntry;
     (var_a3)->draw = &Menu_DrawItemIconList;
     (var_a3)->cursor_x = 0;
     (var_a3)->cursor_y = 0;
