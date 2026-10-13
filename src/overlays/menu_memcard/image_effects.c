@@ -26,7 +26,7 @@ s32 MenuCard_PulseImage(s32 mode, MemcardPulseState *state) {
         scale = rsin(angle) + 2048;
         rcos(angle);
         rotation.x = 0; rotation.y = 0; twist = state->timer;
-        track = D_801F1D5C;
+        track = g_MenuCardPulseColorTrack;
         rotation.flags = 0;
         rotation.z = twist << 5;
         FieldFx_SampleColorTrack(track, &color, state->timer << 1);
@@ -47,10 +47,10 @@ s32 MenuCard_LinkEffect(s32 mode, MemcardLinkState *state) {
     GteShortVector unused;
     GteShortVector first;
     GteShortVector second;
-    MemcardJointOffset offset = D_801ED818;
+    MemcardJointOffset offset = g_MenuCardHandOffset;
     RenderColor color;
-    MemcardLinkColor color1 = D_801ED850;
-    MemcardLinkColor color2 = D_801ED854;
+    MemcardLinkColor color1 = g_MenuCardLinkColor1;
+    MemcardLinkColor color2 = g_MenuCardLinkColor2;
     register MemcardJointOffset *offsetPtr asm("$6");
     switch (mode) {
     case 0: {
@@ -64,8 +64,8 @@ s32 MenuCard_LinkEffect(s32 mode, MemcardLinkState *state) {
         firstPtr = &first;
         state->opacity = opacity; state->phase = 0; state->timer = 0;
         __asm__("" : : : "memory");
-        FieldFx_TransformMatrixPoint(entity, D_801F1D86, offsetPtr, firstPtr);
-        FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D88, &offset, &second);
+        FieldFx_TransformMatrixPoint(entity, g_MenuCardLinkJointA, offsetPtr, firstPtr);
+        FieldFx_TransformMatrixPoint(D_8009D254, g_MenuCardLinkJointB, &offset, &second);
         FieldFx_DrawHistoryTrail(&first, &second, 1016, (unsigned char *)&color2, (unsigned char *)&color1, 128, (struct FieldTrailPair *)&state->rotation, 1);
         return FieldFx_InitCallbackList(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 22,
                              (FieldFxCallbackListCallback)MenuCard_PulseImage);
@@ -77,7 +77,7 @@ s32 MenuCard_LinkEffect(s32 mode, MemcardLinkState *state) {
 
             state->timer = timer;
             __asm__("" : : : "memory");
-            FieldFx_TransformMatrixPoint(entity, D_801F1D88, &offset, &unused);
+            FieldFx_TransformMatrixPoint(entity, g_MenuCardLinkJointB, &offset, &unused);
         }
         if (state->timer >= 23 && state->opacity > 0) state->opacity -= 8;
         if (state->timer < 22) return 0;
@@ -85,9 +85,9 @@ s32 MenuCard_LinkEffect(s32 mode, MemcardLinkState *state) {
         return 2;
     case 2:
         if (state->opacity >= 0) {
-            FieldFx_SampleColorTrack(D_801F1D5C, &color, state->timer);
-            FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D86, &offset, &first);
-            FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D88, &offset, &second);
+            FieldFx_SampleColorTrack(g_MenuCardPulseColorTrack, &color, state->timer);
+            FieldFx_TransformMatrixPoint(D_8009D254, g_MenuCardLinkJointA, &offset, &first);
+            FieldFx_TransformMatrixPoint(D_8009D254, g_MenuCardLinkJointB, &offset, &second);
             gte_ldrotmatrix(g_ViewMatrixSlot.value);
             gte_ldtransmatrix(g_ViewMatrixSlot.value);
             FieldFx_DrawHistoryTrail(&first, &second, 16, (unsigned char *)&color2, (unsigned char *)&color1,
@@ -151,7 +151,7 @@ s32 MenuCard_CosineImage(s32 mode, MemcardPulseState *state) {
 
 s32 MenuCard_TrailEffect(s32 mode, MemcardTrailState *state) {
     GteShortVector position;
-    MemcardJointOffset offset = D_801ED818;
+    MemcardJointOffset offset = g_MenuCardHandOffset;
     RenderColor color;
     s32 scale, palette;
     s32 index;
@@ -192,7 +192,7 @@ s32 MenuCard_TrailEffect(s32 mode, MemcardTrailState *state) {
         g_FieldFxSpriteParams.parameter0A = 5;
         g_FieldFxSpriteParams.depth = 32;
         if (state->timer < 33) {
-            FieldFx_SampleColorTrack(D_801F1DE8, &color, state->timer);
+            FieldFx_SampleColorTrack(g_MenuCardTrailColorTrack, &color, state->timer);
             scale = rsin(state->timer << 6) + 4096;
             __asm__("" : "=r"(scale) : "0"(scale) : "memory");
             index = g_FieldFxSpriteParams.palette;
@@ -270,7 +270,7 @@ s32 MenuCard_SineRotatingImage(s32 mode, MemcardPulseState *state) {
 
 s32 MenuCard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
     GteShortVector position;
-    MemcardJointOffset offset = D_801ED818;
+    MemcardJointOffset offset = g_MenuCardHandOffset;
     RenderColor color;
     RenderMatrixSlot *matrixSlot;
     s32 scale, kind, palette;
@@ -319,7 +319,7 @@ s32 MenuCard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
         g_FieldFxSpriteParams.parameter0A = 5;
         g_FieldFxSpriteParams.depth = 32;
         if (state->timer < 33) {
-            FieldFx_SampleColorTrack(D_801F1E74, &color, state->timer);
+            FieldFx_SampleColorTrack(g_MenuCardSineTrailColorTrack, &color, state->timer);
             scale = rsin(state->timer << 6) / 2 + 2048;
             kind = g_FieldFxSpriteParams.palette;
             palette = g_FieldFxPaletteTable[kind];
@@ -369,8 +369,8 @@ GteShortVector *MenuCard_GetGlintOriginF(void) {
  * flag each frame and clears the flag for the next frame. */
 int MenuCard_ConsumeCrossFlashFlag(int mode) {
     if (mode == 1) {
-        if (D_801F1F3A == 0) return 1;
-        D_801F1F3A = 0;
+        if (g_MenuCardCrossFlashRaised == 0) return 1;
+        g_MenuCardCrossFlashRaised = 0;
     }
     return 0;
 }

@@ -124,8 +124,8 @@ The overlays' own C (outside `room_lib/`) went from 432 files to 62 (97
 until the `boot_display` and `menu_memcard` merges of 2026-10-13). None of
 the 149 address-named files is left: the last, the second instance of the
 event-flag template in `menu_memcard` (the first is in `video.c`), is now
-part of `menu_memcard/video_playback.c`, where its function keeps the
-address-named `func_8012B1F0`. The others are named by role, and the functions
+part of `menu_memcard/video_playback.c`, where its function is
+`MenuCard_RequestVideoDepthFlip` (the first copy's is `MenuCardFirst_RequestVideoDepthFlip`). The others are named by role, and the functions
 they hold take that name when the overlay has only the one copy. Adjacent units of one overlay were merged when nothing else
 lies between them in the manifest (no shared `room_lib` unit, data, or foreign
 rodata between the members' rodata) and their per-file markers agree.

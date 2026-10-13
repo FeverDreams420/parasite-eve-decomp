@@ -13,7 +13,7 @@ MenuCard_StopVideo = 0x8012B19C; // type:func
 // the table typed as words, the records hold symbol references and follow
 // the overlay when it moves; as bytes they kept the retail addresses (a
 // shifted build played the next movie).
-D_80122438 = 0x80122438; // type:s32 size:0x3AC
+g_MenuCardVideoTable = 0x80122438; // type:s32 size:0x3AC
 g_MenuCardVideoName000 = 0x80120FE4; // type:asciz
 g_MenuCardVideoName001 = 0x80120FD4; // type:asciz
 g_MenuCardVideoName002 = 0x80120FC4; // type:asciz
@@ -99,3 +99,17 @@ g_MenuCardScreenSavedDispEnv = 0x801D1384;
 g_MenuCardVideoEntry = 0x801227E4;
 g_MenuCardVideoLastTime = 0x801227E8;
 g_MenuCardVideoSavedDispEnv = 0x801227EC;
+g_MenuCardVideoFinished = 0x801223F5;
+g_MenuCardVideoDecodeMode = 0x801223F6;
+g_MenuCardVideoDepthFlip = 0x801223F8;
+g_MenuCardVideoFile = 0x801223FC;
+g_MenuCardVideoRestartLoc = 0x80122414;
+g_MenuCardVideoSize = 0x80122418;
+g_MenuCardVideoDecodeBuffer0 = 0x80122420;
+g_MenuCardVideoDecodeBuffer1 = 0x80122424;
+g_MenuCardVideoSliceBuffer0 = 0x80122428;
+g_MenuCardVideoSliceBuffer1 = 0x8012242C;
+g_MenuCardVideoVlcTable = 0x80122430;
+g_MenuCardVideoStreamRing = 0x80122434;
+g_MenuCardVideoDisplay = 0x801228CC;
+g_MenuCardVideoSavedDrawEnv = 0x80122814;

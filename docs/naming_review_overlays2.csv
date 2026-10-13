@@ -125,3 +125,100 @@ address,overlay,old_name,name,evidence
 0x801E4E6C,fx_common,D_801E4E6C,&g_FxCommonRecords[1],"record 1 of the array at 0x801E4E00 (stride 0x6C)"
 0x801E4A8A,fx_common,D_801E4A8A,g_FxCommonIndexLinks[].next,"index link next field at +2 of g_FxCommonIndexLinks"
 0x8019CC14,fx_common,D_8019CC14,g_FxCommonHsyncCount,"effects.c: only access is D_8019CC14 = VSync(1) (mode 1 returns the horizontal-blank count) just before DrawSync(0)/VSync(2) in the buffer-swap path; never read"
+0x801D0DBD,menu_memcard,D_801D0DBD,g_MenuCardScreenVideoFinished,video_frame.inc sets it to 1 when the frame time wraps or reaches entry->end; video_open.inc clears it; video_step.inc stops the player on 1
+0x801D0DBE,menu_memcard,D_801D0DBE,g_MenuCardScreenVideoDecodeMode,"video_display.inc writes 3 (24-bit, wide) or 2 (16-bit); video_step.inc passes it as the mode argument of DecDCTin"
+0x801D0DC0,menu_memcard,D_801D0DC0,g_MenuCardScreenVideoDepthFlip,"video_upload.inc: 1 requests a colour-depth flip at frame end, the slice callback sets 2 after switching; video_step.inc applies it and clears it; event_flag.inc raises it"
+0x801D0DC4,menu_memcard,D_801D0DC4,g_MenuCardScreenVideoFile,"video_open.inc: DsSearchFile(&file, name) result record; .pos is the stream start"
+0x801D0DDC,menu_memcard,D_801D0DDC,g_MenuCardScreenVideoRestartLoc,"video_open.inc / video_step.inc: copy of file.pos used as the CdlLOC to restart the stream (StGetBackloc, DsRead2)"
+0x801D0DE0,menu_memcard,D_801D0DE0,g_MenuCardScreenVideoSize,video_frame.inc: last frame width/height (s16[2]); a change clears the screen and resizes the display regions
+0x801D0DE8,menu_memcard,D_801D0DE8,g_MenuCardScreenVideoDecodeBuffer0,video_open.inc MenuCard_OpenSetDecodeEnv: dec->decode[0]
+0x801D0DEC,menu_memcard,D_801D0DEC,g_MenuCardScreenVideoDecodeBuffer1,dec->decode[1]
+0x801D0DF0,menu_memcard,D_801D0DF0,g_MenuCardScreenVideoSliceBuffer0,"dec->buffers[0], the DecDCTout slice buffer"
+0x801D0DF4,menu_memcard,D_801D0DF4,g_MenuCardScreenVideoSliceBuffer1,dec->buffers[1]
+0x801D0DF8,menu_memcard,D_801D0DF8,g_MenuCardScreenVideoVlcTable,MdecDiag_ExpandDecoderTable(ptr) in video_open.inc and the third DecDCTvlc2 argument in video_step.inc
+0x801D0DFC,menu_memcard,D_801D0DFC,g_MenuCardScreenVideoStreamRing,"video_open.inc: StSetRing(ptr, 0x40)"
+0x801D1464,menu_memcard,D_801D1464,g_MenuCardScreenVideoDisplay,"VideoDisplay state used by the step, slice upload and decode setup"
+0x801D13AC,menu_memcard,D_801D13AC,g_MenuCardScreenSavedDrawEnv,video_buffers.inc saves g_RenderDrawEnvArray into it; display_reset.inc restores it (pair of g_MenuCardScreenSavedDispEnv)
+0x801D0E00,menu_memcard,D_801D0E00,g_MenuCardScreenVideoTable,"video_open.inc indexes it by movie number (47 VideoEntry records, 0x14 bytes); linkers/USA/pe_img_pointers.txt documents the table"
+0x801223F5,menu_memcard,D_801223F5,g_MenuCardVideoFinished,first-copy twin of g_MenuCardScreenVideoFinished (video.c passes it for MENUCARD_VIDEO_FINISHED); same template as the second copy
+0x801223F6,menu_memcard,D_801223F6,g_MenuCardVideoDecodeMode,first-copy video_display.inc mode byte; same template as the second copy
+0x801223F8,menu_memcard,D_801223F8,g_MenuCardVideoDepthFlip,first-copy depth-flip request; same template as the second copy
+0x801223FC,menu_memcard,D_801223FC,g_MenuCardVideoFile,first-copy DslFILE; same template as the second copy
+0x80122414,menu_memcard,D_80122414,g_MenuCardVideoRestartLoc,first-copy restart CdlLOC; same template as the second copy
+0x80122418,menu_memcard,D_80122418,g_MenuCardVideoSize,first-copy frame size; same template as the second copy
+0x80122420,menu_memcard,D_80122420,g_MenuCardVideoDecodeBuffer0,first-copy decode buffer 0; same template as the second copy
+0x80122424,menu_memcard,D_80122424,g_MenuCardVideoDecodeBuffer1,first-copy decode buffer 1; same template as the second copy
+0x80122428,menu_memcard,D_80122428,g_MenuCardVideoSliceBuffer0,first-copy slice buffer 0; same template as the second copy
+0x8012242C,menu_memcard,D_8012242C,g_MenuCardVideoSliceBuffer1,first-copy slice buffer 1; same template as the second copy
+0x80122430,menu_memcard,D_80122430,g_MenuCardVideoVlcTable,first-copy VLC table; same template as the second copy
+0x80122434,menu_memcard,D_80122434,g_MenuCardVideoStreamRing,first-copy stream ring; same template as the second copy
+0x80122438,menu_memcard,D_80122438,g_MenuCardVideoTable,first-copy VideoEntry table (video.c MENUCARD_VIDEO_TABLE); same template as the second copy
+0x801228CC,menu_memcard,D_801228CC,g_MenuCardVideoDisplay,first-copy VideoDisplay; same template as the second copy
+0x80122814,menu_memcard,D_80122814,g_MenuCardVideoSavedDrawEnv,first-copy saved DRAWENV pair; same template as the second copy
+0x8018FBC0,menu_memcard,func_8018FBC0,MenuCard_CreateImageNode,already defined under this name in image_nodes.c at 0x8018FBC0 (address in build map); fade.c and list_screen.c called it through an address spelling
+0x8018FE1C,menu_memcard,func_8018FE1C,MenuCard_CreateImageGroup,image_nodes.c definition at the same address
+0x801918F8,menu_memcard,func_801918F8,MenuCard_SetVideoDisplay,video_playback.c definition at 0x801918F8 (map); video_upload.inc called it by address
+0x80192CE8,menu_memcard,func_80192CE8,MenuCard_PlayVideo,video_playback.c definition at 0x80192CE8 (map)
+0x8018F7F0,menu_memcard,D_8018F7F0,MenuCard_BlendImage,node->update callback; the map has MenuCard_BlendImage at 0x8018F7F0
+0x8018F958,menu_memcard,D_8018F958,MenuCard_BlendRotatedImage,node->update callback; the map has MenuCard_BlendRotatedImage at 0x8018F958
+0x80121004,menu_memcard,func_80121004,MenuCardFirst_SetVideoDisplay,video_display.inc instance in the first video player block
+0x80121270,menu_memcard,func_80121270,MenuCardFirst_UpdateVideoFrame,video_frame.inc instance (first copy)
+0x801214D4,menu_memcard,func_801214D4,MenuCardFirst_UploadVideoSlice,"video_upload.inc instance, registered with DecDCToutCallback by the first-copy open"
+0x80121A44,menu_memcard,func_80121A44,MenuCardFirst_ResetDisplayState,display_reset.inc instance (first copy)
+0x80122398,menu_memcard,func_80122398,MenuCardFirst_StopVideo,"decrements the video-active byte, mutes SPU, clears DecDCTout callback and ring, DsControlB(9): same body as MenuCard_StopVideo"
+0x801223EC,menu_memcard,func_801223EC,MenuCardFirst_RequestVideoDepthFlip,event_flag.inc instance (first copy)
+0x8012B1F0,menu_memcard,func_8012B1F0,MenuCard_RequestVideoDepthFlip,event_flag.inc instance (second copy): raises the depth-flip request when the requested state differs from D_800B0DBB
+0x8012B6F0,menu_memcard,func_8012B6F0,MenuCard_CreateFadeImageNode,fade.c: MenuCard_CreateImageNode(2)
+0x8012B710,menu_memcard,func_8012B710,MenuCard_AttachFadePayload,fade.c: finds the kind-2 node and sets its payload to the fade step callback
+0x8012B754,menu_memcard,func_8012B754,MenuCard_StepFadeToImages,"fade.c: level -= 0x10; at 0x80 calls MenuCard_CreateImageGroup, at 0 sets finished"
+0x80190064,menu_memcard,func_80190064,MenuCard_HandleListInput,"list_screen.c comment: scroll and confirm handling for the memory card list screen (reads the remapped pad, moves node kinds 1 and 2)"
+0x80190660,menu_memcard,func_80190660,MenuCard_ShowLogoFade,"list_screen.c comment: fades a two-part logo (TIM from the image bundle, two sprites) in and out over 480 frames"
+0x801ED7FC,menu_memcard,D_801ED7FC,g_MenuCardEffectSpinRotation,"GteRotation template copied by DriftGlow, RingBurst (local 'spin') and RisingEmber for their sprite rotation"
+0x801ED804,menu_memcard,D_801ED804,g_MenuCardEffectTiltRotation,RingBurst local 'tilt' rotation template
+0x801ED80C,menu_memcard,D_801ED80C,g_MenuCardRingBurstGlowColor,RingBurst local 'glow' colour
+0x801ED810,menu_memcard,D_801ED810,g_MenuCardRingBurstRingColor,RingBurst local 'ring' colour
+0x801ED814,menu_memcard,D_801ED814,g_MenuCardRingBurstBandColor,RingBurst local 'band' colour
+0x801ED818,menu_memcard,D_801ED818,g_MenuCardHandOffset,"menu_memcard_offset.h: hand offset shared by the link, trail and cross flash effects"
+0x801ED820,menu_memcard,D_801ED820,g_MenuCardCrossFlashTipAOffset,"CrossFlash tipA, mirrored with x *= -1"
+0x801ED828,menu_memcard,D_801ED828,g_MenuCardCrossFlashTipBOffset,CrossFlash tipB
+0x801ED830,menu_memcard,D_801ED830,g_MenuCardCrossFlashCenterOffset,CrossFlash center point for the spark origin
+0x801ED838,menu_memcard,D_801ED838,g_MenuCardCrossFlashInnerColor,CrossFlash trail inner colour argument of FieldFx_DrawHistoryTrail
+0x801ED83C,menu_memcard,D_801ED83C,g_MenuCardCrossFlashOuterColor,CrossFlash trail outer colour
+0x801ED840,menu_memcard,D_801ED840,g_MenuCardCrossFlashEdgeColor,CrossFlash second beam colour
+0x801ED844,menu_memcard,D_801ED844,g_MenuCardGlintBurstFlashColor,GlintBurstController local 'flash'
+0x801ED848,menu_memcard,D_801ED848,g_MenuCardSpinRingColorA,SpinRingParticle colorA
+0x801ED84C,menu_memcard,D_801ED84C,g_MenuCardSpinRingColorB,SpinRingParticle colorB
+0x801ED850,menu_memcard,D_801ED850,g_MenuCardLinkColor1,LinkEffect color1
+0x801ED854,menu_memcard,D_801ED854,g_MenuCardLinkColor2,LinkEffect color2
+0x801F1BB0,menu_memcard,D_801F1BB0,g_MenuCardDriftGlowColorTrack,FieldFx_SampleColorTrack argument in DriftGlowParticle
+0x801F1C28,menu_memcard,D_801F1C28,g_MenuCardRisingEmberColorTrack,FieldFx_SampleColorTrack argument in RisingEmberParticle
+0x801F1CB0,menu_memcard,D_801F1CB0,g_MenuCardGlintBurstColorTrack,FieldFx_SampleColorTrack argument in GlintBurstController
+0x801F1CD8,menu_memcard,D_801F1CD8,g_MenuCardSpinRingColorTrack,FieldFx_SampleColorTrack argument in SpinRingParticle
+0x801F1D5C,menu_memcard,D_801F1D5C,g_MenuCardPulseColorTrack,FieldFx_SampleColorTrack argument in PulseImage and LinkEffect
+0x801F1DE8,menu_memcard,D_801F1DE8,g_MenuCardTrailColorTrack,FieldFx_SampleColorTrack argument in TrailEffect
+0x801F1E74,menu_memcard,D_801F1E74,g_MenuCardSineTrailColorTrack,FieldFx_SampleColorTrack argument in SineTrailEffect
+0x801F1D86,menu_memcard,D_801F1D86,g_MenuCardLinkJointA,second argument (joint index) of FieldFx_TransformMatrixPoint on the entity in LinkEffect
+0x801F1D88,menu_memcard,D_801F1D88,g_MenuCardLinkJointB,joint index on the player actor in LinkEffect
+0x801F1F3A,menu_memcard,D_801F1F3A,g_MenuCardCrossFlashRaised,CrossFlashController sets it every frame; MenuCard_ConsumeCrossFlashFlag reads and clears it
+0x80193254,menu_memcard,D_80193254,g_MemcardImageBundle,image_nodes.c / list_screen.c add g_MemcardImageOffsets[kind] to it to reach each image
+0x801D0D5C,menu_memcard,D_801D0D5C,g_MemcardImagePresets,"image_nodes.c: &presets[kind] (x, y, parameter) per node kind"
+0x801D0D8C,menu_memcard,D_801D0D8C,g_MemcardImagePresets[4],kind = 4 sits next to it in CreateFixedImageNode; 12-byte records from 0x801D0D5C
+0x801D0DA4,menu_memcard,D_801D0DA4,g_MemcardImagePresets[6],kind = 6 in CreateImageGroup
+0x801D0DB0,menu_memcard,D_801D0DB0,g_MemcardImagePresets[7],kind = 7 in CreateImageGroup
+0x80193268,menu_memcard,D_80193268,g_MemcardImageOffsets[4],CreateFixedImageNode kind 4 (image base + this); page_flip.c keeps a separate view g_MemcardImageOffsetsView4 because a shared base changes codegen
+0x80193270,menu_memcard,D_80193270,g_MemcardImageOffsets[6],CreateImageGroup kind 6
+0x80193274,menu_memcard,D_80193274,g_MemcardImageOffsets[7],CreateImageGroup kind 7
+0x80193278,menu_memcard,D_80193278,g_MemcardImageOffsets[8],ShowLogoFade uses it as the logo TIM offset
+0x801D1550,menu_memcard,D_801D1550,g_MemcardListSavedDispEnv[0],list_screen saves g_RenderDispEnvArray[0..1] into 0x14-byte DISPENVs at the start and restores them at the end
+0x801D1564,menu_memcard,D_801D1564,g_MemcardListSavedDispEnv[1],second saved DISPENV
+0x801D1498,menu_memcard,D_801D1498,g_MemcardListSavedDrawEnv[0],"saved DRAWENV copy of g_RenderDrawEnvArray[0], restored at the end of the list screen"
+0x801D14F4,menu_memcard,D_801D14F4,g_MemcardListSavedDrawEnv[1],second saved DRAWENV (0x5C stride)
+0x801D11C0,menu_memcard,D_801D11C0,g_MemcardSecondScreenView,third pointer view of the second MemcardScreenBuffer slot (same address as g_MemcardSecondScreen)
+0x80192F98,menu_memcard,D_80192F98,MenuCard_InitFadeForNodeAtLoad,node->field14 callback; equals the fade.c function MenuCard_InitFadeForNode (map 0x80192F4C) plus the 0x4C difference between link and load base (yaml comment)
+0x80192FE8,menu_memcard,D_80192FE8,MenuCard_UpdateFadeCounterAtLoad,map 0x80192F9C + 0x4C
+0x80193084,menu_memcard,D_80193084,MenuCard_AdvanceFadeAtLoad,map 0x80193038 + 0x4C
+0x801930D8,menu_memcard,D_801930D8,MenuCard_UpdateFadeDisplayAtLoad,map 0x8019308C + 0x4C
+0x8019316C,menu_memcard,D_8019316C,MenuCard_DecreaseFadeAtLoad,map 0x80193120 + 0x4C
+0x8019319C,menu_memcard,D_8019319C,MenuCard_CreateFadeImageNodeAtLoad,"fade.c function after DecreaseFade, + 0x4C"
+0x801931BC,menu_memcard,D_801931BC,MenuCard_AttachFadePayloadAtLoad,"0x20 bytes later, matches the tail copy MenuCard_AttachFadePayload layout"
+0x80193200,menu_memcard,D_80193200,MenuCard_StepFadeToImagesAtLoad,"the payload AttachFadePayload stores; 0x44 after the previous, matching the tail copy"

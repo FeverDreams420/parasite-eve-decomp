@@ -2,8 +2,8 @@
 #define MENUCARD_UPDATE_VIDEO_FRAME_NAME MenuCard_UpdateVideoFrame
 #define MENUCARD_VIDEO_ENTRY g_MenuCardScreenVideoEntry
 #define MENUCARD_VIDEO_LAST_TIME g_MenuCardScreenVideoLastTime
-#define MENUCARD_VIDEO_FINISHED D_801D0DBD
-#define MENUCARD_VIDEO_SIZE D_801D0DE0
+#define MENUCARD_VIDEO_FINISHED g_MenuCardScreenVideoFinished
+#define MENUCARD_VIDEO_SIZE g_MenuCardScreenVideoSize
 #endif
 
 void *MENUCARD_UPDATE_VIDEO_FRAME_NAME(VideoDisplay *display) {

@@ -2,13 +2,13 @@
 #define MENUCARD_STEP_VIDEO_NAME MenuCard_StepVideo
 #define MENUCARD_VIDEO_SET_DISPLAY MenuCard_SetVideoDisplay
 #define MENUCARD_VIDEO_UPDATE_FRAME MenuCard_UpdateVideoFrame
-#define MENUCARD_VIDEO_MODE D_801D0DBE
-#define MENUCARD_VIDEO_FLIP D_801D0DC0
-#define MENUCARD_VIDEO_FILE D_801D0DC4
-#define MENUCARD_VIDEO_RESTART D_801D0DDC
-#define MENUCARD_VIDEO_DISPLAY D_801D1464
-#define MENUCARD_VIDEO_PTR4 D_801D0DF8
-#define MENUCARD_VIDEO_FINISHED D_801D0DBD
+#define MENUCARD_VIDEO_MODE g_MenuCardScreenVideoDecodeMode
+#define MENUCARD_VIDEO_FLIP g_MenuCardScreenVideoDepthFlip
+#define MENUCARD_VIDEO_FILE g_MenuCardScreenVideoFile
+#define MENUCARD_VIDEO_RESTART g_MenuCardScreenVideoRestartLoc
+#define MENUCARD_VIDEO_DISPLAY g_MenuCardScreenVideoDisplay
+#define MENUCARD_VIDEO_PTR4 g_MenuCardScreenVideoVlcTable
+#define MENUCARD_VIDEO_FINISHED g_MenuCardScreenVideoFinished
 #endif
 
 /* Wait for the next decoded frame and start its decode; -1 on a stall. */

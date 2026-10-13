@@ -1,6 +1,6 @@
 #ifndef MENUCARD_EVENT_FLAG_NAME
 #define MENUCARD_EVENT_FLAG_NAME MenuCard_UpdateEventFlag
-#define MENUCARD_EVENT_FLAG D_801D0DC0
+#define MENUCARD_EVENT_FLAG g_MenuCardScreenVideoDepthFlip
 #endif
 
 /* Raises the flag when the requested state differs from the current event

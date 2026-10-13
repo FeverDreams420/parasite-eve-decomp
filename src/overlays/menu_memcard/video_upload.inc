@@ -1,8 +1,8 @@
 #ifndef MENUCARD_UPLOAD_VIDEO_SLICE_NAME
 #define MENUCARD_UPLOAD_VIDEO_SLICE_NAME MenuCard_UploadVideoSlice
-#define MENUCARD_VIDEO_DISPLAY D_801D1464
-#define MENUCARD_VIDEO_FLIP D_801D0DC0
-#define MENUCARD_VIDEO_SET_DISPLAY func_801918F8
+#define MENUCARD_VIDEO_DISPLAY g_MenuCardScreenVideoDisplay
+#define MENUCARD_VIDEO_FLIP g_MenuCardScreenVideoDepthFlip
+#define MENUCARD_VIDEO_SET_DISPLAY MenuCard_SetVideoDisplay
 #endif
 
 /* Slice callback of the PSY-Q movie player: upload the decoded slice to
