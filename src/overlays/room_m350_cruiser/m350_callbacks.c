@@ -1265,7 +1265,7 @@ GteShortVector *func_80199CA4(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 char *func_80199D2C(void *arg0, char arg1, short arg2, short arg3) {
-    char *ptr = (char *)&D_8019A831;
+    char *ptr = &D_8019A831;
 
     *ptr = arg1;
     D_8019A82A[0] = arg2;
