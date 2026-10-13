@@ -272,7 +272,7 @@ void Battle_Update(void) {
     g_ActiveActor = active;
     D_8009D2A4 = Menu_RunFrameWithArg((int)&D_800A76D8);
     if (g_BattleModeState == 0 && g_BattleEnemyEscapeFlag != 0) {
-        if ((u16) g_ActiveActor->hpAlive >= 0x2328U) {
+        if (g_ActiveActor->hpAlive >= 0x2328U) {
             g_ActiveActor->hpAlive = 0x2328U;
             if (D_8009D288 == 0) {
                 srand(D_8009D250);
@@ -429,7 +429,7 @@ void Battle_Update(void) {
             Draw_QueuePrimitive();
         }
         player = D_8009D254;
-        if ((player->animLastFrame == player->animPrev.parts.integer) && ((u8)player->actionMode < 4U)) {
+        if ((player->animLastFrame == player->animPrev.parts.integer) && (player->actionMode < 4U)) {
             if (D_8009D298 == 0) {
                 Entity_SetActionMode(player, g_ActiveActor->actionMode12);
                 if (!(g_DiscChangeFlags & 1) && ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) && (g_BattleModeState == 0) && (g_ActiveActor->action->turnWord & 0x8000) && (D_8009D1D0 != 0)) {
@@ -888,7 +888,7 @@ void Battle_StepPostBattle(void)
         break;
     }
     case 3: {
-        if ((u8) g_BattleEndTimer >= 0x1AU) {
+        if (g_BattleEndTimer >= 0x1AU) {
             u8 pulse = rcos((g_BattleEndTimer - 16) * 16) * 11U >> 11;
             RenderTexturedQuad *panels = g_BattleEndPanels;
             RenderTexturedQuad *panel = &panels[g_ActiveDrawSlot];
@@ -1274,7 +1274,7 @@ void Battle_PhaseInitEnemyTurn(void) {
                     entityFlags = entity->entityFlags & ~0x100;
                     entity->entityFlags = entityFlags;
                     if (entity->animLastFrame == entity->animPrev.parts.integer) {
-                        if (((u8) entity->actionMode < 4U) && (D_8009D298 != 0)) {
+                        if ((entity->actionMode < 4U) && (D_8009D298 != 0)) {
                             if (D_8009D298 >= 2U) {
                                 entity->entityFlags = (entityFlags | 0x100);
                             }
@@ -1311,7 +1311,7 @@ void Battle_PhaseInitEnemyTurn(void) {
     if (Asset_LoadTimTextures(0) != 0) {
         ready = 0;
     }
-    if ((u8)ready != 0) {
+    if (ready != 0) {
         Akao_Cmd_21(0, 0xFF);
         {
             Combatant *finisher = g_ActiveActor;
@@ -1691,7 +1691,7 @@ void Battle_PhaseEndTurn(void) {
                 entity = entity->next;
             } while (entity != 0);
         }
-        if ((u8)ready != 0) {
+        if (ready != 0) {
             Akao_Cmd_21(0, 0xFF);
             Pm_StopAllBoth();
             D_8009CE74 += 1;
