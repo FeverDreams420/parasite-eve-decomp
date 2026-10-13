@@ -117,3 +117,5 @@ g_BootDisplayPlaybackReadCount = 0x80172CF4;
 g_BootDisplayPlaybackRingIndex = 0x80172CF8;
 g_BootDisplayReportedPos = 0x80172CFC;
 g_BootDisplayPlaybackSectorBuffer = 0x80172D00;
+g_BootDisplayUppercaseWidths = 0x80125B1C;
+g_BootDisplayUppercaseWidthsStyle2 = 0x80125B1E;

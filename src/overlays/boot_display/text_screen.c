@@ -13,7 +13,7 @@ void BootDisplay_RunDisplay(void) {
     }
     g_BootDisplayCallbacks->init();
     if (!(g_GameStateFlags & 0x10000)) {
-        func_8012562C();
+        BootDisplay_InitPlaybackFileAtLoad();
         BootDisplay_StartPlayback();
         if (g_GameStateFlags & 0x20000) {
             Spu_SetVoiceVolume(144);
@@ -171,7 +171,7 @@ u16 BootDisplay_GetGlyphWidth(u8 character) {
         if ((u8)(character - 'a') < 26)
             saved = character - 32;
         if ((u8)(saved - 'A') < 26)
-            width = D_80125B1E[saved][0];
+            width = g_BootDisplayUppercaseWidthsStyle2[saved][0];
         else switch (saved) {
         case '!': case '\'': case '.': case ':': width = 3; break;
         case '#': width = 7; break;
@@ -184,7 +184,7 @@ u16 BootDisplay_GetGlyphWidth(u8 character) {
         }
     } else {
         if ((u8)(character - 'A') < 26)
-            width = D_80125B1C[character][style];
+            width = g_BootDisplayUppercaseWidths[character][style];
         else if ((u8)(character - 'a') < 26)
             width = g_BootDisplayLowercaseWidths[character][style | 1];
         else switch (character) {

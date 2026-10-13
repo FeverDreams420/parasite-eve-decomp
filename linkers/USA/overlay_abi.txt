@@ -21,7 +21,7 @@
  * by the disc loader, not linked with them. */
 MdecDiag_ExpandDecoderTable = OVERLAY_WINDOW_MDEC_DIAG + 0x54; /* boot_display, menu_memcard */
 DecDCTReset = OVERLAY_WINDOW_MDEC_DIAG + 0x144; /* boot_display, menu_memcard */
-func_8010BF94 = OVERLAY_WINDOW_MDEC_DIAG + 0x29C; /* boot_display */
+MdecDiag_ReadHalfword = OVERLAY_WINDOW_MDEC_DIAG + 0x29C; /* boot_display */
 DecDCTin = OVERLAY_WINDOW_MDEC_DIAG + 0x2A8; /* boot_display, menu_memcard */
 DecDCTout = OVERLAY_WINDOW_MDEC_DIAG + 0x324; /* boot_display, menu_memcard */
 DecDCToutSync = OVERLAY_WINDOW_MDEC_DIAG + 0x380; /* boot_display */
@@ -62,9 +62,10 @@ g_BootDisplayPlaybackEndPos = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CEC; /* boot_displ
 g_BootDisplayPlaybackCurrentPos = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CF0; /* boot_display */
 g_BootDisplayPlaybackReadCount = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CF4; /* boot_display */
 g_BootDisplayPlaybackRingIndex = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CF8; /* boot_display */
-D_80172CFA = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CFA; /* boot_display */
+g_BootDisplayPlaybackAltCount = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CFA; /* boot_display */
 g_BootDisplayReportedPos = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CFC; /* boot_display */
 g_BootDisplayPlaybackSectorBuffer = OVERLAY_WINDOW_FX_SECTOR17 + 0x2D00; /* boot_display */
+BootDisplay_InitPlaybackFileAtLoad = OVERLAY_WINDOW_BOOT_DISPLAY + 0x2688; /* boot_display */
 
 /* owner: asset[71], the credits data (PE.IMG sectors 1111..1276), read
  * to 0x80120D00 together with boot_display, which lies inside it.
