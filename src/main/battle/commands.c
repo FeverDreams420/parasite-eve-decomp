@@ -179,7 +179,6 @@ void Inv_SetActiveList(int mode, int *slot) {
             int kind;
             int encoded;
             u32 flags2;
-            register u32 shifted asm("$2");
             encoded = -0x400;
             word = (word & encoded) | (item->ammo & 0x3FF);
             data->attackWord = word;
@@ -197,11 +196,8 @@ void Inv_SetActiveList(int mode, int *slot) {
                 else encoded = kind - 18;
             }
             flags2 = data->attackWord;
-            shifted = 0xFFCFFFFF;
-            flags2 &= shifted;
-            shifted = encoded & 3;
-            shifted <<= 20;
-            flags2 |= shifted;
+            flags2 &= 0xFFCFFFFF;
+            flags2 |= (u32)(encoded & 3) << 20;
             data->attackWord = flags2;
         }
         break;
