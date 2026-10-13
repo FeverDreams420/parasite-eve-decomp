@@ -63,7 +63,7 @@ int func_80196C64(int event, void *object)
             unsigned int drawSampleOffset;
             drawSampleOffset = ((unsigned int)frame << 9) & 0x3E00;
             colors = D_8019A59C;
-            func_800CEE20(object, 0, (short)size, (short)size,
+            func_800CEE20(object, 0, size, size,
                 (s16)((RenderEffectParameters *)state)->parameter02 * phase + 192,
                 handle, 1, D_800966EC[drawSampleOffset / 4].bits.cos >> 5, (struct RenderColor *)colors);
         }
