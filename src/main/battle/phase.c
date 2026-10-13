@@ -107,14 +107,14 @@ void Battle_AdvancePhase(void) {
     temp_s2 = &D_800BE830[temp_a2 & 0xFF];
     if (var_a0 == 0) {
         var_s0 = temp_a2;
-        if ((temp_a2 & 0xFF) < (u8) g_BattleActionQueueCount) {
+        if ((temp_a2 & 0xFF) < g_BattleActionQueueCount) {
             do {
                 temp_a0 = (u16)D_800BE830[var_s0 & 0xFF].command;
                 if (temp_a0 - 3U < 0x180U) {
                     Inv_AddItem((s16) temp_a0 - 3);
                 }
                 var_s0 += 1;
-            } while ((var_s0 & 0xFFU) < (u8) g_BattleActionQueueCount);
+            } while ((var_s0 & 0xFFU) < g_BattleActionQueueCount);
         }
         g_BattleActionQueueCount = 0;
         g_BattleActionIndex = 0;
@@ -199,7 +199,7 @@ block_search_done:
                 g_BattleActionIndex = var_v0_3;
                 temp_v1_3 -= 3;
                 temp_v1_3 = temp_v1_3 < 0x194U;
-                if (!temp_v1_3 || ((u8) D_8009D254->actionMode < 4U)) {
+                if (!temp_v1_3 || (D_8009D254->actionMode < 4U)) {
                     g_GameStateFlags = g_GameStateFlags & ~0x100;
                 }
                 Entity_SetActionMode(((void *)D_8009D254), g_ActiveActor->actionMode12);
@@ -241,7 +241,7 @@ block_35:
                 g_BattleActionIndex = var_v0_3;
                 temp_v1_3 -= 3;
                 temp_v1_3 = temp_v1_3 < 0x194U;
-                if (!temp_v1_3 || ((u8) D_8009D254->actionMode < 4U)) {
+                if (!temp_v1_3 || (D_8009D254->actionMode < 4U)) {
                     g_GameStateFlags = g_GameStateFlags & ~0x100;
                 }
                 Entity_SetActionMode(((void *)D_8009D254), g_ActiveActor->actionMode12);
@@ -325,7 +325,7 @@ block_55:
                     }
                     var_s0_4 += 1;
                     var_a2_2 = var_s0_4 & 0xFF;
-                } while ((unsigned)var_a2_2 < (u8) g_BattleActionIndex);
+                } while ((unsigned)var_a2_2 < g_BattleActionIndex);
             }
             var_a0_4 = g_FieldActorListHead;
             if (var_a0_4 != NULL) {
@@ -374,10 +374,10 @@ block_55:
         if (((g_PmSlotTable[D_8009D258].header.state - 1U >= 2U) || (temp_s2->command == 0x196)) && (g_ActiveActor->stateFlags |= 0x200000, Battle_ApplySpellEffect(temp_s2->command - 0x183, temp_s2->actor), (temp_s2->command != 0x196))) {
             temp_v0_6 = g_BattleActionIndex + 1;
             g_BattleActionIndex = temp_v0_6;
-            if (((u16)D_800BE830[temp_v0_6 & 0xFF].command - 3U >= 0x194U) || ((u8) D_8009D254->actionMode < 4U)) {
+            if (((u16)D_800BE830[temp_v0_6 & 0xFF].command - 3U >= 0x194U) || (D_8009D254->actionMode < 4U)) {
                 g_GameStateFlags = g_GameStateFlags & ~0x100;
             }
-            temp_a0_4 = (u8)g_BattleActionQueueCount;
+            temp_a0_4 = g_BattleActionQueueCount;
             for (var_s0_4 = g_BattleActionIndex; (var_s0_4 & 0xFFU) < (unsigned)temp_a0_4; var_s0_4++) {
                 if ((u16)D_800BE830[var_s0_4 & 0xFF].command - 1U < 2U) {
                     Battle_DispatchEntityEffect();
