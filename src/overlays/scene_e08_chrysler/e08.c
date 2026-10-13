@@ -1001,7 +1001,6 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     void *volatile *sound = D_800B0E64;
     void *handle;
     int playerX;
-    register int playerZ asm("$3");
 
     FieldFx_SetScriptContext(state);
     D_80199528 = Asset_FindTable08ByU32Key(*sound, 0x10D8704);
@@ -1047,10 +1046,10 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     handle = *sound;
     /* Keep the handle load ahead of the two player-coordinate loads. */
     asm volatile("" : : "r"(handle));
-    playerZ = Pe1Fixed_Integer(&player->pos_z);
+    intensity = Pe1Fixed_Integer(&player->pos_z);
     playerX = Pe1Fixed_Integer(&player->pos_x);
     D_8019956C = playerX;
-    D_8019957C = playerZ;
+    D_8019957C = intensity;
     if (handle != 0) {
         Akao_SendTableCommand(*sound, 0x603, 0, 0x80, 0x7F);
     }
