@@ -30,7 +30,7 @@ typedef struct RoomFallingBurstEntity {
     struct FieldActor *actor;     /* 0x08 */
 } RoomFallingBurstEntity;
 
-/* Shared scene clock returned by func_800C2B50: the owner's actor, the
+/* Shared scene clock returned by FieldFx_GetScriptContext: the owner's actor, the
  * re-arm reload and timer, the hit request, the clock step and tick, and
  * the sprite asset whose low byte selects the texture page. */
 typedef struct RoomFallingBurstClock {
@@ -110,6 +110,6 @@ extern RoomFxSpritePacket g_RoomFallingBurstParticle;
 
 int *FieldFx_RegPtr(int index);
 int *FieldFx_VarPtr(int index);
-int func_80071A54(void);
+int rand(void);
 
 #endif

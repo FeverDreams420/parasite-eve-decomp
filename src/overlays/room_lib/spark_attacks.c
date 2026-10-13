@@ -75,9 +75,9 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
             spark->x += spark->vx;
             spark->y += spark->vy;
             spark->z += spark->vz;
-            spark->x += (func_80071A54() & 0x1F) - 0x10;
-            spark->y += (func_80071A54() & 0x1F) - 0x10;
-            spark->z += (func_80071A54() & 0x1F) - 0x10;
+            spark->x += (rand() & 0x1F) - 0x10;
+            spark->y += (rand() & 0x1F) - 0x10;
+            spark->z += (rand() & 0x1F) - 0x10;
             if (spark->y >= (s16)g_RoomFloorY->raw) {
                 spark->state = 1;
                 spark->timer = 0;
@@ -87,11 +87,11 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
                         child->x = spark->x;
                         child->y = spark->y;
                         child->z = spark->z;
-                        size = (func_80071A54() & 0x1F) + 0x64;
-                        angle = g_RoomBurstOrbHeading + (func_80071A54() & 0x1FF) - 0x100;
+                        size = (rand() & 0x1F) + 0x64;
+                        angle = g_RoomBurstOrbHeading + (rand() & 0x1FF) - 0x100;
                         child->vx = rcos(angle) * size / 4096;
                         child->vz = rsin(angle) * size / 4096;
-                        child->vy = -(func_80071A54() & 0x1F) - 0x18;
+                        child->vy = -(rand() & 0x1F) - 0x18;
                         child->state = 4;
                         child->timer = 0;
                     }
@@ -100,11 +100,11 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
                         child->x = spark->x;
                         child->y = spark->y;
                         child->z = spark->z;
-                        size = (func_80071A54() & 0xF) + 0x30;
-                        angle = g_RoomBurstOrbHeading + (func_80071A54() & 0x1FF) - 0x100;
+                        size = (rand() & 0xF) + 0x30;
+                        angle = g_RoomBurstOrbHeading + (rand() & 0x1FF) - 0x100;
                         child->vx = rcos(angle) * size / 4096;
                         child->vz = rsin(angle) * size / 4096;
-                        child->vy = -(func_80071A54() & 0xF);
+                        child->vy = -(rand() & 0xF);
                         child->state = 3;
                         child->timer = 0;
                     }
@@ -116,12 +116,12 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
                     child->x = spark->x;
                     child->y = spark->y;
                     child->z = spark->z;
-                    child->x += (func_80071A54() & 0x7F) - 0x40;
-                    child->y += (func_80071A54() & 0x7F) - 0x40;
-                    child->z += (func_80071A54() & 0x7F) - 0x40;
-                    child->vx = (func_80071A54() & 0xF) - 8;
-                    child->vy = (func_80071A54() & 0xF) - 8;
-                    child->vz = (func_80071A54() & 0xF) - 8;
+                    child->x += (rand() & 0x7F) - 0x40;
+                    child->y += (rand() & 0x7F) - 0x40;
+                    child->z += (rand() & 0x7F) - 0x40;
+                    child->vx = (rand() & 0xF) - 8;
+                    child->vy = (rand() & 0xF) - 8;
+                    child->vz = (rand() & 0xF) - 8;
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -132,9 +132,9 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
                     child->x = spark->x;
                     child->y = spark->y;
                     child->z = spark->z;
-                    child->vx = (func_80071A54() & 0x1F) - 0x10;
-                    child->vy = (func_80071A54() & 0x1F) - 0x10;
-                    child->vz = (func_80071A54() & 0x1F) - 0x10;
+                    child->vx = (rand() & 0x1F) - 0x10;
+                    child->vy = (rand() & 0x1F) - 0x10;
+                    child->vz = (rand() & 0x1F) - 0x10;
                     child->state = 3;
                     child->timer = 0;
                 }
@@ -145,9 +145,9 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
                     child->x = spark->x;
                     child->y = spark->y;
                     child->z = spark->z;
-                    child->vx = (func_80071A54() & 0x7F) - 0x40;
-                    child->vy = (func_80071A54() & 0x7F) - 0x40;
-                    child->vz = (func_80071A54() & 0x7F) - 0x40;
+                    child->vx = (rand() & 0x7F) - 0x40;
+                    child->vy = (rand() & 0x7F) - 0x40;
+                    child->vz = (rand() & 0x7F) - 0x40;
                     child->state = 4;
                     child->timer = 0;
                 }
@@ -569,11 +569,11 @@ int RoomEffect_DampedSparkController(int mode, void *unused, void *state) {
                 child->x = position[0];
                 child->y = position[1];
                 child->z = position[2];
-                radius = (func_80071A54() & 15) + 8;
-                angle = angle + (func_80071A54() & 0x1FF) - 0x100;
+                radius = (rand() & 15) + 8;
+                angle = angle + (rand() & 0x1FF) - 0x100;
                 child->vx = rcos(angle) * radius / 4096;
                 child->vz = rsin(angle) * radius / 4096;
-                child->vy = -(func_80071A54() & 7);
+                child->vy = -(rand() & 7);
                 child->state = 0;
                 child->timer = 0;
             }
@@ -584,11 +584,11 @@ int RoomEffect_DampedSparkController(int mode, void *unused, void *state) {
                 child->x = position[0];
                 child->y = position[1];
                 child->z = position[2];
-                radius = (func_80071A54() & 7) + 4;
-                angle = angle + (func_80071A54() & 0x1FF) - 0x100;
+                radius = (rand() & 7) + 4;
+                angle = angle + (rand() & 0x1FF) - 0x100;
                 child->vx = rcos(angle) * radius / 4096;
                 child->vz = rsin(angle) * radius / 4096;
-                child->vy = -(func_80071A54() & 15);
+                child->vy = -(rand() & 15);
                 child->state = 1;
                 child->timer = 0;
             }
@@ -739,7 +739,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
                     child->x = fx->tx;
                     child->y = fx->ty;
                     child->z = fx->tz;
-                    speed = (func_80071A54() & 0x1F) + 0x20;
+                    speed = (rand() & 0x1F) + 0x20;
                     child->vx = rcos(angle) * speed / 4096;
                     child->vz = rsin(angle) * speed / 4096;
                     child->vy = 0;
@@ -765,10 +765,10 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
             for (i = 0; i < 0x16; i++) {
                 child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
-                    scratch = func_80071A54() & 0xFFF;
+                    scratch = rand() & 0xFFF;
                     LoadAverageShort12(fx, &fx->tx, 0x1000 - scratch, scratch, child);
                     child->vy = 0;
-                    child->ay = (func_80071A54() & 3) + 1;
+                    child->ay = (rand() & 3) + 1;
                     child->state = 1;
                     child->timer = 0;
                 }
@@ -860,7 +860,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x40, palette);
-            func_800C6EC0(page, clut);
+            FieldFx_ModelSetTexture(page, clut);
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&modelRotation, &matrix);
             matrix.t[0] = fx->tx;
@@ -924,9 +924,9 @@ int RoomEffect_JitterSparkParticle(int mode, RoomDampedSpark *spark) {
                 bounce = -(s16)fall;
                 spark->vy = bounce;
             }
-            spark->x += (func_80071A54() & 0xF) - 7;
-            spark->y += (func_80071A54() & 0xF) - 7;
-            spark->z += (func_80071A54() & 0xF) - 7;
+            spark->x += (rand() & 0xF) - 7;
+            spark->y += (rand() & 0xF) - 7;
+            spark->z += (rand() & 0xF) - 7;
             if ((s16)spark->timer < 32) break;
             return 1;
         case 1:
@@ -943,9 +943,9 @@ int RoomEffect_JitterSparkParticle(int mode, RoomDampedSpark *spark) {
                 bounce = -(s16)fall;
                 spark->vy = bounce;
             }
-            spark->vx += (func_80071A54() & 0xF) - 7;
-            spark->vy += (func_80071A54() & 0xF) - 7;
-            spark->vz += (func_80071A54() & 0xF) - 7;
+            spark->vx += (rand() & 0xF) - 7;
+            spark->vy += (rand() & 0xF) - 7;
+            spark->vz += (rand() & 0xF) - 7;
             if ((s16)spark->timer < 20) break;
             return 1;
         }
@@ -1057,14 +1057,14 @@ int RoomEffect_JitterSparkController(int mode, GteShortVector *target,
                     child->x = target->x;
                     child->y = target->y;
                     child->z = target->z;
-                    angle = func_80071A54();
-                    reach = radius * (func_80071A54() & 0xFF) / 256;
+                    angle = rand();
+                    reach = radius * (rand() & 0xFF) / 256;
                     child->x += rcos(angle) * reach / 4096;
                     child->z += rsin(angle) * reach / 4096;
-                    child->angle = func_80071A54();
-                    child->vx = func_80071A54() % 64 - 32;
-                    child->vy = -(func_80071A54() % 44);
-                    child->vz = func_80071A54() % 64 - 32;
+                    child->angle = rand();
+                    child->vx = rand() % 64 - 32;
+                    child->vy = -(rand() % 44);
+                    child->vz = rand() % 64 - 32;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -1075,15 +1075,15 @@ int RoomEffect_JitterSparkController(int mode, GteShortVector *target,
                     child->x = target->x;
                     child->y = target->y;
                     child->z = target->z;
-                    angle = func_80071A54();
-                    reach = radius * (func_80071A54() & 0xFF) / 256;
+                    angle = rand();
+                    reach = radius * (rand() & 0xFF) / 256;
                     child->x += rcos(angle) * reach / 4096;
                     child->z += rsin(angle) * reach / 4096;
-                    child->angle = func_80071A54();
-                    child->vx = func_80071A54() % 128 - 64;
-                    child->vy = -(func_80071A54() % 80);
-                    child->vz = func_80071A54() % 128 - 64;
-                    child->state = (func_80071A54() & 1) + 1;
+                    child->angle = rand();
+                    child->vx = rand() % 128 - 64;
+                    child->vy = -(rand() % 80);
+                    child->vz = rand() % 128 - 64;
+                    child->state = (rand() & 1) + 1;
                     child->timer = 0;
                 }
             }
@@ -1095,14 +1095,14 @@ int RoomEffect_JitterSparkController(int mode, GteShortVector *target,
                     child->x = target->x;
                     child->y = target->y;
                     child->z = target->z;
-                    angle = func_80071A54();
-                    reach = radius * (func_80071A54() & 0xFF) / 256;
+                    angle = rand();
+                    reach = radius * (rand() & 0xFF) / 256;
                     child->x += rcos(angle) * reach / 4096;
                     child->z += rsin(angle) * reach / 4096;
-                    child->angle = func_80071A54();
-                    child->vx = func_80071A54() % 70 - 35;
-                    child->vy = -(func_80071A54() % 44);
-                    child->vz = func_80071A54() % 70 - 35;
+                    child->angle = rand();
+                    child->vx = rand() % 70 - 35;
+                    child->vy = -(rand() % 44);
+                    child->vz = rand() % 70 - 35;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -1112,15 +1112,15 @@ int RoomEffect_JitterSparkController(int mode, GteShortVector *target,
                 child->x = target->x;
                 child->y = target->y;
                 child->z = target->z;
-                angle = func_80071A54();
-                reach = radius * (func_80071A54() & 0xFF) / 256;
+                angle = rand();
+                reach = radius * (rand() & 0xFF) / 256;
                 child->x += rcos(angle) * reach / 4096;
                 child->z += rsin(angle) * reach / 4096;
-                child->angle = func_80071A54();
-                child->vx = func_80071A54() % 80 - 40;
-                child->vy = -(func_80071A54() % 49);
-                child->vz = func_80071A54() % 80 - 40;
-                child->state = (func_80071A54() & 1) + 1;
+                child->angle = rand();
+                child->vx = rand() % 80 - 40;
+                child->vy = -(rand() % 49);
+                child->vz = rand() % 80 - 40;
+                child->state = (rand() & 1) + 1;
                 child->timer = 0;
             }
         }

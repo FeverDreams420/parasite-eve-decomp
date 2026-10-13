@@ -1,6 +1,4 @@
 RoomLib_UpdateCallback = 0x8019262C; // type:func
-FieldFx_VecToAngle = 0x800DFF80;
-FieldFx_TurnToward = 0x800DFFB8;
 func_80192584 = 0x80192584; // type:func
 func_801925AC = 0x801925AC; // type:func
 func_80192624 = 0x80192624; // type:func
@@ -66,4 +64,3 @@ RoomLib_HandlerA = 0x801922C4; // type:func
 RoomLib_HandlerF = 0x801923D8; // type:func
 RoomLib_ReleaseHandlerA = 0x80192558; // type:func
 RoomLib_HandlerANop6 = 0x80192574; // type:func
-g_PlayerEntity = 0x8009D254;

@@ -11,7 +11,9 @@ options:
   build_path: build/USA/overlays/room_m349_cruiser
   ld_script_path: linkers/USA/overlays/room_m349_cruiser.ld
   undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.room_m349_cruiser.txt
-  symbol_addrs_path: configs/USA/overlays/sym.room_m349_cruiser.txt
+  symbol_addrs_path:
+    - configs/USA/overlays/sym.room_m349_cruiser.txt
+    - configs/USA/sym.main.txt
   undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.room_m349_cruiser.txt
   find_file_boundaries: True
   disassemble_all: True

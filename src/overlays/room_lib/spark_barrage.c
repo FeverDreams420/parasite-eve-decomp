@@ -76,8 +76,8 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
                     spark->phase = 1;
                     spark->timer = 0;
                     func_800CE870((char *)D_8009D254, 0, (s16 *)&target);
-                    spark->x = target.x + func_80071A54() % 1200 - 600;
-                    spark->z = target.z + func_80071A54() % 1200 - 600;
+                    spark->x = target.x + rand() % 1200 - 600;
+                    spark->z = target.z + rand() % 1200 - 600;
                 }
                 break;
             case 1:
@@ -91,7 +91,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
                 break;
             }
             if (spark->phase < 2 && (D_800E27EC & 1)) {
-                if (func_80071A54() & 1) {
+                if (rand() & 1) {
                     child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                     if (child) {
                         child->x = spark->x;
@@ -107,9 +107,9 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
                         child->x = spark->x;
                         child->y = spark->y;
                         child->z = spark->z;
-                        child->vx = (func_80071A54() & 0x1F) - 16;
-                        child->vz = (func_80071A54() & 0x1F) - 16;
-                        child->vy = (func_80071A54() & 3) - 2;
+                        child->vx = (rand() & 0x1F) - 16;
+                        child->vz = (rand() & 0x1F) - 16;
+                        child->vy = (rand() & 3) - 2;
                         child->state = 3;
                         child->timer = 0;
                     }
@@ -128,11 +128,11 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
                     child->x = spark->x;
                     child->y = spark->y;
                     child->z = spark->z;
-                    child->x = (func_80071A54() & 0xFF) - 0x80;
-                    child->z = (func_80071A54() & 0xFF) - 0x80;
-                    child->vx = (func_80071A54() & 0x1F) - 16;
-                    child->vz = (func_80071A54() & 0x1F) - 16;
-                    child->vy = (func_80071A54() & 3) - 2;
+                    child->x = (rand() & 0xFF) - 0x80;
+                    child->z = (rand() & 0xFF) - 0x80;
+                    child->vx = (rand() & 0x1F) - 16;
+                    child->vz = (rand() & 0x1F) - 16;
+                    child->vy = (rand() & 3) - 2;
                     child->state = 3;
                     child->timer = 0;
                 }
@@ -450,10 +450,10 @@ int RoomEffect_BouncingSparkController(int mode)
                 particle->x = output.x;
                 particle->y = output.y;
                 particle->z = output.z;
-                motion[0] = (func_80071A54() & 31) - 16;
-                motion[1] = (func_80071A54() & 31) - 16;
-                motion[2] = -32 - (func_80071A54() & 31);
-                kind = func_80071A54() % 3;
+                motion[0] = (rand() & 31) - 16;
+                motion[1] = (rand() & 31) - 16;
+                motion[2] = -32 - (rand() & 31);
+                kind = rand() % 3;
                 if (kind == mode) {
                     motion[0] = motion[0] * 3 / 2;
                     motion[1] = motion[1] * 3 / 2;
@@ -715,12 +715,12 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
             spark->z = (first.z + second.z) / 2;
             LoadAverageShort12(spark, &spark->vx, 0xAAB, 0x555, &spark->steer);
             LoadAverageShort12(spark, &spark->vx, 0x556, 0xAAA, &spark->drift);
-            spark->drift.x += (func_80071A54() & 0x1FF) - 0x100;
-            spark->drift.y += (func_80071A54() & 0x1FF) - 0x100;
-            spark->drift.z += (func_80071A54() & 0x1FF) - 0x100;
-            spark->steer.x += (func_80071A54() & 0xFF) - 0x80;
-            spark->steer.y += (func_80071A54() & 0xFF) - 0x80;
-            spark->steer.z += (func_80071A54() & 0xFF) - 0x80;
+            spark->drift.x += (rand() & 0x1FF) - 0x100;
+            spark->drift.y += (rand() & 0x1FF) - 0x100;
+            spark->drift.z += (rand() & 0x1FF) - 0x100;
+            spark->steer.x += (rand() & 0xFF) - 0x80;
+            spark->steer.y += (rand() & 0xFF) - 0x80;
+            spark->steer.z += (rand() & 0xFF) - 0x80;
             if ((s16)spark->timer < 8) break;
             return 1;
         case 1:
@@ -906,8 +906,8 @@ int RoomEffect_CometSparkController(int mode, RoomCometSparkAnchor *anchor) {
             func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &direction);
             direction.z = 0;
             direction.x = 0;
-            direction.y += (func_80071A54() & 0x1FF) - 0x100;
-            func_800CFB7C(&direction, (s16)(func_80071A54() % 1400 + 1500), &origin);
+            direction.y += (rand() & 0x1FF) - 0x100;
+            func_800CFB7C(&direction, (s16)(rand() % 1400 + 1500), &origin);
             origin.x += anchor->x;
             origin.y += anchor->y;
             origin.z += anchor->z;
@@ -934,9 +934,9 @@ int RoomEffect_CometSparkController(int mode, RoomCometSparkAnchor *anchor) {
                     child->x = origin.x;
                     child->y = origin.y;
                     child->z = origin.z;
-                    child->vx = func_80071A54() % 128 - 64;
-                    child->vy = -(func_80071A54() % 128);
-                    child->vz = func_80071A54() % 128 - 64;
+                    child->vx = rand() % 128 - 64;
+                    child->vy = -(rand() % 128);
+                    child->vz = rand() % 128 - 64;
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -1072,9 +1072,9 @@ int RoomEffect_LiftedSparkController(int mode) {
                 child->x = target.x;
                 child->y = target.y;
                 child->z = target.z;
-                child->vx = func_80071A54() % 80 - 40;
-                child->vy = -(func_80071A54() % 60);
-                child->vz = func_80071A54() % 80 - 40;
+                child->vx = rand() % 80 - 40;
+                child->vy = -(rand() % 60);
+                child->vz = rand() % 80 - 40;
                 child->state = 1;
                 child->timer = 0;
             }
@@ -1087,9 +1087,9 @@ int RoomEffect_LiftedSparkController(int mode) {
                     child->x = target.x;
                     child->y = target.y;
                     child->z = target.z;
-                    child->vx = func_80071A54() % 192 - 96;
-                    child->vy = -(func_80071A54() % 170);
-                    child->vz = func_80071A54() % 192 - 96;
+                    child->vx = rand() % 192 - 96;
+                    child->vy = -(rand() % 170);
+                    child->vz = rand() % 192 - 96;
                     child->state = 0;
                     child->timer = 0;
                 }

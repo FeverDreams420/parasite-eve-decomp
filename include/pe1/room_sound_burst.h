@@ -75,8 +75,8 @@ PE1_STATIC_ASSERT(sizeof(RoomSoundBurstParticle) == 0x18,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomSoundBurstState, soundHandle) == 0xC,
                   room_sound_burst_state_sound_handle);
 
-extern void func_800866A4(int, int);
-extern int func_80071A54(void);
+extern void Akao_Cmd_21(int, int);
+extern int rand(void);
 extern struct BattleEntity *D_8009D254;
 extern void func_800CF844(void *, void *, int, void *, int, int);
 extern void LoadAverageShort12(void *, void *, int, int, void *);

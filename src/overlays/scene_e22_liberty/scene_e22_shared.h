@@ -34,7 +34,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneE22RangeCallbackState, range_value) == 0x17,
 PE1_STATIC_ASSERT(sizeof(SceneE22RangeCallbackState) == 0x18,
                   scene_e22_range_callback_state_size);
 
-extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
+extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
 extern GteShortVector D_801994EC;
 extern s16 D_801994F4, D_801994F6, D_801994F8;
 extern int D_801994FC;

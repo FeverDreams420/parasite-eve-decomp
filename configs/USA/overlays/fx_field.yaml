@@ -12,7 +12,9 @@ options:
   ld_script_path: linkers/USA/overlays/fx_field.ld
   undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.fx_field.txt
   undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.fx_field.txt
-  symbol_addrs_path: configs/USA/overlays/sym.fx_field.txt
+  symbol_addrs_path:
+    - configs/USA/overlays/sym.fx_field.txt
+    - configs/USA/sym.main.txt
   find_file_boundaries: True
   disassemble_all: True
   asm_function_macro: glabel

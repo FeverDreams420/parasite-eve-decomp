@@ -9,6 +9,6 @@ extern void func_8012562C(void);
 extern void func_80125744(void);
 extern void func_80125894(s32);
 s32 BootDisplay_DrawTextBlock(void);
-extern void func_8003EB04(void);
+extern void Field_HandleStateTransition(void);
 extern void func_801255A4(void);
 #endif /* PE1_EXT_TEXT_SCREEN */

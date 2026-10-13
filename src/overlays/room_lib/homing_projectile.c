@@ -213,16 +213,16 @@ int RoomEffect_HomingProjectile(int mode) {
             }
             if (model->finished == 0) return 0;
             if (model->soundHandle != -1) {
-                func_800866A4(model->soundHandle, 0);
+                Akao_Cmd_21(model->soundHandle, 0);
             }
             model->position[0].word = model->position[0].part.integer;
             model->position[1].word = model->position[1].part.integer + 0x20;
             model->position[2].word = model->position[2].part.integer;
             {
-                int handle = func_8006F39C(0x25, actor);
+                int handle = Scene_LoadRoomAssets(0x25, actor);
                 u32 n = 0;
                 do {
-                    func_8006F6D4(handle, 0, n + 1,
+                    Pm_SendCmd(handle, 0, n + 1,
                                   ((s32 *)model)[g_RoomHomingReportFields[n]],
                                   0, 0);
                     n++;
@@ -332,7 +332,7 @@ int RoomEffect_HomingProjectileThrow(int mode, RoomHomingModel *model) {
         model->damping = g_RoomHomingLaunch.damping;
     } else if (mode == 1) {
         if (model->released == 0) {
-            if (actor->core == 0 || func_8003010C(actor, 0x2C) <= 0) {
+            if (actor->core == 0 || Battle_GetEnemyContextField(actor, 0x2C) <= 0) {
                 model->released = 1;
             } else if ((actor->core->flags & 0x1800) != 0) {
                 model->released = 1;

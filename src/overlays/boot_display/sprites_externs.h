@@ -2,7 +2,7 @@
 #define PE1_EXT_SPRITES
 extern s32 g_ActiveDrawSlot __asm__("D_8009CDDC");
 extern u16 D_80093168;
-extern void func_800752AC(void *, s32);
+extern void ClearOTagR(void *, s32);
 extern void *D_80125BA4[];
 extern s32 D_80172CD8;
 extern u32 g_BootDisplayFrameCounter;

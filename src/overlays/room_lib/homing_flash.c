@@ -57,7 +57,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
                 spark->state = 1;
                 spark->timer = 0;
                 if (spark->soundHandle != -1) {
-                    func_800866A4(spark->soundHandle, 0);
+                    Akao_Cmd_21(spark->soundHandle, 0);
                 }
             }
             if (D_800E27EC & 1) {
@@ -73,7 +73,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
             }
             if (D_800E27EC < 36) return 0;
             if (spark->soundHandle != -1) {
-                func_800866A4(spark->soundHandle, 0);
+                Akao_Cmd_21(spark->soundHandle, 0);
             }
             return 1;
         case 1:

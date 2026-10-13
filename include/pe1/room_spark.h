@@ -41,18 +41,17 @@ typedef struct RoomSparkChannel {
 } RoomSparkChannel;
 
 extern struct PmPrimarySlot *D_800942E4; /* running process slot (pm/process.c) */
-extern int func_80071A54(void);
+extern int rand(void);
 
 /* Heading helpers and the trail history: turn the angles towards a target,
  * record a position into a history of points and draw the history as a
  * ribbon. */
-extern void func_800D3AFC(void *history, int count, void *position, int reset);
 /* Rotates an offset by a bone's matrix. */
 /* Fades a colour layer record in or out. */
 extern void func_800CF4B4(int kind, int value, void *layer);
 
 /* Asset library lookup and the model draw calls of the model effects. */
-void func_800C6EC0(int tpage, int clut);
+void FieldFx_ModelSetTexture(int tpage, int clut);
 
 /* Jitter spark: the damped spark layout with a spin angle and a size. */
 typedef struct RoomJitterSpark {

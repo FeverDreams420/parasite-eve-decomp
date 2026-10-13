@@ -47,7 +47,7 @@ extern u8 D_8019B3E4[];
 extern u8 D_8019B404[];
 extern GteShortVector D_8019B670;
 
-int func_80071A54(void);
+int rand(void);
 void func_800CFFAC(SceneSpinRay *ray);
 int func_80196748(int mode, SceneSpinRay *ray);
 

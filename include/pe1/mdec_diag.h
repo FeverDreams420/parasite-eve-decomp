@@ -27,6 +27,6 @@ int func_8010C39C(void);
 int func_8010C430(void);
 int func_8010C448(char *message);
 /* printf. */
-int func_80071A74(const char *format, ...);
+int printf(const char *format, ...);
 
 #endif

@@ -11,7 +11,9 @@ options:
   build_path: build/USA/overlays/fx_common
   ld_script_path: linkers/USA/overlays/fx_common.ld
   undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.fx_common.txt
-  symbol_addrs_path: configs/USA/overlays/sym.fx_common.txt
+  symbol_addrs_path:
+    - configs/USA/overlays/sym.fx_common.txt
+    - configs/USA/sym.main.txt
   undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.fx_common.txt
   find_file_boundaries: True
   disassemble_all: True

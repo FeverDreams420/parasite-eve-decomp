@@ -38,8 +38,8 @@ int RoomLib_ThreeParticleStart(void *o) {
     int result;
 
     if ((unsigned int)FieldFx_GetStatus(o) >= 2) {
-        result = func_800C251C(o, g_RoomThreeParticleUpdateList);
-        result |= func_800C2758(o, g_RoomThreeParticleInitList,
+        result = FieldFx_UpdateSlots(o, g_RoomThreeParticleUpdateList);
+        result |= FieldFx_RunScript(o, g_RoomThreeParticleInitList,
                                 g_RoomThreeParticleSpawnLayout);
     } else {
         result = -1;
@@ -113,7 +113,7 @@ void RoomLib_InitThreeParticlePackets(RoomDebrisEntity *arg0, void *arg1, RoomDe
     RoomEffectWords8 *src;
     RoomDebrisActor *table;
 
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
     state->asset.index = Asset_SearchByKeyType(0xA);
     table = arg0->actor;
     state->actor = table;
@@ -161,7 +161,7 @@ void RoomLib_UpdateThreeParticleTimer(int arg0, char *arg1, char *arg2) {
         }
     }
 
-    if (func_800C2B68() == 1) {
+    if (FieldFx_IsLastSlotHalted() == 1) {
         arg1[1] = 2;
     }
 }
@@ -176,7 +176,7 @@ typedef struct RoomInitThreeStack {
 } RoomInitThreeStack;
 
 int *FieldFx_RegPtr(int index);
-int func_80071A54(void);
+int rand(void);
 int func_800C66C8(void *object, int message, void *state);
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
@@ -198,7 +198,7 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
 
     callOwner = owner;
     particles = state;
-    clockResult = func_800C2B50();
+    clockResult = FieldFx_GetScriptContext();
     parameterIndex = 3;
     clock = clockResult;
         stack.firstSeed.x = 0;
@@ -257,7 +257,7 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
 
     i = 0;
     for (; i < 3; i++) {
-        randomValue = func_80071A54();
+        randomValue = rand();
         particles->size[i] = 0;
         particles->countdown[i] = (randomValue % 10) + 1;
         particles->life[i] = *FieldFx_VarPtr(2);
@@ -328,7 +328,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, Room
 
     drawState = state;
     stack.args = args;
-    clock = func_800C2B50();
+    clock = FieldFx_GetScriptContext();
     stack.seed = s_ThreeParticleSeed;
     i = 0;
     sourceScale = &stack.sourceScale;
@@ -440,7 +440,7 @@ void RoomLib_UpdateDebrisTriplet(void *unused, RoomDebrisOwner *owner,
     unsigned int i;
     int step;
 
-    clock = func_800C2B50();
+    clock = FieldFx_GetScriptContext();
     for (i = 0; i < 3; i++) {
         if (state->countdown[i] != 0) {
             state->countdown[i]--;
@@ -459,8 +459,8 @@ void RoomLib_UpdateDebrisTriplet(void *unused, RoomDebrisOwner *owner,
             state->position[i].z += (state->velocity[i].z * state->speed) >> 4;
         }
         if (state->swing[i] < state->swingLimit) {
-            state->swing[i] += func_80071A54() % 80 + 20;
-            state->phase[i] += func_80071A54() % 40 + 40;
+            state->swing[i] += rand() % 80 + 20;
+            state->phase[i] += rand() % 40 + 40;
             state->position[i].y += -0xA0000;
         }
         state->swing[i] += rsin(owner->angle << 5) >> 7;
@@ -484,9 +484,9 @@ void RoomLib_UpdateDebrisTriplet(void *unused, RoomDebrisOwner *owner,
         point[0] = (state->position[i].x >> 16);
         point[1] = (state->position[i].y >> 16);
         point[2] = (state->position[i].z >> 16);
-        state->jitter[0] = func_80071A54() % 11 - 5;
-        state->jitter[1] = func_80071A54() % 11 - 5;
-        state->jitter[2] = func_80071A54() % 11 - 5;
+        state->jitter[0] = rand() % 11 - 5;
+        state->jitter[1] = rand() % 11 - 5;
+        state->jitter[2] = rand() % 11 - 5;
         if (func_800C6B90(point, state->swing[i] >> 4)) {
             if (state->landed[i] == 0) {
                 clock->landedFlag = 1;

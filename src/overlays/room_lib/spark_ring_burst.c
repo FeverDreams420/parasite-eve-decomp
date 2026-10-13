@@ -163,12 +163,12 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
                 child->x = state->target.x;
                 child->y = state->target.y;
                 child->z = state->target.z;
-                child->x += (func_80071A54() & 0xFF) - 0x80;
-                child->z += (func_80071A54() & 0xFF) - 0x80;
-                child->y += (func_80071A54() & 0x1FF) - 0x100;
-                child->dx = func_80071A54() % 32 - 16;
-                child->dy = func_80071A54() % 32 - 16;
-                child->dz = func_80071A54() % 32 - 16;
+                child->x += (rand() & 0xFF) - 0x80;
+                child->z += (rand() & 0xFF) - 0x80;
+                child->y += (rand() & 0x1FF) - 0x100;
+                child->dx = rand() % 32 - 16;
+                child->dy = rand() % 32 - 16;
+                child->dz = rand() % 32 - 16;
                 child->state = 0;
                 child->timer = 0;
             }
@@ -300,9 +300,9 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                     child->x = spark->x;
                     child->y = spark->y;
                     child->z = spark->z;
-                    child->vx = func_80071A54() % 32 - 16;
-                    child->vy = func_80071A54() % 32 - 16;
-                    child->vz = func_80071A54() % 32 - 16;
+                    child->vx = rand() % 32 - 16;
+                    child->vy = rand() % 32 - 16;
+                    child->vz = rand() % 32 - 16;
                     child->state = 1;
                     child->timer = 0;
                 }
@@ -328,9 +328,9 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                         child->x = spark->x;
                         child->y = spark->y;
                         child->z = spark->z;
-                        child->vx = func_80071A54() % 40 - 20;
-                        child->vy = func_80071A54() % 40 - 20;
-                        child->vz = func_80071A54() % 40 - 20;
+                        child->vx = rand() % 40 - 20;
+                        child->vy = rand() % 40 - 20;
+                        child->vz = rand() % 40 - 20;
                         child->state = 3;
                         child->timer = 0;
                     }
@@ -346,9 +346,9 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                         child->x = spark->x;
                         child->y = spark->y;
                         child->z = spark->z;
-                        child->vx = func_80071A54() % 40 - 20;
-                        child->vy = func_80071A54() % 40 - 20;
-                        child->vz = func_80071A54() % 40 - 20;
+                        child->vx = rand() % 40 - 20;
+                        child->vy = rand() % 40 - 20;
+                        child->vz = rand() % 40 - 20;
                         child->state = 3;
                         child->timer = 0;
                     }

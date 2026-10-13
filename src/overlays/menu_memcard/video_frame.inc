@@ -23,16 +23,16 @@ void *MENUCARD_UPDATE_VIDEO_FRAME_NAME(VideoDisplay *display) {
     register void **dataPtr asm("$4");
 
     retries = 2000;
-    status = func_8007F72C();
+    status = DsSystemStatus();
     dataPtr = &local.data;
     if (status == 1) {
-        status = func_8007F7A8();
+        status = DsShellOpen();
         dataPtr = &local.data;
         if (status != D_800B0DD4) {
-            func_800719E4(1);
+            exit(1);
         }
     }
-    while (func_8007C484(dataPtr, &local.frame) != 0) {
+    while (StGetNext(dataPtr, &local.frame) != 0) {
         dataPtr = &local.data;
         if (--retries == 0) {
             return 0;
@@ -47,7 +47,7 @@ void *MENUCARD_UPDATE_VIDEO_FRAME_NAME(VideoDisplay *display) {
         if (remaining < 0) {
             remaining = 0;
         }
-        func_800870F0(D_800B0DBE * remaining / 14);
+        Spu_SetVoiceVolume(D_800B0DBE * remaining / 14);
     }
     if (local.frame->time < MENUCARD_VIDEO_LAST_TIME || local.frame->time >= MENUCARD_VIDEO_ENTRY->end) {
         MENUCARD_VIDEO_FINISHED = 1;

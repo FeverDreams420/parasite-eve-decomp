@@ -89,7 +89,7 @@ typedef struct RoomSparkBattleEntity {
 
 extern struct BattleEntity *D_8009D254;
 
-int func_80071A54(void);
+int rand(void);
 
 /* Per-room data: the colour ramp of the ring sprite and the damped sparks,
  * and the word the room's slot setter writes. */

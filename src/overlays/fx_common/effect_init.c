@@ -14,7 +14,7 @@ void func_80195F6C(void)
     u32 i;
 
     for (i = 0; i < 2; i++) {
-        func_80077BC4(&g_FxCommonSkyQuads[i]);
+        SetPolyG4(&g_FxCommonSkyQuads[i]);
         SET_RGB(g_FxCommonSkyQuads[i].color0, 20, 68, 100);
         SET_RGB(g_FxCommonSkyQuads[i].color1, 20, 68, 100);
         SET_RGB(g_FxCommonSkyQuads[i].color2, 5, 17, 25);
@@ -28,7 +28,7 @@ void func_80195F6C(void)
         g_FxCommonSkyQuads[i].x3 = 320;
         g_FxCommonSkyQuads[i].y3 = 240;
 
-        func_80077BC4(&g_FxCommonShadeQuads[i]);
+        SetPolyG4(&g_FxCommonShadeQuads[i]);
         SET_RGB(g_FxCommonShadeQuads[i].color0, 10, 24, 40);
         SET_RGB(g_FxCommonShadeQuads[i].color1, 10, 24, 40);
         SET_RGB(g_FxCommonShadeQuads[i].color2, 5, 7, 15);
@@ -42,8 +42,8 @@ void func_80195F6C(void)
         g_FxCommonShadeQuads[i].x3 = 320;
         g_FxCommonShadeQuads[i].y3 = 240;
 
-        func_80077BC4(&g_FxCommonFloorFadeQuads[i]);
-        func_80077B04(&g_FxCommonFloorFadeQuads[i], 1);
+        SetPolyG4(&g_FxCommonFloorFadeQuads[i]);
+        SetSemiTrans(&g_FxCommonFloorFadeQuads[i], 1);
         SET_RGB(g_FxCommonFloorFadeQuads[i].color0, 0, 0, 0);
         SET_RGB(g_FxCommonFloorFadeQuads[i].color1, 0, 0, 0);
         SET_RGB(g_FxCommonFloorFadeQuads[i].color2, 255, 255, 255);
@@ -57,8 +57,8 @@ void func_80195F6C(void)
         g_FxCommonFloorFadeQuads[i].x3 = 320;
         g_FxCommonFloorFadeQuads[i].y3 = 240;
 
-        func_80077BC4(&g_FxCommonTopFadeQuads[i]);
-        func_80077B04(&g_FxCommonTopFadeQuads[i], 1);
+        SetPolyG4(&g_FxCommonTopFadeQuads[i]);
+        SetSemiTrans(&g_FxCommonTopFadeQuads[i], 1);
         SET_RGB(g_FxCommonTopFadeQuads[i].color0, 255, 255, 255);
         SET_RGB(g_FxCommonTopFadeQuads[i].color1, 255, 255, 255);
         SET_RGB(g_FxCommonTopFadeQuads[i].color2, 0, 0, 0);
@@ -152,8 +152,8 @@ void func_80196498(void)
         g_FxTextureSetup[textureIndexOrHasPoints].clut = (g_FxTextureSetup[textureIndexOrHasPoints].h << 6) | (((u16) g_FxTextureSetup[textureIndexOrHasPoints].w >> 4) & 0x3F);
         textureIndexOrHasPoints++;
     } while (textureIndexOrHasPoints < 2);
-    if ((D_8019C008 != 0) || (func_800371B0(Draw_GetTimTableEntry(&D_801D0260, 0)), (D_8019C008 != 0))) {
-        func_800371B0(Draw_GetTimTableEntry(&D_801D0260, 1));
+    if ((D_8019C008 != 0) || (Render_SetupFogLayer(Draw_GetTimTableEntry(&D_801D0260, 0)), (D_8019C008 != 0))) {
+        Render_SetupFogLayer(Draw_GetTimTableEntry(&D_801D0260, 1));
     }
     resourceTableData = &D_801D0260;
     resourceTable = Draw_GetTimTableEntry(resourceTableData, 2);

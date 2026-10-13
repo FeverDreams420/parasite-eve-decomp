@@ -135,9 +135,9 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
             func_800CE870(ANIM_OWNER_AS(RoomM023Channel)->pool, 0, position);
             particle = func_800CE610(ANIM_POOL_AS(RoomM023Channel)->pool);
             if (particle == 0) return 0;
-            if (func_80071A54() & 1) {
-                particle->x = (func_80071A54() & 0x7FF) - 0x400;
-                particle->y = func_80071A54();
+            if (rand() & 1) {
+                particle->x = (rand() & 0x7FF) - 0x400;
+                particle->y = rand();
                 particle->z = 0;
                 particle->attached = 0;
             } else {
@@ -146,9 +146,9 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
                 particle->z = position[2];
                 particle->attached = 1;
             }
-            particle->vx = func_80071A54() % 70 - 35;
-            particle->vy = func_80071A54() % 70 - 35;
-            particle->vz = func_80071A54() % 70 - 35;
+            particle->vx = rand() % 70 - 35;
+            particle->vy = rand() % 70 - 35;
+            particle->vz = rand() % 70 - 35;
         }
         break;
     case 2:

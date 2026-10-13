@@ -30,9 +30,9 @@ int func_8018F010(int mode, RoomM349FlareSpark *spark) {
                 bounce = -(s16)fall;
                 spark->vy = bounce;
             }
-            spark->vx += (func_80071A54() & 0xF) - 7;
-            spark->vy += (func_80071A54() & 0xF) - 7;
-            spark->vz += (func_80071A54() & 0xF) - 7;
+            spark->vx += (rand() & 0xF) - 7;
+            spark->vy += (rand() & 0xF) - 7;
+            spark->vz += (rand() & 0xF) - 7;
             if ((s16)spark->timer < 48) break;
             return 1;
         case 1:
@@ -48,9 +48,9 @@ int func_8018F010(int mode, RoomM349FlareSpark *spark) {
                 bounce = -(s16)fall;
                 spark->vy = bounce;
             }
-            spark->vx += (func_80071A54() & 7) - 3;
-            spark->vy += (func_80071A54() & 7) - 3;
-            spark->vz += (func_80071A54() & 7) - 3;
+            spark->vx += (rand() & 7) - 3;
+            spark->vy += (rand() & 7) - 3;
+            spark->vz += (rand() & 7) - 3;
             if ((s16)spark->timer < 32) break;
             return 1;
         case 2:
@@ -66,9 +66,9 @@ int func_8018F010(int mode, RoomM349FlareSpark *spark) {
                 bounce = -(s16)fall;
                 spark->vy = bounce;
             }
-            spark->x += (func_80071A54() & 7) - 3;
-            spark->y += (func_80071A54() & 7) - 3;
-            spark->z += (func_80071A54() & 7) - 3;
+            spark->x += (rand() & 7) - 3;
+            spark->y += (rand() & 7) - 3;
+            spark->z += (rand() & 7) - 3;
             spark->angle += 8;
             if ((s16)spark->timer < 8) break;
             return 1;
@@ -179,15 +179,15 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
                     child->x = target->position.x;
                     child->y = target->position.y;
                     child->z = target->position.z;
-                    phase = func_80071A54();
-                    reach = radius * (func_80071A54() & 0xFF) / 256;
+                    phase = rand();
+                    reach = radius * (rand() & 0xFF) / 256;
                     child->x += rcos(phase) * reach / 4096;
-                    child->y -= func_80071A54() & 0x1F;
+                    child->y -= rand() & 0x1F;
                     child->z += rsin(phase) * reach / 4096;
-                    child->angle = func_80071A54();
-                    child->vx = func_80071A54() % 32 - 16;
-                    child->vy = -(func_80071A54() % 32);
-                    child->vz = func_80071A54() % 32 - 16;
+                    child->angle = rand();
+                    child->vx = rand() % 32 - 16;
+                    child->vy = -(rand() % 32);
+                    child->vz = rand() % 32 - 16;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -198,40 +198,40 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
                     child->x = target->position.x;
                     child->y = target->position.y;
                     child->z = target->position.z;
-                    phase = func_80071A54();
-                    reach = radius * (func_80071A54() & 0xFF) / 256;
+                    phase = rand();
+                    reach = radius * (rand() & 0xFF) / 256;
                     child->x += rcos(phase) * reach / 4096;
-                    child->y -= func_80071A54() & 0x1F;
+                    child->y -= rand() & 0x1F;
                     child->z += rsin(phase) * reach / 4096;
-                    child->angle = func_80071A54();
-                    child->vx = func_80071A54() % 24 - 12;
-                    child->vy = -(func_80071A54() % 24);
-                    child->vz = func_80071A54() % 24 - 12;
+                    child->angle = rand();
+                    child->vx = rand() % 24 - 12;
+                    child->vy = -(rand() % 24);
+                    child->vz = rand() % 24 - 12;
                     child->state = 1;
                     child->timer = 0;
                 }
             }
         }
-        if (!(D_800E27EC & 1) && !(func_80071A54() & 1)) {
+        if (!(D_800E27EC & 1) && !(rand() & 1)) {
             child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = joint.x;
                 child->y = joint.y;
                 child->z = joint.z;
-                child->x += (func_80071A54() & 0x1FF) - 0x100;
-                child->y += func_80071A54() % 800 - 400;
-                child->z += (func_80071A54() & 0x1FF) - 0x100;
-                child->size = (func_80071A54() & 0x1FF) + 0x2AA;
-                child->angle = func_80071A54();
-                child->vx = func_80071A54() % 24 - 12;
-                child->vy = -(func_80071A54() % 24);
-                child->vz = func_80071A54() % 24 - 12;
+                child->x += (rand() & 0x1FF) - 0x100;
+                child->y += rand() % 800 - 400;
+                child->z += (rand() & 0x1FF) - 0x100;
+                child->size = (rand() & 0x1FF) + 0x2AA;
+                child->angle = rand();
+                child->vx = rand() % 24 - 12;
+                child->vy = -(rand() % 24);
+                child->vz = rand() % 24 - 12;
                 child->state = 2;
                 child->timer = 0;
             }
         }
         if (D_800E27EC == params->lastFrame + 16 && target->sound != -1) {
-            func_800866A4(target->sound, 0);
+            Akao_Cmd_21(target->sound, 0);
         }
         if (D_800E27EC < 16) break;
         return 2;
@@ -249,7 +249,7 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
             D_800F3368.tpage = tpage;
         }
         size = 0x2AA;
-        phase = (func_80071A54() & 0x1F) + 0x20;
+        phase = (rand() & 0x1F) + 0x20;
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 13, &rotation, &anchor);
         {
             u16 clut;

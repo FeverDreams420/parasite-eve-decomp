@@ -10,13 +10,13 @@ s32 BootDisplay_InitPlaybackFile(void) {
     register s32 ready asm("$16");
     register s32 failure asm("$2");
     volatile s32 *start;
-    func_8007EC14();
-    func_80080CC8(0);
+    DsInit();
+    DsSetDebug(0);
     for (;;) {
         ready = 1;
         asm volatile("" : : "r"(ready));
-        if (func_8007F72C() != ready || func_8007F778() != 0)
-            return func_80073A44(0);
+        if (DsSystemStatus() != ready || DsQueueLen() != 0)
+            return VSync(0);
         found = (s32)DsSearchFile(&file, D_80125B48);
         if (found == 0) continue;
         failure = -1;

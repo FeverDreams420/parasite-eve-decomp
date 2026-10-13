@@ -32,6 +32,6 @@ extern GteRotation D_8018F1D4;
 extern GteShortVector D_8018F264;
 extern RenderColor D_8018F26C;
 
-int func_80071A54(void);
+int rand(void);
 
 #endif

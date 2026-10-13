@@ -42,6 +42,9 @@ VERSION = "USA"
 LINKERS = ROOT / "linkers" / VERSION
 BUILD = ROOT / "build" / VERSION
 OVERLAY_CONFIGS = ROOT / "configs" / VERSION / "overlays"
+# Overlays whose copied code keeps foreign link addresses: their generated
+# script also pins names their own objects define (Makefile OVERLAY_VMA_OVERLAP).
+PIN_DEFINED_OVERLAYS = ("boot_display", "menu_memcard")
 
 
 def tool(name: str) -> str:
@@ -439,86 +442,83 @@ def relocation_audit(elf_path: Path, layout: Layout):
 # (d) overlays
 
 
-def overlay_symbols() -> dict[str, dict[str, int]]:
-    """Defined symbols of every built overlay ELF: overlay -> name -> address."""
-    from elftools.elf.elffile import ELFFile
-
-    out = {}
-    for elf_path in sorted((BUILD / "overlays").glob("*/*.elf")):
-        with open(elf_path, "rb") as fh:
-            symtab = ELFFile(fh).get_section_by_name(".symtab")
-            out[elf_path.stem] = {s.name: s["st_value"] for s in symtab.iter_symbols()
-                                  if s.name and s["st_shndx"] not in ("SHN_ABS", "SHN_UNDEF")}
-    return out
-
-
-def classify_overlay_assignment(a: Assignment, overlay: str, referenced: set[str],
-                                defined: set[str],
-                                own: list[tuple[int, int]], windows,
+def classify_overlay_assignment(a: Assignment, referenced: set[str], defined: set[str],
+                                own: list[tuple[int, int]], windows, abi: dict[str, int],
                                 main_syms: dict[str, int], main_addrs: set[int],
-                                main_abs: set[str], other: dict[str, int]) -> str:
+                                main_abs: dict[str, int]) -> str:
+    """How one assignment of an overlay's link_symbols script binds its name.
+
+    `main_same_name` follows main: the generator took the address from the
+    built main executable by name. `main_pinned_in_main_too` also comes from
+    main by name, but main itself still pins the symbol (main's debt). The
+    `abi_*` kinds are the loader contract listed in linkers/USA/overlay_abi.txt
+    and are not debt. `main_other_name`, `main_no_symbol` and
+    `other_window_unlisted` cannot be linked any more (the generator fails on
+    them) and stay at zero.
+    """
     if a.value is None:
         return "symbolic"
     if a.name not in referenced:
         return "unreferenced"
+    if a.name in defined:
+        return "provide_unused" if a.provide else "shadows_own_definition"
+    if abi.get(a.name) == a.value:
+        if any(lo <= a.value < hi for lo, hi in own):
+            return "abi_own_window"
+        return "abi_loader_contract"
     region = address_region(a.value)
     if region:
         return region
-    if a.name in defined:
-        return "provide_unused" if a.provide else "shadows_own_definition"
     if any(lo <= a.value < hi for lo, hi in own):
         return "own_overlay_pinned"
-    if other.get(a.name) == a.value:
-        return "other_overlay_symbol"
-    if in_program(a.value) and not any(lo <= a.value < hi for lo, hi, _ in windows):
-        if main_syms.get(a.name) == a.value:
-            return "main_same_name"
-        if a.value in main_addrs:
-            return "main_other_name"
-        if a.name in main_abs:
-            return "main_pinned_in_main_too"
-        return "main_no_symbol"
+    if any(lo <= a.value < hi for lo, hi, _ in windows):
+        return "other_window_unlisted"
+    if main_syms.get(a.name) == a.value:
+        return "main_same_name"
+    if main_abs.get(a.name) == a.value:
+        return "main_pinned_in_main_too"
     if in_program(a.value):
-        return "overlay_window_buffer"
+        return "main_other_name" if a.value in main_addrs else "main_no_symbol"
     return "outside_image"
 
 
 def overlay_audit(main_syms: dict[str, int], windows) -> dict:
-    """How each overlay learns main's (and other overlays') addresses."""
+    """How each overlay learns main's (and other overlays') addresses.
+
+    Every overlay links one generated script, link_symbols.<overlay>.txt:
+    main's addresses by name from the built main.elf, the ABI list, and its
+    own window (tools/scripts/overlay_link_symbols.py).
+    """
     stats = Counter()
     addresses = Counter()  # distinct addresses per overlay and category
     files = Counter()
     per_overlay = {}
     main_addrs = set(main_syms.values())
-    main_abs = absolute_symbols()
-    ovl_syms = overlay_symbols()
+    main_abs = absolute_symbol_values()
+    abi_path = LINKERS / "overlay_abi.txt"
+    abi = {a.name: a.value for a in parse_assignments(abi_path.read_text())} if abi_path.exists() else {}
+    stats["abi_file_entries"] = len(abi)
     main_targets: set[int] = set()
     for cfg in sorted(OVERLAY_CONFIGS.glob("*.yaml")):
         name = cfg.stem
-        assigns = []
-        for kind in ("undefined_funcs_auto", "undefined_syms_auto", "undefined_extra"):
-            path = LINKERS / "overlays" / f"{kind}.{name}.txt"
-            if path.exists():
-                got = parse_assignments(path.read_text(), path.name)
-                files[kind] += len(got)
-                assigns += got
+        path = LINKERS / "overlays" / f"link_symbols.{name}.txt"
+        assigns = parse_assignments(path.read_text(), path.name) if path.exists() else []
+        files["link_symbols"] += len(assigns)
         objdir = BUILD / "overlays" / name
         objects = sorted(objdir.rglob("*.o")) if objdir.exists() else []
-        if not objects:
+        if not objects or not path.exists():
             stats["overlays_not_built"] += 1
             continue
         defined, undefined, _common = nm_tables(objects)
+        if name in PIN_DEFINED_OVERLAYS:
+            # Their script also binds names their objects define.
+            undefined, defined = undefined | defined, set()
         own = [(lo, hi) for lo, hi, n in windows if n == name]
-        other = {}
-        for oname, syms in ovl_syms.items():
-            if oname != name:
-                for sname, addr in syms.items():
-                    other.setdefault(sname, addr)
         counts = Counter()
         targets = defaultdict(set)
         for a in assigns:
-            kind = classify_overlay_assignment(a, name, undefined, defined, own, windows, main_syms,
-                                               main_addrs, main_abs, other)
+            kind = classify_overlay_assignment(a, undefined, defined, own, windows, abi, main_syms,
+                                               main_addrs, main_abs)
             counts[kind] += 1
             targets[kind].add(a.value if a.value is not None else a.name)
             if kind.startswith("main_"):
@@ -554,6 +554,17 @@ def fixed_layout(ld_text: str, header_text: str) -> list[str]:
 
 # --------------------------------------------------------------------------
 # driver
+
+
+def absolute_symbol_values() -> dict[str, int]:
+    """Program-range symbols main.elf still pins (absolute), with values."""
+    from elftools.elf.elffile import ELFFile
+
+    with open(BUILD / "main.elf", "rb") as fh:
+        return {sym.name: sym["st_value"]
+                for sym in ELFFile(fh).get_section_by_name(".symtab").iter_symbols()
+                if sym.name and sym["st_shndx"] == "SHN_ABS"
+                and address_region(sym["st_value"]) is None}
 
 
 def absolute_symbols() -> set[str]:
@@ -649,9 +660,13 @@ def collect(with_relocs: bool = True) -> dict:
     report["linker_assignments"] = files
 
     # (b)
+    # Overlays link only their generated link_symbols script (splat's
+    # undefined_*_auto files are catalogues); names it takes from the built
+    # main executable follow main and are not pins.
     pinned = absolute_symbols()
-    for path in (LINKERS / "overlays").glob("*.txt"):
-        pinned |= {a.name for a in parse_assignments(path.read_text()) if a.value is not None}
+    for path in (LINKERS / "overlays").glob("link_symbols.*.txt"):
+        pinned |= {a.name for a in parse_assignments(path.read_text())
+                   if a.value is not None and main_syms.get(a.name) != a.value}
     main_src = sorted((ROOT / "src" / "main").rglob("*.[ch]")) + sorted((ROOT / "src" / "main").rglob("*.inc"))
     ovl_src = sorted((ROOT / "src" / "overlays").rglob("*.[ch]")) + sorted((ROOT / "src" / "overlays").rglob("*.inc"))
     inc = sorted((ROOT / "include").rglob("*.h"))

@@ -38,12 +38,12 @@ extern struct BattleEntity *D_8009D254;
 extern void *D_8019085C;
 int SceneE20_HoverOrbController(int mode, SceneE20TrailEffect *effect, SceneEffectSlot *command);
 extern SceneEffectSlot D_80190860[];
-int func_80071A54(void);
+int rand(void);
 #include "pe1/gte_types.h"
 void func_800D2B58(void *from, void *to, void *color0, void *color1, int scale0,
                   int scale1, int mode);
 
-void func_800C6EC0(int tpage,int clut);
+void FieldFx_ModelSetTexture(int tpage,int clut);
 #include "pe1/render_matrix_slot.h"
 
 extern s32 D_80190800;

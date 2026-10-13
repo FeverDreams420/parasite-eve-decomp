@@ -822,16 +822,16 @@ void func_80191854(void)
 {
 
     func_8019BD78();
-    if (func_8005BCB0() == 0)
+    if (Save_GetMetadataWindowIndex() == 0)
         D_8019C008 = 0;
     else
         D_8019C008 = 0xFF;
     if (g_FxCommonGameFlags & 0x40000000) {
         D_8019C008 = 0xFF;
-        func_800371A4(1);
+        Menu_SetEquipSlotIndex(1);
     } else {
         D_8019C008 = 0;
-        func_800371A4(0);
+        Menu_SetEquipSlotIndex(0);
     }
 
     D_8019CC52 = -1;
@@ -929,7 +929,7 @@ void func_80191854(void)
     func_80191C94();
 }
 
-int func_8006E7E8(void);
+int CdRom_PollReady(void);
 
 void func_80191C94(void) {
     FxAssetSource *resource = (FxAssetSource *)&D_800B0CD8;
@@ -943,7 +943,7 @@ first:
                                &D_801D0260, range[1] - range[0]);
     } while (result == -1);
     for (;;) {
-        result = func_8006E7E8();
+        result = CdRom_PollReady();
         if (result == 0) break;
         if (result == -1) goto first;
     }
@@ -957,7 +957,7 @@ second:
                                &D_8019CE10, range[1] - range[0]);
     } while (result == -1);
     for (;;) {
-        result = func_8006E7E8();
+        result = CdRom_PollReady();
         if (result == 0) return;
         if (result == -1) goto second;
     }
@@ -970,7 +970,7 @@ third:
                                &D_8019CE10, range[1] - range[0]);
     } while (result == -1);
     for (;;) {
-        result = func_8006E7E8();
+        result = CdRom_PollReady();
         if (result == 0) break;
         if (result == -1) goto third;
     }
@@ -1040,9 +1040,9 @@ void func_80191EFC(int handle, volatile s32 *state)
     scratch.vector.x = state[0];
     scratch.vector.y = state[1];
     scratch.vector.z = state[2];
-    func_8006DFA8(&scratch.vector, &scratch.valueA, &scratch.valueB);
-    func_800868F0(handle, 0, scratch.valueB);
-    func_80086A28(handle, 0, scratch.valueA);
+    Akao_Calc3DPan(&scratch.vector, &scratch.valueA, &scratch.valueB);
+    Akao_Cmd_A0(handle, 0, scratch.valueB);
+    Akao_Cmd_A2(handle, 0, scratch.valueA);
     *matrixSlot = savedMatrix;
     D_800BCFA8.distance = savedOutput;
     PopMatrix();

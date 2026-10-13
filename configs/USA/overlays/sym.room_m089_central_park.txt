@@ -1,5 +1,3 @@
-FieldFx_VecToAngle = 0x800DFF80; // absolute:True
-FieldFx_TurnToward = 0x800DFFB8; // absolute:True
 func_80193FF0 = 0x80193FF0; // type:func
 D_80194160 = 0x80194160;
 D_80194162 = 0x80194162;

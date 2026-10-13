@@ -69,7 +69,7 @@ extern RoomM023Template D_8018EFF4;
 /* Anchor vector room_m023 keeps in its scene script record. */
 #define RoomM023_ScriptAnchor (*(GteShortVector *)&g_RoomScriptRecord)
 
-extern int func_80071A54(void);
+extern int rand(void);
 extern int func_8018F004(int mode,
                          RoomM023DriftPulseCallbackView *particle);
 

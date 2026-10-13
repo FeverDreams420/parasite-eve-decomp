@@ -145,14 +145,14 @@ int func_80192A30(int mode, unsigned short *dst, unsigned short *src) {
             effect[20] = 0;
             effect[25] = 0;
             effect[24] = 0;
-            effect[26] = func_80071A54();
-            effect[3] = (func_80071A54() & 0x3FF) + 0x400;
-            if (func_80071A54() & 1) {
-                effect[7] = (func_80071A54() & 0x7F) + 0x1AC;
+            effect[26] = rand();
+            effect[3] = (rand() & 0x3FF) + 0x400;
+            if (rand() & 1) {
+                effect[7] = (rand() & 0x7F) + 0x1AC;
             } else {
-                effect[7] = -0x1AC - (func_80071A54() & 0x7F);
+                effect[7] = -0x1AC - (rand() & 0x7F);
             }
-            effect[27] = (func_80071A54() & 0x3FF) + 0x5DC;
+            effect[27] = (rand() & 0x3FF) + 0x5DC;
         }
     }
 
@@ -479,8 +479,8 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
                 child = func_800CE610(ANIM_POOL_AS(RoomM089SpawnChannel)->pool);
                 if (child) {
                     child->phase = 0;
-                    child->angle = (func_80071A54() & 0x7F) + (i << 8);
-                    child->radius = (func_80071A54() & 0xFF) + 0x1F4;
+                    child->angle = (rand() & 0x7F) + (i << 8);
+                    child->radius = (rand() & 0xFF) + 0x1F4;
                 }
             }
         }
@@ -488,8 +488,8 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             child = func_800CE610(ANIM_POOL_AS(RoomM089SpawnChannel)->pool);
             if (child) {
                 child->phase = 1;
-                child->x = (func_80071A54() & 0x7F) + 0x200;
-                child->y = func_80071A54();
+                child->x = (rand() & 0x7F) + 0x200;
+                child->y = rand();
                 child->z = 0;
             }
         }

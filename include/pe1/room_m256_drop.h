@@ -68,6 +68,6 @@ extern struct BattleEntity *D_8009D254;
 extern GteRotation D_8018F1CC;
 extern RoomM256DropColor D_8018F1D4;
 
-int func_80071A54(void);
+int rand(void);
 
 #endif

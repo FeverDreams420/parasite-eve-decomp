@@ -113,21 +113,21 @@ update: {
     case 0:                                         /* switch 1 */
         command->pending = 0;
         func_800CE870((char *)D_8009D254, 0, (s16 *)&point);
-        point.x = (func_80071A54() & 0x7FF) - 0x400;
-        point.y = ((u16) g_RoomFloorY->y - 0x258) - (func_80071A54() & 0x1FF);
-        point.z = (func_80071A54() & 0x7FF) - 0x400;
+        point.x = (rand() & 0x7FF) - 0x400;
+        point.y = ((u16) g_RoomFloorY->y - 0x258) - (rand() & 0x1FF);
+        point.z = (rand() & 0x7FF) - 0x400;
         effect->target.x = (s16) (u16) point.x;
         effect->target.y = (s16) (u16) point.y;
         effect->target.z = (s16) (u16) point.z;
         func_800CE870((char *)D_8009D254, 1, (s16 *)&effect->endpoint);
-        effect->duration = (func_80071A54() & 0xF) + 6;
+        effect->duration = (rand() & 0xF) + 6;
         effect->timer = 0;
         effect->phase = 1;
         break;
     case 1:                                         /* switch 1 */
         temp_v0_5 = (u16) effect->timer + 1;
         effect->timer = temp_v0_5;
-        if ((temp_v0_5 == 1) && (func_80071A54() & 1)) {
+        if ((temp_v0_5 == 1) && (rand() & 1)) {
             Asset_Find08w(0x5FF, func_800D3FD8(), effect->position.x, effect->position.y, (s32) effect->position.z);
         }
         temp_s3 = rsin((s32) (effect->timer << 0xA) / (s16) effect->duration);
@@ -225,10 +225,10 @@ update: {
                 temp_v0_12->position.x = (s16) (u16) effect->endpoint.x;
                 temp_v0_12->position.y = (s16) (u16) effect->endpoint.y;
                 temp_v0_12->position.z = (s16) (u16) effect->endpoint.z;
-                temp_v0_12->velocity.x = (func_80071A54() % 70) - 0x23;
-                temp_ret = func_80071A54();
+                temp_v0_12->velocity.x = (rand() % 70) - 0x23;
+                temp_ret = rand();
                 temp_v0_12->velocity.y = ((temp_ret / 70) * 0x46) - temp_ret;
-                temp_v0_13 = func_80071A54();
+                temp_v0_13 = rand();
                 temp_v0_12->kind = 2;
                 temp_v0_12->timer = 0;
                 temp_v0_12->velocity.z = (temp_v0_13 % 70) - 0x23;
@@ -362,7 +362,7 @@ block_63:
             } else {
                 var_a1_2 = temp_a1 + 2;
             }
-            func_800C6EC0(temp_s0, GetClut(0, var_a1_2) & 0xFFFF);
+            FieldFx_ModelSetTexture(temp_s0, GetClut(0, var_a1_2) & 0xFFFF);
             if (temp_s3 != 0xFF) FieldFx_ModelSetSemiTrans(1);
             else FieldFx_ModelSetSemiTrans(0);
             drawAngle = D_800E27EC * 0x60;

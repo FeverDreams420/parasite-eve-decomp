@@ -93,7 +93,7 @@ int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst) {
     switch (mode) {
     case 0:
         func_800CE870((char *)D_8009D254, 0, &burst->x);
-        func_8006DDCC(0x4B7, 0, burst->x, burst->y, burst->z);
+        Akao_SendPositionalCmdStereo(0x4B7, 0, burst->x, burst->y, burst->z);
         burst->state = 0;
         burst->timer = 0;
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 50,
@@ -112,9 +112,9 @@ int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->vx = func_80071A54() % 140 - 70;
-                    child->vy = func_80071A54() % 140 - 70;
-                    child->vz = func_80071A54() % 140 - 70;
+                    child->vx = rand() % 140 - 70;
+                    child->vy = rand() % 140 - 70;
+                    child->vz = rand() % 140 - 70;
                     child->state = (i & 3) == 0;
                     child->timer = 0;
                 }
@@ -254,9 +254,9 @@ int MenuCard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             return 1;
         case 1:
             spark->timer++;
-            spark->y -= (func_80071A54() & 7) + 5;
-            spark->x += (func_80071A54() & 7) - 3;
-            spark->z += (func_80071A54() & 7) - 3;
+            spark->y -= (rand() & 7) + 5;
+            spark->x += (rand() & 7) - 3;
+            spark->z += (rand() & 7) - 3;
             if ((s16)spark->timer < 16) break;
             return 1;
         case 2:
@@ -425,16 +425,16 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
             }
             if (flash->timer & 1) index = 8;
             else index = 21;
-            hand.z = -(func_80071A54() & 0x1FF);
+            hand.z = -(rand() & 0x1FF);
             FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, index, &hand, &from);
             child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = from.x;
                 child->y = from.y;
                 child->z = from.z;
-                child->vx = func_80071A54() % 16 - 8;
-                child->vy = func_80071A54() % 16 - 8;
-                child->vz = func_80071A54() % 16 - 8;
+                child->vx = rand() % 16 - 8;
+                child->vy = rand() % 16 - 8;
+                child->vz = rand() % 16 - 8;
                 child->state = 0;
                 child->timer = 0;
             }
@@ -636,9 +636,9 @@ int MenuCard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->vx = func_80071A54() % 50 - 25;
-                    child->vy = func_80071A54() % 50 - 25;
-                    child->vz = func_80071A54() % 50 - 25;
+                    child->vx = rand() % 50 - 25;
+                    child->vy = rand() % 50 - 25;
+                    child->vz = rand() % 50 - 25;
                     child->state = 1;
                     child->timer = 0;
                 }
@@ -651,13 +651,13 @@ int MenuCard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->angle = (func_80071A54() & 0x7FF) + 0x800;
-                    child->x += (func_80071A54() & 0x7F) - 64;
-                    child->y += (func_80071A54() & 0x7F) - 64;
-                    child->z += (func_80071A54() & 0x7F) - 64;
-                    child->vx = func_80071A54() % 190 - 95;
-                    child->vy = func_80071A54() % 190 - 95;
-                    child->vz = func_80071A54() % 190 - 95;
+                    child->angle = (rand() & 0x7FF) + 0x800;
+                    child->x += (rand() & 0x7F) - 64;
+                    child->y += (rand() & 0x7F) - 64;
+                    child->z += (rand() & 0x7F) - 64;
+                    child->vx = rand() % 190 - 95;
+                    child->vy = rand() % 190 - 95;
+                    child->vz = rand() % 190 - 95;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -825,7 +825,7 @@ int MenuCard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
             kind = D_800F336C;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800C6EC0(page, GetClut(224, palette));
+            FieldFx_ModelSetTexture(page, GetClut(224, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&p->rotation, &matrix);
             matrix.t[0] = offset.x;
@@ -865,7 +865,7 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
                              (FieldFxCallbackListCallback)MenuCard_SpinRingParticle);
     case 1:
         if (D_800E27EC == 3) {
-            func_8006DDCC(1201, 0, burst->x, burst->y, burst->z);
+            Akao_SendPositionalCmdStereo(1201, 0, burst->x, burst->y, burst->z);
         }
         if (D_800E27EC == 2) {
             child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
@@ -883,14 +883,14 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
             for (i = 0; i < 6; i++) {
                 child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
-                    child->x = (func_80071A54() & 0x7F) - 64;
+                    child->x = (rand() & 0x7F) - 64;
                     child->y = 0;
-                    child->z = (func_80071A54() & 0x1F) + 16;
+                    child->z = (rand() & 0x1F) + 16;
                     child->rotation.x = burst->rotation.x;
                     child->rotation.y = burst->rotation.y;
                     child->rotation.z = burst->rotation.z;
                     child->rotation.y += 0x400;
-                    child->rotation.x += func_80071A54();
+                    child->rotation.x += rand();
                     child->rotation.flags = 0;
                     child->state = 1;
                     child->timer = 0;
@@ -915,12 +915,12 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
                 child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = 0;
-                    child->y = (func_80071A54() & 0x7F) - 64;
-                    child->z = (func_80071A54() & 0x1F) + 16;
+                    child->y = (rand() & 0x7F) - 64;
+                    child->z = (rand() & 0x1F) + 16;
                     child->rotation.x = burst->rotation.x;
                     child->rotation.y = burst->rotation.y;
                     child->rotation.z = burst->rotation.z;
-                    child->rotation.y += func_80071A54();
+                    child->rotation.y += rand();
                     child->rotation.flags = 0;
                     child->state = 1;
                     child->timer = 0;

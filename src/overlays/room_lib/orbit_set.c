@@ -70,7 +70,7 @@ void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbit
     int packetValue;
     register int valueNeg42 asm("$5");
 
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
     owner = object->owner;
     state->owner = owner;
     source = owner->render_object.matrices;
@@ -135,13 +135,13 @@ void RoomEffect_OrbitSetDraw(void) {
 }
 
 void RoomEffect_OrbitSetUpdate(void *arg0, char *event) {
-    if (func_800C2B68() == 1) {
+    if (FieldFx_IsLastSlotHalted() == 1) {
         event[1] = 2;
     }
 }
 
 void RoomEffect_InitOrbitParticles(void *unused, void *unused2, RoomOrbitParticleState *state) {
-    RoomOrbitSetState *clock = func_800C2B50();
+    RoomOrbitSetState *clock = FieldFx_GetScriptContext();
     unsigned int i;
     RoomOrbitParticleLaneView *particle;
 
@@ -154,11 +154,11 @@ void RoomEffect_InitOrbitParticles(void *unused, void *unused2, RoomOrbitParticl
         particle->position.y = (u16)g_RoomFloorY->y;
         particle->position.z = clock->matrix.translation[2];
 
-        angle = func_80071A54() % 0x1000;
+        angle = rand() % 0x1000;
         particle->velocity.x = rsin(angle);
-        angle = func_80071A54() % 0x1000;
+        angle = rand() % 0x1000;
         particle->velocity.z = rcos(angle);
-        particle->velocity.angle = -(func_80071A54() % 8000 + 4000);
+        particle->velocity.angle = -(rand() % 8000 + 4000);
         i++;
         particle = (RoomOrbitParticleLaneView *)(&particle->position + 1);
     }
@@ -180,7 +180,7 @@ void RoomEffect_DrawOrbitParticles(
     short *position;
     unsigned int i;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
 
     i = 0;
     depthSlot = (unsigned short *)&g_RoomOrbitParticlePacket.depth;
@@ -265,21 +265,21 @@ void RoomEffect_InitOrbitBurst(
     short *particle;
     unsigned int i;
 
-    view = func_800C2B50();
+    view = FieldFx_GetScriptContext();
     i = 0;
     particle = (short *)state;
     while (i < 8) {
         particle[0] = view->baseX;
         particle[1] = g_RoomFloorY->y;
         particle[2] = view->baseZ;
-        particle[0x20] = func_80071A54() % 0x2000 - 0x1000;
-        particle[0x22] = func_80071A54() % 0x2000 - 0x1000;
-        particle[0x21] = -(func_80071A54() % 8000 + 8000);
+        particle[0x20] = rand() % 0x2000 - 0x1000;
+        particle[0x22] = rand() % 0x2000 - 0x1000;
+        particle[0x21] = -(rand() % 8000 + 8000);
         particle[0x40] = 0;
         particle[0x41] = 0;
-        particle[0x42] = func_80071A54() % 0x1000;
+        particle[0x42] = rand() % 0x1000;
         state->active[i] = 1;
-        state->frame[i] = func_80071A54() % 3;
+        state->frame[i] = rand() % 3;
         i++;
         particle += 4;
     }
@@ -301,7 +301,7 @@ void RoomEffect_DrawOrbitBurst(
     unsigned char *configB;
     unsigned int i;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
 
     i = 0;
     configA = &g_RoomOrbitBurstPacket.code;
@@ -376,7 +376,7 @@ void RoomEffect_UpdateOrbitBurst(
             lane->position[2] += zStep;
             lane->velocity[1] += 0x190;
             lane->secondary[2] +=
-                func_80071A54() % 0x200;
+                rand() % 0x200;
             if ((short)lane->position[1] > g_RoomFloorY->y) {
                 state->count--;
                 state->active[i] = 0;
@@ -414,7 +414,7 @@ void RoomEffect_InitOrbitSprite(
     unsigned short position[4];
     RoomLibOrbitView *view;
 
-    view = func_800C2B50();
+    view = FieldFx_GetScriptContext();
     seed0 = s_OrbitSpriteSeed0;
     seed1 = s_OrbitSpriteSeed1;
     seed2 = s_OrbitSpriteSeed2;
@@ -449,7 +449,7 @@ void RoomEffect_DrawOrbitSprite(
     RoomOrbitSetState *owner;
     u8 *drawSlot;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);

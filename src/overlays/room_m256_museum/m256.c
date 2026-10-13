@@ -121,50 +121,50 @@ int func_80192844(int mode, RoomM256Drop *drop) {
             drop->x += drop->vx;
             drop->y += drop->vy;
             drop->z += drop->vz;
-            drop->x += (func_80071A54() & 0x1F) - 0x10;
-            drop->y += (func_80071A54() & 0x1F) - 0x10;
-            drop->z += (func_80071A54() & 0x1F) - 0x10;
+            drop->x += (rand() & 0x1F) - 0x10;
+            drop->y += (rand() & 0x1F) - 0x10;
+            drop->z += (rand() & 0x1F) - 0x10;
             if (drop->y >= g_RoomFloorY->y - 0x10 || drop->timer >= 0x18) {
                 drop->state = 1;
                 drop->y = g_RoomFloorY->y - 0x10;
                 drop->vy = 0;
             }
             if (drop->timer & 1) {
-                if ((func_80071A54() & 7) == 0) {
+                if ((rand() & 7) == 0) {
                     child = func_800CE610(ANIM_POOL_AS(RoomM256DropSpawnChannel)->pool);
                     if (child) {
                         child->x = drop->x;
                         child->y = drop->y;
                         child->z = drop->z;
-                        child->vx = drop->vx / 2 + (func_80071A54() & 0x1F) - 0x10;
-                        child->vy = drop->vy / 2 + (func_80071A54() & 0x1F) - 0x10;
-                        child->vz = drop->vz / 2 + (func_80071A54() & 0x1F) - 0x10;
+                        child->vx = drop->vx / 2 + (rand() & 0x1F) - 0x10;
+                        child->vy = drop->vy / 2 + (rand() & 0x1F) - 0x10;
+                        child->vz = drop->vz / 2 + (rand() & 0x1F) - 0x10;
                         child->state = 2;
                         child->timer = 0;
                     }
                 }
-                if ((func_80071A54() & 7) == 1) {
+                if ((rand() & 7) == 1) {
                     child = func_800CE610(ANIM_POOL_AS(RoomM256DropSpawnChannel)->pool);
                     if (child) {
                         child->x = drop->x;
                         child->y = drop->y;
                         child->z = drop->z;
-                        child->vx = (func_80071A54() & 0x1F) - 0x10;
-                        child->vy = (func_80071A54() & 0x1F) - 0x10;
-                        child->vz = (func_80071A54() & 0x1F) - 0x10;
+                        child->vx = (rand() & 0x1F) - 0x10;
+                        child->vy = (rand() & 0x1F) - 0x10;
+                        child->vz = (rand() & 0x1F) - 0x10;
                         child->state = 3;
                         child->timer = 0;
                     }
                 }
-                if ((func_80071A54() & 0xF) == 2) {
+                if ((rand() & 0xF) == 2) {
                     child = func_800CE610(ANIM_POOL_AS(RoomM256DropSpawnChannel)->pool);
                     if (child) {
                         child->x = drop->x;
                         child->y = drop->y;
                         child->z = drop->z;
-                        child->vx = (func_80071A54() & 0x1F) - 0x10;
-                        child->vy = (func_80071A54() & 0x1F) - 0x18;
-                        child->vz = (func_80071A54() & 0x1F) - 0x10;
+                        child->vx = (rand() & 0x1F) - 0x10;
+                        child->vy = (rand() & 0x1F) - 0x18;
+                        child->vz = (rand() & 0x1F) - 0x10;
                         child->state = 4;
                         child->timer = 0;
                     }
@@ -179,8 +179,8 @@ int func_80192844(int mode, RoomM256Drop *drop) {
             drop->x += drop->vx;
             drop->y += drop->vy;
             drop->z += drop->vz;
-            drop->x += (func_80071A54() & 0x1F) - 0x10;
-            drop->z += (func_80071A54() & 0x1F) - 0x10;
+            drop->x += (rand() & 0x1F) - 0x10;
+            drop->z += (rand() & 0x1F) - 0x10;
             ROOM_M256_DROP_FLASH(0x26C);
             if (Geo_PointInPoly(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
             if (drop->timer >= 0x20) return 1;
@@ -248,7 +248,7 @@ int func_80192844(int mode, RoomM256Drop *drop) {
                               (s16)D_800F3368.parameter02 * (drop->timer / 4),
                               GetClut(0, palette), 1, 0x72, 0);
             }
-            if (func_80071A54() & 3) return 0;
+            if (rand() & 3) return 0;
             func_800D004C((GteShortVector *)drop, 0xFA, 0xFA, 5, 0, width, width, (struct RenderColor *)&color, 0,
                           rcos(drop->timer << 5) / 32, 3);
             return 0;
@@ -346,14 +346,14 @@ int func_801934AC(int mode, u16 *counter) {
         pool = ANIM_POOL_AS(RoomOrbitPairChannel)->pool;
         child = func_800CE610(pool);
         if (child) {
-            distance = (func_80071A54() & 7) + 0x37;
+            distance = (rand() & 7) + 0x37;
             child->x = position[0];
             child->y = position[1];
             child->z = position[2];
             angles[0] = target[0];
             angles[1] = target[1];
             angles[2] = target[2];
-            spread = func_80071A54() & 0x1F;
+            spread = rand() & 0x1F;
             angles[1] += spread - 0x10;
             func_800CFB7C((GteShortVector *)angles, distance, (GteShortVector *)&child->vx);
             child->parity = *counter & 1;
@@ -409,8 +409,8 @@ int func_8019377C(int mode, RoomM256SwirlSpark *spark) {
                 bounce = -(s16)fall;
                 spark->vy = bounce;
             }
-            spark->x += (func_80071A54() & 1) * 2 - 1;
-            spark->z += (func_80071A54() & 1) * 2 - 1;
+            spark->x += (rand() & 1) * 2 - 1;
+            spark->z += (rand() & 1) * 2 - 1;
             if ((s16)spark->timer < 8) break;
             return 1;
         case 1:
@@ -515,25 +515,25 @@ int func_80193BFC(int mode, s16 *counter) {
                 child->z = position.z;
                 switch (*counter) {
                 case 0:
-                    distance = (func_80071A54() & 7) + 14;
+                    distance = (rand() & 7) + 14;
                     angles.x = base.x;
                     angles.y = base.y;
                     angles.z = base.z;
-                    angles.y += (func_80071A54() & 0x7F) - 0x40;
+                    angles.y += (rand() & 0x7F) - 0x40;
                     break;
                 case 1:
-                    distance = (func_80071A54() & 0xF) + 10;
+                    distance = (rand() & 0xF) + 10;
                     angles.x = base.x;
                     angles.y = base.y;
                     angles.z = base.z;
-                    angles.y += (func_80071A54() & 0x7F) + 0x3C0;
+                    angles.y += (rand() & 0x7F) + 0x3C0;
                     break;
                 case 2:
-                    distance = (func_80071A54() & 0xF) + 10;
+                    distance = (rand() & 0xF) + 10;
                     angles.x = base.x;
                     angles.y = base.y;
                     angles.z = base.z;
-                    angles.y -= (func_80071A54() & 0x7F) + 0x3C0;
+                    angles.y -= (rand() & 0x7F) + 0x3C0;
                     break;
                 }
                 func_800CFB7C(&angles, distance, (GteShortVector *)&child->vx);
@@ -547,22 +547,22 @@ int func_80193BFC(int mode, s16 *counter) {
                 child->z = position.z;
                 switch (*counter & 1) {
                 case 0:
-                    distance = (func_80071A54() & 0xF) + 0x10;
+                    distance = (rand() & 0xF) + 0x10;
                     angles.x = base.x;
                     angles.y = base.y;
                     angles.z = base.z;
-                    angles.y += (func_80071A54() & 0xFF) + 0x380;
+                    angles.y += (rand() & 0xFF) + 0x380;
                     break;
                 case 1:
-                    distance = (func_80071A54() & 0xF) + 0x10;
+                    distance = (rand() & 0xF) + 0x10;
                     angles.x = base.x;
                     angles.y = base.y;
                     angles.z = base.z;
-                    angles.y -= (func_80071A54() & 0xFF) + 0x380;
+                    angles.y -= (rand() & 0xFF) + 0x380;
                     break;
                 }
                 func_800CFB7C(&angles, distance, (GteShortVector *)&child->vx);
-                child->small = func_80071A54() & 1;
+                child->small = rand() & 1;
                 child->state = 1;
                 child->timer = 0;
             }
@@ -687,8 +687,8 @@ s32 func_801940B0(int mode, void *effect) {
             state->motionY = angles.y;
             state->motionZ = angles.z;
             state->motionY = (u16) (state->motionY + 0x800);
-            func_800D3AFC(&D_80195EFC[state->index], historyCount, historyPosition, 1);
-            state->speed = (s16) ((func_80071A54() & 7) + 8);
+            FieldFx_UpdatePointHistory(&D_80195EFC[state->index], historyCount, historyPosition, 1);
+            state->speed = (s16) ((rand() & 7) + 8);
             state->angle = 0;
             particle = func_800CE610(D_800F33E0->end);
 
@@ -745,7 +745,7 @@ s32 func_801940B0(int mode, void *effect) {
                 if (nextEnding >= 0x10) return 1;
             }
             {
-                func_800D3AFC(history, 0x10, state, 0);
+                FieldFx_UpdatePointHistory(history, 0x10, state, 0);
                 if ((func_800C6B90(state, 0x64) != 0) && (state->y >= (g_RoomFloorY->y - 0x202)) && (D_800E2368->flags != 0) && ((D_800F32D0->actor->state->core_flags & 0x3F000000) == 0x01000000)) {
                     trailPlayerState = g_PlayerEntity->state;
                     trailPlayerState->flags = (s32) (trailPlayerState->flags | 0x4000);
@@ -775,23 +775,23 @@ s32 func_801940B0(int mode, void *effect) {
                     }
                     particle = func_800CE610(D_800F33E0->end);
                     if (particle != 0) {
-                        random = func_80071A54();
+                        random = rand();
                         historyIndexX = state->index;
                         particle->x = (u16) *(s16 *)(D_80195F1C + (((historyIndexX * 0x11) + (random & 3)) * 8));
-                        random = func_80071A54();
+                        random = rand();
                         historyIndexY = state->index;
                         particle->y = (u16) *(s16 *)(D_80195F1E + (((historyIndexY * 0x11) + (random & 3)) * 8));
-                        random = func_80071A54();
+                        random = rand();
                         historyIndexZ = state->index;
                         particle->z = (u16) *(s16 *)(D_80195F20 + (((historyIndexZ * 0x11) + (random & 3)) * 8));
-                        particle->x = (u16) (particle->x - 0x40 + (func_80071A54() & 0x7F));
-                        particle->y = (u16) (particle->y - 0x40 + (func_80071A54() & 0x7F));
-                        particle->z = (u16) (particle->z - 0x40 + (func_80071A54() & 0x7F));
-                        randomVelocityX = func_80071A54();
+                        particle->x = (u16) (particle->x - 0x40 + (rand() & 0x7F));
+                        particle->y = (u16) (particle->y - 0x40 + (rand() & 0x7F));
+                        particle->z = (u16) (particle->z - 0x40 + (rand() & 0x7F));
+                        randomVelocityX = rand();
                         particle->motionX = (s16) (((randomVelocityX % 60)) - 0x1E);
-                        randomVelocityY = func_80071A54();
+                        randomVelocityY = rand();
                         particle->motionY = (s16) (((randomVelocityY % 60)) - 0x1E);
-                        randomVelocityZ = func_80071A54();
+                        randomVelocityZ = rand();
                         particle->kind = 2;
                         particle->frame = 0;
                         particle->motionZ = (s16) (((randomVelocityZ % 60)) - 30);
@@ -912,7 +912,7 @@ checkLifetime:
             func_800D3114(D_80195EFC[state->index].point, 0x10, 0xF0, 0, 0x60, 0xFF, 0xF, (s32) D_800E2850[D_800E11EA], GetClut(0x30, trailClutY) & 0xFFFF, 0x80, (RenderColor *)&color.r, (RenderColor *)&darkColor.r, 1);
             fade = ((D_800E27EC & 1) << 5) + 0x60;
             func_800D004C((GteShortVector *)state, 0x190, 0x190, 8, 0, 0x1000, 0x1000, (RenderColor *)&color.r, 0, fade, 1);
-            historySample = D_80195EFC[0].point + (func_80071A54() & 7);
+            historySample = D_80195EFC[0].point + (rand() & 7);
             func_800D004C((void *)((unsigned)(state->index * 0x88) + (unsigned)historySample), 0x1F4, 0x1F4, 6, 0, 0x1000, 0x1000, (RenderColor *)&color.r, 0, (u32)fade >> 1, 1);
             return 0;
         case 1:
@@ -998,7 +998,7 @@ checkLifetime:
                     modelClutY += 4;
                 }
             }
-            func_800C6EC0(modelPage, GetClut(0x70, modelClutY) & 0xFFFF);
+            FieldFx_ModelSetTexture(modelPage, GetClut(0x70, modelClutY) & 0xFFFF);
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&state->motionX, &transform);
             transform.t[0] = (s32) state->x;
@@ -1212,8 +1212,8 @@ int func_80195728(int mode, s16 *state) {
                 child = slot;
                 if (child) {
                     child->frame = 0;
-                    child->scale = (func_80071A54() & 0x1FF) + 0x200;
-                    child->offset = func_80071A54();
+                    child->scale = (rand() & 0x1FF) + 0x200;
+                    child->offset = rand();
                 }
             }
         }
@@ -1279,7 +1279,7 @@ int func_80195728(int mode, s16 *state) {
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 clut = GetClut(0x50, palette);
-                func_800C6EC0(page, clut);
+                FieldFx_ModelSetTexture(page, clut);
             }
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&D_80196098, &matrix);

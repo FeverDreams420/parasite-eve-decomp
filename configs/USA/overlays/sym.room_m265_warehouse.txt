@@ -1,5 +1,3 @@
-FieldFx_VecToAngle = 0x800DFF80;
-FieldFx_TurnToward = 0x800DFFB8;
 RoomLib_SlotTable = 0x80194134;
 RoomLib_HandlerDNop0 = 0x8018F1F0; // type:func
 RoomLib_InitHandlerD = 0x8018F1F8; // type:func

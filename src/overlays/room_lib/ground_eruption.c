@@ -83,7 +83,7 @@ void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, RoomEruptionActor
     RoomSpriteMatrix *workMatrix;
 
     asm("" : "=r"(workState) : "0"(state));
-    func_800C2B40(workState);
+    FieldFx_SetScriptContext(workState);
     workState->cooldown = 0;
     workState->collisionState = 0;
     workState->reload = *FieldFx_VarPtr(5);
@@ -184,7 +184,7 @@ void RoomEffect_GroundEruptionTick(RoomEnt *ent, unsigned char *signal,
         work->h2C = 0;
     }
 
-    if (func_800C2B68() == 1) {
+    if (FieldFx_IsLastSlotHalted() == 1) {
         signal[1] = 2;
     }
 }
@@ -219,7 +219,7 @@ void RoomEffect_GroundEruptionTransformColumn(void *arg0, void *arg1,
     RoomEruptionActor *owner;
 
     workState = state;
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     stack.seed = s_EruptionColumnSeed;
 
     stack.scaleMatrix.m[2][2] = 0x1000;
@@ -286,7 +286,7 @@ void RoomEffect_GroundEruptionUpdateColumn(
     RoomEruptionActor *actor;
     s16 value;
 
-    actor = func_800C2B50();
+    actor = FieldFx_GetScriptContext();
     if (script->frame >= 9) {
         value = effect->depth;
         if (value >= 0x21) {
@@ -311,7 +311,7 @@ void RoomEffect_GroundEruptionUpdateColumn(
 
 void RoomEffect_GroundEruptionInitGlow(void *unused0, void *unused1,
                                        RoomEruptionGlow *state) {
-    RoomEruptionActor *obj = func_800C2B50();
+    RoomEruptionActor *obj = FieldFx_GetScriptContext();
     int tmp;
     int cst;
 
@@ -332,7 +332,7 @@ void RoomEffect_GroundEruptionDrawGlow(void) {
     RoomFxVec4 scale;
     RoomEruptionActor *owner;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
@@ -372,7 +372,7 @@ void RoomEffect_GroundEruptionInitRing(void *arg0, void *arg1,
     unsigned int i;
     int angle;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     for (i = 0; i < 0x10; i++) {
         angle = i << 9;
         ring->point[i].x = owner->matrix.t[0];
@@ -408,7 +408,7 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     u8 code;
 
     workState = state;
-    rawOwner = func_800C2B50();
+    rawOwner = FieldFx_GetScriptContext();
     i = 0;
     depthAddress = (char *)&g_RoomEruptionRingPacket.depth;
     PE1_COMPILER_USE(depthAddress);
@@ -512,7 +512,7 @@ void RoomEffect_GroundEruptionUpdateRing(void *arg0, unsigned char *signal,
 
 void RoomEffect_GroundEruptionInitShadow(void *unused0, void *unused1,
                                          RoomEruptionShadow *state) {
-    RoomEruptionActor *obj = func_800C2B50();
+    RoomEruptionActor *obj = FieldFx_GetScriptContext();
     unsigned int i;
     GteShortVector *entries = state->point;
 
@@ -540,7 +540,7 @@ void RoomEffect_GroundEruptionDrawShadow(
     unsigned short *depthSlot;
     RenderMatrixSlot *matrixSlot;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     stack.seed = s_EruptionShadowSeed;
     RotMatrix(&stack.seed.vector, &stack.generatedMatrix);
     func_800C2EAC(owner->asset.page);
@@ -584,7 +584,7 @@ void RoomEffect_GroundEruptionInitDebris(void *arg0, void *arg1, RoomEruptionDeb
     int angle;
     int wave;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     FieldFx_VarPtr(0);
     angle = rand() % 0x1000;
     for (i = 0; i < 6; i++) {
@@ -621,7 +621,7 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, RoomEruptionDeb
     u8 code;
     u8 mode;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     depth = 0x80;
     i = 0;
     code = 0x42;

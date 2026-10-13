@@ -1,6 +1,3 @@
-GetClut = 0x80077AA4; // type:func
-FieldFx_VecToAngle = 0x800DFF80;
-FieldFx_TurnToward = 0x800DFFB8;
 RoomM318_SetScriptArg2 = 0x8019937C; // type:func
 g_RoomM318ScriptArg2 = 0x80199938;
 func_80199218 = 0x80199218; // type:func
@@ -69,4 +66,3 @@ RoomLib_ReleaseHandlerA = 0x8019253C; // type:func
 RoomLib_HandlerANop6 = 0x80192558; // type:func
 RoomLib_SetArg1 = 0x80199294; // type:func
 g_RoomScriptArg = 0x8019992C;
-g_PlayerEntity = 0x8009D254;

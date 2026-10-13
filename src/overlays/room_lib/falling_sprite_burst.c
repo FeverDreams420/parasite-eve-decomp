@@ -30,7 +30,7 @@ void RoomEffect_FallingBurstInit(void *arg0, int unused, void *arg2) {
     RoomFallingBurstClock *state = arg2;
     RoomFallingBurstEntity *self = arg0;
 
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
     state->asset.index = Asset_SearchByKeyType(0x28);
     state->cooldown = 0;
     state->hit = 0;
@@ -108,7 +108,7 @@ void RoomEffect_InitFallingSprite(void *entity, void *unused,
     FieldActor **root;
     RenderMatrix *view;
 
-    root = func_800C2B50();
+    root = FieldFx_GetScriptContext();
     positionSeed = s_FallingSpritePositionSeed;
     velocitySeed = s_FallingSpriteVelocitySeed;
     view = &(*root)->render_object.matrices[5];
@@ -124,9 +124,9 @@ void RoomEffect_InitFallingSprite(void *entity, void *unused,
     state->active = 0;
 
     if (*FieldFx_RegPtr(1) == 0) {
-        state->velocityX = func_80071A54() % 10 - 5;
+        state->velocityX = rand() % 10 - 5;
         state->velocityY = 0;
-        state->velocityZ = func_80071A54() % 10 - 5;
+        state->velocityZ = rand() % 10 - 5;
     } else {
         ApplyMatrixSV((GteMatrix *)view, &velocitySeed.vector,
                       &velocity);
@@ -147,7 +147,7 @@ void RoomEffect_DrawFallingSprite(void *unused0, void *unused1,
     RoomFxVec4 scale;
     RoomFallingBurstClock *owner;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x10, 0x10);
     func_800C3098(0x10);
@@ -227,7 +227,7 @@ void RoomEffect_UpdateFallingSprite(void *entity, RoomFallingBurstControl *contr
             state->active = 1;
 
             {
-                RoomFallingBurstDecal *shimmer = func_800C2B90(
+                RoomFallingBurstDecal *shimmer = FieldFx_StartSlot(
                     self, 3, (unsigned short *)g_RoomSpawnLayout,
                     g_RoomInitList);
                 if (shimmer != 0) {
@@ -238,7 +238,7 @@ void RoomEffect_UpdateFallingSprite(void *entity, RoomFallingBurstControl *contr
             }
 
             {
-                RoomFallingBurstDecal *pulse = func_800C2B90(
+                RoomFallingBurstDecal *pulse = FieldFx_StartSlot(
                     self, 2, (unsigned short *)g_RoomSpawnLayout,
                     g_RoomInitList);
                 if (pulse != 0) {
@@ -248,7 +248,7 @@ void RoomEffect_UpdateFallingSprite(void *entity, RoomFallingBurstControl *contr
                 }
             }
 
-            burst = func_800C2B90(
+            burst = FieldFx_StartSlot(
                 self, 4, (unsigned short *)g_RoomSpawnLayout,
                 g_RoomInitList);
             if (burst != 0) {
@@ -287,7 +287,7 @@ void RoomEffect_DrawImpactShimmer(void *arg0, void *arg1, RoomSpriteFxParams *fx
     RoomFxVec4 scale;
     RoomFallingBurstClock *owner;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     seed = s_FloorDecalRotation;
     func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
@@ -313,7 +313,7 @@ void RoomEffect_DrawImpactShimmer(void *arg0, void *arg1, RoomSpriteFxParams *fx
 /* Grows the shimmer; in its last thirty ticks it fades in and ends. */
 void RoomEffect_UpdateImpactShimmer(int a, RoomFallingBurstControl *st,
                                 RoomFallingBurstDecal *c) {
-    RoomFallingBurstClock *r = func_800C2B50();
+    RoomFallingBurstClock *r = FieldFx_GetScriptContext();
     c->shimmerScale += 3;
     if (r->tick - 0x1E < st->endTick) {
         unsigned char v = c->shimmerPhase + 8;
@@ -340,7 +340,7 @@ void RoomEffect_DrawGroundPulse(void *unused0, void *unused1,
     RoomFxVec4 scale;
     RoomFallingBurstClock *owner;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     matrixPtr = &matrix;
     seed = s_FloorDecalRotation;
     func_800C2EAC(owner->asset.page);
@@ -367,7 +367,7 @@ void RoomEffect_DrawGroundPulse(void *unused0, void *unused1,
  * flags the clock when the pulse touches the player. */
 void RoomEffect_UpdateGroundPulse(int unused, RoomFallingBurstControl *state,
                               RoomFallingBurstDecal *fx) {
-    RoomFallingBurstClock *clock = func_800C2B50();
+    RoomFallingBurstClock *clock = FieldFx_GetScriptContext();
     if (clock->tick - 0x3C < state->endTick) {
         if (fx->pulseDepth >= 5) {
             fx->pulseDepth -= 4;
@@ -410,16 +410,16 @@ void RoomEffect_InitImpactParticles(int unused, void *state,
     for (i = 0; i < 6; i++) {
         fx->active[i] = 1;
         fx->depth[i] = 0x80;
-        fx->velocity[i].x = func_80071A54() % 31 - 15;
-        fx->velocity[i].y = -(func_80071A54() % 100 + 50);
-        fx->velocity[i].z = func_80071A54() % 31 - 15;
+        fx->velocity[i].x = rand() % 31 - 15;
+        fx->velocity[i].y = -(rand() % 100 + 50);
+        fx->velocity[i].z = rand() % 31 - 15;
     }
 }
 
 /* Draws each live particle and its dimmer reflection on the floor. */
 void RoomEffect_DrawImpactParticles(int unused, void *state,
                                 RoomFallingBurstParticles *fx) {
-    RoomFallingBurstClock *clock = func_800C2B50();
+    RoomFallingBurstClock *clock = FieldFx_GetScriptContext();
     unsigned int i;
     func_800C2EAC(clock->asset.page);
     func_800C2FF0(0x10, 0x10);

@@ -38,8 +38,8 @@ void RoomEffect_UpdateParticleMotion(int arg0, RoomStatePair *control, RoomMotio
     i = 0;
     if (stateReg->count != 0) {
         do {
-            stateReg->lookup[i].id = func_80071A54() % 8;
-            stateReg->lookup[i].pad = func_80071A54() % 8;
+            stateReg->lookup[i].id = rand() % 8;
+            stateReg->lookup[i].pad = rand() % 8;
             count = stateReg->count;
             i++;
         } while (i < count);
@@ -121,7 +121,7 @@ void RoomEffect_InitParticleRenderPair(
 
     callOwner = owner;
     workState = state;
-    root = func_800C2B50();
+    root = FieldFx_GetScriptContext();
     firstMatrix = *(RoomSpriteMatrix *)root->actor->transforms;
     secondMatrix = *(RoomSpriteMatrix *)root->actor->transforms;
 
@@ -163,7 +163,7 @@ void RoomEffect_DrawParticleRenderPair(void *arg0, void *arg1, char *sys) {
     char *sysp = sys;
     RoomParticlePairOwner *root;
 
-    root = func_800C2B50();
+    root = FieldFx_GetScriptContext();
     func_800C2EAC(root->page);
     func_800C2FF0(0x10, 0x40);
     func_800C3098(0x10);
@@ -185,7 +185,7 @@ void RoomEffect_UpdateParticleRenderPair(void *arg0, char *state, char *sys) {
     int result;
     int ret;
 
-    root = func_800C2B50();
+    root = FieldFx_GetScriptContext();
     resultp = &result;
     global = (RoomSharedGlobalState *)D_8009D254;
     value0 = global->field2A;

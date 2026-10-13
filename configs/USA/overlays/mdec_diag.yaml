@@ -13,7 +13,9 @@ options:
   build_path: build/USA/overlays/mdec_diag
   ld_script_path: linkers/USA/overlays/mdec_diag.ld
   undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.mdec_diag.txt
-  symbol_addrs_path: configs/USA/overlays/sym.mdec_diag.txt
+  symbol_addrs_path:
+    - configs/USA/overlays/sym.mdec_diag.txt
+    - configs/USA/sym.main.txt
   undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.mdec_diag.txt
   find_file_boundaries: True
   disassemble_all: True

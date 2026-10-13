@@ -202,7 +202,7 @@ void RoomEffect_ModelUpdate(RoomFxModelGeom *geom) {
     gte_ldclmv(&g_RoomFxMirrorAxes.m[0][2]);
     gte_rtir();
     gte_stclmv(&geom->matrix.m[0][2]);
-    func_80039B74(geom, owner->animation, owner->matrix_count, 1);
+    Anim_BuildRotationMatrices(geom, owner->animation, owner->matrix_count, 1);
 }
 
 /* PSY-Q libgpu style ordering-table link through the 24-bit tag address. */

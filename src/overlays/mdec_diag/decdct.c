@@ -108,16 +108,12 @@ s32 func_8010C078(s32 mode) {
     return result;
 }
 
-void func_80073CF4(int mode, void *value);
-
 void func_8010C0B4(void *value) {
-    func_80073CF4(0, value);
+    DMACallback(0, value);
 }
 
-void func_80073CF4(int mode, void *value);
-
 void func_8010C0D8(void *value) {
-    func_80073CF4(1, value);
+    DMACallback(1, value);
 }
 
 void MdecDiag_Reset(int mode)
@@ -139,7 +135,7 @@ void MdecDiag_Reset(int mode)
         *D_8010DB50 = 0x60000000;
         break;
     default:
-        func_80071A74(D_8010BCFC, mode);
+        printf(D_8010BCFC, mode);
     }
 }
 

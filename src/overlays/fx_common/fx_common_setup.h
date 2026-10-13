@@ -23,8 +23,8 @@ extern FxCommonSceneIds g_FxCommonSceneIds asm("D_800A77F4");
 extern u32 g_FxCommonGameFlags asm("D_800B0CD8");
 extern s32 D_8019C000;
 extern s32 D_8019C004;
-int func_8005BCB0(void);
-void func_800371A4(int enabled);
+int Save_GetMetadataWindowIndex(void);
+void Menu_SetEquipSlotIndex(int enabled);
 void func_8019BD78(void);
 void func_80191C94(void);
 extern s32 D_8019BFF4;
@@ -79,7 +79,7 @@ extern FxCommonNode *D_801EA580;
 extern FxCommonNode *D_801EA584;
 extern FxCommonNode *D_801EA588;
 extern FxCommonNode *D_801EA58C;
-void func_800371B0(void *);
+void Render_SetupFogLayer(void *);
 void SetFogNearFar(int,int,int);
 void SetBackColor(int,int,int);
 void SetFarColor(int,int,int);
@@ -147,7 +147,7 @@ typedef struct FxCommonFixedVec {
 } FxCommonFixedVec;
 
 extern FxCommonFixedVec g_FxCommonMotionWhole[10];
-void func_80077BE4(FxCommonMarkerQuad *packet);
+void SetPolyGT4(FxCommonMarkerQuad *packet);
 int RotTransPers3(GteShortVector *v0, GteShortVector *v1, GteShortVector *v2,
                   s32 *sxy0, s32 *sxy1, s32 *sxy2, s32 *p, s32 *flag);
 

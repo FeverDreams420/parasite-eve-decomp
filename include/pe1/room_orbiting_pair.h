@@ -53,7 +53,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOrbitPairEventState, active) == 0xD,
 PE1_STATIC_ASSERT(sizeof(RoomOrbitPairParticle) == 0x14,
                   room_orbit_pair_particle_size);
 
-extern int func_80071A54(void);
+extern int rand(void);
 
 extern const RoomOrbitPairTemplate8 D_8018F208;
 int func_801934AC(int mode, u16 *counter);

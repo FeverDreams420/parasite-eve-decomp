@@ -111,14 +111,14 @@ void RoomEffect_GrabStartOnProximity(RoomMotionTrigger *arg) {
         RenderMatrix *rotationMatrix;
         FieldActor *actor;
 
-        func_8003E0FC(&arg->source_actor->render_object, 6, sp);
+        Render_FindAnimEntry(&arg->source_actor->render_object, 6, sp);
         sp->x <<= 16;
         sp->z <<= 16;
         if (func_800DFE20((Vec3Fixed *)&GRAB_PLAYER->pos_x, (Vec3Fixed *)sp) >= 0x100) {
             return;
         }
         arg->callback = RoomEffect_GrabHold;
-        func_80020C74();
+        Battle_BeginPlayerAction();
 
         actor = GRAB_PLAYER;
         actor->render_object.animation_source = &arg->source_actor->render_object;
@@ -218,9 +218,9 @@ void RoomEffect_GrabHold(RoomMotionTrigger *arg0) {
     g->pos_z = arg0->saved_z;
     s4 = s0;
 
-    if (s1->state == 0 || func_8003010C(s1, 0x2C) <= 0) {
+    if (s1->state == 0 || Battle_GetEnemyContextField(s1, 0x2C) <= 0) {
         if (RoomEffect_GrabPlayerView(((RoomSparkBattleEntity *)D_8009D254))->state->amount > 0) {
-            func_80020CE4();
+            Battle_ReturnToIdle();
         }
         RoomEffect_GrabResetPlayer(s1, s3v);
         RoomEffect_GrabRelease(arg0);
@@ -238,14 +238,14 @@ void RoomEffect_GrabHold(RoomMotionTrigger *arg0) {
         if (kind == 6) {
             return;
         }
-        func_80020CE4();
+        Battle_ReturnToIdle();
         RoomEffect_GrabResetPlayer(s1, s3v);
         RoomEffect_GrabRelease(arg0);
         return;
     }
 
     if (kind != 0x10) {
-        func_80020CE4();
+        Battle_ReturnToIdle();
         RoomEffect_GrabResetPlayer(s1, s3v);
         RoomEffect_GrabRelease(arg0);
         return;
@@ -287,7 +287,7 @@ void RoomEffect_GrabHold(RoomMotionTrigger *arg0) {
         return;
 
     }
-    func_80020CE4();
+    Battle_ReturnToIdle();
     RoomEffect_GrabResetPlayer(s1, s3v);
     RoomEffect_GrabRelease(arg0);
 }
@@ -303,7 +303,7 @@ void RoomEffect_GrabResetPlayer(FieldActor *unused, RoomGrabStateTail *state) {
         actor->render_object.animation_state = 0;
         actor->flags &= 0xFFFEFFFF;
         actor->render_object.flags_9C &= 0xFBFF;
-        func_8003E0FC(&state->source_actor->render_object, 6, &actor->pos_x);
+        Render_FindAnimEntry(&state->source_actor->render_object, 6, &actor->pos_x);
     }
 
     {
@@ -350,7 +350,7 @@ int RoomEffect_GrabRelease(RoomMotionTrigger *entity) {
             FieldActorState *child = GRAB_PLAYER->state;
 
             if (child->amount > 0) {
-                func_80020CE4();
+                Battle_ReturnToIdle();
             }
         }
 
@@ -361,7 +361,7 @@ int RoomEffect_GrabRelease(RoomMotionTrigger *entity) {
             actor->render_object.animation_state = 0;
             actor->flags &= 0xFFFEFFFF;
             actor->render_object.flags_9C &= 0xFBFF;
-            func_8003E0FC(&entity->source_actor->render_object, 6, &actor->pos_x);
+            Render_FindAnimEntry(&entity->source_actor->render_object, 6, &actor->pos_x);
         }
 
         {
@@ -487,13 +487,13 @@ int RoomEffect_GroundSweepController(int mode, RoomGroundSweep *sweep,
         g_RoomGrabSweepSide = 2 - g_RoomGrabSweepSide;
         work.y = 0;
         work.x = (g_RoomGrabSweepSide - 1) * 350;
-        work.z = -(func_80071A54() & 0xFF) - 400;
+        work.z = -(rand() & 0xFF) - 400;
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &work, sweep);
         sweep->y = g_RoomFloorY->y;
-        sweep->x += (func_80071A54() & 0x1F) - 0x10;
-        sweep->z += (func_80071A54() & 0x1F) - 0x10;
+        sweep->x += (rand() & 0x1F) - 0x10;
+        sweep->z += (rand() & 0x1F) - 0x10;
         sweep->heading.x = 0;
-        sweep->heading.y = func_80071A54() & 0xFFF;
+        sweep->heading.y = rand() & 0xFFF;
         sweep->heading.z = 0;
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &offset, &hand);
         func_800D1384(&hand, (GteShortVector *)sweep, 0x3F0, (unsigned char *)&colorA, (unsigned char *)&colorA, 0x8C, (struct FieldTrailPair *)sweep->trail, 1);
@@ -610,7 +610,7 @@ int RoomEffect_GroundSweepController(int mode, RoomGroundSweep *sweep,
             if ((s16)sweep->timer < 8) break;
             sweep->phase = 4;
             sweep->timer = 0;
-            if (sweep->soundHandle != -1) func_800866A4(sweep->soundHandle, 0);
+            if (sweep->soundHandle != -1) Akao_Cmd_21(sweep->soundHandle, 0);
             break;
         case 4:
             sweep->timer++;
@@ -861,9 +861,9 @@ int RoomEffect_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->heading.x = func_80071A54() % 70 - 0x23;
-                    child->heading.y = func_80071A54() % 70 - 0x23;
-                    child->heading.z = func_80071A54() % 70 - 0x23;
+                    child->heading.x = rand() % 70 - 0x23;
+                    child->heading.y = rand() % 70 - 0x23;
+                    child->heading.z = rand() % 70 - 0x23;
                     child->state = 1;
                     child->timer = 0;
                 }
@@ -874,10 +874,10 @@ int RoomEffect_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->heading.x = func_80071A54();
-                    child->heading.y = func_80071A54();
-                    child->heading.z = func_80071A54();
-                    child->radius = func_80071A54() % 800 + 0x200;
+                    child->heading.x = rand();
+                    child->heading.y = rand();
+                    child->heading.z = rand();
+                    child->radius = rand() % 800 + 0x200;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -888,10 +888,10 @@ int RoomEffect_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->heading.x = func_80071A54();
-                    child->heading.y = func_80071A54();
-                    child->heading.z = func_80071A54();
-                    child->radius = (func_80071A54() & 0x1FF) + 0x100;
+                    child->heading.x = rand();
+                    child->heading.y = rand();
+                    child->heading.z = rand();
+                    child->radius = (rand() & 0x1FF) + 0x100;
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -1185,9 +1185,9 @@ int RoomEffect_RisingSprayController(int mode, void *state,
                 angles.x = heading.x;
                 angles.y = heading.y;
                 angles.z = heading.z;
-                angles.x += (func_80071A54() & 0xFF) - 0x80;
-                angles.y += (func_80071A54() & 0x3FF) - 0x200;
-                func_800CFB7C(&angles, (func_80071A54() & 0xF) | 0x10,
+                angles.x += (rand() & 0xFF) - 0x80;
+                angles.y += (rand() & 0x3FF) - 0x200;
+                func_800CFB7C(&angles, (rand() & 0xF) | 0x10,
                               (GteShortVector *)&child->vx);
                 child->state = 2;
                 child->timer = 0;
@@ -1213,8 +1213,8 @@ int RoomEffect_RisingSprayController(int mode, void *state,
                 child->x = position.x;
                 child->y = position.y;
                 child->z = position.z;
-                heading.y += func_80071A54() % params->spread - params->spread / 2;
-                func_800CFB7C(&heading, (s16)(params->speed + (func_80071A54() & 0xF)),
+                heading.y += rand() % params->spread - params->spread / 2;
+                func_800CFB7C(&heading, (s16)(params->speed + (rand() & 0xF)),
                               (GteShortVector *)&child->vx);
                 child->state = 0;
                 child->timer = 0;

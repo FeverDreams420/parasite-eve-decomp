@@ -109,11 +109,11 @@ extern struct BattleEntity *D_8009D254;
 
 #include "pe1/gte_sine_table.h"
 
-extern void func_800866A4(int handle, int arg);
-extern int func_8006F39C(int id, void *actor);
-extern void func_8006F6D4(int handle, int, int index, int value, int, int);
+extern void Akao_Cmd_21(int handle, int arg);
+extern int Scene_LoadRoomAssets(int id, void *actor);
+extern void Pm_SendCmd(int handle, int, int index, int value, int, int);
 /* Battle_GetEnemyContextField in main. */
-extern int func_8003010C(void *actor, int field);
+extern int Battle_GetEnemyContextField(void *actor, int field);
 
 /* The projectile's constant seeds: the spark sprite's rotation and colour,
  * the model words reported to the scene script, and the floor ring's

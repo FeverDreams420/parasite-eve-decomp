@@ -83,7 +83,7 @@ void RoomLib_GrabOnApproach(SceneGrabHead *head) {
                 FieldActor *player;
 
                 control->callback = func_80192878;
-                func_80020C74();
+                Battle_BeginPlayerAction();
                 player = g_PlayerEntity;
                 player->render_object.animation_source = &actor->render_object;
                 player->render_object.animation_state = 4;
@@ -144,7 +144,7 @@ void func_80192878(SceneE19Selection *selection) {
             *actorState->substate = 2;
         }
         if ((s16)previousFrame < 18 && (s16)currentFrame >= 18) {
-            func_80020CE4();
+            Battle_ReturnToIdle();
             func_80192B10(actor, tail);
             return;
         }
@@ -170,14 +170,13 @@ void func_80192878(SceneE19Selection *selection) {
     case 12:
         return;
     default:
-        func_80020CE4();
+        Battle_ReturnToIdle();
         func_80192B10(actor, tail);
         func_80192BFC(selection);
         return;
     }
 }
 
-s32 func_8001AA78();
 
 void func_80192B10(void *arg0, unsigned char *state) {
     {
@@ -187,7 +186,7 @@ void func_80192B10(void *arg0, unsigned char *state) {
         actor->reset_halfword = 0;
         actor->flags &= 0xFFFEFFFF;
         actor->h250 &= 0xFBFF;
-        func_8001AA78(actor);
+        Entity_FindFloor(actor);
     }
 
     {
@@ -239,7 +238,7 @@ int func_80192BFC(SceneE19ResetTarget *ent) {
             SceneE19ActorChild *child = ((SceneE19Actor *)D_8009D254)->child;
 
             if (child != 0 && child->h0C > 0) {
-                func_80020CE4();
+                Battle_ReturnToIdle();
             }
         }
 
@@ -250,7 +249,7 @@ int func_80192BFC(SceneE19ResetTarget *ent) {
             actor->reset_halfword = 0;
             actor->flags &= 0xFFFEFFFF;
             actor->h250 &= 0xFBFF;
-            func_8001AA78(actor);
+            Entity_FindFloor(actor);
         }
 
         {
@@ -294,7 +293,7 @@ s32 func_80192D04(char *obj)
     {
       if (node->h0C > 0)
       {
-        func_80020CE4();
+        Battle_ReturnToIdle();
       }
     }
     ;
@@ -302,7 +301,7 @@ s32 func_80192D04(char *obj)
     ((SceneE19Actor *)D_8009D254)->h250 &= 0xFBFF;
     ((SceneE19Actor *)D_8009D254)->reset_word = 0;
     ((SceneE19Actor *)D_8009D254)->reset_halfword = 0;
-    func_8001AA78();
+    Entity_FindFloor((struct BattleEntity *)D_8009D254);
     e = (char *)D_8009D254;
     *((s32 *) (e + 0x68)) = 0;
     *((s32 *) (e + 0x6C)) = 0;
@@ -478,7 +477,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 actor->flags |= 0x80000000;
             }
             if (blast->timer < 0x11) {
-                func_800D1D24(2, 0x10, blast->timer);
+                Geo_ClipAlternatingArcPoint(2, 0x10, blast->timer);
             }
             spread = 0x200;
             spark = func_800CE610((char *)ANIM_POOL_AS(SceneE19BlastChannel)->pool);
@@ -486,9 +485,9 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 spark->x = blast->position.x;
                 spark->y = blast->position.y;
                 spark->z = blast->position.z;
-                spark->y -= func_80071A54() % 800;
-                spark->x += func_80071A54() % spread - 0x100;
-                value = func_80071A54() % spread;
+                spark->y -= rand() % 800;
+                spark->x += rand() % spread - 0x100;
+                value = rand() % spread;
                 spark->state = 0;
                 spark->timer = 0;
                 spark->z += value - 0x100;
@@ -508,9 +507,9 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 spark->x = blast->position.x;
                 spark->y = blast->position.y;
                 spark->z = blast->position.z;
-                spark->y -= func_80071A54() % 800;
-                spark->x += func_80071A54() % spread - 0x100;
-                value = func_80071A54() % spread;
+                spark->y -= rand() % 800;
+                spark->x += rand() % spread - 0x100;
+                value = rand() % spread;
                 spark->state = 0;
                 spark->timer = 0;
                 spark->z += value - 0x100;
@@ -598,7 +597,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, GetClut(0x20, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x20, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix1);
             shellScale1.x = radialScale / 2;
@@ -673,7 +672,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 if (params->palette == 4 && D_800F3428 != 0) {
                     paletteValue += 4;
                 }
-                func_800C6EC0(page, GetClut(0x20, paletteValue));
+                FieldFx_ModelSetTexture(page, GetClut(0x20, paletteValue));
             }
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix2);
@@ -751,7 +750,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, GetClut(0x20, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x20, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix3a);
             shellScale3a.x = radialScale;
@@ -782,7 +781,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, GetClut(0x20, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x20, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix3b);
             shellScale3b.x = radialScale;
@@ -814,7 +813,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, GetClut(0x20, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x20, palette));
             FieldFx_ModelSetSemiTrans(1);
             height = center.y;
             center.y -= blast->timer * 0x18;
@@ -860,7 +859,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, GetClut(0x60, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x60, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix3d);
             shellScale3d.x = radialScale;
@@ -891,7 +890,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, GetClut(0x60, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x60, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix3e);
             shellScale3e.x = radialScale;
@@ -925,7 +924,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, GetClut(0x20, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x20, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix4a);
             shellScale4a.x = radialScale;
@@ -957,7 +956,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, GetClut(0x20, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x20, palette));
             FieldFx_ModelSetSemiTrans(1);
             height = center.y;
             center.y -= (blast->timer + 0x20) * 0x18;
@@ -991,7 +990,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, GetClut(0x60, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x60, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix4c);
             shellScale4c.x = radialScale;
@@ -1022,7 +1021,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, GetClut(0x60, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x60, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix4d);
             shellScale4d.x = radialScale;
@@ -1104,7 +1103,7 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
         test = func_800CFE94(&particle->position.x, &temporaryPosition.x) < 1900;
         test = -test;
         bias = test & 500;
-        random = func_80071A54();
+        random = rand();
         remMagic = 0x66660000;
         asm("" : : "r"(remMagic));
         random &= 1023;
@@ -1601,9 +1600,9 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
         if (++burst->timer & 1) {
             child = func_800CE610(ANIM_POOL_AS(SceneSpinRayChannel)->pool);
             if (child) {
-                child->spin.angles.x = func_80071A54();
-                child->spin.angles.y = func_80071A54();
-                child->spin.angles.z = func_80071A54();
+                child->spin.angles.x = rand();
+                child->spin.angles.y = rand();
+                child->spin.angles.z = rand();
                 child->timer = 0;
                 child->state = 2;
             }
@@ -1614,8 +1613,8 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
                 func_800CFFAC(child);
                 child->timer = 0;
                 child->state = 0;
-                child->reach = (func_80071A54() & 0x1F) - 0x10;
-                child->spinY = (func_80071A54() & 0x1F) - 0x10;
+                child->reach = (rand() & 0x1F) - 0x10;
+                child->spinY = (rand() & 0x1F) - 0x10;
             }
             burst->blades--;
         }
@@ -1626,8 +1625,8 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
                     func_800CFFAC(child);
                     child->timer = 0;
                     child->state = 1;
-                    child->reach = (func_80071A54() & 0x1FF) + 600;
-                    child->spinY = (func_80071A54() & 7) - 3;
+                    child->reach = (rand() & 0x1FF) + 600;
+                    child->spinY = (rand() & 7) - 3;
                 }
             }
         }
@@ -1850,13 +1849,13 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
             if (*(void *volatile *)soundSlot != 0)
                 Akao_SendTableCommand(*soundSlot, 0x5E6, 0x80, 0x80, volume);
         }
-        func_800CE870((char *)RoomMain_ActorPtr, 1, (s16 *)burst);
+        func_800CE870((char *)g_PlayerEntity, 1, (s16 *)burst);
         burst->y = g_RoomFloorY->y;
         return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x28,
                              (FieldFxCallbackListCallback)func_801972EC);
     case 1:
         if (burst->state < 2)
-            func_80020D50();
+            Battle_HaltOnPositiveX();
         switch (burst->state) {
         case 0:
             burst->timer++;
@@ -1872,9 +1871,9 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
                 child->x = burst->x;
                 child->y = burst->y;
                 child->z = burst->z;
-                child->heading.x = func_80071A54() % 50 - 25;
-                child->heading.y = -(func_80071A54() % 32);
-                child->heading.z = func_80071A54() % 50 - 25;
+                child->heading.x = rand() % 50 - 25;
+                child->heading.y = -(rand() % 32);
+                child->heading.z = rand() % 50 - 25;
                 child->state = 1;
                 child->timer = 0;
             }
@@ -1884,12 +1883,12 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->y -= func_80071A54() & 0x1FF;
-                    child->x += (func_80071A54() & 0x7F) - 0x40;
-                    child->z += (func_80071A54() & 0x7F) - 0x40;
-                    child->heading.x = func_80071A54() % 24 - 12;
-                    child->heading.y = func_80071A54() % 24 - 12;
-                    child->heading.z = func_80071A54() % 24 - 12;
+                    child->y -= rand() & 0x1FF;
+                    child->x += (rand() & 0x7F) - 0x40;
+                    child->z += (rand() & 0x7F) - 0x40;
+                    child->heading.x = rand() % 24 - 12;
+                    child->heading.y = rand() % 24 - 12;
+                    child->heading.z = rand() % 24 - 12;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -1905,7 +1904,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
                 }
             }
             if (burst->timer < 0x20) return 0;
-            func_80020DD0();
+            Battle_InitEntityColors();
             burst->state = 2;
             burst->timer = 0;
             break;
@@ -1915,7 +1914,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
             if (burst->timer == 1 && FX_TASK_AS(SceneE22EmberEvent)->active) {
                 channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
-                    RoomMain_ActorPtr->state->flags |= 0x4000;
+                    g_PlayerEntity->state->flags |= 0x4000;
                     channel->pool->object->flags =
                         (channel->pool->object->flags & 0xC0FFFFFF) | 0x19000000;
                     channel->pool->object->flags |= 0x80000000;
@@ -2160,9 +2159,9 @@ int func_80198914(int mode, RoomOrbitTrailBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->heading.x = func_80071A54() % 32 - 0x10;
-                    child->heading.y = func_80071A54() % 32 - 0x10;
-                    child->heading.z = func_80071A54() % 32 - 0x10;
+                    child->heading.x = rand() % 32 - 0x10;
+                    child->heading.y = rand() % 32 - 0x10;
+                    child->heading.z = rand() % 32 - 0x10;
                     child->state = 1;
                     child->timer = 0;
                 }
@@ -2173,10 +2172,10 @@ int func_80198914(int mode, RoomOrbitTrailBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->heading.x = func_80071A54();
-                    child->heading.y = func_80071A54();
-                    child->heading.z = func_80071A54();
-                    child->radius = (func_80071A54() & 0x3FF) + 0x5DC;
+                    child->heading.x = rand();
+                    child->heading.y = rand();
+                    child->heading.z = rand();
+                    child->radius = (rand() & 0x3FF) + 0x5DC;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -2187,10 +2186,10 @@ int func_80198914(int mode, RoomOrbitTrailBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->heading.x = func_80071A54();
-                    child->heading.y = func_80071A54();
-                    child->heading.z = func_80071A54();
-                    child->radius = (func_80071A54() & 0xFF) + 0x100;
+                    child->heading.x = rand();
+                    child->heading.y = rand();
+                    child->heading.z = rand();
+                    child->radius = (rand() & 0xFF) + 0x100;
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -2457,9 +2456,9 @@ int func_80199684(int mode, RoomGlintRibbon *ribbon) {
                 spark->x = first.x;
                 spark->y = first.y;
                 spark->z = first.z;
-                spark->vx = func_80071A54() % 32 - 0x10;
-                spark->vy = -(func_80071A54() % 32);
-                spark->vz = func_80071A54() % 32 - 0x10;
+                spark->vx = rand() % 32 - 0x10;
+                spark->vy = -(rand() % 32);
+                spark->vz = rand() % 32 - 0x10;
                 spark->state = 0;
                 spark->timer = 0;
             }
@@ -2468,9 +2467,9 @@ int func_80199684(int mode, RoomGlintRibbon *ribbon) {
                 spark->x = middle.x;
                 spark->y = middle.y;
                 spark->z = middle.z;
-                spark->vx = func_80071A54() % 32 - 0x10;
-                spark->vy = func_80071A54() % 32 - 0x10;
-                spark->vz = func_80071A54() % 32 - 0x10;
+                spark->vx = rand() % 32 - 0x10;
+                spark->vy = rand() % 32 - 0x10;
+                spark->vz = rand() % 32 - 0x10;
                 spark->state = 1;
                 spark->timer = 0;
             }
@@ -2647,11 +2646,11 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                     child->x = glow->position.x;
                     child->y = glow->position.y;
                     child->z = glow->position.z;
-                    child->x += (func_80071A54() & 0xFF) - 0x80;
-                    child->z += (func_80071A54() & 0xFF) - 0x80;
+                    child->x += (rand() & 0xFF) - 0x80;
+                    child->z += (rand() & 0xFF) - 0x80;
                     child->heading.x = rcos(time) * 60 / 4096;
                     child->heading.z = rsin(time) * 60 / 4096;
-                    child->heading.y = -(func_80071A54() & 0xF) - 8;
+                    child->heading.y = -(rand() & 0xF) - 8;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -2660,9 +2659,9 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                     child->x = glow->position.x;
                     child->y = glow->position.y;
                     child->z = glow->position.z;
-                    child->heading.x = func_80071A54() % 49 - 0x18;
-                    child->heading.y = func_80071A54() % 128 - 0x40;
-                    child->heading.z = func_80071A54() % 49 - 0x18;
+                    child->heading.x = rand() % 49 - 0x18;
+                    child->heading.y = rand() % 128 - 0x40;
+                    child->heading.z = rand() % 49 - 0x18;
                     child->state = 1;
                     child->timer = 0;
                 }
@@ -2862,9 +2861,9 @@ int func_8019AC30(int mode, RoomJitterSpark *spark) {
                 bounce = -(s16)fall;
                 spark->vy = bounce;
             }
-            spark->x += (func_80071A54() & 7) - 3;
-            spark->y += (func_80071A54() & 7) - 3;
-            spark->z += (func_80071A54() & 7) - 3;
+            spark->x += (rand() & 7) - 3;
+            spark->y += (rand() & 7) - 3;
+            spark->z += (rand() & 7) - 3;
             spark->angle += 8;
             if ((s16)spark->timer < 8) break;
             return 1;
@@ -2908,21 +2907,21 @@ int func_8019AE8C(int mode) {
         if (((RoomSparkOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->state->frame < 11) return 1;
         func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)&position);
         for (i = 0; i < 3; i++) {
-            if (func_80071A54() & 1) {
+            if (rand() & 1) {
                 child = (RoomJitterSpark *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     position.y += 110;
                     child->x = position.x;
                     child->y = position.y;
                     child->z = position.z;
-                    child->x += func_80071A54() % 400 - 200;
-                    child->y += func_80071A54() % 800 - 400;
-                    child->z += func_80071A54() % 400 - 200;
-                    child->size = (func_80071A54() & 0x1FF) + 682;
-                    child->angle = func_80071A54();
-                    child->vx = func_80071A54() % 24 - 12;
-                    child->vy = -(func_80071A54() % 24);
-                    child->vz = func_80071A54() % 24 - 12;
+                    child->x += rand() % 400 - 200;
+                    child->y += rand() % 800 - 400;
+                    child->z += rand() % 400 - 200;
+                    child->size = (rand() & 0x1FF) + 682;
+                    child->angle = rand();
+                    child->vx = rand() % 24 - 12;
+                    child->vy = -(rand() % 24);
+                    child->vz = rand() % 24 - 12;
                     child->state = 0;
                     child->timer = 0;
                 }

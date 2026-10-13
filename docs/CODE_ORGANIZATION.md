@@ -2034,6 +2034,51 @@ the objects the overlay's linker script links and skips every name one of
 them defines. The two overlays with copied foreign-VMA code
 (`OVERLAY_VMA_OVERLAP`, `boot_display` and `menu_memcard`) keep those pins
 (`--pin-defined`). The splat `undefined_*_auto` scripts still pin.
+Overlays link against the built main executable (since 2026-10-13). Each
+overlay links one generated script, `linkers/USA/overlays/link_symbols.<overlay>.txt`,
+written by `tools/scripts/overlay_link_symbols.py` after main is built. For
+every symbol the overlay's linked objects use and do not define it takes, by
+name and in this order: the loader ABI list `linkers/USA/overlay_abi.txt`;
+the address `build/USA/main.elf` gives the name now (never a main symbol
+inside an overlay load window); the overlay's own window, hardware or kernel
+from its address catalogue (splat's `undefined_*_auto` files and the overlay
+symbol file, which are no longer linked). Anything else fails the build: a
+main address that main does not name, or another overlay's memory that the
+ABI list does not hold. `overlay-build-all` builds main first, and
+`parallel_overlay_make.py` folds main's symbol table into each overlay's
+cache fingerprint, so an overlay relinks whenever main moves a symbol.
+
+The overlays' splat configs read `configs/USA/sym.main.txt` as a second
+symbol file, so their disassembly names main's addresses the way main does
+(`jal rand`, not `jal func_80071A54`). Splat reports every main entry as
+outside the overlay's segments; that report goes to
+`build/USA/overlays/<overlay>/splat.log`. The overlay symbol files no longer
+carry main addresses, and the overlay C refers to main by main's names.
+
+`overlay_abi.txt` lists the addresses that stay fixed on purpose, each block
+with its owner and reason: the mdec_diag entry points other overlays call,
+boot_display's work RAM outside its image, the memory card menu block reached
+at its other link and load bases, and scene overlays' own memory past the end
+of their extracted image inside the room load window. Section (d) of
+`shift_audit.py` reads the linked scripts:
+
+| (d) category | before (three scripts) | after (link_symbols) |
+| --- | ---: | ---: |
+| main_same_name (linked by name from main.elf) | 6247 | 7309 |
+| main_other_name | 712 | 0 |
+| main_no_symbol | 299 | 0 |
+| main_pinned_in_main_too | 140 | 0 |
+| overlay_window_buffer + other_overlay_symbol | 375 + 14 | - |
+| abi_loader_contract (overlay_abi.txt, 435 entries) | - | 458 |
+| own_overlay_pinned | 114 | 163 |
+| shadows_own_definition | 89 | 0 |
+| unreferenced | 5267 | 0 |
+
+A 0x10 shift of main (`shift_test.py --scratch`, then each overlay's script
+regenerated from the shifted ELF and relinked) moves all 7309 main-derived
+assignments by 0x10, leaves the 458 ABI and 163 own-window ones in place,
+and changes 35919 words in 189 of the 190 overlays, every one of them at a
+relocation against a symbol that moved.
 
 Fixed layout: `.main` at 0x80010000 (the PS-X EXE load address, a loader
 contract), `.field_engine` at 0x800C1CA0, `_gp = 0x8009CD70`, and the
@@ -2070,6 +2115,11 @@ gp-relative offsets, 21 literal data words and 17 literal `lui` halves.
    itself (done for `undefined_extra` outside the VMA-overlap overlays).
    Clears the 7349 pinned main addresses and the self-shadowing pins; needs a
    check for names that exist in both main and an overlay.
+3. Done (2026-10-13): overlays link against the built main symbols by name
+   (`overlay_link_symbols.py`), with the loader contract in
+   `overlay_abi.txt`. The overlays' own-window catalogue pins (163) and
+   their run-time memory listed in the ABI file are what remains fixed on
+   the overlay side.
 4. References that a linked object already names under another label (57
    function pins, about 400 data pins into asm blobs): give the blob label the
    C name through `sym.main.txt`, or change the C reference. Mechanical per

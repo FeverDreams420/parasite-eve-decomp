@@ -16,9 +16,9 @@ void BootDisplay_RunDisplay(void) {
         func_8012562C();
         func_80125744();
         if (D_8009D1A0 & 0x20000) {
-            func_800870F0(144);
+            Spu_SetVoiceVolume(144);
             func_80125894(1);
-        } else func_800870F0(218);
+        } else Spu_SetVoiceVolume(218);
     }
     state = 0;
     fade = 0;
@@ -58,7 +58,7 @@ void BootDisplay_RunDisplay(void) {
             break;
         }
         }
-        func_8003EB04();
+        Field_HandleStateTransition();
         if (D_8009D1A0 & 0x10000) {
             if (D_8009D1F4 & 0x4000000) func_80125894(0);
             if (D_8009D1F4 & 0x8000000) func_80125894(1);

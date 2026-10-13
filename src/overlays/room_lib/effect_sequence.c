@@ -359,7 +359,7 @@ void RoomEffect_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxM
     u8 clut;
     RoomEffectSequenceSprite *primary;
 
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
     D_80192C34 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0x498704);
     link = ent->link;
     state->link = link;
@@ -423,7 +423,7 @@ void RoomEffect_EffectSequenceNopA(void) {
 }
 
 #define ROOMLIB_EFFECT_CALL(command) \
-    func_800C2B90((void *)owner, (command), D_80192BBC, D_80192B5C)
+    FieldFx_StartSlot((void *)owner, (command), D_80192BBC, D_80192B5C)
 #define ROOMLIB_EFFECT_SET(index, value, command) \
     *FieldFx_RegPtr(index) = (value); \
     ROOMLIB_EFFECT_CALL(command)
@@ -606,7 +606,7 @@ void RoomEffect_ConfigureEffectSequence(int owner, RoomFxControl *signal)
         ROOMLIB_EFFECT_SET(1, 21, 2);
     }
 
-    if (func_800C2B68() == 1) {
+    if (FieldFx_IsLastSlotHalted() == 1) {
         signal->state = 2;
     }
 }
@@ -643,7 +643,7 @@ void RoomEffect_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control,
     RoomOverlay024Vec4 third_scale;
     s32 draw_zero;
 
-    owner_ptr = func_800C2B50();
+    owner_ptr = FieldFx_GetScriptContext();
     owner = *owner_ptr;
     transform = &((RoomOverlay024Transform *)owner->view)[state->transform_index];
     base_seed = s_EffectBaseSeed;
@@ -772,7 +772,7 @@ void RoomEffect_UpdatePairedSprite(void *unused,
     RoomFxTransformOwner **ownerPtr;
     RoomFxTransform *transform;
 
-    ownerPtr = func_800C2B50();
+    ownerPtr = FieldFx_GetScriptContext();
     transform = &(*ownerPtr)->transforms[state->transformIndex];
 
     state->phase++;
@@ -856,7 +856,7 @@ void RoomEffect_UpdatePairedSprite(void *unused,
     }
 }
 
-s32 func_80071A54(void);
+s32 rand(void);
 
 void RoomEffect_InitVariant38Pulse(void *arg0, void *arg1, RoomOverlay024Variant38SetupState *state) {
     s32 random;
@@ -877,7 +877,7 @@ void RoomEffect_InitVariant38Pulse(void *arg0, void *arg1, RoomOverlay024Variant
     state->field30 = 0;
     state->field22 = 0;
     state->sparkle_timer = 0;
-    random = func_80071A54();
+    random = rand();
     state->random_mod = random % 40;
 }
 
@@ -893,7 +893,7 @@ void RoomEffect_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *con
     RoomOverlay024Vec4 third_scale;
     s32 draw_zero;
 
-    owner_ptr = func_800C2B50();
+    owner_ptr = FieldFx_GetScriptContext();
     owner = *owner_ptr;
     transform = &((RoomOverlay024Transform *)owner->view)[state->transform_index];
     base_seed = s_EffectBaseSeed;
@@ -929,9 +929,9 @@ void RoomEffect_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *con
 
     D_80192C08.depth = state->fade_alpha >> 1;
 
-    matrix.t[0] = transform->x + (func_80071A54() % 20) - 10;
+    matrix.t[0] = transform->x + (rand() % 20) - 10;
     matrix.t[1] = transform->y;
-    matrix.t[2] = transform->z + (func_80071A54() % 20) - 10;
+    matrix.t[2] = transform->z + (rand() % 20) - 10;
 
     if (state->resource_selector == -1) {
         func_800C3134(&D_80192BF0, state->field30, (char *)&D_80192C08);
@@ -1015,7 +1015,7 @@ void RoomEffect_UpdatePairedSpriteBurst(
     RoomFxTransformOwner **ownerPtr;
     RoomFxTransform *transform;
 
-    ownerPtr = func_800C2B50();
+    ownerPtr = FieldFx_GetScriptContext();
     transform = &(*ownerPtr)->transforms[state->transformIndex];
 
     state->phase++;
@@ -1138,7 +1138,7 @@ void RoomEffect_InitVariant290(void *arg0, void *arg1, RoomOverlay024Variant290S
     state->field30 = 0;
     state->field22 = 0;
     state->sparkle_timer = 0;
-    random = func_80071A54();
+    random = rand();
     state->random_mod = random % 40;
 }
 
@@ -1152,7 +1152,7 @@ void RoomEffect_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control
     RoomOverlay024Vec4 draw_scale;
     RoomOverlay024Vec4 second_scale;
 
-    owner_ptr = func_800C2B50();
+    owner_ptr = FieldFx_GetScriptContext();
     owner = *owner_ptr;
     transform = &((RoomOverlay024Transform *)owner->view)[state->transform_index];
     base_seed = s_EffectBaseSeed;
@@ -1188,9 +1188,9 @@ void RoomEffect_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control
 
     D_80192C08.depth = state->fade_alpha;
 
-    matrix.t[0] = transform->x + (func_80071A54() % 20) - 10;
+    matrix.t[0] = transform->x + (rand() % 20) - 10;
     matrix.t[1] = transform->y;
-    matrix.t[2] = transform->z + (func_80071A54() % 20) - 10;
+    matrix.t[2] = transform->z + (rand() % 20) - 10;
 
     func_800C3134(&D_80192BFC, state->field30, (char *)&D_80192C08);
     D_80192C08.cell = state->phase * 2;
@@ -1246,7 +1246,7 @@ void RoomEffect_UpdateSparkleHeight(
     RoomFxTransformOwner **ownerPtr;
     RoomFxTransform *transform;
 
-    ownerPtr = func_800C2B50();
+    ownerPtr = FieldFx_GetScriptContext();
     transform = &(*ownerPtr)->transforms[state->transformIndex];
 
     state->phase++;
@@ -1332,7 +1332,7 @@ void RoomEffect_InitVariantD(void *arg0, void *arg1, RoomOverlay024VariantDSetup
     obj->word30 = 0;
     obj->half22 = 0;
     obj->half14 = 0;
-    random = func_80071A54();
+    random = rand();
     obj->random_mod = random % 40;
 }
 
@@ -1349,7 +1349,7 @@ void RoomEffect_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, 
     RoomOverlay024Vec4 second_scale;
     s32 scale;
 
-    owner_ptr = func_800C2B50();
+    owner_ptr = FieldFx_GetScriptContext();
     owner = *owner_ptr;
     transform = &((RoomOverlay024Transform *)owner->view)[state->transform_index];
     base_seed = s_EffectBaseSeed;
@@ -1390,9 +1390,9 @@ void RoomEffect_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, 
 
     D_80192C18.depth = state->fade_alpha;
 
-    matrix.t[0] = transform->x + projected[0] + (func_80071A54() % 20) - 10;
+    matrix.t[0] = transform->x + projected[0] + (rand() % 20) - 10;
     matrix.t[1] = transform->y + projected[1] - (((s16)state->vertical_offset) >> 4);
-    matrix.t[2] = transform->z + projected[2] + (func_80071A54() % 20) - 10;
+    matrix.t[2] = transform->z + projected[2] + (rand() % 20) - 10;
 
     func_800C3134(&D_80192BFC, state->field30, (char *)&D_80192C18);
     D_80192C18.cell = state->phase * 2;
@@ -1452,7 +1452,7 @@ void RoomEffect_UpdateTransformedSparkle(
     RoomFxSeed8 seed;
     RoomFxSeed8 transformed;
 
-    ownerPtr = func_800C2B50();
+    ownerPtr = FieldFx_GetScriptContext();
     transform = &(*ownerPtr)->transforms[state->transformIndex];
     seed = s_EffectProjectSeed;
     ApplyMatrixSV((const GteMatrix *)transform, &seed.vector, &transformed.vector);
@@ -1532,7 +1532,7 @@ void RoomEffect_EffectSequenceNopB(void) {
 }
 
 void FieldFx_ModelSetDepthBias(s32 arg0);
-void func_800C6EC0(s32 arg0, s32 arg1);
+void FieldFx_ModelSetTexture(s32 arg0, s32 arg1);
 
 void RoomEffect_DrawEffectGlow(void) {
     RoomOverlay024Root **root;
@@ -1544,7 +1544,7 @@ void RoomEffect_DrawEffectGlow(void) {
     s32 handle_a;
     s32 handle_b;
 
-    root = func_800C2B50();
+    root = FieldFx_GetScriptContext();
     view = (RoomOverlay024View *)(*root)->view;
 
     seed = s_EffectProjectSeed;
@@ -1567,7 +1567,7 @@ void RoomEffect_DrawEffectGlow(void) {
     handle_a = GetTPage(0, 1, 0x340, 0x100);
     handle_a = (u16)handle_a;
     handle_b = GetClut(0x10, 0x1D7);
-    func_800C6EC0(handle_a, (u16)handle_b);
+    FieldFx_ModelSetTexture(handle_a, (u16)handle_b);
     FieldFx_ModelSetSemiTrans(0);
     FieldFx_ModelSaveColors(D_80192C34);
     FieldFx_ModelScaleColors(D_80192C34, 0x80);
@@ -1584,7 +1584,7 @@ void RoomEffect_SpawnDriftingEffect(void *arg0, void *arg1, RoomOverlay024Effect
     u16 out[4];
     s32 random;
 
-    view = (RoomOverlay024View *)(*(RoomOverlay024Root **)func_800C2B50())->view;
+    view = (RoomOverlay024View *)(*(RoomOverlay024Root **)FieldFx_GetScriptContext())->view;
     seed = s_EffectProjectSeed;
     ApplyMatrixSV(&view->tail.position.transform, &seed, out);
 
@@ -1596,7 +1596,7 @@ void RoomEffect_SpawnDriftingEffect(void *arg0, void *arg1, RoomOverlay024Effect
         effect->half8 = 0;
         effect->velocity_y = -8;
         effect->halfC = 0;
-        random = func_80071A54();
+        random = rand();
         effect->duration = 0x96;
         effect->timer = random % 80 + 0x50;
     }
@@ -1649,7 +1649,7 @@ void RoomEffect_DrawScaledEffect(void *unused0, void *unused1, RoomLibScaledEffe
     int scale;
     unsigned short depthValue;
 
-    roots = (RoomLibEffectRootTable *)func_800C2B50();
+    roots = (RoomLibEffectRootTable *)FieldFx_GetScriptContext();
     view = roots->root->view;
     seed = s_EffectProjectSeed;
     matrix = view->matrix;
@@ -1743,7 +1743,7 @@ void RoomEffect_UpdateDriftingEffect(void *arg0, void *arg1, RoomDriftEffect *ef
     u16 velocity_z;
 
     current = effect;
-    view = (*(RoomDriftRoot **)func_800C2B50())->view;
+    view = (*(RoomDriftRoot **)FieldFx_GetScriptContext())->view;
     seed = s_EffectProjectSeed;
     ApplyMatrixSV(&view->transform, &seed, out);
 

@@ -57,9 +57,9 @@ int RoomEffect_OrbitSetNop6(void);
 
 /* The frame counter at 0x800942EC, read as the floor height. */
 
-void func_800C2B40(void *state);
+void FieldFx_SetScriptContext(void *state);
 int *FieldFx_RegPtr(int index);
 int func_800C66C8(void *object, int message, void *state);
-int func_80071A54(void);
+int rand(void);
 
 #endif

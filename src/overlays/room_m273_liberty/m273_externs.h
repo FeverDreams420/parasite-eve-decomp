@@ -1,14 +1,14 @@
 #ifndef PE1_EXT_M273
 #define PE1_EXT_M273
 extern FieldActor *g_PlayerEntity;
-extern void func_80020C74(void);
+extern void Battle_BeginPlayerAction(void);
 void func_80192838(RoomSelectionState *state);
 void func_80192D50(char *obj);
-extern void func_80020CE4(void);
+extern void Battle_ReturnToIdle(void);
 void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state);
 extern struct BattleEntity *D_8009D254;
 extern u8 D_8019A8C8[];
-extern s32 func_80052B2C(void);
+extern s32 Inv_ScrambleGrid(void);
 extern short D_800966EE[];
 extern unsigned char D_8019AB70[];
 extern GteRotation D_8019AB68;
@@ -40,7 +40,7 @@ extern s16 D_8019AEB2;
 extern RoomFxSeed8 D_8019AEAC;
 extern unsigned short D_8019AF60;
 extern Vector D_8019AD60;
-extern int func_8005186C(int);
+extern int Math_IntSqrt(int);
 extern short D_8019AD68[];
 extern RoomM273RisingBatchBuffer D_8019AF0C;
 extern short D_8019AE84;

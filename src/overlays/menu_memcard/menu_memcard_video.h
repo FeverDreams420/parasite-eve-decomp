@@ -34,9 +34,8 @@ typedef struct VideoDisplay {
     VideoRect rect;       /* 0x28 next slice */
     u8 done;              /* 0x30 frame fully uploaded */
 } VideoDisplay;
-extern s32 func_8007F72C(void),func_8007F7A8(void);
-extern void func_800719E4(s32),func_800870F0(s32);
-extern s32 func_8007C484(void **,VideoFrame **);
+extern s32 DsSystemStatus(void),DsShellOpen(void);
+extern void exit(s32),Spu_SetVoiceVolume(s32);
 extern u16 D_800B0DD4;
 extern VideoEntry *D_801D11AC;
 extern u8 D_800B0DBE,D_801D0DBD;
@@ -53,7 +52,7 @@ extern u8 D_801223F5;
 
 extern u8 D_801D0DC0;
 extern s32 D_8009CDDC;
-extern void func_8007C564(void),func_8010C01C(void *,s32),func_801918F8(s8,s8);
+extern void StCdInterrupt(void),func_8010C01C(void *,s32),func_801918F8(s8,s8);
 
 void MenuCard_UploadVideoSlice(void);
 
@@ -78,7 +77,7 @@ extern u16 D_80093160;
 extern u16 D_80093162[];
 extern u32 D_8009D26C;
 s32 MenuCard_StepVideo(void);
-extern void SetDispMask(s32), func_80074A44(s32), func_80072714(void), func_800726C4(void), func_80072724(void), func_8003EB04(void), func_8007A2A4(void), Draw_RenderFrame(void);
+extern void SetDispMask(s32), ResetGraph(s32), EnterCriticalSection(void), FlushCache(void), ExitCriticalSection(void), Field_HandleStateTransition(void), StUnSetRing(void), Draw_RenderFrame(void);
 
 s32 MenuCard_PlayVideo(s32 index);
 
@@ -93,18 +92,16 @@ extern VideoFile D_801223FC, D_801D0DC4;
 extern CdlLOC D_80122414, D_801D0DDC;
 extern VideoDisplay D_801228CC, D_801D1464;
 extern char D_80120FF4[], D_80120FFC[], D_8018F2E4[], D_8018F2EC[];
-extern void func_800719F4(char *, char *), func_8007A214(void *, s32);
-extern void func_8007C304(s32, s32, s32, s32, s32), func_8007C394(void *);
+extern void strcat(char *, char *), StSetRing(void *, s32);
 extern void func_8010C89C(void *, void *, void *), func_801214D4(void);
 /* DsSearchFile: the file record, 0 when absent, or all ones on a read error. */
-extern u32 func_80081414(VideoFile *, char *); extern s32 func_80081314(CdlLOC *, s32);
-extern s32 func_80080D5C(s32, CdlLOC *, void *);
+extern u32 DsSearchFile(VideoFile *, char *); extern s32 DsRead2(CdlLOC *, s32);
 s32 func_80121C04(s32 number);
 s32 MenuCard_OpenVideo(s32 number);
 
 /* Per-frame video step: decode, restart the stream on a stall, page flip. */
 extern u8 D_801223F6, D_801223F8, D_801D0DBE;
-extern void func_8010BFA0(void *, s32), func_8007C2A0(CdlLOC *);
+extern void func_8010BFA0(void *, s32);
 s32 func_80122040(void);
 
 #endif

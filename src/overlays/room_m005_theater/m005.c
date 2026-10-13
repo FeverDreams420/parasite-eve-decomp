@@ -142,11 +142,11 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
             pool = ANIM_POOL_AS(RoomM005Channel)->pool;
             child = func_800CE610(pool);
             if (child) {
-                child->seed = func_80071A54();
-                spread = func_80071A54() & 0x1FF;
+                child->seed = rand();
+                spread = rand() & 0x1FF;
                 child->y = target[1] + spread - 0x100;
                 child->flag = 0;
-                child->radius = (func_80071A54() & 0xFF) + 0x100;
+                child->radius = (rand() & 0xFF) + 0x100;
                 child->state = 0;
                 child->timer = 0;
             }
@@ -381,11 +381,11 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         if (D_800E27EC < 10) {
             sprite = func_800CE610(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool);
             if (sprite) {
-                sprite->x = (func_80071A54() & 0x3FF) - 0x200;
-                sprite->y = (func_80071A54() & 0x3FF) - 0x200;
+                sprite->x = (rand() & 0x3FF) - 0x200;
+                sprite->y = (rand() & 0x3FF) - 0x200;
                 sprite->z = 0;
-                sprite->vx = (func_80071A54() & 7) - 3;
-                sprite->vy = (func_80071A54() & 7) - 3;
+                sprite->vx = (rand() & 7) - 3;
+                sprite->vy = (rand() & 7) - 3;
                 sprite->vz = 0;
             }
         }

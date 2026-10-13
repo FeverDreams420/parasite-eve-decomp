@@ -38,8 +38,8 @@ int func_80192540(int mode, RoomM404Drop *drop) {
             drop->x += drop->vx;
             drop->y += drop->vy;
             drop->z += drop->vz;
-            drop->x += (func_80071A54() & 0xF) - 8;
-            drop->z += (func_80071A54() & 0xF) - 8;
+            drop->x += (rand() & 0xF) - 8;
+            drop->z += (rand() & 0xF) - 8;
             drop->y += 0x40;
             if (drop->y >= g_RoomFloorY->y - 0x10) {
                 drop->state = 1;
@@ -54,9 +54,9 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                     child->x = drop->x;
                     child->y = drop->y;
                     child->z = drop->z;
-                    child->vx = (func_80071A54() & 0x1F) - 0x10;
+                    child->vx = (rand() & 0x1F) - 0x10;
                     child->vy = 0;
-                    child->vz = (func_80071A54() & 0x1F) - 0x10;
+                    child->vz = (rand() & 0x1F) - 0x10;
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -72,17 +72,17 @@ int func_80192540(int mode, RoomM404Drop *drop) {
             drop->x += drop->vx;
             drop->y += drop->vy;
             drop->z += drop->vz;
-            drop->x += (func_80071A54() & 0x1F) - 0x10;
-            drop->z += (func_80071A54() & 0x1F) - 0x10;
+            drop->x += (rand() & 0x1F) - 0x10;
+            drop->z += (rand() & 0x1F) - 0x10;
             if (drop->timer & 1) {
                 child = func_800CE610(ANIM_POOL_AS(RoomM404DropSpawnChannel)->pool);
                 if (child) {
                     child->x = drop->x;
                     child->y = drop->y;
                     child->z = drop->z;
-                    child->vx = (func_80071A54() & 0x1F) - 0x10;
+                    child->vx = (rand() & 0x1F) - 0x10;
                     child->vy = 0;
-                    child->vz = (func_80071A54() & 0x1F) - 0x10;
+                    child->vz = (rand() & 0x1F) - 0x10;
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -131,18 +131,18 @@ int func_80192540(int mode, RoomM404Drop *drop) {
             if (func_800C6B90(drop, 0x6E) && FX_TASK_AS(RoomM404DropEvent)->active) {
                 ROOM_M404_DROP_FLASH(0x19000000);
             }
-            if ((drop->timer & 1) && (func_80071A54() & 0xF) == 0) {
+            if ((drop->timer & 1) && (rand() & 0xF) == 0) {
                 child = func_800CE610(ANIM_POOL_AS(RoomM404DropSpawnChannel)->pool);
                 if (child) {
                     child->x = drop->x;
                     child->y = drop->y;
                     child->z = drop->z;
-                    child->x += (func_80071A54() & 0x7F) - 0x40;
-                    child->y -= func_80071A54() & 0x3F;
-                    child->z += (func_80071A54() & 0x7F) - 0x40;
-                    child->vx = (func_80071A54() & 0x1F) - 0x10;
-                    child->vy = -(func_80071A54() & 7);
-                    child->vz = (func_80071A54() & 0x1F) - 0x10;
+                    child->x += (rand() & 0x7F) - 0x40;
+                    child->y -= rand() & 0x3F;
+                    child->z += (rand() & 0x7F) - 0x40;
+                    child->vx = (rand() & 0x1F) - 0x10;
+                    child->vy = -(rand() & 7);
+                    child->vz = (rand() & 0x1F) - 0x10;
                     child->state = 3;
                     child->timer = 0;
                 }
@@ -169,7 +169,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 func_800CEE20((GteShortVector *)drop, 0, size, size, 0x20, GetClut(0x10, palette), 1, alpha,
                               (struct RenderColor *)&glow);
             }
-            if (func_80071A54() & 3) return 0;
+            if (rand() & 3) return 0;
             {
                 RenderMatrixSlot *slot = &D_800BCFA4;
                 gte_ldrotmatrix(slot->value);
@@ -220,7 +220,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 gte_ldrotmatrix(slot->value);
                 gte_ldtransmatrix(slot->value);
             }
-            if (func_80071A54() & 3) return 0;
+            if (rand() & 3) return 0;
             func_800D004C((GteShortVector *)drop, 0x140, 0x140, 6, (GteRotation *)&rotation, 0x1000, 0x1000, (struct RenderColor *)&color, 0,
                           alpha / 2, 1);
             break;
@@ -411,9 +411,9 @@ int func_80193A6C(int mode, RoomM404BurstOrigin *origin) {
                     spark->x = origin->x;
                     spark->y = origin->y;
                     spark->z = origin->z;
-                    spark->vx = func_80071A54() % 50 - 25;
-                    spark->vy = -(func_80071A54() % 39);
-                    spark->vz = func_80071A54() % 50 - 25;
+                    spark->vx = rand() % 50 - 25;
+                    spark->vy = -(rand() % 39);
+                    spark->vz = rand() % 50 - 25;
                     spark->state = 1;
                     spark->timer = 0;
                 }
@@ -424,9 +424,9 @@ int func_80193A6C(int mode, RoomM404BurstOrigin *origin) {
                     spark->x = origin->x;
                     spark->y = origin->y;
                     spark->z = origin->z;
-                    spark->vx = func_80071A54() % 80 - 40;
-                    spark->vy = -(func_80071A54() % 80);
-                    spark->vz = func_80071A54() % 80 - 40;
+                    spark->vx = rand() % 80 - 40;
+                    spark->vy = -(rand() % 80);
+                    spark->vz = rand() % 80 - 40;
                     spark->state = 0;
                     spark->timer = 0;
                 }

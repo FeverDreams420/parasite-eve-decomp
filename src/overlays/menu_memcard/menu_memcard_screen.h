@@ -56,8 +56,7 @@ extern s32 D_801D11C8;
 extern u8 D_80193254[];
 extern s32 D_80193278;
 
-void func_80075358(void *packet); /* DrawPrim */
 void SetDispMask(s32 mask);
-void func_80074A44(s32 mode);
+void ResetGraph(s32 mode);
 
 #endif

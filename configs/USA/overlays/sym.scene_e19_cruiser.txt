@@ -1,11 +1,7 @@
-g_PlayerEntity = 0x8009D254;
-FieldFx_VecToAngle = 0x800DFF80;
-FieldFx_TurnToward = 0x800DFFB8;
 RoomLib_UpdateCallback = 0x80192660; // type:func
 RoomLib_GrabAwaitStance = 0x80192688; // type:func
 RoomLib_GrabOnApproach = 0x801926B4; // type:func
 func_80192B10 = 0x80192B10; // type:func
-RoomMain_ActorPtr = 0x8009D254; // absolute:True
 RoomLib_HandlerDNop0 = 0x8018F270; // type:func
 RoomLib_InitHandlerD = 0x8018F278; // type:func
 RoomLib_ConfigureHandlerD = 0x8018F318; // type:func

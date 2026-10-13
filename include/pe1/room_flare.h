@@ -116,7 +116,7 @@ extern struct BattleEntity *D_8009D254;
 extern u16 D_800E1208;
 
 extern int rand(void);
-extern void func_800866A4(int, int);
+extern void Akao_Cmd_21(int, int);
 
 /* Room data the dropped-flare unit writes; each room defines it. */
 extern int RoomLib_PairA;

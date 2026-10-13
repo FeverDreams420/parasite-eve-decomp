@@ -10,7 +10,9 @@ options:
   src_path: src/overlays/menu_memcard
   build_path: build/USA/overlays/menu_memcard
   ld_script_path: linkers/USA/overlays/menu_memcard.ld
-  symbol_addrs_path: configs/USA/overlays/sym.menu_memcard.txt
+  symbol_addrs_path:
+    - configs/USA/overlays/sym.menu_memcard.txt
+    - configs/USA/sym.main.txt
   undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.menu_memcard.txt
   undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.menu_memcard.txt
   find_file_boundaries: True

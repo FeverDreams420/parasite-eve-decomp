@@ -21,7 +21,7 @@ void func_80190064(void) {
     s32 y;
     MemcardImageNode *node;
 
-    pad = func_8005E038();
+    pad = Draw_RemapStatusFlags();
     if ((pad & 0x800) && !(D_801D11B8 & 0x800)) {
         node = MenuCard_FindImageNode(2);
         if (node != 0 && node->intensity > 0x80) {
@@ -37,13 +37,13 @@ void func_80190064(void) {
     }
     node = MenuCard_FindImageNode(5);
     if (node != 0 && node->draw == 0) {
-        if (func_80042770(0) != 0 || func_80042770(1) != 0) {
+        if (MemCard_IsPortPresent(0) != 0 || MemCard_IsPortPresent(1) != 0) {
             if (node->y < 200) {
                 node->y++;
                 MenuCard_FindImageNode(4)->targetY = 16;
                 D_801D1380 = 0;
             }
-            if (node->y == 200 && func_8003FFCC() != 0) {
+            if (node->y == 200 && MemCard_HasAnyPresentFile() != 0) {
                 node = MenuCard_FindImageNode(6);
                 if (node->targetY == 0) {
                     node->draw = D_801930D8;
@@ -60,7 +60,7 @@ void func_80190064(void) {
             MenuCard_FindImageNode(4)->targetY = -16;
             D_801D1380 = 0;
         }
-        if (func_8003FFCC() == 0) {
+        if (MemCard_HasAnyPresentFile() == 0) {
             node = MenuCard_FindImageNode(6);
             if (node->targetY == 0x54) {
                 node->draw = D_8019316C;
@@ -170,8 +170,8 @@ void func_80190660(void) {
             shade = 0;
         }
         sprite->r0 = sprite->g0 = sprite->b0 = shade;
-        func_80075358(tpage);
-        func_80075358(sprite);
+        DrawPrim(tpage);
+        DrawPrim(sprite);
         sprite++;
         sprite->r0 = sprite->g0 = sprite->b0 = shade;
         DrawSync(0);
@@ -185,7 +185,7 @@ void func_80190660(void) {
             LoadImage(&overlay, D_801D11C4->overlayImage);
         }
         VSync(0);
-        func_80074A44(1);
+        ResetGraph(1);
         PutDrawEnv(&D_801D11C4->draw);
         PutDispEnv(&D_801D11C4->disp);
     }
@@ -249,11 +249,11 @@ s32 func_801909B4(void) {
     D_800B0E54 = secondMemory + 0x4080;
     D_800B0E38.ordering[0] = (u32 *)(firstMemory + 0x80);
     D_800B0E3C = secondMemory + 0x80;
-    func_8005E57C(1);
+    Draw_SetPresentEnabled(1);
     result = -1;
     do {
-        func_8005C1EC(1);
-        func_80042538();
+        MemCard_SetDialogActive(1);
+        MemCard_InitState();
         SetDispMask(0);
         rect.x = 0x140;
         rect.w = 0xA0;
@@ -289,7 +289,7 @@ s32 func_801909B4(void) {
                 waitFrames = 0;
                 do {
                     waitFrames += 1;
-                    func_800425DC();
+                    MemCard_UpdateSavePolling();
                     VSync(0);
                 } while (waitFrames < 0x3C);
             }
@@ -336,7 +336,7 @@ s32 func_801909B4(void) {
                 LoadImage(&overlay, D_801D11C4->overlayImage);
             }
             VSync(0);
-            func_80074A44(1);
+            ResetGraph(1);
             PutDrawEnv(&D_801D11C4->draw);
             PutDispEnv(&D_801D11C4->disp);
         }
@@ -366,8 +366,8 @@ s32 func_801909B4(void) {
                 page = D_801D11C8 == 0;
                 D_801D11C8 = page;
                 D_801D11C4 = D_801D11BC[page];
-                func_800425DC();
-                func_8003EB04();
+                MemCard_UpdateSavePolling();
+                Field_HandleStateTransition();
                 func_80190064();
                 MenuCard_RedrawImageNodes();
                 node = ((MemcardImageNode *)D_801D1370);
@@ -426,7 +426,7 @@ s32 func_801909B4(void) {
                     LoadImage(&overlay, D_801D11C4->overlayImage);
                 }
                 VSync(2);
-                func_80074A44(1);
+                ResetGraph(1);
                 PutDrawEnv(&D_801D11C4->draw);
                 PutDispEnv(&D_801D11C4->disp);
                 elapsed = D_801D1380 + titleMode;
@@ -449,8 +449,8 @@ s32 func_801909B4(void) {
         VSync(0);
         screenYRestore = 8;
         Draw_InitBuffers();
-        func_8005E6F0();
-        func_8005E788(2);
+        Draw_SelectBuffer();
+        Draw_PresentFrame(2);
         if (D_801D1380 >= 0x3E9) {
             wantedKind = 7;
             selection = ((MemcardImageNode *)D_801D1370);
@@ -464,12 +464,12 @@ s32 func_801909B4(void) {
             selectionY = selection->y;
             if (selectionY == 0xA0) {
                 result = 1;
-                func_80036E34();
-                func_80036DF8();
-            } else if ((selectionY >= 0xB5) || ((selectionY == 0xB4) && (func_80042770(0) == 0) && (func_80042770(1) == 0))) {
+                GameTime_InitCounter2();
+                GameTime_InitCounter0();
+            } else if ((selectionY >= 0xB5) || ((selectionY == 0xB4) && (MemCard_IsPortPresent(0) == 0) && (MemCard_IsPortPresent(1) == 0))) {
                 result = 3;
             } else {
-                func_8005E6E4((u8 *)D_801D11C0 + 0x1C080);
+                Draw_SetPresentImage((u8 *)D_801D11C0 + 0x1C080);
                 image = (MemcardImage *)&D_80193254[*D_80193258];
                 source = (u32 *)(image + 1);
                 groupsRemaining = (image->width * image->height) / 6;
@@ -499,17 +499,17 @@ s32 func_801909B4(void) {
                     } while (groupsRemaining >= 0);
                 }
                 SetDispMask(1);
-                func_8004D084(0);
-                func_8003FFAC(selectionY == 0x8C);
+                Menu_OpenMemCardSelectDialog(0);
+                Save_SetTitleStyleFlag(selectionY == 0x8C);
                 do {
-                    func_8003EB04();
-                    result = func_8005C498(0);
+                    Field_HandleStateTransition();
+                    result = Menu_RunFrameWithArg(0);
                 } while (result == 0);
                 if ((result == 2) && (selectionY == 0x8C)) {
-                    func_80036E34();
+                    GameTime_InitCounter2();
                 }
                 SetDispMask(0);
-                func_8005E6E4(0);
+                Draw_SetPresentImage(0);
                 rect.x = 0;
                 rect.y = 0;
                 rect.w = 0x140;
@@ -529,7 +529,7 @@ s32 func_801909B4(void) {
         D_800BCE9E = screenY;
         D_800BCE8A = screenY;
     }
-    func_8005C1EC(0);
-    func_8005E57C(0);
+    MemCard_SetDialogActive(0);
+    Draw_SetPresentEnabled(0);
     return result;
 }

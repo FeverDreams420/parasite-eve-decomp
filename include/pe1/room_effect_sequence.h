@@ -28,7 +28,7 @@ extern void *D_80192C34;
 
 extern int *FieldFx_VarPtr(int index);
 extern int *FieldFx_RegPtr(int index);
-/* Per-command handler table and state size table for func_800C2B90. */
+/* Per-command handler table and state size table for FieldFx_StartSlot. */
 extern int (*D_80192B5C[])(void *, void *, void *);
 extern u16 D_80192BBC[];
 extern char D_80192BFC;

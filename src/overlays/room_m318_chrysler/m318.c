@@ -26,7 +26,7 @@ typedef RoomTwinRibbonPulse RoomM318Pulse;
 #include "m318_externs.h"
 
 /* printf. */
-int func_80071A74(const char *format, ...);
+int printf(const char *format, ...);
 
 FieldActor *func_80192560(int type_id, int sub_id, s16 *position) {
     FieldActor *actor;
@@ -42,7 +42,7 @@ FieldActor *func_80192560(int type_id, int sub_id, s16 *position) {
         actor = actor->next;
     }
 
-    func_80071A74(D_8018F1CC, type_id, sub_id);
+    printf(D_8018F1CC, type_id, sub_id);
     return 0;
 }
 
@@ -51,9 +51,9 @@ s32 func_80192620(s32 mode, s16 *pos) {
     s16 out[4];
     switch (mode) {
     case 1:
-    pos[0] = (u16)(pos[0] - 3 + (func_80071A54() & 7));
-    pos[1] = (u16)(pos[1] - 7 + (func_80071A54() & 3));
-    pos[2] = (u16)(pos[2] - 3 + (func_80071A54() & 7));
+    pos[0] = (u16)(pos[0] - 3 + (rand() & 7));
+    pos[1] = (u16)(pos[1] - 7 + (rand() & 3));
+    pos[2] = (u16)(pos[2] - 3 + (rand() & 7));
     if (D_800E27EC >= 0x12) {
         return 1;
     }
@@ -84,7 +84,7 @@ int func_80192A7C(int mode, RoomFanSweep *sweep, RoomEmberBurstParams *params) {
 
     switch (mode) {
     case 0:
-        sweep->angle = func_80071A54();
+        sweep->angle = rand();
         RoomEffect_AttachToActor(params->subId, params->typeId, sweep);
         sweep->y = g_RoomFloorY->y;
         func_800D3F64(0x5F3, func_800D3FD8());
@@ -192,7 +192,7 @@ int func_80192ED4(int mode, RoomSpiralDrop *drop, RoomEmberBurstParams *params) 
 
     switch (mode) {
     case 0:
-        drop->angle = func_80071A54();
+        drop->angle = rand();
         drop->radius = 0;
         RoomEffect_AttachToActor(params->subId, params->typeId, drop);
         return func_800CE560(ANIM_POOL_AS(RoomEmberBurstChannel)->pool, 8, 0x18,
@@ -204,8 +204,8 @@ int func_80192ED4(int mode, RoomSpiralDrop *drop, RoomEmberBurstParams *params) 
                 spark->emitter.x = drop->x + rcos(drop->angle) * drop->radius / 4096;
                 spark->emitter.z = drop->z + rsin(drop->angle) * drop->radius / 4096;
                 spark->emitter.y = drop->y;
-                spark->emitter.speed = func_80071A54() & 3;
-                drop->angle += 0x8AA + (func_80071A54() & 0x1F);
+                spark->emitter.speed = rand() & 3;
+                drop->angle += 0x8AA + (rand() & 0x1F);
             }
         }
         if (D_800E27EC < 0x4A) break;
@@ -320,7 +320,7 @@ int func_8019326C(int mode, RoomShakeSweepParticle *p) {
             kind = D_800F336C;
             palette = D_800E1204[kind];
             palette = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8 : palette + 4);
-            func_800C6EC0(page, (u16)palette);
+            FieldFx_ModelSetTexture(page, (u16)palette);
         }
         FieldFx_ModelSetSemiTrans(1);
         FieldFx_ModelSaveColors(D_800F32D8);
@@ -347,7 +347,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
 
     switch (mode) {
     case 0:
-        anchor->angle = func_80071A54();
+        anchor->angle = rand();
         func_800CE870((char *)D_8009D254, 1, (s16 *)anchor);
         anchor->y = g_RoomFloorY->y;
         soundSlot = D_800B0E64;
@@ -373,7 +373,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
                              (FieldFxCallbackListCallback)func_8019326C);
     case 1:
         if (D_800E27EC < 0x2B)
-            func_80020D50();
+            Battle_HaltOnPositiveX();
         if (D_800E27EC < 0x28 && D_800E27EC % 6 == 0) {
             next = (RoomShakeSweepParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
             if (next != 0) {
@@ -381,14 +381,14 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
                 next->state = 0;
                 next->timer = 0;
                 {
-                    int jitter = func_80071A54() & 0xFF;
+                    int jitter = rand() & 0xFF;
                     int angle = anchor->angle - 0x555;
                     anchor->angle = angle - jitter;
                 }
             }
         }
         if (D_800E27EC == 0x2B)
-            func_80020DD0();
+            Battle_InitEntityColors();
         if (D_800E27EC == 0x2C && FX_TASK_AS(RoomShakeBurstEvent)->active) {
             channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
@@ -519,15 +519,15 @@ int func_80193FC4(int mode, RoomShakeBurstParticleCallbackView *particle) {
     u16 clut;
     switch (mode) {
     case 1:
-        random = func_80071A54();
+        random = rand();
         value = particle->x - 3;
         value += (random & 7);
         particle->x = value;
-        random = func_80071A54();
+        random = rand();
         value = particle->z - 3;
         value += (random & 7);
         particle->z = value;
-        random = func_80071A54();
+        random = rand();
         particle->y += random & 3;
         if (D_800E27EC >= 32) return 1;
         break;
@@ -586,17 +586,17 @@ int func_80194164(int mode, RoomShakeBurstPoint *anchor) {
                              (FieldFxCallbackListCallback)func_80193FC4);
     case 1:
         if (D_800E27EC < 0x27)
-            func_80020D50();
+            Battle_HaltOnPositiveX();
         if (D_800E27EC < 0x15) {
             next = func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
             if (next != 0) {
-                next->x = anchor->x + (func_80071A54() & 0x1FF) - 0x100;
-                next->y = anchor->y + (func_80071A54() & 0x1FF) - 0x100;
-                next->z = anchor->z + (func_80071A54() & 0x1FF) - 0x100;
+                next->x = anchor->x + (rand() & 0x1FF) - 0x100;
+                next->y = anchor->y + (rand() & 0x1FF) - 0x100;
+                next->z = anchor->z + (rand() & 0x1FF) - 0x100;
             }
         }
         if (D_800E27EC == 0x27)
-            func_80020DD0();
+            Battle_InitEntityColors();
         if (D_800E27EC == 0x28 && FX_TASK_AS(RoomShakeBurstEvent)->active) {
             channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
@@ -794,13 +794,13 @@ int func_80194AAC(int mode, RoomEmberBurst *burst, RoomEmberBurstParams *params)
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->x += (func_80071A54() & 0x3F) - 0x20;
-                    child->y += (func_80071A54() & 0x3F) - 0x20;
-                    child->z += (func_80071A54() & 0x3F) - 0x20;
-                    child->radius = (func_80071A54() & 0x1FF) + 0x200;
-                    child->heading.x = func_80071A54();
-                    child->heading.y = func_80071A54();
-                    child->heading.z = func_80071A54();
+                    child->x += (rand() & 0x3F) - 0x20;
+                    child->y += (rand() & 0x3F) - 0x20;
+                    child->z += (rand() & 0x3F) - 0x20;
+                    child->radius = (rand() & 0x1FF) + 0x200;
+                    child->heading.x = rand();
+                    child->heading.y = rand();
+                    child->heading.z = rand();
                     child->state = 1;
                     child->timer = 0;
                 }
@@ -811,12 +811,12 @@ int func_80194AAC(int mode, RoomEmberBurst *burst, RoomEmberBurstParams *params)
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->y += 0x100 - (func_80071A54() & 0x1FF);
-                    child->x += (func_80071A54() & 0xFF) - 0x80;
-                    child->z += (func_80071A54() & 0xFF) - 0x80;
-                    child->heading.x = func_80071A54() % 32 - 0x10;
-                    child->heading.y = func_80071A54() % 8 - 4;
-                    child->heading.z = func_80071A54() % 32 - 0x10;
+                    child->y += 0x100 - (rand() & 0x1FF);
+                    child->x += (rand() & 0xFF) - 0x80;
+                    child->z += (rand() & 0xFF) - 0x80;
+                    child->heading.x = rand() % 32 - 0x10;
+                    child->heading.y = rand() % 8 - 4;
+                    child->heading.z = rand() % 32 - 0x10;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -827,9 +827,9 @@ int func_80194AAC(int mode, RoomEmberBurst *burst, RoomEmberBurstParams *params)
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->x += (func_80071A54() & 0x1FF) - 0x100;
-                    child->y += (func_80071A54() & 0x1FF) - 0x100;
-                    child->z += (func_80071A54() & 0x1FF) - 0x100;
+                    child->x += (rand() & 0x1FF) - 0x100;
+                    child->y += (rand() & 0x1FF) - 0x100;
+                    child->z += (rand() & 0x1FF) - 0x100;
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -1011,12 +1011,12 @@ int func_801955E4(int mode, RoomRisingColumn *column,
                 child->x = column->x;
                 child->y = column->y;
                 child->z = column->z;
-                child->x += (func_80071A54() & 0xFF) - 0x80;
-                child->z += (func_80071A54() & 0xFF) - 0x80;
-                child->heading.x = func_80071A54() % 32 - 0x10;
+                child->x += (rand() & 0xFF) - 0x80;
+                child->z += (rand() & 0xFF) - 0x80;
+                child->heading.x = rand() % 32 - 0x10;
                 /* The vertical heading spends a random draw on a zero range. */
-                child->heading.y = func_80071A54() % 1;
-                child->heading.z = func_80071A54() % 32 - 0x10;
+                child->heading.y = rand() % 1;
+                child->heading.z = rand() % 32 - 0x10;
                 child->state = 1;
                 child->timer = 0;
             }
@@ -1170,9 +1170,9 @@ int func_80195D20(int mode, RoomShakeBurstPoint *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->heading.x = func_80071A54() % 50 - 0x19;
-                    child->heading.y = func_80071A54() % 50 - 0x19;
-                    child->heading.z = func_80071A54() % 50 - 0x19;
+                    child->heading.x = rand() % 50 - 0x19;
+                    child->heading.y = rand() % 50 - 0x19;
+                    child->heading.z = rand() % 50 - 0x19;
                     child->state = 1;
                     child->timer = 0;
                 }
@@ -1185,13 +1185,13 @@ int func_80195D20(int mode, RoomShakeBurstPoint *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->radius = (func_80071A54() & 0x7FF) + 0x800;
-                    child->x += (func_80071A54() & 0x7F) - 0x40;
-                    child->y += (func_80071A54() & 0x7F) - 0x40;
-                    child->z += (func_80071A54() & 0x7F) - 0x40;
-                    child->heading.x = func_80071A54() % 190 - 0x5F;
-                    child->heading.y = func_80071A54() % 190 - 0x5F;
-                    child->heading.z = func_80071A54() % 190 - 0x5F;
+                    child->radius = (rand() & 0x7FF) + 0x800;
+                    child->x += (rand() & 0x7F) - 0x40;
+                    child->y += (rand() & 0x7F) - 0x40;
+                    child->z += (rand() & 0x7F) - 0x40;
+                    child->heading.x = rand() % 190 - 0x5F;
+                    child->heading.y = rand() % 190 - 0x5F;
+                    child->heading.z = rand() % 190 - 0x5F;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -1368,14 +1368,14 @@ int func_80196820(int mode, RoomCrossFlash *flash) {
             for (i = 0; i < 4; i++) {
                 child = (RoomCrossFlashParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
                 if (child) {
-                    child->x = (func_80071A54() & 0x7F) - 0x40;
+                    child->x = (rand() & 0x7F) - 0x40;
                     child->y = 0;
-                    child->z = (func_80071A54() & 0x1F) + 0x10;
+                    child->z = (rand() & 0x1F) + 0x10;
                     child->rotation.x = flash->rotation.x;
                     child->rotation.y = flash->rotation.y;
                     child->rotation.z = flash->rotation.z;
                     child->rotation.y += 0x400;
-                    child->rotation.x += func_80071A54();
+                    child->rotation.x += rand();
                     child->rotation.flags = 0;
                     child->state = 1;
                     child->timer = 0;
@@ -1400,12 +1400,12 @@ int func_80196820(int mode, RoomCrossFlash *flash) {
                 child = (RoomCrossFlashParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
                 if (child) {
                     child->x = 0;
-                    child->y = (func_80071A54() & 0x7F) - 0x40;
-                    child->z = (func_80071A54() & 0x1F) + 0x10;
+                    child->y = (rand() & 0x7F) - 0x40;
+                    child->z = (rand() & 0x1F) + 0x10;
                     child->rotation.x = flash->rotation.x;
                     child->rotation.y = flash->rotation.y;
                     child->rotation.z = flash->rotation.z;
-                    child->rotation.y += func_80071A54();
+                    child->rotation.y += rand();
                     child->rotation.flags = 0;
                     child->state = 1;
                     child->timer = 0;
@@ -1436,7 +1436,7 @@ int func_80196820(int mode, RoomCrossFlash *flash) {
     return 0;
 }
 
-int func_80071A54(void);
+int rand(void);
 
 int func_80196C48(int mode, RoomM318Pulse *pulse) {
     int angle, sine, cosine, size, clut, random;
@@ -1450,13 +1450,13 @@ int func_80196C48(int mode, RoomM318Pulse *pulse) {
     case 1: {
         if (pulse->delay) return 0;
         ++pulse->age;
-        random = func_80071A54();
+        random = rand();
         value = pulse->y - 5;
         pulse->y = value - (random & 7);
-        random = func_80071A54();
+        random = rand();
         value = pulse->x - 3;
         pulse->x = value + (random & 7);
-        random = func_80071A54();
+        random = rand();
         value = pulse->z - 3;
         pulse->z = value + (random & 7);
         if (pulse->age >= 6) return 1;
@@ -1786,13 +1786,13 @@ int func_80197CBC(int mode, RoomEmberFountain *fountain) {
                 child->x = position.x;
                 child->y = position.y;
                 child->z = position.z;
-                child->x += (func_80071A54() & 0x3F) - 0x20;
-                child->y += (func_80071A54() & 0x3F) - 0x20;
-                child->z += (func_80071A54() & 0x3F) - 0x20;
-                child->radius = (func_80071A54() & 0x3FF) + 0x3E8;
-                child->heading.x = func_80071A54();
-                child->heading.y = func_80071A54();
-                child->heading.z = func_80071A54();
+                child->x += (rand() & 0x3F) - 0x20;
+                child->y += (rand() & 0x3F) - 0x20;
+                child->z += (rand() & 0x3F) - 0x20;
+                child->radius = (rand() & 0x3FF) + 0x3E8;
+                child->heading.x = rand();
+                child->heading.y = rand();
+                child->heading.z = rand();
                 child->state = 1;
                 child->timer = 0;
             }
@@ -1802,12 +1802,12 @@ int func_80197CBC(int mode, RoomEmberFountain *fountain) {
                     child->x = position.x;
                     child->y = position.y;
                     child->z = position.z;
-                    child->y += 0x100 - (func_80071A54() & 0x1FF);
-                    child->x += (func_80071A54() & 0x1FF) - 0x100;
-                    child->z += (func_80071A54() & 0x1FF) - 0x100;
-                    child->heading.x = func_80071A54() % 32 - 0x10;
-                    child->heading.y = func_80071A54() % 32 - 0x10;
-                    child->heading.z = func_80071A54() % 32 - 0x10;
+                    child->y += 0x100 - (rand() & 0x1FF);
+                    child->x += (rand() & 0x1FF) - 0x100;
+                    child->z += (rand() & 0x1FF) - 0x100;
+                    child->heading.x = rand() % 32 - 0x10;
+                    child->heading.y = rand() % 32 - 0x10;
+                    child->heading.z = rand() % 32 - 0x10;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -1818,9 +1818,9 @@ int func_80197CBC(int mode, RoomEmberFountain *fountain) {
                     child->x = position.x;
                     child->y = position.y;
                     child->z = position.z;
-                    child->x += (func_80071A54() & 0x1FF) - 0x100;
-                    child->y += (func_80071A54() & 0x1FF) - 0x100;
-                    child->z += (func_80071A54() & 0x1FF) - 0x100;
+                    child->x += (rand() & 0x1FF) - 0x100;
+                    child->y += (rand() & 0x1FF) - 0x100;
+                    child->z += (rand() & 0x1FF) - 0x100;
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -2051,14 +2051,14 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
                 child->x = position.x;
                 child->y = position.y;
                 child->z = position.z;
-                child->x += (func_80071A54() & 0x3F) - 0x20;
-                child->y += (func_80071A54() & 0x3F) - 0x20;
-                child->z += (func_80071A54() & 0x3F) - 0x20;
-                child->radius = (func_80071A54() & 0x1FF) + 0x200;
+                child->x += (rand() & 0x3F) - 0x20;
+                child->y += (rand() & 0x3F) - 0x20;
+                child->z += (rand() & 0x3F) - 0x20;
+                child->radius = (rand() & 0x1FF) + 0x200;
                 child->heading.x = spiral->x;
                 child->heading.y = spiral->y;
                 child->heading.z = spiral->z;
-                child->heading.pad = func_80071A54();
+                child->heading.pad = rand();
                 child->state = 1;
                 child->timer = 0;
             }
@@ -2068,12 +2068,12 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
                     child->x = position.x;
                     child->y = position.y;
                     child->z = position.z;
-                    child->y += 0x100 - (func_80071A54() & 0x1FF);
-                    child->x += (func_80071A54() & 0x1FF) - 0x100;
-                    child->z += (func_80071A54() & 0x1FF) - 0x100;
-                    child->heading.x = func_80071A54() % 32 - 0x10;
-                    child->heading.y = func_80071A54() % 32 - 0x10;
-                    child->heading.z = func_80071A54() % 32 - 0x10;
+                    child->y += 0x100 - (rand() & 0x1FF);
+                    child->x += (rand() & 0x1FF) - 0x100;
+                    child->z += (rand() & 0x1FF) - 0x100;
+                    child->heading.x = rand() % 32 - 0x10;
+                    child->heading.y = rand() % 32 - 0x10;
+                    child->heading.z = rand() % 32 - 0x10;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -2083,9 +2083,9 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
                 child->x = position.x;
                 child->y = position.y;
                 child->z = position.z;
-                child->x += (func_80071A54() & 0x1F) - 0x10;
-                child->y += (func_80071A54() & 0x1F) - 0x10;
-                child->z += (func_80071A54() & 0x1F) - 0x10;
+                child->x += (rand() & 0x1F) - 0x10;
+                child->y += (rand() & 0x1F) - 0x10;
+                child->z += (rand() & 0x1F) - 0x10;
                 child->state = 2;
                 child->timer = 0;
             }
@@ -2155,7 +2155,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 palette = GetClut(0x40, palette);
-                func_800C6EC0(page, (u16)palette);
+                FieldFx_ModelSetTexture(page, (u16)palette);
             }
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);

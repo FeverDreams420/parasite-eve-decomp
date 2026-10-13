@@ -100,6 +100,6 @@ extern u8 *D_80190B88;
 extern u16 D_800E1208;
 
 int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params);
-int func_80071A54(void);
+int rand(void);
 
 #endif

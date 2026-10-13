@@ -11,6 +11,8 @@ options:
   build_path: build/USA/overlays/scene_e20_cruiser
   ld_script_path: linkers/USA/overlays/scene_e20_cruiser.ld
   undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.scene_e20_cruiser.txt
+  symbol_addrs_path:
+    - configs/USA/sym.main.txt
   undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.scene_e20_cruiser.txt
   find_file_boundaries: True
   disassemble_all: True

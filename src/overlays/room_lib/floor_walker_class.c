@@ -157,10 +157,10 @@ void RoomLib_HandlerG(RoomEnt *o) {
         self->sub.cb = RoomLib_HandlerGFloorWalker;
     }
     if (src->target != 0) {
-        if (func_8003010C(src, 0x2C) <= 0) {
-            func_80030220(dst, 0x2D, 0);
-            func_80030220(dst, 0x2C, 0);
-            func_80030220(dst, 0x5F, 0);
+        if (Battle_GetEnemyContextField(src, 0x2C) <= 0) {
+            Entity_WriteFieldByCmd(dst, 0x2D, 0);
+            Entity_WriteFieldByCmd(dst, 0x2C, 0);
+            Entity_WriteFieldByCmd(dst, 0x5F, 0);
             RoomLib_ReleaseHandlerG(self);
         }
     } else {

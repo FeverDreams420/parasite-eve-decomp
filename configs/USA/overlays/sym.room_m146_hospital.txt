@@ -1,13 +1,4 @@
-FieldFx_Spawn6 = 0x800C2AF0;
 RoomLib_Spawn6 = 0x80190574; // type:func
-FieldFx_GetStatus = 0x800C6CE0;
-FieldFx_Register = 0x800C2414;
-FieldFx_GetSlot = 0x800C22F8;
-Asset_SearchByKeyType = 0x8006DC18; // type:func
-ScaleMatrix = 0x80078CC4; // type:func
-rand = 0x80071A54; // type:func
-rsin = 0x80077CF4; // type:func
-rcos = 0x80077DC4; // type:func
 RoomLib_PlantScript = 0x80190548; // type:func
 g_RoomScript = 0x80192580;
 RoomLib_ClassNop6 = 0x801906F8; // type:func

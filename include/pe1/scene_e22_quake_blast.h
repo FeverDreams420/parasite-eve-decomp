@@ -86,7 +86,7 @@ typedef struct SceneE22QuakeActor {
     u32 flags;                    /* 0x4C */
 } SceneE22QuakeActor;
 
-extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
+extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
 /* Texture page indices: [0] the shared effect page, [8] this scene's. */
 extern void *D_80199508;
 extern void *D_8019950C;
@@ -94,8 +94,8 @@ extern u8 D_8019948C[];
 extern GteRotation D_8018F1FC;
 extern RenderColor D_8018F228;
 
-extern int func_80071A54(void);
-extern void func_800C6EC0(int tpage, int clut);
+extern int rand(void);
+extern void FieldFx_ModelSetTexture(int tpage, int clut);
 #include "pe1/gte_types.h"
 
 #endif

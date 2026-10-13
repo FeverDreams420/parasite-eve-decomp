@@ -57,6 +57,6 @@ extern u8 *D_8019416C;
 extern u8 D_801940F8[];
 
 int func_80193200(int mode, RoomSwirlRiseState *state);
-int func_80071A54(void);
+int rand(void);
 
 #endif

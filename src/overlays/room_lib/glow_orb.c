@@ -61,7 +61,7 @@ void RoomEffect_GlowOrbSpawnerUpdate(void *object, RoomFallingParticleControl *c
 
     yaw = FieldFx_RegPtr(4);
     *yaw = spawner->yaw;
-    func_800C2B90(object, 2, (unsigned short *)g_RoomSpawnLayout, g_RoomInitList);
+    FieldFx_StartSlot(object, 2, (unsigned short *)g_RoomSpawnLayout, g_RoomInitList);
     control->state = 2;
 }
 
@@ -199,7 +199,7 @@ void RoomEffect_GlowOrbUpdate(void *owner, RoomFallingParticleControl *control,
     state->frame++;
     if (Geo_PointInPoly((s16)state->x << 16, (s16)state->z << 16, D_8009D248, D_8009D1CC)) {
         if ((s8)state->frame % 3 == 0) {
-            spawn = func_800C2B90(owner, 3, (unsigned short *)g_RoomSpawnLayout, g_RoomInitList);
+            spawn = FieldFx_StartSlot(owner, 3, (unsigned short *)g_RoomSpawnLayout, g_RoomInitList);
             if (spawn != 0) {
                 spawn[4] = state->x;
                 spawn[5] = g_RoomFloorY->y;

@@ -50,9 +50,9 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
                     child->x = spark->x;
                     child->y = spark->y;
                     child->z = spark->z;
-                    child->vx = (func_80071A54() & 0x1F) - 0x10;
+                    child->vx = (rand() & 0x1F) - 0x10;
                     child->vy = 0;
-                    child->vz = (func_80071A54() & 0x1F) - 0x10;
+                    child->vz = (rand() & 0x1F) - 0x10;
                     child->state = 1;
                     child->timer = 0;
                 }

@@ -78,7 +78,7 @@ void RoomEffect_DropFieldInit(RoomDropFieldEntity *ent, void *unused, RoomDropFi
     RoomDropFieldLink *link;
     RoomDropFieldMatrixWords *matrix;
 
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
     g_RoomDropFieldModel = Asset_FindTable08ByU32Key(D_800B0E64[0], 0x118704);
 
     link = ent->link;
@@ -170,7 +170,7 @@ void RoomEffect_DropFieldTick(int arg0, char* arg1, char* arg2) {
         }
     }
 
-    if (func_800C2B68() == 1) {
+    if (FieldFx_IsLastSlotHalted() == 1) {
         arg1[1] = 2;
     }
 }
@@ -182,21 +182,21 @@ void RoomEffect_DrawStageSpawn(void) {
 }
 
 void RoomEffect_UpdateStageSpawn(void *effect, RoomDropSlot *state, RoomFxSeed8 *seed) {
-    RoomDropFieldState *owner = func_800C2B50();
+    RoomDropFieldState *owner = FieldFx_GetScriptContext();
     char *slot;
 
     if (state->step == 0) {
-        slot = func_800C2B90(effect, 4, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
+        slot = FieldFx_StartSlot(effect, 4, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
         if (slot != 0) {
             *(RoomFxSeed8 *)slot = *seed;
         }
         if (state->step == 0) {
-            slot = func_800C2B90(effect, 3, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
+            slot = FieldFx_StartSlot(effect, 3, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
             if (slot != 0) {
                 *(RoomFxSeed8 *)slot = *seed;
             }
             if (state->step == 0) {
-                slot = func_800C2B90(effect, 2, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
+                slot = FieldFx_StartSlot(effect, 2, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (slot != 0) {
                     ((RoomDropFieldSprite *)slot)->phase = 1;
                     *(RoomFxSeed8 *)slot = *seed;
@@ -205,14 +205,14 @@ void RoomEffect_UpdateStageSpawn(void *effect, RoomDropSlot *state, RoomFxSeed8 
         }
     }
     if (state->step == 4) {
-        slot = func_800C2B90(effect, 2, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
+        slot = FieldFx_StartSlot(effect, 2, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
         if (slot != 0) {
             ((RoomDropFieldSprite *)slot)->phase = 0;
             *(RoomFxSeed8 *)slot = *seed;
         }
     }
     if (state->step == 6) {
-        slot = func_800C2B90(effect, 5, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
+        slot = FieldFx_StartSlot(effect, 5, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
         if (slot != 0) {
             unsigned int i;
 
@@ -250,7 +250,7 @@ void RoomEffect_DrawSpinSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite) 
     RoomDropFieldSpinFrame stack;
     s16 *ptr;
 
-    func_800C2EAC(((RoomDropFieldState *)func_800C2B50())->asset.page);
+    func_800C2EAC(((RoomDropFieldState *)FieldFx_GetScriptContext())->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x100);
     func_800C3238(2);
@@ -321,7 +321,7 @@ void RoomEffect_DrawDoubleSprite(void *arg0, void *arg1, RoomDoubleSpriteFxParam
     RoomDropFieldState *owner;
     u16 *depth_slot;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     seed = *(RoomFxSeed8 *)&s_DropFieldTiltX;
     func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
@@ -517,7 +517,7 @@ void RoomEffect_InitStagedMotion(void *unused0, void *unused1, RoomStagedMotionS
     RoomDropFieldState *owner;
     unsigned int i;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     state->size = 0x80;
     state->fallStep = 0xFFEC0000;
     state->radiusStep = owner->initialFallStep << 8;
@@ -582,7 +582,7 @@ void RoomEffect_DrawStagedMotion(void *unused,
     int variant;
     int handle;
 
-    owner = (RoomStagedMotionRenderOwner *)func_800C2B50();
+    owner = (RoomStagedMotionRenderOwner *)FieldFx_GetScriptContext();
     seedA = *(RoomStagedMotionSeed *)&s_DropFieldNoTilt;
     seedB = *(RoomStagedMotionSeed *)&s_DropFieldTiltX;
     func_800C2EAC((u8)owner->owner);
@@ -684,7 +684,7 @@ void RoomEffect_DrawStagedMotion(void *unused,
                 FieldFx_ModelScrollUv(g_RoomDropFieldModel, 0, 0);
                 FieldFx_ModelSetDepthBias(-0x64);
                 handle = (u16)GetTPage(1, 1, 0x340, 0x100);
-                func_800C6EC0(handle, (u16)GetClut(0, 0x1DB));
+                FieldFx_ModelSetTexture(handle, (u16)GetClut(0, 0x1DB));
                 FieldFx_ModelSetSemiTrans(1);
                 FieldFx_ModelSaveColors(g_RoomDropFieldModel);
                 FieldFx_ModelScaleColors(g_RoomDropFieldModel,
@@ -720,7 +720,7 @@ void RoomEffect_UpdateStagedMotion(void *entity,
     char *spawn;
     int i;
 
-    owner = (RoomDropFieldState *)func_800C2B50();
+    owner = (RoomDropFieldState *)FieldFx_GetScriptContext();
     state->fallStep += owner->fallRate << 8;
     state->radiusStep += (state->radiusStep * owner->radiusRate) >> 12;
     for (i = 0; (unsigned int)i < state->count; i++) {
@@ -744,13 +744,13 @@ void RoomEffect_UpdateStagedMotion(void *entity,
                 if (state->remaining == 0) {
                     control->state = 2;
                 }
-                spawn = func_800C2B90(entity, 6,
+                spawn = FieldFx_StartSlot(entity, 6,
                                       (unsigned short *)g_RoomDropFieldSpawnScript,
                                       (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (spawn != 0) {
                     *(RoomStagedMotionPoint *)spawn = spawnPoint;
                 }
-                spawn = func_800C2B90(entity, 6,
+                spawn = FieldFx_StartSlot(entity, 6,
                                       (unsigned short *)g_RoomDropFieldSpawnScript,
                                       (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (spawn != 0) {
@@ -759,13 +759,13 @@ void RoomEffect_UpdateStagedMotion(void *entity,
             }
             if (g_RoomFloorY->y < (state->record[i].y >> 16) + state->y) {
                 state->kind[i] = 2;
-                spawn = func_800C2B90(entity, 6,
+                spawn = FieldFx_StartSlot(entity, 6,
                                       (unsigned short *)g_RoomDropFieldSpawnScript,
                                       (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (spawn != 0) {
                     *(RoomStagedMotionPoint *)spawn = spawnPoint;
                 }
-                spawn = func_800C2B90(entity, 6,
+                spawn = FieldFx_StartSlot(entity, 6,
                                       (unsigned short *)g_RoomDropFieldSpawnScript,
                                       (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (spawn != 0) {
@@ -809,7 +809,7 @@ void RoomEffect_DrawModelSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite)
     RoomDropFieldSpinFrame stack;
     s16 *ptr;
 
-    func_800C2EAC(((RoomDropFieldState *)func_800C2B50())->asset.page);
+    func_800C2EAC(((RoomDropFieldState *)FieldFx_GetScriptContext())->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -862,7 +862,7 @@ void RoomEffect_InitDropField(s32 arg0, s32 arg1, RoomDropFieldDrops *state) {
     RoomDropFieldState *src;
     u32 i;
 
-    src = func_800C2B50();
+    src = FieldFx_GetScriptContext();
     state->anchor = src->matrix0.head;
     state->facing = src->matrix0.tail;
     state->h180 = *FieldFx_RegPtr(1);
@@ -891,7 +891,7 @@ void RoomEffect_DrawDropField(void *object, void *slot, RoomDropField *field) {
     GteMatrix matrix;
     GteMatrix saved;
     GteMatrix turn;
-    RoomDropActor *actor = func_800C2B50();
+    RoomDropActor *actor = FieldFx_GetScriptContext();
     GteShortVector spin = s_DropFieldNoTilt;
     GteShortVector shadowSpin = s_DropFieldTiltX;
     GteShortVector rotation;
@@ -997,7 +997,7 @@ void RoomEffect_UpdateDropField(void *object, RoomDropSlot *slot, RoomDropField 
                 matrix.t[2] = field->drops[i].z;
                 gte_CompMatrix(&turn, &matrix, &matrix);
                 gte_CompMatrix(&field->matrix, &matrix, &matrix);
-                splash = func_800C2B90(object, 1, (unsigned short *)g_RoomDropFieldSpawnScript,
+                splash = FieldFx_StartSlot(object, 1, (unsigned short *)g_RoomDropFieldSpawnScript,
                                        (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (splash != 0) {
                     splash->x = matrix.t[0];
@@ -1029,7 +1029,7 @@ void RoomEffect_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
     RoomBeamPairActor *actor;
     GteMatrix *model;
 
-    context = func_800C2B50();
+    context = FieldFx_GetScriptContext();
     anchor = &g_RoomDropFieldRings[2].mode;
     params = &g_RoomDropFieldRings[2];
     mode = 0x10;
@@ -1085,7 +1085,7 @@ void RoomEffect_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
 void RoomEffect_DrawBeamPair(void *object, void *slot, RoomBeamPair *beam) {
     GteMatrix matrix;
     GteMatrix second;
-    RoomBeamPairActor **actor = func_800C2B50();
+    RoomBeamPairActor **actor = FieldFx_GetScriptContext();
     GteShortVector spin = s_DropFieldNoTilt;
     GteVector scale;
 
@@ -1148,7 +1148,7 @@ void RoomEffect_InitQuadSprites(void *unused0, void *unused1, void *output_arg) 
     int value;
     int hasNonzeroIndex;
 
-    clock = func_800C2B50();
+    clock = FieldFx_GetScriptContext();
     *(RoomDropFieldMatrixWords *)base = clock->matrix0;
 
     index = 0;
@@ -1228,7 +1228,7 @@ void RoomEffect_DrawQuadSprites(void *unused0, void *unused1,
     unsigned short *work;
     unsigned short *depthSlot;
 
-    clock = func_800C2B50();
+    clock = FieldFx_GetScriptContext();
     stack.seed = *(RoomFxSeed8 *)&s_DropFieldNoTilt;
     i = 0;
     matrix = &stack.matrix;
@@ -1344,7 +1344,7 @@ void RoomEffect_DrawEightParticles(
     int secondScale;
 
     state = stateArg;
-    context = func_800C2B50();
+    context = FieldFx_GetScriptContext();
     i = 0;
     unitScale = 0x1000;
     depthOut = &g_RoomDropFieldParticleSprite.depth;
@@ -1419,7 +1419,7 @@ void RoomEffect_UpdateEightParticles(void *unused,
 
     clock = control;
     particles = stateArg;
-    contextResult = func_800C2B50();
+    contextResult = FieldFx_GetScriptContext();
     i = 0;
     context = contextResult;
     matrixBase = context->root->transforms;

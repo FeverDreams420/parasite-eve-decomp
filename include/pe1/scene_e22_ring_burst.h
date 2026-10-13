@@ -25,11 +25,11 @@ typedef struct SceneE22BurstChannel {
     void *pool;                   /* 0x08 */
 } SceneE22BurstChannel;
 
-extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
+extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
 extern RenderColor D_8018F1D0;
 extern RenderColor D_8018F1D4;
 extern GteShortVector D_801994EC;
-extern int func_80071A54(void);
+extern int rand(void);
 extern int func_80192548(int mode, RoomOrbitTrailParticle *p);
 
 /* Orbit ring trail particle (func_80192548): its colour seed and trail

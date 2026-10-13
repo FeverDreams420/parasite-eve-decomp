@@ -2039,21 +2039,20 @@ void FxCommon_DrawModelFlat(void *context, FxCommonPolyModel *model, int index)
 
 #undef FX_COMMON_LINK_PACKET
 
-void func_80074D28(int);
+void SetDispMask(int);
 void SetBackColor(int, int, int);
 void SetFarColor(int, int, int);
 void SetFogNearFar(int, int, int);
 void SetGeomOffset(int, int);
 void SetGeomScreen(int);
 void func_8019BF8C(void **);
-void func_800752AC(void *, int);
-void func_80074DC0(int);
+void ClearOTagR(void *, int);
 
 void func_8019BD78(void) {
     char *base = (char *)&D_8019C1F8;
     s16 rect[4];
 
-    func_80074D28(0);
+    SetDispMask(0);
     SetBackColor(0x80, 0x80, 0x80);
     SetFarColor(0, 0, 0);
     SetFogNearFar(0x1964, 0x2CEC, 0x300);
@@ -2064,8 +2063,8 @@ void func_8019BD78(void) {
     func_8019BF8C((void **)(base + 0x78));
     D_8019C1FC = D_800B0E38.ordering[0];
     D_8019C274 = D_800B0E3C;
-    func_800752AC(D_8019C1FC, 0x1000);
-    func_800752AC(D_8019C274, 0x1000);
+    ClearOTagR(D_8019C1FC, 0x1000);
+    ClearOTagR(D_8019C274, 0x1000);
 
     SetDefDrawEnv(base + 8, 0, 0, 0x140, 0xF0);
     SetDefDispEnv(base + 0x64, 0, 0xF0, 0x140, 0xF0);
@@ -2093,14 +2092,14 @@ void func_8019BD78(void) {
     rect[3] = 0xF0;
     ClearImage(rect, 0, 0, 0);
 
-    func_80074DC0(0);
-    func_80074D28(1);
+    DrawSync(0);
+    SetDispMask(1);
     D_8019C9C0 = (FxCommonBuffer *)base;
 }
 
 void func_8019BF50(void)
 {
-    func_800752AC(D_8019C9C0->allocation, 0x1000);
+    ClearOTagR(D_8019C9C0->allocation, 0x1000);
     func_8019BF8C((void **)D_8019C9C0);
 }
 

@@ -101,17 +101,15 @@ extern void RoomLib_HandlerC(struct RoomEnt *obj);
 extern void RoomLib_HandlerD(struct RoomEnt *obj);
 extern void RoomLib_HandlerE(struct RoomEnt *obj);
 extern void RoomLib_HandlerF();
-extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
-extern int RoomMain_RotTable[];
+extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
 /* Field object status: 0 no model, 1 model without data, 2 inactive,
  * 3 active, 4 disabled object, 5 the player. */
 extern int FieldFx_GetStatus(void *object);
 extern void FieldFx_Spawn6(int a, int b, int c, int d, int e, int f);
 extern void FieldFx_Register(void *o, void *table);
-extern int func_800C251C(void *o, void *table);
-extern int func_800C2758(void *o, void *tableA, void *tableB);
-extern int func_8003010C(void *o, int arg);
-extern void func_80030220(void *o, int arg, int value);
+extern int FieldFx_UpdateSlots(void *o, void *table);
+extern int FieldFx_RunScript(void *o, void *tableA, void *tableB);
+extern int Battle_GetEnemyContextField(void *o, int arg);
 extern int func_80192BFC();
 
 typedef struct RoomRenderNode {
@@ -779,7 +777,7 @@ extern char RoomLib_TableB[];
  * closing the module with `close` when either call fails */
 #define ROOMLIB_START_ANY(name, update, init, layout, close) \
     int name(void *o) { \
-        if ((func_800C251C(o, update) | func_800C2758(o, init, layout)) == -1) { \
+        if ((FieldFx_UpdateSlots(o, update) | FieldFx_RunScript(o, init, layout)) == -1) { \
             close(o); \
         } \
         return 0; \
@@ -793,8 +791,8 @@ extern char RoomLib_TableB[];
     int name(void *o) { \
         int result; \
         if (FieldFx_GetStatus(o) == 3) { \
-            result = func_800C251C(o, update); \
-            result |= func_800C2758(o, init, layout); \
+            result = FieldFx_UpdateSlots(o, update); \
+            result |= FieldFx_RunScript(o, init, layout); \
         } else { \
             result = -1; \
         } \
@@ -916,7 +914,6 @@ typedef struct RoomDlgState {
     short h12;                    /* 0x12 */
 } RoomDlgState;
 
-extern void *RoomMain_ActorPtr2;
 
 /* The colour ramp table of the timed spawns (timed_spawn.c), each
  * room's own data. */
@@ -937,7 +934,7 @@ extern char RoomLib_TimedRenderTable;
         at_actor: \
             { \
                 short vec[4]; \
-                func_800CE870(RoomMain_ActorPtr2, 0, vec); \
+                func_800CE870(g_PlayerEntity, 0, vec); \
                 FieldFx_CalculateLookAngles(msg, vec, &msg->sub); \
                 msg->sub.h0 = 0x180; \
             } \
@@ -1013,7 +1010,7 @@ typedef struct RoomTimer2 {
 #define ROOMLIB_PARTICLE_TICK_A(name) \
     void name(RoomEnt *o, RoomFxControl *state, RoomFxPairedEmitterState *sys) { \
         struct { short a; short pad; short b; } saved; \
-        RoomLibFxMatrixState *clock = func_800C2B50(); \
+        RoomLibFxMatrixState *clock = FieldFx_GetScriptContext(); \
         int tmp = RW16(o->link, 0x2A); \
         saved.a = tmp; \
         tmp = RW16(o->link, 0x32); \
@@ -1072,7 +1069,7 @@ typedef struct RoomClock {
 
 #include "pe1/gte_types.h"
 #include "pe1/field_glow_sprite.h"
-extern int func_80071A54(void);
+extern int rand(void);
 
 #define ROOMLIB_REGISTER_TABLE_AT3(name, table) \
     int name(void *o) { \

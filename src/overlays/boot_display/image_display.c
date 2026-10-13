@@ -16,9 +16,9 @@ void BootDisplay_InitDisplayBuffers(void) {
     u16 *screenY;
     void *resource;
 
-    func_80074A44(1);
-    func_80074BB8(0);
-    func_80074D28(0);
+    ResetGraph(1);
+    SetGraphDebug(0);
+    SetDispMask(0);
 
     screenY = &D_80093168;
     g_BootDisplayTextScrollX = 0xE000;
@@ -44,22 +44,22 @@ void BootDisplay_InitDisplayBuffers(void) {
     D_80125B98 = end;
     D_80125BA0 = start;
     ClearImage(rect, 0, 0, 0);
-    func_80074DC0(0);
+    DrawSync(0);
     func_8010BE3C(0);
     offset = 0x43000;
     func_8010BD4C(((*screenY - D_80093166) << 11) + offset + D_80011610);
 
     resource = D_8012682C;
-    D_80172C98 = func_80071994(resource);
-    D_80172C9C = func_800719C4(resource);
-    D_80172C90 = func_80071964(resource);
-    D_80172C94 = func_80071944(resource);
+    D_80172C98 = Asset_GetTimImagePixels(resource);
+    D_80172C9C = Asset_GetTimClutPixels(resource);
+    D_80172C90 = Asset_GetTimImageRect(resource);
+    D_80172C94 = Asset_GetTimClutRect(resource);
     g_BootDisplayTPage = GetTPage(0, 0, D_80172C90[0], D_80172C90[1]);
     g_BootDisplayClut = GetClut(D_80172C94[0], D_80172C94[1]);
     func_80124F40(0);
     func_80124F40(1);
     PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
-    func_80074D28(1);
+    SetDispMask(1);
 }
 
 void BootDisplay_PresentFrame(void) {
@@ -86,10 +86,10 @@ void BootDisplay_PresentFrame(void) {
         else
             g_BootDisplayState = 7;
     }
-    func_80074DC0(0);
-    func_80073A44(2);
+    DrawSync(0);
+    VSync(2);
     PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
-    func_80075424(&D_800BCDC8[g_ActiveDrawSlot]);
+    PutDrawEnv(&D_800BCDC8[g_ActiveDrawSlot]);
     g_ActiveDrawSlot ^= 1;
 }
 
@@ -207,7 +207,7 @@ void BootDisplay_StepImageDisplay(void) {
     rect[2] = 480;
     rect[3] = 224;
     StoreImage(rect, g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].pixels);
-    func_80074DC0(0);
+    DrawSync(0);
     if ((int)D_8009D26C < 0) {
         if (D_8009D1F4 & 0x1000000) {
             u16 timer = (u16)g_BootDisplayStateTimer;

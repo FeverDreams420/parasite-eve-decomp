@@ -95,6 +95,6 @@ extern GteShortVector D_80190BA8;
 
 void FieldFx_ModelShiftColors(u8 *data, int r, int g, int b);
 int func_800CEB8C(void *position, GteShortVector *target, int radius);
-int func_80071A54(void);
+int rand(void);
 
 #endif

@@ -139,7 +139,7 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
             int page = (D_800E2850[D_800E11FA] | GetTPage(0, 1, 0, 0)) & 0xFFFF;
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
-            func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
+            FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
                                                                          : palette + 4));
         }
         FieldFx_ModelSetSemiTrans(1);
@@ -173,12 +173,12 @@ int func_801928CC(int mode, SceneE18FlankParticle *particle) {
             int distance;
             int dz;
             int range;
-            distance = RoomMain_ActorPtr->render_object.model_matrix.translation[0] - particle->position[0];
-            dz = RoomMain_ActorPtr->render_object.model_matrix.translation[2] - particle->position[2];
-            distance = func_8005186C(distance * distance + dz * dz);
+            distance = g_PlayerEntity->render_object.model_matrix.translation[0] - particle->position[0];
+            dz = g_PlayerEntity->render_object.model_matrix.translation[2] - particle->position[2];
+            distance = Math_IntSqrt(distance * distance + dz * dz);
             range = particle->width / 4;
             if (distance < range) {
-                RoomMain_ActorPtr->state->flags |= 0x4000;
+                g_PlayerEntity->state->flags |= 0x4000;
                 ANIM_OWNER_AS(SceneE18Actor)->instance->owner->flags |= 0x80000000;
                 particle->leader = 0;
             }
@@ -281,7 +281,7 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
             int page = (D_800E2850[D_800E11FA] | GetTPage(0, 1, 0, 0)) & 0xFFFF;
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
-            func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
+            FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
                                                                          : palette + 6));
         }
         FieldFx_ModelSetSemiTrans(1);
@@ -352,11 +352,11 @@ int func_80193018(int mode, SceneE18PulseRing *ring) {
             angle = 0x400;
         ring->radius = rsin(angle);
         if (ring->last) {
-            int dx = (RoomMain_ActorPtr->pos_x - instance->x) >> 16;
-            int dz = (RoomMain_ActorPtr->pos_z - instance->z) >> 16;
-            if (func_8005186C(dx * dx + dz * dz) < (ring->radius * 3) >> 3) {
+            int dx = (g_PlayerEntity->pos_x - instance->x) >> 16;
+            int dz = (g_PlayerEntity->pos_z - instance->z) >> 16;
+            if (Math_IntSqrt(dx * dx + dz * dz) < (ring->radius * 3) >> 3) {
                 ring->last = 0;
-                RoomMain_ActorPtr->state->flags |= 0x4000;
+                g_PlayerEntity->state->flags |= 0x4000;
                 instance->owner->flags |= 0x80000000;
             }
             if (ring->size < 0x40)
@@ -506,18 +506,18 @@ int func_801935F0(int mode, SceneE18EmitterState *state) {
         if (particle == 0) break;
         count = state->count;
         particle->size = (count << 5) + 0x800;
-        particle->position.x = ANIM_OWNER_AS(SceneE18Actor)->instance->transforms[func_80052B2C() % 38].t[0];
-        particle->position.y = ANIM_OWNER_AS(SceneE18Actor)->instance->transforms[func_80052B2C() % 38].t[1];
-        particle->position.z = ANIM_OWNER_AS(SceneE18Actor)->instance->transforms[func_80052B2C() % 38].t[2];
-        random = func_80052B2C();
+        particle->position.x = ANIM_OWNER_AS(SceneE18Actor)->instance->transforms[Inv_ScrambleGrid() % 38].t[0];
+        particle->position.y = ANIM_OWNER_AS(SceneE18Actor)->instance->transforms[Inv_ScrambleGrid() % 38].t[1];
+        particle->position.z = ANIM_OWNER_AS(SceneE18Actor)->instance->transforms[Inv_ScrambleGrid() % 38].t[2];
+        random = Inv_ScrambleGrid();
         particle->position.y -= ((random & 0x7F) * particle->size) >> 13;
         halfSize = particle->size >> 1;
         offset.x = 0;
-        random = func_80071A54();
+        random = rand();
         divisor = 96;
         offset.z = ((random % divisor + 64) * halfSize) >> 12;
-        cosine = rcos(func_80071A54());
-        sine = rsin(func_80071A54());
+        cosine = rcos(rand());
+        sine = rsin(rand());
         rotation.m[0][2] = sine;
         rotation.m[2][0] = -sine;
         rotation.m[1][1] = 0x1000;
@@ -615,7 +615,7 @@ int func_80193C24(int mode, SceneE18EmitterState *state) {
             if (--state->delay == -1) {
                 particle = func_800CE610(ANIM_POOL_AS(SceneE18Emitter)->pool);
                 if (particle != 0) {
-                    random = func_80071A54();
+                    random = rand();
                     index = (random >> 2) % 38;
                     actor = ANIM_OWNER_AS(SceneE18Actor);
                     particle->position.x = actor->instance->transforms[index].t[0];
@@ -626,7 +626,7 @@ int func_80193C24(int mode, SceneE18EmitterState *state) {
                     particle->amplitude = count * 2048 + 2048;
                     state->delay = (random & 7) + 12;
                     state->count++;
-                    random = func_80071A54();
+                    random = rand();
                     particle->controls[0] = (random & 0xFF) + 0x200;
                     high = (random >> 8) & 0xFF;
                     if (random & 2) {

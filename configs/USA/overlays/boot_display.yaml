@@ -12,7 +12,9 @@ options:
   build_path: build/USA/overlays/boot_display
   ld_script_path: linkers/USA/overlays/boot_display.ld
   undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.boot_display.txt
-  symbol_addrs_path: configs/USA/overlays/sym.boot_display.txt
+  symbol_addrs_path:
+    - configs/USA/overlays/sym.boot_display.txt
+    - configs/USA/sym.main.txt
   undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.boot_display.txt
   find_file_boundaries: True
   disassemble_all: True

@@ -43,7 +43,7 @@ void RoomEffect_MotionParticlesInit(RoomMotionInitOwner *owner, void *unused, Ro
     RoomMotionParticle *particle;
     unsigned int i;
 
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
     state->allocation = Asset_SearchByKeyType(12);
     link = owner->link;
     state->link = link;
@@ -131,7 +131,7 @@ void RoomEffect_MotionParticlesNop(void) {
 ROOM_REARM_TIMER_TICK(RoomEffect_MotionParticlesTick, 0x64)
 
 void RoomEffect_MotionParticlesAnchor(int a0, int a1, short *out) {
-    RoomMotionInitState *ctx = func_800C2B50();
+    RoomMotionInitState *ctx = FieldFx_GetScriptContext();
 
     out[0] = ctx->primary.t[0];
     out[1] = ctx->primary.t[1];
@@ -171,7 +171,7 @@ void RoomEffect_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     int sprite;
 
     fx = params;
-    root = func_800C2B50();
+    root = FieldFx_GetScriptContext();
     stack.seed = s_MotionQuadSeed;
     map = ((RoomMotionInitLink *)root->link)->model;
     func_800C2EAC(root->owner);
@@ -308,7 +308,7 @@ void RoomEffect_DrawAnchoredSpritePair(void *unused0, void *unused1,
     int secondX;
     int secondY;
 
-    root = func_800C2B50();
+    root = FieldFx_GetScriptContext();
     stack.seed = s_MotionQuadSeed;
 
     stack.scaleMatrix.m[2][2] = 0x1000;
@@ -388,7 +388,7 @@ void RoomEffect_StepSpritePair(void *arg0, RoomFxControl *state, RoomAnchoredSpr
 }
 
 s32 *FieldFx_RegPtr(s32 index);
-int func_80071A54(void);
+int rand(void);
 
 /* Seeds the motion particles: three or six of them depending on the first
  * scene flag, each with a random anchor offset, a random sprite lookup and
@@ -412,28 +412,28 @@ void RoomEffect_SeedMotionParticles(void *unused0, void *unused1,
         do {
             state->scale[i].x = 0x400;
             state->scale[i].y = 0x400;
-            state->particle[i].primaryX = func_80071A54() % 140 - 70;
-            state->particle[i].primaryY = func_80071A54() % 140 - 70;
-            state->particle[i].primaryZ = func_80071A54() % 140 - 70;
-            state->particle[i].secondaryX = func_80071A54() % 140 - 70;
-            state->particle[i].secondaryY = func_80071A54() % 140 - 70;
-            state->particle[i].secondaryZ = func_80071A54() % 140 - 70;
-            state->lookup[i].id = func_80071A54() % 8;
-            state->lookup[i].pad = func_80071A54() % 8;
+            state->particle[i].primaryX = rand() % 140 - 70;
+            state->particle[i].primaryY = rand() % 140 - 70;
+            state->particle[i].primaryZ = rand() % 140 - 70;
+            state->particle[i].secondaryX = rand() % 140 - 70;
+            state->particle[i].secondaryY = rand() % 140 - 70;
+            state->particle[i].secondaryZ = rand() % 140 - 70;
+            state->lookup[i].id = rand() % 8;
+            state->lookup[i].pad = rand() % 8;
             if (*FieldFx_RegPtr(1) == 0) {
-                state->velocity[i].primaryX = func_80071A54() % 40 - 20;
+                state->velocity[i].primaryX = rand() % 40 - 20;
                 state->velocity[i].primaryY = 0;
-                state->velocity[i].primaryZ = func_80071A54() % 40 - 20;
-                state->velocity[i].secondaryX = func_80071A54() % 40 - 20;
+                state->velocity[i].primaryZ = rand() % 40 - 20;
+                state->velocity[i].secondaryX = rand() % 40 - 20;
                 state->velocity[i].secondaryY = 0;
-                state->velocity[i].secondaryZ = func_80071A54() % 40 - 20;
+                state->velocity[i].secondaryZ = rand() % 40 - 20;
             } else {
-                state->velocity[i].primaryX = func_80071A54() % 26 - 13;
-                state->velocity[i].primaryY = -func_80071A54() % 10;
-                state->velocity[i].primaryZ = func_80071A54() % 26 - 13;
-                state->velocity[i].secondaryX = func_80071A54() % 26 - 13;
-                state->velocity[i].secondaryY = -func_80071A54() % 10;
-                state->velocity[i].secondaryZ = func_80071A54() % 26 - 13;
+                state->velocity[i].primaryX = rand() % 26 - 13;
+                state->velocity[i].primaryY = -rand() % 10;
+                state->velocity[i].primaryZ = rand() % 26 - 13;
+                state->velocity[i].secondaryX = rand() % 26 - 13;
+                state->velocity[i].secondaryY = -rand() % 10;
+                state->velocity[i].secondaryZ = rand() % 26 - 13;
             }
             i++;
         } while (i < state->count);

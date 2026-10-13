@@ -32,7 +32,7 @@ static inline s16 MenuCard_OpenNextVideoFrame(VideoDisplay *dec) {
     D_800B0DBC.value++;
     dec->decodeIndex ^= 1;
     func_8010C89C(frame, dec->decode[dec->decodeIndex], MENUCARD_VIDEO_PTR4);
-    func_8007C394(frame);
+    StFreeRing(frame);
     return 0;
 }
 
@@ -40,11 +40,11 @@ static inline s16 MenuCard_OpenNextVideoFrame(VideoDisplay *dec) {
 static inline void MenuCard_OpenKickVideoStream(CdlLOC *loc, u8 *result) {
     do {
         do {
-            while (func_8007F72C() != 1) {
+            while (DsSystemStatus() != 1) {
             }
         } while (DsQueueLen() != 0);
-        func_80080D5C(2, loc, result);
-    } while (!func_80081314(loc, 0x1E0));
+        DsControl(2, loc, result);
+    } while (!DsRead2(loc, 0x1E0));
 }
 
 /* Start reading at the file position, retrying from the drive wait. */
@@ -54,11 +54,11 @@ static inline void MenuCard_OpenStartVideoStream(CdlLOC *loc, u8 *result) {
      * hoist the per-try constant 1 out of the restart loop). */
 start:
     do {
-        while (func_8007F72C() != 1) {
+        while (DsSystemStatus() != 1) {
         }
     } while (DsQueueLen() != 0);
-    func_80080D5C(2, loc, result);
-    if (!func_80081314(loc, 0x1E0)) goto start;
+    DsControl(2, loc, result);
+    if (!DsRead2(loc, 0x1E0)) goto start;
 }
 
 /* Reset the decode environment: buffers, both display areas, first slice. */
@@ -104,18 +104,18 @@ s32 MENUCARD_OPEN_VIDEO_NAME(s32 number) {
     MENUCARD_VIDEO_SET_DISPLAY(1, D_800B0DBB);
     name[0] = 0;
     if ((u16)number < 21) {
-        func_800719F4(name, MENUCARD_VIDEO_DIRECTORY);
+        strcat(name, MENUCARD_VIDEO_DIRECTORY);
     } else {
-        func_800719F4(name, MENUCARD_VIDEO_DIRECTORY_LATE);
+        strcat(name, MENUCARD_VIDEO_DIRECTORY_LATE);
     }
-    func_800719F4(name, MENUCARD_VIDEO_ENTRY->name);
+    strcat(name, MENUCARD_VIDEO_ENTRY->name);
     /* Recorded crutch debt: retail's CD retry loop is a goto restart, not
      * reproducible with a structured loop in stock GCC 2.7.2 (loop.c
      * hoists the per-try constants out of any loop with loop notes). */
 search:
     found = 0;
-    if (func_8007F72C() == 1 && DsQueueLen() == 0) {
-        found = func_80081414(&MENUCARD_VIDEO_FILE, name);
+    if (DsSystemStatus() == 1 && DsQueueLen() == 0) {
+        found = DsSearchFile(&MENUCARD_VIDEO_FILE, name);
     }
     if (found == 0 || found == -1) goto search;
     MENUCARD_VIDEO_RESTART = MENUCARD_VIDEO_FILE.pos;
@@ -125,10 +125,10 @@ search:
     MenuCard_OpenSetDecodeEnv(&MENUCARD_VIDEO_DISPLAY, size.x, size.y + 240, size.x, size.y);
     func_8010BE3C(0);
     func_8010C0D8(MENUCARD_VIDEO_UPLOAD);
-    func_8007A214(MENUCARD_VIDEO_PTR5, 0x40);
-    func_8007C304(1, MENUCARD_VIDEO_ENTRY->speed, -1, 0, 0);
+    StSetRing(MENUCARD_VIDEO_PTR5, 0x40);
+    StSetStream(1, MENUCARD_VIDEO_ENTRY->speed, -1, 0, 0);
     MenuCard_OpenStartVideoStream(&MENUCARD_VIDEO_FILE.pos, result);
-    func_800870F0(D_800B0DBE);
+    Spu_SetVoiceVolume(D_800B0DBE);
     func_8010BD4C(MENUCARD_VIDEO_PTR4);
     while (MenuCard_OpenNextVideoFrame(&MENUCARD_VIDEO_DISPLAY) == -1) {
         MENUCARD_VIDEO_RESTART = MENUCARD_VIDEO_FILE.pos;

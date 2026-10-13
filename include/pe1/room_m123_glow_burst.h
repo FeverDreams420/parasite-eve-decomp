@@ -32,7 +32,7 @@ extern GteShortVector D_80195690;
 extern u8 D_801954BC[];
 extern u8 D_801954E4[];
 
-int func_80071A54(void);
+int rand(void);
 void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y, int texture,
                    int clut, int page, int intensity, int unused, int angle);
 int func_80192BDC(int mode, RoomM123BurstParticle *particle);

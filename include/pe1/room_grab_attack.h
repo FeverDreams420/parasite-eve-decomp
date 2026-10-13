@@ -68,11 +68,11 @@ int RoomEffect_GroundSweepMark(int mode, RoomGroundSweepMark *state);
 int RoomEffect_OrbitTrailParticle(int mode, RoomOrbitTrailParticle *p);
 int RoomEffect_RisingSprayParticle(int mode, RoomSpraySpark *spark);
 
-void func_8003E0FC(void *object, int count, void *out);
-void func_80020C74(void);
-void func_80020CE4(void);
-s32 func_8003010C(void *actor, s32 arg1);
-void func_800866A4(int handle, int arg);
+void Render_FindAnimEntry(void *object, int count, void *out);
+void Battle_BeginPlayerAction(void);
+void Battle_ReturnToIdle(void);
+s32 Battle_GetEnemyContextField(void *actor, s32 arg1);
+void Akao_Cmd_21(int handle, int arg);
 void func_800D2B58(void *, void *, void *, void *, int, int, int);
 
 #endif

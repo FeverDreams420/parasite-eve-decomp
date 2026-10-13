@@ -39,8 +39,8 @@ void MenuCard_BlendRotatedImage(MemcardImageNode *node, u8 *destination, s32 pad
 extern s32 D_801D11B8; /* Pad state of the previous frame. */
 extern s32 D_801D1380;
 extern u8 D_801931BC[], D_8019316C[];
-s32 func_8005E038(void); /* Draw_RemapStatusFlags: pad state */
-s32 func_80042770(s32 port); /* MemCard_IsPortPresent */
-s32 func_8003FFCC(void);
+s32 Draw_RemapStatusFlags(void); /* Draw_RemapStatusFlags: pad state */
+s32 MemCard_IsPortPresent(s32 port); /* MemCard_IsPortPresent */
+s32 MemCard_HasAnyPresentFile(void);
 
 #endif

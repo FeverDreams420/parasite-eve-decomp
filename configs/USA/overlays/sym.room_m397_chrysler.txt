@@ -1,5 +1,3 @@
-FieldFx_VecToAngle = 0x800DFF80;
-FieldFx_TurnToward = 0x800DFFB8;
 RoomEffect_SeekingTrailHistory = 0x801955E4; // type:func
 RoomEffect_ScatterTrailHistory = 0x801955F4; // type:func
 RoomLib_HandlerDNop0 = 0x8018F1E4; // type:func

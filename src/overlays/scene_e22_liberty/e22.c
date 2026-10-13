@@ -144,7 +144,7 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
         burst->counterB = 0;
         burst->counterA = 0;
         burst->sweep = 1;
-        func_800CE870((char *)RoomMain_ActorPtr, 0, (s16 *)burst);
+        func_800CE870((char *)g_PlayerEntity, 0, (s16 *)burst);
         return func_800CE560(ANIM_POOL_AS(SceneE22BurstChannel)->pool, 0x14, 0x18,
                              (FieldFxCallbackListCallback)func_80192548);
     case 1:
@@ -161,9 +161,9 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->heading.x = func_80071A54() % 60 - 0x1E;
-                    child->heading.y = func_80071A54() % 60 - 0x1E;
-                    child->heading.z = func_80071A54() % 60 - 0x1E;
+                    child->heading.x = rand() % 60 - 0x1E;
+                    child->heading.y = rand() % 60 - 0x1E;
+                    child->heading.z = rand() % 60 - 0x1E;
                     child->state = 1;
                     child->timer = 0;
                 }
@@ -175,10 +175,10 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
                         child->x = burst->x;
                         child->y = burst->y;
                         child->z = burst->z;
-                        child->heading.x = func_80071A54();
-                        child->heading.y = func_80071A54();
-                        child->heading.z = func_80071A54();
-                        child->radius = (func_80071A54() & 0x3FF) + 0x200;
+                        child->heading.x = rand();
+                        child->heading.y = rand();
+                        child->heading.z = rand();
+                        child->radius = (rand() & 0x3FF) + 0x200;
                         child->state = 0;
                         child->timer = 0;
                     }
@@ -190,10 +190,10 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->heading.x = func_80071A54();
-                    child->heading.y = func_80071A54();
-                    child->heading.z = func_80071A54();
-                    child->radius = (func_80071A54() & 0x7FF) + 0x400;
+                    child->heading.x = rand();
+                    child->heading.y = rand();
+                    child->heading.z = rand();
+                    child->radius = (rand() & 0x7FF) + 0x400;
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -556,7 +556,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
         burst->timer = 0;
         burst->glow = 0;
         func_800D3F64(0x5DB, func_800D3FD8());
-        func_800CE870((char *)RoomMain_ActorPtr, 1, (s16 *)burst);
+        func_800CE870((char *)g_PlayerEntity, 1, (s16 *)burst);
         burst->y = g_RoomFloorY->y;
         if (FX_TASK_AS(SceneE22EmberEvent)->active) {
             pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
@@ -572,7 +572,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
         switch (burst->state) {
         case 0:
             burst->timer++;
-            func_80020D50();
+            Battle_HaltOnPositiveX();
             burst->glow = rsin(burst->timer << 6) / 32;
             if (burst->timer < 0x10) break;
             burst->state = 1;
@@ -581,15 +581,15 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
         case 1:
             burst->timer++;
             if (burst->timer < 0x18)
-                func_80020D50();
+                Battle_HaltOnPositiveX();
             child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
             if (child) {
                 child->x = burst->x;
                 child->y = burst->y;
                 child->z = burst->z;
-                child->heading.x = func_80071A54() % 50 - 25;
-                child->heading.y = -(func_80071A54() % 32);
-                child->heading.z = func_80071A54() % 50 - 25;
+                child->heading.x = rand() % 50 - 25;
+                child->heading.y = -(rand() % 32);
+                child->heading.z = rand() % 50 - 25;
                 child->state = 1;
                 child->timer = 0;
             }
@@ -599,12 +599,12 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
                     child->x = burst->x;
                     child->y = burst->y;
                     child->z = burst->z;
-                    child->y -= func_80071A54() & 0x1FF;
-                    child->x += (func_80071A54() & 0x7F) - 0x40;
-                    child->z += (func_80071A54() & 0x7F) - 0x40;
-                    child->heading.x = func_80071A54() % 24 - 12;
-                    child->heading.y = func_80071A54() % 24 - 12;
-                    child->heading.z = func_80071A54() % 24 - 12;
+                    child->y -= rand() & 0x1FF;
+                    child->x += (rand() & 0x7F) - 0x40;
+                    child->z += (rand() & 0x7F) - 0x40;
+                    child->heading.x = rand() % 24 - 12;
+                    child->heading.y = rand() % 24 - 12;
+                    child->heading.z = rand() % 24 - 12;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -620,11 +620,11 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
                 }
             }
             if (burst->timer == 0x18)
-                func_80020DD0();
+                Battle_InitEntityColors();
             if (burst->timer == 0x19 && FX_TASK_AS(SceneE22EmberEvent)->active) {
                 channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
-                    RoomMain_ActorPtr->state->flags |= 0x4000;
+                    g_PlayerEntity->state->flags |= 0x4000;
                     channel->pool->object->flags =
                         (channel->pool->object->flags & 0xC0FFFFFF) | 0x19000000;
                     channel->pool->object->flags |= 0x80000000;
@@ -840,7 +840,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
     case 0:
         func_800D3F64(0x5DC, func_800D3FD8());
         func_800D3F64(0x5DD, 0x80);
-        func_800CE870((char *)RoomMain_ActorPtr, 0, (s16 *)anchor);
+        func_800CE870((char *)g_PlayerEntity, 0, (s16 *)anchor);
         if (FX_TASK_AS(SceneE22EmberEvent)->active) {
             pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool != 0 && pool->object != 0) {
@@ -853,7 +853,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
                              (FieldFxCallbackListCallback)func_8019485C);
     case 1:
         if (D_800E27EC < 0x1C)
-            func_80020D50();
+            Battle_HaltOnPositiveX();
         if (D_800E27EC < 0x11) {
             for (i = 0; i < 2; i++) {
                 child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
@@ -861,9 +861,9 @@ int func_80194F60(int mode, GteShortVector *anchor) {
                     child->x = anchor->x;
                     child->y = anchor->y;
                     child->z = anchor->z;
-                    child->heading.x = func_80071A54() % 64 - 0x20;
-                    child->heading.y = func_80071A54() % 64 - 0x20;
-                    child->heading.z = func_80071A54() % 64 - 0x20;
+                    child->heading.x = rand() % 64 - 0x20;
+                    child->heading.y = rand() % 64 - 0x20;
+                    child->heading.z = rand() % 64 - 0x20;
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -875,9 +875,9 @@ int func_80194F60(int mode, GteShortVector *anchor) {
                 child->x = anchor->x;
                 child->y = anchor->y;
                 child->z = anchor->z;
-                child->heading.x = func_80071A54() % 40 - 20;
-                child->heading.y = func_80071A54() % 32 - 16;
-                child->heading.z = func_80071A54() % 40 - 20;
+                child->heading.x = rand() % 40 - 20;
+                child->heading.y = rand() % 32 - 16;
+                child->heading.z = rand() % 40 - 20;
                 child->state = 1;
                 child->timer = 0;
             }
@@ -887,20 +887,20 @@ int func_80194F60(int mode, GteShortVector *anchor) {
                     child->x = anchor->x;
                     child->y = anchor->y;
                     child->z = anchor->z;
-                    child->heading.x = func_80071A54() % 48 - 24;
-                    child->heading.y = func_80071A54() % 48 - 24;
-                    child->heading.z = func_80071A54() % 48 - 24;
+                    child->heading.x = rand() % 48 - 24;
+                    child->heading.y = rand() % 48 - 24;
+                    child->heading.z = rand() % 48 - 24;
                     child->state = 2;
                     child->timer = 0;
                 }
             }
         }
         if (D_800E27EC == 0x1C)
-            func_80020DD0();
+            Battle_InitEntityColors();
         if (D_800E27EC == 0x1D && FX_TASK_AS(SceneE22EmberEvent)->active) {
             channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
-                RoomMain_ActorPtr->state->flags |= 0x4000;
+                g_PlayerEntity->state->flags |= 0x4000;
                 channel->pool->object->flags =
                     (channel->pool->object->flags & 0xC0FFFFFF) | 0x19000000;
                 channel->pool->object->flags |= 0x80000000;
@@ -1084,13 +1084,13 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
                         child->x = position.x;
                         child->y = position.y;
                         child->z = position.z;
-                        child->x += (func_80071A54() & 0xFF) - 0x80;
-                        child->y += (func_80071A54() & 0xFF) - 0x80;
-                        child->z += (func_80071A54() & 0xFF) - 0x80;
-                        child->radius = (func_80071A54() & 0x3FF) + 0x578;
-                        child->heading.x = func_80071A54();
-                        child->heading.y = func_80071A54();
-                        child->heading.z = func_80071A54();
+                        child->x += (rand() & 0xFF) - 0x80;
+                        child->y += (rand() & 0xFF) - 0x80;
+                        child->z += (rand() & 0xFF) - 0x80;
+                        child->radius = (rand() & 0x3FF) + 0x578;
+                        child->heading.x = rand();
+                        child->heading.y = rand();
+                        child->heading.z = rand();
                         child->state = 1;
                         child->timer = 0;
                     }
@@ -1105,9 +1105,9 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
                     child->x = position.x;
                     child->y = position.y;
                     child->z = position.z;
-                    child->heading.x = func_80071A54();
-                    child->heading.y = func_80071A54();
-                    child->heading.z = func_80071A54();
+                    child->heading.x = rand();
+                    child->heading.y = rand();
+                    child->heading.z = rand();
                     child->state = 0;
                     child->timer = 0;
                 }
@@ -1306,11 +1306,11 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 child->x = position.x;
                 child->y = position.y;
                 child->z = position.z;
-                child->radius = (func_80071A54() & 0xFF) + 0x180;
+                child->radius = (rand() & 0xFF) + 0x180;
                 child->heading.x = bolt->heading.x;
                 child->heading.y = bolt->heading.y;
                 child->heading.z = bolt->heading.z;
-                child->heading.pad = func_80071A54();
+                child->heading.pad = rand();
                 child->state = 0;
                 child->timer = 0;
             }
@@ -1352,7 +1352,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 page = (u16)(D_800E2850[*slot] | GetTPage(0, 1, 0, 0));
                 kind = D_800F336C;
                 palette = D_800E1204[kind];
-                func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
+                FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
             FieldFx_ModelSetSemiTrans(1);
@@ -1393,7 +1393,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 page = (u16)(D_800E2850[*slot] | GetTPage(0, 1, 0, 0));
                 kind = D_800F336C;
                 palette = D_800E1204[kind];
-                func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
+                FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
             FieldFx_ModelSetSemiTrans(1);
@@ -1660,11 +1660,11 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 child->x = tip.x;
                 child->y = tip.y;
                 child->z = tip.z;
-                child->radius = (func_80071A54() & 0xFF) + 0x180;
+                child->radius = (rand() & 0xFF) + 0x180;
                 child->heading.x = bolt->heading.x;
                 child->heading.y = bolt->heading.y;
                 child->heading.z = bolt->heading.z;
-                child->heading.pad = func_80071A54();
+                child->heading.pad = rand();
                 child->state = 0;
                 child->timer = 0;
             }
@@ -1681,8 +1681,8 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
         case 1:
             bolt->timer++;
             angle = (bolt->timer << 10) / 24;
-            func_80020D50();
-            if (bolt->timer < 9) func_800D1D24(2, 8, bolt->timer);
+            Battle_HaltOnPositiveX();
+            if (bolt->timer < 9) Geo_ClipAlternatingArcPoint(2, 8, bolt->timer);
             bolt->position.x = bolt->origin.x;
             bolt->position.y = bolt->origin.y;
             bolt->position.z = bolt->origin.z;
@@ -1694,9 +1694,9 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                     child->x = bolt->origin.x;
                     child->y = bolt->origin.y;
                     child->z = bolt->origin.z;
-                    child->radius = (func_80071A54() & 0x3FF) + 0x7D0;
+                    child->radius = (rand() & 0x3FF) + 0x7D0;
                     child->heading.x = 0;
-                    child->heading.y = func_80071A54();
+                    child->heading.y = rand();
                     child->heading.z = 0;
                     child->state = 1;
                     child->timer = 0;
@@ -1709,16 +1709,16 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                         child->x = bolt->origin.x;
                         child->y = bolt->origin.y;
                         child->z = bolt->origin.z;
-                        child->heading.x = func_80071A54() % 768 + 0x100;
-                        child->heading.y = func_80071A54();
-                        child->heading.z = func_80071A54();
+                        child->heading.x = rand() % 768 + 0x100;
+                        child->heading.y = rand();
+                        child->heading.z = rand();
                         child->state = 2;
                         child->timer = 0;
                     }
                 }
             }
             if (bolt->timer < 0x18) break;
-            func_80020DD0();
+            Battle_InitEntityColors();
             return 1;
         }
         break;
@@ -1753,7 +1753,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 page = (u16)(D_800E2850[*slot] | GetTPage(0, 1, 0, 0));
                 kind = D_800F336C;
                 palette = D_800E1204[kind];
-                func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
+                FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
             FieldFx_ModelSetSemiTrans(1);
@@ -1820,7 +1820,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 page = (u16)(D_800E2850[*slot] | GetTPage(0, 1, 0, 0));
                 kind = D_800F336C;
                 palette = D_800E1204[kind];
-                func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
+                FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
             FieldFx_ModelSetSemiTrans(1);
@@ -1928,7 +1928,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
         if (fx->timer == 6 && func_800C6B90(fx, target->radius) && FX_TASK_AS(SceneE22QuakeEvent)->active) {
             channel = ANIM_OWNER_AS(SceneE22QuakeObjectChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
-                RoomMain_ActorPtr->state->flags |= 0x4000;
+                g_PlayerEntity->state->flags |= 0x4000;
                 channel->pool->object->flags =
                     (channel->pool->object->flags & 0xC0FFFFFF) | 0x21000000;
                 channel->pool->object->flags |= 0x80000000;
@@ -1942,10 +1942,10 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
                     child->x = fx->position.x;
                     child->y = fx->position.y;
                     child->z = fx->position.z;
-                    child->radius = (func_80071A54() & 0xFFF) + 0x800;
-                    child->y -= func_80071A54() & 0x7F;
-                    child->x += func_80071A54() % phase - phase / 2;
-                    child->z += func_80071A54() % phase - phase / 2;
+                    child->radius = (rand() & 0xFFF) + 0x800;
+                    child->y -= rand() & 0x7F;
+                    child->x += rand() % phase - phase / 2;
+                    child->z += rand() % phase - phase / 2;
                     child->heading.x = 0;
                     child->heading.y = 0;
                 }
@@ -2031,7 +2031,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800C6EC0(page, GetClut(0x10, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x10, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;
@@ -2066,7 +2066,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             kind = D_800F336C;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800C6EC0(page, GetClut(0x10, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x10, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;
@@ -2103,7 +2103,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             kind = D_800F336C;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800C6EC0(page, GetClut(0x30, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x30, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;
@@ -2143,10 +2143,10 @@ int func_80198F54(int mode) {
     case 0:
         FX_TASK_AS(WaitState)->complete = 0;
         FX_TASK_AS(WaitState)->signaled = 0;
-        RoomMain_ActorPtr->state->flags &= ~0x10000000u;
+        g_PlayerEntity->state->flags &= ~0x10000000u;
         return 0;
     case 1:
-        if (RoomMain_ActorPtr->state->flags & 0x10000000u) {
+        if (g_PlayerEntity->state->flags & 0x10000000u) {
             FX_TASK_AS(WaitState)->complete = 1;
             FX_TASK_AS(WaitState)->signaled = 1;
             return 1;
@@ -2179,7 +2179,7 @@ s16 *func_80199048(int mode, int value, int unused, int extra)
 
     if (mode == 1) {
         saved = g_RoomFloorY->raw;
-        actor = (char *)RoomMain_ActorPtr;
+        actor = (char *)g_PlayerEntity;
         out = &D_801994F4;
         *out = value;
         D_801994F8 = extra;

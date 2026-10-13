@@ -119,7 +119,7 @@ void RoomLib_GrabOnApproach(SceneGrabHead *head) {
                 if (func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x, (void *)0x1F800008) <
                     0x180) {
                     typedState->callback = func_80192838;
-                    func_80020C74();
+                    Battle_BeginPlayerAction();
                     {
                         FieldActor *activePlayer = g_PlayerEntity;
 
@@ -197,7 +197,7 @@ void func_80192838(RoomSelectionState *state) {
             stateTail->vertical_ticks = 16;
         } else if ((s16)previousFrame < 50 && (s16)currentFrame >= 50) {
             if (stateTail->placement_checked == 0) {
-                func_80020CE4();
+                Battle_ReturnToIdle();
                 func_80192C00(actor, stateTail);
             }
         } else if ((s16)previousFrame < 3 && (s16)currentFrame >= 3) {
@@ -237,7 +237,7 @@ void func_80192838(RoomSelectionState *state) {
     }
 }
 
-void func_80020CE4(void);
+void Battle_ReturnToIdle(void);
 
 void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
     FieldActor *player = g_PlayerEntity;
@@ -305,7 +305,7 @@ s32 func_80192D8C(RoomSelectionState *selection) {
         target = *((void **)D_8009D254);
         if (target != 0) {
             if (*(s16 *)(target + 0xC) > 0) {
-                func_80020CE4();
+                Battle_ReturnToIdle();
             }
         }
         func_80192C00((RoomPlacementOwner *)selection->actor, placementState);
@@ -330,7 +330,7 @@ int func_80192E4C(RoomOscillationEffect *obj) {
     return 0;
 }
 
-int func_8005186C(int value);
+int Math_IntSqrt(int value);
 
 int func_80192E64(RoomOscillationEffect *base, int unused, unsigned int operation, int arg3,
                   int arg4, int arg5) {
@@ -353,7 +353,7 @@ int func_80192E64(RoomOscillationEffect *base, int unused, unsigned int operatio
         int dx = (*(s32 *)arg3 - owner->pos_x) >> 16;
         int dy = (*(s32 *)arg4 - owner->pos_z) >> 16;
 
-        *(s32 *)arg5 = func_8005186C(dx * dx + dy * dy);
+        *(s32 *)arg5 = Math_IntSqrt(dx * dx + dy * dy);
         break;
     }
     case 3:
@@ -371,7 +371,7 @@ int func_80192E64(RoomOscillationEffect *base, int unused, unsigned int operatio
     return 0;
 }
 
-int func_8005186C(int squaredDistance);
+int Math_IntSqrt(int squaredDistance);
 
 int func_80192F54(void) {
     return 0;
@@ -418,7 +418,7 @@ int func_80192F5C(RoomOscillationEffect *effect) {
         int dx = (player->pos_x - actor->pos_x) >> 16;
         int dz = (player->pos_z - actor->pos_z) >> 16;
 
-        *outs[1] = func_8005186C(dx * dx + dz * dz);
+        *outs[1] = Math_IntSqrt(dx * dx + dz * dz);
     }
 
     return 0;
@@ -457,7 +457,7 @@ s32 func_80193114(s32 arg0, RoomLibertyChoiceInputs *inputs) {
     }
 
     weights = D_8019A8C8 + (arg0 * 84) + (distanceBand * 28) + (variant * 7);
-    threshold = ((func_80052B2C() & 0xFF) * 100) / 0x100;
+    threshold = ((Inv_ScrambleGrid() & 0xFF) * 100) / 0x100;
 
     i = 0;
     sum = 0;
@@ -1801,7 +1801,7 @@ int func_801969D8(int mode) {
         playerPosition.z=z=((Pe1Fixed16_16 *)&player->pos_z)->parts.integer;
         dz=z-D_8019AEFC.z;
         dy=y-D_8019AEFC.y;
-        angle=ratan2(dy,func_8005186C((unsigned int)dx*dx+(unsigned int)dz*dz))&4095;
+        angle=ratan2(dy,Math_IntSqrt((unsigned int)dx*dx+(unsigned int)dz*dz))&4095;
         if(angle>768) angle=768;
         if(angle<384) angle=384;
         /* Pitch is clamped to [384, 768]; the second ring halves its spread. */
@@ -2541,7 +2541,7 @@ int func_80198E94(int mode, GteShortVector *position) {
             int radius = D_800966EC[((now << 11) / 40) & 0xFFF].bits.sin / 16 + 0x80;
             int dx = g_PlayerEntity->render_object.model_matrix.translation[0] - position->x;
             int dz = g_PlayerEntity->render_object.model_matrix.translation[2] - position->z;
-            if (radius < func_8005186C(dx * dx + dz * dz)) return 0;
+            if (radius < Math_IntSqrt(dx * dx + dz * dz)) return 0;
         }
         position->pad = 1;
         g_PlayerEntity->state->flags |= 0x4000;
@@ -2990,7 +2990,7 @@ s32 func_8019A068(s32 state) {
     return 0;
 }
 
-int func_80052B2C(void);
+int Inv_ScrambleGrid(void);
 
 void *func_8019A1A0(void *unused, int mode) {
     int direction;
@@ -3003,7 +3003,7 @@ void *func_8019A1A0(void *unused, int mode) {
         D_8019AEEA = 2;
         break;
     case 1:
-        direction = (func_80052B2C() & 1) ? 42 : -42;
+        direction = (Inv_ScrambleGrid() & 1) ? 42 : -42;
         D_8019AEF2 = 2;
         D_8019AEEA = 2;
         PE1_COMPILER_MEMORY_BARRIER();
@@ -3012,7 +3012,7 @@ void *func_8019A1A0(void *unused, int mode) {
         D_8019AEF6 = value;
         break;
     case 2:
-        direction = (func_80052B2C() & 1) ? 0x80 : -0x80;
+        direction = (Inv_ScrambleGrid() & 1) ? 0x80 : -0x80;
         D_8019AEF2 = 4;
         D_8019AEEA = 5;
         PE1_COMPILER_MEMORY_BARRIER();

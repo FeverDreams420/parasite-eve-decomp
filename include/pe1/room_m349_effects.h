@@ -35,7 +35,7 @@ typedef struct RoomM349FlareParams {
 extern GteRotation D_8018EFF4;
 extern GteRotation D_8018F000;
 extern GteRotation D_8018F008;
-extern void func_800866A4(int handle, int arg);
+extern void Akao_Cmd_21(int handle, int arg);
 extern int func_8018F010(int mode, RoomM349FlareSpark *spark);
 extern RenderColor D_8018EFFC;
 

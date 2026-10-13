@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/gte_types.h"
+#include "pe1/entity_frame_update.h"
 
 struct RoomFxModelOwner;
 
@@ -43,7 +44,6 @@ typedef struct RoomFxModelOwner {
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFxModelOwner, geom) == 0x1B4, room_fx_model_geom_offset);
 
 int abs(int value);
-void func_80039B74(RoomFxModelGeom *geom, void *animation, int count, int mode);
 
 /* The mirror room controller (src/overlays/room_lib/mirror_model.c),
  * linked by room_m017, room_m018, room_m021, room_m045, room_m102,

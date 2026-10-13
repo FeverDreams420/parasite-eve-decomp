@@ -16,7 +16,7 @@ typedef struct {
     s16 glowDepth;          /* 0x264: fades by 2 per frame */
 } Ovl178FadeState;
 
-/* The scene object func_800C2B50 returns while the e08 effects run: its
+/* The scene object FieldFx_GetScriptContext returns while the e08 effects run: its
  * position, the sprite page mode the draws select, and the flag the
  * effects raise when they touch the player. */
 typedef struct {

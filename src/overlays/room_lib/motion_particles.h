@@ -82,7 +82,7 @@ PE1_STATIC_ASSERT(sizeof(RoomSharedGlobalState) == 0x2C,
 
 /* Field engine calls of the motion particle set. */
 void func_800C4E50(void *arg0);
-int func_80071A54(void);
+int rand(void);
 void func_800C5A40(void *arg0);
 int func_800C5EB0(void *obj, s16 *values, int *result);
 

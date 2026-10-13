@@ -30,7 +30,10 @@ OVERLAY_BUILD := $(BUILD)/overlays/$(OVERLAY)
 OVERLAY_LD := linkers/$(VERSION)/overlays/$(OVERLAY).ld
 OVERLAY_UNDEFINED_FUNCS := linkers/$(VERSION)/overlays/undefined_funcs_auto.$(OVERLAY).txt
 OVERLAY_UNDEFINED_SYMS := linkers/$(VERSION)/overlays/undefined_syms_auto.$(OVERLAY).txt
-OVERLAY_EXTRA_UNDEFINEDS := linkers/$(VERSION)/overlays/undefined_extra.$(OVERLAY).txt
+# The one symbol script an overlay links: main's symbols taken from the built
+# main.elf, the loader ABI list, and the overlay's own window.
+OVERLAY_LINK_SYMBOLS := linkers/$(VERSION)/overlays/link_symbols.$(OVERLAY).txt
+OVERLAY_ABI := linkers/$(VERSION)/overlay_abi.txt
 OVERLAY_OUT := $(OVERLAY_BUILD)/$(OVERLAY).bin
 
 ELF        := $(BUILD)/$(BASENAME).elf
@@ -230,8 +233,10 @@ report-audit:
 # Each overlay logs to build/USA/overlay-build.<name>.log and a failure
 # replays its tail - a parallel build that hides why it failed costs a CI
 # round trip per bug.
+# Overlays link against the built main executable's symbols, so main is
+# built first.
 OVERLAY_JOBS ?= 4
-overlay-build-all: | $(BUILD)
+overlay-build-all: build | $(BUILD)
 	@test -n "$(OVERLAY_NAMES)" || { echo "no configured overlays in configs/$(VERSION)/overlays"; exit 1; }
 	@$(PY) tools/scripts/parallel_overlay_make.py --jobs $(OVERLAY_JOBS) \
 	    --target overlay-build $(OVERLAY_NAMES)
@@ -248,8 +253,11 @@ overlay-extract:
 OVERLAY_SRC_PATH = $(shell sed -n 's/^  src_path: *//p' $(OVERLAY_CFG) 2>/dev/null)
 overlay-split: overlay-extract
 	@test -f $(OVERLAY_CFG) || { echo "missing overlay config: $(OVERLAY_CFG)"; exit 1; }
-	@mkdir -p $(OVERLAY_SRC_PATH)
-	@$(PY) -m splat split $(OVERLAY_CFG)
+	@mkdir -p $(OVERLAY_SRC_PATH) $(OVERLAY_BUILD)
+	@# Main's symbol file names the main addresses the overlay uses; splat lists
+	@# every one of them as outside the overlay's segments. Keep that in a log.
+	@$(PY) -m splat split $(OVERLAY_CFG) > $(OVERLAY_BUILD)/splat.log 2>&1 || \
+	    { cat $(OVERLAY_BUILD)/splat.log; exit 1; }
 	@find $(OVERLAY_ASM_DIR) \( -name '*.data.s' -o -name '*.rodata.s' -o -path '*/data/*.s' \) \
 	    | xargs $(PY) tools/scripts/collapse_zero_data.py
 
@@ -269,15 +277,16 @@ overlay-build: overlay-split
 	    mkdir -p "$$(dirname "$$obj")"; \
 	    $(CC_WRAPPER) "$$src" "$$obj" || exit $$?; \
 	done
-	@$(PY) tools/scripts/overlay_extra_undefineds.py $(OVERLAY_BUILD) \
+	@$(PY) tools/scripts/overlay_link_symbols.py $(OVERLAY_BUILD) \
 	    --ld $(OVERLAY_LD) $(if $(filter $(OVERLAY),$(OVERLAY_VMA_OVERLAP)),--pin-defined) \
-	    --out $(OVERLAY_EXTRA_UNDEFINEDS) \
-	    --existing $(OVERLAY_UNDEFINED_FUNCS) \
-	    --existing $(OVERLAY_UNDEFINED_SYMS) \
-	    --symbols $(OVERLAY_CONFIG_DIR)/sym.$(OVERLAY).txt \
-	    --symbols configs/$(VERSION)/sym.$(BASENAME).txt
+	    --out $(OVERLAY_LINK_SYMBOLS) \
+	    --config $(OVERLAY_CFG) --configs $(OVERLAY_CONFIG_DIR) \
+	    --main-elf $(ELF) --abi $(OVERLAY_ABI) \
+	    --catalogue $(OVERLAY_UNDEFINED_FUNCS) \
+	    --catalogue $(OVERLAY_UNDEFINED_SYMS) \
+	    --catalogue $(OVERLAY_CONFIG_DIR)/sym.$(OVERLAY).txt
 	# Copied functions retain their original link VMAs, which can overlap other sections.
-	$(LD) $(if $(filter $(OVERLAY),$(OVERLAY_VMA_OVERLAP)),--no-check-sections) -EL -T $(OVERLAY_LD) -T $(OVERLAY_UNDEFINED_FUNCS) -T $(OVERLAY_UNDEFINED_SYMS) -T $(OVERLAY_EXTRA_UNDEFINEDS) \
+	$(LD) $(if $(filter $(OVERLAY),$(OVERLAY_VMA_OVERLAP)),--no-check-sections) -EL -T $(OVERLAY_LD) -T $(OVERLAY_LINK_SYMBOLS) \
 	    -Map $(OVERLAY_BUILD)/$(OVERLAY).map -o $(OVERLAY_BUILD)/$(OVERLAY).elf
 	$(OBJCOPY) -O binary $(OVERLAY_BUILD)/$(OVERLAY).elf $(OVERLAY_OUT)
 

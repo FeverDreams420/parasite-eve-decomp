@@ -60,7 +60,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             trail->ax = angles.x;
             trail->ay = angles.y;
             trail->az = angles.z;
-            func_800D3AFC(&g_RoomSeekingTrailHistory[trail->slot], 0x18, trail, 1);
+            FieldFx_UpdatePointHistory(&g_RoomSeekingTrailHistory[trail->slot], 0x18, trail, 1);
             trail->speed = 0x20;
             trail->turn = 0x200;
             child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
@@ -81,10 +81,10 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
                 func_800CFD50((unsigned short *)&angles, &trail->ax, trail->turn);
                 if (trail->timer >= 3) {
                     range = trail->timer * 16 + 0x100;
-                    if (!(func_80071A54() & 1)) {
-                        trail->ay += func_80071A54() % (range * 2) - range;
+                    if (!(rand() & 1)) {
+                        trail->ay += rand() % (range * 2) - range;
                     } else {
-                        trail->ay += func_80071A54() % range - (range >> 1);
+                        trail->ay += rand() % range - (range >> 1);
                     }
                 }
                 if (trail->speed < 0x3C) trail->speed += 2;
@@ -95,7 +95,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             } else if (++trail->fade >= 16) {
                 return 1;
             }
-            func_800D3AFC(point, 0x18, trail, 0);
+            FieldFx_UpdatePointHistory(point, 0x18, trail, 0);
             point = g_RoomSeekingTrailHistory[trail->slot].point;
             for (i = 0; i < 0x18; i++, point++) {
                 if (func_800C6B90(point, 0x68) && FX_TASK_AS(RoomSparkEventState)->active) {
@@ -112,20 +112,20 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             if (trail->fade == 0) {
                 child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
-                    point += (func_80071A54() & 3) * 4;
+                    point += (rand() & 3) * 4;
                     child->x = point->x;
                     child->y = point->y;
                     child->z = point->z;
-                    child->x += -0x20 + (func_80071A54() & 0x3F);
-                    child->y += -0x20 + (func_80071A54() & 0x3F);
-                    child->z += -0x20 + (func_80071A54() & 0x3F);
+                    child->x += -0x20 + (rand() & 0x3F);
+                    child->y += -0x20 + (rand() & 0x3F);
+                    child->z += -0x20 + (rand() & 0x3F);
                     child->ax = trail->ax;
                     child->ay = trail->ay;
                     child->az = trail->az;
-                    child->ax += -100 + func_80071A54() % 200;
-                    child->ay += -100 + func_80071A54() % 200;
-                    child->speed = (func_80071A54() & 0x3F) - 0x20;
-                    child->turn = (func_80071A54() & 0x3F) - 0x20;
+                    child->ax += -100 + rand() % 200;
+                    child->ay += -100 + rand() % 200;
+                    child->speed = (rand() & 0x3F) - 0x20;
+                    child->turn = (rand() & 0x3F) - 0x20;
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -171,7 +171,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             func_800D3114((GteShortVector *)&g_RoomSeekingTrailHistory[trail->slot], 0x18, 0x78, i, scale,
                           0xFD, 0x1F, D_800E2850[D_800E11EA], clut, 0x80,
                           &colorA, &colorB, 1);
-            func_800D004C(&g_RoomSeekingTrailHistory[trail->slot].point[func_80071A54() & 0xF],
+            func_800D004C(&g_RoomSeekingTrailHistory[trail->slot].point[rand() & 0xF],
                           0x190, 0x190, 6, 0, 0x1000, 0x1000, &colorA, 0, 0x80, 3);
             return 0;
         case 2:
@@ -223,9 +223,9 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             target.x = trail->x;
             target.y = trail->y;
             target.z = trail->z;
-            target.x += -0x10 + (func_80071A54() & 0x1F);
-            target.y += -0x10 + (func_80071A54() & 0x1F);
-            target.z += -0x10 + (func_80071A54() & 0x1F);
+            target.x += -0x10 + (rand() & 0x1F);
+            target.y += -0x10 + (rand() & 0x1F);
+            target.z += -0x10 + (rand() & 0x1F);
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
@@ -380,13 +380,13 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
         }
         child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
         if (child) {
-            child->x = func_80071A54();
-            child->y = func_80071A54();
-            child->z = func_80071A54();
+            child->x = rand();
+            child->y = rand();
+            child->z = rand();
             child->frame = 0;
             child->reserved08 = 0;
-            child->vx = (func_80071A54() & 0x7F) - 0x40;
-            child->vy = (func_80071A54() & 0x7F) - 0x40;
+            child->vx = (rand() & 0x7F) - 0x40;
+            child->vy = (rand() & 0x7F) - 0x40;
         }
         if (D_800E27EC < 0x30) break;
         return 1;
@@ -442,7 +442,7 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x30, palette);
-            func_800C6EC0(page, clut);
+            FieldFx_ModelSetTexture(page, clut);
         }
         FieldFx_ModelSetSemiTrans(1);
         RotMatrixYXZ((GteShortVector *)&spin, &matrix);
@@ -505,11 +505,11 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 5, &rotation, trail);
             func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &angles);
             angles.x = 0;
-            angles.y += (func_80071A54() & 0x1FF) - 0x100;
+            angles.y += (rand() & 0x1FF) - 0x100;
             trail->ax = angles.x;
             trail->ay = angles.y;
             trail->az = angles.z;
-            func_800D3AFC(&g_RoomScatterTrailHistory[trail->slot], 0x18, trail, 1);
+            FieldFx_UpdatePointHistory(&g_RoomScatterTrailHistory[trail->slot], 0x18, trail, 1);
             trail->speed = 0x20;
             trail->turn = 0x200;
             child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
@@ -528,10 +528,10 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             angles.x = 0;
             if (trail->fade == 0) {
                 func_800CFD50((unsigned short *)&angles, &trail->ax, trail->turn);
-                if (!(func_80071A54() & 1)) {
-                    trail->ay += func_80071A54() % 800 - 400;
+                if (!(rand() & 1)) {
+                    trail->ay += rand() % 800 - 400;
                 } else {
-                    trail->ay += (func_80071A54() & 0x1FF) - 0x100;
+                    trail->ay += (rand() & 0x1FF) - 0x100;
                 }
                 if (trail->speed < 0x3C) trail->speed += 2;
                 func_800CFB7C((GteShortVector *)&trail->ax, (s16)(trail->speed * trail->speed / 16), &target);
@@ -541,7 +541,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             } else if (++trail->fade >= 16) {
                 return 1;
             }
-            func_800D3AFC(point, 0x18, trail, 0);
+            FieldFx_UpdatePointHistory(point, 0x18, trail, 0);
             point = g_RoomScatterTrailHistory[trail->slot].point;
             for (i = 0; i < 0x18; i++, point++) {
                 if (func_800C6B90(point, 0x64) && FX_TASK_AS(RoomSparkEventState)->active) {
@@ -558,20 +558,20 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             if (trail->fade == 0) {
                 child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
-                    point += (func_80071A54() & 3) * 4;
+                    point += (rand() & 3) * 4;
                     child->x = point->x;
                     child->y = point->y;
                     child->z = point->z;
-                    child->x += -0x20 + (func_80071A54() & 0x3F);
-                    child->y += -0x20 + (func_80071A54() & 0x3F);
-                    child->z += -0x20 + (func_80071A54() & 0x3F);
+                    child->x += -0x20 + (rand() & 0x3F);
+                    child->y += -0x20 + (rand() & 0x3F);
+                    child->z += -0x20 + (rand() & 0x3F);
                     child->ax = trail->ax;
                     child->ay = trail->ay;
                     child->az = trail->az;
-                    child->ax += -100 + func_80071A54() % 200;
-                    child->ay += -100 + func_80071A54() % 200;
-                    child->speed = (func_80071A54() & 0x3F) - 0x20;
-                    child->turn = (func_80071A54() & 0x3F) - 0x20;
+                    child->ax += -100 + rand() % 200;
+                    child->ay += -100 + rand() % 200;
+                    child->speed = (rand() & 0x3F) - 0x20;
+                    child->turn = (rand() & 0x3F) - 0x20;
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -617,7 +617,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             func_800D3114((GteShortVector *)&g_RoomScatterTrailHistory[trail->slot], 0x18, 0x78, i, scale,
                           0xFD, 0x1F, D_800E2850[D_800E11EA], clut, 0x80,
                           &colorA, &colorB, 1);
-            func_800D004C(&g_RoomScatterTrailHistory[trail->slot].point[func_80071A54() & 0xF],
+            func_800D004C(&g_RoomScatterTrailHistory[trail->slot].point[rand() & 0xF],
                           0x190, 0x190, 6, 0, 0x1000, 0x1000, &colorA, 0, 0x80, 3);
             return 0;
         case 2:
@@ -669,9 +669,9 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             target.x = trail->x;
             target.y = trail->y;
             target.z = trail->z;
-            target.x += -0x10 + (func_80071A54() & 0x1F);
-            target.y += -0x10 + (func_80071A54() & 0x1F);
-            target.z += -0x10 + (func_80071A54() & 0x1F);
+            target.x += -0x10 + (rand() & 0x1F);
+            target.y += -0x10 + (rand() & 0x1F);
+            target.z += -0x10 + (rand() & 0x1F);
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
@@ -820,13 +820,13 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
         }
         child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
         if (child) {
-            child->x = func_80071A54();
-            child->y = func_80071A54();
-            child->z = func_80071A54();
+            child->x = rand();
+            child->y = rand();
+            child->z = rand();
             child->frame = 0;
             child->reserved08 = 0;
-            child->vx = (func_80071A54() & 0x7F) - 0x40;
-            child->vy = (func_80071A54() & 0x7F) - 0x40;
+            child->vx = (rand() & 0x7F) - 0x40;
+            child->vy = (rand() & 0x7F) - 0x40;
         }
         if (D_800E27EC < 0x30) break;
         return 1;
@@ -882,7 +882,7 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x30, palette);
-            func_800C6EC0(page, clut);
+            FieldFx_ModelSetTexture(page, clut);
         }
         FieldFx_ModelSetSemiTrans(1);
         RotMatrixYXZ((GteShortVector *)&spin, &matrix);

@@ -8,7 +8,7 @@
  * effect done. The state keeps the reload value at `reload`, the timer
  * right after it and the request flag after that; the same code in every
  * effect, with only that offset differing. The caller declares
- * func_800C6C18 and func_800C2B68. */
+ * func_800C6C18 and FieldFx_IsLastSlotHalted. */
 #define ROOM_REARM_TIMER_TICK(name, reload) \
     void name(int arg0, char *arg1, char *arg2) { \
         short *state = (short *)arg2; \
@@ -27,7 +27,7 @@
             } \
         } \
         \
-        if (func_800C2B68() == 1) { \
+        if (FieldFx_IsLastSlotHalted() == 1) { \
             arg1[1] = 2; \
         } \
     }

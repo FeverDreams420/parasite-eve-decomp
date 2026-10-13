@@ -144,7 +144,7 @@
 #undef MENUCARD_VIDEO_PTR4
 #undef MENUCARD_VIDEO_FINISHED
 
-void func_800870F0(int arg0);
+void Spu_SetVoiceVolume(int arg0);
 void StUnSetRing(void);
 
 void func_80122398(void) {
@@ -154,7 +154,7 @@ void func_80122398(void) {
     counter = &D_800B0DBA;
     value = *counter - 1;
     *counter = value;
-    func_800870F0(0);
+    Spu_SetVoiceVolume(0);
     func_8010C0D8(0);
     StUnSetRing();
     DsControlB(9, 0, 0);

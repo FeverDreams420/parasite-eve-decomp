@@ -62,11 +62,11 @@ typedef struct SceneE22EmberEvent {
     s16 jointSet;                 /* 0x12 */
 } SceneE22EmberEvent;
 
-extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
+extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
 
-extern int func_80071A54(void);
-extern void func_80020D50(void);
-extern void func_80020DD0(void);
+extern int rand(void);
+extern void Battle_HaltOnPositiveX(void);
+extern void Battle_InitEntityColors(void);
 
 /* Link beam controller (func_80193414): two light ribbons strung across
  * three actor joints picked by the scene event's joint set; the last joint
@@ -120,7 +120,7 @@ typedef struct SceneE22ModelScale {
     s32 x, y, z, reserved0C;
 } SceneE22ModelScale;
 
-extern void func_800C6EC0(int tpage, int clut);
+extern void FieldFx_ModelSetTexture(int tpage, int clut);
 #include "pe1/gte_types.h"
 extern void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
                           int texture, int clut, int page, int intensity, int arg7,
@@ -139,6 +139,6 @@ typedef struct SceneE22SweepBolt {
     s16 sweep;                    /* 0x1E */
 } SceneE22SweepBolt;
 
-extern void func_800D1D24(int mode, int step, int time);
+extern void Geo_ClipAlternatingArcPoint(int mode, int step, int time);
 
 #endif

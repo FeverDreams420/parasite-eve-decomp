@@ -46,7 +46,7 @@ typedef struct RoomM005Seed8 {
 extern RoomM005Seed8 D_8018EFF4;
 extern u8 D_80190B84[];
 extern u8 D_80190B8C[];
-extern int func_80071A54(void);
+extern int rand(void);
 int func_8018F330(int mode, RoomM005OrbiterState *state);
 
 extern RenderColor D_8018F00C;

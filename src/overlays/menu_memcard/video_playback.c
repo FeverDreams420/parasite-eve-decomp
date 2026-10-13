@@ -103,7 +103,7 @@
 #undef MENUCARD_VIDEO_PTR4
 #undef MENUCARD_VIDEO_FINISHED
 
-void func_800870F0(int arg0);
+void Spu_SetVoiceVolume(int arg0);
 void StUnSetRing(void);
 
 void MenuCard_StopVideo(void) {
@@ -113,7 +113,7 @@ void MenuCard_StopVideo(void) {
     counter = &D_800B0DBA;
     value = *counter - 1;
     *counter = value;
-    func_800870F0(0);
+    Spu_SetVoiceVolume(0);
     func_8010C0D8(0);
     StUnSetRing();
     DsControlB(9, 0, 0);
@@ -135,7 +135,7 @@ s32 MenuCard_PlayVideo(s32 index) {
     flags=&D_800B0CD8;
     *flags |= 0x200;
     D_801D0E00[entry].wide=1;
-    SetDispMask(0); DrawSync(0); func_80074A44(1);
+    SetDispMask(0); DrawSync(0); ResetGraph(1);
 retry:
     {
         VideoDiscRange *range = (VideoDiscRange *)D_8009315E;
@@ -149,7 +149,7 @@ retry:
             if (ready==pollError) goto retry;
         }
     }
-    func_80072714(); func_800726C4(); func_80072724();
+    EnterCriticalSection(); FlushCache(); ExitCriticalSection();
     buffer=D_80011610+((D_80093162[0]-D_80093160)<<11);
     MenuCard_InitVideoBuffers(1,&buffer);
     MenuCard_OpenVideo((s16)entry);
@@ -160,7 +160,7 @@ retry:
             do {
                 s32 left = *remainingPtr;
                 if (left<=0) break;
-                func_8003EB04();
+                Field_HandleStateTransition();
                 if (!(s8)MenuCard_StepVideo()) {
                     D_801D0DE8=0;D_801D0DEC=0;D_801D0DFC=0;D_801D0DF8=0;D_801D0DF0=0;D_801D0DF4=0;
                     D_800B0DBA=0;
@@ -168,7 +168,7 @@ retry:
                 else if (D_8009D26C & 0x20000004) {
                     s32 remaining;
                     D_800B0DBA--;
-                    func_800870F0(0);func_8010C0D8(0);func_8007A2A4();DsControlB(9,0,0);
+                    Spu_SetVoiceVolume(0);func_8010C0D8(0);StUnSetRing();DsControlB(9,0,0);
                     remaining=*remainingPtr;
                     D_801D0DE8=0;D_801D0DEC=0;D_801D0DFC=0;D_801D0DF8=0;D_801D0DF0=0;D_801D0DF4=0;
                     D_800B0DBA=0;

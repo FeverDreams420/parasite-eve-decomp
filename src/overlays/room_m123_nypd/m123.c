@@ -248,8 +248,8 @@ int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
                 child = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);
                 if (child) {
                     child->frame = 0;
-                    child->scale = (func_80071A54() & 0x1FF) + 0x200;
-                    child->offset = func_80071A54();
+                    child->scale = (rand() & 0x1FF) + 0x200;
+                    child->offset = rand();
                 }
             }
             func_800D3F64(0x580, func_800D3FD8());
@@ -702,16 +702,16 @@ int func_80194768(int mode)
                 particle = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);
                 if (particle != 0) {
                     particle->frame = (i << 6) / 24;
-                    particle->scale = (func_80071A54() & 63) + 64;
-                    particle->offset = func_80071A54();
+                    particle->scale = (rand() & 63) + 64;
+                    particle->offset = rand();
                 }
             }
         } else {
             particle = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);
             if (particle != 0) {
                 particle->frame = 0;
-                particle->scale = (func_80071A54() & 63) + 64;
-                particle->offset = func_80071A54();
+                particle->scale = (rand() & 63) + 64;
+                particle->offset = rand();
             }
         }
         time = D_800E27EC;
@@ -911,17 +911,17 @@ int func_80195114(int mode, RoomM123Burst *burst, int *choice) {
                 child->y = burst->y;
                 child->z = burst->z;
                 {
-                    int sample = func_80071A54();
+                    int sample = rand();
                     int previous = child->x;
                     child->x = (previous - 128) + (sample & 255);
                 }
                 {
-                    int sample = func_80071A54();
+                    int sample = rand();
                     int previous = child->y;
                     child->y = (previous - 128) + (sample & 255);
                 }
                 {
-                    int sample = func_80071A54();
+                    int sample = rand();
                     int previous = child->z;
                     child->z = (previous - 128) + (sample & 255);
                 }

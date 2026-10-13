@@ -24,7 +24,7 @@ static inline s16 MenuCard_NextVideoFrame(VideoDisplay *dec) {
     D_800B0DBC.value++;
     dec->decodeIndex ^= 1;
     func_8010C89C(frame, dec->decode[dec->decodeIndex], MENUCARD_VIDEO_PTR4);
-    func_8007C394(frame);
+    StFreeRing(frame);
     return 0;
 }
 
@@ -32,14 +32,14 @@ static inline s16 MenuCard_NextVideoFrame(VideoDisplay *dec) {
 static inline void MenuCard_KickVideoStream(CdlLOC *loc) {
     u8 result[8];
 
-    func_8007C2A0(loc);
+    StGetBackloc(loc);
     do {
         do {
-            while (func_8007F72C() != 1) {
+            while (DsSystemStatus() != 1) {
             }
         } while (DsQueueLen() != 0);
-        func_80080D5C(2, loc, result);
-    } while (!func_80081314(loc, 0x1E0));
+        DsControl(2, loc, result);
+    } while (!DsRead2(loc, 0x1E0));
 }
 
 /* Wait for the slice upload; on a timeout skip to the other frame buffer. */
@@ -91,7 +91,7 @@ s32 MENUCARD_STEP_VIDEO_NAME(void) {
             (*active)--;
         }
         func_8010C0D8(0);
-        func_8007A2A4();
+        StUnSetRing();
         DsControlB(9, 0, 0);
     }
     return 0;

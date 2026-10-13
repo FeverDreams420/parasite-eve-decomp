@@ -6,6 +6,11 @@
 #include "pe1/cdrom_buffers.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/gpu_image.h"
+#include "pe1/asset_tim.h"
+#include "pe1/psyq_callbacks.h"
+#include "pe1/psyq_cd.h"
+#include "pe1/psyq_ds.h"
+#include "pe1/psyq_ds_queue.h"
 
 /* Three byte channels in the boot screen image buffer. */
 typedef struct BootRgb24Pixel {
@@ -101,42 +106,27 @@ extern volatile s32 D_80172CF4;
 extern char *D_80125B48;
 extern s32 g_ActiveDrawSlot __asm__("D_8009CDDC");
 
-void func_80077AC4(void *ordering_table, void *primitive);
-void func_80077B04(void *primitive, s32 code);
-void func_80077CB4(void *primitive, void *next);
-void func_80074A44(s32 value);
-s32 func_80073A44(s32 value);
-void func_800870F0(s32 value);
+void SetSemiTrans(void *primitive, s32 code);
+void ResetGraph(s32 value);
+s32 VSync(s32 value);
+void Spu_SetVoiceVolume(s32 value);
 int func_801258EC(int command, int parameter);
-s32 func_8007EE84(s32, void *, void *, s32);
-s32 func_8007F418(s32, void *);
-void func_800824C8(s32 (*)(u8));
-void func_80073D24(void (*)(void));
+s32 DsSync(s32, void *);
 s32 BootDisplay_StartPlayback(void);
 void BootDisplay_CheckPlaybackTime(void);
-s32 func_8007F72C(void);
-s32 func_8007F7A8(void);
+s32 DsSystemStatus(void);
+s32 DsShellOpen(void);
 /* PsyQ exit: the failure path never returns to the transfer callback. */
-void func_800719E4(s32) __attribute__((noreturn));
-void func_80080AE4(void *, s32);
+void exit(s32) __attribute__((noreturn));
 s32 BootDisplay_StepPlaybackTransfer(u8 mode);
-void func_8007EC14(void);
-void func_80080CC8(void *);
-s32 func_8007F778(void);
+void DsInit(void);
+s32 DsQueueLen(void);
 s32 BootDisplay_InitPlaybackFile(void);
-void func_80074BB8(s32 value);
-void func_80074D28(s32 value);
-void func_80074DC0(s32 value);
-s32 func_800718D0(void *resource);
-s32 func_800719C4(void *resource);
-s32 func_80071994(void *resource);
-s16 *func_80071964(void *resource);
-s16 *func_80071944(void *resource);
+void SetGraphDebug(s32 value);
+void SetDispMask(s32 value);
 void func_8010BE3C(s32 value);
 void func_8010BD4C(void *address);
-void func_80075424(void *draw_env);
 void BootDisplay_PresentFrame(void);
-void func_800754E4(void *dst, void *src);
 void func_80124F40(s32 value);
 
 /* Callable entry points inside neighboring boot-display code. */

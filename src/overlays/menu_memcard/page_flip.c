@@ -12,7 +12,7 @@ typedef PsxSignedRect Rect;
 
 #include "page_flip_externs.h"
 
-void func_80074A44(int);
+void ResetGraph(int);
 
 void MenuCard_FlipScreenPages(void) {
     int i;
@@ -45,7 +45,7 @@ void MenuCard_FlipScreenPages(void) {
         }
 
         VSync(0);
-        func_80074A44(1);
+        ResetGraph(1);
         PutDrawEnv(&D_801D11C4->draw);
         PutDispEnv(&D_801D11C4->disp);
     }

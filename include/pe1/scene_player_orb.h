@@ -77,7 +77,7 @@ extern u8 D_801987E4[];
 extern FieldGlowSprite D_80199690;
 
 int *FieldFx_RegPtr(int index);
-int func_80071A54(void);
+int rand(void);
 
 /* Scene e08 limb beams: ten ribbons fanned from the player's chest bone to
  * hand and foot bones, each with its own swing and bend offsets. */

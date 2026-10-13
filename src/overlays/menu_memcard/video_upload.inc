@@ -14,7 +14,7 @@ void MENUCARD_UPLOAD_VIDEO_SLICE_NAME(void) {
     s8 old;
 
     if (D_800B0DBB && g_CdStreamReadyHalfword) {
-        func_8007C564();
+        StCdInterrupt();
         g_CdStreamReadyHalfword = 0;
     }
     old = MENUCARD_VIDEO_DISPLAY.selector;

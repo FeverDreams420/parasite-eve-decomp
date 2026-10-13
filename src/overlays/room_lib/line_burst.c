@@ -92,7 +92,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
                     child->x = state->px;
                     child->y = state->py;
                     child->z = state->pz;
-                    speed = (func_80071A54() & 7) + 0x14;
+                    speed = (rand() & 7) + 0x14;
                     child->vx = rcos(angle) * speed / 4096;
                     child->vz = rsin(angle) * speed / 4096;
                     child->vy = 0;
@@ -120,10 +120,10 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             for (i = 0; i < 12; i++) {
                 child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
-                    weight = func_80071A54() & 0xFFF;
+                    weight = rand() & 0xFFF;
                     LoadAverageShort12(state, &state->px, 0x1000 - weight, weight, child);
                     child->vy = 0;
-                    child->ay = (func_80071A54() & 3) + 1;
+                    child->ay = (rand() & 3) + 1;
                     child->state = 1;
                     child->timer = 0;
                 }

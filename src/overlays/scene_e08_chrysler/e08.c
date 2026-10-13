@@ -150,12 +150,12 @@ typedef struct {
 
 #include "e08_externs.h"
 
-void func_800C2B40(void *arg0);
+void FieldFx_SetScriptContext(void *arg0);
 
 void func_8018F3C4(RoomEnt *ent, void *arg1, SceneE08LinkInitState *state) {
     SceneE08MatrixFields *matrix;
 
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
 
     state->link = ent->link;
     matrix = (SceneE08MatrixFields *)state->link->p238;
@@ -184,7 +184,7 @@ void func_8018F4FC(void) {
 }
 
 void func_8018F504(void *arg0, unsigned char *state) {
-    if (func_800C2B68() == 1) {
+    if (FieldFx_IsLastSlotHalted() == 1) {
         state[1] = 2;
     }
 }
@@ -234,7 +234,7 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
     SceneShiftedPosition *ownerCursor;
     unsigned i;
 
-    owner = (SceneFadeOwner *)func_800C2B50();
+    owner = (SceneFadeOwner *)FieldFx_GetScriptContext();
     seed.raw = D_8018EFF4;
 
     ownerCursor = &owner->position;
@@ -366,7 +366,7 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
     register unsigned i;
     s16 *slot = &D_801994B2;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     i = 0;
     /* Hoist the draw state address before the cursor setup. */
     asm("" : : "r"(slot));
@@ -505,7 +505,7 @@ ROOMLIB_RETURN_ZERO(SceneE08_OrbNop6)
 void func_80190060(RoomEnt *ent, void *unused, SceneE08State *state) {
     SceneE08MatrixWords *matrix;
 
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
     state->link = ent->link;
     matrix = (SceneE08MatrixWords *)state->link->p238;
     state->matrix = *matrix;
@@ -558,7 +558,7 @@ ROOM_REARM_TIMER_TICK(func_8019024C, 0x28)
 
 void func_801902CC(int unused0, int unused1, SceneEmitterSlots *slots) {
     unsigned int i;
-    SceneActorPositionTail *origin = (SceneActorPositionTail *)((s32 *)func_800C2B50() + 1);
+    SceneActorPositionTail *origin = (SceneActorPositionTail *)((s32 *)FieldFx_GetScriptContext() + 1);
 
     slots->activeSlots = 4;
     for (i = 0; i < 4; ++i) {
@@ -595,7 +595,7 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
     register unsigned i;
     int diag = 0x1000;
     s16 *slot = &D_801994C2;
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     i = 0;
         asm volatile("" : : "r"(slot));
     func_800C2EAC(owner->spriteMode);
@@ -676,7 +676,7 @@ void func_801906BC(void *object, void *timer, ScenePlayerOrb *orb)
     GteMatrix matrix;
     ScenePlayerOrbAnchor *anchor;
 
-    anchor = func_800C2B50();
+    anchor = FieldFx_GetScriptContext();
     rotation = D_8018EFFC;
     orb->count = 3;
     orb->anchor.x = anchor->x;
@@ -688,8 +688,8 @@ void func_801906BC(void *object, void *timer, ScenePlayerOrb *orb)
     orb->position.x = g_PlayerEntity->pos_x >> 16;
     orb->position.y = g_PlayerEntity->pos_y >> 16;
     orb->position.z = g_PlayerEntity->pos_z >> 16;
-    orb->position.x += func_80071A54() % 300 - 150;
-    orb->position.z += func_80071A54() % 300 - 150;
+    orb->position.x += rand() % 300 - 150;
+    orb->position.z += rand() % 300 - 150;
     rotation.y = *FieldFx_RegPtr(2);
     RotMatrix(&rotation, &matrix);
     offset.x = orb->position.x - orb->anchor.x;
@@ -723,7 +723,7 @@ void func_80190914(void *object, void *timer, ScenePlayerOrb *orb)
     ScenePlayerOrbAnchor *anchor;
     u32 i;
 
-    anchor = func_800C2B50();
+    anchor = FieldFx_GetScriptContext();
     color = D_8018F004;
     func_800C2EAC(anchor->mode);
     func_800C3098(0x10);
@@ -771,18 +771,18 @@ void func_80190B98(void *object, ScenePlayerOrbTimer *timer, ScenePlayerOrb *orb
     GteShortVector *spawn;
     u32 i;
 
-    anchor = func_800C2B50();
+    anchor = FieldFx_GetScriptContext();
     if (orb->delay != 0) {
         if (--orb->delay == 0) {
             orb->active = 1;
-            func_800C2B90(object, 1, (unsigned short *)g_SceneE08OrbSpawnLayout,
+            FieldFx_StartSlot(object, 1, (unsigned short *)g_SceneE08OrbSpawnLayout,
                           (int (**)(void *, void *, void *))g_SceneE08OrbInitList);
         }
     }
     if (orb->active != 0) {
         orb->fade++;
         if (++orb->active == 12) {
-            spawn = func_800C2B90(object, 3, (unsigned short *)g_SceneE08OrbSpawnLayout,
+            spawn = FieldFx_StartSlot(object, 3, (unsigned short *)g_SceneE08OrbSpawnLayout,
                                  (int (**)(void *, void *, void *))g_SceneE08OrbInitList);
             if (spawn != 0) {
                 spawn->x = orb->position.x;
@@ -817,9 +817,9 @@ void func_80190B98(void *object, ScenePlayerOrbTimer *timer, ScenePlayerOrb *orb
     orb->trailB[2].y = g_RoomFloorY->y;
     orb->trailB[2].z = orb->trailA[2].z;
     for (i = 0; i < 8; i++) {
-        orb->points[i].x = orb->trailA[2].x - (step.x << 2) + func_80071A54() % 100 - 50;
+        orb->points[i].x = orb->trailA[2].x - (step.x << 2) + rand() % 100 - 50;
         orb->points[i].y = orb->trailA[2].y;
-        orb->points[i].z = orb->trailA[2].z - (step.z << 2) + func_80071A54() % 100 - 50;
+        orb->points[i].z = orb->trailA[2].z - (step.z << 2) + rand() % 100 - 50;
     }
 }
 
@@ -887,7 +887,7 @@ void func_8019104C(void *object, void *timer, void *data)
     SceneRingSpritesState *ring;
     SceneRingSpritesState *state;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     rotation = D_8018F018;
     ring = data;
     state = data;
@@ -1009,7 +1009,7 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     int playerX;
     register int playerZ asm("$3");
 
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
     D_80199528 = Asset_FindTable08ByU32Key(*sound, 0x10D8704);
     state->link = ent->link;
     matrix = (SceneE08MatrixWords *)state->link->p238;
@@ -1066,8 +1066,8 @@ void func_80191740(void) {
 }
 
 int *FieldFx_VarPtr(int arg0);
-void func_80020D50(void);
-void func_80020DD0(void);
+void Battle_HaltOnPositiveX(void);
+void Battle_InitEntityColors(void);
 int FieldFx_GetStatus(void *arg0);
 
 void func_80191748(SceneGrabHead *arg0, RoomFxControl *arg1) {
@@ -1078,7 +1078,7 @@ void func_80191748(SceneGrabHead *arg0, RoomFxControl *arg1) {
     status = FieldFx_VarPtr(1);
     if (*status == 1) {
         if (arg1->frame < 0xF0) {
-            func_80020D50();
+            Battle_HaltOnPositiveX();
         }
 
         if (arg1->frame == 0xF0) {
@@ -1088,12 +1088,12 @@ void func_80191748(SceneGrabHead *arg0, RoomFxControl *arg1) {
 
                 objectFlags = (int *)&arg0->actor->state->core_flags;
                 *objectFlags |= 0x80000000;
-                func_80020DD0();
+                Battle_InitEntityColors();
             }
         }
     }
 
-    if (func_800C2B68() == 1) {
+    if (FieldFx_IsLastSlotHalted() == 1) {
         arg1->state = 2;
     }
 }
@@ -1116,7 +1116,7 @@ void func_80191850(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
     SceneE08Vector draw_scale;
     Ovl178Position *owner;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     func_800C2EAC(owner->spriteMode);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
@@ -1170,7 +1170,7 @@ void func_801919B0(s32 arg0, s32 arg1, SceneMovingSlots *base) {
     u8 buf38[8];
     u8 buf40[8];
 
-    st = func_800C2B50();
+    st = FieldFx_GetScriptContext();
     func_800C2EAC(st->spriteMode);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -1499,7 +1499,7 @@ void func_801927A8(void *unused0, void *unused1, SceneMovingSlots *effect) {
     u8 *table;
     int retA, retB;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     i = 0;
     table = D_80198820;
     scratchPtr = scratchB;
@@ -1645,7 +1645,7 @@ void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect)
     Ovl178Position *owner;
     unsigned i;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     i = 0;
     asm volatile("" : : "r"(scale));
     func_800C2EAC(owner->spriteMode);
@@ -1694,13 +1694,13 @@ void func_80192F50(void *unused, RoomFxControl *condition_arg, SceneE08OrbitPart
 
     do {
         if (((SceneE08OrbitParticles *)state)->active[0] == 0) {
-            if (func_80071A54() % 30 == 0 && condition->frame < 50) {
+            if (rand() % 30 == 0 && condition->frame < 50) {
                 ((SceneE08OrbitParticles *)state)->active[0] = 1;
                 ((SceneE08OrbitParticles *)state)->frame[0] = 0;
-                effect->angle[i] = func_80071A54() % 4096;
+                effect->angle[i] = rand() % 4096;
                 effect->size[i] = 0x7e8;
                 effect->radius[i] = 0x7e8;
-                random = func_80071A54();
+                random = rand();
                 ((SceneE08OrbitParticles *)state)->radialSpeed[0] = 0;
                 ((SceneE08OrbitParticles *)state)->angularSpeed[0] = random % 20 + 40;
             }
@@ -1752,7 +1752,7 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
     int size;
 
     model = state;
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     RotMatrix(&model->seed.vector, &matrix);
     memset(&source, 0, 0x10);
     source.x = model->scaleX;
@@ -1766,11 +1766,11 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
     FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80199528, 0, 0);
     if (owner->mode == 0) {
         int tpage = (u16)GetTPage(0, 1, 0x340, 0x100);
-        func_800C6EC0(tpage, (u16)GetClut(0, 0x1D7));
+        FieldFx_ModelSetTexture(tpage, (u16)GetClut(0, 0x1D7));
     }
     if (owner->mode == 1) {
         int tpage = (u16)GetTPage(0, 1, 0x340, 0x160);
-        func_800C6EC0(tpage, (u16)GetClut(0, 0x1DB));
+        FieldFx_ModelSetTexture(tpage, (u16)GetClut(0, 0x1DB));
     }
     func_800C3134(D_80198860, timer->ticks, (unsigned char *)&color);
     FieldFx_ModelSetSemiTrans(1);
@@ -1864,7 +1864,7 @@ void func_801935A8(void *object, void *timer, SceneLimbBeams *beams)
     u32 i;
     int tpage;
 
-    anchor = func_800C2B50();
+    anchor = FieldFx_GetScriptContext();
     target = &g_PlayerEntity->render_object.matrices[2];
     func_800C2EAC(anchor->mode);
     func_800C2FF0(0x20, 0x20);
@@ -1919,11 +1919,11 @@ void func_801938FC(int unused, SceneE08RandomState *state, SceneE08RandomEntries
     for (i = 0; i < 10; ++i) {
         if (entries->active[i] == 1) {
             ++entries->counter[i];
-            D_801994D8[i].rise = func_80071A54() % 160 - 80;
-            D_801994D8[i].bend = func_80071A54() % 160 - 80;
-            D_801994D8[i].reach = func_80071A54() % 160 - 80;
-            D_801994D8[i].swing = func_80071A54() % 512 - 256;
-        } else if (func_80071A54() % 20 == 0) {
+            D_801994D8[i].rise = rand() % 160 - 80;
+            D_801994D8[i].bend = rand() % 160 - 80;
+            D_801994D8[i].reach = rand() % 160 - 80;
+            D_801994D8[i].swing = rand() % 512 - 256;
+        } else if (rand() % 20 == 0) {
             entries->active[i] = 1;
         }
     }
@@ -1958,7 +1958,7 @@ ROOMLIB_RETURN_ZERO(SceneE08_LayeredSpriteNop6)
 
 /* The 0x80199560 glow sprite, field by field as Scene_DrawLayeredSprite
  * stores its colour. */
-void func_800C2B40(void *);
+void FieldFx_SetScriptContext(void *);
 
 void func_80193C68(SceneGrabHead *actor, void *unused, SceneE08Context *state) {
     FieldActor *source;
@@ -1974,7 +1974,7 @@ void func_80193C68(SceneGrabHead *actor, void *unused, SceneE08Context *state) {
     int minus300;
     int scratch; /* -50 offset, later the sound pan */
     int scale;
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
     source = actor->actor;
     state->source = source;
     block = source->render_object.matrices;
@@ -2075,7 +2075,7 @@ void func_80193FF8(s32 arg0, s32 arg1, SceneE08TrailGlow *p) {
     Ovl178Position *view;
     s32 z;
 
-    view = func_800C2B50();
+    view = FieldFx_GetScriptContext();
     FieldFx_RegPtr(1);
     p->acceleration = 0x14;
     p->unused88 = 0x80;
@@ -2105,7 +2105,7 @@ void func_80194090(void *arg0, void *arg1, char *effects) {
     s16 *alpha;
     unsigned i;
     unsigned angleOffset;
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     i = 0;
     alpha = &D_8019955A;
     /* This single-pass block preserves the original setup scheduling. */
@@ -2153,7 +2153,7 @@ void func_80194214(void *unused, RoomFxControl *phase, SceneE08TrailGlow *effect
     u16 preserved;
     s32 x, z;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     for (i = 2; i != 0; i--) {
         __builtin_memcpy(&effect->rotation[i], &effect->rotation[i - 1], 8);
         effect->trail[i] = effect->trail[i - 1];
@@ -2192,7 +2192,7 @@ void func_80194214(void *unused, RoomFxControl *phase, SceneE08TrailGlow *effect
 
 void func_801943CC(void *arg0, void *arg1, SceneLayeredSpriteState *out)
 {
-    Ovl178Position *position = func_800C2B50();
+    Ovl178Position *position = FieldFx_GetScriptContext();
 
     out->center[0].fixed = position->x << 16;
     out->center[1].fixed = position->y << 16;
@@ -2223,7 +2223,7 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     s16 *alphaBase;
     u8 *red;
 
-    owner = (char *)func_800C2B50();
+    owner = (char *)FieldFx_GetScriptContext();
     func_800C2EAC(((Ovl178Position *)owner)->spriteMode);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
@@ -2273,11 +2273,11 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     }
 }
 
-int func_80071A54(void);
+int rand(void);
 
 void func_801946D4(void *unused, RoomFxControl *control, char *state)
 {
-    Ovl178Position *owner = func_800C2B50();
+    Ovl178Position *owner = FieldFx_GetScriptContext();
     /* Keeps the later history-copy loop based at its original offset. */
     register char *cursor asm("$6");
     s16 point[3];
@@ -2341,7 +2341,7 @@ void func_801946D4(void *unused, RoomFxControl *control, char *state)
     }
     if (control->frame < 50)
     {
-        random = func_80071A54();
+        random = rand();
         ((SceneLayeredSpriteState *)state)->initialSeed.vector.y = (random % 1024) - 0x200;
         ground = &g_RoomFloorY->y;
         ((SceneLayeredSpriteState *)state)->initialSeed.vector.x = 0x400;
@@ -2389,7 +2389,7 @@ void func_80194988(void *arg0, void *arg1, Ovl178MotionState *state) {
     int z;
 
     state_reg = state;
-    position = func_800C2B50();
+    position = FieldFx_GetScriptContext();
 
     state_reg->x = position->x - 0xC8;
     state_reg->y = position->y;
@@ -2416,7 +2416,7 @@ void func_801949F4(s32 arg0, RoomFxControl *arg1, Ovl178MotionState *rec) {
     GteVector vsrc;
 
     r = rec;
-    ctx = func_800C2B50();
+    ctx = FieldFx_GetScriptContext();
     idx = ((rec->frame >> 4) << 1) << 1;
     if (idx >= 0xD) {
         idx = 0xC;
@@ -2476,7 +2476,7 @@ void func_80194B44(s32 arg0, s16 *rec, u16 *p)
 }
 
 void func_80194C04(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
-    Ovl178Position *position = func_800C2B50();
+    Ovl178Position *position = FieldFx_GetScriptContext();
 
     glow->x = position->x - 0x15E;
     glow->y = position->y;
@@ -2496,7 +2496,7 @@ void func_80194C60(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
     Ovl178Position *owner;
     s16 *draw_slot;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     func_800C2EAC(owner->spriteMode);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
@@ -2563,7 +2563,7 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
     RenderMatrix *matrices;
     int tpage;
 
-    anchor = func_800C2B50();
+    anchor = FieldFx_GetScriptContext();
     matrices = anchor->actor->render_object.matrices;
     head = D_8018F060;
     tail = D_8018F064;

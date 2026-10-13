@@ -86,8 +86,8 @@ typedef struct SceneE18WaveParticle {
 
 extern u8 D_801941D0;
 
-extern int func_80052B2C(void);
-extern int func_80071A54(void);
+extern int Inv_ScrambleGrid(void);
+extern int rand(void);
 
 /* Flank model emitter (func_80192B8C): four model particles that follow
  * the room model's translation and alternate sides, the model asset it
@@ -106,13 +106,13 @@ typedef struct SceneE18FlankParticle {
 
 extern void *D_801941C4;
 extern s16 D_801941C8;
-extern void func_800C6EC0(int tpage, int clut);
+extern void FieldFx_ModelSetTexture(int tpage, int clut);
 extern int func_801928CC(int mode, SceneE18FlankParticle *particle);
 
 /* Flank model particle (func_801928CC): the player instance whose distance
  * to the model releases the actor, and the model draw helpers. */
-extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
-extern int func_8005186C(int value);
+extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
+extern int Math_IntSqrt(int value);
 
 /* Pulse ring particle (func_80193018): shrinking light rings around the
  * room model; the last one releases the actor once the player is near. */

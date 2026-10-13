@@ -18,15 +18,15 @@ int RoomM272_Cinematic(void) {
     if (D_801991C8 == 0) {
         StoreImage(&b1, RoomM272_Rec);
         MoveImage(&b2, 0x300, 0x100);
-        func_80074DC0(0);
+        DrawSync(0);
     }
     if (D_801991C8 == 1) {
         LoadImage(&b1, RoomM272_Rec);
         MoveImage(&b3, 0x140, 0x100);
-        func_80074DC0(0);
-        func_80073A44(2);
+        DrawSync(0);
+        VSync(2);
         PutDispEnv(&D_800BCE80[D_8009CDDC]);
-        func_80074D28(1);
+        SetDispMask(1);
     }
     return 0;
 }

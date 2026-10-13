@@ -4,12 +4,12 @@
 
 void func_80191FE8(void)
 {
-    func_800868AC(1, 0);
+    Akao_Cmd_A9(1, 0);
 }
 
 void func_8019200C(void)
 {
-    func_800868AC(30, 0);
+    Akao_Cmd_A9(30, 0);
 }
 
 /* Choose the room to return to once the effect sequence ends, clear the
@@ -109,27 +109,27 @@ void func_80192030(void)
         }
     }
 
-    func_80074D28(0);
-    func_80074A44(1);
+    SetDispMask(0);
+    ResetGraph(1);
     area.x = 0;
     area.y = 0;
     area.w = 0x140;
     area.h = 0x1C0;
     ClearImage(&area, 0, 0, 0);
-    func_80074DC0(0);
+    DrawSync(0);
     PutDispEnv(D_800BCE80);
     if (fade == 1)
-        func_80086C5C(D_800B0DB5, 0x1E, 0);
-    func_800868AC(0x1E, 0);
+        Akao_Cmd_C1_WithSlot(D_800B0DB5, 0x1E, 0);
+    Akao_Cmd_A9(0x1E, 0);
     for (i = 0; i < 0x1E; i++)
-        func_80073A44(0);
+        VSync(0);
     if (fade == 1) {
         D_800B0DB4 = -1;
         D_800B0DB2 = -1;
         g_FxCommonGameFlags &= ~0x40;
-        func_80086FF8();
+        Akao_Cmd_F0();
     }
-    func_80087024();
+    Akao_Cmd_F1();
     func_80038D48();
 }
 
@@ -151,21 +151,21 @@ void func_8019234C(void)
     last = 0;
     func_80196498();
     func_80191DE8(D_8019C034 != 10);
-    func_80071A64(func_80073A44(-1));
+    srand(VSync(-1));
     started = 0;
-    D_8019C03C = func_80071A54() % 3000000;
+    D_8019C03C = rand() % 3000000;
     handle = 0;
     if (D_8019C034 == 10)
         D_8019C03C = 120000;
 
     while (D_8019C024 == 0) {
-        func_8003EB04();
+        Field_HandleStateTransition();
         if ((D_8009D26C & 0x0F000006) == 0x0F000006) {
-            func_80073A44(0);
-            func_80074D28(0);
+            VSync(0);
+            SetDispMask(0);
             D_8019C00E = 1;
             D_8019C024 = 1;
-            func_8006A25C();
+            Boot_Shutdown();
         }
         func_801942FC();
         if (D_8019C00E != 0)
@@ -185,7 +185,7 @@ void func_8019234C(void)
             func_80191EFC(handle, D_801EA578->state);
         }
         if (D_8019C034 == 10 || (D_8019C044 == 1 && D_8019C045 == 0))
-            func_80037870();
+            Menu_DrawTextboxEntries();
 
         scanning = 1;
         for (i = 0xFFF; i >= 0; i--) {
@@ -205,20 +205,20 @@ void func_8019234C(void)
             }
         }
 
-        D_8019CC14 = func_80073A44(1);
-        func_80074DC0(0);
-        func_80073A44(2);
+        D_8019CC14 = VSync(1);
+        DrawSync(0);
+        VSync(2);
         func_80193AB0();
-        func_80074A44(1);
-        func_80075424(((FxCommonFrame *)D_8019C9C0)->drawEnv);
+        ResetGraph(1);
+        PutDrawEnv(((FxCommonFrame *)D_8019C9C0)->drawEnv);
         PutDispEnv(((FxCommonFrame *)D_8019C9C0)->dispEnv);
-        func_800753B4(&D_8019C9C0->allocation[0xFFF]);
+        DrawOTag(&D_8019C9C0->allocation[0xFFF]);
         next = &g_FxCommonFrames[0].buffer;
         if (D_8019C9C0 == next)
             next = &g_FxCommonFrames[1].buffer;
         D_8019C9C0 = next;
         D_8009CDDC ^= 1;
-        func_800752AC(next->allocation, 0x1000);
+        ClearOTagR(next->allocation, 0x1000);
         func_8019BF8C((void **)D_8019C9C0);
     }
     if (D_8019C00E == 0)
@@ -356,8 +356,8 @@ void func_80192800(void)
     DRAW(D_8019CC24, 0, 1, 1);
 
     if (D_8019C1F0 == 1) {
-        D_8019C0D0[0] += (s16)(func_80071A54() % 40 + 20);
-        D_8019C0D0[1] += (s16)(func_80071A54() % 52 + 26);
+        D_8019C0D0[0] += (s16)(rand() % 40 + 20);
+        D_8019C0D0[1] += (s16)(rand() % 52 + 26);
         g_FxCommonEchoNodes[0]->matrix = g_FxCommonPathNodes[0]->matrix;
         g_FxCommonEchoNodes[0]->seed = g_FxCommonPathNodes[0]->seed;
         g_FxCommonEchoNodes[0]->kind = 0x53;
@@ -617,7 +617,7 @@ s16 func_80193B5C(s16 value)
         line = (FxCommonLinePacket *)D_8019C9C0->data;
         line->tag.bytes.length = 3;
         line->code = 0x40;
-        func_80077B04(line, 1);
+        SetSemiTrans(line, 1);
         vertex = &line->xy0;
         *vertex++ = screen0;
         *vertex = screen1;
@@ -642,8 +642,8 @@ s16 func_80193B5C(s16 value)
         x = xy;
         y = xy >> 16;
         u = 0;
-        func_80077BE4(quad);
-        func_80077B04(quad, 1);
+        SetPolyGT4(quad);
+        SetSemiTrans(quad, 1);
         quad->r0 = level >> 1;
         quad->g0 = level >> 1;
         quad->b0 = level >> 1;
@@ -684,8 +684,8 @@ s16 func_80193B5C(s16 value)
         quad++;
 
         u = 0x80;
-        func_80077BE4(quad);
-        func_80077B04(quad, 1);
+        SetPolyGT4(quad);
+        SetSemiTrans(quad, 1);
         quad->r0 = u;
         quad->g0 = u;
         quad->b0 = u;
@@ -766,8 +766,8 @@ void func_801941A4(int intensity)
     u32 tag;
 
     packet = D_8019C9C0->data;
-    func_80077BC4(&packet->quad);
-    func_80077B04(&packet->quad, 1);
+    SetPolyG4(&packet->quad);
+    SetSemiTrans(&packet->quad, 1);
 
     packet->quad.color0[0] = intensity;
     packet->quad.color0[1] = intensity;
@@ -1162,29 +1162,29 @@ void func_801942FC(void)
         if ((D_8019C0CD == 2) && ((u8) D_8019C0CC >= 0xBU)) {
             D_8019C0CC -= 5;
         }
-        func_80038940(D_8019C0C4, D_8019C0CC, D_8019C0CC, D_8019C0CC);
+        Menu_SetHighlightColor(D_8019C0C4, D_8019C0CC, D_8019C0CC, D_8019C0CC);
         resourceTicks = D_8019C0BC + 1;
         D_8019C0BC = resourceTicks;
         if (resourceTicks == 0x4B1) {
             D_8019C02A = 1;
             D_8019C026 = 0x10;
             D_8019CA68 = D_8019CC52;
-            func_800868AC(0x12C, 0);
+            Akao_Cmd_A9(0x12C, 0);
             D_8019C0C0 = 1;
         }
         if (D_8019C0BC == 0x41A) {
-            func_80086C5C(D_800B0DB5, 0xDC, 0);
+            Akao_Cmd_C1_WithSlot(D_800B0DB5, 0xDC, 0);
         }
     }
     func_80195D3C();
     if (D_8019C018 != 0) {
         D_8019C018 = 0;
         if (D_8019C01C == 1) {
-            func_8003746C(D_8019C028);
+            Draw_CloseTextboxPage(D_8019C028);
         }
-        func_80038940(g_FxCommonEffectSetup[D_8019CC52].value25, 0x80, 0x80, 0x80);
+        Menu_SetHighlightColor(g_FxCommonEffectSetup[D_8019CC52].value25, 0x80, 0x80, 0x80);
         if (D_8019C034 != 0xA) {
-            func_800375E0(g_FxCommonEffectSetup[D_8019CC52].value25, 3, &resourceResult);
+            Render_SetupColorTable(g_FxCommonEffectSetup[D_8019CC52].value25, 3, &resourceResult);
         }
         D_8019C028 = (s16) g_FxCommonEffectSetup[D_8019CC52].value25;
         D_8019C01C = 1;
@@ -1240,15 +1240,15 @@ s16 func_801958D4(s16 resourceId, u8 action)
     id = resourceId;
     if ((u8)action == 0) {
         if (id != g_FxCommonResourceState.active) {
-            func_8003746C(g_FxCommonResourceState.current.half);
-            func_80038940(id, 0x80, 0x80, 0x80);
-            func_800375E0(id, 3, &result);
+            Draw_CloseTextboxPage(g_FxCommonResourceState.current.half);
+            Menu_SetHighlightColor(id, 0x80, 0x80, 0x80);
+            Render_SetupColorTable(id, 3, &result);
             g_FxCommonResourceState.current.word = id;
         }
     }
 
     if ((u8)action == 1) {
-        func_8003746C(g_FxCommonResourceState.current.half);
+        Draw_CloseTextboxPage(g_FxCommonResourceState.current.half);
     }
 
     return (s16)resourceId;

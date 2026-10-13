@@ -236,26 +236,26 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
                         child->position.x = state->position.x;
                         child->position.y = state->position.y;
                         child->position.z = state->position.z;
-                        child->position.x += (func_80071A54() & 0x7F) - 0x40;
-                        child->position.y += (func_80071A54() & 0x7F) - 0x40;
-                        child->position.z += (func_80071A54() & 0x7F) - 0x40;
+                        child->position.x += (rand() & 0x7F) - 0x40;
+                        child->position.y += (rand() & 0x7F) - 0x40;
+                        child->position.z += (rand() & 0x7F) - 0x40;
                         child->state = 1;
                         child->timer = 0;
                     }
                 }
             }
             if (state->position.y < g_RoomFloorY->y - 0x202) return 0;
-            angle = func_80071A54();
+            angle = rand();
             for (i = 0; i < 6; i++) {
                 child = func_800CE610(ANIM_POOL_AS(RoomM086SpawnChannel)->pool);
                 if (child) {
                     child->position.x = state->position.x;
                     child->position.y = state->position.y;
                     child->position.z = state->position.z;
-                    speed = (func_80071A54() & 0x1F) + 0x10;
+                    speed = (rand() & 0x1F) + 0x10;
                     child->heading.x = rcos(angle) * speed / 4096;
                     child->heading.z = rsin(angle) * speed / 4096;
-                    child->heading.y = -8 - (func_80071A54() & 0xF);
+                    child->heading.y = -8 - (rand() & 0xF);
                     child->state = 2;
                     child->timer = 0;
                 }
@@ -491,7 +491,7 @@ int func_801900CC(int mode, RoomBounceGlint *glint, int *size) {
     return 0;
 }
 
-s32 func_80071A54(void);
+s32 rand(void);
 
 #define COPY_POS(dst, src) \
     (dst)->x = (src)->x;   \
@@ -534,13 +534,13 @@ s32 func_80190574(s32 mode, RoomBounceGlint *ent) {
 mode1:
     value = D_800E27EC;
     if (value == 1) {
-        angle = func_80071A54();
+        angle = rand();
         i = 0;
         do {
             actor = func_800CE610(((void **)ANIM_POOL_AS(void))[2]);
             if (actor != 0) {
                 COPY_POS(actor, ent);
-                mag = (func_80071A54() & 0xF) + 7;
+                mag = (rand() & 0xF) + 7;
                 value = rcos(angle) * mag;
                 if (value < 0) {
                     value += 0xFFF;
@@ -551,7 +551,7 @@ mode1:
                     value += 0xFFF;
                 }
                 actor->vz = value >> 12;
-                actor->vy = -(func_80071A54() & 0xF) - 0xE;
+                actor->vy = -(rand() & 0xF) - 0xE;
                 actor->phase = 0;
                 actor->timer = 0;
             }
@@ -563,13 +563,13 @@ mode1:
 
     value = D_800E27EC - 2;
     if (value < 3U) {
-        angle = func_80071A54();
+        angle = rand();
         i = 0;
         do {
             actor = func_800CE610(((void **)ANIM_POOL_AS(void))[2]);
             if (actor != 0) {
                 COPY_POS(actor, ent);
-                mag = (func_80071A54() & 0x1F) + 0x18;
+                mag = (rand() & 0x1F) + 0x18;
                 value = rcos(angle) * mag;
                 if (value < 0) {
                     value += 0xFFF;
@@ -580,8 +580,8 @@ mode1:
                     value += 0xFFF;
                 }
                 actor->vz = value >> 12;
-                actor->vy = -(func_80071A54() & 0x1F) - 0x18;
-                actor->flag = func_80071A54() & 1;
+                actor->vy = -(rand() & 0x1F) - 0x18;
+                actor->flag = rand() & 1;
                 actor->phase = 1;
                 actor->timer = 0;
             }
@@ -592,25 +592,25 @@ mode1:
 
     value = D_800E27EC - 2;
     if (value < 0x15U) {
-        angle = func_80071A54();
+        angle = rand();
         actor = func_800CE610(((void **)ANIM_POOL_AS(void))[2]);
         if (actor != 0) {
             COPY_POS(actor, ent);
-            value = func_80071A54();
+            value = rand();
             phase = actor->x;
             phase -= 0x80;
             phase += value & 0xFF;
             actor->x = phase;
-            value = func_80071A54();
+            value = rand();
             phase = actor->z;
             phase -= 0x80;
             phase += value & 0xFF;
             actor->z = phase;
-            mag = (func_80071A54() & 0xF) + 7;
+            mag = (rand() & 0xF) + 7;
             if (D_800E27EC & 1) {
-                actor->vy = -(func_80071A54() & 0x1F) - 0x1E;
+                actor->vy = -(rand() & 0x1F) - 0x1E;
             } else {
-                actor->vy = -(func_80071A54() & 0xF) - 8;
+                actor->vy = -(rand() & 0xF) - 8;
                 mag = (s32)(mag + ((u32)mag >> 31)) >> 1;
             }
             value = rcos(angle) * mag;
@@ -623,7 +623,7 @@ mode1:
                 value += 0xFFF;
             }
             actor->vz = value >> 12;
-            actor->flag = func_80071A54() & 1;
+            actor->flag = rand() & 1;
             actor->phase = 0;
             actor->timer = 0;
         }

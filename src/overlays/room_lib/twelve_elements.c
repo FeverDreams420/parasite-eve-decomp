@@ -37,7 +37,7 @@ void RoomLib_InitTwelveEffectPackets(RoomEnt *obj, void *unused, RoomLibFxMatrix
     RoomLink *owner;
     RoomLibFxMatrixWords *words;
 
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
     state->asset.index = Asset_SearchByKeyType(0xB);
     owner = obj->link;
     state->link = owner;
@@ -84,7 +84,7 @@ void RoomLib_UpdateTwelveElementTimer(int arg0, char *arg1, char *arg2) {
         }
     }
 
-    if (func_800C2B68() == 1) {
+    if (FieldFx_IsLastSlotHalted() == 1) {
         arg1[1] = 2;
     }
 }
@@ -121,7 +121,7 @@ void RoomLib_InitTwelveElementEffect(void *owner, void *unused, char *state) {
 
     effectOwner = owner;
     workState = (RoomLibTick12Rec *)state;
-    clock = func_800C2B50();
+    clock = FieldFx_GetScriptContext();
     stack.seed = s_TwelveEffectInitSeed;
     stack.sourceMatrix = clock->matrix.matrix;
 
@@ -211,7 +211,7 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
     int pointX, pointY, pointZ;
 
     workState = (RoomLibTick12Rec *)state;
-    clock = func_800C2B50();
+    clock = FieldFx_GetScriptContext();
     stack.seed = s_TwelveEffectDrawSeed;
     stack.localMatrix.m[2][2] = 0x1000;
     stack.localMatrix.m[1][1] = 0x1000;

@@ -39,11 +39,11 @@ extern char D_80195F1C[], D_80195F1E[], D_80195F20[];
 extern s32 D_80195EF0, D_80195EF8;
 extern u16 D_800E1208;
 typedef struct RoomM256TrailPalettes { u16 first, second; } RoomM256TrailPalettes;
-int func_80071A54(void);
+int rand(void);
 #include "pe1/gte_types.h"
 #include "pe1/player_entity.h"
-void func_800C6EC0(int,int);
-void func_800D3AFC(void *,int,void *,int);
+#include "pe1/render_object.h"
+void FieldFx_ModelSetTexture(int,int);
 
 int func_801940B0(int mode, void *effect);
 

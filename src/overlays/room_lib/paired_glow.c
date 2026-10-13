@@ -38,7 +38,7 @@ void *RoomLib_InitPairedGlowSprite(RoomEnt *obj, s32 arg1, RoomLibFxMatrixState 
     RoomLink *owner;
     RoomLibFxMatrixWords *src;
 
-    func_800C2B40(state);
+    FieldFx_SetScriptContext(state);
     owner = obj->link;
     state->link = owner;
     src = (RoomLibFxMatrixWords *)owner->p238;
@@ -81,7 +81,7 @@ void RoomLib_TickPairedGlowTimer(int arg0, RoomFxControl *arg1, char *arg2) {
         }
     }
 
-    if (func_800C2B68() == 1) {
+    if (FieldFx_IsLastSlotHalted() == 1) {
         arg1->state = 2;
     }
 }
@@ -146,7 +146,7 @@ void RoomLib_UpdatePairedEmitter(void *arg0, RoomFxControl *arg1,
     GteMatrix *view;
     unsigned char *table;
 
-    owner = func_800C2B50();
+    owner = FieldFx_GetScriptContext();
     stack.seed = s_PairedGlowSeed;
     stack.base_matrix.m[2][2] = 0x1000;
     stack.base_matrix.m[1][1] = 0x1000;
@@ -236,7 +236,7 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
 
     entity = (RoomEnt *)object;
     workState = state;
-    clock = func_800C2B50();
+    clock = FieldFx_GetScriptContext();
     RotMatrix(&workState->seed.vector, &stack.matrix);
 
     stack.matrix.t[0] = (s16)(entity->link->pos[0] >> 16);
@@ -256,13 +256,13 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
         handleA = GetTPage(textureWord, 1, 0x340, 0x100);
         handleA = (u16)handleA;
         handleB = GetClut(0, 0x1D7);
-        func_800C6EC0((u16)handleA, (u16)handleB);
+        FieldFx_ModelSetTexture((u16)handleA, (u16)handleB);
     }
     if (clock->asset.index == 1) {
         handleA = GetTPage(textureWord, 1, 0x340, 0x160);
         textureWord = (u16)handleA;
         handleB = GetClut(0, 0x1DB);
-        func_800C6EC0(textureWord, (u16)handleB);
+        FieldFx_ModelSetTexture(textureWord, (u16)handleB);
     }
     FieldFx_ModelSetSemiTrans(1);
     FieldFx_ModelSaveColors(g_RoomPairedGlowPacket);
@@ -355,7 +355,7 @@ void RoomLib_TransformPairedEmitter(void *unused, RoomFxControl *params,
     RenderMatrix *owner;
 
     workState = state;
-    root = func_800C2B50();
+    root = FieldFx_GetScriptContext();
     stack.seed = s_PairedGlowSeed;
 
     stack.scaleMatrix.m[2][2] = 0x1000;

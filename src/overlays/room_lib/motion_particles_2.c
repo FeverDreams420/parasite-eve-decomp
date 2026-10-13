@@ -42,7 +42,7 @@ void RoomEffect_DrawMotionParticles(void *unused, RoomStatePair *control,
     RoomMotionCursor *cursor;
     int i;
 
-    context = (RoomMotionContext *)func_800C2B50();
+    context = (RoomMotionContext *)FieldFx_GetScriptContext();
     func_800C2EAC(context->owner);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);

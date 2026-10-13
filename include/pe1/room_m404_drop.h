@@ -75,6 +75,6 @@ extern RoomM404DropColor D_8018F1D4;
 extern RoomM404DropColor D_8018F1D8;
 extern u8 D_80193EFC[];
 
-int func_80071A54(void);
+int rand(void);
 
 #endif

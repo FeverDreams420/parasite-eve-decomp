@@ -89,10 +89,10 @@ PE1_STATIC_ASSERT(sizeof(RoomShakeSweepParticle) == 0x10,
 
 extern struct BattleEntity *D_8009D254;
 
-extern int func_80071A54(void);
-extern void func_80020D50(void);
+extern int rand(void);
+extern void Battle_HaltOnPositiveX(void);
 extern u8 *D_800F32D8;
-extern void func_80020DD0(void);
+extern void Battle_InitEntityColors(void);
 
 /* room_m318 particle callbacks and the sweep anchor. */
 extern int func_80193FC4(int mode,
@@ -102,7 +102,7 @@ extern GteShortVector D_80199904;
 
 /* Sweep particle draw: model asset, matrix helpers and clut lookups. */
 #include "pe1/gte_types.h"
-extern void func_800C6EC0(int tpage, int clut);
+extern void FieldFx_ModelSetTexture(int tpage, int clut);
 
 /* Flash burst controller (func_80195D20): its particle callback, colour
  * seed, glow track and the helpers it calls. */

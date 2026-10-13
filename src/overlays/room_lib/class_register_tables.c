@@ -12,8 +12,8 @@ int RoomLib_RegisterPairedTables(void *o) {
     int result;
 
     if ((unsigned int)FieldFx_GetStatus(o) >= 2) {
-        result = func_800C251C(o, g_RoomUpdateList);
-        result |= func_800C2758(o, g_RoomInitList, g_RoomSpawnLayout);
+        result = FieldFx_UpdateSlots(o, g_RoomUpdateList);
+        result |= FieldFx_RunScript(o, g_RoomInitList, g_RoomSpawnLayout);
     } else {
         result = -1;
     }

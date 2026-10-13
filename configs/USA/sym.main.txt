@@ -2210,3 +2210,26 @@ g_CdRomEventCommandState = 0x8009B558;
 g_CdRomCmdRetryState = 0x8009B59C;
 g_CdReadProgress = 0x8009B6A4;
 g_CdStreamReady = 0x800B0CD0;
+
+// Main data that the overlays address directly. Each needs a label of its
+// own so an overlay links it by name from the built executable and follows
+// it when main's layout moves (tools/scripts/overlay_link_symbols.py).
+D_800966EE = 0x800966EE;
+D_800E11EA = 0x800E11EA;
+D_800E11EC = 0x800E11EC;
+D_800E11F8 = 0x800E11F8;
+D_800E11FA = 0x800E11FA;
+D_800E1208 = 0x800E1208;
+D_800E120A = 0x800E120A;
+D_800BCE24 = 0x800BCE24;
+D_800BCE94 = 0x800BCE94;
+D_8009D1BC = 0x8009D1BC;
+D_80093170 = 0x80093170;
+D_80093172 = 0x80093172;
+D_80093174 = 0x80093174;
+
+// Main functions and data the overlays call or read by name.
+Battle_GetEnemyContextField = 0x8003010C;
+Inv_ScrambleGrid = 0x80052B2C; // type:func
+g_GeomVramPacketDst = 0x800BCFA4;
+D_800E2368 = 0x800E2368;

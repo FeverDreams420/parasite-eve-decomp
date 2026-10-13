@@ -11,7 +11,9 @@ options:
   build_path: build/USA/overlays/room_m291_chrysler
   ld_script_path: linkers/USA/overlays/room_m291_chrysler.ld
   undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.room_m291_chrysler.txt
-  symbol_addrs_path: configs/USA/overlays/sym.room_m291_chrysler.txt
+  symbol_addrs_path:
+    - configs/USA/overlays/sym.room_m291_chrysler.txt
+    - configs/USA/sym.main.txt
   undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.room_m291_chrysler.txt
   find_file_boundaries: True
   disassemble_all: True

@@ -33,7 +33,7 @@ WaitState state;
 FieldActorState owner;
 struct FieldActor actor = { &owner };
 struct FieldFxTaskContext *D_800E2368 = (struct FieldFxTaskContext *)&state;
-struct FieldActor *RoomMain_ActorPtr = &actor;
+struct FieldActor *g_PlayerEntity = &actor;
 int D_800E27EC;
 int main(void) {
     int modes[] = {INT_MIN, -1, 2, 3, INT_MAX};

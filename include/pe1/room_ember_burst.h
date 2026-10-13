@@ -38,7 +38,7 @@ extern char D_8018F1CC[];
 extern RenderColor D_8018F200;
 extern RenderColor D_8018F204;
 
-extern int func_80071A54(void);
+extern int rand(void);
 extern int func_801944E8(int mode, RoomOrbitTrailParticle *p);
 
 /* Ember fountain controller (func_80197CBC): follows its actor for 141
@@ -180,7 +180,7 @@ static inline void RoomEffect_AttachToActor(int subId, int typeId, void *anchor)
             return;
         }
     }
-    func_80071A74(D_8018F1CC, subId, typeId);
+    printf(D_8018F1CC, subId, typeId);
 }
 
 #endif

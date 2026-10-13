@@ -171,7 +171,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
                 state->state = 2;
                 state->frame = 0;
                 if (state->soundHandle != -1) {
-                    func_800866A4(state->soundHandle, 0);
+                    Akao_Cmd_21(state->soundHandle, 0);
                 }
             }
             if (func_800C6B90(state, 0x39) == 0) break;
@@ -181,7 +181,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             state->state = 2;
             state->frame = 0;
             if (state->soundHandle != -1) {
-                func_800866A4(state->soundHandle, 0);
+                Akao_Cmd_21(state->soundHandle, 0);
             }
             break;
         case 2:

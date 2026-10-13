@@ -116,7 +116,7 @@ int RoomEffect_SoundBurstController(int mode, RoomSoundBurstState *state) {
                     child->phase = 0;
                     child->amplitude = 0;
                     child->swing = 0;
-                    child->tilt = func_80071A54();
+                    child->tilt = rand();
                     child->spread = angle;
                 }
                 if (FX_TASK_AS(RoomSoundBurstEventState)->active) {
@@ -130,7 +130,7 @@ int RoomEffect_SoundBurstController(int mode, RoomSoundBurstState *state) {
             }
         }
         if (D_800E27EC == 0x46 && state->soundHandle != -1) {
-            func_800866A4(state->soundHandle, 0);
+            Akao_Cmd_21(state->soundHandle, 0);
         }
         if (D_800E27EC < 8) break;
         return 2;
