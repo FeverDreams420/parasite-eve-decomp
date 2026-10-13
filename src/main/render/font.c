@@ -196,16 +196,16 @@ int Render_LoadFontGlyphAlt(void)
 
     unique_count = 0;
     forced_slot = 0;
-    for (i = 0; (u8)i < 0x45; i++) {
-        if (((u8)i + 2) % 10 == 0) {
-            (D_8009EE22 + 2)[(u8)i] = forced_slot;
+    for (i = 0; i < 0x45; i++) {
+        if ((i + 2) % 10 == 0) {
+            (D_8009EE22 + 2)[i] = forced_slot;
             forced_slot++;
             continue;
         }
 
-        if ((u8)i + 2 < 10) {
+        if (i + 2 < 10) {
             limit = 0x68;
-        } else if ((u8)i + 2 < 20) {
+        } else if (i + 2 < 20) {
             limit = 0x6D;
         } else {
             limit = 0x71;
@@ -217,14 +217,14 @@ int Render_LoadFontGlyphAlt(void)
         }
 
         glyph = (rand() % (limit - 7)) + 7;
-        (D_8009EE22 + 2)[(u8)i] = glyph;
+        (D_8009EE22 + 2)[i] = glyph;
 
         if (unique_count < D_8009ECD8.codeCount - 9) {
             do {
                 duplicate = 1;
                 for (j = 0; j < i; j++) {
-                    if ((D_8009EE22 + 2)[j] == (D_8009EE22 + 2)[(u8)i]) {
-                        (D_8009EE22 + 2)[(u8)i] = (rand() % (limit - 7)) + 7;
+                    if ((D_8009EE22 + 2)[j] == (D_8009EE22 + 2)[i]) {
+                        (D_8009EE22 + 2)[i] = (rand() % (limit - 7)) + 7;
                         duplicate = 0;
                     }
                 }
@@ -324,7 +324,7 @@ static inline int findSlot(int useDecimalGroup)
     count = table->groups.count;
     groups = &table->groups;
     for (; i < count; ++i) {
-        if (groups->codes[i] == (unsigned char)code) {
+        if (groups->codes[i] == code) {
             found = i;
             i = groups->count;
         }
