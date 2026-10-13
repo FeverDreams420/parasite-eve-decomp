@@ -5,8 +5,9 @@
 #include "pe1/gte_types.h"
 #include "pe1/psyq_nop.h"
 
-/* Q12 rotation with retail wrap/rounding order. Pins, empty HI/LO and
- * scheduling constraints, and individual NOPs are tracked matching debt.
+/* Q12 rotation with retail wrap/rounding order. Pins and empty HI/LO
+ * scheduling constraints are tracked matching debt. The NOP slots reproduce
+ * the handwritten LIBGTE schedule and are not debt.
  * Provenance: configs/USA/psyq_provenance.json (LIBGTE FGO objects).
  */
 GteMatrix *RotMatrixYXZ(GteShortVector *angles, GteMatrix *matrix) {

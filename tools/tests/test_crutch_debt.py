@@ -145,7 +145,7 @@ class CrutchDebtTests(unittest.TestCase):
         self.assertEqual(scopes["overlays"]["aliases"], 0)
         self.assertEqual(dirty, 1)
 
-    def test_counts_individual_nop_macro_invocations(self):
+    def test_nop_macros_are_not_crutch_debt(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = pathlib.Path(tmp)
             source = root / "main" / "test.c"
@@ -157,9 +157,11 @@ class CrutchDebtTests(unittest.TestCase):
                 PE1_NOP_IO2_DEP(first, second, value);
                 /* PE1_NOP(); */
             }''')
-            _, totals, _, _ = crutch_debt.collect_debt(root)
-        self.assertEqual(totals["nop_barriers"], 4)
+            _, totals, dirty, _ = crutch_debt.collect_debt(root)
+        self.assertNotIn("nop_barriers", totals)
+        self.assertEqual(totals["asm_bodies"], 0)
         self.assertEqual(totals["asm_constrained_units"], 0)
+        self.assertEqual(dirty, 0)
 
     def test_nop_header_has_only_individual_nop_instructions(self):
         import re

@@ -38,8 +38,6 @@ _HW_OPS = "cfc2|ctc2|lwc2|swc2|mfc2|mtc2|nop"
 PATTERNS = {
     # Explicitly named frame reservations retained solely for matching.
     "stack_reserves": re.compile(r"\b(?:volatile\s+\w+\s+matchingStackReserve\s*\[|long\s+long\s+matchingStackSlot\s*;)"),
-    # One explicitly authorized scheduling instruction per macro invocation.
-    "nop_barriers": re.compile(r"\bPE1_NOP(?:_DEP|_MEMORY_DEP|_IO2_DEP)?\s*\("),
     # Dead statements kept only for their scheduling-block effect.
     "dead_code": re.compile(r"\bPE1_DEAD_CODE\s*\("),
     # Filled from the source classifier below; unlike regex-only counters this
@@ -102,7 +100,7 @@ PATTERNS = {
 
 ORDER = [
     "asm_constrained_units", "byte_pointer_arithmetic", "raw_offset_dereferences",
-    "pointer_integer_casts", "field_macros", "pins", "barriers", "nop_barriers", "aliases",
+    "pointer_integer_casts", "field_macros", "pins", "barriers", "aliases",
     "asm_bodies", "directives", "gotos", "include_asm", "postpass",
     "statement_expressions", "unknown_fields", "declaration_overrides",
     "externs_in_c", "stack_reserves", "dead_code", "stack_switch_macros",
@@ -212,7 +210,6 @@ def render_report(per_sub, totals, dirty_files) -> str:
         "Read-only; regenerate with `make debt`. Watch these shrink._",
         "",
         "**pins** = `register T x asm(\"$r\")` · **barriers** = empty `asm(\"\")` and `PE1_COMPILER_*` calls · "
-        "**nop_barriers** = explicit one-NOP scheduling macros · "
         "**stack_reserves** = explicitly named unused matchingStackReserve arrays · "
         "**dead_code** = `PE1_DEAD_CODE(...)` dead statements kept for scheduling · "
         "**aliases** = `extern T x asm(\"sym\")` (C and shared headers) · **asm_bodies** = real instructions · "
@@ -255,7 +252,7 @@ def write_reports(per_sub, totals, dirty_files) -> None:
 
     def badge_message(counts):
         return (f"{counts['pins']} pins / {counts['barriers']} barriers / "
-                f"{counts['nop_barriers']} nops / {counts['gotos']} gotos")
+                f"{counts['gotos']} gotos")
 
     for group, counts in groups.items():
         heavy_total = sum(counts[k] for k in HEAVY)

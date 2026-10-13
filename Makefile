@@ -167,6 +167,7 @@ progress:
 	@$(PY) tools/scripts/progress_report.py
 
 # Crutch-debt tracker: count pins/barriers/aliases/gotos still to remove.
+# PE1_NOP slots are not debt.
 debt:
 	@$(PY) tools/scripts/crutch_debt.py --write
 

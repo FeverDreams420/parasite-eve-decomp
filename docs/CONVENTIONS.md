@@ -294,7 +294,9 @@ result is byte-identical).
 - Register pins and empty barriers are compiler constraints, not
   instructions. They are allowed, counted by `make debt`, and removed whenever
   the match survives without them (`make drop-pins`, `make drop-barriers`).
-  The `PE1_NOP*` scheduling slots (`psyq_nop.h`) are counted the same way.
+  The `PE1_NOP*` scheduling slots (`psyq_nop.h`) are an authorized exception
+  and are not counted. They reproduce handwritten LIBGTE FGO delay slots
+  that stock GCC does not emit.
 - The compiler and MASPSX are stock. Per-file options are one marker block
   at the very top of the file, one marker per line in this order, then a
   blank line:
