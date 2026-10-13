@@ -41,13 +41,13 @@ int FieldFx_TurnToward(int current, int target, int step) {
 
 s32 FieldFx_AngleDistance(s32 lhs, s32 rhs) {
     register s32 delta asm("$4");
-    register s32 abs_delta asm("$3");
+    s32 abs_delta;
 
     delta = lhs - rhs;
-    if ((delta << 16) >= 0) {
+    abs_delta = delta;
+    if ((delta << 16) < 0) {
+        delta = -delta;
         abs_delta = delta;
-    } else {
-        abs_delta = -delta;
     }
 
     if ((short)abs_delta >= 0x801) {
