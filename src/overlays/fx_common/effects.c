@@ -245,14 +245,14 @@ void func_80192740(void)
         lowMask = 0xFFFFFF;
         base = D_801EA598;
         highMask = 0xFF000000;
-        src1 = (u32 *)((FxCommonBuffer *)owner)->allocation;
+        src1 = (u32 *)(owner)->allocation;
         destWord = *dst;
         lowWord = src1[0xFFF];
         destWord &= highMask;
         lowWord &= lowMask;
         destWord |= lowWord;
         *dst = destWord;
-        src2 = (u32 *)((FxCommonBuffer *)owner)->allocation;
+        src2 = (u32 *)(owner)->allocation;
         if (owner != sentinel)
             base += 9;
         address.pointer = base;
@@ -905,14 +905,14 @@ void func_801942FC(void)
                     D_8019C045 = 0;
                     func_80195994(D_8019CC52, 4, 5, 0);
                     if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
-                        Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
+                        Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                     }
                 }
                 transitionMode = D_8019C034;
                 if (transitionMode == 1) {
                     if (g_FieldPadBits & 0x20) {
                         if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
-                            Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
+                            Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                         }
                         D_8019C02C = -1;
                         D_8019C032 = 1;
@@ -943,7 +943,7 @@ void func_801942FC(void)
                 }
                 if (D_8019C034 == 2) {
                     if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
-                        Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
+                        Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                     }
                     if (D_8019C13E == 0) {
                         D_8019C02C = -1;
@@ -973,10 +973,10 @@ void func_801942FC(void)
                 D_8019C045 = 0;
                 func_80195994(D_8019CC52, 4, 5, 0);
                 if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
-                    Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
+                    Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                 }
             }
-            if (((u8) D_8019C040 < 2U) && (D_8019C034 == 0) && (D_8019C13C == 0)) {
+            if ((D_8019C040 < 2U) && (D_8019C034 == 0) && (D_8019C13C == 0)) {
                 if ((D_8009D1F4 & 0x20000000) && (D_8019C026 == 0)) {
                     if (D_8019C040 == 1) {
                         D_8019C02A = 1;
@@ -985,7 +985,7 @@ void func_801942FC(void)
                     }
                     if (D_8019C044 == 0) {
                         if (g_AkaoBgmHandle[0] != 0) {
-                            Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
+                            Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                         }
                         D_8019C02C = -1;
                         D_8019C045 = 1;
@@ -994,7 +994,7 @@ void func_801942FC(void)
                         D_8019C048 = 1;
                     } else {
                         if (g_AkaoBgmHandle[0] != 0) {
-                            Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
+                            Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                         }
                         D_8019C02A = 1;
                         D_8019C026 = 0x10;
@@ -1015,7 +1015,7 @@ void func_801942FC(void)
                     D_8019C032 = 1;
                     if (D_8019C044 == 1) {
                         if (g_AkaoBgmHandle[0] != 0) {
-                            Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
+                            Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                         }
                         func_80195994(D_8019CC52, 4, 5, 0);
                         D_8019C02C = 1;
@@ -1034,7 +1034,7 @@ void func_801942FC(void)
                     if (g_FxCommonEffectSetup[D_8019CC52].value22 != 0xFF) {
                         do {
                             nextIndex0 = g_FxCommonEffectSetup[D_8019CC52].value22;
-                            D_8019CC52 = (s16) nextIndex0;
+                            D_8019CC52 = nextIndex0;
                         } while (g_FxCommonEffectSetup[nextIndex0].enabled == 0);
                         D_8019C018 = 1;
                         D_8019CC1C = g_FxCommonEffectSetup[nextIndex0].value0c;
@@ -1065,7 +1065,7 @@ void func_801942FC(void)
                     if (g_FxCommonEffectSetup[D_8019CC52].value23 != 0xFF) {
                         do {
                             nextIndex1 = g_FxCommonEffectSetup[D_8019CC52].value23;
-                            D_8019CC52 = (s16) nextIndex1;
+                            D_8019CC52 = nextIndex1;
                         } while (g_FxCommonEffectSetup[nextIndex1].enabled == 0);
                         D_8019C018 = 1;
                         D_8019CC1C = g_FxCommonEffectSetup[nextIndex1].value0c;
@@ -1156,10 +1156,10 @@ void func_801942FC(void)
             D_8019C0CD = 2;
         }
         D_8019C0C8 += 1;
-        if ((D_8019C0CD == 0) && ((u8) D_8019C0CC < 0x78U)) {
+        if ((D_8019C0CD == 0) && (D_8019C0CC < 0x78U)) {
             D_8019C0CC += 5;
         }
-        if ((D_8019C0CD == 2) && ((u8) D_8019C0CC >= 0xBU)) {
+        if ((D_8019C0CD == 2) && (D_8019C0CC >= 0xBU)) {
             D_8019C0CC -= 5;
         }
         Menu_SetHighlightColor(D_8019C0C4, D_8019C0CC, D_8019C0CC, D_8019C0CC);
@@ -1238,7 +1238,7 @@ s16 func_801958D4(s16 resourceId, u8 action)
 
     result = 0;
     id = resourceId;
-    if ((u8)action == 0) {
+    if (action == 0) {
         if (id != g_FxCommonResourceState.active) {
             Draw_CloseTextboxPage(g_FxCommonResourceState.current.half);
             Menu_SetHighlightColor(id, 0x80, 0x80, 0x80);
@@ -1247,11 +1247,11 @@ s16 func_801958D4(s16 resourceId, u8 action)
         }
     }
 
-    if ((u8)action == 1) {
+    if (action == 1) {
         Draw_CloseTextboxPage(g_FxCommonResourceState.current.half);
     }
 
-    return (s16)resourceId;
+    return resourceId;
 }
 
 /* Pins and empty scheduling barriers preserve the retail argument setup,
