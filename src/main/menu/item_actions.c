@@ -286,7 +286,7 @@ int Menu_StepSkillSelect(MenuWidgetNode *arg0, int arg1) {
             temp_a1 = &g_StatBaseTable[g_MenuSelectedItemIndex];
             temp_v0_2 = *temp_a1;
             *temp_a1 = temp_v0_2 - (temp_v0_2 < 0x3E7);
-            ((void (*)())MenuWidget_NavScrollTo)(0x2C, temp_a1);
+            MenuWidget_NavScrollTo(0x2C);
             MenuWidget_NavScrollTo(0xB);
             MenuWidget_NavScrollTo(0xA);
             MenuWidget_NavScrollTo(5);
