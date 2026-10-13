@@ -103,7 +103,7 @@ void Akao_StepSequencerVoice(void *arg0) {
     register s32 all_voices;
 
     arg0v = arg0;
-    walk = (u8 *)arg0v;
+    walk = arg0v;
     kFFFa = 0xFFFFFF;
     p2c8a = g_AkaoCurTrack;
     ((AkaoSequencerBank *)p2c8a)->sequence_base = arg0v;
@@ -252,7 +252,7 @@ void Akao_InitVoices(int arg0, char *arg1) {
         i++;
         parameters->note_length = mode3;
         parameters->pan_duration = mode1;
-        voice->pc = (AkaoU8 *)fallback;
+        voice->pc = fallback;
         parameters->update_flags |= AKAO_VOICE_PARAM_ADSR_RELEASE;
         parameters->adsr_release_rate = mode5;
         voice++;
@@ -767,7 +767,7 @@ void Akao_UpdateVoiceMask(AkaoU8 *new_base) {
             active->note_length = reset_duration;
             short_duration = 2;
             active->pan_duration = short_duration;
-            default_pc = (AkaoU8 *)g_AkaoDefaultVoiceProgram;
+            default_pc = g_AkaoDefaultVoiceProgram;
             track->pc = default_pc;
         }
         --remaining;
