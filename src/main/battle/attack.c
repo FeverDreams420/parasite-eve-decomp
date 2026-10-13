@@ -130,10 +130,10 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         break;
     ready:
         }
-        actorField = &turnSlot->actor;
         g_BattleHitTimer = 0;
-        { height = (*actorField)->renderObject.target_y; angle = height - g_BattlePlayerAimHeight; }
+        actorField = &turnSlot->actor;
         { u8 animMode = g_ActiveActor->action->animMode[1]; g_BattleActionAnimModes[1] = animMode; }
+        { height = (*actorField)->renderObject.target_y; angle = height - g_BattlePlayerAimHeight; }
         { facingAngle = ratan2(angle, Battle_CalcDistToPlayer(turnSlot->actor, D_8009D254));
         if (facingAngle < -0xAB) direction = 0; else { predicate = facingAngle < 0xE4; if (predicate) direction = 1; else direction = 2; } }
         Entity_SetActionMode(D_8009D254, *(direction + g_ActiveActor->followUpAngleActionModes));
