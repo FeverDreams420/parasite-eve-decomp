@@ -568,7 +568,7 @@ void RoomEffect_GroundEruptionDrawShadow(
     stack.matrix.t[0] = fx->x;
     stack.matrix.t[1] = g_RoomFloorY->y;
     stack.matrix.t[2] = fx->z;
-    depthSlot = (unsigned short *)&g_RoomEruptionShadowPacket.depth;
+    depthSlot = &g_RoomEruptionShadowPacket.depth;
     *depthSlot = fx->depth;
     matrixSlot = &D_800BCFA4;
     gte_ldrotmatrix(matrixSlot->value);
