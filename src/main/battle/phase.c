@@ -299,20 +299,20 @@ block_39:
         }
         ((int (*)(int, int, int, int, int))Akao_SendPositionalCmdStereo)(var_a0_3, 0, var_a2_2, var_a3_2, var_v0_5);
         var_a1 = 0xFFDFFFFF;
-        var_a0_4 = ((void *)g_ActiveActor);
+        var_a0_4 = g_ActiveActor;
         actor_flags = ((Combatant *)var_a0_4)->stateFlags;
         g_GameStateFlags = g_GameStateFlags | 0x100;
         actor_flags &= var_a1;
         ((Combatant *)var_a0_4)->stateFlags = actor_flags;
     }
 block_55:
-    actor = ((void *)g_ActiveActor);
+    actor = g_ActiveActor;
     actor_flags = actor->stateFlags;
     if (actor_flags & 0x80000) {
         if ((Battle_StepAyaAction() << 0x18) != 0) {
             end_slot = g_BattleActionIndex;
-            aya_actor = ((void *)g_ActiveActor);
-            aya_player = ((void *)D_8009D254);
+            aya_actor = g_ActiveActor;
+            aya_player = D_8009D254;
             aya_actor->exp_or_acc = 0;
             aya_player->entityFlags &= ~0x100;
             var_s0_4 = end_slot - 7;
@@ -354,8 +354,8 @@ block_55:
         if (g_PmSlotTable[D_8009D258].header.state - 1U >= 2U) {
             var_a2_2 = 0xFFEFFFFF;
             temp_a0_3 = -0x101;
-            cleanupActor = ((void *)g_ActiveActor);
-            character_state = ((void *)D_8009D254);
+            cleanupActor = g_ActiveActor;
+            character_state = D_8009D254;
             cleanupActor->exp_or_acc = 0;
             *(s32 *)&character_state->entityFlags &= temp_a0_3;
             system_flags = g_GameStateFlags;
@@ -390,8 +390,8 @@ block_55:
 
 void Battle_StartEnemyAttackEffect(BattleEntity *entity)
 {
-    Combatant *core = (Combatant *)entity->core;
-    u32 *status = (u32 *)&core->statusFlags2;
+    Combatant *core = entity->core;
+    u32 *status = &core->statusFlags2;
     int effect;
 
     if ((g_ActiveActor->action->turnWord & 0x400) && ((*status & 3) != 1)) {
