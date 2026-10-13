@@ -233,7 +233,7 @@ int RoomM256_ScatterDropCallback(int mode, RoomM256Drop *drop) {
         }
         break;
     case 2:
-        slot = &g_ViewMatrixSlot;
+        slot = &D_800BCFA4;
         gte_ldrotmatrix(slot->value);
         gte_ldtransmatrix(slot->value);
         switch (drop->state) {
@@ -434,7 +434,7 @@ int RoomM256_SwirlSparkCallback(int mode, RoomM256SwirlSpark *spark) {
         }
         break;
     case 2:
-        matrixSlot = &g_ViewMatrixSlot;
+        matrixSlot = &D_800BCFA4;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         switch (spark->state) {
@@ -903,8 +903,8 @@ checkLifetime:
         renderKind = state->kind - 1;
         switch (renderKind) {
         case 0:
-            gte_ldrotmatrix(g_ViewMatrixSlot.value);
-            gte_ldtransmatrix(g_ViewMatrixSlot.value);
+            gte_ldrotmatrix(D_800BCFA4.value);
+            gte_ldtransmatrix(D_800BCFA4.value);
             trailClutY = g_FieldFxPaletteTable[D_800F336C];
             if ((D_800F336C == 4) && (g_FieldFxAltPaletteFlag != 0)) {
                 trailClutY += 4;
@@ -977,8 +977,8 @@ checkLifetime:
         case 2:
             renderScale = rsin(((state->frame << 0xA) / 10)) / 4;
             fade = (rsin((state->frame << 0xB) / 10) / 48);
-            gte_ldrotmatrix(g_ViewMatrixSlot.value);
-            gte_ldtransmatrix(g_ViewMatrixSlot.value);
+            gte_ldrotmatrix(D_800BCFA4.value);
+            gte_ldtransmatrix(D_800BCFA4.value);
             {
                 int pageDepth = 0;
                 int pageBlend = 1;
@@ -1166,9 +1166,9 @@ int RoomM256_ModelPulseParticleCallback(int mode, RoomModelPulseParticle *partic
         FieldFx_DrawShapeQuads(&position, 0, 0x1000, 0x1000,
                        (s16)g_FieldFxSpriteParams.parameter02 * 2 + 0xD8, clut, 3,
                        g_RoomM256PulseBrightness, (RenderColor *)&color);
+        gte_ldrotmatrix(D_800BCFA4.value);
+        gte_ldtransmatrix(D_800BCFA4.value);
         FieldFx_DrawHaloedPoint(&position, &color, g_RoomM256PulseBrightness, 1);
-        gte_ldrotmatrix(g_ViewMatrixSlot.value);
-        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         break;
     }
     return 0;
@@ -1259,7 +1259,7 @@ int RoomM256_ModelPulse(int mode, s16 *state) {
             size = rcos(angle);
             brightness = rsin(angle) / 32;
             {
-                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
+                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }

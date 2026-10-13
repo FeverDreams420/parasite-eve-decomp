@@ -298,7 +298,7 @@ update: {
         return 0;
     }
 render: {
-        register GteMatrix **matrixAddress asm("$5") = &g_ViewMatrixSlot.value;
+        register GteMatrix **matrixAddress asm("$5") = &D_800BCFA4.value;
         {
             u32 *matrixWords;
             asm volatile("" : "=r"(matrixWords) : "0"((u32 *)*matrixAddress) : "$2", "$3", "$4", "$7");
