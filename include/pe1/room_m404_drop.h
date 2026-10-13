@@ -16,7 +16,7 @@
 #include "pe1/render_prim.h"
 #include "pe1/room_floor.h"
 
-/* room_m404 sinking drop (func_80192540): a drop that sinks and jitters,
+/* room_m404 sinking drop (RoomM404_SinkingDropCallback): a drop that sinks and jitters,
  * spreads on the floor and sheds splash children, a lingering pool that
  * spits droplets, and their bouncing splashes; each flashes the scene when
  * it reaches the player. */
@@ -73,7 +73,7 @@ extern struct BattleEntity *D_8009D254;
 extern RoomM404DropRotation D_8018F1CC;
 extern RoomM404DropColor D_8018F1D4;
 extern RoomM404DropColor D_8018F1D8;
-extern u8 D_80193EFC[];
+extern u8 g_RoomM404SinkingDropColorTrack[];
 
 int rand(void);
 

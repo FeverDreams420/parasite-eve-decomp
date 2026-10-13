@@ -529,3 +529,11 @@ address,overlay,old_name,new_name,evidence
 0x801941C4,scene_e18_cruiser,D_801941C4,g_SceneE18FlankModel,model asset key 0xC58C7704 loaded by SceneE18_FlankEmitter mode 0 and drawn by the flank particles
 0x801941C8,scene_e18_cruiser,D_801941C8,g_SceneE18FlankRemaining,set to 4 by SceneE18_FlankEmitter and decremented by SceneE18_FlankParticleCallback as each particle fades out; the emitter finishes when it reaches 0
 0x801941D0,scene_e18_cruiser,D_801941D0,g_SceneE18RisingStop,"cleared by SceneE18_RisingParticleEmitter mode 0, tested to end it, and set to 1 by SceneE18_WaveRingEmitter"
+0x80192540,room_m404_chrysler,func_80192540,RoomM404_SinkingDropCallback,"source comment: sinking drop that sinks and jitters until it spreads on the floor, sheds splash children and lingers as a pool; installed by RoomM404_SinkingDrop via FieldFx_InitCallbackList"
+0x80193368,room_m404_chrysler,func_80193368,RoomM404_SinkingDrop,"installs RoomM404_SinkingDropCallback (20 byte records, 55 slots) and releases drops; slot 0 of effect set D_80193F1C"
+0x801935E0,room_m404_chrysler,func_801935E0,RoomM404_DebrisSparkCallback,"source comment: spark of the m404 joint debris burst, state 0 bouncing twice off the floor while circling, state 1 falling and drawn as a spinning tinted sprite; installed by RoomM404_DebrisBurst via FieldFx_InitCallbackList"
+0x80193A6C,room_m404_chrysler,func_80193A6C,RoomM404_DebrisBurst,source comment: bursts six bouncing sparks and two falling ones from a model joint during the first frames; slot 0 of effect set D_80193F88
+0x80193F1C,room_m404_chrysler,D_80193F1C,g_RoomM404SinkingDropEffects,effect set table: slot 0 RoomM404_SinkingDrop
+0x80193F88,room_m404_chrysler,D_80193F88,g_RoomM404DebrisBurstEffects,effect set table: slot 0 RoomM404_DebrisBurst
+0x80193EFC,room_m404_chrysler,D_80193EFC,g_RoomM404SinkingDropColorTrack,colour track sampled by RoomM404_SinkingDropCallback for the fading pool
+0x80193F68,room_m404_chrysler,D_80193F68,g_RoomM404DebrisSparkColorTrack,colour track sampled by RoomM404_DebrisSparkCallback for state 1

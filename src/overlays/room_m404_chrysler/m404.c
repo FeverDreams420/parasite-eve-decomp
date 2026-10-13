@@ -19,7 +19,7 @@
 /* Sinking drop: sinks and jitters until it spreads on the floor, sheds
  * splash children, lingers as a pool that spits droplets and expires once
  * it leaves the walkable area; the splashes slow down and bounce. */
-int func_80192540(int mode, RoomM404Drop *drop) {
+int RoomM404_SinkingDropCallback(int mode, RoomM404Drop *drop) {
     RoomM404DropRotation rotation = D_8018F1CC;
     RoomM404DropColor color = D_8018F1D4;
     RoomM404DropColor glow = D_8018F1D8;
@@ -178,7 +178,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
             FieldFx_DrawStarFan((GteShortVector *)drop, 0xC8, 0xC8, 5, 0, size, size, (struct RenderColor *)&glow, 0, alpha, 1);
             break;
         case 2:
-            FieldFx_SampleColorTrack(D_80193EFC, &fadeColor, (drop->timer << 4) / 12);
+            FieldFx_SampleColorTrack(g_RoomM404SinkingDropColorTrack, &fadeColor, (drop->timer << 4) / 12);
             {
                 int kind = g_FieldFxSpriteParams.palette;
                 int palette = g_FieldFxPaletteTable[kind];
@@ -232,7 +232,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
 
 #undef ROOM_M404_DROP_FLASH
 
-int func_80193368(int mode, void *unused, char *state) {
+int RoomM404_SinkingDrop(int mode, void *unused, char *state) {
     RoomTemplate8 template = D_8018F208;
     s16 position[4];
     s16 target[4];
@@ -252,7 +252,7 @@ int func_80193368(int mode, void *unused, char *state) {
             }
             pool = ANIM_POOL_AS(RoomM404Channel)->pool;
             return FieldFx_InitCallbackList(pool, 20, 55,
-                                 (FieldFxCallbackListCallback)func_80192540);
+                                 (FieldFxCallbackListCallback)RoomM404_SinkingDropCallback);
         }
     case 1:
     {
@@ -298,7 +298,7 @@ int func_80193368(int mode, void *unused, char *state) {
 /* Spark of the m404 joint debris burst: state 0 bounces twice off the
  * floor while circling and draws as two glow points, state 1 falls
  * and draws as a spinning sprite tinted by a color track. */
-int func_801935E0(int mode, RoomDampedSpark *spark) {
+int RoomM404_DebrisSparkCallback(int mode, RoomDampedSpark *spark) {
     GteRotation rotation = D_8018F210;
     GteShortVector position;
     RenderColor trackColor;
@@ -371,7 +371,7 @@ int func_801935E0(int mode, RoomDampedSpark *spark) {
             g_FieldFxSpriteParams.extent_x = 32;
             g_FieldFxSpriteParams.extent_y = 32;
             rotation.z = g_FieldFxCurrentAge << 5;
-            FieldFx_SampleColorTrack(D_80193F68, &trackColor, (s16)spark->timer);
+            FieldFx_SampleColorTrack(g_RoomM404DebrisSparkColorTrack, &trackColor, (s16)spark->timer);
             kind = g_FieldFxSpriteParams.palette;
             palette = g_FieldFxPaletteTable[kind];
             if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
@@ -389,7 +389,7 @@ int func_801935E0(int mode, RoomDampedSpark *spark) {
 
 /* Bursts six bouncing sparks and two falling ones from a model joint
  * during the first frames of the effect. */
-int func_80193A6C(int mode, RoomM404BurstOrigin *origin) {
+int RoomM404_DebrisBurst(int mode, RoomM404BurstOrigin *origin) {
     RoomM404JointTemplate template = D_8018F21C;
     RoomDampedSpark *spark;
     int i;
@@ -401,7 +401,7 @@ int func_80193A6C(int mode, RoomM404BurstOrigin *origin) {
         FieldFx_PlaySoundAtOwner(0x5C0, FieldFx_GetOwnerProgress());
         FieldFx_PlaySoundAtOwner(0x5C1, 0x80);
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 32,
-                             (FieldFxCallbackListCallback)func_801935E0);
+                             (FieldFxCallbackListCallback)RoomM404_DebrisSparkCallback);
     case 1:
         if (g_FieldFxCurrentAge < 5) {
             for (i = 0; i < 6; i++) {
