@@ -36,7 +36,7 @@ extern GteRotation D_8018EFF4;
 extern GteRotation D_8018F000;
 extern GteRotation D_8018F008;
 extern void Akao_Cmd_21(int handle, int arg);
-extern int func_8018F010(int mode, RoomM349FlareSpark *spark);
+extern int RoomM349_FlareSparkCallback(int mode, RoomM349FlareSpark *spark);
 extern RenderColor D_8018EFFC;
 
 #endif

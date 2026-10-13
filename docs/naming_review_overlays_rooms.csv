@@ -541,3 +541,8 @@ address,overlay,old_name,new_name,evidence
 0x80190804,scene_e20_cruiser,D_80190804,g_SceneE20FlareColorTrack,colour track sampled three times by SceneE20_FlareParticle
 0x8019085C,scene_e20_cruiser,D_8019085C,g_SceneE20HoverOrbModel,"model asset from Asset_FindTable08ByU32Key(assetKey | 0x3704) in SceneE20_HoverOrbController, drawn with FieldFx_ModelDraw"
 0x80190860,scene_e20_cruiser,D_80190860,g_SceneE20EffectSlots,array of SceneEffectSlot indexed by the index argument of SceneE20_CommandEffectSlot
+0x8018F010,room_m349_cruiser,func_8018F010,RoomM349_FlareSparkCallback,"source comment: spark that jitters its velocity or position by a small random amount each frame and bounces off the floor height, drawn as a spinning flare; installed by RoomM349_FlareRing via FieldFx_InitCallbackList"
+0x8018F7C4,room_m349_cruiser,func_8018F7C4,RoomM349_FlareRing,"source comment: spawns flare sparks on a ring around the target every period frames until lastFrame, scatters glints around a model joint and stops the looping sound 16 frames after the ring ends; slot 0 of effect set D_8019015C"
+0x801900D0,room_m349_cruiser,func_801900D0,RoomM349_SetFlareParams,"slot 12 of effect set D_8019015C: mode 1 stores x/y/z, mode 2 stores radius and lastFrame, other modes store period (minimum 2) into g_RoomM349FlareParams; returns the record"
+0x8019015C,room_m349_cruiser,D_8019015C,g_RoomM349FlareEffects,"effect set table: slot 0 RoomM349_FlareRing, slot 12 RoomM349_SetFlareParams"
+0x80190194,room_m349_cruiser,D_80190194,g_RoomM349FlareParams,"RoomM349FlareParams record (x, y, z, radius, period, lastFrame) written by RoomM349_SetFlareParams and returned to the engine as the params argument of RoomM349_FlareRing"

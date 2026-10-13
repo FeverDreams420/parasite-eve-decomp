@@ -5,7 +5,7 @@
 /* Spark that jitters its velocity (states 0 and 1) or its position
  * (state 2) by a small random amount each frame and bounces off the floor
  * height; draws as a spinning flare, the last state with a glow ring. */
-int func_8018F010(int mode, RoomM349FlareSpark *spark) {
+int RoomM349_FlareSparkCallback(int mode, RoomM349FlareSpark *spark) {
     GteRotation rotation = D_8018EFF4;
     RenderColor color = D_8018EFFC;
     int angle;
@@ -145,7 +145,7 @@ int func_8018F010(int mode, RoomM349FlareSpark *spark) {
  * (and a second kind half a period later) until `lastFrame`, scatters
  * glints around a model joint on random even frames, stops the looping
  * sound 16 frames after the ring ends and draws two joint glows. */
-int func_8018F7C4(int mode, RoomM349FlareTarget *target,
+int RoomM349_FlareRing(int mode, RoomM349FlareTarget *target,
                   RoomM349FlareParams *params) {
     GteShortVector joint;
     GteShortVector anchor;
@@ -168,7 +168,7 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
         target->position.z = params->z;
         target->position.y = g_RoomFloorY->y;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 70,
-                             (FieldFxCallbackListCallback)func_8018F010);
+                             (FieldFxCallbackListCallback)RoomM349_FlareSparkCallback);
     case 1:
         FieldFx_GetActorPosition(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)&joint);
         radius = params->radius;
@@ -293,9 +293,9 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
     return 0;
 }
 
-short *func_801900D0(int arg0, int arg1, int arg2, int arg3) {
+short *RoomM349_SetFlareParams(int arg0, int arg1, int arg2, int arg3) {
     if (arg0 == 1) {
-        D_80190194 = arg1;
+        g_RoomM349FlareParams = arg1;
         D_80190196 = arg2;
         D_80190198 = arg3;
     }
@@ -308,5 +308,5 @@ short *func_801900D0(int arg0, int arg1, int arg2, int arg3) {
         }
         D_801901A0 = arg1;
     }
-    return &D_80190194;
+    return &g_RoomM349FlareParams;
 }
