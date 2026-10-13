@@ -2081,11 +2081,14 @@ and changes 35919 words in 189 of the 190 overlays, every one of them at a
 relocation against a symbol that moved.
 
 Fixed layout: `.main` at 0x80010000 (the PS-X EXE load address, a loader
-contract), `.field_engine` at 0x800C1CA0, `_gp = 0x8009CD70`, and the
-header literals in `asm/USA/main/header.s` (initial PC 0x80072534, text size
+contract) and the header literals in `asm/USA/main/header.s` (initial PC 0x80072534, text size
 0x1EE000, stack 0x801FFFF0). Main's BSS, heap and every overlay load window
 live inside the zero-filled `dtail_*` data blobs, so the executable covers
-0x80010000 to 0x801FE000 with no layout of its own for those regions.
+0x80010000 to 0x801FE000 with no layout of its own for those regions. Since
+2026-10-13 `_gp` is `_ramsize` (the first `.sdata` word) and `.field_engine`
+follows `main_VRAM_END`, so a padded relink links without rebasing anything.
+The plan for main's data (phase 3: pins, BSS ownership, COMMON, ABI list and
+the work list) is [SHIFTABILITY_PLAN.md](SHIFTABILITY_PLAN.md).
 
 ### Shift test result
 
