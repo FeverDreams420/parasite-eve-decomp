@@ -3,29 +3,29 @@
 
 #include "common.h"
 
-extern s32 D_8010DA0C[];
-extern s32 D_8010DA10[16];
-extern s32 D_8010DA50[16];
-extern s32 D_8010DA90[];
-extern char D_8010BD18[];
-extern char D_8010BD28[];
-extern char D_8010BCFC[];
-extern char D_8010BD38[];
-extern s32 *volatile *D_8010DB1C;
-extern volatile u32 *D_8010DB20;
-extern volatile u32 *D_8010DB24;
-extern s32 *volatile *D_8010DB28;
-extern volatile u32 *D_8010DB2C;
-extern volatile u32 *D_8010DB30;
-extern volatile u32 *D_8010DB4C;
-extern volatile u32 *D_8010DB50;
-extern volatile u32 *D_8010DB54;
+extern s32 g_MdecQuantTableCommand[];
+extern s32 g_MdecQuantTableLuma[16];
+extern s32 g_MdecQuantTableChroma[16];
+extern s32 g_MdecScaleTableCommand[];
+extern char g_MdecInSyncName[];
+extern char g_MdecOutSyncName[];
+extern char g_MdecResetBadOptionFormat[];
+extern char g_MdecTimeoutFormat[];
+extern s32 *volatile *g_MdecDma0MadrPtr;
+extern volatile u32 *g_MdecDma0BcrPtr;
+extern volatile u32 *g_MdecDma0ChcrPtr;
+extern s32 *volatile *g_MdecDma1MadrPtr;
+extern volatile u32 *g_MdecDma1BcrPtr;
+extern volatile u32 *g_MdecDma1ChcrPtr;
+extern volatile u32 *g_MdecCommandRegPtr;
+extern volatile u32 *g_MdecStatusRegPtr;
+extern volatile u32 *g_MdecDmaControlRegPtr;
 
 void MdecDiag_SendInput(s32 *data, u32 size);
-int func_8010C308(void);
-int func_8010C39C(void);
-int func_8010C430(void);
-int func_8010C448(char *message);
+int MdecDiag_WaitInputSync(void);
+int MdecDiag_WaitOutputSync(void);
+int MdecDiag_ReadStatus(void);
+int MdecDiag_HandleTimeout(char *message);
 /* printf. */
 int printf(const char *format, ...);
 

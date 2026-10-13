@@ -31,7 +31,7 @@ static inline s16 MenuCard_OpenNextVideoFrame(VideoDisplay *dec) {
     }
     D_800B0DBC.value++;
     dec->decodeIndex ^= 1;
-    func_8010C89C(frame, dec->decode[dec->decodeIndex], MENUCARD_VIDEO_PTR4);
+    DecDCTvlc2(frame, dec->decode[dec->decodeIndex], MENUCARD_VIDEO_PTR4);
     StFreeRing(frame);
     return 0;
 }
@@ -124,13 +124,13 @@ search:
     size.x = entry->x;
     size.y = entry->y;
     MenuCard_OpenSetDecodeEnv(&MENUCARD_VIDEO_DISPLAY, size.x, size.y + 240, size.x, size.y);
-    func_8010BE3C(0);
-    func_8010C0D8(MENUCARD_VIDEO_UPLOAD);
+    DecDCTReset(0);
+    DecDCToutCallback(MENUCARD_VIDEO_UPLOAD);
     StSetRing(MENUCARD_VIDEO_PTR5, 0x40);
     StSetStream(1, MENUCARD_VIDEO_ENTRY->speed, -1, 0, 0);
     MenuCard_OpenStartVideoStream(&MENUCARD_VIDEO_FILE.pos, result);
     Spu_SetVoiceVolume(D_800B0DBE);
-    func_8010BD4C(MENUCARD_VIDEO_PTR4);
+    MdecDiag_ExpandDecoderTable(MENUCARD_VIDEO_PTR4);
     while (MenuCard_OpenNextVideoFrame(&MENUCARD_VIDEO_DISPLAY) == -1) {
         MENUCARD_VIDEO_RESTART = MENUCARD_VIDEO_FILE.pos;
         MenuCard_OpenKickVideoStream(&MENUCARD_VIDEO_RESTART, result);

@@ -72,7 +72,7 @@
       "verified_by": "agent review 2026-10-05: retail disassembly vs stock cc1 output"
     },
     {
-      "name": "func_8010C4CC",
+      "name": "DecDCTvlcSize",
       "module": "mdec_diag",
       "source": "overlays/mdec_diag/vlc.c",
       "address": "0x8010C4CC",
@@ -88,7 +88,7 @@
       "verified_by": "agent review 2026-10-05: PSY-Q 3.5 LIBPRESS.LIB vlc.o comparison"
     },
     {
-      "name": "func_8010C4FC",
+      "name": "DecDCTvlc",
       "module": "mdec_diag",
       "source": "overlays/mdec_diag/vlc.c",
       "address": "0x8010C4FC",
@@ -103,7 +103,7 @@
       "verified_by": "agent review 2026-10-05: PSY-Q 3.5 LIBPRESS.LIB vlc.o comparison and retail disassembly"
     },
     {
-      "name": "func_8010C86C",
+      "name": "DecDCTvlcSize2",
       "module": "mdec_diag",
       "source": "overlays/mdec_diag/vlc_c.c",
       "address": "0x8010C86C",
@@ -118,7 +118,7 @@
       "verified_by": "agent review 2026-10-05: retail disassembly"
     },
     {
-      "name": "func_8010C89C",
+      "name": "DecDCTvlc2",
       "module": "mdec_diag",
       "source": "overlays/mdec_diag/vlc_c.c",
       "address": "0x8010C89C",

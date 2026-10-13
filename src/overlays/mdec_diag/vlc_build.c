@@ -4,7 +4,7 @@
 
 void MdecDiag_ExpandDecoderTable(u16 *table) {
     s32 distance = 0;
-    const u8 *source = D_8010CBFC;
+    const u8 *source = g_MdecVlcTableSource;
     /* The empty barrier preserves the token load order. */
     u8 *output = (u8 *)table;
     u32 count;

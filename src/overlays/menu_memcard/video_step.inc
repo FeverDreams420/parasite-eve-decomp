@@ -23,7 +23,7 @@ static inline s16 MenuCard_NextVideoFrame(VideoDisplay *dec) {
     }
     D_800B0DBC.value++;
     dec->decodeIndex ^= 1;
-    func_8010C89C(frame, dec->decode[dec->decodeIndex], MENUCARD_VIDEO_PTR4);
+    DecDCTvlc2(frame, dec->decode[dec->decodeIndex], MENUCARD_VIDEO_PTR4);
     StFreeRing(frame);
     return 0;
 }
@@ -72,8 +72,8 @@ s32 MENUCARD_STEP_VIDEO_NAME(void) {
             *flip = 0;
         }
         MENUCARD_VIDEO_RESTART = MENUCARD_VIDEO_FILE.pos;
-        func_8010BFA0(MENUCARD_VIDEO_DISPLAY.decode[MENUCARD_VIDEO_DISPLAY.decodeIndex], MENUCARD_VIDEO_MODE);
-        func_8010C01C(MENUCARD_VIDEO_DISPLAY.buffers[MENUCARD_VIDEO_DISPLAY.selector],
+        DecDCTin(MENUCARD_VIDEO_DISPLAY.decode[MENUCARD_VIDEO_DISPLAY.decodeIndex], MENUCARD_VIDEO_MODE);
+        DecDCTout(MENUCARD_VIDEO_DISPLAY.buffers[MENUCARD_VIDEO_DISPLAY.selector],
                       MENUCARD_VIDEO_DISPLAY.rect.w * MENUCARD_VIDEO_DISPLAY.rect.h / 2);
         while (MenuCard_NextVideoFrame(&MENUCARD_VIDEO_DISPLAY) == -1) {
             MenuCard_KickVideoStream(&MENUCARD_VIDEO_RESTART);
@@ -90,7 +90,7 @@ s32 MENUCARD_STEP_VIDEO_NAME(void) {
 
             (*active)--;
         }
-        func_8010C0D8(0);
+        DecDCToutCallback(0);
         StUnSetRing();
         DsControlB(9, 0, 0);
     }

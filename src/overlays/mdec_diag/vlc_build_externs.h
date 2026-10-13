@@ -3,5 +3,5 @@
 
 #include "common.h"
 
-extern const u8 D_8010CBFC[];
+extern const u8 g_MdecVlcTableSource[];
 #endif /* PE1_EXT_E74C5A70D958 */

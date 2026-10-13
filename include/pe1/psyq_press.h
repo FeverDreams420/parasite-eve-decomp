@@ -4,6 +4,6 @@
 /* Psy-Q LIBPRESS entry points linked into the mdec_diag overlay. */
 
 /* DecDCToutCallback: installs the MDEC-out DMA completion callback. */
-void func_8010C0D8(void *callback);
+void DecDCToutCallback(void *callback);
 
 #endif

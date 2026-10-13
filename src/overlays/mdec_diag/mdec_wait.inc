@@ -7,7 +7,7 @@
             do { \
                 timeout = timeout - 1; \
                 if (timeout == g_##name##_MessageArg) { \
-                    func_8010C448(message); \
+                    MdecDiag_HandleTimeout(message); \
                     return -1; \
                 } \
             } while ((*status & mask) != 0); \

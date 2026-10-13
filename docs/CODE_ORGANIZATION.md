@@ -220,7 +220,7 @@ after what their functions do (`fx_common/camera.c`,
   after any function definition of the unit ("global register variable
   follows a function definition"), and once declared it keeps `$a0` from
   every later function, so the status read and timeout handler
-  (`mdec_status.c`) score lev 3 after the waits (`func_8010C448` loads the
+  (`mdec_status.c`) score lev 3 after the waits (`MdecDiag_HandleTimeout` loads the
   status register into `$a1`).
 - `fx_common` (2026-10-13): `camera_nodes.c` and `render_op.c` are one
   K8 unit, `camera.c`. Under cc1 `-G8` the camera aim function scored lev 16

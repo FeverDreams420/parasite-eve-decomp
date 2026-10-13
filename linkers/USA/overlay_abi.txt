@@ -19,15 +19,15 @@
 /* owner: mdec_diag, the MDEC/video library overlay loaded at 0x8010BCF8.
  * reason: callers enter that overlay at fixed addresses; it is loaded
  * by the disc loader, not linked with them. */
-func_8010BD4C = OVERLAY_WINDOW_MDEC_DIAG + 0x54; /* boot_display, menu_memcard */
-func_8010BE3C = OVERLAY_WINDOW_MDEC_DIAG + 0x144; /* boot_display, menu_memcard */
+MdecDiag_ExpandDecoderTable = OVERLAY_WINDOW_MDEC_DIAG + 0x54; /* boot_display, menu_memcard */
+DecDCTReset = OVERLAY_WINDOW_MDEC_DIAG + 0x144; /* boot_display, menu_memcard */
 func_8010BF94 = OVERLAY_WINDOW_MDEC_DIAG + 0x29C; /* boot_display */
-func_8010BFA0 = OVERLAY_WINDOW_MDEC_DIAG + 0x2A8; /* boot_display, menu_memcard */
-func_8010C01C = OVERLAY_WINDOW_MDEC_DIAG + 0x324; /* boot_display, menu_memcard */
-func_8010C078 = OVERLAY_WINDOW_MDEC_DIAG + 0x380; /* boot_display */
-func_8010C0D8 = OVERLAY_WINDOW_MDEC_DIAG + 0x3E0; /* menu_memcard */
-func_8010C86C = OVERLAY_WINDOW_MDEC_DIAG + 0xB74; /* boot_display */
-func_8010C89C = OVERLAY_WINDOW_MDEC_DIAG + 0xBA4; /* boot_display, menu_memcard */
+DecDCTin = OVERLAY_WINDOW_MDEC_DIAG + 0x2A8; /* boot_display, menu_memcard */
+DecDCTout = OVERLAY_WINDOW_MDEC_DIAG + 0x324; /* boot_display, menu_memcard */
+DecDCToutSync = OVERLAY_WINDOW_MDEC_DIAG + 0x380; /* boot_display */
+DecDCToutCallback = OVERLAY_WINDOW_MDEC_DIAG + 0x3E0; /* menu_memcard */
+DecDCTvlcSize2 = OVERLAY_WINDOW_MDEC_DIAG + 0xB74; /* boot_display */
+DecDCTvlc2 = OVERLAY_WINDOW_MDEC_DIAG + 0xBA4; /* boot_display, menu_memcard */
 
 /* owner: boot_display (image at 0x80122FA4).
  * reason: its work variables and scratch buffer live in RAM outside

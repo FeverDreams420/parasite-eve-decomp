@@ -66,7 +66,7 @@ extern void *D_801D1470[2];
 extern s16 D_800B0CD0;
 extern s32 D_8009CDDC;
 extern void func_8007C564(void);
-extern void func_8010C01C(void *, s32);
+extern void DecDCTout(void *, s32);
 extern void func_801918F8(s8, s8);
 extern void func_8007506C(void *, void *);
 void MenuCard_UploadVideoSlice(void);
@@ -123,7 +123,7 @@ extern void func_80072714(void);
 extern void func_800726C4(void);
 extern void func_80072724(void);
 extern void func_8003EB04(void);
-extern void func_8010C0D8(s32);
+extern void DecDCToutCallback(s32);
 extern void func_8007A2A4(void);
 extern void DsControlB(s32, s32, s32);
 extern void VSync(s32);
@@ -169,8 +169,8 @@ extern u8 D_801D146C;
 extern u8 D_801D0DBE;
 extern VideoDiscPosition D_801D0DC4;
 extern VideoDiscPosition D_801D0DDC;
-extern void func_8010BFA0(void *, s32);
-extern void func_8010C89C(void *, void *, void *);
+extern void DecDCTin(void *, s32);
+extern void DecDCTvlc2(void *, void *, void *);
 extern void func_8007C394(void *);
 extern void func_8007C2A0(VideoDiscPosition *);
 extern s32 DsQueueLen(void);
@@ -207,12 +207,12 @@ s16 MenuCard_StepVideo(void)
     D_801D0DDC = D_801D0DC4;
     selector = &D_801D146C;
     firstBuffers = (void **) (selector - 8);
-    func_8010BFA0(firstBuffers[*selector], D_801D0DBE);
+    DecDCTin(firstBuffers[*selector], D_801D0DBE);
     buffers = firstBuffers;
     asm("" : "=r"(buffers) : "0"(buffers));
     one = 1;
     selector += D_801D1478 * 4;
-    func_8010C01C(*((void **) (selector + 4)), (D_801D1490 * D_801D1492) / 2);
+    DecDCTout(*((void **) (selector + 4)), (D_801D1490 * D_801D1492) / 2);
     retry:
     retries = 2000;
 
@@ -241,7 +241,7 @@ s16 MenuCard_StepVideo(void)
       D_801D146C = region;
       D_800B0DBC = frames;
       asm("" : "=r"(region) : "0"(region));
-      func_8010C89C(frame, buffers[region], D_801D0DF8);
+      DecDCTvlc2(frame, buffers[region], D_801D0DF8);
       func_8007C394(frame);
       decodeResult = 0;
     }
@@ -295,7 +295,7 @@ s16 MenuCard_StepVideo(void)
     }
     active = &D_800B0DBA;
     (*active)--;
-    func_8010C0D8(0);
+    DecDCToutCallback(0);
     func_8007A2A4();
     DsControlB(9, 0, 0);
   }

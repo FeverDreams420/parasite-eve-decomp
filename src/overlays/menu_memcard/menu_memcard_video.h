@@ -54,7 +54,7 @@ extern u8 D_801223F5;
 
 extern u8 D_801D0DC0;
 extern s32 g_ActiveDrawSlot;
-extern void StCdInterrupt(void),func_8010C01C(void *,s32),func_801918F8(s8,s8);
+extern void StCdInterrupt(void),DecDCTout(void *,s32),func_801918F8(s8,s8);
 
 void MenuCard_UploadVideoSlice(void);
 
@@ -91,14 +91,14 @@ extern CdlLOC D_80122414, D_801D0DDC;
 extern VideoDisplay D_801228CC, D_801D1464;
 extern char D_80120FF4[], D_80120FFC[], D_8018F2E4[], D_8018F2EC[];
 extern void strcat(char *, char *), StSetRing(void *, s32);
-extern void func_8010C89C(void *, void *, void *), func_801214D4(void);
+extern void DecDCTvlc2(void *, void *, void *), func_801214D4(void);
 extern s32 DsRead2(CdlLOC *, s32);
 s32 func_80121C04(s32 number);
 s32 MenuCard_OpenVideo(s32 number);
 
 /* Per-frame video step: decode, restart the stream on a stall, page flip. */
 extern u8 D_801223F6, D_801223F8, D_801D0DBE;
-extern void func_8010BFA0(void *, s32);
+extern void DecDCTin(void *, s32);
 s32 func_80122040(void);
 
 #endif

@@ -5,12 +5,12 @@
 
 #include "mdec_wait.inc"
 
-MDECDIAG_WAIT_MDEC(func_8010C308, D_8010DB50, 0x20000000, D_8010BD18)
+MDECDIAG_WAIT_MDEC(MdecDiag_WaitInputSync, g_MdecStatusRegPtr, 0x20000000, g_MdecInSyncName)
 
 #undef MDECDIAG_WAIT_MDEC
 
 #include "mdec_wait.inc"
 
-MDECDIAG_WAIT_MDEC(func_8010C39C, D_8010DB30, 0x1000000, D_8010BD28)
+MDECDIAG_WAIT_MDEC(MdecDiag_WaitOutputSync, g_MdecDma1ChcrPtr, 0x1000000, g_MdecOutSyncName)
 
 #undef MDECDIAG_WAIT_MDEC

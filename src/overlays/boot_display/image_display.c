@@ -45,9 +45,9 @@ void BootDisplay_InitDisplayBuffers(void) {
     D_80125BA0 = start;
     ClearImage(rect, 0, 0, 0);
     DrawSync(0);
-    func_8010BE3C(0);
+    DecDCTReset(0);
     offset = 0x43000;
-    func_8010BD4C(((*screenY - g_BootDisplayDataLbaTbl) << 11) + offset + g_CdLoadAreaBase);
+    MdecDiag_ExpandDecoderTable(((*screenY - g_BootDisplayDataLbaTbl) << 11) + offset + g_CdLoadAreaBase);
 
     resource = D_8012682C;
     D_80172C98 = Asset_GetTimImagePixels(resource);
@@ -230,20 +230,20 @@ void BootDisplay_StepImageDisplay(void) {
         s32 endOffset;
         char *base;
 
-        func_8010C86C(func_8010BF94(D_80125BA4[(u16)g_BootDisplayStateTimer]) >> 4);
+        DecDCTvlcSize2(func_8010BF94(D_80125BA4[(u16)g_BootDisplayStateTimer]) >> 4);
         startOffset = 0x38800;
         endOffset = 0x43000;
         offset = (g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) * 2048;
         base = g_CdLoadAreaBase;
         startOffset += offset;
-        func_8010C89C(D_80125BA4[(u16)g_BootDisplayStateTimer], base + startOffset, base + (offset + endOffset));
+        DecDCTvlc2(D_80125BA4[(u16)g_BootDisplayStateTimer], base + startOffset, base + (offset + endOffset));
         g_BootDisplayState = 1;
         break;
     }
     case 1: {
         s32 offset;
         offset = (g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) * 2048;
-        if (func_8010C89C(0, 0, g_CdLoadAreaBase + (offset + 0x43000)) == 0) {
+        if (DecDCTvlc2(0, 0, g_CdLoadAreaBase + (offset + 0x43000)) == 0) {
             g_BootDisplayState = 2;
             g_BootDisplayTransferProgress = 0;
         }
@@ -252,15 +252,15 @@ void BootDisplay_StepImageDisplay(void) {
     case 2: {
         s32 offset;
         g_BootDisplayTransferCursor = g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].decodeTarget;
-        func_8010BE3C(0);
+        DecDCTReset(0);
         offset = (g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) * 2048;
-        func_8010BFA0(g_CdLoadAreaBase + (offset + 0x38800), 1);
-        func_8010C01C(g_BootDisplayTransferCursor, 0x3C00);
+        DecDCTin(g_CdLoadAreaBase + (offset + 0x38800), 1);
+        DecDCTout(g_BootDisplayTransferCursor, 0x3C00);
         g_BootDisplayState = 3;
         break;
     }
     case 3:
-        if (func_8010C078(1) == 0) {
+        if (DecDCToutSync(1) == 0) {
             g_BootDisplayState = 4;
             g_BootDisplayTransferProgress = g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].transferX + 120;
         }

@@ -124,8 +124,8 @@ s32 DsQueueLen(void);
 s32 BootDisplay_InitPlaybackFile(void);
 void SetGraphDebug(s32 value);
 void SetDispMask(s32 value);
-void func_8010BE3C(s32 value);
-void func_8010BD4C(void *address);
+void DecDCTReset(s32 value);
+void MdecDiag_ExpandDecoderTable(void *address);
 void BootDisplay_PresentFrame(void);
 void func_80124F40(s32 value);
 

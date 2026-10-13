@@ -154,7 +154,7 @@ void func_80122398(void) {
     value = *counter - 1;
     *counter = value;
     Spu_SetVoiceVolume(0);
-    func_8010C0D8(0);
+    DecDCToutCallback(0);
     StUnSetRing();
     DsControlB(9, 0, 0);
 }

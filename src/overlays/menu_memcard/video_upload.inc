@@ -24,7 +24,7 @@ void MENUCARD_UPLOAD_VIDEO_SLICE_NAME(void) {
     if (MENUCARD_VIDEO_DISPLAY.rect.x
         < MENUCARD_VIDEO_DISPLAY.regions[MENUCARD_VIDEO_DISPLAY.region].x
               + MENUCARD_VIDEO_DISPLAY.regions[MENUCARD_VIDEO_DISPLAY.region].w) {
-        func_8010C01C(MENUCARD_VIDEO_DISPLAY.buffers[MENUCARD_VIDEO_DISPLAY.selector],
+        DecDCTout(MENUCARD_VIDEO_DISPLAY.buffers[MENUCARD_VIDEO_DISPLAY.selector],
                       MENUCARD_VIDEO_DISPLAY.rect.w * MENUCARD_VIDEO_DISPLAY.rect.h / 2);
     } else {
         MENUCARD_VIDEO_DISPLAY.done = 1;

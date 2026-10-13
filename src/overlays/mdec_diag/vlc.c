@@ -4,7 +4,7 @@
 
 /*
  * PSY-Q LIBPRESS VLC, linked into the mdec_diag overlay:
- * func_8010C4CC = DecDCTvlcSize, func_8010C4FC = DecDCTvlc.
+ * DecDCTvlcSize, DecDCTvlc.
  *
  * Original SDK assembler (configs/USA/original_asm_evidence.json): no stack
  * frame, decoder state saved to static words, interrupts masked through
@@ -16,9 +16,9 @@
  */
 PSYQ_ASM_OBJECT(LIBPRESS, VLC)
 
-PSYQ_ASM_FUNCTION(func_8010C4CC,
-    "    lui     $t0, %hi(D_8011EB5C)\n"
-    "    addiu   $t0, $t0, %lo(D_8011EB5C)\n"
+PSYQ_ASM_FUNCTION(DecDCTvlcSize,
+    "    lui     $t0, %hi(g_MdecVlcSizeLimit)\n"
+    "    addiu   $t0, $t0, %lo(g_MdecVlcSizeLimit)\n"
     "    addi    $at, $a0, -0x1\n"
     "    blez    $at, .Ldefault\n"
     "    lw      $v0, 0x0($t0)\n"
@@ -31,17 +31,17 @@ PSYQ_ASM_FUNCTION(func_8010C4CC,
     "    jr      $ra\n"
     "    sw      $at, 0x0($t0)\n");
 
-PSYQ_ASM_FUNCTION(func_8010C4FC,
-    "    lui     $t0, %hi(D_8011EB5C)\n"
-    "    addiu   $t0, $t0, %lo(D_8011EB5C)\n"
-    "    lui     $a2, %hi(D_8010E35C)\n"
-    "    addiu   $a2, $a2, %lo(D_8010E35C)\n"
-    "    lui     $a3, %hi(D_8011E35C)\n"
-    "    addiu   $a3, $a3, %lo(D_8011E35C)\n"
+PSYQ_ASM_FUNCTION(DecDCTvlc,
+    "    lui     $t0, %hi(g_MdecVlcSizeLimit)\n"
+    "    addiu   $t0, $t0, %lo(g_MdecVlcSizeLimit)\n"
+    "    lui     $a2, %hi(g_MdecVlcPrimaryTable)\n"
+    "    addiu   $a2, $a2, %lo(g_MdecVlcPrimaryTable)\n"
+    "    lui     $a3, %hi(g_MdecVlcSecondaryTable)\n"
+    "    addiu   $a3, $a3, %lo(g_MdecVlcSecondaryTable)\n"
     "    bnez    $a0, .L8010C554\n"
     "    lw      $t1, 0x0($t0)\n"
-    "    lui     $t0, %hi(D_8011EB60)\n"
-    "    addiu   $t0, $t0, %lo(D_8011EB60)\n"
+    "    lui     $t0, %hi(g_MdecVlcSavedState)\n"
+    "    addiu   $t0, $t0, %lo(g_MdecVlcSavedState)\n"
     "    lw      $a0, 0x0($t0)\n"
     "    lw      $a1, 0x4($t0)\n"
     "    lw      $v0, 0x8($t0)\n"
@@ -80,8 +80,8 @@ PSYQ_ASM_FUNCTION(func_8010C4FC,
     "    sll     $t1, $t1, 2\n"
     "    addiu   $t1, $t1, 0x4\n"
     "    add     $t1, $t1, $a1\n"
-    "    lui     $t0, %hi(D_8011EB84)\n"
-    "    addiu   $t0, $t0, %lo(D_8011EB84)\n"
+    "    lui     $t0, %hi(g_MdecVlcFrameEnd)\n"
+    "    addiu   $t0, $t0, %lo(g_MdecVlcFrameEnd)\n"
     "    sw      $t1, 0x0($t0)\n"
     "    addi    $a1, $a1, 0x2\n"
     ".L8010C5C4:\n"
@@ -239,8 +239,8 @@ PSYQ_ASM_FUNCTION(func_8010C4FC,
     "    b       .L8010C6E0\n"
     "    or      $v0, $v0, $t0\n"
     ".L8010C7E8:\n"
-    "    lui     $t0, %hi(D_8011EB84)\n"
-    "    addiu   $t0, $t0, %lo(D_8011EB84)\n"
+    "    lui     $t0, %hi(g_MdecVlcFrameEnd)\n"
+    "    addiu   $t0, $t0, %lo(g_MdecVlcFrameEnd)\n"
     "    lw      $t1, 0x0($t0)\n"
     "    ori     $t0, $zero, 0xFE00\n"
     ".L8010C7F8:\n"
@@ -259,8 +259,8 @@ PSYQ_ASM_FUNCTION(func_8010C4FC,
     "    jr      $ra\n"
     "    add     $v0, $zero, $zero\n"
     ".L8010C82C:\n"
-    "    lui     $t0, %hi(D_8011EB60)\n"
-    "    addiu   $t0, $t0, %lo(D_8011EB60)\n"
+    "    lui     $t0, %hi(g_MdecVlcSavedState)\n"
+    "    addiu   $t0, $t0, %lo(g_MdecVlcSavedState)\n"
     "    sw      $a0, 0x0($t0)\n"
     "    sw      $a1, 0x4($t0)\n"
     "    sw      $v0, 0x8($t0)\n"
