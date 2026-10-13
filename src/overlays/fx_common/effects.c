@@ -45,7 +45,7 @@ void FxCommon_EndSequence(void)
         else
             g_SceneDispatchToken = 0xA80290C8;
     } else {
-        switch (D_8019CA68) {
+        switch (g_FxCommonExitVariant) {
         case 0:
             g_SceneDispatchToken = 0xA80281C8;
             break;
@@ -150,44 +150,44 @@ void func_8019234C(void)
     FxCommonAddress current;
 
     g_ActiveDrawSlot = 0;
-    D_8019C00E = 0;
+    g_FxCommonResetRequested = 0;
     last = 0;
     FxCommon_InitScene();
-    FxCommon_SetAkao3dVolumeRange(D_8019C034 != 10);
+    FxCommon_SetAkao3dVolumeRange(g_FxCommonViewMode != 10);
     srand(VSync(-1));
     started = 0;
-    D_8019C03C = rand() % 3000000;
+    g_FxCommonFlyerPathPosition = rand() % 3000000;
     handle = 0;
-    if (D_8019C034 == 10)
-        D_8019C03C = 120000;
+    if (g_FxCommonViewMode == 10)
+        g_FxCommonFlyerPathPosition = 120000;
 
-    while (D_8019C024 == 0) {
+    while (g_FxCommonExitRequested == 0) {
         Field_HandleStateTransition();
         if ((g_FieldPadBits & 0x0F000006) == 0x0F000006) {
             VSync(0);
             SetDispMask(0);
-            D_8019C00E = 1;
-            D_8019C024 = 1;
+            g_FxCommonResetRequested = 1;
+            g_FxCommonExitRequested = 1;
             Boot_Shutdown();
         }
         FxCommon_StepEffects();
-        if (D_8019C00E != 0)
+        if (g_FxCommonResetRequested != 0)
             continue;
 
         FxCommon_UpdateCameraMatrices();
         FxCommon_UpdateFrustumPlanes((void *)&g_FxCommonCameraPosition);
-        if (D_8019C02A != 0)
-            D_8019C02A = FxCommon_StepFadeIntensity(D_8019C02A);
+        if (g_FxCommonScreenFade != 0)
+            g_FxCommonScreenFade = FxCommon_StepFadeIntensity(g_FxCommonScreenFade);
         FxCommon_DrawNightShadeAndMarkers();
         FxCommon_DrawSceneNodes();
         FxCommon_StepPathNodes();
         if (!started) {
             handle = FxCommon_SendTableCommand3d(0xABE, D_801EA578->state);
             started = 1;
-        } else if (D_8019C0C0 == 0) {
+        } else if (g_FxCommonDemoExiting == 0) {
             FxCommon_Apply3dPan(handle, D_801EA578->state);
         }
-        if (D_8019C034 == 10 || (D_8019C044 == 1 && D_8019C045 == 0))
+        if (g_FxCommonViewMode == 10 || (g_FxCommonPlaying == 1 && g_FxCommonPlayAdvance == 0))
             Menu_DrawTextboxEntries();
 
         scanning = 1;
@@ -224,13 +224,13 @@ void func_8019234C(void)
         ClearOTagR(next->allocation, 0x1000);
         FxCommon_SelectBufferAllocation((void **)g_FxCommonActiveBuffer);
     }
-    if (D_8019C00E == 0)
+    if (g_FxCommonResetRequested == 0)
         FxCommon_EndSequence();
 }
 
 void FxCommon_DrawNightShadeAndMarkers(void)
 {
-    if (D_8019C1F0 == 1) {
+    if (g_FxCommonNight == 1) {
         u32 *dst = D_801EA598;
         FxCommonBuffer *owner = g_FxCommonActiveBuffer;
         FxCommonBuffer *sentinel = (FxCommonBuffer *)&D_8019C1F8;
@@ -278,7 +278,7 @@ void FxCommon_DrawSceneNodes(void)
 {
     int i;
 
-    if (D_8019C034 != 0) {
+    if (g_FxCommonViewMode != 0) {
         g_FxCommonDepthBias = 0xFA1;
         DRAW(D_8019CC28, 1, 1, 0);
     }
@@ -333,11 +333,11 @@ void FxCommon_DrawSceneNodes(void)
     }
     g_FxCommonDepthBias = 0;
     DRAW(g_FxCommonPathNodes[0], 0, 0, 0);
-    if (D_8019C034 != 2)
+    if (g_FxCommonViewMode != 2)
         DRAW(g_FxCommonPathNodes[2], 0, 0, 0);
     g_FxCommonDepthBias = 1000;
     DRAW(g_FxCommonPathNodes[1], 0, 0, 1);
-    if (D_8019C034 != 2)
+    if (g_FxCommonViewMode != 2)
         DRAW(g_FxCommonPathNodes[3], 0, 0, 1);
 
     g_FxCommonDepthBias = 0;
@@ -358,7 +358,7 @@ void FxCommon_DrawSceneNodes(void)
     g_FxCommonDepthBias = 800;
     DRAW(D_8019CC24, 0, 1, 1);
 
-    if (D_8019C1F0 == 1) {
+    if (g_FxCommonNight == 1) {
         D_8019C0D0[0] += (s16)(rand() % 40 + 20);
         D_8019C0D0[1] += (s16)(rand() % 52 + 26);
         g_FxCommonEchoNodes[0]->matrix = g_FxCommonPathNodes[0]->matrix;
@@ -379,21 +379,21 @@ void FxCommon_DrawSceneNodes(void)
         DRAW(g_FxCommonEchoNodes[1], 0, 0, 1);
     }
 
-    for (i = 0; i < D_8019C020 >> 1; i++) {
+    for (i = 0; i < g_FxCommonRouteNodeCount >> 1; i++) {
         g_FxCommonDepthBias = 0;
         if (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] & 0x2000) {
-            D_801EA264[0] = 60;
-            D_801EA264[1] = 60;
-            D_801EA264[2] = 40;
+            g_FxCommonFlatColor[0] = 60;
+            g_FxCommonFlatColor[1] = 60;
+            g_FxCommonFlatColor[2] = 40;
         } else {
-            D_801EA264[0] = 20;
-            D_801EA264[1] = 40;
-            D_801EA264[2] = 40;
+            g_FxCommonFlatColor[0] = 20;
+            g_FxCommonFlatColor[1] = 40;
+            g_FxCommonFlatColor[2] = 40;
         }
-        DRAW_PAIR(D_8019C3B0[i * 2], 0, 0);
+        DRAW_PAIR(g_FxCommonRouteNodes[i * 2], 0, 0);
         if (D_8019C032 == 1 && (i & 3)) {
             g_FxCommonDepthBias = 800;
-            DRAW_PAIR(D_8019C3B0[i * 2 + 1], 0, 1);
+            DRAW_PAIR(g_FxCommonRouteNodes[i * 2 + 1], 0, 1);
         }
     }
 
@@ -406,7 +406,7 @@ void FxCommon_DrawSceneNodes(void)
     DRAW_PAIR(g_FxCommonRuntime.pairedNodes[9], 0, 0);
     if (D_8019C032 == 1) {
         g_FxCommonDepthBias = 800;
-        if (D_8019C044) {
+        if (g_FxCommonPlaying) {
             DRAW_PAIR(g_FxCommonRuntime.pairedNodes[11], 0, 1);
             DRAW_PAIR(g_FxCommonRuntime.pairedNodes[12], 0, 1);
             DRAW_PAIR(g_FxCommonRuntime.pairedNodes[13], 0, 1);
@@ -418,7 +418,7 @@ void FxCommon_DrawSceneNodes(void)
         }
         DRAW_PAIR(g_FxCommonRuntime.pairedNodes[15], 0, 1);
     }
-    D_801EA5E0 = 500;
+    g_FxCommonDepthBase = 500;
     FxCommon_DrawTransformNode(D_801EA260, g_FxCommonActiveBuffer);
 }
 
@@ -432,15 +432,15 @@ void FxCommon_StepPathNodes(void)
     GteShortVector bank0;
     GteShortVector bank1;
 
-    FxCommon_SamplePath(D_8019C038, 0x4A, Draw_GetTimTableEntry(&g_FxCommonTimTable, 2),
+    FxCommon_SamplePath(g_FxCommonTailPathPosition, 0x4A, Draw_GetTimTableEntry(&g_FxCommonTimTable, 2),
                   (FxCommonVec3 *)g_FxCommonPathNodes[4]->matrix.t,
                   &g_FxCommonPathNodes[4]->seed.angles);
-    FxCommon_SamplePath(D_8019C038, 0x4B, Draw_GetTimTableEntry(&g_FxCommonTimTable, 2),
+    FxCommon_SamplePath(g_FxCommonTailPathPosition, 0x4B, Draw_GetTimTableEntry(&g_FxCommonTimTable, 2),
                   (FxCommonVec3 *)g_FxCommonPathNodes[5]->matrix.t,
                   &g_FxCommonPathNodes[5]->seed.angles);
-    FxCommon_SamplePath(D_8019C03C, 0x4C, Draw_GetTimTableEntry(&g_FxCommonTimTable, 2),
+    FxCommon_SamplePath(g_FxCommonFlyerPathPosition, 0x4C, Draw_GetTimTableEntry(&g_FxCommonTimTable, 2),
                   (FxCommonVec3 *)g_FxCommonPathNodes[0]->matrix.t, &bank0);
-    FxCommon_SamplePath(D_8019C03C, 0x4D, Draw_GetTimTableEntry(&g_FxCommonTimTable, 2),
+    FxCommon_SamplePath(g_FxCommonFlyerPathPosition, 0x4D, Draw_GetTimTableEntry(&g_FxCommonTimTable, 2),
                   (FxCommonVec3 *)g_FxCommonPathNodes[2]->matrix.t, &bank1);
 
     g_FxCommonPathNodes[0]->seed.component[0] = bank0.x;
@@ -476,8 +476,8 @@ void FxCommon_StepPathNodes(void)
     g_FxCommonPathNodes[1]->seed = g_FxCommonPathNodes[0]->seed;
     g_FxCommonPathNodes[3]->matrix = g_FxCommonPathNodes[2]->matrix;
     g_FxCommonPathNodes[3]->seed = g_FxCommonPathNodes[2]->seed;
-    D_8019C038 += 4;
-    D_8019C03C += 0x10;
+    g_FxCommonTailPathPosition += 4;
+    g_FxCommonFlyerPathPosition += 0x10;
 }
 
 void FxCommon_SnapMotionWhole(s16 base)
@@ -865,66 +865,66 @@ void FxCommon_StepEffects(void)
     s16 nextIndex1;
 
     resourceResult = 0;
-    if (D_8019C026 != 0) {
-        countdown = D_8019C026 - 1;
-        D_8019C026 = countdown;
+    if (g_FxCommonExitCountdown != 0) {
+        countdown = g_FxCommonExitCountdown - 1;
+        g_FxCommonExitCountdown = countdown;
         if (countdown == 1) {
-            D_8019C024 = 1;
+            g_FxCommonExitRequested = 1;
         }
     }
-    if (D_8019C045 == 1) {
-        FxCommon_StartCameraMove(g_FxCommonRoomVariant, 0, 0, D_8019CC1C << 8);
+    if (g_FxCommonPlayAdvance == 1) {
+        FxCommon_StartCameraMove(g_FxCommonRoomVariant, 0, 0, g_FxCommonPlayFrame << 8);
         rowIndex = g_FxCommonRoomVariant;
-        if (D_8019CC1C >= g_FxCommonEffectSetup[rowIndex].value30) {
+        if (g_FxCommonPlayFrame >= g_FxCommonEffectSetup[rowIndex].value30) {
             D_8019C032 = 0;
         }
-        if (D_8019CC1C < (g_FxCommonEffectSetup[rowIndex].value0c - 1)) {
-            D_8019CC1C += 1;
+        if (g_FxCommonPlayFrame < (g_FxCommonEffectSetup[rowIndex].value0c - 1)) {
+            g_FxCommonPlayFrame += 1;
         } else {
-            D_8019C045 = 0;
+            g_FxCommonPlayAdvance = 0;
         }
     }
-    if ((D_8019C026 != 0) && (D_8019C045 == 0) && (D_8019C034 != 0xA) && (D_8019C046 == 0) && (D_8019BFF8 == -1)) {
-        nextFrame = D_8019CC1C + 1;
-        D_8019CC1C = nextFrame;
+    if ((g_FxCommonExitCountdown != 0) && (g_FxCommonPlayAdvance == 0) && (g_FxCommonViewMode != 0xA) && (g_FxCommonReplayCamera == 0) && (g_FxCommonAutoPlay == -1)) {
+        nextFrame = g_FxCommonPlayFrame + 1;
+        g_FxCommonPlayFrame = nextFrame;
         FxCommon_StartCameraMove(g_FxCommonRoomVariant, 0, 0, nextFrame << 8);
     }
-    if ((D_8019C044 == 1) && (elapsed = D_8019C048 + 1, D_8019C048 = elapsed, ((elapsed < 0xC9) == 0)) && (D_8019C040 == 0)) {
-        if (D_8019C046 == 0) {
-            D_8019C04C = 0;
+    if ((g_FxCommonPlaying == 1) && (elapsed = g_FxCommonPlayTicks + 1, g_FxCommonPlayTicks = elapsed, ((elapsed < 0xC9) == 0)) && (g_FxCommonCameraPathRemaining == 0)) {
+        if (g_FxCommonReplayCamera == 0) {
+            g_FxCommonCameraPathPosition = 0;
         }
-        D_8019C046 = 1;
+        g_FxCommonReplayCamera = 1;
     } else {
-        D_8019C046 = 0;
+        g_FxCommonReplayCamera = 0;
     }
-    mode = D_8019C034;
+    mode = g_FxCommonViewMode;
     if (mode != 0xA) {
-        if ((D_8019C026 == 0) && (g_FieldPadBits != 0)) {
-            if ((D_8009D1F4 & 2) && (D_8019BFF8 == -1)) {
+        if ((g_FxCommonExitCountdown == 0) && (g_FieldPadBits != 0)) {
+            if ((D_8009D1F4 & 2) && (g_FxCommonAutoPlay == -1)) {
                 nextMode = (s16)(mode + 1) % 3;
-                D_8019C034 = nextMode;
+                g_FxCommonViewMode = nextMode;
                 if ((nextMode << 0x10) == 0) {
                     g_FxCommonMarkerFade = 1;
-                    D_8019C045 = 0;
+                    g_FxCommonPlayAdvance = 0;
                     FxCommon_StartCameraMove(g_FxCommonRoomVariant, 4, 5, 0);
-                    if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
+                    if ((g_FxCommonExitCountdown == 0) && (g_AkaoBgmHandle[0] != 0)) {
                         Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                     }
                 }
-                transitionMode = D_8019C034;
+                transitionMode = g_FxCommonViewMode;
                 if (transitionMode == 1) {
                     if (g_FieldPadBits & 0x20) {
-                        if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
+                        if ((g_FxCommonExitCountdown == 0) && (g_AkaoBgmHandle[0] != 0)) {
                             Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                         }
                         g_FxCommonMarkerFade = -1;
                         D_8019C032 = 1;
-                        D_8019C048 = 0;
-                        D_8019C044 = 0;
-                        D_8019C045 = 0;
+                        g_FxCommonPlayTicks = 0;
+                        g_FxCommonPlaying = 0;
+                        g_FxCommonPlayAdvance = 0;
                         D_8019C13C = 0;
-                        FxCommon_SamplePath(D_8019C038 + 0x20, 0x4A, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &mode1Sample.vector, &sampleExtra);
-                        FxCommon_SamplePath(D_8019C038 + 0x20, 0x4B, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &mode1NextSample.vector, &sampleExtra);
+                        FxCommon_SamplePath(g_FxCommonTailPathPosition + 0x20, 0x4A, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &mode1Sample.vector, &sampleExtra);
+                        FxCommon_SamplePath(g_FxCommonTailPathPosition + 0x20, 0x4B, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &mode1NextSample.vector, &sampleExtra);
                         copyX = mode1Sample.vector.x;
                         copyY = mode1Sample.vector.y;
                         copyZ = mode1Sample.vector.z;
@@ -940,12 +940,12 @@ void FxCommon_StepEffects(void)
                         FxCommon_SetMotionEndpoints((FxCommonShortVec3 *)&shortA, (FxCommonShortVec3 *)&shortB, 4, 5);
                         D_8019C13E = 1;
                     } else {
-                        D_8019C034 = 2;
+                        g_FxCommonViewMode = 2;
                         D_8019C13E = 0;
                     }
                 }
-                if (D_8019C034 == 2) {
-                    if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
+                if (g_FxCommonViewMode == 2) {
+                    if ((g_FxCommonExitCountdown == 0) && (g_AkaoBgmHandle[0] != 0)) {
                         Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                     }
                     if (D_8019C13E == 0) {
@@ -955,12 +955,12 @@ void FxCommon_StepEffects(void)
                         g_FxCommonMarkerFade = 0;
                     }
                     D_8019C032 = 1;
-                    D_8019C048 = 0;
-                    D_8019C044 = 0;
-                    D_8019C045 = 0;
+                    g_FxCommonPlayTicks = 0;
+                    g_FxCommonPlaying = 0;
+                    g_FxCommonPlayAdvance = 0;
                     D_8019C13C = 0;
-                    FxCommon_SamplePath(D_8019C03C + 0x100, 0x4C, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &mode2Sample.vector, &sampleExtra);
-                    FxCommon_SamplePath(D_8019C03C + 0x100, 0x4D, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &mode2NextSample.vector, &sampleExtra);
+                    FxCommon_SamplePath(g_FxCommonFlyerPathPosition + 0x100, 0x4C, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &mode2Sample.vector, &sampleExtra);
+                    FxCommon_SamplePath(g_FxCommonFlyerPathPosition + 0x100, 0x4D, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &mode2NextSample.vector, &sampleExtra);
                     shortA.x = (s16) mode2NextSample.vector.x;
                     shortA.y = (s16) mode2NextSample.vector.y;
                     shortA.z = (s16) mode2NextSample.vector.z;
@@ -970,77 +970,77 @@ void FxCommon_StepEffects(void)
                     FxCommon_SetMotionEndpoints((FxCommonShortVec3 *)&shortA, (FxCommonShortVec3 *)&shortB, 4, 5);
                 }
             }
-            if ((D_8009D1F4 & 0x50) && (D_8019C034 != 0)) {
-                D_8019C034 = 0;
+            if ((D_8009D1F4 & 0x50) && (g_FxCommonViewMode != 0)) {
+                g_FxCommonViewMode = 0;
                 g_FxCommonMarkerFade = 1;
-                D_8019C045 = 0;
+                g_FxCommonPlayAdvance = 0;
                 FxCommon_StartCameraMove(g_FxCommonRoomVariant, 4, 5, 0);
-                if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
+                if ((g_FxCommonExitCountdown == 0) && (g_AkaoBgmHandle[0] != 0)) {
                     Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                 }
             }
-            if ((D_8019C040 < 2U) && (D_8019C034 == 0) && (D_8019C13C == 0)) {
-                if ((D_8009D1F4 & 0x20000000) && (D_8019C026 == 0)) {
-                    if (D_8019C040 == 1) {
-                        D_8019C02A = 1;
-                        D_8019C026 = 0x10;
-                        D_8019CA68 = g_FxCommonRoomVariant;
+            if ((g_FxCommonCameraPathRemaining < 2U) && (g_FxCommonViewMode == 0) && (D_8019C13C == 0)) {
+                if ((D_8009D1F4 & 0x20000000) && (g_FxCommonExitCountdown == 0)) {
+                    if (g_FxCommonCameraPathRemaining == 1) {
+                        g_FxCommonScreenFade = 1;
+                        g_FxCommonExitCountdown = 0x10;
+                        g_FxCommonExitVariant = g_FxCommonRoomVariant;
                     }
-                    if (D_8019C044 == 0) {
+                    if (g_FxCommonPlaying == 0) {
                         if (g_AkaoBgmHandle[0] != 0) {
                             Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                         }
                         g_FxCommonMarkerFade = -1;
-                        D_8019C045 = 1;
-                        D_8019C044 = 1;
-                        D_8019CC1C = 0;
-                        D_8019C048 = 1;
+                        g_FxCommonPlayAdvance = 1;
+                        g_FxCommonPlaying = 1;
+                        g_FxCommonPlayFrame = 0;
+                        g_FxCommonPlayTicks = 1;
                     } else {
                         if (g_AkaoBgmHandle[0] != 0) {
                             Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                         }
-                        D_8019C02A = 1;
-                        D_8019C026 = 0x10;
-                        D_8019CA68 = g_FxCommonRoomVariant;
+                        g_FxCommonScreenFade = 1;
+                        g_FxCommonExitCountdown = 0x10;
+                        g_FxCommonExitVariant = g_FxCommonRoomVariant;
                     }
-                    if ((D_8019C000 == 1) && (g_FxCommonRoomVariant == D_8019C004)) {
+                    if ((g_FxCommonConfirmExit == 1) && (g_FxCommonRoomVariant == g_FxCommonConfirmExitVariant)) {
                         g_FxCommonMarkerFade = -1;
-                        D_8019C02A = 1;
-                        D_8019C045 = 0;
-                        D_8019C044 = 0;
-                        D_8019CC1C = 0;
-                        D_8019C048 = 0;
-                        D_8019C026 = 0x10;
-                        D_8019CA68 = g_FxCommonRoomVariant;
+                        g_FxCommonScreenFade = 1;
+                        g_FxCommonPlayAdvance = 0;
+                        g_FxCommonPlaying = 0;
+                        g_FxCommonPlayFrame = 0;
+                        g_FxCommonPlayTicks = 0;
+                        g_FxCommonExitCountdown = 0x10;
+                        g_FxCommonExitVariant = g_FxCommonRoomVariant;
                     }
                 }
-                if ((D_8009D1F4 & 0x40000000) && (D_8019BFF8 == -1) && (D_8019C026 == 0)) {
+                if ((D_8009D1F4 & 0x40000000) && (g_FxCommonAutoPlay == -1) && (g_FxCommonExitCountdown == 0)) {
                     D_8019C032 = 1;
-                    if (D_8019C044 == 1) {
+                    if (g_FxCommonPlaying == 1) {
                         if (g_AkaoBgmHandle[0] != 0) {
                             Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                         }
                         FxCommon_StartCameraMove(g_FxCommonRoomVariant, 4, 5, 0);
                         g_FxCommonMarkerFade = 1;
-                        D_8019C044 = 0;
-                        D_8019C045 = 0;
+                        g_FxCommonPlaying = 0;
+                        g_FxCommonPlayAdvance = 0;
                     }
                 }
-                if ((D_8009D1F4 & 0x40) && (D_8019BFF8 == -1)) {
-                    if (D_8019C044 == 1) {
+                if ((D_8009D1F4 & 0x40) && (g_FxCommonAutoPlay == -1)) {
+                    if (g_FxCommonPlaying == 1) {
                         g_FxCommonMarkerFade = 1;
                     }
-                    D_8019C045 = 0;
-                    D_8019C044 = 0;
-                    D_8019CC1C = 0;
+                    g_FxCommonPlayAdvance = 0;
+                    g_FxCommonPlaying = 0;
+                    g_FxCommonPlayFrame = 0;
                     D_8019C032 = 1;
                     if (g_FxCommonEffectSetup[g_FxCommonRoomVariant].value22 != 0xFF) {
                         do {
                             nextIndex0 = g_FxCommonEffectSetup[g_FxCommonRoomVariant].value22;
                             g_FxCommonRoomVariant = nextIndex0;
                         } while (g_FxCommonEffectSetup[nextIndex0].enabled == 0);
-                        D_8019C018 = 1;
-                        D_8019CC1C = g_FxCommonEffectSetup[nextIndex0].value0c;
+                        g_FxCommonPageChanged = 1;
+                        g_FxCommonPlayFrame = g_FxCommonEffectSetup[nextIndex0].value0c;
                         FxCommon_StartCameraMove(nextIndex0, 4, 5, 0);
                         motionIndex0 = 0;
                         motionSlot0 = 0;
@@ -1057,21 +1057,21 @@ void FxCommon_StepEffects(void)
                         } while (motionIndex0 < 0xAU);
                     }
                 }
-                if ((D_8009D1F4 & 0x10) && (D_8019BFF8 == -1)) {
-                    if (D_8019C044 == 1) {
+                if ((D_8009D1F4 & 0x10) && (g_FxCommonAutoPlay == -1)) {
+                    if (g_FxCommonPlaying == 1) {
                         g_FxCommonMarkerFade = 1;
                     }
-                    D_8019C045 = 0;
-                    D_8019C044 = 0;
-                    D_8019CC1C = 0;
+                    g_FxCommonPlayAdvance = 0;
+                    g_FxCommonPlaying = 0;
+                    g_FxCommonPlayFrame = 0;
                     D_8019C032 = 1;
                     if (g_FxCommonEffectSetup[g_FxCommonRoomVariant].value23 != 0xFF) {
                         do {
                             nextIndex1 = g_FxCommonEffectSetup[g_FxCommonRoomVariant].value23;
                             g_FxCommonRoomVariant = nextIndex1;
                         } while (g_FxCommonEffectSetup[nextIndex1].enabled == 0);
-                        D_8019C018 = 1;
-                        D_8019CC1C = g_FxCommonEffectSetup[nextIndex1].value0c;
+                        g_FxCommonPageChanged = 1;
+                        g_FxCommonPlayFrame = g_FxCommonEffectSetup[nextIndex1].value0c;
                         FxCommon_StartCameraMove(nextIndex1, 4, 5, 0);
                         motionIndex1 = 0;
                         motionSlot1 = 0;
@@ -1091,7 +1091,7 @@ void FxCommon_StepEffects(void)
             }
         }
     }
-    if ((D_8019C034 == 1) && (g_FxCommonMotionRemaining0 == 0) && (g_FxCommonMotionRemaining1 == 0)) {
+    if ((g_FxCommonViewMode == 1) && (g_FxCommonMotionRemaining0 == 0) && (g_FxCommonMotionRemaining1 == 0)) {
         ((FxCommonVec3 *)&g_FxCommonCameraPosition)->x = D_801EA58C->state[0];
         g_FxCommonCameraPosition.y = D_801EA58C->state[1] - 0x12C;
         g_FxCommonCameraPosition.z = D_801EA58C->state[2];
@@ -1099,7 +1099,7 @@ void FxCommon_StepEffects(void)
         g_FxCommonCameraTarget.y = D_801EA578->state[1];
         g_FxCommonCameraTarget.z = D_801EA578->state[2];
     }
-    if ((D_8019C034 == 2) && (g_FxCommonMotionRemaining0 == 0) && (g_FxCommonMotionRemaining1 == 0)) {
+    if ((g_FxCommonViewMode == 2) && (g_FxCommonMotionRemaining0 == 0) && (g_FxCommonMotionRemaining1 == 0)) {
         ((FxCommonVec3 *)&g_FxCommonCameraPosition)->x = D_801EA580->state[0];
         g_FxCommonCameraPosition.y = D_801EA580->state[1];
         g_FxCommonCameraPosition.z = D_801EA580->state[2];
@@ -1107,90 +1107,90 @@ void FxCommon_StepEffects(void)
         g_FxCommonCameraTarget.y = D_801EA578->state[1];
         g_FxCommonCameraTarget.z = D_801EA578->state[2];
     }
-    if (D_8019C046 == 1) {
-        FxCommon_SamplePath(D_8019C04C, g_FxCommonEffectSetup[g_FxCommonRoomVariant].motionIndices[3], Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &g_FxCommonCameraPosition, &sampleExtra);
-        FxCommon_SamplePath(D_8019C04C, g_FxCommonEffectSetup[g_FxCommonRoomVariant].motionIndices[2], Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &g_FxCommonCameraTarget, &sampleExtra);
-        D_8019C04C += 0x80;
+    if (g_FxCommonReplayCamera == 1) {
+        FxCommon_SamplePath(g_FxCommonCameraPathPosition, g_FxCommonEffectSetup[g_FxCommonRoomVariant].motionIndices[3], Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &g_FxCommonCameraPosition, &sampleExtra);
+        FxCommon_SamplePath(g_FxCommonCameraPathPosition, g_FxCommonEffectSetup[g_FxCommonRoomVariant].motionIndices[2], Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &g_FxCommonCameraTarget, &sampleExtra);
+        g_FxCommonCameraPathPosition += 0x80;
     }
-    if (D_8019C034 == 0xA) {
-        D_8019C030 += 1;
-        FxCommon_SamplePath(D_8019C04C, 0x4E, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &g_FxCommonCameraPosition, &sampleExtra);
-        FxCommon_SamplePath(D_8019C04C, 0x4F, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &g_FxCommonCameraTarget, &sampleExtra);
-        D_8019C04C += 0x10;
-        if ((s16) D_8019C030 == 0x4B) {
-            D_8019C0C4 = FxCommon_SwitchResource(0xB, 0U);
-            D_8019C0C8 = 0;
+    if (g_FxCommonViewMode == 0xA) {
+        g_FxCommonDemoFrame += 1;
+        FxCommon_SamplePath(g_FxCommonCameraPathPosition, 0x4E, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &g_FxCommonCameraPosition, &sampleExtra);
+        FxCommon_SamplePath(g_FxCommonCameraPathPosition, 0x4F, Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &g_FxCommonCameraTarget, &sampleExtra);
+        g_FxCommonCameraPathPosition += 0x10;
+        if ((s16) g_FxCommonDemoFrame == 0x4B) {
+            g_FxCommonDemoResource = FxCommon_SwitchResource(0xB, 0U);
+            g_FxCommonDemoResourceTicks = 0;
         }
-        if ((s16)D_8019C030 == 0x11D) {
+        if ((s16)g_FxCommonDemoFrame == 0x11D) {
             FxCommon_SwitchResource(0xE, 1U);
         }
-        if ((s16)D_8019C030 == 0x13B) {
-            D_8019C0C4 = FxCommon_SwitchResource(0xC, 0U);
-            D_8019C0C8 = 0;
+        if ((s16)g_FxCommonDemoFrame == 0x13B) {
+            g_FxCommonDemoResource = FxCommon_SwitchResource(0xC, 0U);
+            g_FxCommonDemoResourceTicks = 0;
         }
-        if ((s16)D_8019C030 == 0x20D) {
+        if ((s16)g_FxCommonDemoFrame == 0x20D) {
             FxCommon_SwitchResource(0xE, 1U);
         }
-        if ((s16)D_8019C030 == 0x22B) {
-            D_8019C0C4 = FxCommon_SwitchResource(0xD, 0U);
-            D_8019C0C8 = 0;
+        if ((s16)g_FxCommonDemoFrame == 0x22B) {
+            g_FxCommonDemoResource = FxCommon_SwitchResource(0xD, 0U);
+            g_FxCommonDemoResourceTicks = 0;
         }
-        if ((s16)D_8019C030 == 0x2FD) {
+        if ((s16)g_FxCommonDemoFrame == 0x2FD) {
             FxCommon_SwitchResource(0xE, 1U);
         }
-        if ((s16)D_8019C030 == 0x31B) {
-            D_8019C0C4 = FxCommon_SwitchResource(0xE, 0U);
-            D_8019C0C8 = 0;
+        if ((s16)g_FxCommonDemoFrame == 0x31B) {
+            g_FxCommonDemoResource = FxCommon_SwitchResource(0xE, 0U);
+            g_FxCommonDemoResourceTicks = 0;
         }
-        if ((s16)D_8019C030 == 0x3ED) {
+        if ((s16)g_FxCommonDemoFrame == 0x3ED) {
             FxCommon_SwitchResource(0xE, 1U);
         }
-        if ((s16)D_8019C030 == 0x40B) {
-            D_8019C0C4 = FxCommon_SwitchResource(0xE, 1U);
+        if ((s16)g_FxCommonDemoFrame == 0x40B) {
+            g_FxCommonDemoResource = FxCommon_SwitchResource(0xE, 1U);
         }
-        if (D_8019C0C8 == 0) {
-            D_8019C0CD = 0;
-            D_8019C0CC = 0;
+        if (g_FxCommonDemoResourceTicks == 0) {
+            g_FxCommonDemoFadePhase = 0;
+            g_FxCommonDemoShade = 0;
         }
-        if (D_8019C0C8 == 0x18) {
-            D_8019C0CD = 1;
+        if (g_FxCommonDemoResourceTicks == 0x18) {
+            g_FxCommonDemoFadePhase = 1;
         }
-        if (D_8019C0C8 == 0xBA) {
-            D_8019C0CD = 2;
+        if (g_FxCommonDemoResourceTicks == 0xBA) {
+            g_FxCommonDemoFadePhase = 2;
         }
-        D_8019C0C8 += 1;
-        if ((D_8019C0CD == 0) && (D_8019C0CC < 0x78U)) {
-            D_8019C0CC += 5;
+        g_FxCommonDemoResourceTicks += 1;
+        if ((g_FxCommonDemoFadePhase == 0) && (g_FxCommonDemoShade < 0x78U)) {
+            g_FxCommonDemoShade += 5;
         }
-        if ((D_8019C0CD == 2) && (D_8019C0CC >= 0xBU)) {
-            D_8019C0CC -= 5;
+        if ((g_FxCommonDemoFadePhase == 2) && (g_FxCommonDemoShade >= 0xBU)) {
+            g_FxCommonDemoShade -= 5;
         }
-        Menu_SetHighlightColor(D_8019C0C4, D_8019C0CC, D_8019C0CC, D_8019C0CC);
-        resourceTicks = D_8019C0BC + 1;
-        D_8019C0BC = resourceTicks;
+        Menu_SetHighlightColor(g_FxCommonDemoResource, g_FxCommonDemoShade, g_FxCommonDemoShade, g_FxCommonDemoShade);
+        resourceTicks = g_FxCommonDemoTicks + 1;
+        g_FxCommonDemoTicks = resourceTicks;
         if (resourceTicks == 0x4B1) {
-            D_8019C02A = 1;
-            D_8019C026 = 0x10;
-            D_8019CA68 = g_FxCommonRoomVariant;
+            g_FxCommonScreenFade = 1;
+            g_FxCommonExitCountdown = 0x10;
+            g_FxCommonExitVariant = g_FxCommonRoomVariant;
             Akao_Cmd_A9(0x12C, 0);
-            D_8019C0C0 = 1;
+            g_FxCommonDemoExiting = 1;
         }
-        if (D_8019C0BC == 0x41A) {
+        if (g_FxCommonDemoTicks == 0x41A) {
             Akao_Cmd_C1_WithSlot(g_SceneAudioSlot0Handle, 0xDC, 0);
         }
     }
     FxCommon_StepCameraPath();
-    if (D_8019C018 != 0) {
-        D_8019C018 = 0;
-        if (D_8019C01C == 1) {
-            Draw_CloseTextboxPage(D_8019C028);
+    if (g_FxCommonPageChanged != 0) {
+        g_FxCommonPageChanged = 0;
+        if (g_FxCommonPageOpen == 1) {
+            Draw_CloseTextboxPage(g_FxCommonPageId);
         }
         Menu_SetHighlightColor(g_FxCommonEffectSetup[g_FxCommonRoomVariant].value25, 0x80, 0x80, 0x80);
-        if (D_8019C034 != 0xA) {
+        if (g_FxCommonViewMode != 0xA) {
             Render_SetupColorTable(g_FxCommonEffectSetup[g_FxCommonRoomVariant].value25, 3, &resourceResult);
         }
-        D_8019C028 = (s16) g_FxCommonEffectSetup[g_FxCommonRoomVariant].value25;
-        D_8019C01C = 1;
+        g_FxCommonPageId = (s16) g_FxCommonEffectSetup[g_FxCommonRoomVariant].value25;
+        g_FxCommonPageOpen = 1;
     }
     if (g_FxCommonMotionRemaining0 != 0) {
         remaining0 = g_FxCommonMotionRemaining0 - 1;

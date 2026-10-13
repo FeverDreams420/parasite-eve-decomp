@@ -35,26 +35,26 @@ extern u32 D_8009D1F4;
 extern u32 g_FieldPadBits;
 extern s8 g_SceneAudioSlot0Handle;
 extern void *g_AkaoBgmHandle[1];
-extern s32 D_8019C018;
-extern s32 D_8019C01C;
-extern s16 D_8019C024;
-extern s16 D_8019C026;
-extern s16 D_8019C028;
-extern s16 D_8019C02A;
-extern u16 D_8019C030;
+extern s32 g_FxCommonPageChanged;
+extern s32 g_FxCommonPageOpen;
+extern s16 g_FxCommonExitRequested;
+extern s16 g_FxCommonExitCountdown;
+extern s16 g_FxCommonPageId;
+extern s16 g_FxCommonScreenFade;
+extern u16 g_FxCommonDemoFrame;
 extern s16 D_8019C032;
-extern s32 D_8019C038;
-extern s32 D_8019C03C;
-extern s32 D_8019C04C;
-extern s32 D_8019C0BC;
-extern s32 D_8019C0C0;
-extern s16 D_8019C0C4;
-extern s32 D_8019C0C8;
-extern u8 D_8019C0CC;
-extern u8 D_8019C0CD;
+extern s32 g_FxCommonTailPathPosition;
+extern s32 g_FxCommonFlyerPathPosition;
+extern s32 g_FxCommonCameraPathPosition;
+extern s32 g_FxCommonDemoTicks;
+extern s32 g_FxCommonDemoExiting;
+extern s16 g_FxCommonDemoResource;
+extern s32 g_FxCommonDemoResourceTicks;
+extern u8 g_FxCommonDemoShade;
+extern u8 g_FxCommonDemoFadePhase;
 extern s16 D_8019C13C;
 extern s16 D_8019C13E;
-extern s32 D_8019CA68;
+extern s32 g_FxCommonExitVariant;
 
 /* Double-buffered frame: packet buffer and ordering table, then the
  * DRAWENV and DISPENV handed to PutDrawEnv / PutDispEnv. */
@@ -66,7 +66,7 @@ typedef struct FxCommonFrame {
 typedef PsxSignedRect FxCommonRect;
 extern FxCommonFrame g_FxCommonFrames[2];
 extern s32 g_ActiveDrawSlot;
-extern u8 D_8019C00E;
+extern u8 g_FxCommonResetRequested;
 extern s32 D_8019CC14;
 /* Plain views of the camera position and its look-at target. */
 extern FxCommonVec3 g_FxCommonCameraPosition;
@@ -109,7 +109,7 @@ void FxCommon_DrawSceneNodes(void);
 extern s32 g_FxCommonDepthBias;
 extern FxCommonTransformNode *g_FxCommonPathTailNodes[2];
 extern s16 D_8019C0D0[2];
-extern u8 D_801EA264[3];
+extern u8 g_FxCommonFlatColor[3];
 extern void *D_801EA260;
 extern FxCommonTransformNode *g_FxCommonEchoNodes[4];
 void FxCommon_DrawTransformNodeCulled(FxCommonTransformNode *node, FxCommonBuffer *context, u8 pass,

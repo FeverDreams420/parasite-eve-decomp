@@ -12,19 +12,19 @@ void FxCommon_StepCameraPath(void)
     GteShortVector scratch;
     void *lookup;
 
-    if (D_8019C040 > 1) {
-        D_8019C040--;
-        D_8019C041++;
+    if (g_FxCommonCameraPathRemaining > 1) {
+        g_FxCommonCameraPathRemaining--;
+        g_FxCommonCameraPathStep++;
 
         lookup = Draw_GetTimTableEntry(&g_FxCommonTimTable, 2);
-        FxCommon_SamplePath(D_8019C041 << 8, D_8019C042 + 1,
+        FxCommon_SamplePath(g_FxCommonCameraPathStep << 8, g_FxCommonCameraPathIndex + 1,
                        lookup, &point, &scratch);
         g_FxCommonCameraTarget.x = point.x;
         g_FxCommonCameraTarget.y = point.y;
         g_FxCommonCameraTarget.z = point.z;
 
         lookup = Draw_GetTimTableEntry(&g_FxCommonTimTable, 2);
-        FxCommon_SamplePath(D_8019C041 << 8, D_8019C042,
+        FxCommon_SamplePath(g_FxCommonCameraPathStep << 8, g_FxCommonCameraPathIndex,
                        lookup, &point, &scratch);
         g_FxCommonCameraPosition.x = point.x;
         g_FxCommonCameraPosition.y = point.y;
@@ -51,10 +51,10 @@ void FxCommon_InitCameraPath(int index, int unused1, int unused2, int source)
 
     lookup = Draw_GetTimTableEntry(&g_FxCommonTimTable, 2);
     result = FxCommon_SamplePath(source, shortIndex, lookup, &point, &scratch);
-    D_8019C040 = result - 2;
+    g_FxCommonCameraPathRemaining = result - 2;
     g_FxCommonMotionRemaining1 = 0;
-    D_8019C041 = 0;
-    D_8019C042 = savedIndex;
+    g_FxCommonCameraPathStep = 0;
+    g_FxCommonCameraPathIndex = savedIndex;
     g_FxCommonMarkerFade = 0;
     g_FxCommonCameraPosition.x = point.x;
     g_FxCommonCameraPosition.y = point.y;

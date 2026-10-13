@@ -216,7 +216,7 @@ typedef struct FxCommonResourceState {
 } FxCommonResourceState;
 
 extern s16 g_FxCommonMotionBlendFrames;
-extern u8 D_8019BFCC;
+extern u8 g_FxCommonPathWrapped;
 extern GteMatrix D_8018F014;
 extern FxCommonMotionRecord D_8019CAA8[10];
 extern FxCommonMotionLane D_8019CAB0[10];
@@ -238,7 +238,7 @@ extern FxCommonIndexLink g_FxCommonIndexLinks[];
 extern u8 g_Akao3dVolumeMin;
 extern u8 g_Akao3dVolumeMax;
 extern u8 D_8019C1F8;
-extern u8 D_8019C1F0;
+extern u8 g_FxCommonNight;
 extern s16 g_FxCommonMarkerFade;
 extern u32 D_801EA598[];
 extern FxCommonBuffer *g_FxCommonActiveBuffer;

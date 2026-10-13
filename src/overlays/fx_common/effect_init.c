@@ -141,8 +141,8 @@ void FxCommon_InitScene(void)
     FxCommon_SelectRoomVariant();
     FxCommon_InitNodePools();
     FxCommon_InitFadeQuads();
-    SetLightMatrix(&D_8019C11C);
-    SetColorMatrix(&D_8019C0FC);
+    SetLightMatrix(&g_FxCommonLightMatrix);
+    SetColorMatrix(&g_FxCommonColorMatrix);
     SetBackColor(0x40, 0x40, 0x40);
     SetFogNearFar(0x1000, 0x2000, 0x300);
     SetFarColor(0xFF, 0xFF, 0xFF);
@@ -372,14 +372,14 @@ void FxCommon_InitScene(void)
         *yCursor = (s16) (u16)pointList->y;
         pointZ = (u16)pointList->z;
         *zCursor = (s16) pointZ;
-        firstInitialNode = FxCommon_CreateConfiguredNode(&g_FxCommonDefaultNode, *subtypeCursor, *variantCursor, *typeCursor, (void *) g_FxCommonEffectSetup[pointIndex].parameter38, (void *) g_FxCommonEffectSetup[pointIndex].parameter3c, Draw_GetTimTableEntry(&D_8019CE10, 0));
+        firstInitialNode = FxCommon_CreateConfiguredNode(&g_FxCommonDefaultNode, *subtypeCursor, *variantCursor, *typeCursor, (void *) g_FxCommonEffectSetup[pointIndex].parameter38, (void *) g_FxCommonEffectSetup[pointIndex].parameter3c, Draw_GetTimTableEntry(&g_FxCommonModelTable, 0));
         initialSlots[pointIndex] = firstInitialNode;
         firstInitialNode->state[1] = setupCursor->position[0];
         (initialSlots[pointIndex])->state[2] = (s32) *yCursor;
         (initialSlots[pointIndex])->state[3] = (s32) *zCursor;
         initialNode = initialSlots[pointIndex];
         (initialNode)->value2E = (u16) *rotationCursor;
-        initialResource = Draw_GetTimTableEntry(&D_8019CE10, 0);
+        initialResource = Draw_GetTimTableEntry(&g_FxCommonModelTable, 0);
         initialNodeType = *typeCursor;
         initialNodeVariant = *variantCursor;
         initialNodeSubtype = *subtypeCursor;
@@ -401,8 +401,8 @@ void FxCommon_InitScene(void)
         pointList++;
         setupCursor++;
     }
-    nodeResource = Draw_GetTimTableEntry(&D_8019CE10, 0);
-    g_FxCommonRuntime.node0 = FxCommon_CreateBareNode(&g_FxCommonDefaultNode, Draw_GetTimTableEntry(&D_8019CE10, 1));
+    nodeResource = Draw_GetTimTableEntry(&g_FxCommonModelTable, 0);
+    g_FxCommonRuntime.node0 = FxCommon_CreateBareNode(&g_FxCommonDefaultNode, Draw_GetTimTableEntry(&g_FxCommonModelTable, 1));
     D_8019C180 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x51, nodeResource);
     D_8019CDA0 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x28, nodeResource);
     D_8019CDA4 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x29, nodeResource);
@@ -494,25 +494,25 @@ void FxCommon_InitScene(void)
             do {
                 effectRoot = &g_FxCommonDefaultNode;
                 variantOrMotionOffset = variantBase + 0x34;
-                firstNode = FxCommon_CreateConfiguredNode(effectRoot, (s16) nodeSubtype, variantOrMotionOffset, (s16) nodeType, (void *) (u16) *(short *)((u8 *)D_8019C0D4 + tableIndex), (void *) (u16) *(short *)((u8 *)D_8019C0E8 + tableIndex), nodeResource);
-                firstSlot = &D_8019C3B0[D_8019C020];
-                D_8019C3B0[D_8019C020] = firstNode;
+                firstNode = FxCommon_CreateConfiguredNode(effectRoot, (s16) nodeSubtype, variantOrMotionOffset, (s16) nodeType, (void *) (u16) *(short *)((u8 *)g_FxCommonRouteFarDepths + tableIndex), (void *) (u16) *(short *)((u8 *)g_FxCommonRouteNearDepths + tableIndex), nodeResource);
+                firstSlot = &g_FxCommonRouteNodes[g_FxCommonRouteNodeCount];
+                g_FxCommonRouteNodes[g_FxCommonRouteNodeCount] = firstNode;
                 firstNode->state[1] = point->x;
                 yNode = *firstSlot;
                 yNode->state[2] = point->y;
-                D_8019C020 += 1;
+                g_FxCommonRouteNodeCount += 1;
                 (*firstSlot)->state[3] = point->z;
                 secondNode = FxCommon_CreateConfiguredNode(effectRoot, (s16) nodeSubtype, variantOrMotionOffset, (s16) nodeType, (void *)0x7D0, (void *)0x1F4, nodeResource);
-                nodeIndex = D_8019C020;
-                secondSlot = &D_8019C3B0[nodeIndex];
-                D_8019C3B0[nodeIndex] = secondNode;
+                nodeIndex = g_FxCommonRouteNodeCount;
+                secondSlot = &g_FxCommonRouteNodes[nodeIndex];
+                g_FxCommonRouteNodes[nodeIndex] = secondNode;
                 secondNode->state[1] = point->x;
                 (*secondSlot)->state[2] = point->y;
                 nextPointIndex = ++pointIndex;
                 (*secondSlot)->state[3] = point->z;
                 pairedNode = *secondSlot;
                 asm("" : "=r"(nodeIndex), "=r"(point) : "0"(nodeIndex), "1"(point), "r"(pointList), "r"(pointCount), "r"(pairedNode));
-                D_8019C020 = nodeIndex + 1;
+                g_FxCommonRouteNodeCount = nodeIndex + 1;
                 /* Byte view retains the retail ordering after the pool-index store. */
                 *(u16 *)((u8 *)pairedNode + PE1_OFFSETOF(FxCommonNode, value2C)) = (u16) (*(u16 *)((u8 *)pairedNode + PE1_OFFSETOF(FxCommonNode, value2C)) + 0x800);
                 point++;
@@ -540,35 +540,35 @@ void FxCommon_InitScene(void)
         *((s32 *)((u8 *)D_8019CAB0 + variantOrMotionOffset)) = motion.vector.z << 0x10;
         variantOrMotionOffset += 0x10;
     }
-    if (D_8019BFF8 == 1) {
+    if (g_FxCommonAutoPlay == 1) {
         g_FxCommonMarkerFade = 0;
-        D_8019C045 = 1;
-        D_8019C044 = 1;
-        D_8019C048 = 1;
-        g_FxCommonRoomVariant = (s16) D_8019BFFC;
+        g_FxCommonPlayAdvance = 1;
+        g_FxCommonPlaying = 1;
+        g_FxCommonPlayTicks = 1;
+        g_FxCommonRoomVariant = (s16) g_FxCommonAutoVariant;
     }
-    if (D_8019BFF4 == 0) {
+    if (g_FxCommonStartPreset == 0) {
         g_FxCommonRoomVariant = 7;
-        D_8019CC1C = 0;
-        D_8019C045 = 0;
-        D_8019C046 = 0;
-        D_8019C048 = 0;
-        D_8019C044 = 0;
+        g_FxCommonPlayFrame = 0;
+        g_FxCommonPlayAdvance = 0;
+        g_FxCommonReplayCamera = 0;
+        g_FxCommonPlayTicks = 0;
+        g_FxCommonPlaying = 0;
         g_FxCommonMarkerFade = 0;
         D_8019C02E = 0;
-        D_8019C034 = 0xA;
+        g_FxCommonViewMode = 0xA;
         FxCommon_StartCameraMove(7, 0, 0, 0);
         D_8019C00D = 1;
     }
-    if (D_8019BFF4 == 7) {
+    if (g_FxCommonStartPreset == 7) {
         selectedMotion = D_8019C017;
         g_FxCommonRoomVariant = 9;
-        D_8019CC1C = 0;
+        g_FxCommonPlayFrame = 0;
         g_FxCommonMarkerFade = 0;
-        D_8019C045 = 0;
-        D_8019C044 = 1;
-        D_8019C048 = 1;
-        D_8019BFF8 = 1;
+        g_FxCommonPlayAdvance = 0;
+        g_FxCommonPlaying = 1;
+        g_FxCommonPlayTicks = 1;
+        g_FxCommonAutoPlay = 1;
         FxCommon_SamplePath(0, selectedMotion + 1, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion);
         /* Shared volatile is scheduling debt in other callers; this store is ordinary. */
         *(s16 *)&g_FxCommonMotionRemaining0 = 0;
@@ -577,9 +577,9 @@ void FxCommon_InitScene(void)
         g_FxCommonCameraTarget.z = motion.vector.z;
         motionCount = FxCommon_SamplePath(0, selectedMotion, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion) - 2;
         g_FxCommonMotionRemaining1 = 0;
-        D_8019C040 = motionCount;
-        D_8019C041 = 0;
-        D_8019C042 = selectedMotion;
+        g_FxCommonCameraPathRemaining = motionCount;
+        g_FxCommonCameraPathStep = 0;
+        g_FxCommonCameraPathIndex = selectedMotion;
         g_FxCommonMarkerFade = 0;
         g_FxCommonCameraPosition.x = motion.vector.x;
         g_FxCommonCameraPosition.y = motion.vector.y;

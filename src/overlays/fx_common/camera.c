@@ -156,7 +156,7 @@ int FxCommon_SamplePath(u32 position, int index, void *table,
     points++;
     span = count - 2;
     if (span < segment)
-        D_8019BFCC = 1;
+        g_FxCommonPathWrapped = 1;
     segment %= span;
     if (segment < 0)
         segment += count - 2;
@@ -512,16 +512,16 @@ void FxCommon_InitNodePools(void)
 
     i = 0;
     {
-        FxCommonNode *source = D_801EA5E8;
-        FxCommonNode *dest = D_8019CC58;
+        FxCommonNode *source = g_FxCommonListHeadNodes;
+        FxCommonNode *dest = g_FxCommonListTailNodes;
 
         for (; i < 3;) {
-            D_8019CC58[i].previous = source;
+            g_FxCommonListTailNodes[i].previous = source;
             source++;
-            D_801EA5E8[i].next = dest;
+            g_FxCommonListHeadNodes[i].next = dest;
             dest++;
-            D_801EA5E8[i].previous = 0;
-            D_8019CC58[i].next = 0;
+            g_FxCommonListHeadNodes[i].previous = 0;
+            g_FxCommonListTailNodes[i].next = 0;
             i++;
         }
     }
@@ -868,61 +868,61 @@ void FxCommon_SelectRoomVariant(void)
         g_FxCommonRoomVariant = 7;
 
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x80)
-        D_8019BFF4 = 0;
+        g_FxCommonStartPreset = 0;
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x208)
-        D_8019BFF4 = 7;
+        g_FxCommonStartPreset = 7;
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xB8) {
-        D_8019C000 = 1;
-        D_8019C004 = 9;
+        g_FxCommonConfirmExit = 1;
+        g_FxCommonConfirmExitVariant = 9;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xC0) {
-        D_8019BFF8 = 1;
-        D_8019BFFC = 9;
+        g_FxCommonAutoPlay = 1;
+        g_FxCommonAutoVariant = 9;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xD0) {
-        D_8019C000 = 1;
-        D_8019C004 = 7;
+        g_FxCommonConfirmExit = 1;
+        g_FxCommonConfirmExitVariant = 7;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xD8) {
-        D_8019BFF8 = 1;
-        D_8019BFFC = 7;
+        g_FxCommonAutoPlay = 1;
+        g_FxCommonAutoVariant = 7;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xE0) {
-        D_8019C000 = 1;
-        D_8019C004 = 8;
+        g_FxCommonConfirmExit = 1;
+        g_FxCommonConfirmExitVariant = 8;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xE4) {
-        D_8019BFF8 = 1;
-        D_8019BFFC = 8;
+        g_FxCommonAutoPlay = 1;
+        g_FxCommonAutoVariant = 8;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x148) {
-        D_8019C000 = 1;
-        D_8019C004 = 9;
+        g_FxCommonConfirmExit = 1;
+        g_FxCommonConfirmExitVariant = 9;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x160) {
-        D_8019BFF8 = 1;
-        D_8019BFFC = 9;
+        g_FxCommonAutoPlay = 1;
+        g_FxCommonAutoVariant = 9;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x178) {
-        D_8019C000 = 1;
-        D_8019C004 = 7;
+        g_FxCommonConfirmExit = 1;
+        g_FxCommonConfirmExitVariant = 7;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x180) {
-        D_8019BFF8 = 1;
-        D_8019BFFC = 7;
+        g_FxCommonAutoPlay = 1;
+        g_FxCommonAutoVariant = 7;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x1C0) {
-        D_8019C000 = 1;
-        D_8019C004 = 4;
+        g_FxCommonConfirmExit = 1;
+        g_FxCommonConfirmExitVariant = 4;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x1C8) {
-        D_8019BFF8 = 1;
-        D_8019BFFC = 4;
+        g_FxCommonAutoPlay = 1;
+        g_FxCommonAutoVariant = 4;
     }
     if (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] & 0x2000)
-        D_8019C1F0 = 1;
+        g_FxCommonNight = 1;
     else
-        D_8019C1F0 = 0;
+        g_FxCommonNight = 0;
     FxCommon_LoadEffectSectors();
 }
 
@@ -943,13 +943,13 @@ first:
         if (result == -1) goto first;
     }
 
-    if (!(D_8019C1F0)) {
+    if (!(g_FxCommonNight)) {
 
 second:
     range = D_80093174;
     do {
         result = CdRom_ReadSectorsFromLba(resource->data + range[0],
-                               &D_8019CE10, range[1] - range[0]);
+                               &g_FxCommonModelTable, range[1] - range[0]);
     } while (result == -1);
     for (;;) {
         result = CdRom_PollReady();
@@ -962,7 +962,7 @@ third:
     range = D_80093172;
     do {
         result = CdRom_ReadSectorsFromLba(resource->data + range[0],
-                               &D_8019CE10, range[1] - range[0]);
+                               &g_FxCommonModelTable, range[1] - range[0]);
     } while (result == -1);
     for (;;) {
         result = CdRom_PollReady();
