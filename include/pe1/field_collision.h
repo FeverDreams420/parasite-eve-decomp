@@ -148,7 +148,7 @@ PE1_STATIC_ASSERT(sizeof(CollisionTriangleXYZ) == 28, collision_triangle_xyz_siz
  *   recurses over the child and every entity sharing the same +0x18C parent,
  *   so a whole grouped formation reverts together.
  *   The per-frame actor contact pass Scene_UpdateEntityPositions walks every
- *   pair in the entity list D_8009D20C (skipping actors with flags(+0x98)&0x20),
+ *   pair in the entity list g_FieldActorListHead (skipping actors with flags(+0x98)&0x20),
  *   tests body spheres and x/z cylinders, and rolls back actors that move into
  *   each other through Entity_RollbackPositionHierarchy.
  *

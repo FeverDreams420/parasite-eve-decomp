@@ -1201,7 +1201,7 @@ FieldActor **func_80199B0C(s32 arg0, s32 arg1, s32 arg2) {
     FieldActor *node;
 
     slot = &D_8019A774;
-    if ((*slot = D_8009D20C) != 0) {
+    if ((*slot = g_FieldActorListHead) != 0) {
         iter = slot;
         while (1) {
             node = D_8019A774;
@@ -1252,7 +1252,7 @@ GteShortVector *func_80199CA4(s32 arg0, s32 arg1, s32 arg2) {
     FieldActor *node;
 
     slot = &D_8019A7F8;
-    if ((*slot = D_8009D20C) != 0) {
+    if ((*slot = g_FieldActorListHead) != 0) {
         iter = slot;
         while (1) {
             node = D_8019A7F8;

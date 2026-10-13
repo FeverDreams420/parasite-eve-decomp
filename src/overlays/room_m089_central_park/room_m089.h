@@ -9,7 +9,7 @@
 
 #include "pe1/gte_sine_table.h"
 
-extern struct FieldActor *D_8009D20C;
+extern struct FieldActor *g_FieldActorListHead;
 
 extern short D_80194160;
 extern short D_80194162;

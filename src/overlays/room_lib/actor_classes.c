@@ -73,7 +73,7 @@ int RoomLib_ConfigureHandlerD(RoomEnt *o, int query, unsigned int op, int arg0, 
         }
         break;
     case 0:
-        state->targetLink = (RoomLink *)D_8009D20C;
+        state->targetLink = (RoomLink *)g_FieldActorListHead;
         while (state->targetLink != 0) {
             node = (FieldActorNode *)state->targetLink;
             if (node->b0C == arg0 && node->b0D == arg1 &&
@@ -141,7 +141,7 @@ int RoomLib_ConfigureHandlerD(RoomEnt *o, int query, unsigned int op, int arg0, 
         state->range[2] = arg2;
         break;
     case 21:
-        state->secondaryLink = (RoomLink *)D_8009D20C;
+        state->secondaryLink = (RoomLink *)g_FieldActorListHead;
         while (state->secondaryLink != 0) {
             node = (FieldActorNode *)state->secondaryLink;
             if (node->b0C == arg0 && node->b0D == arg1 &&
@@ -561,7 +561,7 @@ int RoomLib_ConfigureHandlerE(RoomEnt *o, int query, unsigned int op, int arg0, 
         }
         break;
     case 0:
-        state->targetLink = (RoomLink *)D_8009D20C;
+        state->targetLink = (RoomLink *)g_FieldActorListHead;
         while (state->targetLink != 0) {
             node = (FieldActorNode *)state->targetLink;
             if (node->b0C == arg0 && node->b0D == arg1 &&
@@ -597,7 +597,7 @@ int RoomLib_ConfigureHandlerE(RoomEnt *o, int query, unsigned int op, int arg0, 
         state->eased = arg1;
         break;
     case 21:
-        state->secondaryLink = (RoomLink *)D_8009D20C;
+        state->secondaryLink = (RoomLink *)g_FieldActorListHead;
         while (state->secondaryLink != 0) {
             node = (FieldActorNode *)state->secondaryLink;
             if (node->b0C == arg0 && node->b0D == arg1 &&
@@ -955,7 +955,7 @@ int RoomLib_ConfigureHandlerB(RoomEnt *o, int query, unsigned int op, int arg0, 
         }
         break;
     case 0:
-        state->targetLink = (RoomLink *)D_8009D20C;
+        state->targetLink = (RoomLink *)g_FieldActorListHead;
         while (state->targetLink != 0) {
             node = (FieldActorNode *)state->targetLink;
             if (node->b0C == arg0 && node->b0D == arg1 &&
@@ -977,7 +977,7 @@ int RoomLib_ConfigureHandlerB(RoomEnt *o, int query, unsigned int op, int arg0, 
         state->targetLink = 0;
         break;
     case 21:
-        state->secondaryLink = (RoomLink *)D_8009D20C;
+        state->secondaryLink = (RoomLink *)g_FieldActorListHead;
         while (state->secondaryLink != 0) {
             node = (FieldActorNode *)state->secondaryLink;
             if (node->b0C == arg0 && node->b0D == arg1 &&
@@ -1383,7 +1383,7 @@ int RoomLib_ConfigureHandlerC(RoomEnt *o, int query, unsigned int op, int arg0, 
         }
         break;
     case 0:
-        state->targetLink = (RoomLink *)D_8009D20C;
+        state->targetLink = (RoomLink *)g_FieldActorListHead;
         while (state->targetLink != 0) {
             node = (FieldActorNode *)state->targetLink;
             if (node->b0C == arg0 && node->b0D == arg1 &&
@@ -1445,7 +1445,7 @@ int RoomLib_ConfigureHandlerC(RoomEnt *o, int query, unsigned int op, int arg0, 
         }
         break;
     case 21:
-        state->secondaryLink = (RoomLink *)D_8009D20C;
+        state->secondaryLink = (RoomLink *)g_FieldActorListHead;
         while (state->secondaryLink != 0) {
             node = (FieldActorNode *)state->secondaryLink;
             if (node->b0C == arg0 && node->b0D == arg1 &&

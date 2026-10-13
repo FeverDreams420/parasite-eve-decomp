@@ -75,8 +75,8 @@ case4:
     return 0;
 
 case0:
-    ((RoomFloorWalkerObject *)o)->state.leader = (RoomLink *)D_8009D20C;
-    if (D_8009D20C != 0) {
+    ((RoomFloorWalkerObject *)o)->state.leader = (RoomLink *)g_FieldActorListHead;
+    if (g_FieldActorListHead != 0) {
         do {
             FieldActorNode *cur = (FieldActorNode *)p->leader;
             if (cur->b0C == arg0 && cur->b0D == arg1) {

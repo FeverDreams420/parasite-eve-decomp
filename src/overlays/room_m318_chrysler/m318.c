@@ -31,7 +31,7 @@ int printf(const char *format, ...);
 FieldActor *func_80192560(int type_id, int sub_id, s16 *position) {
     FieldActor *actor;
 
-    actor = D_8009D20C;
+    actor = g_FieldActorListHead;
     while (actor != 0) {
         if ((actor != ((FieldActor *)D_8009D254)) && (actor->state != 0) &&
             (actor->state->control10.command_value > 0) &&

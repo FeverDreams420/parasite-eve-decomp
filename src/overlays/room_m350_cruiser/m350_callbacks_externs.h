@@ -35,7 +35,7 @@ int func_80199148(int event, RoomM350FadingParticle *object);
 extern int rand(void),Inv_ScrambleGrid(void),rcos(int),rsin(int);
 extern RenderColor D_8019A738, D_8019A734;
 extern int rand(void);
-extern FieldActor *D_8009D20C;
+extern FieldActor *g_FieldActorListHead;
 extern void D_8019A410;
 extern short D_8019A82C;
 extern unsigned char D_8019A831;

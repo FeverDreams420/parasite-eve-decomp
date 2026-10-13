@@ -1,6 +1,6 @@
 #ifndef PE1_EXT_M318
 #define PE1_EXT_M318
-extern FieldActor *D_8009D20C;
+extern FieldActor *g_FieldActorListHead;
 extern struct BattleEntity *D_8009D254;
 extern char D_8018F1CC[];
 extern char D_80199464[];

@@ -53,7 +53,7 @@ int RoomEffect_GrabConfigure(char *obj, int arg1, int op, int arg3, int arg4) {
         return 0;
     }
 
-    next = D_8009D20C;
+    next = g_FieldActorListHead;
     ((RoomMotionTrigger *)obj)->source_actor = next;
     if (next != 0) {
         do {

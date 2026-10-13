@@ -426,7 +426,7 @@ extern short D_800966EE[];
 #include "pe1/gte_sine_table.h"
 extern struct BattleEntity *D_8009D254;
 struct FieldActorNode;
-extern struct FieldActor *D_8009D20C;
+extern struct FieldActor *g_FieldActorListHead;
 extern int RoomLib_ResetAndSignal_801914B0(RoomEnt *obj);
 extern int RoomLib_Set4ClearSignal_80192510(RoomEnt *obj);
 extern void RoomLib_ArmWindowA_80190D0C(RoomEnt *obj);

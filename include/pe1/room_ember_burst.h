@@ -33,7 +33,7 @@ typedef struct RoomEmberBurstParams {
 
 typedef RoomOrbitTrailPoolChannel RoomEmberBurstChannel;
 
-extern FieldActor *D_8009D20C;
+extern FieldActor *g_FieldActorListHead;
 extern char D_8018F1CC[];
 extern RenderColor D_8018F200;
 extern RenderColor D_8018F204;
@@ -172,7 +172,7 @@ extern int func_80192DA0(int mode, volatile RoomSpiralDropSparkRecord *spark);
 static inline void RoomEffect_AttachToActor(int subId, int typeId, void *anchor) {
     FieldActor *actor;
 
-    for (actor = D_8009D20C; actor != 0; actor = actor->next) {
+    for (actor = g_FieldActorListHead; actor != 0; actor = actor->next) {
         if (actor != g_PlayerEntity && actor->state != 0 &&
             actor->state->control10.command_value > 0 &&
             actor->sub_id == subId && actor->type_id == typeId) {

@@ -51,7 +51,7 @@ extern int g_RoomGrabSlot;
 extern int RoomLib_PairA;
 extern int RoomLib_PairB;
 
-extern FieldActor *D_8009D20C;
+extern FieldActor *g_FieldActorListHead;
 
 int RoomEffect_GrabNop0(void);
 int RoomEffect_GrabInit(RoomMotionTrigger *obj);
