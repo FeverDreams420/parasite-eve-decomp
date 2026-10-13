@@ -618,7 +618,7 @@ void Battle_DrawSpellName(void) {
         u8 *q508;
         workValue = 0x130;
         __asm__ __volatile__("" :: "r"(workValue));
-        q508 = D_8009E508;
+        q508 = (u8 *)&g_BattleRemainingActionSprites[0][0].sprite;
         {
             RenderSpritePacket *pa;
             u8 e0a;
@@ -656,7 +656,7 @@ void Battle_DrawSpellName(void) {
             q508 -= 8;
             eo = cD * 0x118;
             cD = cD * 4;
-            *(s16 *)(D_8009E516 + eo) = clut;
+            *(s16 *)(g_BattleRemainingActionClut + eo) = clut;
             __asm__ __volatile__("");
             {
                 BattleStatusPrimAddress entry;
@@ -677,7 +677,7 @@ void Battle_DrawSpellName(void) {
     if (g_BattleRemainingActions != 0) {
         u8 e0 = 0xE0;
         u8 *e5m8;
-        e508 = D_8009E508;
+        e508 = (u8 *)&g_BattleRemainingActionSprites[0][0].sprite;
         e5m8 = e508 - 8;
         do {
             s32 s0;
@@ -747,7 +747,7 @@ void Battle_DrawSpellName(void) {
                 workValue = g_ActiveDrawSlotRecord.slot;
                 packetOffset = workValue * 0x118;
                 packetOffset = s0 + packetOffset;
-                                *(s16 *)(D_8009E516 + packetOffset) = clut;
+                                *(s16 *)(g_BattleRemainingActionClut + packetOffset) = clut;
                 __asm__ __volatile__("");
             }
             {
@@ -814,11 +814,11 @@ void Battle_DrawStatusSymbol(s8 which) {
     index = which * 2;
     a = first.data.bytes + index;
     b = second.data.bytes + index;
-    packetBase = D_8009E930;
+    packetBase = (u8 *)&g_BattleStatusSymbolSprites[0].sprite;
     thirdBase = third.data.bytes;
-    D_8009E93C[g_ActiveDrawSlot * 28] = a[0];
+    g_BattleStatusSymbolSpriteU[g_ActiveDrawSlot * 28] = a[0];
     c = thirdBase + index;
-    D_8009E93D[g_ActiveDrawSlot * 28] = a[1];
+    g_BattleStatusSymbolSpriteV[g_ActiveDrawSlot * 28] = a[1];
     slot = g_ActiveDrawSlot;
     packetOffset = slot * 28;
     packet = packetBase + packetOffset;

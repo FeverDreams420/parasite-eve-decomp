@@ -80,7 +80,7 @@ class RenderSetFontGlyphByCodeTests(unittest.TestCase):
                 "g_FontActiveGlyphTable = 0x8009ECD8;\n"
                 "D_800B0DD8 = 0x800B0DD8;\n"
                 "D_800B0E6C = 0x800B0E6C;\n"
-                "D_80093176 = 0x80093176;\n"
+                "g_PeImageSectorTable = 0x800930D8;\n"
                 "CdRom_ReadSectorsFromLba = 0x8006E6A8;\n"
                 "CdRom_PollReady = 0x8006E7E8;\n"
                 "rand = 0x80071A54;\n"

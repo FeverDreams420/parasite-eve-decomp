@@ -120,7 +120,7 @@ dispatch:
 
 void LIBDS_DSSYS_1_text_A9C(int event, u8 *inResult) {
     u8 *result = inResult;
-    register u32 *command = &D_8009B578;
+    register u32 *command = &g_DsReadStatusBlock.command;
     register int twelve;
     register int old;
     register int two;

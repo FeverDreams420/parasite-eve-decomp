@@ -69,7 +69,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FontGlyphLoadState, buffer) == 0x94,
 extern FontGlyphSelectionState g_FontSelectionState;
 extern FontGlyphTable g_FontActiveGlyphTable;
 extern u8 *D_800B0E6C;
-extern u16 D_80093176[2];
+extern u16 g_PeImageSectorTable[];
 
 /* Historical name: returns a slot index, or 0xFF; performs no drawing.
  * A null table selects the current one (g_FontSelectionState.table). */

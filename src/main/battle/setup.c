@@ -24,9 +24,6 @@
 s8 g_BattleHaltTimer;
 u16 g_BattleHitActionPending;
 u8 g_BattleActionAnimModes[4];
-u8 D_8009CE39;
-u8 D_8009CE3A;
-u8 D_8009CE3B;
 s8 g_BattleTargetCycleMode;
 u8 g_BattleSlotCancelPending;
 u8 g_BattleRemainingActions;
@@ -196,11 +193,11 @@ void Battle_Init(void)
     g_BattleRemainingActions = config1->turnWord & 0xF;
     g_BattleActionAnimModes[0] = config2->animMode[0];
     config3 = *action;
-    D_8009CE39 = config3->animMode[1];
+    g_BattleActionAnimModes[1] = config3->animMode[1];
     config4 = *action;
-    D_8009CE3A = config4->animMode[2];
+    g_BattleActionAnimModes[2] = config4->animMode[2];
     config5 = *action;
-    D_8009CE3B = config5->animMode[3];
+    g_BattleActionAnimModes[3] = config5->animMode[3];
 
     Draw_ResetTextboxes();
     D_8009D1CE = 0;

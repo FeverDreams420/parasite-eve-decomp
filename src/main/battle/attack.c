@@ -20,8 +20,6 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 u8 g_BattleActionAnimModes[4];
-u8 D_8009CE39;
-u8 D_8009CE3A;
 u8 g_BattleActionQueueCount;
 u8 g_BattleActionIndex;
 u8 g_BattleRemainingActions;
@@ -123,8 +121,8 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
             break;
         if (g_BattleActionAnimModes[0] != 0) {
             g_BattleActionAnimModes[0]--;
-        } else if (D_8009CE39 != 0) {
-            D_8009CE39--;
+        } else if (g_BattleActionAnimModes[1] != 0) {
+            g_BattleActionAnimModes[1]--;
         } else {
             goto ready;
         }
@@ -134,8 +132,8 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         }
         actorField = &turnSlot->actor;
         g_BattleHitTimer = 0;
-        { u8 animMode = g_ActiveActor->action->animMode[1]; D_8009CE39 = animMode; }
         { height = (*actorField)->renderObject.target_y; angle = height - g_BattlePlayerAimHeight; }
+        { u8 animMode = g_ActiveActor->action->animMode[1]; g_BattleActionAnimModes[1] = animMode; }
         { facingAngle = ratan2(angle, Battle_CalcDistToPlayer(turnSlot->actor, D_8009D254));
         if (facingAngle < -0xAB) direction = 0; else { predicate = facingAngle < 0xE4; if (predicate) direction = 1; else direction = 2; } }
         Entity_SetActionMode(D_8009D254, *(direction + g_ActiveActor->followUpAngleActionModes));
@@ -203,7 +201,7 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
                 D_8009D254->entityFlags |= 0x100; }
               { register BattleAction *postAction = postActor->action;
                 { u32 turnWord = postAction->turnWord;
-                D_8009CE39 += D_8009CE3A;
+                g_BattleActionAnimModes[1] += g_BattleActionAnimModes[2];
                 g_BattleRemainingActions = turnWord & 0xF; } } }
             break;
         }

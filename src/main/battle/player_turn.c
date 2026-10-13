@@ -9,9 +9,11 @@
 #include "pe1/gte_types.h"
 
 /* COMMON supplies the small-data sizes of the turn queue words to MASPSX;
- * every other word stays absolute. */
-u8 D_8009CE39;
-u8 D_8009CE3B;
+ * every other word stays absolute. g_BattleActionAnimMode1/3 are one-byte
+ * views of g_BattleActionAnimModes[1] and [3]: Battle_UpdatePlayerTurn
+ * compiles to retail only with the scalar symbols. */
+u8 g_BattleActionAnimMode1;
+u8 g_BattleActionAnimMode3;
 u8 g_BattleActionQueueCount;
 u8 g_BattleActionIndex;
 int g_BattleAttackPmSlot;
@@ -60,10 +62,10 @@ void Battle_UpdatePlayerTurn(void)
         {
             if (slot->actor != g_BattleActionQueue[g_BattleActionIndex + 1].actor ||
                 CORE_HEALTH(slot->actor) <= 0) {
-                u8 count = D_8009CE39;
-                u8 delta = D_8009CE3B;
+                u8 count = g_BattleActionAnimMode1;
+                u8 delta = g_BattleActionAnimMode3;
                 BattleAction *effectAction = g_ActiveActor->action;
-                D_8009CE39 = count + delta;
+                g_BattleActionAnimMode1 = count + delta;
                 asm volatile("" : : );
                 if (effectAction->attackWord & 0x3FF)
                     Battle_StartEnemyAttackEffect(slot->actor);

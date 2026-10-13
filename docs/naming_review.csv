@@ -13,7 +13,7 @@ address,old_name,name,review,proposer_confidence,evidence
 0x80010928,D_80010928,g_AyaBattleStateInitial,ok,verified,Battle_SaveAyaState (src/main/battle/encounter.c:1835) copies this rodata template into g_AyaBattleState.
 0x80010998,D_80010998,g_SavedBattleStateTailInitial,ok,verified,Battle_SaveAyaState (encounter.c:1836) copies it into g_SavedBattleStateTail.
 0x800109B0,D_800109B0,g_EnemyCombatantInitial,ok,verified,Entity_AllocSlot (src/main/battle/enemy_slots.c:4) copies it into D_800A5D58[index].combatant for a freshly allocated slot.
-0x80010DFC,D_80010DFC,g_BattleStatusSymbolUv,ok,verified,Battle_DrawStatusSymbol (src/main/battle/status_hud.c:810) indexes it by status*2 and stores the pair into the packet u/v bytes (D_8009E93C/D).
+0x80010DFC,D_80010DFC,g_BattleStatusSymbolUv,ok,verified,Battle_DrawStatusSymbol (src/main/battle/status_hud.c:810) indexes it by status*2 and stores the pair into the packet u/v bytes (g_BattleStatusSymbolSpriteU/D).
 0x80010E10,D_80010E10,g_BattleStatusSymbolSize,ok,verified,status_hud.c:811 indexes it by status*2 and stores the pair as RenderSpritePacket width and height.
 0x80010E24,D_80010E24,g_BattleStatusSymbolOffset,ok,verified,status_hud.c:812 indexes it by status*2 and adds the pair to the HUD slot x and y.
 0x80010E94,D_80010E94,g_ErrorSeverityWarningName,ok,verified,Rodata string directly before g_ErrorSeverityFatalName (0x80010EA0) and referenced from the severity name table in dtail_gp_pre_s016.data.s:1151.
@@ -170,7 +170,7 @@ address,old_name,name,review,proposer_confidence,evidence
 0x800957EC,D_800957EC,g_GpuMoveImagePacket,ok,verified,"MoveImage2 fills D_800957EC[0..2] with source rect, destination x/y and size, and MoveImage hands the array to the GPU command routine."
 0x800957F8,D_800957F8,g_GpuOtTerminatorTarget,ok,likely,ClearOTag and ClearOTagR build the terminator word as the 24-bit address of D_800957F8 combined with 0x04000000 and store it in D_8009580C.
 0x8009580C,D_8009580C,g_GpuOtTerminatorWord,ok,verified,ClearOTag and ClearOTagR store the terminator link word there and point the last OT entry at it.
-0x80095820,D_80095820,g_GpuHRangeTable,ok,verified,"PutDispEnv indexes D_80095820[(video*5+widthIndex)*2] as the horizontal start and D_80095822 as the end (values 590/3150, 600/3160, ...)."
+0x80095820,D_80095820,g_GpuHRangeTable,ok,verified,"PutDispEnv indexes D_80095820[(video*5+widthIndex)*2] as the horizontal start and g_GpuHRangeEndTable as the end (values 590/3150, 600/3160, ...)."
 0x80095848,D_80095848,g_GpuDotClockDividers,ok,verified,"PutDispEnv multiplies screen.x by D_80095848[widthIndex] and adds 4*D_80095848[index] as the minimum span; bytes 10,8,7,5,4 are the GPU dot-clock dividers for 256/320/384/512/640 widths."
 0x80095864,D_80095864,g_GpuOtDmaMadrPtr,ok,verified,Holds 0x1F8010E0 (DMA6 MADR); Gpu_SendOtChain writes the last table address through it.
 0x80095868,D_80095868,g_GpuOtDmaBcrPtr,ok,verified,Holds 0x1F8010E4 (DMA6 BCR); Gpu_SendOtChain writes the entry count through it.

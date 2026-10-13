@@ -148,7 +148,7 @@ void Battle_SetupPlayerPalette(void) {
     Battle_FlushScriptSounds();
     g_EntityInstanceCounter = 0;
     g_BattleLiveEnemyCount = 0;
-    D_8009D254->actionCheckFn = (void *)D_800915E0[0];
+    D_8009D254->actionCheckFn = (void *)g_FieldActorTypeCallbacks[0].contact;
     g_GameStateFlags &= -3;
     D_8009D2E8 &= -0x11;
     flags = &g_GameState.story_day_flags;

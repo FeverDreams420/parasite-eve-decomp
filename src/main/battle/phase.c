@@ -30,9 +30,6 @@ int Battle_StepCharacterAction(BattleInitSlot *slot);
 /* COMMON supplies the small-data sizes of the turn queue words to MASPSX;
  * every other word stays absolute. */
 u8 g_BattleActionAnimModes[4];
-u8 D_8009CE39;
-u8 D_8009CE3A;
-u8 D_8009CE3B;
 u8 g_BattleActionQueueCount;
 u8 g_BattleActionIndex;
 s32 g_BattleAilmentPmSlot;
@@ -276,10 +273,10 @@ block_39:
                 s32 *stateFlags = &g_ActiveActor->stateFlags;
                 *stateFlags &= 0xFFDFFFFF;
             }
-            D_8009CE39 = 0x58;
+            g_BattleActionAnimModes[1] = 0x58;
             g_BattleActionAnimModes[0] = 0;
-            D_8009CE3A = 0x18;
-            D_8009CE3B = 0;
+            g_BattleActionAnimModes[2] = 0x18;
+            g_BattleActionAnimModes[3] = 0;
         } else {
             Entity_SetActionMode(((void *)D_8009D254), 0xFU);
         }

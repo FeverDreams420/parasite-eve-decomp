@@ -135,7 +135,6 @@ extern RenderPagedSpritePacket g_BattleHpLabels[2];
 extern RenderPagedSpritePacket g_BattleRemainingActionSprites[2][10];
 extern RenderPagedSpritePacket g_BattleStatusValueMarkers[2];
 extern RenderPagedSpritePacket g_BattleStatusSymbolSprites[2];
-extern u8 D_8009E976[];
 /* The sprites of a paged-sprite array seen from the first sprite: each is
  * followed by the texture-page command of the next packet. The view keeps
  * the sprite base (array + 8) in its own register, as Battle_DrawHPBar's

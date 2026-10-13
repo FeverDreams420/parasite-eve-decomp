@@ -14,8 +14,9 @@ class CdReadStepTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_timeout_and_completion_state(self):
         source = host_unit("DS_read_cbdata")
-        source = source.replace("extern int D_8009B6B0[];",
-            "static int words[7];\n#define D_8009B6B0 (words + 1)")
+        source = source.replace("int *state = &g_CdReadProgress.destination;",
+            "int *state = words + 1;")
+        source = "static int words[7];\n" + source
         harness = source + r'''
 #include <assert.h>
 #include <stdint.h>

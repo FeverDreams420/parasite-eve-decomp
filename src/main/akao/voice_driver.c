@@ -1194,7 +1194,7 @@ void Akao_SetVoiceKeyOff(AkaoTrack *voice, u32 voice_mask, int index) {
             }
             break;
         default:
-            voice->volume_right = (unsigned int)(base_volume * D_8009B9F8[0]) >> 15;
+            voice->volume_right = (unsigned int)(base_volume * g_AkaoPanVolumeTable[0x80]) >> 15;
             voice->volume_left = voice->volume_right;
             break;
         }
@@ -1219,7 +1219,7 @@ void Akao_SetVoiceKeyOff(AkaoTrack *voice, u32 voice_mask, int index) {
             }
             break;
         default:
-            voice->volume_right = (unsigned int)(base_volume * D_8009B9F8[0]) >> 15;
+            voice->volume_right = (unsigned int)(base_volume * g_AkaoPanVolumeTable[0x80]) >> 15;
             voice->volume_left = voice->volume_right;
             break;
         }
@@ -1358,7 +1358,7 @@ void Akao_SetVoiceKeyOn(AkaoTrack *voice, u32 voice_mask) {
             }
             break;
         default:
-            voice->volume_right = (unsigned int)(base_volume * D_8009B9F8[0]) >> 15;
+            voice->volume_right = (unsigned int)(base_volume * g_AkaoPanVolumeTable[0x80]) >> 15;
             voice->volume_left = voice->volume_right;
             break;
         }

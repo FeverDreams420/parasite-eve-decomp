@@ -48,7 +48,7 @@ class RenderLoadFontGlyphTests(unittest.TestCase):
             subprocess.run(["tools/scripts/cc.sh", "src/main/render/font_load.c", str(obj)],
                            cwd=ROOT, check=True, capture_output=True)
             (work / "glyph.ld").write_text(
-                "D_80093176 = 0x80093176;\n"
+                "g_PeImageSectorTable = 0x800930D8;\n"
                 "g_FontActiveGlyphTable = 0x8009ECD8;\n"
                 "D_800B0DD8 = 0x800B0DD8;\n"
                 "D_800B0E6C = 0x800B0E6C;\n"

@@ -119,7 +119,7 @@ DISPENV *PutDispEnv(DISPENV *env) {
             int table = (video * 5 + index) * 2;
             register int base = g_GpuHRangeTable[table];
             register int screenWidth = e->screen.w;
-            span = D_80095822[table] - base;
+            span = g_GpuHRangeEndTable[table] - base;
             hstart = base + product;
             if (screenWidth)
                 span = (span * screenWidth) >> 8;

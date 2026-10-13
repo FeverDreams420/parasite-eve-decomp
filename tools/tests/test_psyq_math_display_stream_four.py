@@ -42,7 +42,7 @@ CASES = [('libmath/divdf3',
   'D_800957C0 = 0x800957C0;\n'
   'g_GpuDotClockDividers = 0x80095848;\n'
   'g_GpuHRangeTable = 0x80095820;\n'
-  'D_80095822 = 0x80095822;\n'
+  'g_GpuHRangeEndTable = 0x80095822;\n'
   'g_GpuActiveDispEnv = 0x800957B8;\n'
   'memcpy = 0x80071A34;\n'
   'SECTIONS { .text 0x800755f0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) '
