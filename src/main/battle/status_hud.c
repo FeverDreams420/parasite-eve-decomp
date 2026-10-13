@@ -1010,27 +1010,27 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
         register s32 y asm("$7");
         timer = panel->timer;
         y = panel->y;
-        *(D_800B01CC + ((slotIndex * 0x8C) + (frame * 0x578))) = timer * 4;
+        *(g_BattleMissSpriteR + ((slotIndex * 0x8C) + (frame * 0x578))) = timer * 4;
         asm("" : : : "memory");
         screenX = x - 16;
         asm("" : : "r"(screenX));
         timer -= 30;
         screenY = y + timer;
-        *(D_800B01CD + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0;
-        *(D_800B01CE + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0;
-        *(D_800B01D4 + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0x50;
-        *(D_800B01D5 + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0xE0;
+        *(g_BattleMissSpriteG + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0;
+        *(g_BattleMissSpriteB + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0;
+        *(g_BattleMissSpriteU + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0x50;
+        *(g_BattleMissSpriteV + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0xE0;
         {
             /* screenY is complete; reuse the Y scratch for the draw slot. */
             y = g_ActiveDrawSlot;
             missFrameOffset = y * 0x578;
             panelOffset = g_BattleStatusPanelSlot * 0x8C;
-            missSprite = (RenderSpritePacket *)(missFrameOffset + panelOffset + ((u8 *)D_800B01C8));
+            missSprite = (RenderSpritePacket *)(missFrameOffset + panelOffset + ((u8 *)g_BattleMissSprite));
             missSprite->width = 0x18;
             missSprite->x = screenX;
             missSprite->y = screenY;
             missSprite->height = 8;
-            AddPrim(((u32 *)D_800B0E38.ordering[y]) + 7, panelOffset + ((((u8 *)D_800B01C8) - 8) + missFrameOffset));
+            AddPrim(((u32 *)D_800B0E38.ordering[y]) + 7, panelOffset + ((((u8 *)g_BattleMissSprite) - 8) + missFrameOffset));
         }
     } else {
         value = number;

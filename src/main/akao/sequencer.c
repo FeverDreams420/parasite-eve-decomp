@@ -2211,14 +2211,14 @@ void SeqOp_LoadNestedStreams(AkaoTrack *track) {
         second = 0;
     }
 
-    D_800B89D4 = 0;
-    D_800B89D8 = 0;
+    g_AkaoNestedKeyOffMask = 0;
+    g_AkaoNestedKeyOnMask = 0;
     {
         AkaoU16 *panpot = &track->panpot;
         int *expression = &track->expression_value;
 
-        D_800B89DC = *panpot >> 8;
-        D_800B89E0 = *expression >> 23;
+        g_AkaoNestedPan = *panpot >> 8;
+        g_AkaoNestedPanTarget = *expression >> 23;
     }
     Seq_StartNestedStreams(&g_AkaoNestedSource, first, second);
     *(u8 **)track += 4;

@@ -21,7 +21,6 @@ extern volatile int g_SpuTransferStatus;
 /* Stream instrument relocation. */
 /* Stream instrument scratch table; bank selection advances by 0x400 bytes. */
 extern AkaoInstrument g_AkaoStreamInstrumentCacheB[];
-extern AkaoInstrument D_800B4D00[];
 /* An instrument record address as the word retail adds a byte offset to
  * (table slots, cache slots copied word by word). */
 typedef union AkaoInstrumentAddress {

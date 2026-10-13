@@ -2397,7 +2397,7 @@ address union (the established `...Address` recipe), so no pointer is cast.
 
 Left, with the best crutch-free lev:
 
-- `Battle_DrawStatusPanel` (miss sprite link, `(u8 *)D_800B01C8 - 8`): as a
+- `Battle_DrawStatusPanel` (miss sprite link, `(u8 *)g_BattleMissSprite - 8`): as a
   `BattleSpriteWord` integer sum the frame/panel offset multiplies swap
   `a1`/`a2` (lev 16); with a byte member the `-8` moves after the sum.
 - `Draw_SetupSprites` emit macros: the `BattleSpriteWord` form of `EMIT_BASE`

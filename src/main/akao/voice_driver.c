@@ -574,7 +574,7 @@ int Spu_UploadStreamBlockA(unsigned bank, unsigned char *input, unsigned availab
         g_AkaoStreamARemaining = payload_size - upload_size;
         Spu_RebaseStreamAddrs(instruments, address, count);
         address = bank << 10;
-        cache.instrument = D_800B4D00;
+        cache.instrument = &g_AkaoStreamInstrumentCacheB[16];
         cache.word = address + cache.word;
         dest = cache.words;
         upload_size = count << 4;

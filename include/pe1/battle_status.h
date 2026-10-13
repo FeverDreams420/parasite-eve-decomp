@@ -168,10 +168,13 @@ PE1_STATIC_ASSERT(sizeof(BattleGaugePrim) == 0x1C,
                   battle_gauge_prim_stride);
 
 extern s32 g_BattleStatusPanelSlot;
-extern RenderSpritePacket D_800B01C8[];
-/* Interior byte symbols of the first panel sprite, independently relocated. */
-extern u8 D_800B01CC[], D_800B01CD[], D_800B01CE[];
-extern u8 D_800B01D4[], D_800B01D5[];
+/* The MISS sprite: the sprite of g_BattlePanelDigits[slot][panel][0], which
+ * Battle_DrawStatusPanel draws for a negative value. Views of the record,
+ * its colour and its texture coordinates: retail addresses each byte with
+ * its own relocation, and the indexed field form changes the function. */
+extern RenderSpritePacket g_BattleMissSprite[];
+extern u8 g_BattleMissSpriteR[], g_BattleMissSpriteG[], g_BattleMissSpriteB[];
+extern u8 g_BattleMissSpriteU[], g_BattleMissSpriteV[];
 void Battle_DrawStatusPanel(int mode, BattleStatusPanel *panel);
 
 

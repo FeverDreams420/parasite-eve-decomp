@@ -73,9 +73,9 @@ extern AkaoNestedSource g_AkaoNestedSource;
 /* Its key_off_mask, key_on_mask, pan word and pan_target as words of their
  * own: retail stores each one absolutely, where the record keeps the field
  * address in a register and derives the record address from it. */
-extern u32 D_800B89D4;
-extern u32 D_800B89D8;
-extern u32 D_800B89DC;
-extern u32 D_800B89E0;
+extern u32 g_AkaoNestedKeyOffMask;
+extern u32 g_AkaoNestedKeyOnMask;
+extern u32 g_AkaoNestedPan;
+extern u32 g_AkaoNestedPanTarget;
 
 #endif
