@@ -43,10 +43,6 @@ typedef struct FieldFxObject {
 /* Bytes of slot data after the dispatch slots (object size 0xA0C). */
 #define FIELDFX_DATA_SIZE 0x80C
 
-/* One handler of an effect module's lists: called with the object, its
- * dispatch slot and the slot's data. */
-typedef int (*FieldFxHandler)(void *obj, void *slot, void *data);
-
 /* The object the engine is running and its parts, set by every pass. */
 extern FieldFxState *g_FieldFxScriptState;
 extern FieldFxObject *g_FieldFxScriptObject;
@@ -70,7 +66,6 @@ int FieldFx_RunScript(FieldFxObject *obj, FieldFxHandler *handlers, u16 *sizes);
 int FieldFx_Spawn6();
 int *FieldFx_RegPtr(int index);
 int *FieldFx_VarPtr(int index);
-void *FieldFx_StartSlot(void *obj, u8 id, u16 *sizes, FieldFxHandler *handlers);
 void FieldFx_ActivateSlot(u16 slot, u8 id, u16 size);
 int FieldFx_FreeSlot(u16 slot);
 int FieldFx_FreeAllSlots(void);
