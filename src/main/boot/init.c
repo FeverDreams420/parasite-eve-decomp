@@ -159,7 +159,7 @@ void Boot_VsyncCallback(void) {
 }
 
 void Boot_InitMemCard(void) {
-    PadInitDirect(g_AnalogStickState, g_AnalogStickState + 0x22);
+    PadInitDirect((u8 *)&g_PadPackets[0], (u8 *)&g_PadPackets[1]);
     PadStartCom();
 }
 
@@ -262,7 +262,7 @@ void Field_HandleStateTransition(void) {
         g_GameStateFlags = initial_flags | 0x4000;
     }
 
-    mode = g_PadPort1Buffer & 0xF000;
+    mode = g_PadPackets[0].header & 0xF000;
     if (!((mode != 0x4000) && (mode != 0x7000))) {
 
     if (g_GameStateFlags & 0x4000) {
@@ -282,7 +282,7 @@ void Field_HandleStateTransition(void) {
         }
     }
 
-    pad = D_800BE9A2;
+    pad = g_PadPackets[0].buttons;
     rawInverted = ~pad;
     pad_mask = 0xFFFF9FFF;
     base_bits = rawInverted & pad_mask;
@@ -356,26 +356,26 @@ void Field_HandleStateTransition(void) {
         g_FieldPadBits &= 0x7FFFFFFF;
     }
 
-    if ((g_PadPort1Buffer & 0xF000) == 0x7000) {
+    if ((g_PadPackets[0].header & 0xF000) == 0x7000) {
         g_FieldPadBits &= ~0x79;
         menu_open = MenuWidget_FindByModeAndSelectedBase(1, 0) != 0;
 
         if (menu_open) {
-            analog = D_800BE9A7;
+            analog = g_PadPackets[0].leftY;
             if (analog < 0x14) {
                 g_FieldPadBits |= 0x8;
             } else if (analog >= 0xE7) {
                 g_FieldPadBits |= 0x20;
             }
 
-            analog = D_800BE9A6;
+            analog = g_PadPackets[0].leftX;
             if (analog < 0x14) {
                 g_FieldPadBits |= 0x40;
             } else if (analog >= 0xE7) {
                 g_FieldPadBits |= 0x10;
             }
         } else {
-            analog = D_800BE9A7;
+            analog = g_PadPackets[0].leftY;
             if (analog < 0x5A) {
                 g_FieldPadBits |= 0x8;
                 if (analog < 0x14) {
@@ -388,7 +388,7 @@ void Field_HandleStateTransition(void) {
                 }
             }
 
-            analog = D_800BE9A6;
+            analog = g_PadPackets[0].leftX;
             if (analog < 0x5A) {
                 g_FieldPadBits |= 0x40;
                 if (analog < 0x14) {

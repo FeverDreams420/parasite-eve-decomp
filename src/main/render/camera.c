@@ -5,6 +5,7 @@
 #include "pe1/geom_state.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
+#include "pe1/pad_state.h"
 #include "pe1/projection_slot.h"
 #include "pe1/render_camera.h"
 #include "pe1/render_lighting.h"
@@ -863,7 +864,7 @@ int Render_DrawSprite(void)
     GteShortVector axis;
     GteVector up, right, newUp, forward;
     int angle, cosine, sine;
-    if ((g_PadPort1Buffer & 0xF000) == 0x7000)
+    if ((g_PadPackets[0].header & 0xF000) == 0x7000)
         angle = g_CameraBaseAngleAnalog;
     else
         angle = g_CameraBaseAngleDigital;

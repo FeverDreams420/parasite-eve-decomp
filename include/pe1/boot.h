@@ -36,7 +36,6 @@ extern u16 g_SceneInitLbaTbl0[];
 
 /* System start-up (boot/init.c). */
 extern s32 g_FrameRngCounter[];
-extern char g_AnalogStickState[];
 
 /* Pad sampling (boot/init.c): render flag table, the
  * button mask per game bit, frames each bit has been held, the actuator

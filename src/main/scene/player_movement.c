@@ -3,6 +3,7 @@
 #include "pe1/field_movement.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
+#include "pe1/pad_state.h"
 #include "pe1/render_camera.h"
 
 /* Field player movement state handlers: idle, walk, run, turn-in-place and
@@ -41,9 +42,9 @@ void Scene_UpdatePlayerEntity(BattleEntity *entity, int *actionState)
     }
     speed = Math_FixedMul(0x50000, entity->moveFactor);
     speed = Math_FixedMul(speed, entity->moveSpeed << 4);
-    if ((g_PadPort1Buffer & 0xF000) == 0x7000) {
+    if ((g_PadPackets[0].header & 0xF000) == 0x7000) {
         int angle;
-        angle = ratan2(D_800BE9A7 - 128, D_800BE9A6 - 128) - 0x400;
+        angle = ratan2(g_PadPackets[0].leftY - 128, g_PadPackets[0].leftX - 128) - 0x400;
         PE1_COMPILER_LAUNDER(angle);
         if (angle < 0) angle += 0x1000;
         entity->facingAngle = g_CameraBaseAngleAnalog + angle;
@@ -146,9 +147,9 @@ void Scene_UpdateEntityFacing(BattleEntity *entity, int *actionState)
     }
     speed = Math_FixedMul(speed, entity->moveFactor);
     speed = Math_FixedMul(speed, entity->moveSpeed << 4);
-    if ((g_PadPort1Buffer & 0xF000) == 0x7000) {
+    if ((g_PadPackets[0].header & 0xF000) == 0x7000) {
         int angle;
-        angle = ratan2(D_800BE9A7 - 128, D_800BE9A6 - 128) - 0x400;
+        angle = ratan2(g_PadPackets[0].leftY - 128, g_PadPackets[0].leftX - 128) - 0x400;
         PE1_COMPILER_LAUNDER(angle);
         if (angle < 0) angle += 0x1000;
         entity->facingAngle = g_CameraBaseAngleAnalog + angle;
@@ -247,8 +248,8 @@ void Scene_SyncEntityAction(BattleEntity *entity, int *actionState) {
 void Scene_UpdateEntityFacingFromPad(BattleEntity *entity) {
     int angle;
     Entity_SetAction(entity, 0x11);
-    if ((g_PadPort1Buffer & 0xF000) == 0x7000) {
-        angle = ratan2(D_800BE9A7 - 128, D_800BE9A6 - 128) - 0x400;
+    if ((g_PadPackets[0].header & 0xF000) == 0x7000) {
+        angle = ratan2(g_PadPackets[0].leftY - 128, g_PadPackets[0].leftX - 128) - 0x400;
         /* Keep the wrapped-angle correction based on the adjusted value. */
         asm volatile("" : "=r"(angle) : "0"(angle));
         if (angle < 0) angle += 0x1000;

@@ -77,7 +77,6 @@ D_800B8AC0 = g_AkaoVoiceStateTable;
 D_800BC000 = g_AkaoVoiceChannelTable;
 D_800BCF88 = g_RenderStateFlags;
 D_800BD024 = g_GeomOtZ;
-g_PadPort1Buffer = g_AnalogStickState;
 D_800C0D90 = g_AkaoSpuCommonAttr;
 g_AyaSaveState = g_AyaSaveTotalExp;
 g_InventoryRuntime = g_AyaEquippedWeaponSlot;
