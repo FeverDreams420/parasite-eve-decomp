@@ -96,7 +96,7 @@ void Inv_BuildArmorList(BattleAttributes *out) {
 }
 
 void Inv_RecalcSlotStats(void) {
-    s16 *p = (s16 *)D_800C0E00.stats.levels;
+    s16 *p = D_800C0E00.stats.levels;
     int level, hp;
     Combatant *actor;
     AyaLevelStats *row;
