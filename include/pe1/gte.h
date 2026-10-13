@@ -180,15 +180,16 @@
 #define gte_lwc2_1_8(ptr) \
     asm volatile("lwc2 $1,8(%0)" : : "r"(ptr) : "memory")
 
-/* Pack the low halfwords of X/Y from word-stride input, then transfer V0.
- * source is an lvalue so callers can reuse the constrained address. */
+/* Load V0 from an s32[3] translation (a matrix's t): the low halfwords of
+ * t[0] and t[1] packed into VXY0 (narrowed to lhu), t[2] by lwc2 into VZ0.
+ * source is an s32 * lvalue so callers can reuse the constrained address. */
 #define gte_ldv0_word3(source) \
     do { \
         register unsigned int packed asm("$12"); \
         register unsigned int high asm("$13"); \
         asm volatile("" : "=r"(source) : "0"(source)); \
-        high = ((volatile unsigned short *)source)[2]; \
-        packed = ((unsigned short *)source)[0]; \
+        high = (unsigned short)(source)[1]; \
+        packed = (unsigned short)(source)[0]; \
         asm volatile("" : "=r"(high) : "0"(high), "r"(packed)); \
         high <<= 16; \
         packed |= high; \
@@ -199,7 +200,7 @@
 
 #define gte_ldv0_word3_at(vec) \
     do { \
-        unsigned short *source = (unsigned short *)(vec); \
+        s32 *source = (vec); \
         gte_ldv0_word3(source); \
     } while (0)
 

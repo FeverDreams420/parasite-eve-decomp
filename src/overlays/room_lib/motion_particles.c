@@ -213,7 +213,7 @@ void RoomEffect_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     gte_stir123_column_at(&stack.matrix.m[0][2]);
     gte_ldtransmatrix(scaleMatrix);
     {
-        unsigned short *translation = (unsigned short *)stack.matrix.t;
+        s32 *translation = stack.matrix.t;
         gte_ldv0_word3(translation);
         gte_cop2_hazard_slot();
         gte_cop2_hazard_slot();
@@ -345,7 +345,7 @@ void RoomEffect_DrawAnchoredSpritePair(void *unused0, void *unused1,
     gte_stir123_column_at(&stack.matrix.m[0][2]);
     gte_ldtransmatrix(scaleMatrix);
     {
-        unsigned short *translation = (unsigned short *)stack.matrix.t;
+        s32 *translation = stack.matrix.t;
         gte_ldv0_word3(translation);
         gte_cop2_hazard_slot();
         gte_cop2_hazard_slot();

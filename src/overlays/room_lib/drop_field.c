@@ -1225,9 +1225,7 @@ void RoomEffect_DrawQuadSprites(void *unused0, void *unused1,
      * places in s0..s2 after them. */
     register RoomSpriteMatrix *matrix asm("$19");
     register short *column1 asm("$23");
-    /* One scratch pointer serves the last column and the translation, so
-     * the loop optimizer does not hoist either address. */
-    unsigned short *work;
+    short *work;
     unsigned short *depthSlot;
 
     clock = FieldFx_GetScriptContext();
@@ -1267,14 +1265,17 @@ void RoomEffect_DrawQuadSprites(void *unused0, void *unused1,
         gte_ldrtir12_matrix_column(work);
         gte_stir123_column(work);
         gte_ldtransmatrix(&state->rotation);
-        work = (unsigned short *)stack.matrix.t;
-        gte_ldv0_word3(work);
-        gte_cop2_hazard_slot();
-        gte_cop2_hazard_slot();
-        gte_mvmva_rotation_v0_translation_sf12();
-        gte_swc2_9_0(work);
-        gte_swc2_10_4(work);
-        gte_swc2_11_8(work);
+        {
+            s32 *translation = stack.matrix.t;
+
+            gte_ldv0_word3(translation);
+            gte_cop2_hazard_slot();
+            gte_cop2_hazard_slot();
+            gte_mvmva_rotation_v0_translation_sf12();
+            gte_swc2_9_0(translation);
+            gte_swc2_10_4(translation);
+            gte_swc2_11_8(translation);
+        }
 
         RotMatrix(&stack.seed, matrix);
         memset(&stack.sourceScale, 0, 0x10);
