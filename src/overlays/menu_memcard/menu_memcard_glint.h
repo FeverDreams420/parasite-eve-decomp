@@ -1,6 +1,7 @@
 #ifndef MENU_MEMCARD_GLINT_H
 #define MENU_MEMCARD_GLINT_H
 
+#include "pe1/akao.h"
 #include "pe1/field_effect_pool.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/fieldfx_calls.h"
@@ -76,7 +77,6 @@ typedef struct MemcardCrossFlash {
 
 extern MemcardJointOffset D_801ED820, D_801ED828, D_801ED830;
 extern RenderColor D_801ED838, D_801ED83C, D_801ED840;
-extern void Akao_SendPositionalCmdStereo(int sound, int mode, int x, int y, int z);
 extern u8 D_801F1CB0[];
 
 int MenuCard_FadingGlintParticle(int mode, RoomDampedSpark *spark);
