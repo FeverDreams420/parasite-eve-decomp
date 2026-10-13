@@ -124,3 +124,4 @@ address,overlay,old_name,name,evidence
 0x8019C39C,fx_common,D_8019C39C,g_FxCommonDefaultNode.bucket,"FxCommonNode.bucket at +0x5C of the default node at 0x8019C340"
 0x801E4E6C,fx_common,D_801E4E6C,&g_FxCommonRecords[1],"record 1 of the array at 0x801E4E00 (stride 0x6C)"
 0x801E4A8A,fx_common,D_801E4A8A,g_FxCommonIndexLinks[].next,"index link next field at +2 of g_FxCommonIndexLinks"
+0x8019CC14,fx_common,D_8019CC14,g_FxCommonHsyncCount,"effects.c: only access is D_8019CC14 = VSync(1) (mode 1 returns the horizontal-blank count) just before DrawSync(0)/VSync(2) in the buffer-swap path; never read"

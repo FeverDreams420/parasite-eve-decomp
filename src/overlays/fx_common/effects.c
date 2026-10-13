@@ -208,7 +208,7 @@ void func_8019234C(void)
             }
         }
 
-        D_8019CC14 = VSync(1);
+        g_FxCommonHsyncCount = VSync(1);
         DrawSync(0);
         VSync(2);
         FxCommon_StepMotionBlend();

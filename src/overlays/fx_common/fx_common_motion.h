@@ -67,7 +67,7 @@ typedef PsxSignedRect FxCommonRect;
 extern FxCommonFrame g_FxCommonFrames[2];
 extern s32 g_ActiveDrawSlot;
 extern u8 g_FxCommonResetRequested;
-extern s32 D_8019CC14;
+extern s32 g_FxCommonHsyncCount;
 /* Plain views of the camera position and its look-at target. */
 extern FxCommonVec3 g_FxCommonCameraPosition;
 extern FxCommonVec3 g_FxCommonCameraTarget;
