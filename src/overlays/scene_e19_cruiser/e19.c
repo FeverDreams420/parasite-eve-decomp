@@ -1081,7 +1081,6 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
     register int floorIndex asm("$4");
     int floorTimer;
     int signedValue;
-    register int returnTest asm("$2");
 
     switch (mode) {
     case 1:
@@ -1176,18 +1175,18 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
                 | 0x29000000;
             D_800F32D0->actor->state->core_flags |= 0x80000000;
         }
-        returnTest = particle->timer < 24;
-        if (returnTest) return 0;
+        test = particle->timer < 24;
+        if (test) return 0;
         return 1;
 
     case 3:
-        returnTest = (unsigned short)particle->timer + 1;
-        particle->timer = returnTest;
+        test = (unsigned short)particle->timer + 1;
+        particle->timer = test;
 
-        returnTest = (s16)returnTest < 12;
+        test = (s16)test < 12;
 test_timer:
 
-        if (returnTest) return 0;
+        if (test) return 0;
         return 1;
 
         }
