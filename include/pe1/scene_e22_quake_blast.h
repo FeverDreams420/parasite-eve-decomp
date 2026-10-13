@@ -36,6 +36,9 @@ typedef struct SceneE22QuakeTarget {
     int radius;                   /* 0x08 */
 } SceneE22QuakeTarget;
 
+/* The block SceneE22_ConfigureBlastTarget fills (0x801994F4) and the script hands to the quake blast. */
+extern SceneE22QuakeTarget g_SceneE22BlastTarget;
+
 /* A colour written whole; the byte array keeps the union in memory
  * (BLKmode) so it gets its stack slot in declaration order. */
 typedef struct SceneE22QuakeBytes {
@@ -93,7 +96,8 @@ extern void *g_SceneE22QuakeModel0;
 extern void *g_SceneE22QuakeModel1;
 extern u8 g_SceneE22QuakeColorTrack[];
 extern GteRotation g_SceneE22_D_8018F1FC;
-extern RenderColor D_8018F228;
+extern GteRotation g_SceneE22FlatTilt;
+extern RenderColor g_SceneE22QuakeFlashColor;
 
 extern int rand(void);
 

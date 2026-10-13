@@ -40,6 +40,7 @@ int SceneE22_RingBurstParticleCallback(int mode, RoomOrbitTrailParticle *p) {
     int radius;
 
     seed = g_SceneE22_D_8018F1CC;
+    seed = g_SceneE22RingBurstTriangleColor;
     switch (mode) {
     case 1:
         switch (p->state) {
@@ -76,16 +77,16 @@ int SceneE22_RingBurstParticleCallback(int mode, RoomOrbitTrailParticle *p) {
         case 0:
             scale = (rsin(((s16)p->timer << 10) / 24) + 0x1000) / 2;
             FieldFx_AnglesToVector(&p->heading, (s16)(p->radius * scale / 4096), &offset);
-            offset.x += D_801994EC.x;
-            offset.y += D_801994EC.y;
-            offset.z += D_801994EC.z;
+            offset.x += g_SceneE22BurstAnchor.x;
+            offset.y += g_SceneE22BurstAnchor.y;
+            offset.z += g_SceneE22BurstAnchor.z;
             {
                 RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
-            FieldFx_SampleColorTrack(D_80199168, &color, (s16)p->timer);
-            FieldFx_DrawGlowLine(&D_801994EC, &offset, &color, 0, 0x80, 0, 1);
+            FieldFx_SampleColorTrack(g_SceneE22RingBurstParticleColorTrack, &color, (s16)p->timer);
+            FieldFx_DrawGlowLine(&g_SceneE22BurstAnchor, &offset, &color, 0, 0x80, 0, 1);
             break;
         case 1: {
             u16 clut;
@@ -120,7 +121,7 @@ int SceneE22_RingBurstParticleCallback(int mode, RoomOrbitTrailParticle *p) {
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
-            FieldFx_DrawRotatedTriangle(&D_801994EC, (GteRotation *)&p->heading, radius, size, &seed, 0, 0,
+            FieldFx_DrawRotatedTriangle(&g_SceneE22BurstAnchor, (GteRotation *)&p->heading, radius, size, &seed, 0, 0,
                           (s16)glow, 1);
             break;
         }
@@ -137,6 +138,8 @@ int SceneE22_RingBurst(int mode, RoomOrbitRingBurst *burst) {
     GteRotation tilt;
     RenderColor ringColor = g_SceneE22_D_8018F1D0;
     RenderColor haloColor = g_SceneE22_D_8018F1D4;
+    RenderColor ringColor = g_SceneE22RingBurstRingColor;
+    RenderColor haloColor = g_SceneE22RingBurstHaloColor;
     RoomOrbitTrailParticle *child;
     int i;
 
@@ -241,9 +244,9 @@ int SceneE22_RingBurst(int mode, RoomOrbitRingBurst *burst) {
             FieldFx_DrawRingBand((GteShortVector *)burst, 0x44C, 0x578, 0x14, &tilt, size,
                           size, 0, &ringColor, glow / 2, 1);
         }
-        D_801994EC.x = burst->x;
-        D_801994EC.y = burst->y;
-        D_801994EC.z = burst->z;
+        g_SceneE22BurstAnchor.x = burst->x;
+        g_SceneE22BurstAnchor.y = burst->y;
+        g_SceneE22BurstAnchor.z = burst->z;
         g_FieldFxSpriteParams.parameter00 = 0x20;
         g_FieldFxSpriteParams.parameter02 = 2;
         g_FieldFxSpriteParams.extent_x = 0x20;
@@ -299,7 +302,7 @@ int SceneE22_LinkBeamSparkCallback(int mode, RoomOrbitTrailParticle *p) {
         spin.y = 0;
         spin.z = (s16)p->timer * 32;
         spin.flags = 0;
-        FieldFx_SampleColorTrack(D_80199190, &color, (s16)p->timer * 2);
+        FieldFx_SampleColorTrack(g_SceneE22LinkBeamSparkColorTrack, &color, (s16)p->timer * 2);
         g_FieldFxSpriteParams.parameter00 = 0x20;
         g_FieldFxSpriteParams.parameter02 = 2;
         g_FieldFxSpriteParams.extent_x = 0x20;
@@ -328,8 +331,12 @@ int SceneE22_LinkBeam(int mode, SceneE22LinkBeam *beam) {
     GteShortVector offset0 = g_SceneE22_D_8018F1D8;
     GteShortVector offset1 = g_SceneE22_D_8018F1E0;
     RenderColor color0 = g_SceneE22_D_8018F1E8;
-    RenderColor color1 = D_8018F1EC;
     RenderColor color2 = g_SceneE22_D_8018F1F0;
+    GteShortVector offset0 = g_SceneE22JointOrigin;
+    GteShortVector offset1 = g_SceneE22JointAnchor;
+    RenderColor color0 = g_SceneE22LinkBeamTailColor;
+    RenderColor color1 = g_SceneE22LinkBeamMidColor;
+    RenderColor color2 = g_SceneE22LinkBeamHeadColor;
     RoomOrbitTrailParticle *spark;
 
     switch (mode) {
@@ -403,9 +410,11 @@ int SceneE22_LinkBeam(int mode, SceneE22LinkBeam *beam) {
  * sideways speed decays (state 0 slowly, state 1 quickly while falling),
  * and a wide glow pulses in place (state 2). */
 int SceneE22_EmberDriftParticleCallback(int mode, RoomOrbitTrailParticle *p) {
-    GteRotation spin = D_8018F1F4;
     GteRotation turn = g_SceneE22_D_8018F1FC;
     RenderColor color = g_SceneE22_D_8018F204;
+    GteRotation spin = g_SceneE22ZeroSpin;
+    GteRotation turn = g_SceneE22FlatTilt;
+    RenderColor color = g_SceneE22EmberParticleColor;
     int fall;
     int bounce;
     int size;
@@ -544,7 +553,8 @@ int SceneE22_EmberDriftParticleCallback(int mode, RoomOrbitTrailParticle *p) {
  * flickering halo and ring. */
 int SceneE22_EmberDrift(int mode, SceneE22EmberBurst *burst) {
     RenderColor ringColor = g_SceneE22_D_8018F208;
-    RenderColor haloColor = D_8018F20C;
+    RenderColor ringColor = g_SceneE22EmberDriftRingColor;
+    RenderColor haloColor = g_SceneE22EmberDriftHaloColor;
     RoomOrbitTrailParticle *child;
     SceneE22EmberObjectChannel *channel;
     SceneE22EmberSlot *pool;
@@ -684,6 +694,7 @@ int SceneE22_EmberDrift(int mode, SceneE22EmberBurst *burst) {
 int SceneE22_EmberColumnParticleCallback(int mode, RoomOrbitTrailParticle *p) {
     GteRotation spin;
     RenderColor color = g_SceneE22_D_8018F204;
+    RenderColor color = g_SceneE22EmberParticleColor;
     int fall;
     int bounce;
     int size;
@@ -826,8 +837,10 @@ int SceneE22_EmberColumnParticleCallback(int mode, RoomOrbitTrailParticle *p) {
  * script. It draws a flare, a halo and a floor ring while it burns. */
 int SceneE22_EmberColumn(int mode, GteShortVector *anchor) {
     GteRotation spin = g_SceneE22_D_8018F1FC;
+    GteRotation spin = g_SceneE22FlatTilt;
     GteShortVector position;
     RenderColor color = g_SceneE22_D_8018F210;
+    RenderColor color = g_SceneE22EmberColumnColor;
     RenderColor shade;
     RoomOrbitTrailParticle *child;
     SceneE22EmberObjectChannel *channel;
@@ -963,7 +976,7 @@ int SceneE22_EmberColumn(int mode, GteShortVector *anchor) {
  * heading turns (state 0), or a glow that swings out along its turning
  * heading for 24 frames (state 1). */
 int SceneE22_SwirlRingParticleCallback(int mode, RoomOrbitTrailParticle *p) {
-    GteRotation spin = D_8018F1F4;
+    GteRotation spin = g_SceneE22ZeroSpin;
     GteShortVector offset;
     RenderColor color;
     int angle;
@@ -996,7 +1009,7 @@ int SceneE22_SwirlRingParticleCallback(int mode, RoomOrbitTrailParticle *p) {
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
-            FieldFx_SampleColorTrack(D_80199434, &color, (s16)p->timer);
+            FieldFx_SampleColorTrack(g_SceneE22SwirlRingParticleColorTrack, &color, (s16)p->timer);
             FieldFx_DrawRotatedTriangle((GteShortVector *)p, (GteRotation *)&p->heading, 0x7D0, size, &color, 0, 0, 0x80, 1);
             return 0;
         case 1:
@@ -1040,9 +1053,11 @@ int SceneE22_SwirlRingParticleCallback(int mode, RoomOrbitTrailParticle *p) {
  * and a spinning flare while it swells, a flashing ring while it fades. */
 int SceneE22_SwirlRing(int mode, SceneE22SwirlRing *swirl) {
     GteShortVector offset = g_SceneE22_D_8018F1E0;
+    GteShortVector offset = g_SceneE22JointAnchor;
     GteShortVector position;
-    GteRotation spin = D_8018F1F4;
     RenderColor color = g_SceneE22_D_8018F214;
+    GteRotation spin = g_SceneE22ZeroSpin;
+    RenderColor color = g_SceneE22SwirlRingColor;
     RoomOrbitTrailParticle *child;
     void **soundSlot;
     int volume;
@@ -1056,7 +1071,7 @@ int SceneE22_SwirlRing(int mode, SceneE22SwirlRing *swirl) {
         swirl->timer = 0;
         swirl->glow = 0;
         swirl->ring = 0;
-        soundSlot = D_800B0E64;
+        soundSlot = g_LoadedSceneAssetBlock;
         if (*soundSlot != 0) {
             volume = 0x7F;
             Akao_SendTableCommand(*soundSlot, 0x5D6, FieldFx_GetOwnerProgress(), 0x80, volume);
@@ -1206,7 +1221,7 @@ int SceneE22_SwirlRing(int mode, SceneE22SwirlRing *swirl) {
 /* Twisting trail particle: for 32 frames it turns its twist angle and
  * draws a glow at the end of a bent trail that swings out and back. */
 int SceneE22_TwistTrailCallback(int mode, RoomOrbitTrailParticle *p) {
-    GteRotation spin = D_8018F1F4;
+    GteRotation spin = g_SceneE22ZeroSpin;
     GteShortVector offset;
     RenderColor color;
     int angle;
@@ -1238,7 +1253,7 @@ int SceneE22_TwistTrailCallback(int mode, RoomOrbitTrailParticle *p) {
             g_FieldFxSpriteParams.parameter06 = 1;
             g_FieldFxSpriteParams.tpage = tpage;
         }
-        FieldFx_SampleColorTrack(D_8019944C, &color, (s16)p->timer);
+        FieldFx_SampleColorTrack(g_SceneE22TwistTrailColorTrack, &color, (s16)p->timer);
         kind = g_FieldFxSpriteParams.palette;
         palette = g_FieldFxPaletteTable[kind];
         FieldFx_DrawShapeQuads(&offset, &spin, size, size, (s16)g_FieldFxSpriteParams.parameter02 + 100,
@@ -1257,11 +1272,13 @@ int SceneE22_TwistTrailCallback(int mode, RoomOrbitTrailParticle *p) {
  * glows and flares while it advances. */
 int SceneE22_TwistModel(int mode, SceneE22TwistModel *bolt) {
     RenderColor color = g_SceneE22_D_8018F218;
+    RenderColor color = g_SceneE22BoltColor;
     GteShortVector position;
     GteShortVector step;
     GteRotation rotation;
-    GteRotation spin = D_8018F1F4;
     GteShortVector offset = g_SceneE22_D_8018F1E0;
+    GteRotation spin = g_SceneE22ZeroSpin;
+    GteShortVector offset = g_SceneE22JointAnchor;
     RoomOrbitTrailParticle *child;
     int glow;
     int angle;
@@ -1272,7 +1289,7 @@ int SceneE22_TwistModel(int mode, SceneE22TwistModel *bolt) {
         bolt->state = 0;
         bolt->timer = 0;
         bolt->reserved1C = 0;
-        g_SceneE22BoltModel = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C4704);
+        g_SceneE22BoltModel = Asset_FindTable08ByU32Key(g_LoadedSceneAssetBlock[0], 0xC54C4704);
         FieldFx_ModelScrollUv(g_SceneE22BoltModel, 0, 0);
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, &bolt->position);
         bolt->origin.x = bolt->position.x;
@@ -1502,11 +1519,13 @@ int SceneE22_TwistModel(int mode, SceneE22TwistModel *bolt) {
  * held until the release flag is set (state 1), or a swelling ring that
  * drifts along its heading (state 2). */
 int SceneE22_TwistBeamCallback(int mode, RoomOrbitTrailParticle *p) {
-    GteRotation spin = D_8018F1F4;
+    GteRotation spin = g_SceneE22ZeroSpin;
     GteShortVector offset;
     RenderColor color;
     RenderColor colorA = g_SceneE22_D_8018F21C;
     RenderColor colorB = g_SceneE22_D_8018F220;
+    RenderColor colorA = g_SceneE22TwistBeamColorA;
+    RenderColor colorB = g_SceneE22TwistBeamColorB;
     int angle;
     int size;
     int alpha;
@@ -1521,7 +1540,7 @@ int SceneE22_TwistBeamCallback(int mode, RoomOrbitTrailParticle *p) {
             return 1;
         case 1:
             p->timer++;
-            if (D_80199504 == 0) break;
+            if (g_SceneE22TwistBeamStop == 0) break;
             return 1;
         case 2:
             p->timer++;
@@ -1551,7 +1570,7 @@ int SceneE22_TwistBeamCallback(int mode, RoomOrbitTrailParticle *p) {
                 g_FieldFxSpriteParams.parameter06 = 1;
                 g_FieldFxSpriteParams.tpage = tpage;
             }
-            FieldFx_SampleColorTrack(D_8019946C, &color, (s16)p->timer);
+            FieldFx_SampleColorTrack(g_SceneE22TwistBeamColorTrack, &color, (s16)p->timer);
             kind = g_FieldFxSpriteParams.palette;
             palette = g_FieldFxPaletteTable[kind];
             FieldFx_DrawShapeQuads(&offset, &spin, size, size, (s16)g_FieldFxSpriteParams.parameter02 + 100,
@@ -1607,10 +1626,13 @@ int SceneE22_TwistBeamCallback(int mode, RoomOrbitTrailParticle *p) {
 int SceneE22_SweepBolt(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
     RenderColor color = g_SceneE22_D_8018F218;
     RenderColor haloColor = g_SceneE22_D_8018F224;
+    RenderColor color = g_SceneE22BoltColor;
+    RenderColor haloColor = g_SceneE22SweepBoltHaloColor;
     GteShortVector tip;
     GteRotation rotation;
-    GteRotation spin = D_8018F1F4;
     GteRotation tilt = g_SceneE22_D_8018F1FC;
+    GteRotation spin = g_SceneE22ZeroSpin;
+    GteRotation tilt = g_SceneE22FlatTilt;
     RoomOrbitTrailParticle *child;
     int glow;
     int angle;
@@ -1623,8 +1645,8 @@ int SceneE22_SweepBolt(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin
         bolt->timer = 0;
         bolt->reserved1C = 0;
         bolt->sweep = 0;
-        D_80199504 = 0;
-        g_SceneE22BoltModel = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C4704);
+        g_SceneE22TwistBeamStop = 0;
+        g_SceneE22BoltModel = Asset_FindTable08ByU32Key(g_LoadedSceneAssetBlock[0], 0xC54C4704);
         FieldFx_ModelScrollUv(g_SceneE22BoltModel, 0, 0);
         if (FX_TASK_AS(SceneE22EmberEvent)->active) {
             SceneE22EmberSlot *pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
@@ -1672,10 +1694,10 @@ int SceneE22_SweepBolt(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin
             if (bolt->timer < 0x10) break;
             bolt->state = 1;
             bolt->timer = 0;
-            if (D_800B0E64[0]) {
-                Akao_SendTableCommand(D_800B0E64[0], 0x5D8, FieldFx_GetOwnerProgress(), 0x80, 0x7F);
-                if (D_800B0E64[0]) {
-                    Akao_SendTableCommand(D_800B0E64[0], 0x5D9, 0x80, 0x80, 0x7F);
+            if (g_LoadedSceneAssetBlock[0]) {
+                Akao_SendTableCommand(g_LoadedSceneAssetBlock[0], 0x5D8, FieldFx_GetOwnerProgress(), 0x80, 0x7F);
+                if (g_LoadedSceneAssetBlock[0]) {
+                    Akao_SendTableCommand(g_LoadedSceneAssetBlock[0], 0x5D9, 0x80, 0x80, 0x7F);
                 }
             }
             break;
@@ -1860,7 +1882,7 @@ int SceneE22_SweepBolt(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin
 }
 
 int SceneE22_QuakeSparkCallback(int mode, SceneE22Effect *effect) {
-    GteRotation position = D_8018F1F4;
+    GteRotation position = g_SceneE22ZeroSpin;
     int angle, sine, brightness, palette, kind;
     u16 clut;
 
@@ -1896,9 +1918,10 @@ int SceneE22_QuakeSparkCallback(int mode, SceneE22Effect *effect) {
 int SceneE22_QuakeBlast(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target) {
     GteShortVector position;
     GteRotation tilt = g_SceneE22_D_8018F1FC;
+    GteRotation tilt = g_SceneE22FlatTilt;
     GteRotation rotation;
     SceneE22QuakeColor color;
-    RenderColor flash = D_8018F228;
+    RenderColor flash = g_SceneE22QuakeFlashColor;
     GteShortVector floor;
     GteRotation flat;
     RoomOrbitTrailParticle *child;
@@ -1912,12 +1935,12 @@ int SceneE22_QuakeBlast(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *t
     case 0:
         fx->state = 0;
         fx->timer = 0;
-        if (D_800B0E64[0]) {
-            Akao_SendTableCommand(D_800B0E64[0], 0x5DA, FieldFx_GetOwnerProgress(), 0x80, 0x7F);
+        if (g_LoadedSceneAssetBlock[0]) {
+            Akao_SendTableCommand(g_LoadedSceneAssetBlock[0], 0x5DA, FieldFx_GetOwnerProgress(), 0x80, 0x7F);
         }
-        g_SceneE22QuakeModel0 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C4704);
+        g_SceneE22QuakeModel0 = Asset_FindTable08ByU32Key(g_LoadedSceneAssetBlock[0], 0xC58C4704);
         FieldFx_ModelScrollUv(g_SceneE22QuakeModel0, 0, 0);
-        g_SceneE22QuakeModel1 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5CC4704);
+        g_SceneE22QuakeModel1 = Asset_FindTable08ByU32Key(g_LoadedSceneAssetBlock[0], 0xC5CC4704);
         FieldFx_ModelScrollUv(g_SceneE22QuakeModel1, 0, 0);
         fx->position.x = target->x;
         fx->position.y = target->y;
@@ -2136,7 +2159,7 @@ int SceneE22_QuakeBlast(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *t
 }
 
 int *SceneE22_GetBurstAnchor(void) {
-    return (int *)&D_801994EC;
+    return (int *)&g_SceneE22BurstAnchor;
 }
 
 int SceneE22_PlayerGate(int mode) {
@@ -2165,11 +2188,11 @@ int SceneE22_PlayerGate(int mode) {
 }
 
 int *SceneE22_EmberDriftConfigure(void) {
-    return (int *)&D_801994EC;
+    return (int *)&g_SceneE22BurstAnchor;
 }
 
 int *SceneE22_EmberColumnConfigure(void) {
-    return (int *)&D_801994EC;
+    return (int *)&g_SceneE22BurstAnchor;
 }
 
 s16 *SceneE22_ConfigureBlastTarget(int mode, int value, int unused, int extra)
@@ -2181,16 +2204,16 @@ s16 *SceneE22_ConfigureBlastTarget(int mode, int value, int unused, int extra)
     if (mode == 1) {
         saved = g_RoomFloorY->raw;
         actor = (char *)g_PlayerEntity;
-        out = &g_SceneE22BlastTarget;
+        out = (s16 *)&g_SceneE22BlastTarget;
         *out = value;
-        D_801994F8 = extra;
-        D_801994F6 = saved;
+        g_SceneE22BlastTarget.z = extra;
+        g_SceneE22BlastTarget.y = saved;
         FieldFx_GetActorPosition(actor, 1, out);
     } else {
         if (value <= 0)
             value = 1;
-        D_801994FC = value;
+        g_SceneE22BlastTarget.radius = value;
     }
 
-    return &g_SceneE22BlastTarget;
+    return (s16 *)&g_SceneE22BlastTarget;
 }

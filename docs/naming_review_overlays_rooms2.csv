@@ -73,3 +73,33 @@ address,overlay,old_name,new_name,evidence
 0x80195F1C,room_m256_museum,D_80195F1C,g_RoomM256TrailPoint4X,"Interior of g_RoomM256TrailHistory: +0x20, point[4].x of record 0, indexed with ((index*17)+r)*8. Member form recomputes the address (SHA mismatch tested), so a raw one-field view."
 0x80195F1E,room_m256_museum,D_80195F1E,g_RoomM256TrailPoint4Y,"Same, point[4].y (+0x22)."
 0x80195F20,room_m256_museum,D_80195F20,g_RoomM256TrailPoint4Z,"Same, point[4].z (+0x24)."
+0x8018F1CC,scene_e22_liberty,D_8018F1CC,g_SceneE22RingBurstTriangleColor,"RoomOrbit RingBurstParticleCallback copies it into local seed (rgb C8,00,8C) and passes &seed as the colour of FieldFx_DrawRotatedTriangle."
+0x8018F1D0,scene_e22_liberty,D_8018F1D0,g_SceneE22RingBurstRingColor,"SceneE22_RingBurst local ringColor (C8,BE,78), the ring draw colour."
+0x8018F1D4,scene_e22_liberty,D_8018F1D4,g_SceneE22RingBurstHaloColor,"SceneE22_RingBurst local haloColor (5C,00,80), the halo draw colour."
+0x8018F1D8,scene_e22_liberty,D_8018F1D8,g_SceneE22JointOrigin,Zero point: SceneE22_LinkBeam transforms it (offset0) on the first joints to place the beam start and middle.
+0x8018F1E0,scene_e22_liberty,D_8018F1E0,g_SceneE22JointAnchor,"Point {0,0,-140}: SceneE22_LinkBeam offset1 (beam end), SceneE22_SwirlRing and SceneE22_TwistModel offset, each transformed on a joint."
+0x8018F1E8,scene_e22_liberty,D_8018F1E8,g_SceneE22LinkBeamTailColor,"LinkBeam color0, the final colour of the middle-to-last FieldFx_DrawHistoryTrail segment."
+0x8018F1EC,scene_e22_liberty,D_8018F1EC,g_SceneE22LinkBeamMidColor,"LinkBeam color1 (BE,00,BE): joins the two history trail segments."
+0x8018F1F0,scene_e22_liberty,D_8018F1F0,g_SceneE22LinkBeamHeadColor,"LinkBeam color2 (6E,14,E6): first colour of the first history trail segment."
+0x8018F1F4,scene_e22_liberty,D_8018F1F4,g_SceneE22ZeroSpin,"Zero GteRotation copied as 'spin' by EmberDriftParticleCallback, SwirlRing, SwirlRingParticleCallback, TwistTrailCallback, TwistModel and others, then filled per frame."
+0x8018F1FC,scene_e22_liberty,D_8018F1FC,g_SceneE22FlatTilt,"{0x400,0,0,flags 1} GteRotation copied as 'turn'/'spin' in EmberDriftParticleCallback, EmberColumn, SweepBolt and QuakeBlast for the flat ground-plane sprites."
+0x8018F204,scene_e22_liberty,D_8018F204,g_SceneE22EmberParticleColor,"Colour (80,80,80) of the ember particles in SceneE22_EmberDriftParticleCallback and SceneE22_EmberColumnParticleCallback."
+0x8018F208,scene_e22_liberty,D_8018F208,g_SceneE22EmberDriftRingColor,"SceneE22_EmberDrift local ringColor (32,00,C8)."
+0x8018F20C,scene_e22_liberty,D_8018F20C,g_SceneE22EmberDriftHaloColor,"SceneE22_EmberDrift local haloColor (C8,00,32)."
+0x8018F210,scene_e22_liberty,D_8018F210,g_SceneE22EmberColumnColor,"SceneE22_EmberColumn local colour (00,32,6E)."
+0x8018F214,scene_e22_liberty,D_8018F214,g_SceneE22SwirlRingColor,"SceneE22_SwirlRing local colour (BE,6E,C8)."
+0x8018F218,scene_e22_liberty,D_8018F218,g_SceneE22BoltColor,"Colour (8C,32,C8) of both SceneE22_TwistModel and SceneE22_SweepBolt, the bolt effects."
+0x8018F21C,scene_e22_liberty,D_8018F21C,g_SceneE22TwistBeamColorA,SceneE22_TwistBeamCallback colorA.
+0x8018F220,scene_e22_liberty,D_8018F220,g_SceneE22TwistBeamColorB,SceneE22_TwistBeamCallback colorB.
+0x8018F224,scene_e22_liberty,D_8018F224,g_SceneE22SweepBoltHaloColor,"SceneE22_SweepBolt local haloColor (8C,8C,C8)."
+0x8018F228,scene_e22_liberty,D_8018F228,g_SceneE22QuakeFlashColor,"SceneE22_QuakeBlast local 'flash' RenderColor (F0,C8,DC)."
+0x80199168,scene_e22_liberty,D_80199168,g_SceneE22RingBurstParticleColorTrack,Passed to FieldFx_SampleColorTrack by SceneE22_RingBurstParticleCallback (only reader).
+0x80199190,scene_e22_liberty,D_80199190,g_SceneE22LinkBeamSparkColorTrack,Only reader: SceneE22_LinkBeamSparkCallback FieldFx_SampleColorTrack.
+0x80199434,scene_e22_liberty,D_80199434,g_SceneE22SwirlRingParticleColorTrack,Only reader: SceneE22_SwirlRingParticleCallback FieldFx_SampleColorTrack.
+0x8019944C,scene_e22_liberty,D_8019944C,g_SceneE22TwistTrailColorTrack,Only reader: SceneE22_TwistTrailCallback FieldFx_SampleColorTrack.
+0x8019946C,scene_e22_liberty,D_8019946C,g_SceneE22TwistBeamColorTrack,Only reader: SceneE22_TwistBeamCallback FieldFx_SampleColorTrack.
+0x801994EC,scene_e22_liberty,D_801994EC,g_SceneE22BurstAnchor,"Written from burst x/y/z by SceneE22_RingBurst, read as the particle origin by RingBurstParticleCallback; returned by SceneE22_GetBurstAnchor and the EmberDrift/EmberColumn configure functions."
+0x80199504,scene_e22_liberty,D_80199504,g_SceneE22TwistBeamStop,"s16 cleared by SceneE22_SweepBolt init; SceneE22_TwistBeamCallback case 1 keeps the particle while it is 0 and ends it otherwise (stop flag, same pattern as g_SceneE18RisingStop)."
+0x801994F6,scene_e22_liberty,D_801994F6,g_SceneE22BlastTarget.y,"Interior of g_SceneE22BlastTarget (0x801994F4), which is the SceneE22QuakeTarget {x,y,z,reserved,radius} the quake blast receives: ConfigureBlastTarget stores the floor y at +2. Declared as the struct; byte-identical."
+0x801994F8,scene_e22_liberty,D_801994F8,g_SceneE22BlastTarget.z,"Same block, +4 (the extra argument)."
+0x801994FC,scene_e22_liberty,D_801994FC,g_SceneE22BlastTarget.radius,"Same block, +8: the int radius, written by the non-1 mode of ConfigureBlastTarget (clamped to >= 1)."
