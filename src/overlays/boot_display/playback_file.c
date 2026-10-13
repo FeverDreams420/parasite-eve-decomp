@@ -8,7 +8,7 @@ s32 BootDisplay_InitPlaybackFile(void) {
     /* Preserve separate zero/-1 retries and the ready-constant reload.
      * Pins and empty barriers are tracked in crutch debt. */
     register s32 ready asm("$16");
-    register s32 failure asm("$2");
+    s32 failure;
     volatile s32 *start;
     DsInit();
     DsSetDebug(0);
@@ -17,8 +17,9 @@ s32 BootDisplay_InitPlaybackFile(void) {
         asm volatile("" : : "r"(ready));
         if (DsSystemStatus() != ready || DsQueueLen() != 0)
             return VSync(0);
+        failure = 0;
         found = (s32)DsSearchFile(&file, D_80125B48);
-        if (found == 0) continue;
+        if (found == failure) continue;
         failure = -1;
         asm volatile("" : : "r"(ready));
         if (found != failure) break;
