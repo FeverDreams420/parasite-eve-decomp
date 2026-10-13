@@ -48,9 +48,8 @@ extern unsigned int g_MenuActionSubmenuSel;
 /* Scroll step chosen from D_8009CDAC: +4 below 300, -4 from 300 on. */
 extern int D_8009CDAC;
 extern int g_MenuScrollStep;
-/* List target handed to Menu_RunFrameWithArg; incomplete so -G8 units keep
- * retail's absolute accesses. */
-extern int g_MenuActiveListTarget[];
+/* List target handed to Menu_RunFrameWithArg. */
+extern u8 *g_MenuActiveListTarget;
 /* Which list the equipment options act on: 0 sorts Aya's inventory, any
  * other value sorts Wayne's storage. */
 extern int g_MenuInventoryViewMode;

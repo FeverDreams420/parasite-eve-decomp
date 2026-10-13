@@ -87,7 +87,6 @@ g_GameStateFlagsRecord = g_GameStateFlags;
 g_GameStateBlock = g_GameStateFlags;
 D_8009D1A8 = g_BattleActiveEntity;
 g_BattleResultFlagsRecord = g_BattleResultFlags;
-D_8009D1E0 = g_MenuActiveListTarget;
 g_EntityCollisionWallParam = g_WallPolygonVertexCount;
 g_ActiveActorRecord = g_ActiveActor;
 D_8009D2C8 = g_AkaoCurTrack;
