@@ -100,7 +100,7 @@ void BootDisplay_PresentFrame(void) {
         u32 brightness = (((u16 *)g_BootDisplayFontClutPixels)[index >> (shift)] & 31) << 3; \
         register u32 blue asm("$5") = greenPixel[1]; \
         register u32 green asm("$4") = greenPixel[0]; \
-        register u32 red asm("$3") = pixel->red; \
+        u32 red = pixel->red; \
         blue += brightness; if (blue >= 256) blue = 255; \
         green += brightness; if (green >= 256) green = 255; \
         red += brightness; if (red >= 256) red = 255; \
