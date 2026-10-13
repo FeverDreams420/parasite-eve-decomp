@@ -162,7 +162,7 @@ void Menu_OnEquipConfirm(MenuWidgetNode *unused, int confirmed)
 /* Confirmation input handling shares the callback's equip-selection flow. */
 
 int Menu_StepEquipConfirm(MenuWidgetNode *node, int input) {
-    register MenuWidgetNode *child asm("$16");
+    MenuWidgetNode *child;
     MenuWidgetNode *parent;
     MenuWidgetNode *dialog;
     MenuWidgetNode *option_node;
@@ -176,9 +176,10 @@ int Menu_StepEquipConfirm(MenuWidgetNode *node, int input) {
 
     handled = 0;
     child = MenuWidget_GetChild(node, 0);
+    parent = child;
 
     if ((input & 0x10000) != 0) {
-        item = Inv_GetPackedListItem(MenuWidget_GridCellIndex(child));
+        item = Inv_GetPackedListItem(MenuWidget_GridCellIndex(parent));
         if (g_MenuLayoutLocked != 0) {
             Inv_SelectActiveList(MenuWidget_GridCellIndex(
                 MenuWidget_FindByModeAndSelectedBase(2, 0x36)) == 1);
@@ -205,7 +206,7 @@ reserved:
         if (Inv_IsAyaInventorySlotReserved(item) == 0) {
         if (Menu_GetBattleEquipMode() != 0) {
 
-        dialog = MenuWidget_CreateSimpleNode(0x29, child, 0, 1);
+        dialog = MenuWidget_CreateSimpleNode(0x29, parent, 0, 1);
         option_node = MenuWidget_CreateNode(0x29, dialog, dialog);
         dialog->draw = Menu_DrawItemLabel;
         dialog->update = Menu_ConfirmDialogHandler;
@@ -263,8 +264,8 @@ error:
     } else if ((input & 0x1040) != 0) {
         if (g_MenuEquipMode != 0) {
             MenuWidget_NavScrollTo(0x35);
-            child->cursor_x = -1;
-            child->scroll_y = 0;
+            parent->cursor_x = -1;
+            parent->scroll_y = 0;
             MenuWidget_SetCurrentNode(MenuWidget_FindByModeAndSelectedBase(2, 0x36));
         } else {
             if ((input & 0x40) == 0) {
