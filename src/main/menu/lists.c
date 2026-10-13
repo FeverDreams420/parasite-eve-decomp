@@ -290,7 +290,7 @@ void Menu_HandleMemCardWriteOrError(MenuWidgetNode *arg0, int arg1) {
     if (arg1 != 0) {
         entry = MenuWidget_CreateSimpleNode(0x27, MenuWidget_GetCurrentNode(), 0, 1);
         entry->draw = MemCard_DrawProgress;
-        entry->update = (void (*)())Menu_MemCardProgressInputHandler;
+        entry->update = Menu_MemCardProgressInputHandler;
         MenuWidget_SetCurrentNode(entry);
         g_MemCardProgressPrimList = 0x40;
         MemCard_SetDelayedCallback(MemCard_MarkActivePortState13);
