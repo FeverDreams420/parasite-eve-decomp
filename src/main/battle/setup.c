@@ -28,7 +28,7 @@ u8 D_8009CE3A;
 u8 D_8009CE3B;
 s8 D_8009CE40;
 u8 D_8009CE60;
-u8 D_8009D1DC;
+u8 g_BattleRemainingActions;
 int D_8009D200;
 s32 D_8009D208;
 s32 D_8009D258;
@@ -50,7 +50,7 @@ void Battle_BeginPlayerAction(void) {
     player = D_8009D254;
     entityFlags = &player->entityFlags;
     flags = *entityFlags;
-    actor = D_8009D278;
+    actor = g_ActiveActor;
     flags &= mask;
     *entityFlags = flags;
     stateFlags = &actor->stateFlags;
@@ -111,8 +111,8 @@ void Battle_InitEntityColors(void) {
     s32 flags;
     s32 *stateFlags;
 
-    Entity_SetActionMode(D_8009D254, D_8009D278->actionMode12);
-    stateFlags = &D_8009D278->stateFlags;
+    Entity_SetActionMode(D_8009D254, g_ActiveActor->actionMode12);
+    stateFlags = &g_ActiveActor->stateFlags;
     flags = *stateFlags;
     D_8009CE30 = 0;
     *stateFlags = flags & ~0x2000;
@@ -184,7 +184,7 @@ void Battle_Init(void)
         index++;
     } while (index < 45);
 
-    action = &D_8009D278->action;
+    action = &g_ActiveActor->action;
     config0 = *action;
     g_BattleTargetIndex = 0;
     D_8009CE40 = 0;
@@ -192,7 +192,7 @@ void Battle_Init(void)
     config1 = *action;
     D_8009D2D8 = (config0->turnWord >> 4) & 3;
     config2 = *action;
-    D_8009D1DC = config1->turnWord & 0xF;
+    g_BattleRemainingActions = config1->turnWord & 0xF;
     D_8009CE38[0] = config2->animMode[0];
     config3 = *action;
     D_8009CE39 = config3->animMode[1];
@@ -203,7 +203,7 @@ void Battle_Init(void)
 
     Draw_ResetTextboxes();
     D_8009D1CE = 0;
-    D_8009D1AC &= ~0x300;
+    g_BattleResultFlags &= ~0x300;
     Battle_InitFadeVars();
     D_8009CE60 = 0;
 }
@@ -252,7 +252,7 @@ void Battle_DispatchEntityEffect(void) {
     int result;
     u32 word10;
 
-    action = D_8009D278->action;
+    action = g_ActiveActor->action;
     action_id = action->actionCode.actionId;
 
     if (action_id == 6) {
@@ -272,7 +272,7 @@ void Battle_DispatchEntityEffect(void) {
         BattleCmd_CommitAmmoAndUpdate(action);
     }
 
-    action2 = D_8009D278->action;
+    action2 = g_ActiveActor->action;
     action_id2 = action2->actionCode.actionId;
 
     if (action_id2 == 5 || ((word10 = action2->turnWord) & 0x1F00) != 0) {
@@ -306,7 +306,7 @@ void Battle_CheckEvasion(BattleEntity *actor, BattleEvasionOutcome *outcome,
 
     outcome->reaction = 0;
     if (!(actor->entityFlags & 0x4000)) {
-    if (D_8009D278->stateFlags & 0x100000) {
+    if (g_ActiveActor->stateFlags & 0x100000) {
         outcome->status = 1;
         outcome->reaction = 2;
         return;
@@ -314,8 +314,8 @@ void Battle_CheckEvasion(BattleEntity *actor, BattleEvasionOutcome *outcome,
 
     outcome->status = 0;
     range = AYA_DARKNESS_RANGE;
-    if ((D_8009D278->stateFlags & AYA_DARKNESS_MASK) != AYA_DARKNESS) {
-        range = D_8009D278->action->range;
+    if ((g_ActiveActor->stateFlags & AYA_DARKNESS_MASK) != AYA_DARKNESS) {
+        range = g_ActiveActor->action->range;
     }
     distance = Battle_CalcDistToPlayer(actor, D_8009D254) * 1000 / range;
     {
@@ -324,7 +324,7 @@ void Battle_CheckEvasion(BattleEntity *actor, BattleEvasionOutcome *outcome,
         roll = random - quotient * 100;
     }
 
-    action = D_8009D278->action;
+    action = g_ActiveActor->action;
     if (action->actionCode.actionId == 8) {
         if (distance >= 1001) return;
         threshold = ((action->turnWord >> 17) & 1) * 20;
@@ -378,7 +378,7 @@ below_1201:
 
     }
 close_range:
-    special = (D_8009D278->action->turnWord >> 17) & 1;
+    special = (g_ActiveActor->action->turnWord >> 17) & 1;
     threshold = special * 20;
     if (distance >= 801) threshold += 5;
     else if (distance >= 501) threshold += 20;
@@ -478,7 +478,7 @@ void Battle_SwapRecords(BattleTargetWords *records, int from_arg, int to_arg) {
 
 /* Copy the action the battle menu chose into the player's action record. */
 void Battle_CopyPadStateToRecord(void) {
-    BattleAction *record = D_8009D278->action;
+    BattleAction *record = g_ActiveActor->action;
     BattleAttackBits *attack = (BattleAttackBits *)&record->attackWord;
     BattleTurnBits *turn = (BattleTurnBits *)&record->turnWord;
 
@@ -534,7 +534,7 @@ void Battle_SyncEnemyAttributes(void) {
 /* MASPSX_FORCE_G0 keeps the game-state flags absolute, as retail; the COMMON
  * script sound cursor and count supply the small-data metadata of the two
  * $gp-relative bytes. */
-u8 D_8009D1D4;
+u8 g_BattleActionIndex;
 u8 g_BattleActionQueueCount;
 
 void Battle_FlushScriptSounds(void) {
@@ -543,7 +543,7 @@ void Battle_FlushScriptSounds(void) {
     int mask;
     int item;
 
-    index = D_8009D1D4;
+    index = g_BattleActionIndex;
     while ((index & 0xFF) < g_BattleActionQueueCount) {
         item = (u16)D_800BE830[index & 0xFF].command;
         if ((unsigned int)(item - 3) < 0x180) {
@@ -556,7 +556,7 @@ void Battle_FlushScriptSounds(void) {
     flags = g_GameStateFlags;
     mask = -0x101;
     g_BattleActionQueueCount = 0;
-    D_8009D1D4 = 0;
+    g_BattleActionIndex = 0;
     g_GameStateFlags = flags & mask;
 }
 
@@ -566,8 +566,8 @@ void Battle_StepScriptEntry(void)
     BattleEntity *entity;
     int command;
 
-    if (D_8009D1D4 < g_BattleActionQueueCount) {
-        entry = &D_800BE830[D_8009D1D4];
+    if (g_BattleActionIndex < g_BattleActionQueueCount) {
+        entry = &D_800BE830[g_BattleActionIndex];
         entity = D_8009D254;
         entity->motionX = 0;
         entity->motionY = 0;
@@ -583,18 +583,18 @@ void Battle_StepScriptEntry(void)
             } else if (command < 0x199) {
                 Entity_SetActionMode(entity, 13);
                 D_8009D2E8 |= 1;
-                D_8009D1D4++;
+                g_BattleActionIndex++;
                 D_8009D254->entityFlags |= 0x100;
             } else {
                 if ((s8)Battle_RollEscapeChance() == 1) {
-                    Entity_SetActionMode(D_8009D254, D_8009D278->actionMode12);
-                    D_8009D28C = 4;
+                    Entity_SetActionMode(D_8009D254, g_ActiveActor->actionMode12);
+                    g_BattleModeState = 4;
                 }
-                D_8009D1D4++;
+                g_BattleActionIndex++;
             }
         }
     } else {
-        D_8009D1D4 = 0;
+        g_BattleActionIndex = 0;
         g_BattleActionQueueCount = 0;
     }
 }

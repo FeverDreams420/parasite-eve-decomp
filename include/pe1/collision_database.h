@@ -31,7 +31,7 @@ typedef struct CollisionTriangleHeader {
 typedef struct CollisionFace {
     u8 kind;
     u8 region;    /* flat mode: index into g_RegionHeightTable */
-    u16 plane;    /* sloped mode: index into D_8009D1D8 */
+    u16 plane;    /* sloped mode: index into g_CollisionPlaneTable */
     s32 distance; /* sloped mode: plane D term */
 } CollisionFace;
 

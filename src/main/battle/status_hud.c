@@ -396,7 +396,7 @@ void Battle_DrawStatusOverlay(RenderObjectEntity *object, int mode, int outOfRan
         Battle_LayoutStatusPrimRow(0x18);
         Battle_DrawStatusSymbol(8);
     }
-    if (((BattleTurnBits *)&D_8009D278->action->turnWord)->slot >= 2)
+    if (((BattleTurnBits *)&g_ActiveActor->action->turnWord)->slot >= 2)
         Battle_DrawTargetHighlight();
 }
 
@@ -552,7 +552,7 @@ void Battle_DrawTargetHighlight(void)
     register unsigned first_offset asm("$4");
     register unsigned index_offset asm("$5");
     register unsigned char texture_v asm("$18");
-    if (((D_8009D278->action->turnWord >> 4) & 3) == 0) {
+    if (((g_ActiveActor->action->turnWord >> 4) & 3) == 0) {
         return;
     }
     texture_v = 224;
@@ -589,7 +589,7 @@ void Battle_DrawTargetHighlight(void)
             AddPrim((unsigned *)D_800B0E38.ordering[slot] + 7, at.words);
         }
         ++index;
-    } while (index < (int)((D_8009D278->action->turnWord >> 4) & 3));
+    } while (index < (int)((g_ActiveActor->action->turnWord >> 4) & 3));
 }
 
 #define NULL ((void *)0)
@@ -613,7 +613,7 @@ void Battle_DrawSpellName(void) {
         tv = *(u16 *)(g_BattleStatusRowPosY + c * 0x30);
         ys = tv + 4;
     }
-    if ((D_8009D278->action->attackWord & 0x300000) == 0x200000) {
+    if ((g_ActiveActor->action->attackWord & 0x300000) == 0x200000) {
         u8 *q508;
         r130 = 0x130;
         __asm__ __volatile__("" :: "r"(r130));
@@ -700,7 +700,7 @@ void Battle_DrawSpellName(void) {
             }
             {
                 Combatant *dval;
-                dval = D_8009D278;
+                dval = g_ActiveActor;
                 pl->width = 4;
                 pl->height = 0x10;
                 d68 = dval->action;
@@ -845,14 +845,14 @@ void Battle_DrawATBGauge(void)
     /* Keep the queue index initialized across the ammo-base callback. */
     i = 0;
     y = D_8009E358[g_ActiveDrawSlot * 3].y0 + 22;
-    category = (D_8009D278->action->attackWord >> 20) & 3;
+    category = (g_ActiveActor->action->attackWord >> 20) & 3;
     ammo = Inv_GetWeaponCategoryAmmoBase(category - 1);
     base = &D_8009E768[0].sprite;
     packet = (BattleGaugePrim *)((char *)base - PE1_OFFSETOF(BattleGaugePrim, sprite));
 
     packet += g_ActiveDrawSlot;
     sprite = &D_8009E768[g_ActiveDrawSlot].sprite;
-    ammo += *(unsigned short *)&D_8009D278->action->attackWord & 0x3ff;
+    ammo += *(unsigned short *)&g_ActiveActor->action->attackWord & 0x3ff;
     sprite->x = D_8009E358[g_ActiveDrawSlot * 3].x0 + 8;
     sprite->y = y;
     AddPrim((unsigned *)D_800B0E38.ordering[g_ActiveDrawSlot] + 4, (unsigned *)packet);
@@ -861,9 +861,9 @@ void Battle_DrawATBGauge(void)
         if (kind == 1) {
             --ammo;
         } else if (kind == 2) {
-            unsigned mode = D_8009D278->action->turnWord & 0xc0;
+            unsigned mode = g_ActiveActor->action->turnWord & 0xc0;
             if (mode == 0xc0) {
-                ammo -= *(unsigned char *)&D_8009D278->action->turnWord & 15;
+                ammo -= *(unsigned char *)&g_ActiveActor->action->turnWord & 15;
             } else if (mode == 0x40) {
                 --ammo;
             }
@@ -1320,27 +1320,27 @@ void Battle_DrawActiveStatus(void)
     RenderSpritePacket *peLabel;
     BattleTileSlot *tiles;
 
-    if (!(D_8009D1A0 & 2)) {
-        D_8009D278 = D_8009D254->core;
+    if (!(g_GameStateFlags & 2)) {
+        g_ActiveActor = D_8009D254->core;
     }
-    if ((u16)D_8009D278->hpAlive >= 9001) {
-        D_8009D278->hpAlive = 9000;
+    if ((u16)g_ActiveActor->hpAlive >= 9001) {
+        g_ActiveActor->hpAlive = 9000;
     }
-    currentGauge = D_8009D278->exp_or_acc;
-    maximumGauge = D_8009D278->maxAtk;
+    currentGauge = g_ActiveActor->exp_or_acc;
+    maximumGauge = g_ActiveActor->maxAtk;
     if (maximumGauge < currentGauge) {
-        D_8009D278->exp_or_acc = maximumGauge;
+        g_ActiveActor->exp_or_acc = maximumGauge;
     } else if (currentGauge < 0) {
-        D_8009D278->exp_or_acc = 0;
+        g_ActiveActor->exp_or_acc = 0;
     }
-    maximumHP = D_8009D278->maxHP;
-    if (maximumHP < (s16)D_8009D278->curHP) {
-        D_8009D278->curHP = maximumHP;
+    maximumHP = g_ActiveActor->maxHP;
+    if (maximumHP < (s16)g_ActiveActor->curHP) {
+        g_ActiveActor->curHP = maximumHP;
     }
-    peProduct = (s16)(D_8009D278->exp_or_acc >> 16) * 0x38;
-    atbWidth = (D_8009D278->hpAlive * 0x38) / 9000;
-    peWidth = peProduct / (s16)(D_8009D278->maxAtk >> 16);
-    if (D_8009D1A0 & 2) {
+    peProduct = (s16)(g_ActiveActor->exp_or_acc >> 16) * 0x38;
+    atbWidth = (g_ActiveActor->hpAlive * 0x38) / 9000;
+    peWidth = peProduct / (s16)(g_ActiveActor->maxAtk >> 16);
+    if (g_GameStateFlags & 2) {
         atbTrack = &g_BattleAtbTracks[g_ActiveDrawSlot];
         atbTrack->x0 = g_HudOrigin.x + 8;
         atbTrack->y0 = g_HudOrigin.y + 4;
@@ -1389,7 +1389,7 @@ void Battle_DrawActiveStatus(void)
         AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 5, (u32 *)peFill);
         AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 5, (u32 *)&g_BattlePeGauges[g_ActiveDrawSlot][1]);
         AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 4, (u32 *)&g_BattlePeLabels[g_ActiveDrawSlot]);
-        if (D_8009D1A0 & 2) {
+        if (g_GameStateFlags & 2) {
             tiles = D_8009E070;
             tiles[g_ActiveDrawSlot].tile.x0 = g_HudOrigin.x;
             tiles[g_ActiveDrawSlot].tile.y0 = g_HudOrigin.y;
@@ -1402,7 +1402,7 @@ void Battle_DrawActiveStatus(void)
             tiles[g_ActiveDrawSlot].tile.w = 0x54;
             tiles[g_ActiveDrawSlot].tile.h = 0x19;
         }
-    } else if (D_8009D1A0 & 2) {
+    } else if (g_GameStateFlags & 2) {
         tiles = D_8009E070;
         tiles[g_ActiveDrawSlot].tile.x0 = g_HudOrigin.x;
         tiles[g_ActiveDrawSlot].tile.y0 = g_HudOrigin.y;
@@ -1416,7 +1416,7 @@ void Battle_DrawActiveStatus(void)
         tiles[g_ActiveDrawSlot].tile.h = 0x12;
     }
     AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 7, (u32 *)&g_BattleStatusBackgrounds[g_ActiveDrawSlot]);
-    Battle_DrawEnemyHP(D_8009D278->maxHP, D_8009D278->curHP);
+    Battle_DrawEnemyHP(g_ActiveActor->maxHP, g_ActiveActor->curHP);
     Draw_StatusIcons();
 }
 

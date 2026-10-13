@@ -34,7 +34,7 @@ u8 D_8009CE39;
 u8 D_8009CE3A;
 u8 D_8009CE3B;
 u8 g_BattleActionQueueCount;
-u8 D_8009D1D4;
+u8 g_BattleActionIndex;
 s32 D_8009D208;
 s32 D_8009D258;
 s16 D_8009D27C;
@@ -103,7 +103,7 @@ void Battle_AdvancePhase(void) {
     u32 misaligned;
 
     var_a0 = D_8009D2A0;
-    temp_a2 = D_8009D1D4;
+    temp_a2 = g_BattleActionIndex;
     temp_s2 = &D_800BE830[temp_a2 & 0xFF];
     if (var_a0 == 0) {
         var_s0 = temp_a2;
@@ -117,11 +117,11 @@ void Battle_AdvancePhase(void) {
             } while ((var_s0 & 0xFFU) < (u8) g_BattleActionQueueCount);
         }
         g_BattleActionQueueCount = 0;
-        D_8009D1D4 = 0;
-        D_8009D1A0 = D_8009D1A0 & ~0x100;
+        g_BattleActionIndex = 0;
+        g_GameStateFlags = g_GameStateFlags & ~0x100;
         return;
     }
-    if (D_8009D278->stateFlags & 0x200000) {
+    if (g_ActiveActor->stateFlags & 0x200000) {
         sp18 = D_8001074C;
         copy_dst = (u8 *)sp30.soundId;
         copy_src = (const u8 *)D_80010760.soundId;
@@ -164,7 +164,7 @@ after_command:
         action = command_value - 0x183;
         if (temp_s2->actor != D_8009D254) {
             temp_v0 = Battle_CalcAngleToTarget(&temp_s2->actor->renderObject, &D_8009D254->posX);
-            var_a0_2 = D_8009D1D4;
+            var_a0_2 = g_BattleActionIndex;
             firstSlot = var_a0_2 & 0xFF;
 
             D_8009D254->facingAngle = temp_v0;
@@ -186,7 +186,7 @@ after_command:
                 }
 block_search_done:
                 if (!(targetFound & 0xFF)) {
-                    var_v0_3 = D_8009D1D4 + 7;
+                    var_v0_3 = g_BattleActionIndex + 7;
                 temp_v1_3 = var_v0_3 & 0xFF;
                 temp_v1_3 <<= 3;
                 {
@@ -196,18 +196,18 @@ block_search_done:
                     at.address = temp_v1_3 + at.address;
                     temp_v1_3 = (u16)at.slot->command;
                 }
-                D_8009D1D4 = var_v0_3;
+                g_BattleActionIndex = var_v0_3;
                 temp_v1_3 -= 3;
                 temp_v1_3 = temp_v1_3 < 0x194U;
                 if (!temp_v1_3 || ((u8) D_8009D254->actionMode < 4U)) {
-                    D_8009D1A0 = D_8009D1A0 & ~0x100;
+                    g_GameStateFlags = g_GameStateFlags & ~0x100;
                 }
-                Entity_SetActionMode(((void *)D_8009D254), D_8009D278->actionMode12);
-                D_8009D278->stateFlags |= 0x200000;
+                Entity_SetActionMode(((void *)D_8009D254), g_ActiveActor->actionMode12);
+                g_ActiveActor->stateFlags |= 0x200000;
                 return;
                 }
                 if (var_a2 != NULL) {
-                    var_s0 = D_8009D1D4;
+                    var_s0 = g_BattleActionIndex;
                     temp_v1_3 = var_s0 & 0xFF;
                     var_a0_2 = temp_v1_3 + 7;
                     if (temp_v1_3 < var_a0_2) {
@@ -227,7 +227,7 @@ block_search_done:
             {
             temp_v1_6 = D_800BE830[firstSlot].actor;
             if ((temp_v1_6 == NULL) || (((EnemyCombatant *)temp_v1_6->core)->hpAlive <= 0) || (*(s32 *)&temp_v1_6->entityFlags & 0x4000)) {
-                var_v0_3 = D_8009D1D4 + 1;
+                var_v0_3 = g_BattleActionIndex + 1;
 block_35:
                 temp_v1_3 = var_v0_3 & 0xFF;
                 temp_v1_3 <<= 3;
@@ -238,14 +238,14 @@ block_35:
                     at.address = temp_v1_3 + at.address;
                     temp_v1_3 = (u16)at.slot->command;
                 }
-                D_8009D1D4 = var_v0_3;
+                g_BattleActionIndex = var_v0_3;
                 temp_v1_3 -= 3;
                 temp_v1_3 = temp_v1_3 < 0x194U;
                 if (!temp_v1_3 || ((u8) D_8009D254->actionMode < 4U)) {
-                    D_8009D1A0 = D_8009D1A0 & ~0x100;
+                    g_GameStateFlags = g_GameStateFlags & ~0x100;
                 }
-                Entity_SetActionMode(((void *)D_8009D254), D_8009D278->actionMode12);
-                D_8009D278->stateFlags |= 0x200000;
+                Entity_SetActionMode(((void *)D_8009D254), g_ActiveActor->actionMode12);
+                g_ActiveActor->stateFlags |= 0x200000;
                 return;
             }
         }
@@ -254,11 +254,11 @@ block_39:
         Pm_StopAll();
         if (action == 6) {
             BattleEntity *attackTarget;
-            queuedAction = D_8009D278->action;
+            queuedAction = g_ActiveActor->action;
             if (!(*(s32 *)&queuedAction->attackWord & 0x3FF)) {
                 BattleCmd_CommitAmmoAndUpdate(queuedAction);
             }
-            D_8009D278->stateFlags |= 0x100000;
+            g_ActiveActor->stateFlags |= 0x100000;
             attackTarget = temp_s2->actor;
             temp_s0 = attackTarget->renderObject.target_y - D_8009D27C;
             temp_v0_2 = ratan2(temp_s0, Battle_CalcDistToPlayer(attackTarget, ((void *)D_8009D254)));
@@ -270,9 +270,9 @@ block_39:
                     var_v1 = 1;
                 }
             }
-            Entity_SetActionMode(((void *)D_8009D254), *(var_v1 + D_8009D278->targetAngleActionModes));
+            Entity_SetActionMode(((void *)D_8009D254), *(var_v1 + g_ActiveActor->targetAngleActionModes));
             {
-                s32 *stateFlags = &D_8009D278->stateFlags;
+                s32 *stateFlags = &g_ActiveActor->stateFlags;
                 *stateFlags &= 0xFFDFFFFF;
             }
             D_8009CE39 = 0x58;
@@ -299,19 +299,19 @@ block_39:
         }
         ((int (*)(int, int, int, int, int))Akao_SendPositionalCmdStereo)(var_a0_3, 0, var_a2_2, var_a3_2, var_v0_5);
         var_a1 = 0xFFDFFFFF;
-        var_a0_4 = ((void *)D_8009D278);
+        var_a0_4 = ((void *)g_ActiveActor);
         actor_flags = ((Combatant *)var_a0_4)->stateFlags;
-        D_8009D1A0 = D_8009D1A0 | 0x100;
+        g_GameStateFlags = g_GameStateFlags | 0x100;
         actor_flags &= var_a1;
         ((Combatant *)var_a0_4)->stateFlags = actor_flags;
     }
 block_55:
-    actor = ((void *)D_8009D278);
+    actor = ((void *)g_ActiveActor);
     actor_flags = actor->stateFlags;
     if (actor_flags & 0x80000) {
         if ((Battle_StepAyaAction() << 0x18) != 0) {
-            end_slot = D_8009D1D4;
-            aya_actor = ((void *)D_8009D278);
+            end_slot = g_BattleActionIndex;
+            aya_actor = ((void *)g_ActiveActor);
             aya_player = ((void *)D_8009D254);
             aya_actor->exp_or_acc = 0;
             aya_player->entityFlags &= ~0x100;
@@ -325,7 +325,7 @@ block_55:
                     }
                     var_s0_4 += 1;
                     var_a2_2 = var_s0_4 & 0xFF;
-                } while ((unsigned)var_a2_2 < (u8) D_8009D1D4);
+                } while ((unsigned)var_a2_2 < (u8) g_BattleActionIndex);
             }
             var_a0_4 = g_FieldActorListHead;
             if (var_a0_4 != NULL) {
@@ -344,7 +344,7 @@ block_55:
                     var_a0_4 = ((BattleEntity *)var_a0_4)->next;
                 } while (var_a0_4 != NULL);
             }
-            D_8009D278->stateFlags &= 0xFFF7FFFF;
+            g_ActiveActor->stateFlags &= 0xFFF7FFFF;
             Battle_HaltOnPositiveX();
         }
     } else if (actor_flags & 0x100000) {
@@ -354,15 +354,15 @@ block_55:
         if (g_PmSlotTable[D_8009D258].header.state - 1U >= 2U) {
             var_a2_2 = 0xFFEFFFFF;
             temp_a0_3 = -0x101;
-            cleanupActor = ((void *)D_8009D278);
+            cleanupActor = ((void *)g_ActiveActor);
             character_state = ((void *)D_8009D254);
             cleanupActor->exp_or_acc = 0;
             *(s32 *)&character_state->entityFlags &= temp_a0_3;
-            system_flags = D_8009D1A0;
+            system_flags = g_GameStateFlags;
             cleanup_flags.value = cleanupActor->stateFlags;
             system_flags &= temp_a0_3;
             cleanup_flags.value &= var_a2_2;
-            D_8009D1A0 = system_flags;
+            g_GameStateFlags = system_flags;
             cleanup_flags.value |= 0x200000;
             cleanupActor->stateFlags = cleanup_flags.value;
             Battle_HaltOnPositiveX();
@@ -371,14 +371,14 @@ block_55:
         if (D_8009D254->animLastFrame == D_8009D254->animPrev.parts.integer) {
             Entity_SetActionMode(((void *)D_8009D254), actor->actionMode12);
         }
-        if (((g_PmSlotTable[D_8009D258].header.state - 1U >= 2U) || (temp_s2->command == 0x196)) && (D_8009D278->stateFlags |= 0x200000, Battle_ApplySpellEffect(temp_s2->command - 0x183, temp_s2->actor), (temp_s2->command != 0x196))) {
-            temp_v0_6 = D_8009D1D4 + 1;
-            D_8009D1D4 = temp_v0_6;
+        if (((g_PmSlotTable[D_8009D258].header.state - 1U >= 2U) || (temp_s2->command == 0x196)) && (g_ActiveActor->stateFlags |= 0x200000, Battle_ApplySpellEffect(temp_s2->command - 0x183, temp_s2->actor), (temp_s2->command != 0x196))) {
+            temp_v0_6 = g_BattleActionIndex + 1;
+            g_BattleActionIndex = temp_v0_6;
             if (((u16)D_800BE830[temp_v0_6 & 0xFF].command - 3U >= 0x194U) || ((u8) D_8009D254->actionMode < 4U)) {
-                D_8009D1A0 = D_8009D1A0 & ~0x100;
+                g_GameStateFlags = g_GameStateFlags & ~0x100;
             }
             temp_a0_4 = (u8)g_BattleActionQueueCount;
-            for (var_s0_4 = D_8009D1D4; (var_s0_4 & 0xFFU) < (unsigned)temp_a0_4; var_s0_4++) {
+            for (var_s0_4 = g_BattleActionIndex; (var_s0_4 & 0xFFU) < (unsigned)temp_a0_4; var_s0_4++) {
                 if ((u16)D_800BE830[var_s0_4 & 0xFF].command - 1U < 2U) {
                     Battle_DispatchEntityEffect();
                     return;
@@ -394,7 +394,7 @@ void Battle_StartEnemyAttackEffect(BattleEntity *entity)
     u32 *status = (u32 *)&core->statusFlags2;
     int effect;
 
-    if ((D_8009D278->action->turnWord & 0x400) && ((*status & 3) != 1)) {
+    if ((g_ActiveActor->action->turnWord & 0x400) && ((*status & 3) != 1)) {
         effect = Scene_LoadRoomAssets(7, entity);
         D_8009D208 = effect;
         Pm_SendCmd(effect, 0, 0, 2, 0, 0);
@@ -402,28 +402,28 @@ void Battle_StartEnemyAttackEffect(BattleEntity *entity)
                         entity->renderObject.target_y, entity->renderObject.target_z);
         return;
     }
-    if ((D_8009D278->action->turnWord & 0x300) == 0x300 &&
+    if ((g_ActiveActor->action->turnWord & 0x300) == 0x300 &&
         ((*status & 0x3C000) != 0x14000)) {
         D_8009D208 = Scene_LoadRoomAssets(90, entity);
         Asset_Find08Alt(0x488, 0, entity->renderObject.target_x,
                         entity->renderObject.target_y, entity->renderObject.target_z);
         return;
     }
-    if ((D_8009D278->action->turnWord & 0x100) &&
+    if ((g_ActiveActor->action->turnWord & 0x100) &&
         ((*status & 0xC000) != 0x4000)) {
         D_8009D208 = Scene_LoadRoomAssets(88, entity);
         Asset_Find08Alt(0x488, 0, entity->renderObject.target_x,
                         entity->renderObject.target_y, entity->renderObject.target_z);
         return;
     }
-    if ((D_8009D278->action->turnWord & 0x200) &&
+    if ((g_ActiveActor->action->turnWord & 0x200) &&
         ((*status & 0x30000) != 0x10000)) {
         D_8009D208 = Scene_LoadRoomAssets(89, entity);
         Asset_Find08Alt(0x486, 0, entity->renderObject.target_x,
                         entity->renderObject.target_y, entity->renderObject.target_z);
         return;
     }
-    if ((D_8009D278->action->turnWord & 0x800) &&
+    if ((g_ActiveActor->action->turnWord & 0x800) &&
         ((*status & 0xC) != 4)) {
         effect = Scene_LoadRoomAssets(7, entity);
         D_8009D208 = effect;
@@ -432,7 +432,7 @@ void Battle_StartEnemyAttackEffect(BattleEntity *entity)
                         entity->renderObject.target_y, entity->renderObject.target_z);
         return;
     }
-    if ((D_8009D278->action->turnWord & 0x1000) &&
+    if ((g_ActiveActor->action->turnWord & 0x1000) &&
         ((*status & 0x30) != 0x10)) {
         effect = Scene_LoadRoomAssets(7, entity);
         D_8009D208 = effect;

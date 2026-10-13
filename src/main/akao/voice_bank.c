@@ -498,7 +498,7 @@ void Seq_StartNestedTrack(AkaoTrack *track, AkaoNestedSource *source, unsigned i
     g_AkaoTrack38Mask &= mask;
     g_AkaoTrack3CMask &= mask;
 
-    if ((D_8009D2DC & 2) != 0) {
+    if ((g_AkaoSeqPendingFlags & 2) != 0) {
         unsigned int busy_mask;
         unsigned int *active_loop_mask;
         int count;

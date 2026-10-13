@@ -5,17 +5,17 @@
 void BootDisplay_RunDisplay(void) {
     u32 state;
     s32 fade;
-    if (D_8009D1A0 & 0x10000) {
+    if (g_GameStateFlags & 0x10000) {
         g_BootDisplayCallbacks = &D_80125B68;
     } else {
         g_BootDisplayCallbacks = &D_80125B4C;
-        if (!(D_8009D1A0 & 0x20000)) D_80125B4C.text = 0;
+        if (!(g_GameStateFlags & 0x20000)) D_80125B4C.text = 0;
     }
     g_BootDisplayCallbacks->init();
-    if (!(D_8009D1A0 & 0x10000)) {
+    if (!(g_GameStateFlags & 0x10000)) {
         func_8012562C();
         func_80125744();
-        if (D_8009D1A0 & 0x20000) {
+        if (g_GameStateFlags & 0x20000) {
             Spu_SetVoiceVolume(144);
             func_80125894(1);
         } else Spu_SetVoiceVolume(218);
@@ -31,7 +31,7 @@ void BootDisplay_RunDisplay(void) {
         switch (state) {
         case 0:
             if (BootDisplay_DrawTextBlock()) {
-                state = (D_8009D1A0 & 0x20000) ? 1 : 4;
+                state = (g_GameStateFlags & 0x20000) ? 1 : 4;
                 fade = 0;
             }
             break;
@@ -42,7 +42,7 @@ void BootDisplay_RunDisplay(void) {
             break;
         case 2:
             g_BootDisplayCallbacks->transition(255);
-            if (D_80172CE4 && (D_8009D26C & 0xF0000004)) { state = 3; fade = 255; }
+            if (D_80172CE4 && (g_FieldPadBits & 0xF0000004)) { state = 3; fade = 255; }
             break;
         case 3:
             g_BootDisplayCallbacks->transition((u8)fade);
@@ -50,7 +50,7 @@ void BootDisplay_RunDisplay(void) {
             if (fade < 0) state = 4;
             break;
         case 4: {
-            u32 flags = D_8009D1A0;
+            u32 flags = g_GameStateFlags;
             s32 finished;
             if (flags & 0x30000) finished = 1;
             else finished = D_80172CE4;
@@ -59,7 +59,7 @@ void BootDisplay_RunDisplay(void) {
         }
         }
         Field_HandleStateTransition();
-        if (D_8009D1A0 & 0x10000) {
+        if (g_GameStateFlags & 0x10000) {
             if (D_8009D1F4 & 0x4000000) func_80125894(0);
             if (D_8009D1F4 & 0x8000000) func_80125894(1);
         }
@@ -68,7 +68,7 @@ void BootDisplay_RunDisplay(void) {
     } while (D_80172CE0 == 0);
     func_801255A4();
     g_BootDisplayCallbacks->shutdown();
-    D_8009D1A0 &= ~0x10000;
+    g_GameStateFlags &= ~0x10000;
 }
 
 s32 BootDisplay_DrawTextBlock(void) {

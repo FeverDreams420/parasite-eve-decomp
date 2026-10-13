@@ -46,7 +46,6 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 u32 *D_8009CE00;
-ScriptNode *D_8009D300;
 ScriptNode *g_ScriptNodePool;
 int g_SceneDataTable0;
 
@@ -376,7 +375,7 @@ int Render_CameraTrackRelativeOffset(int **args) {
     }
     movement_speed = Math_FixedMul(movement_speed, g_CurrentEntity->move_speed << 4);
 
-    init_state = D_8009D300;
+    init_state = g_ScriptNodePool;
     if ((init_state->flags & 0x20) == 0) {
         turn_speed = *args[2];
         target_x = current_x + *args[0];
@@ -454,7 +453,7 @@ int Render_CameraTrackRelativeOffset(int **args) {
     movement_distance = current_x * current_x + current_z * current_z;
     motion_entity->motion_z = movement_z;
     if (movement_distance >= remaining_distance) {
-        camera_state = D_8009D300;
+        camera_state = g_ScriptNodePool;
         motion_entity->pos_x = target_x;
         motion_entity->pos_z = target_z;
         motion_entity->motion_x = 0;
@@ -463,7 +462,7 @@ int Render_CameraTrackRelativeOffset(int **args) {
         return 1;
     } else {
         D_8009CE00 -= 5;
-        D_8009D300->active = 1;
+        g_ScriptNodePool->active = 1;
         return 0;
     }
 }
@@ -637,7 +636,7 @@ int Script_PlayEntityAnim(s16 **args) {
     u32 control_flags;
     u16 progress;
 
-    script_state = D_8009D300;
+    script_state = g_ScriptNodePool;
     progress = script_state->flags;
     if (progress & 0x20) {
         if (!(g_CurrentEntity->render_object.flags_9C & 4)) {
@@ -663,7 +662,7 @@ int Script_PlayEntityAnim(s16 **args) {
     }
 
     D_8009CE00 -= 3;
-    D_8009D300->active = 1;
+    g_ScriptNodePool->active = 1;
     return 0;
 }
 
@@ -816,7 +815,7 @@ int Script_SetGteMatrix(int **args) {
         result = 0;
         script_ptr = D_8009CE00;
         flag_actor->flags = flags | 0x08000000;
-        script_state = D_8009D300;
+        script_state = g_ScriptNodePool;
         D_8009CE00 = script_ptr - 5;
         script_state->active = 1;
         return result;
@@ -955,11 +954,11 @@ int Scene_SelectMapById(int **args) {
     }
 
     raw_selection = 1;
-    if (D_8009D1C4 == D_8009D280) {
+    if (g_SceneDispatchCur == D_8009D280) {
         game_state = &g_GameState.flags;
-        state_flags = D_8009D1A0;
+        state_flags = g_GameStateFlags;
         map_flags = game_state[0];
-        D_8009D1A0 = state_flags | 0x2000;
+        g_GameStateFlags = state_flags | 0x2000;
         game_state[0] = map_flags | 0x800;
     } else {
         return raw_selection;
@@ -1215,7 +1214,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
                                 *args->arg2 == 0);
         if (status == 1) {
             D_8009CE00 -= 8;
-            D_8009D300->active = status;
+            g_ScriptNodePool->active = status;
             return 0;
         }
         if (locals.slot + 2U < 2U) {
@@ -1230,7 +1229,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
                                 *args->arg3 == 0);
         if (status == 1) {
             D_8009CE00 -= 8;
-            D_8009D300->active = status;
+            g_ScriptNodePool->active = status;
             return 0;
         }
         if (locals.slot + 2U < 2U) {
@@ -1253,7 +1252,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
             break;
         }
         D_8009CE00 -= 8;
-        D_8009D300->active = status;
+        g_ScriptNodePool->active = status;
         return 0;
     case 0xCC:
         Akao_Cmd_90(*args->arg1);
@@ -1449,14 +1448,14 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
                                *args->arg2 == 0);
         if (status == 1) {
             D_8009CE00 -= 8;
-            D_8009D300->active = status;
+            g_ScriptNodePool->active = status;
             return 0;
         }
         }
         else
         {
         D_8009CE00 -= 8;
-        D_8009D300->active = status;
+        g_ScriptNodePool->active = status;
         return 0;
         }
         *args->result = locals.slot;

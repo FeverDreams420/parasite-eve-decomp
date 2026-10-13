@@ -55,11 +55,11 @@ PE1_STATIC_ASSERT(sizeof(AkaoTickBank) == 0x68, akao_tick_bank_size);
 extern AkaoTickBank *D_8009D2C8;
 extern AkaoTickTrack D_800BC000[];
 extern u8 D_8009D2D2;
-extern u32 D_8009D2DC;
+extern u32 g_AkaoSeqPendingFlags;
 extern u32 D_8009D22C;
 /* Message-queue lock, also read by the timer interrupt. */
 extern volatile u32 D_8009D268;
-extern u32 D_8009D2C4;
+extern u32 g_AkaoVoiceUpdateFlags;
 extern u32 g_SpuActiveVoiceMask;
 extern u32 D_800BCD58;
 extern u32 g_SpuPendingKeyOffMask;

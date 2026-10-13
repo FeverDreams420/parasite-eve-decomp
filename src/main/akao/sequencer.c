@@ -165,7 +165,7 @@ void Akao_Tick(void)
                 tempo = (tempo * scale) >> 8;
         }
         D_8009D2C8->timing.tick_accumulator += tempo;
-        if ((D_8009D2C8->timing.tick_accumulator & 0xFFFF0000) || (D_8009D2DC & 4)) {
+        if ((D_8009D2C8->timing.tick_accumulator & 0xFFFF0000) || (g_AkaoSeqPendingFlags & 4)) {
             D_8009D2C8->timing.tick_accumulator &= 0xFFFF;
             do {
                 bit = 1;
@@ -199,7 +199,7 @@ void Akao_Tick(void)
 
                     (*duration)--;
                     *volume += D_8009D2C8->timing.volume_delta;
-                    D_8009D2C4 |= 0x80;
+                    g_AkaoVoiceUpdateFlags |= 0x80;
                 }
                 if (D_8009D2C8->timing.ticks_per_beat) {
                     if (++D_8009D2C8->timing.tick == D_8009D2C8->timing.ticks_per_beat) {
@@ -227,7 +227,7 @@ void Akao_Tick(void)
                 tempo = (tempo * scale) >> 8;
         }
         D_8009D2C8->timing.tick_accumulator += tempo;
-        if ((D_8009D2C8->timing.tick_accumulator & 0xFFFF0000) || (D_8009D2DC & 4)) {
+        if ((D_8009D2C8->timing.tick_accumulator & 0xFFFF0000) || (g_AkaoSeqPendingFlags & 4)) {
             D_8009D2C8->timing.tick_accumulator &= 0xFFFF;
             bit = 1;
             track = &D_800B8AC0[24];
@@ -283,13 +283,13 @@ void Akao_Tick(void)
     if (mask) {
         accumulator = D_800BCD68 + D_800BCD66;
         D_800BCD68 = accumulator;
-        if ((accumulator & 0xFFFF0000) || (D_8009D2DC & 4)) {
+        if ((accumulator & 0xFFFF0000) || (g_AkaoSeqPendingFlags & 4)) {
             D_800BCD68 = accumulator & 0xFFFF;
             bit = 0x1000;
             track = D_800BC000;
             do {
                 if (mask & bit) {
-                    if (!(D_8009D2DC & 2) || (track->timing.key_on_mask & 0x2000000)) {
+                    if (!(g_AkaoSeqPendingFlags & 2) || (track->timing.key_on_mask & 0x2000000)) {
                         track->timing.note_length--;
                         track->timing.tick_count++;
                         track->timing.gate_length--;

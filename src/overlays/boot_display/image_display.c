@@ -208,7 +208,7 @@ void BootDisplay_StepImageDisplay(void) {
     rect[3] = 224;
     StoreImage(rect, g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].pixels);
     DrawSync(0);
-    if ((int)D_8009D26C < 0) {
+    if ((int)g_FieldPadBits < 0) {
         if (D_8009D1F4 & 0x1000000) {
             u16 timer = (u16)g_BootDisplayStateTimer;
             if (timer != 0) {

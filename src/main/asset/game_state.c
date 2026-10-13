@@ -380,7 +380,7 @@ int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
         frame = next_frame - extra;
     }
 
-    if (actor_reg == ((AkaoVoiceActor *)D_8009D254) && (D_8009D1A0 & 2) == 0 && (state->flags & 0x800000) == 0) {
+    if (actor_reg == ((AkaoVoiceActor *)D_8009D254) && (g_GameStateFlags & 2) == 0 && (state->flags & 0x800000) == 0) {
         u16 *entry_ids;
         entry_ids = D_80094488[0].ids;
         entry = 0;

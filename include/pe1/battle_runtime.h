@@ -6,7 +6,7 @@
 #include "pe1/pm.h"
 #include "pe1/scene_transition.h"
 
-extern Combatant *D_8009D278;
+extern Combatant *g_ActiveActor;
 extern BattleEntity *D_8009D254;
 extern s16 D_8009D2A4;
 extern int D_8009D200;
@@ -35,21 +35,20 @@ extern int D_8009D2FC;
 extern int D_8009D258;
 extern s8 D_8009CE40; /* item target mode: 0, or 4..7 while picking */
 extern u8 D_8009D2D8;
-extern u8 D_8009D1DC;
 /* Actions left in the battle turn (Save_ResetGlobalFlags clears it). */
 extern unsigned char g_BattleRemainingActions;
 extern u8 D_8009CE38[4];
-extern unsigned int D_8009D1AC;
+extern unsigned int g_BattleResultFlags;
 extern u8 D_8009D1CE;
 /* D_8009D1CE read as the signed save-overlay flag, and the actor effect
  * timer at 0x8009D228 read as a signed count. */
 extern s8 g_BattleSaveOverlayActive;
 extern s16 g_ActorEffectFlag100Timer;
 extern u8 D_8009CE60;
-extern u8 D_8009D1D4;
+extern u8 g_BattleActionIndex;
 extern u8 g_BattleActionQueueCount;
 extern unsigned int D_8009D2E8;
-extern int D_8009D28C;
+extern int g_BattleModeState;
 /* Action record the battle menu fills in (Menu_RunFrameWithArg). Its packed
  * words are also declared on their own: retail reads each of them through
  * its own absolute address. */
@@ -64,10 +63,10 @@ extern u8 D_8009159C[];
 extern u8 D_800915C0[];
 extern const EnemyCombatant D_800109B0;
 extern BattleEnemySlot D_800A5D58[7];
-extern u8 D_8009D2EC;
+extern u8 g_EntityInstanceCounter;
 extern s8 D_8009D2A0;
 extern u8 D_8009CE74;
-extern u8 D_8009D244;
+extern u8 g_BattleEnemyEscapeFlag;
 /* Frames since the player halted at battle end; Menu_MainUpdate counts it up
  * to 0x5A. */
 extern s8 D_8009CE30;
@@ -169,7 +168,6 @@ extern struct { u16 value; char pad[14]; } D_800B0D88_write __asm__("D_800B0D88"
 extern u16 D_800B0D88;
 extern u8 D_800B0D8A;
 extern u16 D_801F1F38;
-extern u32 D_8009D1A0;
 int Scene_InitEntityPlayer(int mode);
 void Pm_StopLowerHalf(void);
 s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);

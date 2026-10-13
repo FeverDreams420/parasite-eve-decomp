@@ -29,7 +29,7 @@
 s32 g_SceneFlagBits;
 s32 g_BattleControlFlags;
 s32 g_FieldRenderFlags;
-u32 D_8009D26C;
+u32 g_FieldPadBits;
 u32 D_8009D2D4;
 
 /* Boot-time system initialization: Boot_InitSystem, the subsystem and global
@@ -179,7 +179,7 @@ void Boot_BuildRenderFlagTable(void) {
     g_BattleControlFlags = 0;
     D_8009D2D4 = 0;
     g_FieldRenderFlags = 0;
-    D_8009D26C = 0;
+    g_FieldPadBits = 0;
     do {
         *entry = 0;
         i += 1;
@@ -253,7 +253,7 @@ void Field_HandleStateTransition(void) {
         u32 initial_flags = g_GameStateFlags;
         if ((initial_flags & 0x4001) == 0) {
             D_8009D1F4 = 4;
-            D_8009D26C = 4;
+            g_FieldPadBits = 4;
             D_8009D1E4 = 0;
             g_GameStateFlags = initial_flags | 0x4000;
             return;
@@ -285,7 +285,7 @@ void Field_HandleStateTransition(void) {
     pad_mask = 0xFFFF9FFF;
     base_bits = (~pad) & pad_mask;
     asm volatile("" : "=r"(pad) : "0"(pad));
-    old_pad_bits = D_8009D26C;
+    old_pad_bits = g_FieldPadBits;
     D_8009D238 = old_pad_bits;
     inverted = ~pad;
     pad_bits = base_bits;
@@ -296,10 +296,10 @@ void Field_HandleStateTransition(void) {
         pad_bits |= 0x2000;
     }
 
-    D_8009D26C = 0;
+    g_FieldPadBits = 0;
     for (i = 0; i < 0x20; i++) {
         if (((u16)pad_bits & D_800A76F0[i]) != 0) {
-            D_8009D26C |= 1u << i;
+            g_FieldPadBits |= 1u << i;
             D_800A7770[i]++;
         } else {
             D_800A7770[i] = 0;
@@ -308,7 +308,7 @@ void Field_HandleStateTransition(void) {
 
     flags = g_GameStateFlags;
     if ((flags & 1) != 0) {
-        active_pad = D_8009D26C;
+        active_pad = g_FieldPadBits;
         if ((int)active_pad < 0) {
             mask = ((active_pad ^ D_8009D2D4) & active_pad) & 0x7000007E;
             if (mask != 0) {
@@ -326,81 +326,81 @@ void Field_HandleStateTransition(void) {
         } else {
             D_8009D2A8 = 0;
         }
-        save_pad = D_8009D26C;
+        save_pad = g_FieldPadBits;
         D_8009D2D4 = save_pad;
     }
 
     menu_open = g_GameState.flags;
     if (menu_open & 0x400) {
-        D_8009D26C &= 0x40FFDC7F;
+        g_FieldPadBits &= 0x40FFDC7F;
     }
     if (menu_open & 0x200) {
-        D_8009D26C &= 0x60FFDB04;
+        g_FieldPadBits &= 0x60FFDB04;
         if (g_GameState.scene_audio.tracks.movie_index != 1) {
-            D_8009D26C &= 0xDFFFFCFF;
+            g_FieldPadBits &= 0xDFFFFCFF;
         }
     }
-    if (D_8009D26C & 0x10000080) {
-        D_8009D26C &= 0x7FFFFFFF;
+    if (g_FieldPadBits & 0x10000080) {
+        g_FieldPadBits &= 0x7FFFFFFF;
     }
-    if (D_8009D26C & 0x40000401) {
-        D_8009D26C &= 0xEFFFFF7F;
-        D_8009D26C &= 0x7FFFFFFF;
+    if (g_FieldPadBits & 0x40000401) {
+        g_FieldPadBits &= 0xEFFFFF7F;
+        g_FieldPadBits &= 0x7FFFFFFF;
     }
-    if (D_8009D26C & 0x20000300) {
-        D_8009D26C &= 0xBFFFFBFE;
-        D_8009D26C &= 0xEFFFFF7F;
-        D_8009D26C &= 0x7FFFFFFF;
+    if (g_FieldPadBits & 0x20000300) {
+        g_FieldPadBits &= 0xBFFFFBFE;
+        g_FieldPadBits &= 0xEFFFFF7F;
+        g_FieldPadBits &= 0x7FFFFFFF;
     }
 
     if ((D_800BE9A0 & 0xF000) == 0x7000) {
-        D_8009D26C &= ~0x79;
+        g_FieldPadBits &= ~0x79;
         menu_open = MenuWidget_FindByModeAndSelectedBase(1, 0) != 0;
 
         if (menu_open) {
             analog = D_800BE9A7;
             if (analog < 0x14) {
-                D_8009D26C |= 0x8;
+                g_FieldPadBits |= 0x8;
             } else if (analog >= 0xE7) {
-                D_8009D26C |= 0x20;
+                g_FieldPadBits |= 0x20;
             }
 
             analog = D_800BE9A6;
             if (analog < 0x14) {
-                D_8009D26C |= 0x40;
+                g_FieldPadBits |= 0x40;
             } else if (analog >= 0xE7) {
-                D_8009D26C |= 0x10;
+                g_FieldPadBits |= 0x10;
             }
         } else {
             analog = D_800BE9A7;
             if (analog < 0x5A) {
-                D_8009D26C |= 0x8;
+                g_FieldPadBits |= 0x8;
                 if (analog < 0x14) {
-                    D_8009D26C |= 0x1;
+                    g_FieldPadBits |= 0x1;
                 }
             } else if (analog >= 0xA1) {
-                D_8009D26C |= 0x20;
+                g_FieldPadBits |= 0x20;
                 if (analog >= 0xE7) {
-                    D_8009D26C |= 0x1;
+                    g_FieldPadBits |= 0x1;
                 }
             }
 
             analog = D_800BE9A6;
             if (analog < 0x5A) {
-                D_8009D26C |= 0x40;
+                g_FieldPadBits |= 0x40;
                 if (analog < 0x14) {
-                    D_8009D26C |= 0x1;
+                    g_FieldPadBits |= 0x1;
                 }
             } else if (analog >= 0xA1) {
-                D_8009D26C |= 0x10;
+                g_FieldPadBits |= 0x10;
                 if (analog >= 0xE7) {
-                    D_8009D26C |= 0x1;
+                    g_FieldPadBits |= 0x1;
                 }
             }
         }
     }
 
-    final_pad = D_8009D26C;
+    final_pad = g_FieldPadBits;
     final_old = D_8009D238;
     changed = final_pad ^ final_old;
     D_8009D1F4 = changed & final_pad;
@@ -408,7 +408,7 @@ void Field_HandleStateTransition(void) {
     return;
     }
 
-    D_8009D26C = 0;
+    g_FieldPadBits = 0;
     D_8009D1F4 = 0;
     D_8009D1E4 = 0;
 }

@@ -13,7 +13,7 @@
 u8 D_8009CE39;
 u8 D_8009CE3B;
 u8 g_BattleActionQueueCount;
-u8 D_8009D1D4;
+u8 g_BattleActionIndex;
 int D_8009D200;
 s16 D_8009D27C;
 
@@ -23,7 +23,7 @@ int Battle_StepCharacterAction(BattleInitSlot *slot);
 
 void Battle_UpdatePlayerTurn(void)
 {
-    BattleInitSlot *slot = &D_800BE830[D_8009D1D4];
+    BattleInitSlot *slot = &D_800BE830[g_BattleActionIndex];
     BattleEntity *player = D_8009D254;
     BattleEntity *actor;
     Combatant *active;
@@ -33,7 +33,7 @@ void Battle_UpdatePlayerTurn(void)
     int diff;
 
     if (player->actionMode != 12) {
-        active = D_8009D278;
+        active = g_ActiveActor;
         if (active->stateFlags & 0x200000) {
             BattleEntity *target = slot->actor;
             if (target->core != 0 && CORE_HEALTH(target) > 0) {
@@ -43,8 +43,8 @@ void Battle_UpdatePlayerTurn(void)
                 if (angle < -0xAB) category = 0;
                 else if (angle < 0xE4) category = 1;
                 else category = 2;
-                Entity_SetActionMode(D_8009D254, *(category + D_8009D278->targetAngleActionModes));
-                D_8009D278->stateFlags &= ~0x200000;
+                Entity_SetActionMode(D_8009D254, *(category + g_ActiveActor->targetAngleActionModes));
+                g_ActiveActor->stateFlags &= ~0x200000;
             }
         }
 
@@ -57,12 +57,12 @@ void Battle_UpdatePlayerTurn(void)
         }
 
         {
-            if (slot->actor != D_800BE830[D_8009D1D4 + 1].actor ||
+            if (slot->actor != D_800BE830[g_BattleActionIndex + 1].actor ||
                 CORE_HEALTH(slot->actor) <= 0) {
                 u8 count = D_8009CE39;
                 u8 delta = D_8009CE3B;
                 register Combatant *effect asm("$4");
-                                effect = D_8009D278;
+                                effect = g_ActiveActor;
                 D_8009CE39 = count + delta;
                 asm volatile("" : : );
                 if (effect->action->attackWord & 0x3FF)
@@ -70,9 +70,9 @@ void Battle_UpdatePlayerTurn(void)
             }
         }
 
-        D_8009D1D4++;
-        if (D_8009D1D4 != g_BattleActionQueueCount) return;
-        if (D_8009D278->action->actionCode.actionId != 8)
+        g_BattleActionIndex++;
+        if (g_BattleActionIndex != g_BattleActionQueueCount) return;
+        if (g_ActiveActor->action->actionCode.actionId != 8)
             Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
         {
             int sound = D_8009D2FC;
@@ -90,7 +90,7 @@ void Battle_UpdatePlayerTurn(void)
     if (angle < -0xAB) category = 0;
     else if (angle < 0xE4) category = 1;
     else category = 2;
-    Entity_SetActionMode(D_8009D254, *(category + D_8009D278->targetAngleActionModes));
+    Entity_SetActionMode(D_8009D254, *(category + g_ActiveActor->targetAngleActionModes));
 }
 
 #define U8_AT(ptr, offset) (*(u8 *)((u8 *)(ptr) + (offset)))
@@ -108,37 +108,37 @@ void Battle_ApplyPlayerHit(void) {
     u16 action;
 
     committed = 0x200000;
-    if (D_8009D278->stateFlags & committed) {
+    if (g_ActiveActor->stateFlags & committed) {
         unsigned int stateFlags;
         Entity_SetActionMode(D_8009D254, 0xE);
         Asset_Find08Alt(0x4B3, 0, D_8009D254->posX.parts.integer,
                         D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
 
         mask = ~0x200000;
-        actor = D_8009D278;
+        actor = g_ActiveActor;
         stateFlags = actor->stateFlags;
-        flags = D_8009D1A0;
-        D_8009D1A0 = flags | 0x100;
+        flags = g_GameStateFlags;
+        g_GameStateFlags = flags | 0x100;
         actor->stateFlags = stateFlags & mask;
     }
 
     if (D_8009D254->animLastFrame == D_8009D254->animPrev.parts.integer) {
-        Entity_SetActionMode(D_8009D254, D_8009D278->actionMode12);
-        actor = D_8009D278;
-        index = D_8009D1D4;
+        Entity_SetActionMode(D_8009D254, g_ActiveActor->actionMode12);
+        actor = g_ActiveActor;
+        index = g_BattleActionIndex;
         actor->stateFlags |= committed;
 
         Battle_ApplyDamage((s16)ACTION_AT(index) - 3);
         Scene_LoadRoomAssets(0x55, D_8009D254);
 
         {
-            unsigned int nextIndex = D_8009D1D4 + 1;
+            unsigned int nextIndex = g_BattleActionIndex + 1;
             action = ACTION_AT(nextIndex);
-            D_8009D1D4 = nextIndex;
+            g_BattleActionIndex = nextIndex;
         }
 
         if (action - 3U >= 0x194U || D_8009D254->actionMode < 4) {
-            D_8009D1A0 = D_8009D1A0 & ~0x100;
+            g_GameStateFlags = g_GameStateFlags & ~0x100;
         }
     }
 }

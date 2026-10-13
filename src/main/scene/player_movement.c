@@ -10,7 +10,7 @@
  * profile and share the pad/analog and camera-angle globals. */
 
 void Scene_Init(BattleEntity *entity, int *actionState) {
-    if (D_8009D1A0 & 2) {
+    if (g_GameStateFlags & 2) {
         Scene_SyncEntityAction(entity, actionState);
         return;
     }
@@ -31,7 +31,7 @@ void Scene_UpdatePlayerEntity(BattleEntity *entity, int *actionState)
     int facing;
     u32 pad;
 
-    if (D_8009D1A0 & 2) {
+    if (g_GameStateFlags & 2) {
         Scene_UpdateEntityFacing(entity, actionState);
         return;
     }
@@ -52,7 +52,7 @@ void Scene_UpdatePlayerEntity(BattleEntity *entity, int *actionState)
         movement.z = Math_FixedMul(-speed, rcos(angle) << 4);
     } else {
         diagonal = Math_FixedMul(speed, 0xB504);
-        pad = D_8009D26C;
+        pad = g_FieldPadBits;
         entity->facingAngle = D_800BD020;
         if (pad & FIELD_PAD_DOWN) {
             if (pad & FIELD_PAD_LEFT) {
@@ -125,7 +125,7 @@ void Scene_UpdateEntityFacing(BattleEntity *entity, int *actionState)
     u32 pad;
 
     speed = AYA_MOVE_SPEED_NORMAL;
-    if (D_8009D1A0 & 2) {
+    if (g_GameStateFlags & 2) {
         int flags = ((Combatant *)entity->core)->stateFlags;
         if ((flags & AYA_STIFFNESS_MASK) == AYA_STIFFNESS_SLOW) {
             speed = AYA_MOVE_SPEED_STIFF;
@@ -157,7 +157,7 @@ void Scene_UpdateEntityFacing(BattleEntity *entity, int *actionState)
         movement.z = Math_FixedMul(-speed, rcos(angle) << 4);
     } else {
         diagonal = Math_FixedMul(speed, 0xB504);
-        pad = D_8009D26C;
+        pad = g_FieldPadBits;
         entity->facingAngle = D_800BD020;
         if (pad & FIELD_PAD_DOWN) {
             if (pad & FIELD_PAD_LEFT) {
@@ -224,7 +224,7 @@ void Scene_UpdateEntityFacing(BattleEntity *entity, int *actionState)
 void Scene_SyncEntityAction(BattleEntity *entity, int *actionState) {
     u8 mode;
 
-    if (!(D_8009D1A0 & 2)) {
+    if (!(g_GameStateFlags & 2)) {
         if (*actionState != 0x15) {
             entity->motionX = 0;
             entity->motionY = 0;
@@ -254,16 +254,16 @@ void Scene_UpdateEntityFacingFromPad(BattleEntity *entity) {
         if (angle < 0) angle += 0x1000;
         angle += D_800BD022;
     } else {
-        if (D_8009D26C & FIELD_PAD_DOWN) {
-            if (D_8009D26C & FIELD_PAD_LEFT) entity->facingAngle = 0x600;
-            else if (D_8009D26C & FIELD_PAD_RIGHT) entity->facingAngle = 0xA00;
+        if (g_FieldPadBits & FIELD_PAD_DOWN) {
+            if (g_FieldPadBits & FIELD_PAD_LEFT) entity->facingAngle = 0x600;
+            else if (g_FieldPadBits & FIELD_PAD_RIGHT) entity->facingAngle = 0xA00;
             else entity->facingAngle = 0x800;
-        } else if (D_8009D26C & FIELD_PAD_UP) {
-            if (D_8009D26C & FIELD_PAD_LEFT) entity->facingAngle = 0x200;
-            else if (D_8009D26C & FIELD_PAD_RIGHT) entity->facingAngle = 0xE00;
+        } else if (g_FieldPadBits & FIELD_PAD_UP) {
+            if (g_FieldPadBits & FIELD_PAD_LEFT) entity->facingAngle = 0x200;
+            else if (g_FieldPadBits & FIELD_PAD_RIGHT) entity->facingAngle = 0xE00;
             else entity->facingAngle = 0;
-        } else if (D_8009D26C & FIELD_PAD_LEFT) entity->facingAngle = 0x400;
-        else if (D_8009D26C & FIELD_PAD_RIGHT) entity->facingAngle = 0xC00;
+        } else if (g_FieldPadBits & FIELD_PAD_LEFT) entity->facingAngle = 0x400;
+        else if (g_FieldPadBits & FIELD_PAD_RIGHT) entity->facingAngle = 0xC00;
         angle = entity->facingAngle + D_800BD020;
     }
     if (D_8009D254 && (D_8009D2E8 & FIELD_MOVE_CONFUSED)) {

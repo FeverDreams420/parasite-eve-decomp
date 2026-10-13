@@ -275,25 +275,25 @@ void Battle_SetupEnemyAnims(void) {
     animTable = g_BattleActionAnimRows;
     scaleTable = g_BattleActionOffenseScale;
 
-    combatant = D_8009D278;
+    combatant = g_ActiveActor;
     action = combatant->action;
     actionId = action->actionCode.bytes.actionIdByte;
     combatant->scaledOffense =
         (combatant->stat22 * scaleTable.values[actionId]) / 10;
     combatant->actionMode12 = 4;
-    D_8009D278->actionMode13 = 5;
-    D_8009D278->targetAngleActionModes[0] = 6;
-    D_8009D278->followUpAngleActionModes[0] = 7;
-    D_8009D278->targetAngleActionModes[1] = 8;
-    D_8009D278->followUpAngleActionModes[1] = 9;
-    D_8009D278->targetAngleActionModes[2] = 10;
-    D_8009D278->followUpAngleActionModes[2] = 11;
+    g_ActiveActor->actionMode13 = 5;
+    g_ActiveActor->targetAngleActionModes[0] = 6;
+    g_ActiveActor->followUpAngleActionModes[0] = 7;
+    g_ActiveActor->targetAngleActionModes[1] = 8;
+    g_ActiveActor->followUpAngleActionModes[1] = 9;
+    g_ActiveActor->targetAngleActionModes[2] = 10;
+    g_ActiveActor->followUpAngleActionModes[2] = 11;
 
     animRow = animTable.rows[actionId];
-    D_8009D278->action->animMode[0] = animRow[0];
-    D_8009D278->action->animMode[1] = animRow[1];
-    D_8009D278->action->animMode[2] = animRow[2];
-    D_8009D278->action->animMode[3] = animRow[3];
-    D_8009D278->action->hitTrigger = animRow[4];
-    Scene_SetStoryDay(D_8009D278->action->actionCode.actionId);
+    g_ActiveActor->action->animMode[0] = animRow[0];
+    g_ActiveActor->action->animMode[1] = animRow[1];
+    g_ActiveActor->action->animMode[2] = animRow[2];
+    g_ActiveActor->action->animMode[3] = animRow[3];
+    g_ActiveActor->action->hitTrigger = animRow[4];
+    Scene_SetStoryDay(g_ActiveActor->action->actionCode.actionId);
 }

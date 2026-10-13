@@ -5,8 +5,8 @@
 #include "pe1/boot_display.h"
 
 extern BootDisplayCallbacks D_80125B4C, D_80125B68;
-extern u32 D_8009D1A0, D_8009D1F4;
-extern u32 D_8009D26C;
+extern u32 g_GameStateFlags, D_8009D1F4;
+extern u32 g_FieldPadBits;
 extern s32 D_80172CE0;
 extern u32 g_BootDisplayFrameCounter;
 extern void func_8012562C(void);

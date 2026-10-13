@@ -33,7 +33,7 @@ void Scene_CheckFlagBits(void *ctx, SceneFlagRecord **table, int *index_ptr)
                 callback(ctx, index_ptr);
                 triggered = 1;
             } else if (flags & 1) {
-                value = D_8009D26C;
+                value = g_FieldPadBits;
                 mask = record->mask_all;
                 if ((value & mask) == mask) {
                     if (flags & 4) {
@@ -59,7 +59,7 @@ void Scene_CheckFlagBits(void *ctx, SceneFlagRecord **table, int *index_ptr)
             } else if (flags & 2) {
                 u32 current;
 
-                current = D_8009D26C;
+                current = g_FieldPadBits;
                 mask = record->mask_any;
                 mask_copy = mask;
                 if (current & mask_copy) {

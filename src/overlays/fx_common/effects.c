@@ -160,7 +160,7 @@ void func_8019234C(void)
 
     while (D_8019C024 == 0) {
         Field_HandleStateTransition();
-        if ((D_8009D26C & 0x0F000006) == 0x0F000006) {
+        if ((g_FieldPadBits & 0x0F000006) == 0x0F000006) {
             VSync(0);
             SetDispMask(0);
             D_8019C00E = 1;
@@ -896,7 +896,7 @@ void func_801942FC(void)
     }
     mode = D_8019C034;
     if (mode != 0xA) {
-        if ((D_8019C026 == 0) && (D_8009D26C != 0)) {
+        if ((D_8019C026 == 0) && (g_FieldPadBits != 0)) {
             if ((D_8009D1F4 & 2) && (D_8019BFF8 == -1)) {
                 nextMode = (s16)(mode + 1) % 3;
                 D_8019C034 = nextMode;
@@ -910,7 +910,7 @@ void func_801942FC(void)
                 }
                 transitionMode = D_8019C034;
                 if (transitionMode == 1) {
-                    if (D_8009D26C & 0x20) {
+                    if (g_FieldPadBits & 0x20) {
                         if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
                             Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                         }

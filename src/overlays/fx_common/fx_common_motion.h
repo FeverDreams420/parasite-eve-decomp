@@ -19,7 +19,7 @@ extern FxCommonShortVec3 g_FxCommonMotionTarget0;
 extern s16 g_FxCommonMotionRemaining0;
 extern s16 g_FxCommonMotionRemaining1;
 extern u32 D_8009D1F4;
-extern u32 D_8009D26C;
+extern u32 g_FieldPadBits;
 extern s8 D_800B0DB5;
 extern void *g_AkaoBgmHandle[1];
 extern s32 D_8019C018;

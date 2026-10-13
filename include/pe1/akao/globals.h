@@ -64,7 +64,6 @@ extern int g_AkaoSeqLoopCounter;
 /* Sound-effect sequencer masks next to the 34/38/3C dirty masks. */
 extern unsigned int D_800BCD58;
 extern unsigned int D_800BCD64;
-extern unsigned int D_8009D2DC;
 
 /* Fields of the first sound-effect channel (g_AkaoVoiceChannelTable[0]),
  * where the per-channel loops start their biased cursors:

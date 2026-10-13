@@ -94,10 +94,10 @@ void Menu_MainUpdate(s32 arg0) {
     EnemyCombatant *temp_v1_5;
     BattleEntity *var_s0;
 
-    state0 = D_8009D278;
+    state0 = g_ActiveActor;
     temp_s2 = &state0->stateFlags;
     if (arg0 & 0xFF) {
-        if (!(D_8009D1A0 & 0x100)) {
+        if (!(g_GameStateFlags & 0x100)) {
             temp_a2 = state0->stateFlags;
             temp_a1 = state0->hpAlive + state0->scaledOffense;
             temp_v1 = temp_a2 & 0xC0;
@@ -107,7 +107,7 @@ void Menu_MainUpdate(s32 arg0) {
             } else if (temp_a2 & 0x100) {
                 state0->hpAlive = temp_a1 + ((u16) state0->scaledOffense >> 1);
             }
-            temp_a1_2 = D_8009D278;
+            temp_a1_2 = g_ActiveActor;
             if ((temp_a1_2->exp_or_acc < temp_a1_2->maxAtk) && !(*temp_s2 & 0x2600)) {
                 temp_v0 = temp_a1_2->atbRate - 3;
                 temp_a1_2->atbRate = temp_v0;
@@ -119,8 +119,8 @@ void Menu_MainUpdate(s32 arg0) {
                 if (temp_v0_2 < 0x1999) {
                     temp_a1_2->atbStep = 0x1999;
                 }
-                temp_v0_3 = D_8009D278->exp_or_acc + temp_a1_2->atbStep;
-                D_8009D278->exp_or_acc = temp_v0_3;
+                temp_v0_3 = g_ActiveActor->exp_or_acc + temp_a1_2->atbStep;
+                g_ActiveActor->exp_or_acc = temp_v0_3;
                 if (temp_v0_3 >= temp_a1_2->maxAtk) {
                     temp_a1_2->atbGauge = 0xF0;
                     if (g_AkaoBgmHandle[0] != 0) {
@@ -131,8 +131,8 @@ void Menu_MainUpdate(s32 arg0) {
         }
         if ((arg0 & 0xFF) == 1) {
             temp_a0 = D_8009D254->actionMode;
-            if (((temp_a0 == D_8009D278->actionMode12) || (temp_a0 == 5)) &&
-                !((D_8009D278->attributes->effectFlags & 0x4000) && (D_8009D278->stateFlags & 0x4000) &&
+            if (((temp_a0 == g_ActiveActor->actionMode12) || (temp_a0 == 5)) &&
+                !((g_ActiveActor->attributes->effectFlags & 0x4000) && (g_ActiveActor->stateFlags & 0x4000) &&
                   (Pad_GetMenuPressedBitOrDisabled() << 0x18) > 0)) {
                 D_8009D2E8 &= ~1;
             } else if ((u8) D_8009D254->actionMode >= 0xEU) {
@@ -144,8 +144,8 @@ void Menu_MainUpdate(s32 arg0) {
     } else {
         D_8009D2E8 |= 1;
     }
-    if (D_8009D278->exp_or_acc < 0) {
-        D_8009D278->exp_or_acc = 0;
+    if (g_ActiveActor->exp_or_acc < 0) {
+        g_ActiveActor->exp_or_acc = 0;
     }
     if (*temp_s2 & 0x2000) {
         var_v1 = D_8009D1E8 & 3;
@@ -257,11 +257,11 @@ void Menu_MainUpdate(s32 arg0) {
             s32 reset_flags;
             u32 reset_operand;
 
-            Entity_SetActionMode(D_8009D254, D_8009D278->actionMode12);
+            Entity_SetActionMode(D_8009D254, g_ActiveActor->actionMode12);
             reset_flags = *temp_s2;
             reset_operand = ~0x2000U;
             reset_flags &= reset_operand;
-            reset_operand = (u32) D_8009D278;
+            reset_operand = (u32) g_ActiveActor;
             D_8009CE30 = 0;
             *temp_s2 = reset_flags;
             ((Combatant *)reset_operand)->exp_or_acc = 0x10000;
@@ -296,10 +296,10 @@ void Menu_MainUpdate(s32 arg0) {
             D_8009D254->motionZ = 0;
         }
     }
-    if (!(D_8009D1A0 & 0x100)) {
+    if (!(g_GameStateFlags & 0x100)) {
         register Combatant *timer_state;
 
-        timer_state = D_8009D278;
+        timer_state = g_ActiveActor;
         temp_v0_4 = timer_state->atbGauge;
         if (temp_v0_4 > 0) {
             temp_v0_4 -= 1;
@@ -402,10 +402,10 @@ void Menu_MainUpdate(s32 arg0) {
                     var_v0_4 = g_ActiveDrawSlot;
                     *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
-                if (D_8009D278->exp_or_acc < D_8009D278->maxAtk) {
-                    D_8009D278->atbGauge = 0;
+                if (g_ActiveActor->exp_or_acc < g_ActiveActor->maxAtk) {
+                    g_ActiveActor->atbGauge = 0;
                 }
-                if (D_8009D278->atbGauge == 0) {
+                if (g_ActiveActor->atbGauge == 0) {
                 D_800B0134[0] = 0;
                 D_800B0135[0] = 0x82;
                 D_800B0136[0] = 0x36;
@@ -511,7 +511,7 @@ void Menu_MainUpdate(s32 arg0) {
                                 {
                                 register Combatant *desc_state;
 
-                                desc_state = D_8009D278;
+                                desc_state = g_ActiveActor;
                                 temp_v1_8 = (s16) desc_state->curHP;
                                 if ((s16) desc_state->maxHP >= temp_v1_8) {
                                     register BattleEntity *d254;
@@ -522,15 +522,15 @@ void Menu_MainUpdate(s32 arg0) {
                                     u16 copy210;
 
                                     copy210 = (u16)d254->renderObject.projected_x;
-                                    D_8009D278->panelA_x = copy210;
+                                    g_ActiveActor->panelA_x = copy210;
                                     }
                                     {
                                     u16 copy212;
                                     register Combatant *desc_tail;
 
                                     copy212 = (u16)d254->renderObject.projected_y;
-                                    D_8009D278->panelA_timer = 0x1EU;
-                                    desc_tail = D_8009D278;
+                                    g_ActiveActor->panelA_timer = 0x1EU;
+                                    desc_tail = g_ActiveActor;
                                     desc_state->panelA_y = copy212;
                                     if (desc_tail->panelA_val == 0) {
                                         desc_tail->panelA_scale = 0;
@@ -538,7 +538,7 @@ void Menu_MainUpdate(s32 arg0) {
                                         desc_tail->panelA_scale = (s8) (((unsigned int)desc_tail->stateFlags >> 0xE) & 2);
                                     }
                                     }
-                                    D_8009D278->stateFlags = D_8009D278->stateFlags & 0xFFFF7FFF;
+                                    g_ActiveActor->stateFlags = g_ActiveActor->stateFlags & 0xFFFF7FFF;
                                 }
                                 }
                             }
@@ -546,7 +546,7 @@ void Menu_MainUpdate(s32 arg0) {
                                 temp_v1_9 = *temp_s2;
                                 if (!(temp_v1_9 & 0x01000000) && (temp_v1_5->hpAlive > 0)) {
                                     if (!(temp_v1_9 & 0x200)) {
-                                        D_8009D278->curHP = (s16) ((u16) D_8009D278->curHP - temp_v1_5->contactDamage);
+                                        g_ActiveActor->curHP = (s16) ((u16) g_ActiveActor->curHP - temp_v1_5->contactDamage);
                                     }
                                     {
                                     s32 s2_flags2;
@@ -554,7 +554,7 @@ void Menu_MainUpdate(s32 arg0) {
 
                                     D_8009CE34 = 0x5A;
                                     s2_flags2 = *temp_s2;
-                                    desc_state = D_8009D278;
+                                    desc_state = g_ActiveActor;
                                     *temp_s2 = s2_flags2 | 0x01000000;
                                     temp_v1_10 = (s16) desc_state->curHP;
                                     if ((s16) desc_state->maxHP >= temp_v1_10) {
@@ -574,7 +574,7 @@ void Menu_MainUpdate(s32 arg0) {
 
                                         copy212 = (u16)d254->renderObject.projected_y;
                                         desc_state->panelA_timer = 0x1EU;
-                                        desc_tail = D_8009D278;
+                                        desc_tail = g_ActiveActor;
                                         desc_state->panelA_y = copy212;
                                         if (desc_tail->panelA_val == 0) {
                                             desc_tail->panelA_scale = 0;
@@ -582,7 +582,7 @@ void Menu_MainUpdate(s32 arg0) {
                                             desc_tail->panelA_scale = (s8) (((unsigned int)desc_tail->stateFlags >> 0xE) & 2);
                                         }
                                         }
-                                        D_8009D278->stateFlags = D_8009D278->stateFlags & 0xFFFF7FFF;
+                                        g_ActiveActor->stateFlags = g_ActiveActor->stateFlags & 0xFFFF7FFF;
                                     }
                                     }
                                     {
@@ -593,10 +593,10 @@ void Menu_MainUpdate(s32 arg0) {
                                     D_8009D254->motionY = 0;
                                     D_8009D254->motionZ = 0;
                                     D_8009D254->entityFlags = D_8009D254->entityFlags & clear_flags;
-                                    D_8009D278->knockbackAngle = Entity_ApplyHitAndSetAnim(var_s0);
+                                    g_ActiveActor->knockbackAngle = Entity_ApplyHitAndSetAnim(var_s0);
                                     }
-                                    D_8009D278->knockbackDistance = (u8) temp_v1_5->contactKnockback;
-                                    D_8009D278->knockbackFrames = 6;
+                                    g_ActiveActor->knockbackDistance = (u8) temp_v1_5->contactKnockback;
+                                    g_ActiveActor->knockbackFrames = 6;
                                 }
                             }
                         }
@@ -608,7 +608,7 @@ void Menu_MainUpdate(s32 arg0) {
             {
             register Combatant *desc_state;
 
-            desc_state = D_8009D278;
+            desc_state = g_ActiveActor;
             temp_v1_11 = (s16) desc_state->curHP;
             temp_v0_7 = (s16) desc_state->hpMirror;
             if (temp_v1_11 < temp_v0_7) {
@@ -621,15 +621,15 @@ void Menu_MainUpdate(s32 arg0) {
                     u16 copy210;
 
                     copy210 = (u16)d254->renderObject.projected_x;
-                    D_8009D278->panelA_x = copy210;
+                    g_ActiveActor->panelA_x = copy210;
                     }
                     {
                     u16 copy212;
                     register Combatant *desc_tail;
 
                     copy212 = (u16)d254->renderObject.projected_y;
-                    D_8009D278->panelA_timer = 0x1EU;
-                    desc_tail = D_8009D278;
+                    g_ActiveActor->panelA_timer = 0x1EU;
+                    desc_tail = g_ActiveActor;
                     desc_state->panelA_y = copy212;
                     if (desc_tail->panelA_val == 0) {
                         desc_tail->panelA_scale = 0;
@@ -637,36 +637,36 @@ void Menu_MainUpdate(s32 arg0) {
                         desc_tail->panelA_scale = (s8) (((unsigned int)desc_tail->stateFlags >> 0xE) & 2);
                     }
                     }
-                    D_8009D278->stateFlags = D_8009D278->stateFlags & 0xFFFF7FFF;
+                    g_ActiveActor->stateFlags = g_ActiveActor->stateFlags & 0xFFFF7FFF;
                 }
-                D_8009D278->hpMirror = (u16) D_8009D278->curHP;
+                g_ActiveActor->hpMirror = (u16) g_ActiveActor->curHP;
             }
             }
         }
         *temp_s2 &= ~0x4000;
-        if (D_8009D278->knockbackFrames != 0) {
+        if (g_ActiveActor->knockbackFrames != 0) {
             temp_a0_3 = D_8009D254->entityFlags;
-            if ((temp_a0_3 & 0xC0000) || (D_8009D278->knockbackDistance == 0)) {
+            if ((temp_a0_3 & 0xC0000) || (g_ActiveActor->knockbackDistance == 0)) {
                 D_8009D254->entityFlags = temp_a0_3 & 0xFFF3FFFF;
-                D_8009D278->knockbackFrames = 0;
-                D_8009D278->knockbackDistance = 0U;
+                g_ActiveActor->knockbackFrames = 0;
+                g_ActiveActor->knockbackDistance = 0U;
             } else {
-                D_8009D254->posX.fixed = D_8009D254->baseX + (D_8009D278->knockbackDistance * rsin(D_8009D278->knockbackAngle) * 0x10);
-                D_8009D254->posZ.fixed = D_8009D254->baseZ + (D_8009D278->knockbackDistance * rcos(D_8009D278->knockbackAngle) * 0x10);
-                temp_v1_12 = D_8009D278->knockbackDistance;
-                D_8009D278->knockbackDistance = (u8) (temp_v1_12 - (temp_v1_12 / D_8009D278->knockbackFrames));
-                D_8009D278->knockbackFrames = (s8) ((u8) D_8009D278->knockbackFrames - 1);
+                D_8009D254->posX.fixed = D_8009D254->baseX + (g_ActiveActor->knockbackDistance * rsin(g_ActiveActor->knockbackAngle) * 0x10);
+                D_8009D254->posZ.fixed = D_8009D254->baseZ + (g_ActiveActor->knockbackDistance * rcos(g_ActiveActor->knockbackAngle) * 0x10);
+                temp_v1_12 = g_ActiveActor->knockbackDistance;
+                g_ActiveActor->knockbackDistance = (u8) (temp_v1_12 - (temp_v1_12 / g_ActiveActor->knockbackFrames));
+                g_ActiveActor->knockbackFrames = (s8) ((u8) g_ActiveActor->knockbackFrames - 1);
             }
         }
         Entity_UpdateTimers();
     }
-    if (D_8009D278->panelA_timer != 0) {
+    if (g_ActiveActor->panelA_timer != 0) {
         Battle_DrawStatusPanel(0,
-                               (struct BattleStatusPanel *)&D_8009D278->panelA_val);
-        D_8009D278->panelA_timer = (u8) (D_8009D278->panelA_timer - 1);
+                               (struct BattleStatusPanel *)&g_ActiveActor->panelA_val);
+        g_ActiveActor->panelA_timer = (u8) (g_ActiveActor->panelA_timer - 1);
     }
     {
-    state0 = D_8009D278;
+    state0 = g_ActiveActor;
     temp_v0_8 = (s16) state0->hpMirror;
     temp_v1_13 = (s16) state0->curHP;
     if (temp_v0_8 < temp_v1_13) {
@@ -678,34 +678,34 @@ void Menu_MainUpdate(s32 arg0) {
         u16 copy210;
 
         copy210 = (u16)d254->renderObject.projected_x;
-        D_8009D278->panelB_x = copy210;
+        g_ActiveActor->panelB_x = copy210;
         }
         {
         var_v0.value = (u16)d254->renderObject.projected_y;
         var_v1 = 0x1E;
-        D_8009D278->panelB_timer = var_v1;
-        { register Combatant *post_state; post_state = D_8009D278;
+        g_ActiveActor->panelB_timer = var_v1;
+        { register Combatant *post_state; post_state = g_ActiveActor;
         state0->panelB_y = (s16) (var_v0.value - 8);
         post_state->panelB_flag = 1; }
         }
-        D_8009D278->hpMirror = (u16) D_8009D278->curHP;
+        g_ActiveActor->hpMirror = (u16) g_ActiveActor->curHP;
     }
     }
-    temp_a1_2 = D_8009D278;
+    temp_a1_2 = g_ActiveActor;
     if (temp_a1_2->panelB_timer != 0) {
         Battle_DrawStatusPanel(0, (struct BattleStatusPanel *)&temp_a1_2->panelB_val);
-        D_8009D278->panelB_timer = (u8) (D_8009D278->panelB_timer - 1);
-        temp_a1_2 = D_8009D278;
+        g_ActiveActor->panelB_timer = (u8) (g_ActiveActor->panelB_timer - 1);
+        temp_a1_2 = g_ActiveActor;
     }
     if (temp_a1_2->panelAux_timer != 0) {
         Battle_DrawStatusPanel(0, (struct BattleStatusPanel *)&temp_a1_2->panelAux_val);
-        D_8009D278->panelAux_timer = (u8) (D_8009D278->panelAux_timer - 1);
+        g_ActiveActor->panelAux_timer = (u8) (g_ActiveActor->panelAux_timer - 1);
     }
-    temp_a0_4 = D_8009D278->exp_or_acc;
-    D_8009D278->hpMirror = (u16) D_8009D278->curHP;
+    temp_a0_4 = g_ActiveActor->exp_or_acc;
+    g_ActiveActor->hpMirror = (u16) g_ActiveActor->curHP;
     if (temp_a0_4 <= 0) {
         *temp_s2 |= 0x2000;
-        if (Pad_GetMenuPressedBitOrDisabled() != D_8009D1D4) {
+        if (Pad_GetMenuPressedBitOrDisabled() != g_BattleActionIndex) {
             if (D_8009D200 != -1) {
                 Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
                 D_8009D200 = -1;
@@ -717,7 +717,7 @@ void Menu_MainUpdate(s32 arg0) {
         }
         Battle_FlushScriptSounds();
     }
-    if (D_8009D28C == 1) {
+    if (g_BattleModeState == 1) {
         var_a2 = 0x46;
         var_a1 = 0x82;
         var_a0 = 0x9F;
@@ -781,7 +781,7 @@ void Menu_MainUpdate(s32 arg0) {
         D_800B0195[0] = var_v0.value;
         D_800B0196[0] = var_v1;
     }
-    if ((s16) D_8009D278->curHP <= 0) {
+    if ((s16) g_ActiveActor->curHP <= 0) {
         var_a2 = 0x46;
         var_a1 = 0x82;
         var_a0 = 0x9F;
@@ -887,7 +887,7 @@ void Menu_MainUpdate(s32 arg0) {
             Battle_ReturnToIdle();
         }
         Draw_ResetTextboxes();
-        if (Pad_GetMenuPressedBitOrDisabled() != D_8009D1D4) {
+        if (Pad_GetMenuPressedBitOrDisabled() != g_BattleActionIndex) {
             if (D_8009D200 != -1) {
                 Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
                 D_8009D200 = -1;
@@ -905,9 +905,9 @@ void Menu_MainUpdate(s32 arg0) {
 
         tail_a0 = 0x46B;
         tail_mask = ~0x300;
-        tail_d1ac = D_8009D1AC;
+        tail_d1ac = g_BattleResultFlags;
         tail_d1ac &= tail_mask;
-        D_8009D1AC = tail_d1ac;
+        g_BattleResultFlags = tail_d1ac;
         {
             register s32 tail_a1;
             register s32 tail_a2;
@@ -919,12 +919,12 @@ void Menu_MainUpdate(s32 arg0) {
             var_t0.entity = D_8009D254;
             /* posX/posY/posZ integer halves, read through a plain halfword
              * pointer: struct member reads let the scheduler hoist the
-             * D_8009D28C store above them. */
+             * g_BattleModeState store above them. */
             coordinate = &var_t0.entity->posX.parts.integer;
             tail_a2 = *coordinate;
             coordinate = &var_t0.entity->posY.parts.integer;
             tail_a3 = *coordinate;
-            D_8009D28C = 3;
+            g_BattleModeState = 3;
             coordinate = &var_t0.entity->posZ.parts.integer;
             tail_sp = *coordinate;
             tail_a1 = 0;
@@ -932,7 +932,7 @@ void Menu_MainUpdate(s32 arg0) {
             Asset_Find08Alt(tail_a0, tail_a1, tail_a2, tail_a3, tail_sp);
         }
         }
-        D_8009D244 = 0;
+        g_BattleEnemyEscapeFlag = 0;
         MenuWidget_InitPool();
         {
         register s32 minus5;
@@ -943,10 +943,10 @@ void Menu_MainUpdate(s32 arg0) {
         } else {
             minus5 = -5;
         }
-        D_8009D1A0 &= minus5;
+        g_GameStateFlags &= minus5;
         D_8009D2E8 |= 1;
         ((void (*)(BattleEntity *, int, int))Entity_SetActionMode)(D_8009D254, 0x13U, minus5);
         }
-            D_8009D278->curHP = 0;
+            g_ActiveActor->curHP = 0;
     }
 }

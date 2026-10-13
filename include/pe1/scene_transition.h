@@ -11,7 +11,7 @@
  *               room B=0xA80001C8, back to A=0xA8000148). The high half
  *               (0xA8000000) appears to be area/disc flags; the low half is the
  *               room within the area.
- *   D_8009D1C4  mirror of the current room id (same value).
+ *   g_SceneDispatchCur  mirror of the current room id (same value).
  *   NOTE: g_ActiveDrawSlot is NOT the room id (a transient transition flag/counter
  *         that did not revert on return; ignore it for room identity).
  *
@@ -27,7 +27,7 @@
  *
  * PER-ROOM DATA reloaded on every transition (all confirmed reverting in the
  * snapshot-diff A->B->A):
- *   D_8009D1FC  collision DB pointer        (see field_collision.h)
+ *   g_CollisionDb  collision DB pointer        (see field_collision.h)
  *   g_RegionHeightTable  region-height table
  *   D_8009CE00 / g_SceneDataTable1 / g_SceneDataTable2 / D_8009CE90  scene-data table pointers
  *   g_PlayerEntity  player actor (re-allocated each room)

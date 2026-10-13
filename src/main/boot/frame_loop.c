@@ -23,9 +23,8 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 u32 D_8009D280;
-int D_8009D1C4;
+int g_SceneDispatchCur;
 unsigned int g_GameStateFlags;
-u32 D_8009D1A0;
 u32 g_GlobalFrameCounter[1];
 
 /* Field frame loop and its scene flush: Boot_FlushSceneFast is the exit tail
@@ -88,7 +87,7 @@ void Boot_RunFrame(void)
     RenderTintTargetView *fade;
 
     Draw_InitPipeline();
-    if (D_8009D1C4 == D_8009D280) {
+    if (g_SceneDispatchCur == D_8009D280) {
         scene_flags = &g_GameState.bank_state_12;
         state = &g_GameState;
         fade = (RenderTintTargetView *)&D_800BCFE8;
@@ -96,18 +95,18 @@ void Boot_RunFrame(void)
             D_8009CDD8 = 0;
             *scene_flags = 0;
             Field_HandleStateTransition();
-            flags = D_8009D1A0;
-            D_8009D1A0 = flags & ~0x30u;
+            flags = g_GameStateFlags;
+            g_GameStateFlags = flags & ~0x30u;
 
             if (!(GAME_STATE_OF_SCENE_FLAGS(scene_flags)->flags & 0x8000) && g_GlobalFrameCounter[0] &&
                 (D_8009D1F4 & 4) &&
                 !(D_8009D238 & 0xB0002380u)) {
-                D_8009D1A0 =
+                g_GameStateFlags =
                     ((flags & 1) ? (flags & ~0x30u) | 0x20u
                                  : (flags & ~0x30u) | 0x10u) ^ 1u;
             }
 
-            if (!(D_8009D1A0 & 1)) {
+            if (!(g_GameStateFlags & 1)) {
             if (!(state->flags & 0x200)) {
                 Pe1GameStateAddress slot;
 
@@ -151,19 +150,19 @@ void Boot_RunFrame(void)
             }
 
             if (!(D_800B0CD8 & 0x4200) &&
-                (D_8009D26C & 0x0F000006u) == 0x0F000006u) {
+                (g_FieldPadBits & 0x0F000006u) == 0x0F000006u) {
                 Boot_Shutdown();
             }
             if (!(state->flags & 0x100)) {
                 Boot_FinishFrame();
             }
             g_GlobalFrameCounter[0]++;
-            if ((D_8009D1A0 & 0x2000) && (state->flags & 0x800)) {
+            if ((g_GameStateFlags & 0x2000) && (state->flags & 0x800)) {
                 break;
             }
 loop_end_check:
             ;
-        } while (D_8009D1C4 == D_8009D280);
+        } while (g_SceneDispatchCur == D_8009D280);
     }
 
     if (D_800B0CD8 & 0x200) {
@@ -177,7 +176,7 @@ loop_end_check:
     Akao_Cmd_F1();
     Render_Noop(1);
     Asset_UnloadTableEntries();
-    D_8009D1A0 = (D_8009D1A0 | 0x40) & ~0x3800u;
+    g_GameStateFlags = (g_GameStateFlags | 0x40) & ~0x3800u;
     status = D_800B0CD8 | 2;
     {
         u32 first_status = status & ~0x800u;

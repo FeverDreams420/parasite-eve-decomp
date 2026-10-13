@@ -74,7 +74,7 @@ extern VideoEntry D_801D0E00[];
 extern u16 g_SceneInitLbaTbl0[];
 extern u16 g_SceneInitLbaTbl1;
 extern u16 g_SceneAssetLbaTbl[];
-extern u32 D_8009D26C;
+extern u32 g_FieldPadBits;
 s32 MenuCard_StepVideo(void);
 extern void SetDispMask(s32), ResetGraph(s32), EnterCriticalSection(void), FlushCache(void), ExitCriticalSection(void), Field_HandleStateTransition(void), StUnSetRing(void), Draw_RenderFrame(void);
 

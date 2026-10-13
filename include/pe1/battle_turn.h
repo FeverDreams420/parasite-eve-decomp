@@ -9,7 +9,7 @@
 #include "pe1/entity_floor.h"
 #include "pe1/render_setup.h"
 
-extern s32 D_8009D28C;
+extern s32 g_BattleModeState;
 
 
 int Battle_ProcessActionSlot(BattleEntity *);

@@ -12,12 +12,14 @@
 #include "pe1/scene_transition.h"
 
 /* Global game-state flags (bit 4 = menu open, 2 = battle, 0x100 =
- * player-only animation) and the word after them. */
+ * player-only animation) and the word after them. g_GameStateBlock is a
+ * record view of g_GameStateFlags (a relative alias in
+ * linkers/USA/undefined_syms_manual.txt). */
 typedef struct GameStateBlock {
     u32 flags;
     u32 reserved;
 } GameStateBlock;
-extern GameStateBlock g_GameStateBlock __asm__("D_8009D1A0");
+extern GameStateBlock g_GameStateBlock;
 extern u32 D_8009D1F4;         /* pad trigger bits */
 extern s16 D_8009D2A4;         /* menu frame result */
 extern BattleAction D_800A76D8;        /* menu frame argument */

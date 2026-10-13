@@ -4,19 +4,19 @@
 #include "pe1/entity_animation.h"
 #include "pe1/save_slot_metadata.h"
 
-extern Combatant *D_8009D278;
+extern Combatant *g_ActiveActor;
 extern BattleEntity *D_8009D254;
 extern BattleRewardSlot D_800A7FF0[10];
 extern BattleEntity *g_BattleActionActors[7];
 extern int D_8009D1E8;
-extern int D_8009D28C;
+extern int g_BattleModeState;
 extern u8 D_8009CE7C, D_8009CE78, D_8009D288, D_8009CE74;
 extern u8 D_8009D1CE, D_8009D235[16];
 extern u32 D_8009D304;
 extern u16 D_8009D21C;
 
-extern unsigned int D_8009D1AC;
-extern unsigned int D_8009D1A0;
+extern unsigned int g_BattleResultFlags;
+extern unsigned int g_GameStateFlags;
 extern unsigned int D_8009D2E8;
 extern s32 D_8009D290[16];
 extern u32 D_8009D250;

@@ -94,7 +94,7 @@ extern unsigned char g_MenuBlendColorPanelPoints[];
  * the modal flag.
  *
  * Confirmed toggling globals (field value -> menu value):
- *   D_8009D1A0  global game-state flags
+ *   g_GameStateFlags  global game-state flags
  *               bit 0x04 SET while a modal menu is open (clear in plain field).
  *               Also read by battle (Battle_IsActive / Battle_GetStateFlag1);
  *               Boot_RunFrame masks bits 0x30. This is the central mode bitfield.
@@ -108,16 +108,16 @@ extern unsigned char g_MenuBlendColorPanelPoints[];
  *    while a menu owns it -> a clean "is a menu open?" test.)
  *
  * OPEN  : MenuWidget_InitPool() allocates the node pool (g_MenuWidgetActiveListHead/15C != NULL),
- *         D_8009D1A0 |= 0x04, g_MenuDrawPhase set; the inventory root step begins
+ *         g_GameStateFlags |= 0x04, g_MenuDrawPhase set; the inventory root step begins
  *         (Menu_StepInventoryRoot via Menu_InitCategoryTabs).
- * CLOSE : the pool is torn down (pointers NULL), D_8009D1A0 &= ~0x04, phase
+ * CLOSE : the pool is torn down (pointers NULL), g_GameStateFlags &= ~0x04, phase
  *         restored; control returns to the field step.
  *
  * Per-frame: Boot_RunFrame() -> Field_HandleStateTransition() (field/state
- * machine, D_8009D1A0) then Entity_FrameUpdate(); the menu widget tree is
+ * machine, g_GameStateFlags) then Entity_FrameUpdate(); the menu widget tree is
  * driven by MenuWidget_UpdateAndDraw() while the pool is live.
  *
- * Quick live probe: a menu is open iff *(u32*)0x8009D154 != 0  (or D_8009D1A0 & 4).
+ * Quick live probe: a menu is open iff *(u32*)0x8009D154 != 0  (or g_GameStateFlags & 4).
  */
 
 #endif /* PE1_MENU_STATE_H */

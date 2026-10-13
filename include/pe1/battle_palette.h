@@ -8,9 +8,9 @@
 extern struct BattleEntity *D_8009D254;
 /* Word copied into the player entity's action check callback. */
 extern u32 D_800915E0[];
-extern unsigned int D_8009D1A0;
+extern unsigned int g_GameStateFlags;
 extern unsigned int D_8009D2E8;
-extern u8 D_8009D2EC;
+extern u8 g_EntityInstanceCounter;
 extern s8 D_8009D2A0;
 
 void Battle_FlushScriptSounds(void);

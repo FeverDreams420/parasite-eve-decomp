@@ -76,15 +76,15 @@ int Battle_RollEscapeChance(void) {
         }
     }
     if (!result) {
-        int difference = (s8)(D_8009D278->field04.bytes.rank - highestRank);
+        int difference = (s8)(g_ActiveActor->field04.bytes.rank - highestRank);
         if (difference >= 2) result = 80;
         else if (difference == 1) result = 40;
         else if (difference == 0) result = 40;
         else if (difference == -1) result = 25;
         else result = 15;
-        if ((s16)D_8009D278->curHP * 10 < (s16)D_8009D278->maxHP)
+        if ((s16)g_ActiveActor->curHP * 10 < (s16)g_ActiveActor->maxHP)
             result = result * 3 / 2;
-        switch (((unsigned int)D_8009D278->stateFlags >> 25) & 7) {
+        switch (((unsigned int)g_ActiveActor->stateFlags >> 25) & 7) {
         case 1: result = result * 3 / 2; break;
         case 2: result *= 2; break;
         case 3: result *= 3; break;
@@ -104,7 +104,7 @@ int Battle_RollEscapeChance(void) {
             D_8009D1F8 = D_800915C0 + Save_GetMetadataWindowIndex() * 14;
         else
             D_8009D1F8 = D_8009159C + Save_GetMetadataWindowIndex() * 17;
-        player = D_8009D278;
+        player = g_ActiveActor;
         attempts = ((unsigned int)player->stateFlags >> 25) & 7;
         if (attempts < 5)
             player->stateFlags = (player->stateFlags & 0xF1FFFFFF) |
@@ -139,10 +139,10 @@ void Battle_CycleTarget(s8 mode) {
         s8 outOfRange;
         BattleEntity *actor;
         Render_AnimationFrame();
-        if ((D_8009D278->stateFlags & AYA_DARKNESS_MASK) == AYA_DARKNESS)
+        if ((g_ActiveActor->stateFlags & AYA_DARKNESS_MASK) == AYA_DARKNESS)
             outOfRange = g_BattleTargetList[g_BattleTargetIndex].dist > AYA_DARKNESS_RANGE;
         else
-            outOfRange = D_8009D278->action->range < g_BattleTargetList[g_BattleTargetIndex].dist;
+            outOfRange = g_ActiveActor->action->range < g_BattleTargetList[g_BattleTargetIndex].dist;
         actor = g_BattleTargetList[g_BattleTargetIndex].actor;
         Battle_DrawStatusOverlay(&actor->renderObject, mode, outOfRange,
             ((EnemyCombatant *)actor->core)->lowAndEntityId.bytes.entityId);
@@ -160,7 +160,7 @@ void Battle_CycleTarget(s8 mode) {
 }
 
 u8 D_8009D294;
-u8 D_8009D1DC;
+u8 g_BattleRemainingActions;
 u8 D_8009CE38[4];
 u8 D_8009D2D8;
 u8 g_BattleActionQueueCount;
@@ -168,11 +168,11 @@ u8 g_BattleActionQueueCount;
 void Battle_SetupEntityTarget(BattleEntity *actor) {
     BattleEntity *target;
     D_8009D294 = 0;
-    D_8009D1DC = D_8009D278->action->turnWord & 15;
-    D_8009CE38[0] = D_8009D278->action->animMode[0];
-    D_8009CE38[1] = D_8009D278->action->animMode[1];
-    D_8009CE38[2] = D_8009D278->action->animMode[2];
-    D_8009CE38[3] = D_8009D278->action->animMode[3];
+    g_BattleRemainingActions = g_ActiveActor->action->turnWord & 15;
+    D_8009CE38[0] = g_ActiveActor->action->animMode[0];
+    D_8009CE38[1] = g_ActiveActor->action->animMode[1];
+    D_8009CE38[2] = g_ActiveActor->action->animMode[2];
+    D_8009CE38[3] = g_ActiveActor->action->animMode[3];
     target = 0;
     if ((actor->entityFlags & 0x40000000) && !((EnemyCombatant *)actor->core)->deathPersist) {
         for (target = (BattleEntity *)g_FieldActorListHead; target; target = target->next) {
@@ -193,20 +193,20 @@ void Battle_SetupEntityTarget(BattleEntity *actor) {
         }
     } else if (!(actor->entityFlags & 0x4000)) target = actor;
     if (target) {
-        unsigned int mode = D_8009D278->action->turnWord & 0xC0;
+        unsigned int mode = g_ActiveActor->action->turnWord & 0xC0;
         if (mode == 0xC0 || mode == 0x40) {
             BattleInitSlot *slot;
-            D_8009D1DC = 0;
+            g_BattleRemainingActions = 0;
             slot = &D_800BE830[g_BattleActionQueueCount];
             slot->actor = target;
             slot->command = 2;
             slot->actionGeneration = (s8)D_8009D2D8;
             g_BattleActionQueueCount++;
         } else {
-            while (D_8009D1DC) {
+            while (g_BattleRemainingActions) {
                 BattleInitSlot *slot;
                 s16 actionGeneration = (s8)D_8009D2D8;
-                D_8009D1DC--;
+                g_BattleRemainingActions--;
                 slot = &D_800BE830[g_BattleActionQueueCount];
                 slot->actor = target;
                 slot->command = 1;
@@ -215,12 +215,12 @@ void Battle_SetupEntityTarget(BattleEntity *actor) {
             }
         }
         Battle_DispatchEntityEffect();
-        D_8009D278->stateFlags |= 0x200000;
+        g_ActiveActor->stateFlags |= 0x200000;
     }
 }
 
 s8 g_BattleActiveTurnSlot, g_BattleItemMenuState, g_BattleTargetIndex;
-u8 D_8009D1DC, D_8009CE60, g_BattleActionQueueCount;
+u8 g_BattleRemainingActions, D_8009CE60, g_BattleActionQueueCount;
 
 static inline void FinishAction(void) {
     u8 i;
@@ -235,15 +235,15 @@ static inline void FinishAction(void) {
         }
     }
     D_8009D288 = 0;
-    D_8009D278->hpAlive = 0;
-    D_8009D278->stateFlags |= 0x200000;
+    g_ActiveActor->hpAlive = 0;
+    g_ActiveActor->stateFlags |= 0x200000;
     BattleCmd_ResetTableCursor();
 }
 int Battle_HandleItemMenu(void) {
     u8 active=1;
     u8 opened=0, cancelled=0;
     if (!g_BattleActiveTurnSlot) {
-        D_8009D1DC=0;
+        g_BattleRemainingActions=0;
         active=0;
         FinishAction();
         Battle_MarkActiveEntities(g_BattleTargetList,g_BattleTargetIndex);
@@ -251,12 +251,12 @@ int Battle_HandleItemMenu(void) {
     } else {
         if ((D_8009D1F4&0x2000) && !MenuWidget_FindByModeAndSelectedBase(1,0) && g_BattleItemMenuState!=2) {
             cancelled=1;
-            if (D_8009D1DC==(D_8009D278->action->turnWord&15))D_8009CE60=1;
+            if (g_BattleRemainingActions==(g_ActiveActor->action->turnWord&15))D_8009CE60=1;
             else D_8009CE60=0;
             if (g_BattleItemMenuState==1) MenuWidget_InitPool();
             else if (g_BattleItemMenuState==2) BattleCmd_UndoPending();
             if (--g_BattleActiveTurnSlot) {
-                D_8009D1DC=D_8009D278->action->turnWord&15;
+                g_BattleRemainingActions=g_ActiveActor->action->turnWord&15;
             } else {
                 active=0;
                 FinishAction();
@@ -269,9 +269,9 @@ int Battle_HandleItemMenu(void) {
         if (!g_BattleItemMenuState) {
             if (g_BattleActiveTurnSlot) {
                 int mode;
-                if (D_8009D278->action->actionCode.actionId==8)mode=3;
+                if (g_ActiveActor->action->actionCode.actionId==8)mode=3;
                 else {
-                    unsigned int actionMode=(D_8009D278->action->turnWord>>6)&3;
+                    unsigned int actionMode=(g_ActiveActor->action->turnWord>>6)&3;
                     switch(actionMode) {
                     case 1: mode=1; break;
                     case 3: mode=2; break;
@@ -283,15 +283,15 @@ int Battle_HandleItemMenu(void) {
                     D_8009CE60=0;
                     if(D_8009D2B0) {
                         Battle_FillActionQueue(&g_BattleTargetList[g_BattleTargetIndex]);
-                        if(!D_8009D1DC) {
+                        if(!g_BattleRemainingActions) {
                             g_BattleActiveTurnSlot--;
-                            D_8009D1DC=D_8009D278->action->turnWord&15;
+                            g_BattleRemainingActions=g_ActiveActor->action->turnWord&15;
                         }
                     }
                     PLAY_TABLE_SOUND(0x44C)
                 }
             }
-            if(D_8009D1DC==(D_8009D278->action->turnWord&15) && (D_8009D1F4&0x80) && g_BattleActiveTurnSlot && !cancelled) {
+            if(g_BattleRemainingActions==(g_ActiveActor->action->turnWord&15) && (D_8009D1F4&0x80) && g_BattleActiveTurnSlot && !cancelled) {
                 g_BattleItemMenuState=1;
                 Battle_MarkActiveEntities(g_BattleTargetList,g_BattleTargetIndex);
                 PLAY_TABLE_SOUND(0x44C)
@@ -317,7 +317,7 @@ int Battle_HandleItemMenu(void) {
     return active;
 }
 
-u8 D_8009D2D8, g_BattleActionQueueCount, D_8009D1DC;
+u8 D_8009D2D8, g_BattleActionQueueCount, g_BattleRemainingActions;
 u8 D_8009CE60, D_8009D25C;
 s8 D_8009CE40;
 u16 g_BattlePendingCommand;
@@ -334,28 +334,28 @@ static inline void SetSlot(int index, BattleEntity *actor, s16 kind, s16 actionG
 }
 
 void Battle_FillActionQueue(BattleTarget *target) {
-    unsigned int mode = D_8009D278->action->turnWord & 0xC0;
+    unsigned int mode = g_ActiveActor->action->turnWord & 0xC0;
     if (mode == 0xC0) {
         u8 i;
         for (i = 0; g_BattleTargetList[i].actor; i++) {
             StoreSlot(&D_800BE830[g_BattleActionQueueCount], g_BattleTargetList[i].actor, 2, (s8)D_8009D2D8);
             g_BattleActionQueueCount++;
         }
-        D_8009D1DC = 0;
+        g_BattleRemainingActions = 0;
     } else if (mode == 0x40) {
         u8 i;
-        for (i = 0; i < (int)(D_8009D278->action->turnWord & 15) * 3 / 2; i++) {
+        for (i = 0; i < (int)(g_ActiveActor->action->turnWord & 15) * 3 / 2; i++) {
             int index = g_BattleActionQueueCount;
             int randomValue = rand();
             BattleEntity *actor = g_BattleTargetList[randomValue % D_8009D2B0].actor;
             SetSlot(index, actor, 2, (s8)D_8009D2D8);
             g_BattleActionQueueCount++;
         }
-        D_8009D1DC = 0;
+        g_BattleRemainingActions = 0;
     } else {
         SetSlot(g_BattleActionQueueCount, target->actor, 1, (s8)D_8009D2D8);
         g_BattleActionQueueCount++;
-        D_8009D1DC--;
+        g_BattleRemainingActions--;
     }
 }
 
@@ -418,7 +418,7 @@ int Battle_StepEnemyTurn(s8 mode) {
             } else if (command < 409) {
                 SetSlot(g_BattleActionQueueCount, D_8009D254, queuedCommand, (s8)D_8009D2D8);
                 if (!(g_GameStateFlags & 2)) {
-                    D_8009D278 = D_8009D254->core;
+                    g_ActiveActor = D_8009D254->core;
                     Asset_Find08Alt(0x453, 1, (s16)D_8009D254->posX.parts.integer,
                                     (s16)D_8009D254->posY.parts.integer,
                                     (s16)D_8009D254->posZ.parts.integer);
@@ -427,7 +427,7 @@ int Battle_StepEnemyTurn(s8 mode) {
                 case 407:
                     Battle_CopyPadStateToRecord();
                     Battle_SetupEnemyAnims();
-                    D_8009D278->actionMode12 = 13;
+                    g_ActiveActor->actionMode12 = 13;
                     break;
                 case 408:
                     Battle_SyncEnemyAttributes();
@@ -472,7 +472,7 @@ int Battle_StepEnemyTurn(s8 mode) {
 
 /* COMMON supplies small-data metadata to MASPSX. */
 u8 g_BattleActionQueueCount, D_8009CE60;
-u8 D_8009D2D8, D_8009D1DC;
+u8 D_8009D2D8, g_BattleRemainingActions;
 
 /* Step the turn index back to the first slot of the action that ends at
  * initial. The test before the loop is the loop test, so GCC merges the
@@ -510,26 +510,26 @@ void Battle_AdvanceTurnSlot(void)
     g_BattleTargetIndex = 0;
     kind = D_800BE830[savedIndex - 1].command;
     if (kind == 1) {
-        if (D_8009D1DC == (D_8009D278->action->turnWord & 15)) {
+        if (g_BattleRemainingActions == (g_ActiveActor->action->turnWord & 15)) {
             D_8009D2D8++;
             RewindTurn(savedIndex);
             RestorePending(savedIndex);
         } else {
             RewindTurn(savedIndex);
         }
-        D_8009D1DC = D_8009D278->action->turnWord & 15;
+        g_BattleRemainingActions = g_ActiveActor->action->turnWord & 15;
     } else if (kind == 2) {
-        int mode = D_8009D278->action->turnWord & 0xC0;
+        int mode = g_ActiveActor->action->turnWord & 0xC0;
         if (mode == 0xC0) {
             D_8009D2D8++;
             g_BattleActionQueueCount = savedIndex - (u8)D_8009D2B0;
         } else if (mode == 0x40) {
             int word;
             D_8009D2D8++;
-            word = D_8009D278->action->turnWord;
+            word = g_ActiveActor->action->turnWord;
             g_BattleActionQueueCount = savedIndex - (((word & 15) * 3) >> 1);
         }
-        D_8009D1DC = D_8009D278->action->turnWord & 15;
+        g_BattleRemainingActions = g_ActiveActor->action->turnWord & 15;
     } else if (kind < 0x197) {
         D_8009D2D8++;
         if (!D_8009CE60)
@@ -547,7 +547,7 @@ void Battle_AdvanceTurnSlot(void)
             }
         }
         RestorePending(savedIndex);
-        D_8009D1DC = D_8009D278->action->turnWord & 15;
+        g_BattleRemainingActions = g_ActiveActor->action->turnWord & 15;
     }
     generation = D_8009D2D8;
     for (i = 0; i < 45; i++) {
@@ -617,7 +617,7 @@ void Battle_StepPlayerTurn(BattleTarget *targets, int index, int mode)
     g_BattleFadeLevel = level;
 
     if ((s8)mode < 4) {
-        targetMode = (D_8009D278->action->turnWord >> 6) & 3;
+        targetMode = (g_ActiveActor->action->turnWord >> 6) & 3;
         switch (targetMode) {
         case 0:
             FADE_TARGET(targets[(s8)index].actor, level);
@@ -753,7 +753,7 @@ void Battle_MarkActiveEntities(BattleTarget *table, int selected_index)
   {
     return;
   }
-  mode = (D_8009D278->action->turnWord >> 6) & 3;
+  mode = (g_ActiveActor->action->turnWord >> 6) & 3;
   g_BattleFadeStep = 0;
   switch (mode)
   {
@@ -850,10 +850,10 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
     s8 result = 1;
 
     if (phase == 0x2000) {
-        int index = D_8009D1D4;
+        int index = g_BattleActionIndex;
         s16 command = D_800BE830[index].command;
         if (command != 0x196 && command != 0x189) {
-            if (D_8009D278->action->actionCode.actionId != 6) {
+            if (g_ActiveActor->action->actionCode.actionId != 6) {
                 if (g_BattleActionActorCount == 0 && g_BattleActionActors[0] != 0) {
                     int i = 0;
                     do {
@@ -966,7 +966,7 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
         if (maximum < hp)
             enemy->hpAlive = maximum;
     }
-    if (!(D_8009D1A0 & 0x100)) {
+    if (!(g_GameStateFlags & 0x100)) {
         if (enemy->curHP == 0) {
             initialFlags = enemy->coreFlags;
             if (initialFlags & 0xE) {
@@ -1054,7 +1054,7 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
                             }
                         }
                         statusCore->coreFlags &= ~0x6000;
-                        if (!(D_8009D278->stateFlags & 0x80000) && !(enemy->coreFlags & 0x1800)) {
+                        if (!(g_ActiveActor->stateFlags & 0x80000) && !(enemy->coreFlags & 0x1800)) {
                             actor->entityFlags &= ~0x1000;
                             Entity_TickAnimSequences(actor);
                         }
@@ -1102,7 +1102,7 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
         }
     }
     if ((statusCore->coreFlags & 0xE) && (enemy->hpAlive > 0)) {
-        int contextFlags = D_8009D1A0;
+        int contextFlags = g_GameStateFlags;
         actor->motionX = 0;
         actor->motionY = 0;
         actor->motionZ = 0;
@@ -1147,7 +1147,7 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
         enemy->panelC_timer -= 1;
     }
     if (enemy->hpAlive <= 0) {
-        if (!(D_8009D1A0 & 0x100)) {
+        if (!(g_GameStateFlags & 0x100)) {
             if ((enemy->field04.bytes.kind == 1) && !(enemy->coreFlags & 0x6000)) {
                 actor->entityFlags |= 0x10;
                 Battle_SlotFree(actor);

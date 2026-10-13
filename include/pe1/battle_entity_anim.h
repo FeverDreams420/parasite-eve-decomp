@@ -4,7 +4,7 @@
 #include "pe1/asset_find.h"
 #include "pe1/entity_animation.h"
 
-extern u32 D_8009D1A0;
+extern u32 g_GameStateFlags;
 extern struct FieldActor *g_FieldActorListHead;
 extern BattleEntity *D_8009D254;
 extern s8 D_8009D2A0;

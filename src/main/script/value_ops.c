@@ -203,7 +203,7 @@ int Script_DispatchCmd(int **args) {
     case 0: {
         u32 mask;
         u32 state;
-        state = D_8009D26C;
+        state = g_FieldPadBits;
         mask = *args[1];
         if ((state & mask) == mask) {
             *args[2] = 1;
@@ -242,7 +242,7 @@ int Script_DispatchCmd(int **args) {
         int index;
 
         index = (int)args[1];
-        state = D_8009D26C;
+        state = g_FieldPadBits;
         mask = *(u32 *)index;
         state &= mask;
         if (state == mask) {

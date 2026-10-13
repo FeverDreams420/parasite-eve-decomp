@@ -30,10 +30,9 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 u32 *D_8009CE00;
-ScriptNode *D_8009D300;
+ScriptNode *g_ScriptNodePool;
 u8 g_ScriptCameraBytes[3];
 int g_SceneDataTable0;
-ScriptNode *g_ScriptNodePool;
 
 typedef struct ScriptArgParts {
     s16 low;
@@ -161,7 +160,7 @@ int Script_DispatchScriptCmd(ScriptCmdArgs *args)
         status = Asset_LoadTimTextures(1);
         if (status == 1) {
             D_8009CE00 -= 10;
-            D_8009D300->active = status;
+            g_ScriptNodePool->active = status;
             return 0;
         }
         return 1;
@@ -286,7 +285,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, active) == 0x10, interpreter_wait_off
 
 /* Tentative COMMON declarations preserve small-data metadata for stock
  * maspsx. Storage remains at the existing data/linker addresses. */
-ScriptNode *D_8009D300;
+ScriptNode *g_ScriptNodePool;
 u32 *D_8009CE00;
 
 void Script_RunQueue(void)
@@ -300,13 +299,13 @@ void Script_RunQueue(void)
     u16 i;
 
     do {
-        node = D_8009D300;
+        node = g_ScriptNodePool;
         /* Retail first reads flags and sequence together as a word. */
         if (*(u32 *)&node->flags & 0x50) continue;
         entity = D_8009D2F0[0];
         if ((((FieldActor *)entity)->flags & 0x1000) && !(node->flags & 0x80)) continue;
-        if ((D_8009D1A0 & 0x100) && entity != (u8 *)D_8009D254 && !(node->flags & 0x80)) continue;
-        node = D_8009D300;
+        if ((g_GameStateFlags & 0x100) && entity != (u8 *)D_8009D254 && !(node->flags & 0x80)) continue;
+        node = g_ScriptNodePool;
         if (node->active == 0) continue;
         node->active--;
         if (node->active != 0) continue;
@@ -337,8 +336,8 @@ void Script_RunQueue(void)
             }
         } while (D_800910A0[opcode](args));
         /* Handlers may replace both the current node and the script cursor. */
-        D_8009D300->current.script = D_8009CE00;
-    } while ((D_8009D300 = D_8009D300->next) != 0);
+        g_ScriptNodePool->current.script = D_8009CE00;
+    } while ((g_ScriptNodePool = g_ScriptNodePool->next) != 0);
 }
 
 typedef struct {

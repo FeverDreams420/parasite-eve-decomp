@@ -241,38 +241,38 @@ void Entity_UpdateTimers(void) {
     Combatant *combatant;
     s32 *state_flags;
 
-    combatant = D_8009D278;
+    combatant = g_ActiveActor;
     state_flags = &combatant->stateFlags;
     if (((*state_flags) & AYA_POISON_MASK) == AYA_POISON) {
         Battle_SubActionStep();
-        timer40 = D_8009D278->statusTimer40 - D_8009D278->statusStep3E;
-        D_8009D278->statusTimer40 = timer40;
+        timer40 = g_ActiveActor->statusTimer40 - g_ActiveActor->statusStep3E;
+        g_ActiveActor->statusTimer40 = timer40;
         if ((timer40 << 0x10) <= 0) {
             (*state_flags) = ((*state_flags) & ~AYA_POISON_MASK);
         }
     }
     if (((*state_flags) & AYA_CONFUSION_MASK) == AYA_CONFUSION) {
-        timer42 = D_8009D278->statusTimer42 - D_8009D278->statusStep3C;
-        D_8009D278->statusTimer42 = timer42;
+        timer42 = g_ActiveActor->statusTimer42 - g_ActiveActor->statusStep3C;
+        g_ActiveActor->statusTimer42 = timer42;
         if ((timer42 << 0x10) <= 0) {
             (*state_flags) = ((*state_flags) & ~AYA_CONFUSION_MASK);
             D_8009D2E8 &= ~FIELD_MOVE_CONFUSED;
         }
     }
     if (((*state_flags) & AYA_DARKNESS_MASK) == AYA_DARKNESS) {
-        timer44 = D_8009D278->statusTimer44 - D_8009D278->statusStep3C;
-        D_8009D278->statusTimer44 = timer44;
+        timer44 = g_ActiveActor->statusTimer44 - g_ActiveActor->statusStep3C;
+        g_ActiveActor->statusTimer44 = timer44;
         if ((timer44 << 0x10) <= 0) {
             (*state_flags) = ((*state_flags) & ~AYA_DARKNESS_MASK);
         }
     }
     status_group = (*state_flags) & AYA_STIFFNESS_MASK;
     if ((status_group == AYA_STIFFNESS_SLOW) || (status_group == AYA_STIFFNESS_LOCK)) {
-        timer46 = D_8009D278->statusTimer46 - D_8009D278->statusStep3C;
-        D_8009D278->statusTimer46 = timer46;
+        timer46 = g_ActiveActor->statusTimer46 - g_ActiveActor->statusStep3C;
+        g_ActiveActor->statusTimer46 = timer46;
         if ((timer46 << 0x10) <= 0) {
             if (((*state_flags) & AYA_STIFFNESS_MASK) == AYA_STIFFNESS_LOCK && D_8009D254->actionMode == 0x11) {
-                Entity_SetActionMode(D_8009D254, D_8009D278->actionMode12);
+                Entity_SetActionMode(D_8009D254, g_ActiveActor->actionMode12);
             }
             (*state_flags) = ((*state_flags) & ~AYA_STIFFNESS_MASK);
         } else if (((*state_flags) & AYA_STIFFNESS_MASK) == AYA_STIFFNESS_LOCK) {
@@ -288,24 +288,24 @@ void Entity_UpdateTimers(void) {
             (*state_flags) = ((*state_flags) & ~AYA_HASTE);
         }
     }
-    if (((*state_flags) & AYA_BARRIER) && D_8009D278->exp_or_acc <= 0x10000) {
-        D_8009D278->exp_or_acc = 0x10000;
+    if (((*state_flags) & AYA_BARRIER) && g_ActiveActor->exp_or_acc <= 0x10000) {
+        g_ActiveActor->exp_or_acc = 0x10000;
         (*state_flags) = ((*state_flags) & ~AYA_BARRIER);
     }
     if ((*state_flags) & AYA_GENE_HEAL) {
         if (g_ActiveDrawSlot != 0) {
-            current_hp = (s16) D_8009D278->curHP;
-            if (current_hp < (s16) D_8009D278->maxHP) {
-                D_8009D278->curHP = (s16) (current_hp + 1);
-                D_8009D278->hpMirror = (u16) (D_8009D278->hpMirror + 1);
+            current_hp = (s16) g_ActiveActor->curHP;
+            if (current_hp < (s16) g_ActiveActor->maxHP) {
+                g_ActiveActor->curHP = (s16) (current_hp + 1);
+                g_ActiveActor->hpMirror = (u16) (g_ActiveActor->hpMirror + 1);
             }
         }
-        accumulator = D_8009D278->exp_or_acc -
-                    (D_8009D278->maxAtk /
-                     (D_8009D278->field04.fieldId04 * 0x1E));
-        D_8009D278->exp_or_acc = accumulator;
+        accumulator = g_ActiveActor->exp_or_acc -
+                    (g_ActiveActor->maxAtk /
+                     (g_ActiveActor->field04.fieldId04 * 0x1E));
+        g_ActiveActor->exp_or_acc = accumulator;
         if (accumulator <= 0x10000) {
-            D_8009D278->exp_or_acc = 0x10000;
+            g_ActiveActor->exp_or_acc = 0x10000;
             (*state_flags) = ((*state_flags) & ~AYA_GENE_HEAL);
         }
     }
@@ -316,14 +316,14 @@ void Entity_UpdateTimers(void) {
             (*state_flags) = ((*state_flags) & 0xFEFFFFFF);
         }
     }
-    if (D_8009D278->attributes->effectFlags & EFFECT_AUTO_MEDICINE) {
+    if (g_ActiveActor->attributes->effectFlags & EFFECT_AUTO_MEDICINE) {
         consumed_item = 0;
-        if ((s16) D_8009D278->curHP > 0) {
+        if ((s16) g_ActiveActor->curHP > 0) {
             do {
                 consumed_item_snapshot = consumed_item & 0xFF;
-                max_hp = (s16) D_8009D278->maxHP;
+                max_hp = (s16) g_ActiveActor->maxHP;
                 hp_threshold = max_hp / 5;
-                if ((s16) D_8009D278->curHP < hp_threshold) {
+                if ((s16) g_ActiveActor->curHP < hp_threshold) {
                     if (Inv_CountByValue(ITEM_FULL_RECOVER) != 0) {
                         consumed_item = 1;
                         Battle_ApplyDamage(ITEM_FULL_RECOVER);
@@ -364,7 +364,7 @@ void Entity_UpdateTimers(void) {
             }
         }
     }
-    if (D_8009D278->attributes->effectFlags & EFFECT_AUTO_CURE) {
+    if (g_ActiveActor->attributes->effectFlags & EFFECT_AUTO_CURE) {
         if (((*state_flags) & AYA_POISON_MASK) == AYA_POISON) {
             if (Inv_CountByValue(ITEM_CURE_P) != 0) {
                 Battle_ApplyDamage(ITEM_CURE_P);

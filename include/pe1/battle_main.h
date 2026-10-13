@@ -14,7 +14,6 @@ typedef struct StatusSymbolTemplate {
 } StatusSymbolTemplate;
 
 extern const BattleActionSoundTable D_80010760;
-extern s32 g_BattleResultFlags[];
 extern u8 D_8009D274, D_8009CE39, D_8009CE3A;
 extern s16 D_8009D27C;
 extern const Tbl20 D_8001074C;

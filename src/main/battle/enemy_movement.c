@@ -38,16 +38,16 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
     u32 *turnFlags;
     enemy = entity->core;
     statusFlags = &enemy->statusFlags2;
-    activeState = D_8009D278->stateFlags;
+    activeState = g_ActiveActor->stateFlags;
     flagCore = enemy;
     if (activeState & 0x80000)
     {
-        register s32 stat = (u16)D_8009D278->stat1E;
+        register s32 stat = (u16)g_ActiveActor->stat1E;
         double base, scale;
         /* Integer bit patterns avoid native GCC's broken double literal pool. */
         union { double value; unsigned long long bits; } factor;
         stat -= 25;
-        stat += D_8009D278->field04.fieldId04;
+        stat += g_ActiveActor->field04.fieldId04;
         base = __floatsidf(stat * 6);
         scale = __floatsidf(D_8009D2B0 - 1);
         factor.bits = 0x3FB999999999999AULL; /* 0.1 */
@@ -59,18 +59,18 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
     }
     else if (activeState & 0x100000)
     {
-        basePower = (((u16)D_8009D278->stat1E / 5U) & 0xFFFF) + (s16) D_8009D278->action->powerBonus;
-        attackPower = ((basePower * (((D_8009D278->field04.fieldId04 * 7) + 0x78) / 160) * (s16)(D_8009D278->exp_or_acc >> 16)) / (s16) (s16)(D_8009D278->maxAtk >> 16)) + basePower;
+        basePower = (((u16)g_ActiveActor->stat1E / 5U) & 0xFFFF) + (s16) g_ActiveActor->action->powerBonus;
+        attackPower = ((basePower * (((g_ActiveActor->field04.fieldId04 * 7) + 0x78) / 160) * (s16)(g_ActiveActor->exp_or_acc >> 16)) / (s16) (s16)(g_ActiveActor->maxAtk >> 16)) + basePower;
     }
     else
     {
         unsigned char hitCountPercent[11] = { 0, 100, 60, 41, 0, 25, 0, 18, 0, 0, 13 };
         int strength;
-        weaponAction = D_8009D278->action;
-        strength = (u16)D_8009D278->stat1E / 5U;
+        weaponAction = g_ActiveActor->action;
+        strength = (u16)g_ActiveActor->stat1E / 5U;
         attackPower = ((strength + (s16) weaponAction->powerBonus) * hitCountPercent[weaponAction->turnWord & 0xF]) / 100;
     }
-    if (!(D_8009D278->stateFlags & 0x180000) && (defenseAction = D_8009D278->action, (defenseAction->actionCode.actionId != 8)))
+    if (!(g_ActiveActor->stateFlags & 0x180000) && (defenseAction = g_ActiveActor->action, (defenseAction->actionCode.actionId != 8)))
     {
         int remainingActions = defenseAction->turnWord & 0xF;
         damage = attackPower - (enemy->defense / remainingActions);
@@ -81,9 +81,9 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
     }
     if (damage > 0)
     {
-        if (!(D_8009D278->stateFlags & 0x180000))
+        if (!(g_ActiveActor->stateFlags & 0x180000))
         {
-            activeAction = D_8009D278->action;
+            activeAction = g_ActiveActor->action;
             turnFlags = &activeAction->turnWord;
             hitReaction = flagCore->coreFlags & 0x38000;
             resistanceMode = 0;
@@ -200,7 +200,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
         }
     }
     enemy->hpAlive -= damage;
-    if (!(D_8009D278->stateFlags & 0x80000))
+    if (!(g_ActiveActor->stateFlags & 0x80000))
     {
         Battle_UpdateEntityFacing(entity);
     }
@@ -244,7 +244,7 @@ void Battle_UpdateEntityFacing(BattleEntity *entity)
     FacingMotion *motion;
 
     if (core->status05 != 0 || (core->flags & 0xE)) return;
-    if (!((D_8009D278->stateFlags & 0x80000) && core->actions[(core->flags >> 17) & 0x70])) {
+    if (!((g_ActiveActor->stateFlags & 0x80000) && core->actions[(core->flags >> 17) & 0x70])) {
         if (core->mode == 1) {
             core->mode++;
             core->previous_mode = entity->actionMode;
@@ -266,7 +266,7 @@ void Battle_UpdateEntityFacing(BattleEntity *entity)
     }
     entity->animStep = 0x10000;
     entity->entityFlags |= 0x1000;
-    if (D_8009D278->stateFlags & 0x80000) return;
+    if (g_ActiveActor->stateFlags & 0x80000) return;
     if (!(core->flags & 0x100000)) return;
     if (core->motion.state == 0) return;
     motion = &core->motion;

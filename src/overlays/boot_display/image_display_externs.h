@@ -4,7 +4,7 @@
 #include "common.h"
 
 extern void *D_80125BA4[];
-extern u32 D_8009D26C;
+extern u32 g_FieldPadBits;
 extern u32 D_8009D1F4;
 extern u32 g_BootDisplayFrameCounter;
 extern char *g_BootDisplayTransferCursor;

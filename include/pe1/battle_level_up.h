@@ -9,9 +9,9 @@ extern u8 D_8009CE74;
 extern s16 D_8009D2A4;
 extern u32 D_8009D304;
 extern u16 D_8009D21C;
-extern int D_8009D28C;
+extern int g_BattleModeState;
 
-extern u32 D_8009D1A0;
+extern u32 g_GameStateFlags;
 
 void Pm_StopAllBoth(void);
 void Aya_SetTotalExp(u32 exp, u16 pe_bonus, void *rewards);

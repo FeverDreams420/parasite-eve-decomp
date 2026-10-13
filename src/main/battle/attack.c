@@ -23,8 +23,8 @@ u8 D_8009CE38[4];
 u8 D_8009CE39;
 u8 D_8009CE3A;
 u8 g_BattleActionQueueCount;
-u8 D_8009D1D4;
-u8 D_8009D1DC;
+u8 g_BattleActionIndex;
+u8 g_BattleRemainingActions;
 int D_8009D200;
 u8 D_8009D274;
 s16 D_8009D27C;
@@ -42,7 +42,7 @@ void Battle_FinalizeAttackResult(void)
     BattleAction *action;
     u32 attack_word;
 
-    combatant = D_8009D278;
+    combatant = g_ActiveActor;
     action = combatant->action;
 
     if (action->actionCode.actionId == 8) {
@@ -72,7 +72,7 @@ void Battle_FinalizeAttackResult(void)
             BattleAction *next_action;
             u32 next_attack_word;
 
-            next_combatant = D_8009D278;
+            next_combatant = g_ActiveActor;
             next_action = next_combatant->action;
             next_attack_word = next_action->attackWord;
             next_action->attackWord = (next_attack_word & ~0x3FF) |
@@ -132,14 +132,14 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
     ready:
         }
         D_8009D274 = 0;
-        { u8 animMode = D_8009D278->action->animMode[1]; D_8009CE39 = animMode; }
+        { u8 animMode = g_ActiveActor->action->animMode[1]; D_8009CE39 = animMode; }
         asm volatile("");
         { height = turnSlot->actor->renderObject.target_y; angle = height - D_8009D27C; }
         { facingAngle = ratan2(angle, Battle_CalcDistToPlayer(turnSlot->actor, D_8009D254));
         if (facingAngle < -0xAB) direction = 0; else { predicate = facingAngle < 0xE4; if (predicate) direction = 1; else direction = 2; } }
-        Entity_SetActionMode(D_8009D254, *(direction + D_8009D278->followUpAngleActionModes));
+        Entity_SetActionMode(D_8009D254, *(direction + g_ActiveActor->followUpAngleActionModes));
         D_8009D254->entityFlags &= ~0x100;
-        D_8009D1DC = ((BattleTurnBits *)&D_8009D278->action->turnWord)->actions;
+        g_BattleRemainingActions = ((BattleTurnBits *)&g_ActiveActor->action->turnWord)->actions;
         Battle_FinalizeAttackResult();
         break;
 
@@ -149,17 +149,17 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         caseEntity = D_8009D254;
         if (caseEntity->animLastFrame != caseEntity->animPrev.parts.integer)
             break;
-        indexB = D_8009D1D4;
+        indexB = g_BattleActionIndex;
         if (D_800BE830[indexB].command == 0x189) {
-            idleActor = D_8009D278;
+            idleActor = g_ActiveActor;
             idleEntity = D_8009D254;
         }
         else
         {
-        { active = D_8009D278;
+        { active = g_ActiveActor;
         activeAction = active->action;
         if ((activeAction->turnWord & 0xC0) == 0xC0) {
-            int pending = D_8009D1DC;
+            int pending = g_BattleRemainingActions;
             int narrow;
             predicate = 1;
             asm volatile("" : "=r"(pending) : "0"(pending));
@@ -170,11 +170,11 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         nextIndexB = indexB + 1;
         { register int offset asm("$5") = nextIndexB << 3;
         { int nextCode = D_800BE830[nextIndexB].command;
-        D_8009D1DC = 0;
+        g_BattleRemainingActions = 0;
         if (nextCode >= 3 || nextIndexB == g_BattleActionQueueCount) {
             Entity_SetActionMode(D_8009D254, active->actionMode12);
-            D_8009D278->stateFlags |= 0x200000;
-            { u8 animMode = D_8009D278->action->animMode[0]; D_8009CE38[0] = animMode; }
+            g_ActiveActor->stateFlags |= 0x200000;
+            { u8 animMode = g_ActiveActor->action->animMode[0]; D_8009CE38[0] = animMode; }
             result = 1; break;
         }
         }
@@ -182,8 +182,8 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         { BattleInitSlotAddress at; at.slot = D_800BE830; at.address = at.address + offset; enemy = (EnemyCombatant *)at.slot->actor->core; }
         if (!(enemy->hpAlive > 0 && enemy)) {
             Entity_SetActionMode(D_8009D254, active->actionMode12);
-            D_8009D1D4++;
-            D_8009D278->stateFlags |= 0x200000;
+            g_BattleActionIndex++;
+            g_ActiveActor->stateFlags |= 0x200000;
             goto action_done;
         }
         }
@@ -194,16 +194,16 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
             { height = turnSlot->actor->renderObject.target_y; angle = height - D_8009D27C; }
             { facingAngle = ratan2(angle, Battle_CalcDistToPlayer(turnSlot->actor, D_8009D254));
         if (facingAngle < -0xAB) direction = 0; else { predicate = facingAngle < 0xE4; if (predicate) direction = 1; else direction = 2; } }
-            Entity_SetActionMode(D_8009D254, *(direction + D_8009D278->targetAngleActionModes));
+            Entity_SetActionMode(D_8009D254, *(direction + g_ActiveActor->targetAngleActionModes));
             result = 1;
-            { register Combatant *postActor = D_8009D278;
+            { register Combatant *postActor = g_ActiveActor;
               { register BattleEntity *postEntity = D_8009D254;
                 postEntity->animFrame = D_8009D254->animLastFrame << 16;
                 D_8009D254->entityFlags |= 0x100; }
               { register BattleAction *postAction = postActor->action;
                 { u32 turnWord = postAction->turnWord;
                 D_8009CE39 += D_8009CE3A;
-                D_8009D1DC = turnWord & 0xF; } } }
+                g_BattleRemainingActions = turnWord & 0xF; } } }
             break;
         }
         }
@@ -218,7 +218,7 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
 
     alternate:
         if (activeAction->attackWord & 0x3FF) {
-            indexAlt = D_8009D1D4;
+            indexAlt = g_BattleActionIndex;
             {
                 EnemyCombatant *enemy = (EnemyCombatant *)D_800BE830[indexAlt].actor->core;
                 int nextRetry;
@@ -229,11 +229,11 @@ asm volatile("" : : "r"(enemy));
                 }
             target_dead:
             Entity_SetActionMode(caseEntity, active->actionMode12);
-            D_8009D278->stateFlags |= 0x200000;
-            D_8009D1DC = ((BattleTurnBits *)&D_8009D278->action->turnWord)->actions;
+            g_ActiveActor->stateFlags |= 0x200000;
+            g_BattleRemainingActions = ((BattleTurnBits *)&g_ActiveActor->action->turnWord)->actions;
             result = 1; break;
             target_alive:
-            D_8009D1DC = nextRetry;
+            g_BattleRemainingActions = nextRetry;
             Battle_FinalizeAttackResult();
             break;
             }
@@ -244,7 +244,7 @@ asm volatile("" : : "r"(enemy));
                           D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
             break;
         }
-        idleActor = D_8009D278;
+        idleActor = g_ActiveActor;
         idleEntity = D_8009D254;
         }
     set_idle:
@@ -252,15 +252,15 @@ asm volatile("" : : "r"(enemy));
         Entity_SetActionMode(idleEntity, idleActor->actionMode12);
         break;
     default:
-        indexDefault = D_8009D1D4;
+        indexDefault = g_BattleActionIndex;
         if (D_800BE830[indexDefault].command == 0x189)
             break;
-        D_8009D1D4 = indexDefault + 1;
+        g_BattleActionIndex = indexDefault + 1;
         if ((u8)(indexDefault + 1) != g_BattleActionQueueCount)
             break;
         if (D_8009D200 < 0)
             break;
-        if (D_8009D278->action->actionCode.actionId != 8)
+        if (g_ActiveActor->action->actionCode.actionId != 8)
             Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
         Pm_SendCmd(D_8009D2FC, 0, 0, 2, 0, 0);
         break;
@@ -270,7 +270,7 @@ asm volatile("" : : "r"(enemy));
 
 /* COMMON supplies small-data metadata to stock MASPSX. Existing retail
  * data/linker symbols provide storage; these do not allocate new globals. */
-u8 D_8009D274, D_8009D1D4, D_8009D294;
+u8 D_8009D274, g_BattleActionIndex, D_8009D294;
 s8 g_EvasionReaction;
 
 /* Apply the evasion outcome Battle_CheckEvasion left in g_EvasionOutcome and
@@ -286,7 +286,7 @@ static inline void ApplyEvasionOutcome(BattleEntity *target)
     {
         EnemyCoreFlagBits *bits = (EnemyCoreFlagBits *)&core->coreFlags;
         bits->hitState = 1;
-        bits->category = D_8009D278->action->attackWord >> 20;
+        bits->category = g_ActiveActor->action->attackWord >> 20;
         bits->reaction = ((BattleEvasionReaction *)&g_EvasionReaction)->value;
     }
     else if (g_EvasionOutcome.status == 0)
@@ -309,8 +309,8 @@ void Battle_ResolveHitOnTimer(void)
     s32 stealMode;
     u8 hitTimer;
     hitTimer = D_8009D274 + 1;
-    action = D_8009D278->action;
-    selectedSlot = &D_800BE830[D_8009D1D4];
+    action = g_ActiveActor->action;
+    selectedSlot = &D_800BE830[g_BattleActionIndex];
     D_8009D274 = hitTimer;
     if ((hitTimer & 0xFF) != action->hitTrigger)
         return;
@@ -322,7 +322,7 @@ void Battle_ResolveHitOnTimer(void)
         {
             BattleEntity *thief = selectedSlot->actor;
             Asset_Find08Alt(0x46D, 0, thief->renderObject.target_x, thief->renderObject.target_y, thief->renderObject.target_z);
-            if (D_8009D278->action->turnWord & 0x6000)
+            if (g_ActiveActor->action->turnWord & 0x6000)
             {
                 stealMode = (((EnemyCombatant *)selectedSlot->actor->core)->statusFlags2 >> 0xC) & 3;
                 switch (stealMode)
@@ -377,7 +377,7 @@ void Battle_ResolveHitOnTimer(void)
             }
         }
     }
-    else if (((action->turnWord & 0xC0) == 0x80) && !(D_8009D278->stateFlags & 0x100000))
+    else if (((action->turnWord & 0xC0) == 0x80) && !(g_ActiveActor->stateFlags & 0x100000))
     {
         u16 playerAngle = D_8009D254->facingAngle;
         s16 centered;
@@ -455,9 +455,9 @@ void Battle_ApplyDamage(int damageKind) {
     Combatant *actor;
     int flags;
 
-    if ((D_8009D1A0 & 2) == 0) {
+    if ((g_GameStateFlags & 2) == 0) {
         BattleEntity *localActor = D_8009D254;
-        D_8009D278 = localActor->core;
+        g_ActiveActor = localActor->core;
         effect = damageKind < ITEM_CURE_P ? 0x4B4 : 0x4B5;
         Asset_Find08Alt(effect, 1, localActor->posX.parts.integer,
                         localActor->posY.parts.integer,
@@ -473,28 +473,28 @@ void Battle_ApplyDamage(int damageKind) {
 
     switch (damageKind) {
     case ITEM_MEDICINE_1:
-        D_8009D278->curHP += 0x2D;
+        g_ActiveActor->curHP += 0x2D;
         break;
     case ITEM_MEDICINE_2:
-        D_8009D278->curHP += 0x5A;
+        g_ActiveActor->curHP += 0x5A;
         break;
     case ITEM_MEDICINE_3:
-        D_8009D278->curHP += 0xB4;
+        g_ActiveActor->curHP += 0xB4;
         break;
     case ITEM_MEDICINE_4:
-        D_8009D278->curHP += 0x190;
+        g_ActiveActor->curHP += 0x190;
         break;
     case ITEM_FULL_RECOVER:
-        D_8009D278->curHP = D_8009D278->maxHP;
+        g_ActiveActor->curHP = g_ActiveActor->maxHP;
         break;
     case ITEM_SUPER_JUNK:
-        D_8009D278->exp_or_acc += D_8009D278->maxAtk / 4;
+        g_ActiveActor->exp_or_acc += g_ActiveActor->maxAtk / 4;
         break;
     case ITEM_DUPER_JUNK:
-        D_8009D278->exp_or_acc += D_8009D278->maxAtk / 2;
+        g_ActiveActor->exp_or_acc += g_ActiveActor->maxAtk / 2;
         break;
     case ITEM_CURE_P: {
-        Combatant *target = D_8009D278;
+        Combatant *target = g_ActiveActor;
         int field = target->stateFlags;
         if ((field & AYA_POISON_MASK) == 0) {
             target->stateFlags = field | AYA_POISON_IMMUNE;
@@ -505,7 +505,7 @@ void Battle_ApplyDamage(int damageKind) {
         break;
     }
     case ITEM_CURE_D: {
-        Combatant *target = D_8009D278;
+        Combatant *target = g_ActiveActor;
         int field = target->stateFlags;
         if ((field & AYA_DARKNESS_MASK) == 0) {
             target->stateFlags = field | AYA_DARKNESS_IMMUNE;
@@ -516,7 +516,7 @@ void Battle_ApplyDamage(int damageKind) {
         break;
     }
     case ITEM_CURE_C: {
-        Combatant *target = D_8009D278;
+        Combatant *target = g_ActiveActor;
         int field = target->stateFlags;
         if ((field & AYA_CONFUSION_MASK) == 0) {
             target->stateFlags = field | AYA_CONFUSION_IMMUNE;
@@ -528,7 +528,7 @@ void Battle_ApplyDamage(int damageKind) {
         break;
     }
     case ITEM_CURE_M: {
-        Combatant *target = D_8009D278;
+        Combatant *target = g_ActiveActor;
         int field = target->stateFlags;
         if ((field & AYA_STIFFNESS_MASK) == 0) {
             target->stateFlags = field | AYA_STIFFNESS_IMMUNE;
@@ -539,40 +539,40 @@ void Battle_ApplyDamage(int damageKind) {
         break;
     }
     case ITEM_FULL_CURE:
-        actor = D_8009D278;
+        actor = g_ActiveActor;
         Aya_DeriveStats(&actor->atbStep, &actor->atbRate);
-        actor = D_8009D278;
+        actor = g_ActiveActor;
         flags = actor->stateFlags;
         if ((flags & AYA_POISON_MASK) != AYA_POISON_IMMUNE) {
             actor->stateFlags = flags & ~AYA_POISON_MASK;
         }
-        actor = D_8009D278;
+        actor = g_ActiveActor;
         flags = actor->stateFlags;
         if ((flags & AYA_CONFUSION_MASK) != AYA_CONFUSION_IMMUNE) {
             actor->stateFlags = flags & ~AYA_CONFUSION_MASK;
             D_8009D2E8 &= ~FIELD_MOVE_CONFUSED;
         }
-        actor = D_8009D278;
+        actor = g_ActiveActor;
         flags = actor->stateFlags;
         if ((flags & AYA_DARKNESS_MASK) != AYA_DARKNESS_IMMUNE) {
             actor->stateFlags = flags & ~AYA_DARKNESS_MASK;
         }
-        actor = D_8009D278;
+        actor = g_ActiveActor;
         flags = actor->stateFlags;
         if ((flags & AYA_STIFFNESS_MASK) != AYA_STIFFNESS_IMMUNE) {
             actor->stateFlags = flags & ~AYA_STIFFNESS_MASK;
         }
-        D_8009D278->stateFlags &= ~0x1000;
+        g_ActiveActor->stateFlags &= ~0x1000;
         break;
     }
 
     {
-        Combatant *endActor = D_8009D278;
+        Combatant *endActor = g_ActiveActor;
         if ((s16)endActor->maxHP < (s16)endActor->curHP) {
             endActor->curHP = (s16)endActor->maxHP;
         }
     }
-    if (result != -1 && (D_8009D1A0 & 2)) {
+    if (result != -1 && (g_GameStateFlags & 2)) {
         Draw_SetupSprites(D_8009D254, 0, (u8)result);
     }
 }
@@ -885,16 +885,16 @@ s32 Battle_StepAyaAction(void)
       {
         s32 product;
         int reachScale;
-        targetEntity = D_800BE830[D_8009D1D4].actor;
+        targetEntity = D_800BE830[g_BattleActionIndex].actor;
         reachScale = (((EnemyCombatant *) targetEntity->core)->statusFlags2 >> 0x13) & 0x1F;
         targetDistance = ((targetEntity->renderObject.hit_cylinder.radius * reachScale) / 10) + D_8009D254->renderObject.hit_cylinder.radius;
         targetAngle = Battle_CalcAngleToTarget(&targetEntity->renderObject, &g_AyaSavedPos);
         D_8009D254->facingAngle = targetAngle;
         product = targetDistance * rsin(targetAngle);
         asm("" : "=r"(product) : "0"(product));
-        D_8009D254->posX.fixed = (D_800BE830[D_8009D1D4].actor->renderObject.target_x << 16) + (product * 16);
+        D_8009D254->posX.fixed = (D_800BE830[g_BattleActionIndex].actor->renderObject.target_x << 16) + (product * 16);
         product = targetDistance * rcos(D_8009D254->facingAngle);
-        D_8009D254->posZ.fixed = (D_800BE830[D_8009D1D4].actor->renderObject.target_z << 16) + (product * 16);
+        D_8009D254->posZ.fixed = (D_800BE830[g_BattleActionIndex].actor->renderObject.target_z << 16) + (product * 16);
       }
       D_8009D254->baseX = D_8009D254->posX.fixed;
       D_8009D254->baseY = D_8009D254->posY.fixed;
@@ -946,13 +946,13 @@ s32 Battle_StepAyaAction(void)
       {
         unsigned targetIndex;
         EnemyCoreFlagBits *bits;
-        targetIndex = D_8009D1D4;
+        targetIndex = g_BattleActionIndex;
         g_EvasionOutcome.reaction = 2;
         g_EvasionOutcome.status = 1;
         targetCore = D_800BE830[targetIndex].actor->core;
         bits = (EnemyCoreFlagBits *)&targetCore->coreFlags;
         bits->hitState = 1;
-        bits->category = D_8009D278->action->attackWord >> 20;
+        bits->category = g_ActiveActor->action->attackWord >> 20;
         bits->reaction = g_EvasionOutcome.reaction;
         if (g_AyaAttackStep == 2)
         {
@@ -984,13 +984,13 @@ s32 Battle_StepAyaAction(void)
       g_AyaAttackStep = attackStep;
       if (attackStep < 7)
       {
-        slot = D_8009D1D4 & 0xFF;
+        slot = g_BattleActionIndex & 0xFF;
         if (D_800BE830[slot].actor == D_800BE830[slot + 1].actor)
         {
           {
-            u8 next = D_8009D1D4 + 1;
+            u8 next = g_BattleActionIndex + 1;
             D_8009D25C = 8;
-            D_8009D1D4 = next;
+            g_BattleActionIndex = next;
           }
           break;
         }
@@ -1007,7 +1007,7 @@ s32 Battle_StepAyaAction(void)
       if (g_AyaAttackStep < 7)
       {
         D_8009D25C = 5;
-        D_8009D1D4 += 1;
+        g_BattleActionIndex += 1;
         break;
       }
       Anim_SetInterpRate(&D_8009D254->renderObject, 15);
@@ -1107,7 +1107,7 @@ s32 Battle_StepAyaAction(void)
     {
       if (Scene_InitEntityPlayer(0) == 0)
       {
-        Entity_SetActionMode(D_8009D254, D_8009D278->actionMode12);
+        Entity_SetActionMode(D_8009D254, g_ActiveActor->actionMode12);
         {
           register int mask asm("$3");
           register int rate asm("$5") = 30;
@@ -1145,10 +1145,10 @@ s32 Battle_StepAyaAction(void)
     {
       {
         int mask = ~0x100;
-        unsigned flags = D_8009D1A0;
-        u8 next = D_8009D1D4 + 1;
-        D_8009D1A0 = flags & mask;
-        D_8009D1D4 = next;
+        unsigned flags = g_GameStateFlags;
+        u8 next = g_BattleActionIndex + 1;
+        g_GameStateFlags = flags & mask;
+        g_BattleActionIndex = next;
       }
       finished = 1;
     }

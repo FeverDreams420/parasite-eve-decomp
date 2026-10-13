@@ -11,8 +11,8 @@ void Entity_AllocSlot(BattleEntity *entity) {
             D_800A5D58[index].combatant = initial;
             allocated = &D_800A5D58[index].combatant;
             entity->core = allocated;
-            D_8009D2EC++;
-            allocated->lowAndEntityId.bytes.entityId = D_8009D2EC;
+            g_EntityInstanceCounter++;
+            allocated->lowAndEntityId.bytes.entityId = g_EntityInstanceCounter;
             ((EnemyCombatant *)entity->core)->slotBit = 1 << index;
 
             if (!(entity->entityFlags & 0x2000)) {

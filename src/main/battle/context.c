@@ -64,7 +64,7 @@ int Entity_TriggerAnimEvent(BattleEntity *entity, u8 slot)
     register EntityAnimEventCore *core asm("$16");
     BattleEntity *actor;
     u32 nextFrame;
-    if (!initial || !(D_8009D1A0 & 2))
+    if (!initial || !(g_GameStateFlags & 2))
         return 1;
     core = initial;
     if (core->kind == 2 || (actor = entity, core->kind == 4)) {

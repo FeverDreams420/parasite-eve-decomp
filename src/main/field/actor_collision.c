@@ -350,13 +350,13 @@ void Entity_FindFloor(BattleEntity *actor)
 
     x = (u16)actor->posX.parts.integer;
     z = (u16)actor->posZ.parts.integer;
-    if (D_8009D1FC->regionCount == 0) {
+    if (g_CollisionDb->regionCount == 0) {
         return;
     }
 
     floor_index = 0;
     do {
-        if (D_8009D1D8 == 0) {
+        if (g_CollisionPlaneTable == 0) {
             /* The slot offset is summed with the table address as integers;
              * g_RegionHeightTable.entries[floor_index] swaps $v0 and $v1. */
             slot.address = floor_index << 2;
@@ -370,7 +370,7 @@ void Entity_FindFloor(BattleEntity *actor)
             for (triangle_index = 0; triangle_index < triangle_count;
                  triangle_index++, indices++) {
                     triangle_id = *indices;
-                    simple_triangle = (u8 *)&D_8009D1FC->triangles.xz[triangle_id];
+                    simple_triangle = (u8 *)&g_CollisionDb->triangles.xz[triangle_id];
                     if (Geo_PointInTri(simple_triangle, (s16)x, (s16)z)) {
                         actor->collisionFace = simple_triangle;
                         actor->collisionFaceMirror = simple_triangle;
@@ -391,27 +391,27 @@ void Entity_FindFloor(BattleEntity *actor)
             for (triangle_index = 0; triangle_index < triangle_count;
                  triangle_index++, indices++) {
                     triangle_id = *indices;
-                    complex_triangle = &D_8009D1FC->triangles.xyz[triangle_id].face;
+                    complex_triangle = &g_CollisionDb->triangles.xyz[triangle_id].face;
                     if (Geo_PointInTri(complex_triangle, (s16)x, (s16)z)) {
                         actor->collisionFace = complex_triangle;
                         actor->collisionFaceMirror = complex_triangle;
                         if ((actor->entityFlags & 2) == 0) {
                             x_height = Math_FixedMul(
-                                D_8009D1D8[complex_triangle->plane].a,
+                                g_CollisionPlaneTable[complex_triangle->plane].a,
                                 actor->posX.fixed);
                             z_height = Math_FixedMul(
-                                D_8009D1D8[complex_triangle->plane].c,
+                                g_CollisionPlaneTable[complex_triangle->plane].c,
                                 actor->posZ.fixed);
                             actor->posY.fixed = Math_FixedMul(
                                 complex_triangle->distance - x_height - z_height,
-                                D_8009D1D8[complex_triangle->plane].inverseB);
+                                g_CollisionPlaneTable[complex_triangle->plane].inverseB);
                         }
                         return;
                     }
             }
         }
         floor_index++;
-    } while (floor_index < D_8009D1FC->regionCount);
+    } while (floor_index < g_CollisionDb->regionCount);
 }
 
 void Entity_ResolvePosition(BattleEntity *actor, int index) {
@@ -570,7 +570,7 @@ void Entity_UpdateAndRender(BattleEntity *actor)
         D_8009D2E8 &= ~8;
     }
 
-    for (i = 0; i < D_8009D1FC->visitedWordCount; i++)
+    for (i = 0; i < g_CollisionDb->visitedWordCount; i++)
         D_8009DFB0[i] = 0;
     if (!Geo_ClipToFloorBoundary(x, z, face)) {
         if (actor != D_8009D254) {
@@ -581,13 +581,13 @@ void Entity_UpdateAndRender(BattleEntity *actor)
         Entity_SlideOnRamp(actor);
         x = actor->posX.parts.integer;
         z = actor->posZ.parts.integer;
-        for (j = 0; j < D_8009D1FC->visitedWordCount; j++)
+        for (j = 0; j < g_CollisionDb->visitedWordCount; j++)
             D_8009DFB0[j] = 0;
         saved = g_FieldCollisionTriIndex;
         i = Geo_ClipToFloorBoundary(x, z, face);
         if (!i) {
             if (saved == g_FieldCollisionTriIndex) {
-                for (j = 0; j < D_8009D1FC->visitedWordCount; j++)
+                for (j = 0; j < g_CollisionDb->visitedWordCount; j++)
                     D_8009DFB0[j] = 0;
                 D_8009DFB0[g_FieldCollisionTriIndex >> 5] = 1 << (g_FieldCollisionTriIndex & 0x1F);
                 i = Geo_ClipToFloorBoundary(x, z, face);
@@ -599,7 +599,7 @@ void Entity_UpdateAndRender(BattleEntity *actor)
             Entity_SlideOnRamp(actor);
             x = actor->posX.parts.integer;
             z = actor->posZ.parts.integer;
-            for (j = 0; j < D_8009D1FC->visitedWordCount; j++)
+            for (j = 0; j < g_CollisionDb->visitedWordCount; j++)
                 D_8009DFB0[j] = 0;
             i = Geo_ClipToFloorBoundary(x, z, face);
             if (!i) {
@@ -612,16 +612,16 @@ void Entity_UpdateAndRender(BattleEntity *actor)
     if (!Geo_PointInTri(face, x, z))
         face = Geo_ClipToFloorBoundarySub(face, 0, x, z, oldX, oldZ);
 
-    if ((planes = D_8009D1D8) != 0) {
+    if ((planes = g_CollisionPlaneTable) != 0) {
         CollisionFace *floor = face;
 
         if (actor->entityFlags & 2) {
             int y = actor->posY.fixed;
             int a = Math_FixedMul(planes[floor->plane].a, actor->posX.fixed);
-            int c = Math_FixedMul(D_8009D1D8[floor->plane].c, actor->posZ.fixed);
+            int c = Math_FixedMul(g_CollisionPlaneTable[floor->plane].c, actor->posZ.fixed);
 
             actor->posY.fixed = Math_FixedMul(floor->distance - a - c,
-                                              D_8009D1D8[floor->plane].inverseB);
+                                              g_CollisionPlaneTable[floor->plane].inverseB);
             if (y < actor->posY.fixed) {
                 actor->posY.fixed = y;
             } else {
@@ -630,10 +630,10 @@ void Entity_UpdateAndRender(BattleEntity *actor)
             }
         } else {
             int a = Math_FixedMul(planes[floor->plane].a, actor->posX.fixed);
-            int c = Math_FixedMul(D_8009D1D8[floor->plane].c, actor->posZ.fixed);
+            int c = Math_FixedMul(g_CollisionPlaneTable[floor->plane].c, actor->posZ.fixed);
 
             actor->posY.fixed = Math_FixedMul(floor->distance - a - c,
-                                              D_8009D1D8[floor->plane].inverseB);
+                                              g_CollisionPlaneTable[floor->plane].inverseB);
         }
     } else {
         CollisionTriangleHeader *floor = face;
@@ -676,8 +676,8 @@ RampEdge *g_SceneDataTable2;
 u16 g_FieldCollisionTriIndex;
 u16 D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
 unsigned short g_CollisionRadius;
-CollisionDatabase *D_8009D1FC;
-CollisionPlane *D_8009D1D8;
+CollisionDatabase *g_CollisionDb;
+CollisionPlane *g_CollisionPlaneTable;
 CollisionRegionTable g_RegionHeightTable;
 struct CollisionPlane *g_CollisionPlaneTable;
 CollisionDatabase *g_CollisionDb;
@@ -702,7 +702,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
     int d;
 
     neighbours = D_8009CD88;
-    if (!D_8009D1D8) {
+    if (!g_CollisionPlaneTable) {
         CollisionTriangleXZ *tri = triangle;
         int px = x;
         int pz = z;
@@ -790,7 +790,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                     u16 neighbour = tri->layout.links.neighbours[slot];
 
                     if (neighbour == 0xFFFF
-                        || (D_8009D1FC->triangles.xz[neighbour].kind & 0x80)) {
+                        || (g_CollisionDb->triangles.xz[neighbour].kind & 0x80)) {
                         D_8009CE0C.point.x = nextX;
                         D_8009CE0C.point.z = nextZ;
                         D_8009CE10.point.x = prevX;
@@ -819,7 +819,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
         for (slot = 0; slot < 3; slot++) {
             if (neighbours.index[slot] >= 0
                 && !Geo_ClipToFloorBoundary(
-                       x, z, &D_8009D1FC->triangles.xz[neighbours.index[slot]]))
+                       x, z, &g_CollisionDb->triangles.xz[neighbours.index[slot]]))
                 return 0;
         }
         return 1;
@@ -911,7 +911,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                     u16 neighbour = tri->layout.links.neighbours[slot];
 
                     if (neighbour == 0xFFFF
-                        || (D_8009D1FC->triangles.xyz[neighbour].kind & 0x80)) {
+                        || (g_CollisionDb->triangles.xyz[neighbour].kind & 0x80)) {
                         D_8009CE0C.point.x = nextX;
                         D_8009CE0C.point.z = nextZ;
                         D_8009CE10.point.x = prevX;
@@ -940,7 +940,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
         for (slot = 0; slot < 3; slot++) {
             if (neighbours.index[slot] >= 0
                 && !Geo_ClipToFloorBoundary(
-                       x, z, &D_8009D1FC->triangles.xyz[neighbours.index[slot]]))
+                       x, z, &g_CollisionDb->triangles.xyz[neighbours.index[slot]]))
                 return 0;
         }
         return 1;
@@ -981,7 +981,7 @@ void *Geo_ClipToFloorBoundarySub(void *triangle, void *previous, s16 x0, s16 z0,
         minZ = z0;
     }
 
-    if (D_8009D1D8) {
+    if (g_CollisionPlaneTable) {
         CollisionVertexTable vertex;
 
         COLLISION_VERTEX(vertex, ((CollisionTriangleXYZ *)triangle)->layout.links.vertices[2], CollisionVertexXYZ);
@@ -1001,7 +1001,7 @@ void *Geo_ClipToFloorBoundarySub(void *triangle, void *previous, s16 x0, s16 z0,
 
         previousX = nextX;
         previousZ = nextZ;
-        if (D_8009D1D8) {
+        if (g_CollisionPlaneTable) {
             CollisionVertexTable vertex;
 
             COLLISION_VERTEX(vertex, ((CollisionTriangleXYZ *)triangle)->layout.links.vertices[edge], CollisionVertexXYZ);
@@ -1054,8 +1054,8 @@ void *Geo_ClipToFloorBoundarySub(void *triangle, void *previous, s16 x0, s16 z0,
         if (denominator == 0)
             continue;
 
-        if (!D_8009D1D8) {
-            neighbour = &D_8009D1FC->triangles.xz[((CollisionTriangleXZ *)triangle)->layout.links.neighbours[edge]];
+        if (!g_CollisionPlaneTable) {
+            neighbour = &g_CollisionDb->triangles.xz[((CollisionTriangleXZ *)triangle)->layout.links.neighbours[edge]];
             if (neighbour == previous)
                 continue;
             if (Geo_PointInTri(neighbour, x0, z0))
@@ -1065,7 +1065,7 @@ void *Geo_ClipToFloorBoundarySub(void *triangle, void *previous, s16 x0, s16 z0,
             if (neighbour)
                 return neighbour;
         } else {
-            neighbour = &D_8009D1FC->triangles.xyz[((CollisionTriangleXYZ *)triangle)->layout.links.neighbours[edge]];
+            neighbour = &g_CollisionDb->triangles.xyz[((CollisionTriangleXYZ *)triangle)->layout.links.neighbours[edge]];
             if (neighbour == previous)
                 continue;
             if (Geo_PointInTri(neighbour, x0, z0))
@@ -1085,7 +1085,7 @@ int Geo_PointInTri(void *triangle, s16 x, s16 z)
     unsigned edge;
     unsigned inside;
 
-    if (D_8009D1D8) {
+    if (g_CollisionPlaneTable) {
         CollisionVertexTable vertex;
 
         COLLISION_VERTEX(vertex, ((CollisionTriangleXYZ *)triangle)->layout.links.vertices[2], CollisionVertexXYZ);
@@ -1104,7 +1104,7 @@ int Geo_PointInTri(void *triangle, s16 x, s16 z)
     while (edge < 3) {
         previousX = nextX;
         previousZ = nextZ;
-        if (D_8009D1D8) {
+        if (g_CollisionPlaneTable) {
             CollisionVertexTable vertex;
 
             COLLISION_VERTEX(vertex, ((CollisionTriangleXYZ *)triangle)->layout.links.vertices[edge], CollisionVertexXYZ);
