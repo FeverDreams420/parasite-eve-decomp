@@ -5,10 +5,12 @@
 
 int FieldFx_TurnToward(int current, int target, int step) {
     int target_copy;
+    int requestedStep;
+    unsigned angleWord;
     register int diff asm("$5");
     int abs_diff;
     int step_s16;
-    register int delta asm("$3");
+    int delta;
     int result;
     current &= 0xFFF;
     result = target & 0xFFF;
@@ -20,20 +22,23 @@ int FieldFx_TurnToward(int current, int target, int step) {
     if (diff < 0) {
         result = -result;
     }
+    requestedStep = step;
     abs_diff = (s16)result;
 
-    step_s16 = (s16)step;
-    delta = step;
+    angleWord = requestedStep;
+    step_s16 = (s16)requestedStep;
+    delta = angleWord;
     if (step_s16 >= abs_diff) {
         result = target_copy;
     } else {
         if (diff < 0) {
-            delta = -step;
+            delta = -requestedStep;
         }
         if (abs_diff >= 0x801) {
             delta = -delta;
         }
-        result = delta + current;
+        angleWord = delta + current;
+        result = angleWord;
     }
 
     return result & 0xFFF;
