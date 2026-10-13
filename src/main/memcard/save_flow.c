@@ -1047,8 +1047,6 @@ void Save_StartWriteSlot(int port, int arg_slot) {
         return;
     }
 
-    /* Keep the slot copy distinct for the slot-array address calculation. */
-    asm volatile("" : "=r"(slot) : "0"(slot));
     slot_state = &state->slots[slot];
     MemCard_CloseAll();
     Save_BuildHeader();
@@ -1064,8 +1062,6 @@ void Save_StartWriteSlot(int port, int arg_slot) {
         }
         path = D_8009EE70;
         state->selectedSlot = slot;
-        /* Preserve the order of the two metadata stores. */
-        asm volatile("" : "=m"(state->selectedSlot) : "m"(state->selectedSlot));
         state->sequence = next_sequence;
     }
 
