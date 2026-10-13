@@ -364,7 +364,7 @@ void func_80196498(void)
     g_FxCommonEffectSetup[9].value30 = 0x5B;
     g_FxCommonEffectSetup[9].enabled = (D_800A77FC >> 0x10) & 1;
     for (; pointIndex < 10; ++pointIndex) {
-        setupCursor->position[0] = (s16)pointList->x;
+        setupCursor->position[0] = pointList->x;
         *yCursor = (s16) (u16)pointList->y;
         pointZ = (u16)pointList->z;
         *zCursor = (s16) pointZ;
