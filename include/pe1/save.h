@@ -48,8 +48,6 @@ extern unsigned char g_SaveOverlayTimer;
 extern void *D_8009D1F8;
 void Menu_SaveOverlayDraw(void);
 
-/* g_GameTimers[0].current as its own word: the item seed reads it there. */
-extern unsigned int D_800A76A4[];
 extern unsigned char g_CursorRenderDataBlock[];
 
 /* The save-title formatter consumes four numeric fields and two variant

@@ -130,8 +130,6 @@ void GameTime_SetCounterSeconds(int timer, int seconds) {
 
 int g_ItemDropRngIndex;
 
-#define D_800A76A4_VALUE (D_800A76A4[0])
-
 #define SCRAMBLE_RANDOM_BYTES()                    \
     {                                           \
         int scramble_i_;                           \
@@ -150,7 +148,7 @@ void Inv_SetDefaultItemId(void) {
     int bit;
     int index;
 
-    seed = D_800A76A4_VALUE / 60;
+    seed = (unsigned int)g_GameTimers[0].current / 60;
     bits = 0;
 
     for (index = 0; index < 0x11; index++) {

@@ -30,7 +30,6 @@ extern volatile s32 g_FxCommonMotionAccum1X, g_FxCommonMotionAccum1Y, g_FxCommon
 /* Ordinary counter views; legacy callers use volatile scheduling declarations. */
 extern s16 g_FxCommonMotionRemaining0;
 extern s16 g_FxCommonMotionRemaining1;
-extern u32 D_800B0CD8;
 extern u32 g_FieldPadPressed;
 extern u32 g_FieldPadBits;
 extern s8 g_SceneAudioSlot0Handle;

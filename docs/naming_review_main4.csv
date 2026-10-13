@@ -1,0 +1,10 @@
+address,old_name,name,evidence
+0x800930D8,D_800930D8,g_PeImageSectorTable,"Comment-only mention in pe1/boot.h of the already named sector table (sym.main.txt g_PeImageSectorTable = 0x800930D8, naming_review_main2.csv); the duplicated comment line now names it once."
+0x800A22E0,D_800A22E0,g_MenuWidgetNodePool,"Comment-only mention in pe1/menu_widget.h; sym.main.txt names 0x800A22E0 g_MenuWidgetNodePool and MenuWidget_InitPool (menu/widget.c:42) builds the free list from it."
+0x800BCEA8,D_800BCEA8,g_TextboxEntries,"Comment-only mention in pe1/text.h; sym.main.txt names 0x800BCEA8 g_TextboxEntries (size 0xE0 = 4 entries of 0x38), the textbox entry array the comment describes."
+0x800C0E1E,D_800C0E1E,g_AyaBonusPoolRecord.pool,"Comment-only mention in the AyaSaveState field comment (pe1/aya.h); sym.main.txt names 0x800C0E1E g_AyaBonusPoolRecord, the one-field view of pe_bonus_pool."
+0x800F336A,D_800F336A,g_FieldFxSpriteParams (RenderEffectParameters fields),"Comment-only mention in pe1/field_sprite_params.h of the old per-halfword declarations; the block is g_FieldFxSpriteParams (0x800F3368), comment now gives the address range."
+0x800F3378,D_800F3378,g_FieldFxSpriteParams (RenderEffectParameters fields),"Same comment as D_800F336A."
+0x800B0CD8,D_800B0CD8,(removed),"Unused extern in overlays/fx_common/fx_common_motion.h; the fx_common units read the word as g_GameStateFlagsWord (fx_common_setup.h, effects.c:132, camera.c:826)."
+0x800B0E64,D_800B0E64,(removed),"Alias line D_800B0E64 = g_LoadedSceneAssetBlock in undefined_syms_manual.txt had no user left in src/, include/ or the split asm."
+0x800A76A4,D_800A76A4,g_GameTimers[0].current,"Item seed in item/active_list.c read the game clock counter through an unsigned array view; written as (unsigned int)g_GameTimers[0].current it compiles to the same absolute load, so the save.h view and its alias line are gone."
