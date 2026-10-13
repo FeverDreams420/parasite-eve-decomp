@@ -2045,7 +2045,7 @@ void SetGeomScreen(int);
 void FxCommon_SelectBufferAllocation(void **);
 
 void FxCommon_InitDisplay(void) {
-    char *base = &D_8019C1F8;
+    char *base = (char *)g_FxCommonFrames;
     s16 rect[4];
 
     SetDispMask(0);
@@ -2057,24 +2057,24 @@ void FxCommon_InitDisplay(void) {
 
     FxCommon_SelectBufferAllocation((void **)base);
     FxCommon_SelectBufferAllocation((void **)(base + 0x78));
-    D_8019C1FC = g_OtBufferTable[0];
-    D_8019C274 = g_RenderOtBufferBaseAlt[0];
-    ClearOTagR(D_8019C1FC, 0x1000);
-    ClearOTagR(D_8019C274, 0x1000);
+    g_FxCommonFrames[0].buffer.allocation = (FxCommonPacketTag *)g_OtBufferTable[0];
+    g_FxCommonFrames[1].buffer.allocation = (FxCommonPacketTag *)g_RenderOtBufferBaseAlt[0];
+    ClearOTagR(g_FxCommonFrames[0].buffer.allocation, 0x1000);
+    ClearOTagR(g_FxCommonFrames[1].buffer.allocation, 0x1000);
 
     SetDefDrawEnv(base + 8, 0, 0, 0x140, 0xF0);
     SetDefDispEnv(base + 0x64, 0, 0xF0, 0x140, 0xF0);
     SetDefDrawEnv(base + 0x80, 0, 0xF0, 0x140, 0xF0);
     SetDefDispEnv(base + 0xDC, 0, 0, 0x140, 0xF0);
 
-    D_8019C218 = 0;
-    D_8019C290 = 0;
-    D_8019C219 = 0;
-    D_8019C21A = 0;
-    D_8019C21B = 0;
-    D_8019C291 = 0;
-    D_8019C292 = 0;
-    D_8019C293 = 0;
+    g_FxCommonFrames[0].drawEnv[0x18] = 0;
+    g_FxCommonFrames[1].drawEnv[0x18] = 0;
+    g_FxCommonFrames[0].drawEnv[0x19] = 0;
+    g_FxCommonFrames[0].drawEnv[0x1A] = 0;
+    g_FxCommonFrames[0].drawEnv[0x1B] = 0;
+    g_FxCommonFrames[1].drawEnv[0x19] = 0;
+    g_FxCommonFrames[1].drawEnv[0x1A] = 0;
+    g_FxCommonFrames[1].drawEnv[0x1B] = 0;
 
     rect[0] = 0;
     rect[1] = 0;
@@ -2101,7 +2101,7 @@ void FxCommon_ClearActiveOrdering(void)
 
 void FxCommon_SelectBufferAllocation(void **buffer)
 {
-    if (buffer == (void **)&D_8019C1F8) {
+    if (buffer == (void **)g_FxCommonFrames) {
         *buffer = (FxCommonBufferRegion *)g_RenderScratchBufferBase[0];
     } else {
         *buffer = (FxCommonBufferRegion *)g_RenderScratchBufferBase[0] + 1;

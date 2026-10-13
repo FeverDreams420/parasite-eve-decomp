@@ -228,7 +228,6 @@ extern FxCommonResourceState g_FxCommonResourceState;
 
 extern s16 g_FxCommonRecordCursor;
 extern FxCommonBucket g_FxCommonNodeBuckets[];
-extern FxCommonSelection D_801E4A8A[];
 extern FxCommonRecord g_FxCommonRecords[];
 extern s16 g_FxCommonIndexFreeNext[];
 extern s16 g_FxCommonIndexLast;
@@ -237,10 +236,8 @@ extern FxCommonIndexLink g_FxCommonIndexLinks[];
 
 extern u8 g_Akao3dVolumeMin;
 extern u8 g_Akao3dVolumeMax;
-extern u8 D_8019C1F8;
 extern u8 g_FxCommonNight;
 extern s16 g_FxCommonMarkerFade;
-extern u32 D_801EA598[];
 extern FxCommonBuffer *g_FxCommonActiveBuffer;
 extern FxCommonNode g_FxCommonDefaultNode;
 extern RoomSpriteMatrix g_FxCommonViewMatrix;

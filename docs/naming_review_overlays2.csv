@@ -114,3 +114,13 @@ address,overlay,old_name,name,evidence
 0x8019CC28,fx_common,D_8019CC28,g_FxCommonType54Node,Type 0x54 node; FxCommon_DrawSceneNodes draws it first at depth bias 0xFA1 when the view mode is not 0.
 0x8019C820,fx_common,D_8019C820,g_FxCommonLodNodes[0],"Node FxCommon_InitScene creates with FxCommon_CreateConfiguredNode(0x22, 0x20, 0x20) and far/near depths 0x2710/0x1F40; drawn with FxCommon_DrawLodNode at bias 0 beside g_FxCommonPairedNodes[0] (same parameters)."
 0x8019C824,fx_common,D_8019C824,g_FxCommonLodNodes[1],"Second configured LOD node (depths 0x14/0xA), drawn at bias 1000 beside g_FxCommonPairedNodes[1] (same parameters)."
+0x8019C1F8,fx_common,D_8019C1F8,g_FxCommonFrames,"model_buffers.c: base of the two-frame array; the buffer sentinel compare uses it and FxCommon_DrawNode takes &g_FxCommonFrames[0].buffer"
+0x8019C1FC/0x8019C274,fx_common,D_8019C1FC/D_8019C274,g_FxCommonFrames[0/1].buffer.allocation,"ClearOTagR(...,0x1000) on the ordering table taken from g_OtBufferTable[0] / g_RenderOtBufferBaseAlt[0]; stride 0x78 between frames"
+0x8019C218..0x8019C21B/0x8019C290..0x8019C293,fx_common,D_8019C218.. D_8019C290..,g_FxCommonFrames[n].drawEnv[0x18..0x1B],"DRAWENV isbg/r0/g0/b0 bytes at drawEnv+0x18..0x1B cleared in the display init"
+0x801EA598,fx_common,D_801EA598,g_FxCommonShadeQuads,"Existing array symbol; the plain extern was a duplicate view"
+0x801EA260,fx_common,D_801EA260,g_FxCommonRuntime.node0,"passed to FxCommon_DrawTransformNode as the first scene node; at runtime+0x1E0"
+0x8019CBB4..0x8019CBF8 (y/z),fx_common,D_8019CBB4 D_8019CBB8 D_8019CBD4 D_8019CBD8 D_8019CBF4 D_8019CBF8 D_8019CB54 D_8019CB58,g_FxCommonFrustumNormalN.y/.z,"fields inside the frustum normal vectors at +4/+8 of g_FxCommonFrustumNormal0..3"
+0x801E4DA8..0x801E4DAE,fx_common,D_801E4DA8 D_801E4DAA D_801E4DAC D_801E4DAE,g_FxCommonIndexLinks[200/201].previous/.next,"sentinel links -1/201 and 200/-1 written at init; IndexLinks entries are 4 bytes from 0x801E4A88"
+0x8019C39C,fx_common,D_8019C39C,g_FxCommonDefaultNode.bucket,"FxCommonNode.bucket at +0x5C of the default node at 0x8019C340"
+0x801E4E6C,fx_common,D_801E4E6C,&g_FxCommonRecords[1],"record 1 of the array at 0x801E4E00 (stride 0x6C)"
+0x801E4A8A,fx_common,D_801E4A8A,g_FxCommonIndexLinks[].next,"index link next field at +2 of g_FxCommonIndexLinks"

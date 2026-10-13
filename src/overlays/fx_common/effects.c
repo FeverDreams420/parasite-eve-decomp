@@ -231,9 +231,9 @@ void func_8019234C(void)
 void FxCommon_DrawNightShadeAndMarkers(void)
 {
     if (g_FxCommonNight == 1) {
-        u32 *dst = D_801EA598;
+        u32 *dst = (u32 *)g_FxCommonShadeQuads;
         FxCommonBuffer *owner = g_FxCommonActiveBuffer;
-        FxCommonBuffer *sentinel = (FxCommonBuffer *)&D_8019C1F8;
+        FxCommonBuffer *sentinel = &g_FxCommonFrames[0].buffer;
         u32 lowMask;
         u32 *base;
         u32 highMask;
@@ -246,7 +246,7 @@ void FxCommon_DrawNightShadeAndMarkers(void)
         if (owner != sentinel)
             dst += 9;
         lowMask = 0xFFFFFF;
-        base = D_801EA598;
+        base = (u32 *)g_FxCommonShadeQuads;
         highMask = 0xFF000000;
         src1 = (u32 *)(owner)->allocation;
         destWord = *dst;
@@ -419,7 +419,7 @@ void FxCommon_DrawSceneNodes(void)
         DRAW_PAIR(g_FxCommonRuntime.pairedNodes[15], 0, 1);
     }
     g_FxCommonDepthBase = 500;
-    FxCommon_DrawTransformNode(D_801EA260, g_FxCommonActiveBuffer);
+    FxCommon_DrawTransformNode(g_FxCommonRuntime.node0, g_FxCommonActiveBuffer);
 }
 
 #undef DRAW

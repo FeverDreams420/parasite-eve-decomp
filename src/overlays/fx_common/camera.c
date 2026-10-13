@@ -313,10 +313,10 @@ int FxCommon_IsPointInView(int *point)
     int secondVisible;
     int firstVisible = 0;
 
-    first = g_FxCommonFrustumNormal0.x * point[0] + D_8019CBB4 * point[1]
-          + D_8019CBB8 * point[2] + g_FxCommonFrustumDistance0;
-    second = g_FxCommonFrustumNormal1.x * point[0] + D_8019CBD4 * point[1]
-           + D_8019CBD8 * point[2] + g_FxCommonFrustumDistance1;
+    first = g_FxCommonFrustumNormal0.x * point[0] + g_FxCommonFrustumNormal0.y * point[1]
+          + g_FxCommonFrustumNormal0.z * point[2] + g_FxCommonFrustumDistance0;
+    second = g_FxCommonFrustumNormal1.x * point[0] + g_FxCommonFrustumNormal1.y * point[1]
+           + g_FxCommonFrustumNormal1.z * point[2] + g_FxCommonFrustumDistance1;
 
     secondVisible = 0;
     if (first > 0 && g_FxCommonFrustumSide0 > 0)
@@ -337,10 +337,10 @@ int FxCommon_IsShortPointInView(short *point)
     int secondVisible;
     int firstVisible = 0;
 
-    first = g_FxCommonFrustumNormal0.x * point[0] + D_8019CBB4 * point[1]
-          + D_8019CBB8 * point[2] + g_FxCommonFrustumDistance0;
-    second = g_FxCommonFrustumNormal1.x * point[0] + D_8019CBD4 * point[1]
-           + D_8019CBD8 * point[2] + g_FxCommonFrustumDistance1;
+    first = g_FxCommonFrustumNormal0.x * point[0] + g_FxCommonFrustumNormal0.y * point[1]
+          + g_FxCommonFrustumNormal0.z * point[2] + g_FxCommonFrustumDistance0;
+    second = g_FxCommonFrustumNormal1.x * point[0] + g_FxCommonFrustumNormal1.y * point[1]
+           + g_FxCommonFrustumNormal1.z * point[2] + g_FxCommonFrustumDistance1;
 
     secondVisible = 0;
     if (first > 0 && g_FxCommonFrustumSide0 > 0)
@@ -364,10 +364,10 @@ int FxCommon_CheckBoundsWithMargin(int *point, int margin)
     int secondVisible = 0;
     int firstVisible = 0;
     int threshold = margin;
-    first = g_FxCommonFrustumNormal0.x * point[0] + D_8019CBB4 * point[1]
-          + D_8019CBB8 * point[2] + g_FxCommonFrustumDistance0;
-    second = g_FxCommonFrustumNormal1.x * point[0] + D_8019CBD4 * point[1]
-           + D_8019CBD8 * point[2] + g_FxCommonFrustumDistance1;
+    first = g_FxCommonFrustumNormal0.x * point[0] + g_FxCommonFrustumNormal0.y * point[1]
+          + g_FxCommonFrustumNormal0.z * point[2] + g_FxCommonFrustumDistance0;
+    second = g_FxCommonFrustumNormal1.x * point[0] + g_FxCommonFrustumNormal1.y * point[1]
+           + g_FxCommonFrustumNormal1.z * point[2] + g_FxCommonFrustumDistance1;
     if (g_FxCommonFrustumSide0 > 0 && first >= 0)
     {
       firstVisible = 1;
@@ -426,14 +426,14 @@ int FxCommon_CheckFourBoundsWithMargin(int *point, int margin) {
     int limit;
     int fourthVisible = 0, thirdVisible = 0, secondVisible = 0, firstVisible = 0;
     int threshold = margin;
-    first = g_FxCommonFrustumNormal0.x * point[0] + D_8019CBB4 * point[1]
-          + D_8019CBB8 * point[2] + g_FxCommonFrustumDistance0;
-    second = g_FxCommonFrustumNormal1.x * point[0] + D_8019CBD4 * point[1]
-          + D_8019CBD8 * point[2] + g_FxCommonFrustumDistance1;
-    third = g_FxCommonFrustumNormal2.x * point[0] + D_8019CBF4 * point[1]
-          + D_8019CBF8 * point[2] + g_FxCommonFrustumDistance2;
-    fourth = g_FxCommonFrustumNormal3.x * point[0] + D_8019CB54 * point[1]
-          + D_8019CB58 * point[2] + g_FxCommonFrustumDistance3;
+    first = g_FxCommonFrustumNormal0.x * point[0] + g_FxCommonFrustumNormal0.y * point[1]
+          + g_FxCommonFrustumNormal0.z * point[2] + g_FxCommonFrustumDistance0;
+    second = g_FxCommonFrustumNormal1.x * point[0] + g_FxCommonFrustumNormal1.y * point[1]
+          + g_FxCommonFrustumNormal1.z * point[2] + g_FxCommonFrustumDistance1;
+    third = g_FxCommonFrustumNormal2.x * point[0] + g_FxCommonFrustumNormal2.y * point[1]
+          + g_FxCommonFrustumNormal2.z * point[2] + g_FxCommonFrustumDistance2;
+    fourth = g_FxCommonFrustumNormal3.x * point[0] + g_FxCommonFrustumNormal3.y * point[1]
+          + g_FxCommonFrustumNormal3.z * point[2] + g_FxCommonFrustumDistance3;
     if (g_FxCommonFrustumSide0 > 0 && first >= 0)
         firstVisible = 1;
     if (g_FxCommonFrustumSide0 < 0 && first <= 0)
@@ -500,12 +500,12 @@ void FxCommon_InitNodePools(void)
     char *slot;
 
     i = 1;
-    slot = D_801E4E6C;
+    slot = (char *)&g_FxCommonRecords[1];
     for (; i < 200; i++, slot += 108)
         FxCommon_ResetTransformNode(slot);
 
     FxCommon_ResetTransformNode(&g_FxCommonDefaultNode);
-    D_8019C39C = 0;
+    g_FxCommonDefaultNode.bucket = 0;
     g_FxCommonIndexFreeHead = 0;
     for (i = 0; i < 200; i++)
         g_FxCommonIndexFreeNext[i] = i + 1;
@@ -537,10 +537,10 @@ void FxCommon_InitNodePools(void)
     }
 
     g_FxCommonIndexLast = 200;
-    D_801E4DA8 = -1;
-    D_801E4DAA = 201;
-    D_801E4DAC = 200;
-    D_801E4DAE = -1;
+    g_FxCommonIndexLinks[200].previous = -1;
+    g_FxCommonIndexLinks[200].next = 201;
+    g_FxCommonIndexLinks[201].previous = 200;
+    g_FxCommonIndexLinks[201].next = -1;
 }
 
 int FxCommon_AllocIndexLink(void);
@@ -782,7 +782,7 @@ void FxCommon_BeginRecordIteration(void)
 
 FxCommonRecord *FxCommon_NextRecord(void)
 {
-    int record = D_801E4A8A[g_FxCommonRecordCursor].record;
+    int record = g_FxCommonIndexLinks[g_FxCommonRecordCursor].next;
 
     g_FxCommonRecordCursor = record;
     if (record == 201) {
