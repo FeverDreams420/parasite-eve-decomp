@@ -129,7 +129,7 @@ void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbit
     g_RoomOrbitSpritePacket.g = value128b;
     g_RoomOrbitSpritePacket.b = value128b;
     g_RoomOrbitSpritePacket.zero = 0;
-    func_800C66C8((void *)callObject, 0x592, matrixArg);
+    func_800C66C8(callObject, 0x592, matrixArg);
 }
 
 /* The set itself draws nothing; each effect draws its own sprites. */
@@ -216,7 +216,7 @@ void RoomEffect_DrawOrbitParticles(
         matrix.t[0] = position[0];
         matrix.t[1] = position[1];
         matrix.t[2] = position[2];
-        *depthSlot = (short)fx->decay >> 1;
+        *depthSlot = fx->decay >> 1;
         *((unsigned char *)depthSlot - 6) = fx->frame << 1;
         func_800C42A4((FieldGlowSprite *)((char *)depthSlot - 0xA), &matrix, 1);
         i++;
