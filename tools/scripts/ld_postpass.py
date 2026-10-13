@@ -32,7 +32,10 @@ file and memory, so this pass rewrites `linkers/USA/main.ld`
   (`PSX_EXE_STACK_TOP`). `PSX_EXE_HEADROOM` is the room left (0x1FF0 in the
   retail layout) and `PSX_EXE_TEXT_SIZE` the header's text size (0x1EE000);
 - the PS-X EXE header (`asm/USA/main/header.s`, second argument) takes its
-  text size and initial $sp from those symbols instead of literals.
+  initial PC (`__SN_ENTRY_POINT`, the startup), text size and initial $sp
+  from the link's symbols instead of literals: the BIOS jumps to the initial
+  PC, so a literal entry point would start a shifted build in the middle of
+  whatever code then lies at the retail address.
 
 The catch-alls come after every explicit input of their kind, because ld
 gives an input section to the first statement in the script that matches it.
@@ -88,6 +91,7 @@ WINDOWS_END = "    overlay_windows_VRAM_END = .;\n"
 ENGINE_END = "    field_engine_VRAM_END = .;\n"
 HEADER_FIELDS = (
     # (comment splat writes, symbol the link defines)
+    ("Initial PC", "__SN_ENTRY_POINT"),
     (".text size", "PSX_EXE_TEXT_SIZE"),
     ("Initial $sp/r29 & $fp/r30 base", "PSX_EXE_STACK_TOP"),
 )
@@ -176,7 +180,7 @@ def rewrite(text: str) -> str:
 
 
 def rewrite_header(text: str) -> str:
-    """The header's text size and initial $sp become the link's symbols."""
+    """The header's initial PC, text size and initial $sp become the link's symbols."""
     for comment, symbol in HEADER_FIELDS:
         pattern = re.compile(r"^\.word \S+(\s*/\* " + re.escape(comment) + r" \*/)$", re.M)
         if len(pattern.findall(text)) != 1:

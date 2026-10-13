@@ -17,7 +17,9 @@ scratch directory; the repository is never written.
 3. The images are compared word by word. A word that differs must carry a
    relocation whose field changed by exactly PAD (a 32-bit word, a j/jal
    target, a hi/lo half). Nothing else may differ. The PS-X EXE header may
-   differ only in its text size, by PAD.
+   differ only in its initial PC (the startup moves with main) and its text
+   size, both by PAD; an entry point that did not move is a failure, since
+   the BIOS would jump into the middle of other code.
 
 Words that did not change although their relocation points into the program
 (main's remaining absolute pins, see shift_test.py) are listed too: they
@@ -51,6 +53,7 @@ from tools.scripts.shift_audit import (  # noqa: E402
     parse_map_sections)
 
 HEADER_SIZE = 0x800
+ENTRY_OFFSET = 0x10  # PS-X EXE header: initial PC
 TEXT_SIZE_OFFSET = 0x1C  # PS-X EXE header: .text size
 PY = sys.executable
 
@@ -125,7 +128,8 @@ def classify_word(where: int, wb: int, ws: int, rel: Reloc | None, pad: int,
 
 
 def compare_header(base: bytes, shifted: bytes, pad: int, result: Comparison) -> None:
-    """Only the text size may change, and by exactly PAD."""
+    """Only the initial PC (the startup, which lies after the pad) and the
+    text size may change, and by exactly PAD."""
     for off in range(0, HEADER_SIZE, 4):
         wb = int.from_bytes(base[off:off + 4], "little")
         ws = int.from_bytes(shifted[off:off + 4], "little")
@@ -133,8 +137,12 @@ def compare_header(base: bytes, shifted: bytes, pad: int, result: Comparison) ->
             continue
         if off == TEXT_SIZE_OFFSET and ws - wb == pad:
             result.counts["header_text_size"] += 1
+        elif off == ENTRY_OFFSET and ws - wb == pad:
+            result.counts["header_entry_point"] += 1
         else:
             result.add("unexplained_difference", off, f"header word {off:#x} {wb:08X}->{ws:08X}")
+    if pad and base[ENTRY_OFFSET:ENTRY_OFFSET + 4] == shifted[ENTRY_OFFSET:ENTRY_OFFSET + 4]:
+        result.add("unexplained_difference", ENTRY_OFFSET, "header initial PC did not move with the startup")
 
 
 # --------------------------------------------------------------------------

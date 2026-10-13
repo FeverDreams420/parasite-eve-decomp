@@ -2088,9 +2088,11 @@ and changes 35919 words in 189 of the 190 overlays, every one of them at a
 relocation against a symbol that moved.
 
 Fixed layout: `.main` at 0x80010000 (the PS-X EXE load address, a loader
-contract), the initial stack pointer 0x801FFFF0 (`PSX_EXE_STACK_TOP`) and the
-initial PC literal in `asm/USA/main/header.s`. The header's text size is
-`PSX_EXE_TEXT_SIZE`, computed by the link (retail 0x1EE000). Since
+contract) and the initial stack pointer 0x801FFFF0 (`PSX_EXE_STACK_TOP`). The
+header's initial PC is `__SN_ENTRY_POINT` and its text size
+`PSX_EXE_TEXT_SIZE`, both from the link (retail 0x80072534 and 0x1EE000;
+the literal entry point started a shifted build in the middle of the code
+before the startup, found by booting one in an emulator). Since
 2026-10-13 `_gp` is `_ramsize` (the first `.sdata` word), `.field_engine`
 follows `main_VRAM_END`, and the overlay window block (every overlay load
 window and the runtime buffers in them) follows the boot work area as a

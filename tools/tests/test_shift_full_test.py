@@ -54,20 +54,30 @@ class CompareWordsTests(unittest.TestCase):
 
 
 class HeaderTests(unittest.TestCase):
-    def header(self, size: int, sp: int = 0x801FFFF0) -> bytes:
+    def header(self, size: int, sp: int = 0x801FFFF0, pc: int = 0x80072534) -> bytes:
         data = bytearray(sf.HEADER_SIZE)
+        data[sf.ENTRY_OFFSET:sf.ENTRY_OFFSET + 4] = pc.to_bytes(4, "little")
         data[sf.TEXT_SIZE_OFFSET:sf.TEXT_SIZE_OFFSET + 4] = size.to_bytes(4, "little")
         data[0x30:0x34] = sp.to_bytes(4, "little")
         return bytes(data)
 
-    def test_only_the_text_size_moves_by_the_pad(self):
+    def test_only_the_entry_point_and_text_size_move_by_the_pad(self):
         result = sf.Comparison()
-        sf.compare_header(self.header(0x1EE000), self.header(0x1EE000 + PAD), PAD, result)
+        sf.compare_header(self.header(0x1EE000), self.header(0x1EE000 + PAD, pc=0x80072534 + PAD),
+                          PAD, result)
         self.assertEqual(result.counts["header_text_size"], 1)
+        self.assertEqual(result.counts["header_entry_point"], 1)
         self.assertEqual(result.counts["unexplained_difference"], 0)
         result = sf.Comparison()
-        sf.compare_header(self.header(0x1EE000), self.header(0x1EE000 + PAD, 0x80200000), PAD, result)
+        sf.compare_header(self.header(0x1EE000), self.header(0x1EE000 + PAD, 0x80200000, 0x80072534 + PAD),
+                          PAD, result)
         self.assertEqual(result.counts["unexplained_difference"], 1)
+
+    def test_an_entry_point_that_did_not_move_fails(self):
+        result = sf.Comparison()
+        sf.compare_header(self.header(0x1EE000), self.header(0x1EE000 + PAD), PAD, result)
+        self.assertEqual(result.findings["unexplained_difference"],
+                         [(sf.ENTRY_OFFSET, "header initial PC did not move with the startup")])
 
 
 @unittest.skipUnless((BUILD / "main.map").exists() and (LINKERS / "main.ld").exists()
@@ -81,6 +91,7 @@ class BuiltShiftTests(unittest.TestCase):
         self.assertTrue(sf.passed(report), sf.render(report, 5))
         self.assertEqual(report["block"]["shifted_base"] - report["block"]["base"], 0x10)
         self.assertEqual(report["main"]["counts"]["header_text_size"], 1)
+        self.assertEqual(report["main"]["counts"]["header_entry_point"], 1)
         self.assertGreater(report["overlays"]["counts"]["shifted_address_field"], 0)
 
 

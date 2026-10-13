@@ -94,11 +94,11 @@ class RewriteTests(unittest.TestCase):
         self.assertEqual(positions, sorted(positions))
         self.assertNotIn("0x8010BCF8", out)
 
-    def test_header_takes_size_and_stack_from_the_link(self):
+    def test_header_takes_entry_size_and_stack_from_the_link(self):
         out = lp.rewrite_header(HEADER)
+        self.assertIn(".word __SN_ENTRY_POINT       /* Initial PC */", out)
         self.assertIn(".word PSX_EXE_TEXT_SIZE       /* .text size */", out)
         self.assertIn(".word PSX_EXE_STACK_TOP       /* Initial $sp/r29 & $fp/r30 base */", out)
-        self.assertIn(".word 0x80072534       /* Initial PC */", out)
         self.assertEqual(lp.rewrite_header(out), out)
         with self.assertRaises(lp.PostPassError):
             lp.rewrite_header(HEADER.replace("/* .text size */", "/* size */"))

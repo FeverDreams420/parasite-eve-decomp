@@ -277,8 +277,11 @@ labels (`D_8009CDF8`, `D_800C20C8`) and to the heap words `D_8009453C`,
 `D_80094540`. They move with their blobs today. Once `.sbss` is owned and the
 engine boundary moves, they become linker symbols: BSS start = first `.sbss`
 input of main, `_end` = `main_VRAM_END`. The PS-X EXE header's initial PC
-should be `__SN_ENTRY_POINT`; the text size can stay 0x1EE000 while the image
-end is anchored at 0x801FE000 by the overlay-window block.
+is `__SN_ENTRY_POINT` and its text size `PSX_EXE_TEXT_SIZE`, both written by
+the link (`ld_postpass.py` rewrites the two header words); a literal entry
+point made the BIOS jump into the middle of the code below the startup of a
+shifted build (`shift_full_test.py` now fails when the entry point does not
+move with the pad).
 
 ### 3.7 Overlays
 
@@ -588,6 +591,7 @@ overlays on the retail disc.
 | --- | --- | --- | --- |
 | PS-X EXE load address | `.main` at 0x80010000 | `configs/USA/main.yaml`, header `.text start` | BIOS loader contract |
 | Initial stack pointer | 0x801FFFF0, `PSX_EXE_STACK_TOP` | `tools/scripts/ld_postpass.py`, header `$sp` field | BIOS convention; the startup then sets `$sp` to `_ramsize - 8` and reserves `_stacksize` (0x2000) below it |
+| Entry point | `__SN_ENTRY_POINT` (retail 0x80072534) | header `Initial PC` | not fixed: written by the link |
 | Image size | `PSX_EXE_TEXT_SIZE` = end of the window block - 0x80010000 (retail 0x1EE000) | header `.text size` | not fixed: computed by the link |
 | Overlay window layout | 6 windows as offsets from `overlay_windows_VRAM` | `linkers/USA/overlay_windows.txt` | the 190 overlays in the retail `PE.IMG` are prelinked at these offsets from the retail base 0x8010BCF8; the build relinks them for any base (below) |
 | Retail window base 0x8010BCF8 | `vram:` of the `overlay_windows` segment | `configs/USA/main.yaml` (disassembly only) | the loader window base the shipped overlays were linked for; the link does not use it |
