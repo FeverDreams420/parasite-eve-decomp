@@ -39,7 +39,7 @@ void MenuWidget_InitPoolUnk(void) {
     MenuWidgetNode *end;
     MenuWidgetNode *next;
 
-    node = (MenuWidgetNode *)g_MenuWidgetNodePool;
+    node = g_MenuWidgetNodePool;
     end = node + 24;
 
     while (node < end) {
@@ -49,7 +49,7 @@ void MenuWidget_InitPoolUnk(void) {
     }
 
     g_MenuWidgetNodePoolSentinel.next = 0;
-    g_MenuWidgetFreeListHead = (MenuWidgetNode *)&g_MenuWidgetNodePoolSentinel - 23;
+    g_MenuWidgetFreeListHead = &g_MenuWidgetNodePoolSentinel - 23;
     g_MenuWidgetCurrentNode = 0;
     g_MenuWidgetActiveListHead = 0;
 }
