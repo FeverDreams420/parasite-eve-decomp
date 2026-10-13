@@ -31,7 +31,6 @@ int g_BattleAttackPmSlot;
 s32 g_BattleAilmentPmSlot;
 s32 g_BattleEffectPmSlot;
 u8 g_BattleHitPending;
-u8 D_8009D2D8;
 unsigned char g_BattleActionQueueCount;
 s8 g_BattleTargetIndex;
 
@@ -188,7 +187,7 @@ void Battle_Init(void)
     g_BattleTargetCycleMode = 0;
     g_BattleHitPending = 0;
     config1 = *action;
-    D_8009D2D8 = (config0->turnWord >> 4) & 3;
+    g_BattleActiveTurnSlot = (config0->turnWord >> 4) & 3;
     config2 = *action;
     g_BattleRemainingActions = config1->turnWord & 0xF;
     g_BattleActionAnimModes[0] = config2->animMode[0];

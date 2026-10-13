@@ -34,7 +34,6 @@ typedef struct BattleEnemySlot {
 extern int g_BattleImpactPmSlot;
 extern int g_BattleEffectPmSlot;
 extern s8 g_BattleTargetCycleMode; /* item target mode: 0, or 4..7 while picking */
-extern u8 D_8009D2D8;
 /* Actions left in the battle turn (Save_ResetGlobalFlags clears it). */
 extern unsigned char g_BattleRemainingActions;
 extern u8 g_BattleActionAnimModes[4];
