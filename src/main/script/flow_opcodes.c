@@ -302,7 +302,7 @@ void Script_RunQueue(void)
         node = g_ScriptNodePool;
         /* Retail first reads flags and sequence together as a word. */
         if (*(u32 *)&node->flags & 0x50) continue;
-        entity = D_8009D2F0[0];
+        entity = (u8 *)g_CurrentEntity;
         if ((((FieldActor *)entity)->flags & 0x1000) && !(node->flags & 0x80)) continue;
         if ((g_GameStateFlags & 0x100) && entity != (u8 *)D_8009D254 && !(node->flags & 0x80)) continue;
         node = g_ScriptNodePool;
@@ -346,7 +346,7 @@ typedef struct {
 
 int Script_JumpToEntityOffset(ScriptJumpOffsetEntry **arg0)
 {
-    g_ScriptCursor = (u32 *)(((FieldActor *)D_8009D2F0[0])->script_base + ((*arg0)->value * 2));
+    g_ScriptCursor = (u32 *)(g_CurrentEntity->script_base + ((*arg0)->value * 2));
     return 1;
 }
 
