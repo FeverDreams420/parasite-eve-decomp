@@ -1050,7 +1050,7 @@ checkLifetime:
             clut = GetClut(0x10, impactClutY) & 0xFFFF;
             tripledScale = renderScale * 3;
             impactScale = (s32) (tripledScale + (tripledScale >> 0x1F)) >> 1;
-            spriteFrame = (s16 *)&D_800F3368.parameter02;
+            spriteFrame = &D_800F3368.parameter02;
             func_800CEE20((GteShortVector *)state, &spriteRotation, impactScale, impactScale, (*spriteFrame * (s16) (state->frame / 3)) + 0x20, clut, 1, 0x80, 0);
             impactFrame = state->frame;
             if (impactFrame < 0xD) {
@@ -1097,7 +1097,7 @@ int func_80195320(int mode, u16 *out) {
         D_80195EF8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5887704);
         FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80195EF8, 0, 0);
         if (D_800E2368->flags) {
-            actor = (FieldActor *)D_800F32D0->actor;
+            actor = D_800F32D0->actor;
             if (actor) {
                 state = actor->state;
                 if (state) {
