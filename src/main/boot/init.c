@@ -284,10 +284,9 @@ void Field_HandleStateTransition(void) {
     pad = D_800BE9A2;
     pad_mask = 0xFFFF9FFF;
     base_bits = (~pad) & pad_mask;
-    asm volatile("" : "=r"(pad) : "0"(pad));
     old_pad_bits = g_FieldPadBits;
     D_8009D238 = old_pad_bits;
-    inverted = ~pad;
+    inverted = ~(u16)pad;
     pad_bits = base_bits;
     if (inverted & 0x2000) {
         pad_bits = base_bits | 0x4000;
