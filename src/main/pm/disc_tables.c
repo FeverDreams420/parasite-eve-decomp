@@ -25,6 +25,7 @@
 #include "pe1/save_tail_state.h"
 #include "pe1/scene_assets.h"
 #include "pe1/scene_dispatch.h"
+#include "pe1/script_queue.h"
 #include "include_asm.h"
 
 int Draw_InitDisplay(int mode) {
@@ -189,7 +190,7 @@ retry_first_load:
         Asset_LoadTimImage(SceneAsset_ResolveOffset(main_table, main_table->offsets[(s16)i]));
     }
 
-    if (D_800A77FC & 0x2000) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] & 0x2000) {
 retry_large_load_a:
         range = g_LargeTexLbaTbl;
         do {

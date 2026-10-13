@@ -20,11 +20,11 @@ void Seq_ApplyGlobalPitch(void) {
     unsigned short value = g_AkaoCdInputVolume;
     SpuCommonAttr *regs;
 
-    regs = (SpuCommonAttr *)D_800C0D90;
+    regs = &g_AkaoSpuCommonAttr;
     regs->mask = 0x1C0;
-    D_800C0DA4 = 0;
-    D_800C0DA2 = value;
-    D_800C0DA0 = value;
+    g_AkaoSpuCommonAttr.cd.reverb = 0;
+    g_AkaoSpuCommonAttr.cd.volume.right = value;
+    g_AkaoSpuCommonAttr.cd.volume.left = value;
     SpuSetCommonAttr(regs);
 }
 

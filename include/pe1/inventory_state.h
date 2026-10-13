@@ -15,8 +15,6 @@ extern signed char g_AyaEquippedArmorSlot[];
 extern s16 D_800C0EAA[];
 extern s16 D_800C1F7E[];
 extern s16 D_800C2022[];
-extern u8 D_800A1E6D[][32];
-extern s16 D_800A1E76[][16];
 extern int g_InvBonusSlotCount;
 extern s32 g_InvWeaponSortStatIndex;
 extern u16 *g_InvSortListBase;

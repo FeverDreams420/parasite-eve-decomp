@@ -17,7 +17,6 @@ extern const BattleActionSoundTable g_BattleActionSoundIds;
 extern u8 g_BattleHitTimer;
 extern s16 g_BattlePlayerAimHeight;
 extern const Tbl20 g_BattleActionEffectIds;
-extern u16 D_800BE834[];
 extern u8 g_BattleStatusRowPosX[];
 /* A status anchor halfword addressed by the slot's byte offset. */
 typedef union BattleHalfwordAddress {

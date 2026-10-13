@@ -9,7 +9,6 @@
 
 #include "fx_common.h"
 
-
 extern s32 g_FxCommonConfirmExit;
 extern s32 g_FxCommonConfirmExitVariant;
 int Save_GetMetadataWindowIndex(void);

@@ -4,9 +4,6 @@
 #include "pe1/gte_types.h"
 
 extern GteMatrix g_CameraBasisMatrix;
-extern s16 D_800BD002, D_800BD004, D_800BD006, D_800BD008, D_800BD00A;
-extern s16 D_800BD00C, D_800BD00E, D_800BD010;
-extern int D_800BD014, D_800BD018, D_800BD01C;
 int Render_DrawSprite(void);
 
 /* Camera initialization scratch: matrix words followed by projection distance. */

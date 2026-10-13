@@ -293,8 +293,8 @@ void Inv_BuildItemGridFromCategory(void)
         base = g_InvCategoryBaseItemId + i % 3;
         src = Item_LookupBaseData(base - 1);
         g_InvSpecialItemRecords[i] = *src;
-        D_800A1E6D[i][0] = 0;
-        D_800A1E76[i][0] = 999;
+        g_InvSpecialItemRecords[i].baseStats[2] = 0;
+        g_InvSpecialItemRecords[i].bonusStats[2] = 999;
     } while (++i < 9);
 
     i = 0x63;

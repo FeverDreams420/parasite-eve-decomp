@@ -26,8 +26,7 @@ int func_801909B4(void);
 
 /* Disc table load (pm/disc_tables.c): PE.IMG sector ranges of the
  * startup assets (entries of the g_PeImageSectorTable sector table) and the save
- * work word whose bit 0x2000 selects the large texture set. */
-extern unsigned int D_800A77FC;
+ * startup assets (entries of the D_800930D8 sector table). */
 extern u16 g_MainAssetLbaTbl[];
 extern u16 g_LargeTexLbaTbl[];
 extern u16 g_SmallTexLbaTbl[];
