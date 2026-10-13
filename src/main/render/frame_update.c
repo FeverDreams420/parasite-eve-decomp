@@ -292,7 +292,7 @@ int Render_SetCDDCSlot(void) {
         return 0;
     }
     if (mode == 2) {
-        divisor = D_800BCFF6 - 1;
+        divisor = g_ScreenTransitionFadeColor - 1;
         if (divisor <= 0) {
             divisor = 1;
         }

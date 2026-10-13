@@ -19,7 +19,7 @@ extern s16 g_FxCommonMotionRemaining1;
 extern u32 D_8009D1F4;
 extern u32 D_8009D26C;
 extern s8 D_800B0DB5;
-extern void *D_800B0E08[1];
+extern void *g_AkaoBgmHandle[1];
 extern s32 D_8019C018;
 extern s32 D_8019C01C;
 extern s16 D_8019C024;

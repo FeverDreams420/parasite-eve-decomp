@@ -52,7 +52,7 @@ extern s16 D_8009D2A4;
 extern s8 D_8009D2B0;
 extern s32 D_8009D2FC;
 extern BattleAction D_800A76D8;
-extern void *D_800B0E08[16];
+extern void *g_AkaoBgmHandle[16];
 extern BattleEntity *g_BattleActionActors[7];
 
 #endif

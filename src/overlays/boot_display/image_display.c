@@ -58,7 +58,7 @@ void BootDisplay_InitDisplayBuffers(void) {
     g_BootDisplayClut = GetClut(D_80172C94[0], D_80172C94[1]);
     func_80124F40(0);
     func_80124F40(1);
-    PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
+    PutDispEnv(&g_RenderDispEnvArray[g_ActiveDrawSlot]);
     SetDispMask(1);
 }
 
@@ -88,8 +88,8 @@ void BootDisplay_PresentFrame(void) {
     }
     DrawSync(0);
     VSync(2);
-    PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
-    PutDrawEnv(&D_800BCDC8[g_ActiveDrawSlot]);
+    PutDispEnv(&g_RenderDispEnvArray[g_ActiveDrawSlot]);
+    PutDrawEnv(&g_RenderDrawEnvArray[g_ActiveDrawSlot]);
     g_ActiveDrawSlot ^= 1;
 }
 
@@ -184,20 +184,20 @@ void BootDisplay_SetImageDisplay(u16 index) {
         displayY = 224;
         drawY = 0;
     }
-    SetDefDispEnv(&D_800BCE80[index], 0, displayY, 320, 224);
-    drawArg = &D_800BCDC8[index];
+    SetDefDispEnv(&g_RenderDispEnvArray[index], 0, displayY, 320, 224);
+    drawArg = &g_RenderDrawEnvArray[index];
     zeroArg = 0;
     yArg = drawY;
     widthArg = 480;
-    savedWidth = D_800BCE80[index].disp.w;
-    D_800BCE80[index].isrgb24 = 1;
-    D_800BCE80[index].screen.y = 8;
-    D_800BCE80[index].screen.h = 224;
-    D_800BCE80[index].disp.w = savedWidth;
+    savedWidth = g_RenderDispEnvArray[index].disp.w;
+    g_RenderDispEnvArray[index].isrgb24 = 1;
+    g_RenderDispEnvArray[index].screen.y = 8;
+    g_RenderDispEnvArray[index].screen.h = 224;
+    g_RenderDispEnvArray[index].disp.w = savedWidth;
     SetDefDrawEnv(drawArg, zeroArg, yArg, widthArg, 224);
-    D_800BCDC8[index].dtd = 0;
-    D_800BCDC8[index].isbg = 0;
-    D_800BCDC8[index].clip.w = D_800BCDC8[index].clip.w * 2 / 3;
+    g_RenderDrawEnvArray[index].dtd = 0;
+    g_RenderDrawEnvArray[index].isbg = 0;
+    g_RenderDrawEnvArray[index].clip.w = g_RenderDrawEnvArray[index].clip.w * 2 / 3;
 }
 
 void BootDisplay_StepImageDisplay(void) {

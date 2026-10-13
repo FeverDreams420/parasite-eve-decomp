@@ -236,10 +236,10 @@ s32 func_801909B4(void) {
     u32 *destination;
 
     /* Save both display pages before borrowing their backing memory. */
-    D_801D1550 = D_800BCE80[0];
+    D_801D1550 = g_RenderDispEnvArray[0];
     D_801D1564 = D_800BCE94;
     titleMode = D_800B0DCD & 1;
-    D_801D1498 = D_800BCDC8[0];
+    D_801D1498 = g_RenderDrawEnvArray[0];
     D_801D14F4 = D_800BCE24;
     firstMemory = D_80011610;
     secondMemory = firstMemory + 0x1C080;
@@ -293,9 +293,9 @@ s32 func_801909B4(void) {
                     VSync(0);
                 } while (waitFrames < 0x3C);
             }
-            D_801D11BC[0]->draw = D_800BCDC8[0];
+            D_801D11BC[0]->draw = g_RenderDrawEnvArray[0];
             g_MemcardSecondScreen.value->draw = D_800BCE24;
-            D_801D11BC[0]->disp = D_800BCE80[0];
+            D_801D11BC[0]->disp = g_RenderDispEnvArray[0];
             g_MemcardSecondScreen.value->disp = D_800BCE94;
             D_801D11BC[0]->draw.isbg = 0;
             g_MemcardSecondScreen.value->draw.isbg = 0;
@@ -520,9 +520,9 @@ s32 func_801909B4(void) {
             }
         }
     } while (result < 0);
-    D_800BCDC8[0] = D_801D1498;
+    g_RenderDrawEnvArray[0] = D_801D1498;
     D_800BCE24 = D_801D14F4;
-    D_800BCE80[0] = D_801D1550;
+    g_RenderDispEnvArray[0] = D_801D1550;
     D_800BCE94 = D_801D1564;
     {
         register s32 screenY asm("$2") = screenYRestore;

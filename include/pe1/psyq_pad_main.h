@@ -15,7 +15,7 @@ extern void (*D_8009B728)(CardObj *);
 extern int D_800A5AC0[2];
 extern int (*D_8009B7A8[])(void);
 extern int (*D_8009B724)(int);
-extern u32 D_800BD02C, D_800A76D0;
+extern u32 g_TimerTimeoutLimit, g_TimerTimeoutStart;
 void setRC2wait(int);
 int MemCard_WaitReadyForTransfer(void);
 int chkRC2wait(void);

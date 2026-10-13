@@ -277,8 +277,8 @@ void Battle_Update(void) {
             D_8009D278->hpAlive = 0x2328U;
             if (D_8009D288 == 0) {
                 srand(D_8009D250);
-                if ((D_800B0E08[0]) != 0) {
-                    Akao_SendTableCommand((D_800B0E08[0]), 0x454, 0, 0x80, 0x7F);
+                if ((g_AkaoBgmHandle[0]) != 0) {
+                    Akao_SendTableCommand((g_AkaoBgmHandle[0]), 0x454, 0, 0x80, 0x7F);
                 }
                 D_8009D288 = 1;
             }
@@ -433,7 +433,7 @@ void Battle_Update(void) {
         if ((player->animLastFrame == player->animPrev.parts.integer) && ((u8)player->actionMode < 4U)) {
             if (D_8009D298 == 0) {
                 Entity_SetActionMode(player, D_8009D278->actionMode12);
-                if (!(D_800B0CE6 & 1) && ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) && (D_8009D28C == 0) && (D_8009D278->action->turnWord & 0x8000) && (D_8009D1D0 != 0)) {
+                if (!(g_DiscChangeFlags & 1) && ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) && (D_8009D28C == 0) && (D_8009D278->action->turnWord & 0x8000) && (D_8009D1D0 != 0)) {
                     Battle_RollEnemySpawn(D_8009D1D0);
                     D_8009D1D0 = 0;
                 }
@@ -448,7 +448,7 @@ void Battle_Update(void) {
                 player->animPrev.fixed = D_8009D29C[0] + 0xFFFF0000;
             }
         }
-        if ((D_8009D254->actionMode == 0xD) && !(D_800B0CE6 & 1)) {
+        if ((D_8009D254->actionMode == 0xD) && !(g_DiscChangeFlags & 1)) {
             D_8009D278->actionMode12 = 4U;
             if (D_8009D254->entityFlags & 0x100) {
                 Asset_Find08Alt(0x453, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
@@ -570,24 +570,24 @@ int Battle_StepVictory(void)
         if (brightness != 0) {
             brightness = ~(brightness << 3) & 0xFF;
             Render_FadeEntityColor(&D_8009D254->renderObject, brightness, brightness, brightness);
-            Render_FadeEntityColor(&D_800B0CEC, brightness, brightness, brightness);
+            Render_FadeEntityColor(&g_PlayerBattleEntity, brightness, brightness, brightness);
             g_BattleEndTimer--;
             break;
         }
         Render_FadeEntityColor(&D_8009D254->renderObject, 255, 255, 255);
         {
-            RenderObjectEntity *partner = &D_800B0CEC;
+            RenderObjectEntity *partner = &g_PlayerBattleEntity;
 
             Render_FadeEntityColor(partner, 255, 255, 255);
             Anim_SetInterpRate(&D_8009D254->renderObject, 30);
             D_8009D254->renderObject.flags_9C |= 2;
             Anim_SetInterpRate(partner, 30);
-            D_800B0CEC.flags_9C |= 2;
+            g_PlayerBattleEntity.flags_9C |= 2;
         }
         D_8009CE74++;
         break;
     case 2:
-        if (D_8009D254->renderObject.variant_visible != 0 || D_800B0CEC.variant_visible != 0)
+        if (D_8009D254->renderObject.variant_visible != 0 || g_PlayerBattleEntity.variant_visible != 0)
             break;
         Scene_LoadRoomAssets(0x69, D_8009D254);
         spawnPlayer = D_8009D254;
@@ -604,12 +604,12 @@ int Battle_StepVictory(void)
         Anim_SetInterpRate(&D_8009D254->renderObject, 30);
         D_8009D254->renderObject.flags_9C |= 4;
         Render_FadeEntityColor(&D_8009D254->renderObject, 255, 255, 255);
-        D_800B0CEC.variant_visible = 1;
+        g_PlayerBattleEntity.variant_visible = 1;
         {
-            RenderObjectEntity *partner = &D_800B0CEC;
+            RenderObjectEntity *partner = &g_PlayerBattleEntity;
 
             Anim_SetInterpRate(partner, 30);
-            D_800B0CEC.flags_9C |= 4;
+            g_PlayerBattleEntity.flags_9C |= 4;
             Render_FadeEntityColor(partner, 255, 255, 255);
         }
         Entity_SetActionMode(D_8009D254, 0xF);
@@ -633,7 +633,7 @@ int Battle_StepVictory(void)
         if (brightness != 0) {
             brightness = ((brightness << 3) + 127) & 0xFF;
             Render_FadeEntityColor(&D_8009D254->renderObject, brightness, brightness, brightness);
-            Render_FadeEntityColor(&D_800B0CEC, brightness, brightness, brightness);
+            Render_FadeEntityColor(&g_PlayerBattleEntity, brightness, brightness, brightness);
             g_BattleEndTimer--;
         } else {
             D_8009CE74++;
@@ -904,12 +904,12 @@ void Battle_StepPostBattle(void)
         if (countdown == 0) {
             Anim_SetInterpRate(&D_8009D254->renderObject, 0x3C);
             D_8009D254->renderObject.flags_9C |= 2;
-            Anim_SetInterpRate(&D_800B0CEC, 0x3C);
+            Anim_SetInterpRate(&g_PlayerBattleEntity, 0x3C);
             {
                 u8 state = D_8009CE74;
                 g_BattleEndTimer = 0x3C;
                 state++;
-                D_800B0CEC.flags_9C |= 2;
+                g_PlayerBattleEntity.flags_9C |= 2;
                 D_8009CE74 = state;
             }
         }
@@ -921,7 +921,7 @@ void Battle_StepPostBattle(void)
     case 4: {
         register RenderTexturedQuad *base asm("$7");
         register u16 right asm("$6");
-        if ((D_8009D254->renderObject.variant_visible == 0) && (D_800B0CEC.variant_visible == 0)) {
+        if ((D_8009D254->renderObject.variant_visible == 0) && (g_PlayerBattleEntity.variant_visible == 0)) {
             D_8009CE74++;
             break;
         }
@@ -965,7 +965,7 @@ void Battle_StepEscapeOrDeath(void)
             if (entity->core == 0) {
                 if (entity->parent == 0) continue;
             } else if (entity == D_8009D254) {
-                Anim_SetInterpRate(&D_800B0CEC, 30);
+                Anim_SetInterpRate(&g_PlayerBattleEntity, 30);
                 D_800B0D88_write.value = D_800B0D88_read.value | 2;
                 D_8009D254->renderObject.flags_9C |= 2;
             } else {

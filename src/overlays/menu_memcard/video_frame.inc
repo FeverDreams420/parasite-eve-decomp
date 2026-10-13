@@ -28,7 +28,7 @@ void *MENUCARD_UPDATE_VIDEO_FRAME_NAME(VideoDisplay *display) {
     if (status == 1) {
         status = DsShellOpen();
         dataPtr = &local.data;
-        if (status != D_800B0DD4) {
+        if (status != g_CdDiskType) {
             exit(1);
         }
     }

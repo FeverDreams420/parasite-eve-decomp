@@ -36,7 +36,7 @@ typedef struct VideoDisplay {
 } VideoDisplay;
 extern s32 DsSystemStatus(void),DsShellOpen(void);
 extern void exit(s32),Spu_SetVoiceVolume(s32);
-extern u16 D_800B0DD4;
+extern u16 g_CdDiskType;
 extern VideoEntry *D_801D11AC;
 extern u8 D_800B0DBE,D_801D0DBD;
 extern s8 D_800B0DBB;

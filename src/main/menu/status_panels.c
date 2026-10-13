@@ -164,12 +164,12 @@ void Menu_SaveBgApplyFadeStep(void) {
 
     {
         unsigned shade = (unsigned)bias >> 13;
-        D_800BCDC8[1].b0 = shade;
-        D_800BCDC8[1].g0 = shade;
-        D_800BCDC8[1].r0 = shade;
-        D_800BCDC8[0].b0 = shade;
-        D_800BCDC8[0].g0 = shade;
-        D_800BCDC8[0].r0 = shade;
+        g_RenderDrawEnvArray[1].b0 = shade;
+        g_RenderDrawEnvArray[1].g0 = shade;
+        g_RenderDrawEnvArray[1].r0 = shade;
+        g_RenderDrawEnvArray[0].b0 = shade;
+        g_RenderDrawEnvArray[0].g0 = shade;
+        g_RenderDrawEnvArray[0].r0 = shade;
     }
 }
 

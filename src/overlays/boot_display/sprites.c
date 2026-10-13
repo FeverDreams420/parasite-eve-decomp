@@ -261,8 +261,8 @@ void func_801247F4(void) {
     DrawSync(0);
     VSync(2);
     ResetGraph(1);
-    PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
+    PutDispEnv(&g_RenderDispEnvArray[g_ActiveDrawSlot]);
     DrawOTagEnv(g_BootDisplayOrderingTable + 0x3C,
-                  &D_800BCDC8[g_ActiveDrawSlot]);
+                  &g_RenderDrawEnvArray[g_ActiveDrawSlot]);
     g_ActiveDrawSlot ^= 1;
 }

@@ -317,8 +317,8 @@ s32 _padSioRW(CardObj *inObj, s32 inByte) {
         register u32 timer = *(volatile u16 *)0x1F801120;
         register u32 ready = registers->status;
         register MemCardSioRegisters *cursor;
-        D_800BD02C = 0x1AE;
-        D_800A76D0 = timer;
+        g_TimerTimeoutLimit = 0x1AE;
+        g_TimerTimeoutStart = timer;
         if (!(ready & 2)) {
             cursor = registers;
             do {
@@ -398,8 +398,8 @@ int MemCard_WriteByte(CardObj *obj, int value)
         wrap = 0x10000;
         mode = (volatile u16 *)0x1F801124;
         poll_irq = irq;
-        start = D_800A76D0;
-        limit = D_800BD02C;
+        start = g_TimerTimeoutStart;
+        limit = g_TimerTimeoutLimit;
         do {
             ticks = *counter;
             if (ticks < start) {

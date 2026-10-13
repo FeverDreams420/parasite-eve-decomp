@@ -98,7 +98,7 @@ extern volatile s32 D_80172CEC;
 extern s32 D_80172CE8;
 extern s32 D_80172CE4;
 extern u8 D_80125AF0[];
-extern u16 D_800B0DD4;
+extern u16 g_CdDiskType;
 extern volatile u16 D_80172CF8;
 extern volatile u16 D_80172CFA;
 extern char *D_80172D00;

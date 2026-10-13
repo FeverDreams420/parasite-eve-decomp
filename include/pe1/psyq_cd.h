@@ -148,7 +148,7 @@ extern int g_CdStreamDataReadyFlag;
 extern int D_800BE998;
 extern CdlLOC D_800A3490;
 extern int D_800A3494;
-extern int D_800A8020;
+extern int g_DsStreamNoLocFlag;
 extern volatile DsCallback g_StrDataReadyCallback;
 int CdPosToInt(CdlLOC *p);
 CdlLOC *CdIntToPos(int i, CdlLOC *p);
@@ -406,7 +406,6 @@ extern u32 D_800B6918;
 extern s32 D_800A5D54;
 extern s16 D_800A8018;
 extern s32 D_800A801C;
-extern u32 D_800C20C4;
 /* Contiguous end-of-stream controls. StCdInterrupt retains its two interior
  * scalar aliases because field-based addressing changes its retail schedule. */
 typedef struct CdStreamEndState {
@@ -437,7 +436,6 @@ extern s16 g_CdStreamReadyHalfword __asm__("g_CdStreamReady");
 extern volatile s32 D_800B6914, D_800B8620;
 extern void (*D_800B0CCC)(void);
 extern s32 g_CdStreamRingIndex;
-extern StHEADER *D_800C0DC8;
 
 /* Low-level LIBCD command retry wrapper and its shared command state. */
 extern u32 D_8009AF2C[];

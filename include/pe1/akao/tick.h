@@ -60,9 +60,9 @@ extern u32 D_8009D22C;
 /* Message-queue lock, also read by the timer interrupt. */
 extern volatile u32 D_8009D268;
 extern u32 D_8009D2C4;
-extern u32 D_800BCD50;
+extern u32 g_SpuActiveVoiceMask;
 extern u32 D_800BCD58;
-extern u32 D_800BCD5C;
+extern u32 g_SpuPendingKeyOffMask;
 extern u16 D_800BCD66;
 extern u32 D_800BCD68;
 

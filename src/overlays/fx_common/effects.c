@@ -117,7 +117,7 @@ void func_80192030(void)
     area.h = 0x1C0;
     ClearImage(&area, 0, 0, 0);
     DrawSync(0);
-    PutDispEnv(D_800BCE80);
+    PutDispEnv(g_RenderDispEnvArray);
     if (fade == 1)
         Akao_Cmd_C1_WithSlot(D_800B0DB5, 0x1E, 0);
     Akao_Cmd_A9(0x1E, 0);
@@ -904,15 +904,15 @@ void func_801942FC(void)
                     D_8019C02C = 1;
                     D_8019C045 = 0;
                     func_80195994(D_8019CC52, 4, 5, 0);
-                    if ((D_8019C026 == 0) && (D_800B0E08[0] != 0)) {
-                        Akao_SendTableCommand((void *) D_800B0E08[0], 0x44D, 0, 0x80, 0x7F);
+                    if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
+                        Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                     }
                 }
                 transitionMode = D_8019C034;
                 if (transitionMode == 1) {
                     if (D_8009D26C & 0x20) {
-                        if ((D_8019C026 == 0) && (D_800B0E08[0] != 0)) {
-                            Akao_SendTableCommand((void *) D_800B0E08[0], 0x44C, 0, 0x80, 0x7F);
+                        if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
+                            Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                         }
                         D_8019C02C = -1;
                         D_8019C032 = 1;
@@ -942,8 +942,8 @@ void func_801942FC(void)
                     }
                 }
                 if (D_8019C034 == 2) {
-                    if ((D_8019C026 == 0) && (D_800B0E08[0] != 0)) {
-                        Akao_SendTableCommand((void *) D_800B0E08[0], 0x44C, 0, 0x80, 0x7F);
+                    if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
+                        Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                     }
                     if (D_8019C13E == 0) {
                         D_8019C02C = -1;
@@ -972,8 +972,8 @@ void func_801942FC(void)
                 D_8019C02C = 1;
                 D_8019C045 = 0;
                 func_80195994(D_8019CC52, 4, 5, 0);
-                if ((D_8019C026 == 0) && (D_800B0E08[0] != 0)) {
-                    Akao_SendTableCommand((void *) D_800B0E08[0], 0x44D, 0, 0x80, 0x7F);
+                if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
+                    Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                 }
             }
             if (((u8) D_8019C040 < 2U) && (D_8019C034 == 0) && (D_8019C13C == 0)) {
@@ -984,8 +984,8 @@ void func_801942FC(void)
                         D_8019CA68 = D_8019CC52;
                     }
                     if (D_8019C044 == 0) {
-                        if (D_800B0E08[0] != 0) {
-                            Akao_SendTableCommand((void *) D_800B0E08[0], 0x44C, 0, 0x80, 0x7F);
+                        if (g_AkaoBgmHandle[0] != 0) {
+                            Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                         }
                         D_8019C02C = -1;
                         D_8019C045 = 1;
@@ -993,8 +993,8 @@ void func_801942FC(void)
                         D_8019CC1C = 0;
                         D_8019C048 = 1;
                     } else {
-                        if (D_800B0E08[0] != 0) {
-                            Akao_SendTableCommand((void *) D_800B0E08[0], 0x44C, 0, 0x80, 0x7F);
+                        if (g_AkaoBgmHandle[0] != 0) {
+                            Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44C, 0, 0x80, 0x7F);
                         }
                         D_8019C02A = 1;
                         D_8019C026 = 0x10;
@@ -1014,8 +1014,8 @@ void func_801942FC(void)
                 if ((D_8009D1F4 & 0x40000000) && (D_8019BFF8 == -1) && (D_8019C026 == 0)) {
                     D_8019C032 = 1;
                     if (D_8019C044 == 1) {
-                        if (D_800B0E08[0] != 0) {
-                            Akao_SendTableCommand((void *) D_800B0E08[0], 0x44D, 0, 0x80, 0x7F);
+                        if (g_AkaoBgmHandle[0] != 0) {
+                            Akao_SendTableCommand((void *) g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                         }
                         func_80195994(D_8019CC52, 4, 5, 0);
                         D_8019C02C = 1;

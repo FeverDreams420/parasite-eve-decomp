@@ -507,7 +507,7 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
         Spu_RebaseStreamAddrs(rebase_instruments, rebase_address, count);
         address_offset = address == 0x8000 ? 0x20 : 0x50;
         address_offset <<= 6;
-        cache.instrument = D_800B2900;
+        cache.instrument = g_AkaoInstrumentTable;
         cache.word = address_offset + cache.word;
         dest = cache.words;
         upload_size = count << 4;
@@ -1007,7 +1007,7 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
     if (track->key_on_delay != 0) {
         track->key_on_delay--;
         if (track->key_on_delay == 0) {
-            D_800BCD6C ^= voice_mask;
+            g_AkaoTrack34Mask ^= voice_mask;
             g_AkaoVoiceUpdateFlags |= 0x10;
             Seq_MarkTrack34MaskDirty();
         }
@@ -1016,7 +1016,7 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
     if (track->key_off_delay != 0) {
         track->key_off_delay--;
         if (track->key_off_delay == 0) {
-            D_800BCD74 ^= voice_mask;
+            g_AkaoTrack3CMask ^= voice_mask;
             Seq_MarkTrack3CMaskDirty();
         }
     }

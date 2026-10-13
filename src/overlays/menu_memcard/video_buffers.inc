@@ -64,8 +64,8 @@ s32 MENUCARD_INIT_VIDEO_BUFFERS_NAME(s8 count, u8 **buffers) {
     D_800B0DBC.value = 0;
     MENUCARD_VIDEO_LAST_TIME = -1;
     for (i = 0; i < 2; i++) {
-        MENUCARD_VIDEO_SAVED_DISPLAY[i] = D_800BCE80[i];
-        MENUCARD_VIDEO_SAVED_DRAW[i] = D_800BCDC8[i];
+        MENUCARD_VIDEO_SAVED_DISPLAY[i] = g_RenderDispEnvArray[i];
+        MENUCARD_VIDEO_SAVED_DRAW[i] = g_RenderDrawEnvArray[i];
     }
     rectangle.x = 320;
     rectangle.y = 0;

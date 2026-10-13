@@ -793,8 +793,8 @@ s32 Battle_StepAyaAction(void)
       player->entityFlags |= 0x80;
       Anim_SetInterpRate(&player->renderObject, 30);
       D_8009D254->renderObject.flags_9C |= 2;
-      Anim_SetInterpRate(&D_800B0CEC, 0x1E);
-      D_800B0CEC.flags_9C |= 2;
+      Anim_SetInterpRate(&g_PlayerBattleEntity, 0x1E);
+      g_PlayerBattleEntity.flags_9C |= 2;
       Pm_StopLowerHalf();
       D_8009D258 = Scene_LoadRoomAssets(0x6BU, D_8009D254);
       D_8009D25C += 1;
@@ -805,7 +805,7 @@ s32 Battle_StepAyaAction(void)
       Scene_InitEntityPlayer(1);
       if (D_8009D254->renderObject.variant_visible == 0)
     {
-      if (D_800B0CEC.variant_visible == 0)
+      if (g_PlayerBattleEntity.variant_visible == 0)
       {
         D_8009D25C++;
         break;
@@ -1128,11 +1128,11 @@ s32 Battle_StepAyaAction(void)
           Anim_SetInterpRate(render, rate);
         }
         D_8009D254->renderObject.flags_9C |= 4;
-        D_800B0CEC.variant_visible = 1;
-        Anim_SetInterpRate(&D_800B0CEC, 0x1E);
+        g_PlayerBattleEntity.variant_visible = 1;
+        Anim_SetInterpRate(&g_PlayerBattleEntity, 0x1E);
         {
           g_AyaActionTimer = 0xF;
-          D_800B0CEC.flags_9C |= 4;
+          g_PlayerBattleEntity.flags_9C |= 4;
           D_8009D25C++;
         }
         break;

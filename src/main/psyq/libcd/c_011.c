@@ -29,7 +29,7 @@ void StCdInterrupt(void) {
     register u32 dmaControl;
     u8 *subheaderByte;
 
-    if (D_800B89F4 != 1) {
+    if (g_CdStreamDataReadyFlag != 1) {
         if ((D_800A801C != 0) && (*D_8009B34C & 0x01000000)) {
             g_CdStreamReady.word = 1;
             if (D_800C0DB8 != 0) {
@@ -45,7 +45,7 @@ void StCdInterrupt(void) {
                 D_8009B374 = 3;
                 return;
             }
-            header = D_800C0DC8 + D_800BE998;
+            header = StRingAddr + D_800BE998;
             D_800A34A0 = header;
             asm volatile("" ::: "memory");
             if (header->id != 0) {
@@ -62,7 +62,7 @@ void StCdInterrupt(void) {
             *D_8009B33C = 0x20943;
             *D_8009B340 = 0x1323;
             subheaderIndex = 0;
-            if (D_800A8020 == 0) {
+            if (g_DsStreamNoLocFlag == 0) {
                 register u8 *sub = w.subheader;
                 do {
                     subheaderByte = sub + subheaderIndex;
@@ -121,8 +121,8 @@ void StCdInterrupt(void) {
                     ((D_800A5D54 != 0) && (D_800A5D54 != ST_FRAME_INDEX(D_800A34A0)))) {
                     D_800A5D54 = 0;
                     D_800A8018 = 0;
-                    init_ring_status(D_800BE9E4, D_800BE998 - D_800BE9E4);
-                    D_800BE998 = D_800BE9E4;
+                    init_ring_status(g_CdStreamRingReadSlot, D_800BE998 - g_CdStreamRingReadSlot);
+                    D_800BE998 = g_CdStreamRingReadSlot;
                     D_800A34A0->id = 0;
                     asm volatile("" ::: "memory");
                     if (D_800C0DB8 != 0) {
@@ -141,8 +141,8 @@ void StCdInterrupt(void) {
                     if ((limit != 0) && (frame >= limit)) {
                         D_800A5D54 = 0;
                         D_800A8018 = 0;
-                        init_ring_status(D_800BE9E4, D_800BE998 - D_800BE9E4);
-                        D_800BE998 = D_800BE9E4;
+                        init_ring_status(g_CdStreamRingReadSlot, D_800BE998 - g_CdStreamRingReadSlot);
+                        D_800BE998 = g_CdStreamRingReadSlot;
                         D_800A34A0->id = 0;
                         asm volatile("" ::: "memory");
                         D_800C0DC0 = 1;
@@ -155,7 +155,7 @@ void StCdInterrupt(void) {
                         D_8009B374 = 7;
                         return;
                     }
-                    if (((D_800C20C4 - D_800BE998) - 1) <
+                    if (((StRingSize - D_800BE998) - 1) <
                         (u16)D_800A34A0->nSectors) {
                         if (g_CdStreamEndState.endSector == 0) {
                             D_800A34A0->id = 1;
@@ -170,7 +170,7 @@ void StCdInterrupt(void) {
                             D_8009B374 = 8;
                             return;
                         }
-                        if ((s16)D_800C0DC8->id != 0) {
+                        if ((s16)StRingAddr->id != 0) {
                             D_800A34A0->id = 0;
                             asm volatile("" ::: "memory");
                             if (D_800C0DB8 != 0) {
@@ -181,7 +181,7 @@ void StCdInterrupt(void) {
                         }
                         D_800A34A0->id = 1;
                         asm volatile("" ::: "memory");
-                        copyDestination = (u32 *)D_800C0DC8;
+                        copyDestination = (u32 *)StRingAddr;
                         copySource = (u32 *)D_800A34A0;
                         copyIndex = 0;
                         D_800BE998 = 0;
@@ -192,16 +192,16 @@ void StCdInterrupt(void) {
                             *copyDestination = headerWord;
                             copyDestination++;
                         } while (copyIndex < 8U);
-                        D_800A34A0 = D_800C0DC8;
+                        D_800A34A0 = StRingAddr;
                     }
                 begin_frame:
-                    D_800BE9E4 = D_800BE998;
+                    g_CdStreamRingReadSlot = D_800BE998;
                 }
             transfer_sector:
                 D_8009B374 = 0xA;
                 D_800A8018 = (u16)D_800A8018 + 1;
                 D_800C0DC4 =
-                    &((StSectorPayload *)(D_800C0DC8 + D_800C20C4))[D_800BE998];
+                    &((StSectorPayload *)(StRingAddr + StRingSize))[D_800BE998];
                 dmaControl = 0x11000000;
                 if (D_800A801C != 0) {
                     *D_8009B33C = 0x20943;
@@ -215,7 +215,7 @@ void StCdInterrupt(void) {
                     dmaControl |= 0x100;
                 }
                 if ((D_800A34A0->nSectors - 1) == D_800A34A0->secCount) {
-                    D_800B89F4 = 1;
+                    g_CdStreamDataReadyFlag = 1;
                     if (D_800C0DB8 != 0) {
                         mem2mem(D_800C0DC4, D_800C0DB8 + (D_800BCD7C << 0xB) + 0x20,
                                 0x1F8, 1);
@@ -236,7 +236,7 @@ void StCdInterrupt(void) {
                 *D_8009B340 = 0x1325;
                 D_800A34A0->id = 3;
                 D_800BE998 += 1;
-                if ((D_800C0DB8 != 0) && (D_800B89F4 != 0)) {
+                if ((D_800C0DB8 != 0) && (g_CdStreamDataReadyFlag != 0)) {
                     data_ready_callback();
                 }
         }

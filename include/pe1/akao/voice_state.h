@@ -14,7 +14,7 @@ extern unsigned int g_AkaoVoiceUpdateFlags;
 extern char g_AkaoDefaultVoiceProgram[];
 extern unsigned int g_SpuActiveVoiceMask;
 extern unsigned int g_SpuPendingKeyOffMask;
-extern unsigned int D_800BCD6C, D_800BCD74;
+extern unsigned int g_AkaoTrack34Mask, g_AkaoTrack3CMask;
 extern unsigned int g_AkaoSeqPendingFlags;
 extern unsigned short g_AkaoSelectedBankId;
 

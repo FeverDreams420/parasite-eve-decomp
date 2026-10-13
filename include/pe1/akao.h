@@ -44,7 +44,6 @@ typedef union AkaoInstrumentAddress {
     unsigned *words;
     unsigned word;
 } AkaoInstrumentAddress;
-extern AkaoInstrument D_800B2900[];
 /* Instrument records replaced by Spu_UploadSampleBlock. */
 extern AkaoInstrument g_AkaoInstrumentTable[];
 extern unsigned D_8009D270, D_8009D1EC, D_8009D204, D_8009D2BC, D_8009D2E4;

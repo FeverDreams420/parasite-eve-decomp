@@ -55,10 +55,10 @@ extern int g_CdFadeFramesLeft;
 /* Sound table pointer the transition checks before sending its commands.
  * The three extra views keep retail's separate absolute loads of the same
  * word: with one symbol CSE merges them (docs/CODE_ORGANIZATION.md). */
-extern void *D_800B0E08[];
-extern void *tableCheck[] asm("D_800B0E08");
-extern void *tableCheckAgain[] asm("D_800B0E08");
-extern void *tableAgain[] asm("D_800B0E08");
+extern void *g_AkaoBgmHandle[];
+extern void *tableCheck[] asm("g_AkaoBgmHandle");
+extern void *tableCheckAgain[] asm("g_AkaoBgmHandle");
+extern void *tableAgain[] asm("g_AkaoBgmHandle");
 
 void Akao_ResetPositionalState(void);
 int CdRom_SeekToTrack(int key, int mode, int group, int *slot, int immediate);

@@ -62,15 +62,8 @@ extern u16 g_AkaoTrack5ATransposeValue;
 extern int g_AkaoSeqLoopCounter;
 
 /* Sound-effect sequencer masks next to the 34/38/3C dirty masks. */
-extern unsigned int D_800BCD50;
-extern unsigned int D_800BCD54;
 extern unsigned int D_800BCD58;
-extern unsigned int D_800BCD5C;
-extern unsigned int D_800BCD60;
 extern unsigned int D_800BCD64;
-extern unsigned int D_800BCD6C;
-extern unsigned int D_800BCD70;
-extern unsigned int D_800BCD74;
 extern unsigned int D_8009D2DC;
 
 /* Fields of the first sound-effect channel (g_AkaoVoiceChannelTable[0]),

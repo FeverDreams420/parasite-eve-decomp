@@ -28,7 +28,7 @@ void data_ready_callback(void) {
 int StGetBackloc(CdlLOC *arg0) {
     CdlLOC *saved_arg = arg0;
 
-    if (D_800A8020 != 0) {
+    if (g_DsStreamNoLocFlag != 0) {
         return -1;
     }
 

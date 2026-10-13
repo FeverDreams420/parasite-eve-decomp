@@ -125,8 +125,8 @@ void Menu_MainUpdate(s32 arg0) {
                 D_8009D278->exp_or_acc = temp_v0_3;
                 if (temp_v0_3 >= temp_a1_2->maxAtk) {
                     temp_a1_2->atbGauge = 0xF0;
-                    if (D_800B0E08[0] != 0) {
-                        Akao_SendTableCommand(D_800B0E08[0], 0x455, 0, 0x80, 0x7F);
+                    if (g_AkaoBgmHandle[0] != 0) {
+                        Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x455, 0, 0x80, 0x7F);
                     }
                 }
             }

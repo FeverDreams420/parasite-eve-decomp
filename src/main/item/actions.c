@@ -182,7 +182,7 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
     }
 
     Inv_RestoreSelection(list_index);
-    if (g_InvItemPtr == g_AyaInventoryItems && selected_a == D_800C0E22[0]) {
+    if (g_InvItemPtr == g_AyaInventoryItems && selected_a == g_AyaEquippedArmorSlot[0]) {
         {
             int raw_count;
             int loop_count;
@@ -217,7 +217,7 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
 
     Inv_RestoreSelection(list_index < 1);
     if (g_InvItemPtr == g_AyaInventoryItems) {
-        if (selected_b == D_800C0E22[0]) {
+        if (selected_b == g_AyaEquippedArmorSlot[0]) {
             if (mod_index >= 0) {
 
                 {

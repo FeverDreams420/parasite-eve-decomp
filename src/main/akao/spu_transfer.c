@@ -90,12 +90,12 @@ void Spu_InitVoiceState(void) {
     g_AkaoSequencerState.secondary.pitch_current = 0x7F0000;
     g_AkaoSequencerState.primary.pitch_current = 0x7F0000;
     D_8009D2B4 = 0x7FFF0000;
-    D_800BCD50 = 0;
+    g_SpuActiveVoiceMask = 0;
 
     g_AkaoSequencerState.primary.active_voice_mask = 0;
     g_AkaoSequencerState.primary.pending_voice_mask = 0;
     g_AkaoSequencerState.primary.bank_id = 0;
-    D_800BCD60 = 0;
+    g_SpuStoppedVoiceMask = 0;
     g_AkaoSequencerState.primary.pending_restore_mask = 0;
     g_AkaoSequencerState.secondary.pending_restore_mask = 0;
     g_AkaoSequencerState.secondary.active_voice_mask = 0;
@@ -192,9 +192,9 @@ void Spu_InitVoiceState(void) {
     *(int *)&bank[1].key_on_request_mask = 0;
     D_800BCD68 = 1;
     D_800BCD64 = 0x66A80000;
-    D_800BCD5C = 0;
+    g_SpuPendingKeyOffMask = 0;
     D_800BCD58 = 0;
-    D_800BCD54 = 0;
+    g_AkaoVoiceMaskScratch = 0;
     *(int *)&bank[1].volume = 0x3FFF0000;
     *(int *)&bank[0].volume = 0x3FFF0000;
     *(int *)&bank[1].volume_delta = 0;

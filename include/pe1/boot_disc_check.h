@@ -23,7 +23,7 @@ extern s32 g_ActiveDrawSlot;
 /* Ordering table of each draw slot (Boot_InitMemoryLayout). */
 extern RenderBufferPrefix D_800B0E38;
 extern u8 D_800B0DCD;
-extern u16 D_800B0DD4;
+extern u16 g_CdDiskType;
 
 void SetDispMask(int mask);
 void ClearOTagR(u32 *table, int length);

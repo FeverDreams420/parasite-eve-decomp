@@ -346,7 +346,7 @@ keep rebases trivial) and every C rename those symbols need.
 | 1 | functions named elsewhere, shadowing pins, field engine labels | 24 | 131 | low | names only |
 | 2 | `.bss` object run | 60 | 1016 | low | stage A done (2a): 58 blob labels in `sym.main.txt`, 18 address-form C names unified, no alias; pinned words 6253 to 5237; stage B open |
 | 2 | `.sbss` object run + `.sdata` | 108 | 1183 | medium | 99 COMMON pins; names used by many menu units. Stage A done: 107 pins removed (blob labels; 5 second views are relative aliases); left `g_ScriptCameraBytes` (label shared with the BSS start in `snmain`, wave 0) |
-| 2 | large COMMON pool | 104 | 1984 | medium | `g_GameState`, AKAO state; record-view aliases |
+| 2 | large COMMON pool | 104 | 1984 | medium | stage A done: 103 pins are blob labels (pinned words 6253 to 4293), 28 C renames, 40 relative aliases for differently typed record views; `D_800C20C8` left to the engine boundary |
 | 3 | small COMMON pool | 67 | 1870 | high | `g_CurrentEntity`, `g_PlayerEntity`, `g_ActiveActor`: most aliases and record views, most units |
 | 3 | `.data` and `.rodata` in blobs (game, PsyQ SPU/GPU/pad/DS) | 96 | 1114 | medium | descriptive blob names differ from pinned names in 41 places |
 | 3 | `psyq/libcd` state block in `bios_4.c` | 40 | 388 | high | struct base vs field names across 12 LIBCD units; relative aliases first |

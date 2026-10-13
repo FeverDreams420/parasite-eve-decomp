@@ -25,7 +25,7 @@ int RoomM272_Cinematic(void) {
         MoveImage(&b3, 0x140, 0x100);
         DrawSync(0);
         VSync(2);
-        PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
+        PutDispEnv(&g_RenderDispEnvArray[g_ActiveDrawSlot]);
         SetDispMask(1);
     }
     return 0;

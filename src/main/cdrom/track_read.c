@@ -412,7 +412,7 @@ retry:
             if (active) {
                 if (!(g_GameState.flags & 0x400000)) {
                     if (*tableCheck) {
-                        Akao_SendTableCommand(*D_800B0E08, 0x451, 0, 0x80, 0x7F);
+                        Akao_SendTableCommand(*g_AkaoBgmHandle, 0x451, 0, 0x80, 0x7F);
                         if (*tableCheckAgain)
                             Akao_SendTableCommand(*tableAgain, 0x452, 0, 0x80, 0x7F);
                     }

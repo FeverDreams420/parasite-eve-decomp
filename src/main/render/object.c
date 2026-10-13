@@ -178,7 +178,7 @@ void Render_TransformMorphVertices(RenderObjectEntity *entity, u32 *view) {
         matrix++;
         if (part->visible == 1) {
             RenderVec3s *vertices = &entity->vertices[part->vertex_start];
-            u32 *screen = &D_800B1638[part->vertex_start];
+            u32 *screen = &g_RenderClutLookupTable[part->vertex_start];
             u32 *depth = &D_800A6360[part->vertex_start];
             int j;
 
@@ -509,7 +509,7 @@ void Render_DrawObject(RenderObjectEntity *entity, union RenderLightingMatrix *v
         gte_MulMatrix0(view, matrix, lightMatrix);
         gte_SetLightMatrix(lightMatrix);
         first = part->vertex_start;
-        mainColours = &D_800B1638[first];
+        mainColours = &g_RenderClutLookupTable[first];
         altColours = &D_800A6360[first];
         vertex = &entity->vertices[first];
         for (j = 0; j < part->vertex_count; j += 3, mainColours += 3, altColours += 3) {
@@ -649,7 +649,7 @@ void Render_DrawObjectAlt(RenderObjectEntity *entity, s16 limit, u8 red, u8 gree
             limit < y + entity->bounds_vertices[i * 2].pad) {
             RenderVec3s *vertex = &entity->vertices[part->vertex_start];
             RenderColor *colour =
-                (RenderColor *)&D_800B1638[part->vertex_start];
+                (RenderColor *)&g_RenderClutLookupTable[part->vertex_start];
 
             for (j = 0; j < part->vertex_count; colour++) {
                 /* Retail advances the counters while the GTE works. */

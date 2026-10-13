@@ -49,8 +49,8 @@ void MENUCARD_RESET_DISPLAY_STATE_NAME(void) {
 
         i = 0;
         do {
-            D_800BCE80[i] = MENUCARD_SLOT20_SOURCE[i];
-            D_800BCDC8[i] = MENUCARD_SLOT92_SOURCE[i];
+            g_RenderDispEnvArray[i] = MENUCARD_SLOT20_SOURCE[i];
+            g_RenderDrawEnvArray[i] = MENUCARD_SLOT92_SOURCE[i];
             i++;
         } while (i < 2);
 

@@ -94,7 +94,7 @@ void BattleCmd_UndoPending(void) {
             if (data != 0) {
                 index = Inv_FindIndexByData(data);
             }
-            D_800C0E22[0] = index;
+            g_AyaEquippedArmorSlot[0] = index;
             break;
 
         case 4:
@@ -498,7 +498,7 @@ void BattleCmd_LoadWeaponModifiers(void)
     g_InvBonusSlotCount = 0;
     for (i = 6; i >= 0; --i) g_StatScaleBase[i] = 0;
     /* Historical function name notwithstanding, this is the armor index. */
-    item = Inv_LookupActiveListData(D_800C0E22[0]);
+    item = Inv_LookupActiveListData(g_AyaEquippedArmorSlot[0]);
     if (item) {
         for (i = 0; i < item->tailCount; ++i) {
             unsigned mod = item->tailData[i] & 31;

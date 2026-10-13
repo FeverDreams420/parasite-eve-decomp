@@ -65,7 +65,7 @@ int func_801258EC(int command, int parameter) {
 s32 BootDisplay_StepPlaybackTransfer(u8 mode) {
     volatile u16 *index;
     u16 next;
-    if (DsSystemStatus() == 1 && DsShellOpen() != D_800B0DD4)
+    if (DsSystemStatus() == 1 && DsShellOpen() != g_CdDiskType)
         exit(1);
     if (mode == 1) {
         index = &D_80172CF8;

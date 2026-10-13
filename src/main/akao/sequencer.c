@@ -104,7 +104,7 @@ void Spu_StepReverbLoad(void)
         ((AkaoSequencerBank *)D_8009D2C8)->pitch_current = value;
     }
     D_8009D2C8 = D_8009D2C8 - 1;
-    pending = D_800BCD50;
+    pending = g_SpuActiveVoiceMask;
     if (pending) {
         count = 0x1000;
         track = (AkaoTrack *)D_800BC000;
@@ -279,7 +279,7 @@ void Akao_Tick(void)
         D_8009D2C8[1].timing.active_voice_mask = 0;
     }
 
-    mask = D_800BCD50;
+    mask = g_SpuActiveVoiceMask;
     if (mask) {
         accumulator = D_800BCD68 + D_800BCD66;
         D_800BCD68 = accumulator;
@@ -296,7 +296,7 @@ void Akao_Tick(void)
                         if (track->timing.note_length == 0) {
                             Akao_StepSampleLoader(&track->track, bit);
                         } else if (track->timing.gate_length == 0) {
-                            D_800BCD5C |= bit;
+                            g_SpuPendingKeyOffMask |= bit;
                             D_800BCD58 &= ~bit;
                         }
                         Spu_TickVoiceEnvelopes(&track->track, bit);
@@ -649,8 +649,8 @@ static inline void Akao_SetSampleInstrument(AkaoTrack *track, u8 id, u32 offset)
     if (id >= 0x20)
         instrument += offset;
     track->note_pitch = instrument;
-    SeqOp_SetVoiceInstrument(track, &D_800B2900[instrument],
-                             D_800B2900[instrument].start_address);
+    SeqOp_SetVoiceInstrument(track, &g_AkaoInstrumentTable[instrument],
+                             g_AkaoInstrumentTable[instrument].start_address);
 }
 
 /* Selects the sample's instrument unless the track already uses it. */
@@ -694,7 +694,7 @@ void Akao_StepSampleLoader(AkaoTrack *track, u32 voice_mask)
             handler(track, voice_mask);
         } else {
             if (opcode == 0xCA && (track->flags & AKAO_TRACK_FLAG_KEY_OFF_PENDING)) {
-                D_800BCD5C |= voice_mask;
+                g_SpuPendingKeyOffMask |= voice_mask;
                 opcode = 0xA0;
             }
             D_8009C8F0[opcode](track, voice_mask);
@@ -779,7 +779,7 @@ void Akao_StepSampleLoader(AkaoTrack *track, u32 voice_mask)
                         && track->assigned_voice_index < 0x18U)
                         D_8009D2C8->words[6] |= voice_mask;
                 } else {
-                    D_800BCD54 |= voice_mask;
+                    g_AkaoVoiceMaskScratch |= voice_mask;
                 }
                 track->pitch_slide_steps = 0;
             }

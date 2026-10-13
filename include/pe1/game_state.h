@@ -11,7 +11,6 @@ extern int g_FieldMoveLock;
 
 /* g_GameState.story_day_flags as its own byte symbol: Scene_SetStoryDay and
  * the battle update read and set it with absolute byte loads and stores. */
-extern u8 D_800B0CE6;
 extern u8 g_DiscChangeFlags;
 /* g_GameState.pending_story_day as an unsigned byte symbol. Matching debt:
  * Scene_SetStoryDay keeps the lbu and its separate sign extension only

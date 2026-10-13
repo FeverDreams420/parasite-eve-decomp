@@ -87,8 +87,8 @@ extern struct FieldFxPointTriple D_800E2290;
 /* Shape helpers (fieldfx/geometry.c): the two CLUT pixel blocks
  * func_800CED3C uploads and the index of the loaded one, the colour-key table
  * and a word of the direction helpers. */
-extern void *D_800B0E18;
-extern void *D_800B0E1C;
+extern void *g_FieldEffectTexturePage0;
+extern void *g_FieldEffectTexturePage1;
 extern s16 D_800F34E4;
 extern u16 D_800E21A8[];
 extern u16 D_800E21C8;

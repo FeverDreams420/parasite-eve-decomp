@@ -126,7 +126,7 @@ retryFog:
     rect.w = 320;
     rect.h = 224;
     DrawSync(0);
-    PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
+    PutDispEnv(&g_RenderDispEnvArray[g_ActiveDrawSlot]);
     SetDispMask(1);
     while (!done) {
         ClearOTagR((u32 *)D_800B0E38.ordering[g_ActiveDrawSlot], 0x1000);
@@ -245,8 +245,8 @@ retryFog:
         DrawSync(0);
         VSync(0);
         ResetGraph(1);
-        PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
-        PutDrawEnv(&D_800BCDC8[g_ActiveDrawSlot]);
+        PutDispEnv(&g_RenderDispEnvArray[g_ActiveDrawSlot]);
+        PutDrawEnv(&g_RenderDrawEnvArray[g_ActiveDrawSlot]);
         MoveImage(&rect, 0, g_ActiveDrawSlot ? 224 : 0);
         DrawOTag((u32 *)D_800B0E38.ordering[g_ActiveDrawSlot] + 0xFFF);
         g_ActiveDrawSlot ^= 1;
@@ -263,7 +263,7 @@ retryFog:
     /* `wait` is free again here and holds the drive status. */
     while ((wait = DsSystemStatus()) != 1)
         VSync(0);
-    D_800B0DD4 = DsShellOpen();
+    g_CdDiskType = DsShellOpen();
     return 0;
 }
 
@@ -444,7 +444,7 @@ void Boot_SyncShutdown(void)
         VSync(0);
     }
 
-    D_800B0DD4 = DsShellOpen();
+    g_CdDiskType = DsShellOpen();
 }
 
 /* Lay out the memory buffers, then reset the scene voice-bank state. */

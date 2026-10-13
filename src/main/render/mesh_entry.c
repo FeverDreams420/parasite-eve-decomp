@@ -38,13 +38,13 @@ int Render_LoadMeshEntry(GeomEntry *entry, RenderTilePacket *buffer, void **end)
     entry->u30.prim = buffer;
     /* The page pointer and disp_x are stored through pointers to the fields.
      * GCC 2.7 lets a load of a fixed scalar pass a structure field store, but
-     * not an indirect store, so the D_800B1624 reload stays after them as in
+     * not an indirect store, so the g_GeomState reload stays after them as in
      * retail. */
     pageSlot = &entry->u34.pagePackets;
     *pageSlot = pages;
     dispX = &entry->disp_x;
-    *dispX = entry->scr_x + D_800B1624->out_disp_x;
-    entry->disp_y = entry->scr_y + D_800B1624->out_disp_y;
+    *dispX = entry->scr_x + g_GeomState->out_disp_x;
+    entry->disp_y = entry->scr_y + g_GeomState->out_disp_y;
 
     do {
         unsigned int i = 0;

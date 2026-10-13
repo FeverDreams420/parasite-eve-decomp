@@ -29,7 +29,7 @@ void Menu_AlignEquipPanels(void);
 extern int D_8009CFD4;
 /* Per-stat preview tables: value, level, sublevel and pending bonus. */
 extern int D_800A1898[7];
-extern int D_800C0E10[];
+extern int g_AyaBonusPoints[];
 extern int g_MenuBonusPointBarAnimActive, g_BonusPointBarAnimProgress, g_BonusPointDisplayValue;
 
 #endif

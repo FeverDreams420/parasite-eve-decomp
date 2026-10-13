@@ -61,7 +61,7 @@ typedef union RenderTintTargetView {
 extern s16 D_800BCFE8, D_800BCFEA, D_800BCFEC;
 extern s16 D_800BCFF0, D_800BCFF2, D_800BCFF4;
 extern u8 D_800BCFEE;
-extern u16 D_800BCFF6, D_800BCFF8;
+extern u16 D_800BCFF8;
 int Render_SetCDDCSlot(void);
 
 /* Screen transition parameters written by the fade/seek helpers. */

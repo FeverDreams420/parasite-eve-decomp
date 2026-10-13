@@ -162,8 +162,8 @@ typedef struct BattleSavedRotation {
     u16 x, facing, z;
 } BattleSavedRotation;
 extern BattleSavedRotation g_AyaSavedRotation;
-extern RenderObjectEntity D_800B0CEC;
-/* D_800B0D88 is D_800B0CEC.flags_9C. Battle_StepEscapeOrDeath reloads the
+extern RenderObjectEntity g_PlayerBattleEntity;
+/* D_800B0D88 is g_PlayerBattleEntity.flags_9C. Battle_StepEscapeOrDeath reloads the
  * player's flags only after this store, so the store must look like it may
  * alias them: a non-small view keeps the address in a register, and separate
  * read and write views keep GCC from sharing one LUI between the load and

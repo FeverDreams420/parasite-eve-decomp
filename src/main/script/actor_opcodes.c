@@ -660,8 +660,8 @@ int Script_PlayEntityAnim(s16 **args) {
             control_flags = g_FieldMoveLock;
             control_flags &= ~2;
             g_FieldMoveLock = control_flags;
-            Anim_SetInterpRate(&D_800B0CEC, *args[0]);
-            D_800B0CEC.flags_9C |= 4;
+            Anim_SetInterpRate(&g_PlayerBattleEntity, *args[0]);
+            g_PlayerBattleEntity.flags_9C |= 4;
         }
     }
 

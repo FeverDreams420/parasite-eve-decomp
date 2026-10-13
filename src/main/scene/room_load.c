@@ -323,7 +323,7 @@ retry6:
     DrawSync(0);
     ResetGraph(1);
     VSync(0);
-    PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
+    PutDispEnv(&g_RenderDispEnvArray[g_ActiveDrawSlot]);
     SetDispMask(1);
     state->field_bg_cache_id = -1;
     state->loaded_entity_bank = 0;
@@ -936,14 +936,14 @@ int Scene_SetStoryDay(s32 storyDay) {
         u8 pending;
         u8 storyFlags;
         pending = D_800B0CE5;
-        storyFlags = D_800B0CE6;
+        storyFlags = g_DiscChangeFlags;
         storyDay = (s8)pending;
         D_800B0CE4[0] = pending;
-        D_800B0CE6 = storyFlags | 3;
+        g_DiscChangeFlags = storyFlags | 3;
     }
 
     if (((g_GameStateFlags & 2) != 0) || ((gameState->flags & 2) != 0)) {
-        D_800B0CE6 |= 2;
+        g_DiscChangeFlags |= 2;
         g_FieldMoveLock &= ~2U;
     }
 

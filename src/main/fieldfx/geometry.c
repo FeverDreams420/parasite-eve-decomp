@@ -186,9 +186,9 @@ void func_800CED3C(int index) {
     rect.h = 0x100;
 
     if (index == 0) {
-        pixels = D_800B0E18;
+        pixels = g_FieldEffectTexturePage0;
     } else {
-        pixels = D_800B0E1C;
+        pixels = g_FieldEffectTexturePage1;
     }
 
     LoadImage(&rect, pixels);
@@ -206,9 +206,9 @@ void func_800CEDA8(int index) {
         rect.h = 0x100;
 
         if (index == 0) {
-            pixels = D_800B0E18;
+            pixels = g_FieldEffectTexturePage0;
         } else {
-            pixels = D_800B0E1C;
+            pixels = g_FieldEffectTexturePage1;
         }
 
         LoadImage(&rect, pixels);
@@ -1420,9 +1420,9 @@ int Geo_ClipAlternatingArcPoint(int radius, int divisor, int segment) {
     product >>= 12;
     y = product * direction;
 
-    state = D_800B1624;
+    state = g_GeomState;
     state->clip_min_x = state->clip_min_y = -128;
-    state = D_800B1624;
+    state = g_GeomState;
     state->clip_max_x = state->clip_max_y = 128;
 
     return Render_ClipPoint(0, (s16)y, 0);

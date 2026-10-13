@@ -484,20 +484,20 @@ void Seq_StartNestedTrack(AkaoTrack *track, AkaoNestedSource *source, unsigned i
 
     Akao_InitVoiceState(track_reg, script);
 
-    active_mask = &D_800BCD50;
+    active_mask = &g_SpuActiveVoiceMask;
     old_active_mask = *active_mask;
-    old_pending_mask = D_800BCD5C;
+    old_pending_mask = g_SpuPendingKeyOffMask;
     old_active_mask |= mask;
     old_pending_mask |= mask;
     *active_mask = old_active_mask;
 
     mask = ~mask;
-    D_800BCD5C = old_pending_mask;
-    D_800BCD54 &= mask;
+    g_SpuPendingKeyOffMask = old_pending_mask;
+    g_AkaoVoiceMaskScratch &= mask;
     D_800BCD58 &= mask;
-    D_800BCD6C &= mask;
-    D_800BCD70 &= mask;
-    D_800BCD74 &= mask;
+    g_AkaoTrack34Mask &= mask;
+    g_AkaoTrack38Mask &= mask;
+    g_AkaoTrack3CMask &= mask;
 
     if ((D_8009D2DC & 2) != 0) {
         unsigned int busy_mask;
@@ -516,12 +516,12 @@ void Seq_StartNestedTrack(AkaoTrack *track, AkaoNestedSource *source, unsigned i
                 unsigned int off_value;
 
                 not_mask = ~mask;
-                off_value = D_800BCD60;
+                off_value = g_SpuStoppedVoiceMask;
                 active_value = *active_loop_mask;
                 active_value &= not_mask;
                 off_value |= mask;
                 *active_loop_mask = active_value;
-                D_800BCD60 = off_value;
+                g_SpuStoppedVoiceMask = off_value;
             }
             count--;
             track_reg++;
@@ -675,7 +675,7 @@ void Spu_MarkActiveVoicesDirty(void) {
     u32 bit;
     AkaoTrack *track;
     unsigned int *flags;
-    mask = D_800BCD50;
+    mask = g_SpuActiveVoiceMask;
     track = (AkaoTrack *)D_800BC000;
         if (mask != 0) {
         bit = 0x1000;

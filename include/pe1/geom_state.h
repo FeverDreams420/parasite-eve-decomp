@@ -255,7 +255,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(GeomState, entry_offset_1C) == 0x1C,
                   geom_camera_viewport_offset);
 
 extern GeomState * volatile g_GeomState;
-extern GeomState * volatile D_800B1624;
 
 extern u8 g_GeomGroupSel;
 extern u16 *volatile g_GeomVramPacketDst;

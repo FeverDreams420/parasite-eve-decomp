@@ -679,7 +679,7 @@ void Render_TransformVertices(RenderObjectEntity *object);
 void Render_TransformSkinnedVertices(RenderObjectEntity *object, u32 *view_matrix);
 void Render_TransformMorphVertices(RenderObjectEntity *object, u32 *view_matrix);
 /* Word lookup/work buffers also used for GTE screen/depth output. */
-extern u32 D_800A6360[], D_800B1638[];
+extern u32 D_800A6360[], g_RenderClutLookupTable[];
 /* Unit vertex normals indexed by RenderVec3s.pad of a model vertex. */
 extern RenderVec3s g_RenderNormalTable[];
 /* Projected screen XY and view depth of the transformed model vertices. */
