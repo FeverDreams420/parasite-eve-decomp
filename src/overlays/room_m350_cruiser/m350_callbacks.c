@@ -1233,7 +1233,7 @@ s32 func_80199B94(s32 mode, GteShortVector *ctx) {
         tex += 4;
     }
 
-    func_800CEE20(ctx, 0, 0x1800, 0x1800, (s16)D_800F3368.parameter02 + 0xDC, (u16)GetClut(0x30, tex), 1,
+    func_800CEE20(ctx, 0, 0x1800, 0x1800, (s16)D_800F3368.parameter02 + 0xDC, GetClut(0x30, tex), 1,
                   (D_800966EC[((D_800E27EC - 1) << 8) & 0xF00].word << 16) >> 21, &D_8019A410);
 ret0:
     return 0;
@@ -1390,7 +1390,7 @@ s32 func_8019A014(s32 mode, void *ctx) {
         tex += 4;
     }
 
-    func_800CEE20(ctx, 0, 0x1000, 0x1000, 0xDC, (u16)GetClut(0x30, tex), 1, (6 - D_800E27EC) << 5, &D_8019A630);
+    func_800CEE20(ctx, 0, 0x1000, 0x1000, 0xDC, GetClut(0x30, tex), 1, (6 - D_800E27EC) << 5, &D_8019A630);
 ret0:
     return 0;
 }
