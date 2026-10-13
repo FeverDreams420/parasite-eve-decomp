@@ -56,6 +56,7 @@ typedef union RenderLinkAddress {
 
 int Render_DrawSpriteEntry(GeomEntry *input)
 {
+    register u32 *position_cursor asm("$10");
     GeomEntry *entry;
     s32 active;
     RenderTilePacket *sprite;
@@ -150,7 +151,6 @@ int Render_DrawSpriteEntry(GeomEntry *input)
             u32 maskTop = 0xFF000000;
             register RenderTexturePagePacket *page_cursor asm("$13") = page;
             register RenderTilePacket *sprite_cursor asm("$8") = sprite;
-            register u32 *position_cursor asm("$10");
             position_cursor = pos;
                 do {
                 s32 draw_x;
@@ -208,7 +208,6 @@ int Render_DrawSpriteEntry(GeomEntry *input)
         register u32 maskTop asm("$14");
         RenderTilePacket *sprite_cursor;
         RenderTexturePagePacket *page_cursor;
-        register u32 *position_cursor asm("$10");
         i = 0;
         if (count != 0) {
             mask24 = 0x00FFFFFF;
