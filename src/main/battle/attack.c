@@ -644,13 +644,13 @@ void Battle_ApplySpellEffect(u32 idx, BattleEntity *ent) {
         {
             /* Scan: note which of the target's status pairs read 2. */
             Combatant *e = ent->core;
-            g_BattleResultFlagsRecord.bits.scanPair3 = (*(u32 *)&e->statusFlags2 & 3) == 2;
-            g_BattleResultFlagsRecord.bits.scanPairC = (*(u32 *)&e->statusFlags2 & 0xC) == 8;
-            g_BattleResultFlagsRecord.bits.scanPair30 = (*(u32 *)&e->statusFlags2 & 0x30) == 0x20;
-            g_BattleResultFlagsRecord.bits.scanPairC000 = (*(u32 *)&e->statusFlags2 & 0xC000) == 0x8000;
-            g_BattleResultFlagsRecord.bits.scanPair30000 = (*(u32 *)&e->statusFlags2 & 0x30000) == 0x20000;
-            g_BattleResultFlagsRecord.bits.scanPair3000 = (*(u32 *)&e->statusFlags2 & 0x3000) == 0x2000;
-            g_BattleResultFlagsRecord.bits.scanPairC00 = (*(u32 *)&e->statusFlags2 & 0xC00) == 0x800;
+            g_BattleResultFlagsRecord.bits.scanPair3 = (e->statusFlags2 & 3) == 2;
+            g_BattleResultFlagsRecord.bits.scanPairC = (e->statusFlags2 & 0xC) == 8;
+            g_BattleResultFlagsRecord.bits.scanPair30 = (e->statusFlags2 & 0x30) == 0x20;
+            g_BattleResultFlagsRecord.bits.scanPairC000 = (e->statusFlags2 & 0xC000) == 0x8000;
+            g_BattleResultFlagsRecord.bits.scanPair30000 = (e->statusFlags2 & 0x30000) == 0x20000;
+            g_BattleResultFlagsRecord.bits.scanPair3000 = (e->statusFlags2 & 0x3000) == 0x2000;
+            g_BattleResultFlagsRecord.bits.scanPairC00 = (e->statusFlags2 & 0xC00) == 0x800;
             if (((*(u32 *)&((Combatant *)ent->core)->statusFlags2 >> 6) & 3) == 2) {
                 g_BattleResultFlagsRecord.bits.scanPairC0 = 1;
             } else {
@@ -668,7 +668,7 @@ void Battle_ApplySpellEffect(u32 idx, BattleEntity *ent) {
             s32 pair = (*(u32 *)&((Combatant *)ent->core)->statusFlags2 >> 8) & 3;
             if (pair != 0 ? pair == 2 : !(rand() & 1)) {
                 Combatant *e = ent->core;
-                *(s32 *)&e->coreFlags |= 1;
+                e->coreFlags |= 1;
             }
             dmg = 0x5A0000;
         }
@@ -693,9 +693,9 @@ void Battle_ApplySpellEffect(u32 idx, BattleEntity *ent) {
             if (pair != 0 ? pair == 2 : !(rand() & 1)) {
                 s32 r = rand();
                 Combatant *e = ent->core;
-                s32 flags = *(s32 *)&e->coreFlags & ~0xE;
+                s32 flags = e->coreFlags & ~0xE;
                 flags |= (((r % 3) + 3) & 7) * 2;
-                *(s32 *)&e->coreFlags = flags;
+                e->coreFlags = flags;
                 Entity_SetActionMode(ent, 4);
                 ent->entityFlags |= 0x1000;
             }
