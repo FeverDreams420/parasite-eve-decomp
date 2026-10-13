@@ -71,8 +71,10 @@ void Menu_StepSkillList(MenuWidgetNode *arg0, s32 arg1) {
             s32 mask;
             temp_shift = Inv_GetActiveListItemType(temp_v0);
             {
-                register s32 one asm("$3") = 1;
+                s32 one = 1;
                 mask = one << temp_shift;
+                /* Keep the shift source separate from the resulting filter mask. */
+                asm volatile("" : : "r"(one));
             }
             Inv_BuildFilteredPackedListExcluding(mask, temp_v0);
         }
