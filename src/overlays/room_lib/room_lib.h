@@ -712,7 +712,7 @@ extern void func_800DFB20(void *state);
         if (arg1 != 1) { \
             goto done; \
         } \
-        o->sub.signal = (int *)arg3; \
+        o->sub.signal = arg3; \
         *(int *)arg3 = arg1; \
         value = 1; \
         goto store; \
