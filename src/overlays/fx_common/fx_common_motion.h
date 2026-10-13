@@ -4,8 +4,8 @@
 #include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
 #include "pe1/gte_types.h"
-#include "pe1/psyq_libc.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/psyq_libc.h"
 #include "pe1/signed_rect.h"
 
 #include "fx_common_setup.h"
