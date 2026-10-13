@@ -2032,7 +2032,7 @@ void SeqOp_SetVolume(AkaoTrack *track) {
 }
 
 void SeqOp_AdjustVolumeTarget(AkaoTrack *track) {
-    char *cursor = (char *)track->pc;
+    char *cursor = track->pc;
     int value;
 
     track->pc = (unsigned char *)cursor + 1;
