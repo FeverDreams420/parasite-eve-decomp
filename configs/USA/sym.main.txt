@@ -2615,3 +2615,70 @@ g_SpuReverbPresetRegisters = 0x8009C8C0; // size:0x30
 // at the engine's end and runs to the mdec_diag window; it moves with the
 // engine (configs/USA/main.yaml, engine/boot_work_area).
 g_BootWorkArea = 0x800F34F8; // size:0x18800
+
+// Small COMMON pool (shiftability wave 3b, 0x8009D1A0..0x8009D30C): main's
+// small tentative globals after the .sbss object run, labelled inside the
+// data blob so they move with it. Second names are relative aliases in
+// linkers/USA/undefined_syms_manual.txt.
+// g_GameStateFlags: rando:GameState
+g_GameStateFlags = 0x8009D1A0;
+g_BattleActiveEntity = 0x8009D1A8;
+g_BattleResultFlags = 0x8009D1AC;
+g_BattleEquipStateBlock = 0x8009D1B0;
+g_SceneDispatchCur = 0x8009D1C4;
+g_BattleSaveOverlayActive = 0x8009D1CE;
+g_BattlePendingEnemySpawn = 0x8009D1D0;
+g_BattleActionIndex = 0x8009D1D4;
+g_CollisionPlaneTable = 0x8009D1D8;
+g_BattleRemainingActions = 0x8009D1DC;
+g_MenuActiveListTarget = 0x8009D1E0;
+g_SceneFlagBits = 0x8009D1E4;
+g_BattleItemMenuState = 0x8009D1F0;
+g_BattleControlFlags = 0x8009D1F4;
+g_CurItemEffectData = 0x8009D1F8;
+g_CollisionDb = 0x8009D1FC;
+g_AkaoGlobalD2CCSlideStep = 0x8009D210;
+g_AkaoGlobalD2D0SlideStep = 0x8009D214;
+g_AkaoGlobalD2CCSlideCounter = 0x8009D21E;
+g_AkaoGlobalD2D0SlideCounter = 0x8009D220;
+g_ActorEffectFlag100Timer = 0x8009D228;
+g_AkaoSeqLoopCounter = 0x8009D22C;
+g_BattleSpritePrimCountdown = 0x8009D235;
+g_FieldRenderFlags = 0x8009D238;
+g_BattleEnemyEscapeFlag = 0x8009D244;
+g_SpuTransferStatus = 0x8009D24C;
+g_FrameRngCounter = 0x8009D250;
+D_8009D258 = 0x8009D258;
+D_8009D25C = 0x8009D25C;
+g_FieldPadBits = 0x8009D26C;
+g_AkaoStreamUploadMode = 0x8009D270;
+D_8009D274 = 0x8009D274;
+g_ActiveActor = 0x8009D278;
+// g_SceneDispatchToken: rando:Location
+g_SceneDispatchToken = 0x8009D280;
+g_AkaoGlobalPitchSlideStep = 0x8009D284;
+// g_BattleModeState: rando:DeathTrigger (pinned as g_DeathTrigger)
+g_BattleModeState = 0x8009D28C;
+g_BattleAttackAnimFrame = 0x8009D290;
+D_8009D294 = 0x8009D294;
+g_BattleHitActionMode = 0x8009D29A;
+g_BattleHitActionSubmode = 0x8009D29B;
+g_BattleHitActionParam = 0x8009D29C;
+D_8009D2A0 = 0x8009D2A0;
+g_AkaoGlobalPitchSlideCounter = 0x8009D2A2;
+g_EntityFreePoolCount = 0x8009D2A6;
+g_EntityFreeListHead = 0x8009D2AC;
+g_BattleTargetCount = 0x8009D2B0;
+g_AkaoVoicePortamentoResetMask = 0x8009D2B8;
+g_AkaoPlaybackMode = 0x8009D2C0;
+g_AkaoVoiceUpdateFlags = 0x8009D2C4;
+g_AkaoCurTrack = 0x8009D2C8;
+g_BattleActiveTurnSlot = 0x8009D2D8;
+g_AkaoSeqPendingFlags = 0x8009D2DC;
+// g_FieldMoveLock: rando:AyaState
+g_FieldMoveLock = 0x8009D2E8;
+g_EntityInstanceCounter = 0x8009D2EC;
+g_CurrentEntity = 0x8009D2F0;
+g_AkaoMessageQueueCount = 0x8009D2F4;
+g_ScriptNodePool = 0x8009D300;
+g_ScriptNodeSeqCounter = 0x8009D308;
