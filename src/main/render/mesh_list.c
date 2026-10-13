@@ -57,7 +57,7 @@ typedef union RenderLinkAddress {
 int Render_DrawSpriteEntry(GeomEntry *input)
 {
     register u32 *position_cursor asm("$10");
-    register s32 modulus_y asm("$2");
+    register s32 workValue asm("$2");
     GeomEntry *entry;
     s32 active;
     RenderTilePacket *sprite;
@@ -104,12 +104,11 @@ int Render_DrawSpriteEntry(GeomEntry *input)
     }
     asm volatile("" : : "r"(scroll_y));
     {
-        register u32 texture_word asm("$2");
-        texture_word = *(u32 *)entry;
-        texture_word >>= 8;
-        texture_word &= 0xFFF;
+        workValue = *(u32 *)entry;
+        workValue = (u32)workValue >> 8;
+        workValue &= 0xFFF;
         screen_src = state->field26;
-        texture_base = screen_src + texture_word;
+        texture_base = screen_src + workValue;
     }
     screen_src = entry->u28.pos_ptr;
     flags = entry->head.b.flags;
@@ -136,10 +135,10 @@ int Render_DrawSpriteEntry(GeomEntry *input)
         signed_x += divisor_x;
         scroll_x = signed_x % divisor_x;
         mod_y = entry->anim_mod_y;
-        modulus_y = (s16)raw_y;
-        modulus_y -= 224;
-        modulus_y += mod_y & 0xFFFF;
-        remainder_y = modulus_y % (mod_y & 0xFFFF);
+        workValue = (s16)raw_y;
+        workValue -= 224;
+        workValue += mod_y & 0xFFFF;
+        remainder_y = workValue % (mod_y & 0xFFFF);
         i = 0;
         raw_x = mod_x - 320;
         scroll_x -= raw_x;
@@ -173,11 +172,11 @@ int Render_DrawSpriteEntry(GeomEntry *input)
                             s32 y = scroll_y + ((word_y >> 12) & 0x3FF);
                             draw_y = y;
                             if ((s16)y >= 224) {
-                                modulus_y = entry->anim_mod_y;
-                                draw_y = y - modulus_y;
+                                workValue = entry->anim_mod_y;
+                                draw_y = y - workValue;
                             } else if ((s16)y < -15) {
-                                modulus_y = entry->anim_mod_y;
-                                draw_y = modulus_y + y;
+                                workValue = entry->anim_mod_y;
+                                draw_y = workValue + y;
                             }
                         }
                         if ((u16)(draw_y + 15) < 0xEF) {
@@ -218,9 +217,9 @@ int Render_DrawSpriteEntry(GeomEntry *input)
             do {
             u32 word = *position_cursor;
             register s32 draw_x asm("$13");
-            modulus_y = scroll_x + (word >> 22);
-            draw_x = modulus_y;
-            if ((u16)(modulus_y + 15) < 0x14F) {
+            workValue = scroll_x + (word >> 22);
+            draw_x = workValue;
+            if ((u16)(workValue + 15) < 0x14F) {
                     {
                     s32 y;
                     s32 draw_y;
