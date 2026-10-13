@@ -309,7 +309,7 @@
     },
     {
       "unit": "overlays/menu_memcard/menu_memcard_data_0016F4",
-      "symbol": "D_801223F5",
+      "symbol": "g_MenuCardVideoFinished",
       "reported_size": 1,
       "source": null,
       "status": "data_or_padding_excluded_from_function_report",
@@ -318,7 +318,7 @@
     },
     {
       "unit": "overlays/menu_memcard/menu_memcard_data_0016F4",
-      "symbol": "D_801223F6",
+      "symbol": "g_MenuCardVideoDecodeMode",
       "reported_size": 1260,
       "source": null,
       "status": "data_or_padding_excluded_from_function_report",
