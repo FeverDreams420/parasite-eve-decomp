@@ -486,6 +486,7 @@ def classify_overlay_assignment(a: Assignment, overlay: str, referenced: set[str
 def overlay_audit(main_syms: dict[str, int], windows) -> dict:
     """How each overlay learns main's (and other overlays') addresses."""
     stats = Counter()
+    addresses = Counter()  # distinct addresses per overlay and category
     files = Counter()
     per_overlay = {}
     main_addrs = set(main_syms.values())
@@ -514,17 +515,22 @@ def overlay_audit(main_syms: dict[str, int], windows) -> dict:
                 for sname, addr in syms.items():
                     other.setdefault(sname, addr)
         counts = Counter()
+        targets = defaultdict(set)
         for a in assigns:
             kind = classify_overlay_assignment(a, name, undefined, defined, own, windows, main_syms,
                                                main_addrs, main_abs, other)
             counts[kind] += 1
+            targets[kind].add(a.value if a.value is not None else a.name)
             if kind.startswith("main_"):
                 main_targets.add(a.value)
         per_overlay[name] = counts
         stats.update(counts)
+        addresses.update({kind: len(values) for kind, values in targets.items()})
+        addresses["main_references"] += len(set().union(
+            *(values for kind, values in targets.items() if kind.startswith("main_"))))
         stats["overlays_built"] += 1
     stats["distinct_main_addresses"] = len(main_targets)
-    return {"totals": stats, "per_overlay": per_overlay, "files": files}
+    return {"totals": stats, "addresses": addresses, "per_overlay": per_overlay, "files": files}
 
 
 # --------------------------------------------------------------------------
@@ -727,8 +733,13 @@ def render(report: dict) -> str:
     ov = report["overlays"]
     out.append("(d) overlay -> main references")
     out.append(f"  linker files: {dict(ov['files'])}")
-    for k, v in sorted(ov["totals"].items()):
-        out.append(f"  {k:32} {v:6}")
+    out.append(f"  {'category':32} {'names':>6} {'addresses':>9}")
+    for k in sorted(set(ov["totals"]) | set(ov.get("addresses", {}))):
+        v = ov["totals"].get(k, "")
+        n = ov.get("addresses", {}).get(k, "")
+        out.append(f"  {k:32} {v:>6} {n:>9}")
+    out.append("  addresses: distinct per overlay, the ratchet's measure (a second name for")
+    out.append("  an address adds no fixed address)")
     out.append("")
     out.append("(e) fixed layout")
     for item in report["fixed_layout"]:
@@ -737,8 +748,13 @@ def render(report: dict) -> str:
 
 
 # Categories that are catalogue or bookkeeping, not a fixed address: they may
-# grow (a decompiled reference can make a manual symbol unreferenced).
-UNCOUNTED = {"unreferenced", "overlays_built", "overlays_not_built"}
+# grow (a decompiled reference can make a manual symbol unreferenced; a
+# PROVIDE that an object definition overrides binds nothing). Overlay pins of
+# main addresses are ratcheted as one total (`main_references`) plus the
+# categories that lack main's name, so moving a reference to main's own name
+# (main_same_name) is not a regression.
+UNCOUNTED = {"unreferenced", "overlays_built", "overlays_not_built", "provide_unused",
+             "main_same_name"}
 BASELINE = ROOT / "tools" / "shift_baseline.json"
 
 
@@ -756,9 +772,10 @@ def flat_counts(report: dict) -> dict[str, int]:
         for k, n in report["executable"]["unrelocated"].items():
             flat[f"exe:unrelocated:{k}"] = n
         flat["exe:relocs_to_absolute_program"] = report["executable"]["relocs_to_absolute"].get("program", 0)
-    for k, n in report["overlays"]["totals"].items():
+    for k, n in report["overlays"]["addresses"].items():
         if k not in UNCOUNTED:
             flat[f"overlays:{k}"] = n
+    flat["overlays:distinct_main_addresses"] = report["overlays"]["totals"]["distinct_main_addresses"]
     for k, n in report.get("shift_test", {}).items():
         flat[f"shift_test:{k}"] = n
     return flat
