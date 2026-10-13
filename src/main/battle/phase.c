@@ -35,7 +35,7 @@ u8 D_8009CE3A;
 u8 D_8009CE3B;
 u8 g_BattleActionQueueCount;
 u8 g_BattleActionIndex;
-s32 D_8009D208;
+s32 g_BattleAilmentPmSlot;
 s32 g_BattleEffectPmSlot;
 s16 g_BattlePlayerAimHeight;
 
@@ -103,7 +103,7 @@ void Battle_AdvancePhase(void) {
     const u8 *copy_end;
     u32 misaligned;
 
-    var_a0 = D_8009D2A0;
+    var_a0 = g_BattleLiveEnemyCount;
     temp_a2 = g_BattleActionIndex;
     temp_s2 = &g_BattleActionQueue[temp_a2 & 0xFF];
     if (var_a0 == 0) {
@@ -397,7 +397,7 @@ void Battle_StartEnemyAttackEffect(BattleEntity *entity)
 
     if ((g_ActiveActor->action->turnWord & 0x400) && ((*status & 3) != 1)) {
         effect = Scene_LoadRoomAssets(7, entity);
-        D_8009D208 = effect;
+        g_BattleAilmentPmSlot = effect;
         Pm_SendCmd(effect, 0, 0, 2, 0, 0);
         Asset_Find08Alt(0x484, 0, entity->renderObject.target_x,
                         entity->renderObject.target_y, entity->renderObject.target_z);
@@ -405,21 +405,21 @@ void Battle_StartEnemyAttackEffect(BattleEntity *entity)
     }
     if ((g_ActiveActor->action->turnWord & 0x300) == 0x300 &&
         ((*status & 0x3C000) != 0x14000)) {
-        D_8009D208 = Scene_LoadRoomAssets(90, entity);
+        g_BattleAilmentPmSlot = Scene_LoadRoomAssets(90, entity);
         Asset_Find08Alt(0x488, 0, entity->renderObject.target_x,
                         entity->renderObject.target_y, entity->renderObject.target_z);
         return;
     }
     if ((g_ActiveActor->action->turnWord & 0x100) &&
         ((*status & 0xC000) != 0x4000)) {
-        D_8009D208 = Scene_LoadRoomAssets(88, entity);
+        g_BattleAilmentPmSlot = Scene_LoadRoomAssets(88, entity);
         Asset_Find08Alt(0x488, 0, entity->renderObject.target_x,
                         entity->renderObject.target_y, entity->renderObject.target_z);
         return;
     }
     if ((g_ActiveActor->action->turnWord & 0x200) &&
         ((*status & 0x30000) != 0x10000)) {
-        D_8009D208 = Scene_LoadRoomAssets(89, entity);
+        g_BattleAilmentPmSlot = Scene_LoadRoomAssets(89, entity);
         Asset_Find08Alt(0x486, 0, entity->renderObject.target_x,
                         entity->renderObject.target_y, entity->renderObject.target_z);
         return;
@@ -427,7 +427,7 @@ void Battle_StartEnemyAttackEffect(BattleEntity *entity)
     if ((g_ActiveActor->action->turnWord & 0x800) &&
         ((*status & 0xC) != 4)) {
         effect = Scene_LoadRoomAssets(7, entity);
-        D_8009D208 = effect;
+        g_BattleAilmentPmSlot = effect;
         Pm_SendCmd(effect, 0, 0, 1, 0, 0);
         Asset_Find08Alt(0x482, 0, entity->renderObject.target_x,
                         entity->renderObject.target_y, entity->renderObject.target_z);
@@ -436,7 +436,7 @@ void Battle_StartEnemyAttackEffect(BattleEntity *entity)
     if ((g_ActiveActor->action->turnWord & 0x1000) &&
         ((*status & 0x30) != 0x10)) {
         effect = Scene_LoadRoomAssets(7, entity);
-        D_8009D208 = effect;
+        g_BattleAilmentPmSlot = effect;
         Pm_SendCmd(effect, 0, 0, 0, 0, 0);
         Asset_Find08Alt(0x480, 0, entity->renderObject.target_x,
                         entity->renderObject.target_y, entity->renderObject.target_z);

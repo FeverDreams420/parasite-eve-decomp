@@ -13,15 +13,15 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 CASES = [('libapi/counter',
   364,
   'be6a3c32260308417c8b34ea9797a82befe166d3bb582ccc42a8043bc9ce3b90',
-  'D_8009B7D0 = 0x8009B7D0;\n'
-  'D_8009B7CC = 0x8009B7CC;\n'
-  'D_8009B7D4 = 0x8009B7D4;\n'
+  'g_RCntRegsPtr = 0x8009B7D0;\n'
+  'g_RCntIntrRegsPtr = 0x8009B7CC;\n'
+  'g_RCntIntrMasks = 0x8009B7D4;\n'
   'SECTIONS { .text 0x80085814 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) '
   '*(.mdebug) } }'),
  ('libspu/spu_3',
   552,
   '51d8aaa835d28a54bae2e84948b52c900867d28f05b95065295c2c3fdb78f3e0',
-  'D_8009B410 = 0x8009b410;\n_spu_RXX = 0x8009b3fc;\n_spu_mem_mode = 0x8009b420;\n_spu_sys_pcr = 0x8009b40c;\nSECTIONS { .text 0x8007dae0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }')]
+  'g_SpuDelayRegPtr = 0x8009b410;\n_spu_RXX = 0x8009b3fc;\n_spu_mem_mode = 0x8009b420;\n_spu_sys_pcr = 0x8009b40c;\nSECTIONS { .text 0x8007dae0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }')]
 
 
 class CounterSpuAddressTests(unittest.TestCase):

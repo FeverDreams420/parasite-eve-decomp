@@ -574,7 +574,7 @@ exist for the bytes, and why:
   fixed-symbol load is not reused across the stack store of the fifth
   argument, which gives retail's reload without a volatile slot pointer.
 - `g_AkaoMessageQueueLock`, the message-queue lock the timer interrupt tests, and
-  `D_8009D2E0`, the busy flag `Spu_PollOrWaitSeqBusy` spins on, are
+  `g_AkaoSeqBusyFlags`, the busy flag `Spu_PollOrWaitSeqBusy` spins on, are
   `volatile`: `Spu_InitVoiceState` clears the lock and reads it back before
   copying it to the queue words, and only a volatile object keeps that
   reload.
@@ -1132,7 +1132,7 @@ Still open:
     times with no store or call between the check and the use; one symbol
     lets CSE merge those loads, so its three views stay.
   - `Menu_MemCardProgress` (`D_800A19C0`, two views), `Save_StartWriteSlot`
-    (`D_8009EE70` in `memcard.h`) and the scene_e20 hover orb
+    (`g_MemCardFilePath` in `memcard.h`) and the scene_e20 hover orb
     (`g_FieldFxTpageTable`) rebuild a buffer or table address after a call or a
     store. With one symbol GCC keeps the address in a register (or, in the
     hover orb, an 8-byte spill slot). The text buffer matches only when it
@@ -1236,7 +1236,7 @@ Still open:
     `&pending[count - 2]` and `pending -= 2` change the allocation (lev 10
     and 17). The pin is only needed with the barrier.
   - `MemCard_AbortActiveOperation` keeps the barrier that separates
-    `name_buf` from `D_8009EE70`: with one value CSE keeps the buffer
+    `name_buf` from `g_MemCardFilePath`: with one value CSE keeps the buffer
     address in `$s0` across `sprintf` instead of rebuilding it (lev 31).
     Passing the buffer to the path format under a second symbol name and
     clearing the retry counter just before the open loop matches with no
@@ -1600,7 +1600,7 @@ single removal (none was byte-identical):
   `buffer` argument is allocated before the other saved values (s4/s5
   swap, lev 13); the short-lived copy stays out of global allocation, and
   a copy of a constant base folds back into `%lo(symbol)(index)`
-  addressing. The x read keeps the `D_8009E360` name: one base symbol for
+  addressing. The x read keeps the `g_BattleStatusRowPosX` name: one base symbol for
   both halfwords makes CSE share the address (lev 8).
   `Battle_DrawStatusSymbol` and `Battle_DrawATBGauge` address their ordering
   entry and sprite as array elements. `Battle_ApplyEnemyAttack` keeps
@@ -1835,7 +1835,7 @@ Crutches still in these units, with the best crutch-free lev found:
   is scheduled above the width store and the cursor loads move); its pulse
   shade and colour clear are plain C now.
   Plain field statements (`w`, `h`, `code |= 2`, `y0`, `x0`, then the
-  AddPrim pair with `old = D_8009D100` after it) reach lev 16: the tag load
+  AddPrim pair with `old = g_DrawPacketCursor` after it) reach lev 16: the tag load
   and the semi-transparency byte load still move below the width store
   (same base register, disjoint offsets, so sched1 may reorder them), and
   the x/y cursor stores swap.
@@ -2121,7 +2121,7 @@ the shift test). 3 data words and 7 `lui` halves look like program addresses
 without a relocation. None of the data words is an address: two are the
 halfword pairs 0x7FFF/0x8001 of a table in `dtail_gp_post_dsfile`
 (`0x80017FFF`) and one sits in a table of random-looking words
-(`D_8009BE78+0x5C`). Of the `lui` halves, six are the register-block loads
+(`g_AkaoLfoWave12+0x5C`). Of the `lui` halves, six are the register-block loads
 above and one is the multiplier 0x80010003 of a division by 0x7FFF in
 `Render_LoadFontGlyphAlt`.
 

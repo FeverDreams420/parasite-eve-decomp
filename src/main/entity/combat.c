@@ -16,7 +16,7 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-u16 D_8009D298;
+u16 g_BattleHitActionPending;
 unsigned char g_AyaStatusEffectTimer;
 
 int rand(void);
@@ -152,7 +152,7 @@ s16 Entity_ApplyHitAndSetAnim(void *arg0) {
         mode = case_actor->mode;
         g_BattleHitActionMode[0] = mode;
         submode = case_actor->action;
-        D_8009D298 = 1;
+        g_BattleHitActionPending = 1;
         g_BattleHitActionSubmode[0] = submode;
         g_BattleHitActionParam[0] = *(u32 *)&case_actor->anim;
         break;
@@ -168,7 +168,7 @@ s16 Entity_ApplyHitAndSetAnim(void *arg0) {
         mode = case_actor->mode;
         g_BattleHitActionMode[0] = mode;
         submode = case_actor->action;
-        D_8009D298 = 1;
+        g_BattleHitActionPending = 1;
         g_BattleHitActionSubmode[0] = submode;
         g_BattleHitActionParam[0] = case_actor->action << 16;
         break;
@@ -208,7 +208,7 @@ s16 Entity_ApplyHitAndSetAnim(void *arg0) {
         }
         if (flags & 0x100) {
             actor->flags = flags & ~0x100;
-            D_8009D298 = 2;
+            g_BattleHitActionPending = 2;
         }
     }
 

@@ -77,7 +77,7 @@ class RenderSetFontGlyphByCodeTests(unittest.TestCase):
                 "D_80091A20 = 0x80091A20;\n"
                 "D_80091A28 = 0x80091A28;\n"
                 "g_FontGlyphCodeSequence = 0x8009EE22;\n"
-                "D_8009ECD8 = 0x8009ECD8;\n"
+                "g_FontActiveGlyphTable = 0x8009ECD8;\n"
                 "D_800B0DD8 = 0x800B0DD8;\n"
                 "D_800B0E6C = 0x800B0E6C;\n"
                 "D_80093176 = 0x80093176;\n"

@@ -22,18 +22,18 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-u8 D_8009CE7C;
+u8 g_BattleSuspendedModeState;
 s32 D_8009D1D0;
 s32 g_BattleFrameCounter;
 u8 g_BattleActionActorCount;
 u8 g_BattleEnemyEscapeFlag;
 Combatant *g_ActiveActor;
-u8 D_8009D288;
+u8 g_BattleGaugeCapLatch;
 int g_BattleModeState;
-s8 D_8009D2A0;
-s16 D_8009D2A4;
+s8 g_BattleLiveEnemyCount;
+s16 g_MenuFrameCommand;
 s8 D_8009D2B0;
-s32 D_8009D2FC;
+s32 g_BattleImpactPmSlot;
 u8 g_BattleStepIndex;
 u32 g_BattleExpReward;
 u16 g_BattlePeBonusReward;
@@ -50,7 +50,7 @@ void Save_InitSystem(void)
     for (i = 0; i < 7; i++) {
         g_BattleEnemySlots[i].active = 0;
     }
-    D_8009D2A0 = 0;
+    g_BattleLiveEnemyCount = 0;
     g_EntityInstanceCounter = 0;
     Save_ResetGlobalFlags();
 }
@@ -59,15 +59,15 @@ void Save_InitSystem(void)
  * stay absolute. The story-day flags byte is set through its g_GameState
  * record field: the record is not small data, so its address stays in a
  * register for the read-modify-write, as retail has it. */
-u8 g_BattleStepIndex, D_8009CE78, D_8009CE7C;
+u8 g_BattleStepIndex, D_8009CE78, g_BattleSuspendedModeState;
 int D_8009D1D0;
 int g_BattleFrameCounter;
 u16 g_BattlePeBonusReward;
 u8 g_BattleEnemyEscapeFlag;
 Combatant *g_ActiveActor;
-u8 D_8009D288;
+u8 g_BattleGaugeCapLatch;
 int g_BattleModeState;
-s8 D_8009D2A0;
+s8 g_BattleLiveEnemyCount;
 u8 g_EntityInstanceCounter;
 u32 g_BattleExpReward;
 
@@ -89,7 +89,7 @@ void Battle_ResetEnemyStats(int mode) {
     D_8009D1D0 = 0;
 
     if ((mode & 0xFF) == 1) {
-        D_8009D234[0] = 0x5A;
+        g_BattleEnemyHoldTimer[0] = 0x5A;
         g_BattleEnemyEscapeFlag = 1;
         actor->stateFlags |= 0x800000;
     } else {
@@ -131,7 +131,7 @@ void Battle_ResetEnemyStats(int mode) {
     D_8009D2E8 &= ~0x10;
     Battle_FlushScriptSounds();
     Draw_ResetTextboxes();
-    D_8009D298 = 0;
+    g_BattleHitActionPending = 0;
     D_8009D29A = 0;
     g_BattleHitActionSubmode[0] = 0;
     D_8009D29C[0] = 0;
@@ -147,7 +147,7 @@ void Battle_SetupPlayerPalette(void) {
     BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
     Battle_FlushScriptSounds();
     g_EntityInstanceCounter = 0;
-    D_8009D2A0 = 0;
+    g_BattleLiveEnemyCount = 0;
     D_8009D254->actionCheckFn = (void *)D_800915E0[0];
     g_GameStateFlags &= -3;
     D_8009D2E8 &= -0x11;
@@ -169,9 +169,9 @@ void Battle_StartEncounter(int mode) {
     g_BattleFrameCounter = 0;
     *(u32 *)&D_8009D290 = 0;
     g_BattleModeState = 0;
-    D_8009CE7C = 0;
+    g_BattleSuspendedModeState = 0;
     D_8009CE78 = 0;
-    D_8009D288 = 0;
+    g_BattleGaugeCapLatch = 0;
     g_BattleStepIndex = 0;
     mode_reg = mode;
     Save_ResetGlobalFlags();
@@ -256,32 +256,32 @@ void Battle_Update(void) {
     menuMode = 1;
     if (g_ActiveActor->stateFlags & 0x80000) {
         if (g_BattleModeState == 6) {
-            D_8009CE7C = 6;
+            g_BattleSuspendedModeState = 6;
             g_BattleModeState = 0;
         }
     }
     if (!(g_ActiveActor->stateFlags & 0x80000)) {
-        previousPhase = D_8009CE7C;
+        previousPhase = g_BattleSuspendedModeState;
         if (previousPhase == 6) {
-            D_8009CE7C = 0;
+            g_BattleSuspendedModeState = 0;
             g_BattleModeState = previousPhase;
         }
     }
     active = D_8009D254->core;
     g_BattleStatusPanelSlot = 0;
     g_ActiveActor = active;
-    D_8009D2A4 = Menu_RunFrameWithArg((int)&g_BattleMenuActionRecord);
+    g_MenuFrameCommand = Menu_RunFrameWithArg((int)&g_BattleMenuActionRecord);
     if (g_BattleModeState == 0 && g_BattleEnemyEscapeFlag != 0) {
         if (g_ActiveActor->hpAlive >= 0x2328U) {
             g_ActiveActor->hpAlive = 0x2328U;
-            if (D_8009D288 == 0) {
+            if (g_BattleGaugeCapLatch == 0) {
                 srand(D_8009D250);
                 if ((g_AkaoBgmHandle[0]) != 0) {
                     Akao_SendTableCommand((g_AkaoBgmHandle[0]), 0x454, 0, 0x80, 0x7F);
                 }
-                D_8009D288 = 1;
+                g_BattleGaugeCapLatch = 1;
             }
-            if (!(g_ActiveActor->stateFlags & 0x2000) && (D_8009D2A0 != 0)) {
+            if (!(g_ActiveActor->stateFlags & 0x2000) && (g_BattleLiveEnemyCount != 0)) {
                 if ((D_8009D250 & 3) == 0) {
                     register int topGreen asm("$8") = 0x46;
                     register int topBlue asm("$7") = 0x82;
@@ -403,7 +403,7 @@ void Battle_Update(void) {
                 menuMode = 2;
                 Battle_StepScriptEntry();
             }
-            if ((D_8009D294) != 0) {
+            if ((g_BattleHitPending) != 0) {
                 Battle_ResolveHitOnTimer();
             }
         }
@@ -421,8 +421,8 @@ void Battle_Update(void) {
             } while (entity != 0);
         }
         if (g_BattleActionActorCount != 0) {
-            Pm_SendCmd(D_8009D2FC, 0, 1, (int)&(g_BattleActionActors[0]), 0, 0);
-            Pm_SendCmd(D_8009D2FC, 0, 0, 1, 0, 0);
+            Pm_SendCmd(g_BattleImpactPmSlot, 0, 1, (int)&(g_BattleActionActors[0]), 0, 0);
+            Pm_SendCmd(g_BattleImpactPmSlot, 0, 0, 1, 0, 0);
             g_BattleActionActorCount = 0;
         }
         if ((D_8009D235[0]) != 0) {
@@ -430,17 +430,17 @@ void Battle_Update(void) {
         }
         player = D_8009D254;
         if ((player->animLastFrame == player->animPrev.parts.integer) && (player->actionMode < 4U)) {
-            if (D_8009D298 == 0) {
+            if (g_BattleHitActionPending == 0) {
                 Entity_SetActionMode(player, g_ActiveActor->actionMode12);
                 if (!(g_DiscChangeFlags & 1) && ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) && (g_BattleModeState == 0) && (g_ActiveActor->action->turnWord & 0x8000) && (D_8009D1D0 != 0)) {
                     Battle_RollEnemySpawn(D_8009D1D0);
                     D_8009D1D0 = 0;
                 }
             } else {
-                if (D_8009D298 >= 2U) {
+                if (g_BattleHitActionPending >= 2U) {
                     player->entityFlags |= 0x100;
                 }
-                D_8009D298 = 0;
+                g_BattleHitActionPending = 0;
                 Entity_SetActionMode(D_8009D254, D_8009D29A);
                 player = D_8009D254;
                 player->animFrame = D_8009D29C[0];
@@ -527,7 +527,7 @@ void Battle_Update(void) {
     if (g_BattleEnemyEscapeFlag != 0) {
         Battle_DrawActiveStatus();
     }
-    if (D_8009D2A4 != 0) {
+    if (g_MenuFrameCommand != 0) {
         Render_BeginSceneLoad();
     }
 }
@@ -537,7 +537,7 @@ void Battle_Update(void) {
 u8 g_BattleEndTimer, g_BattleStepIndex;
 Combatant *g_ActiveActor;
 int g_BattleModeState;
-s8 D_8009D2A0;
+s8 g_BattleLiveEnemyCount;
 /* Eight-stage transition: model fades, an effect spawn, stat recovery and
  * HUD reset. Returns 1 once the stats have been restored. */
 int Battle_StepVictory(void)
@@ -667,7 +667,7 @@ int Battle_StepVictory(void)
         BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
         g_BattleStepIndex = 0;
         g_BattleModeState = 0;
-        if (D_8009D2A0 == 0)
+        if (g_BattleLiveEnemyCount == 0)
             Battle_StartDeathAnim();
         result = 1;
         break;
@@ -699,7 +699,7 @@ void Battle_StepLevelUp(void) {
         break;
 
     case 1:
-        if (D_8009D2A4 == 0x3E8) {
+        if (g_MenuFrameCommand == 0x3E8) {
             entity = D_8009D254;
             g_BattleStepIndex = step + 1;
             entity->entityFlags &= -0x101;
@@ -1274,11 +1274,11 @@ void Battle_PhaseInitEnemyTurn(void) {
                     entityFlags = entity->entityFlags & ~0x100;
                     entity->entityFlags = entityFlags;
                     if (entity->animLastFrame == entity->animPrev.parts.integer) {
-                        if ((entity->actionMode < 4U) && (D_8009D298 != 0)) {
-                            if (D_8009D298 >= 2U) {
+                        if ((entity->actionMode < 4U) && (g_BattleHitActionPending != 0)) {
+                            if (g_BattleHitActionPending >= 2U) {
                                 entity->entityFlags = (entityFlags | 0x100);
                             }
-                            D_8009D298 = 0;
+                            g_BattleHitActionPending = 0;
                             Entity_SetActionMode(D_8009D254, D_8009D29A);
                             player = D_8009D254;
                             player->animFrame = (D_8009D29C[0]);

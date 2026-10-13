@@ -456,7 +456,7 @@ KNOWN_LITERALS = (
     ("asm/USA/main/data/main/dtail_gp_post_dsfile.data.s.o", 0x80017FFF,
      "not an address: halfword pair 0x7FFF, 0x8001 of an AKAO sound table"),
     ("asm/USA/main/data/main/dtail_gp_post_dsfile.data.s.o", 0x80010804,
-     "not an address: one word of the random-looking table D_8009BE78"),
+     "not an address: one word of the random-looking table g_AkaoLfoWave12"),
 )
 
 

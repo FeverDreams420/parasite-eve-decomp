@@ -304,7 +304,7 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
 
     switch (state->deathAnimPhase) {
     case 0:
-        D_8009D2A0--;
+        g_BattleLiveEnemyCount--;
         state->deathAnimPhase++;
         /* fallthrough */
     case 1:
@@ -411,7 +411,7 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
             }
         }
 
-        if (D_8009D2A0 != 0) {
+        if (g_BattleLiveEnemyCount != 0) {
             return;
         }
 

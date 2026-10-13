@@ -159,7 +159,7 @@ void Battle_CycleTarget(s8 mode) {
     Battle_StepPlayerTurn(g_BattleTargetList, g_BattleTargetIndex, mode);
 }
 
-u8 D_8009D294;
+u8 g_BattleHitPending;
 u8 g_BattleRemainingActions;
 u8 g_BattleActionAnimModes[4];
 u8 D_8009D2D8;
@@ -167,7 +167,7 @@ u8 g_BattleActionQueueCount;
 
 void Battle_SetupEntityTarget(BattleEntity *actor) {
     BattleEntity *target;
-    D_8009D294 = 0;
+    g_BattleHitPending = 0;
     g_BattleRemainingActions = g_ActiveActor->action->turnWord & 15;
     g_BattleActionAnimModes[0] = g_ActiveActor->action->animMode[0];
     g_BattleActionAnimModes[1] = g_ActiveActor->action->animMode[1];
@@ -220,7 +220,7 @@ void Battle_SetupEntityTarget(BattleEntity *actor) {
 }
 
 s8 g_BattleActiveTurnSlot, g_BattleItemMenuState, g_BattleTargetIndex;
-u8 g_BattleRemainingActions, D_8009CE60, g_BattleActionQueueCount;
+u8 g_BattleRemainingActions, g_BattleSlotCancelPending, g_BattleActionQueueCount;
 
 static inline void FinishAction(void) {
     u8 i;
@@ -234,7 +234,7 @@ static inline void FinishAction(void) {
             }
         }
     }
-    D_8009D288 = 0;
+    g_BattleGaugeCapLatch = 0;
     g_ActiveActor->hpAlive = 0;
     g_ActiveActor->stateFlags |= 0x200000;
     BattleCmd_ResetTableCursor();
@@ -251,8 +251,8 @@ int Battle_HandleItemMenu(void) {
     } else {
         if ((D_8009D1F4&0x2000) && !MenuWidget_FindByModeAndSelectedBase(1,0) && g_BattleItemMenuState!=2) {
             cancelled=1;
-            if (g_BattleRemainingActions==(g_ActiveActor->action->turnWord&15))D_8009CE60=1;
-            else D_8009CE60=0;
+            if (g_BattleRemainingActions==(g_ActiveActor->action->turnWord&15))g_BattleSlotCancelPending=1;
+            else g_BattleSlotCancelPending=0;
             if (g_BattleItemMenuState==1) MenuWidget_InitPool();
             else if (g_BattleItemMenuState==2) BattleCmd_UndoPending();
             if (--g_BattleActiveTurnSlot) {
@@ -280,7 +280,7 @@ int Battle_HandleItemMenu(void) {
                 }
                 Battle_CycleTarget(mode);
                 if ((D_8009D1F4&0x200)&&!cancelled) {
-                    D_8009CE60=0;
+                    g_BattleSlotCancelPending=0;
                     if(D_8009D2B0) {
                         Battle_FillActionQueue(&g_BattleTargetList[g_BattleTargetIndex]);
                         if(!g_BattleRemainingActions) {
@@ -318,7 +318,7 @@ int Battle_HandleItemMenu(void) {
 }
 
 u8 D_8009D2D8, g_BattleActionQueueCount, g_BattleRemainingActions;
-u8 D_8009CE60, D_8009D25C;
+u8 g_BattleSlotCancelPending, g_AyaActionStep;
 s8 g_BattleTargetCycleMode;
 u16 g_BattlePendingCommand;
 s8 g_BattleTargetIndex;
@@ -361,9 +361,9 @@ void Battle_FillActionQueue(BattleTarget *target) {
 
 int Battle_StepEnemyTurn(s8 mode) {
     if (mode == 1) {
-        int command = D_8009D2A4;
-        s16 queuedCommand = D_8009D2A4;
-        D_8009CE60 = 0;
+        int command = g_MenuFrameCommand;
+        s16 queuedCommand = g_MenuFrameCommand;
+        g_BattleSlotCancelPending = 0;
         if (command > 0) {
             if (command < 387) {
                 SetSlot(g_BattleActionQueueCount, D_8009D254, queuedCommand, (s8)D_8009D2D8);
@@ -395,12 +395,12 @@ int Battle_StepEnemyTurn(s8 mode) {
                     break;
                 case 406:
                     Battle_InitFadeVars();
-                    D_8009D25C = 0;
+                    g_AyaActionStep = 0;
                     for (mode = 0; (u8)mode < 7; mode++) {
                         int index = g_BattleActionQueueCount;
                         int randomValue = rand();
                         SetSlot(index, g_BattleTargetList[randomValue % D_8009D2B0].actor,
-                                D_8009D2A4, (s8)D_8009D2D8);
+                                g_MenuFrameCommand, (s8)D_8009D2D8);
                         g_BattleActionQueueCount++;
                     }
                     D_8009D2D8--;
@@ -408,7 +408,7 @@ int Battle_StepEnemyTurn(s8 mode) {
                     mode = 0;
                     break;
                 default:
-                    SetSlot(g_BattleActionQueueCount, D_8009D254, D_8009D2A4, (s8)D_8009D2D8);
+                    SetSlot(g_BattleActionQueueCount, D_8009D254, g_MenuFrameCommand, (s8)D_8009D2D8);
                     D_8009D2D8--;
                     g_BattleActionQueueCount++;
                     g_BattleTargetCycleMode = 0;
@@ -446,7 +446,7 @@ int Battle_StepEnemyTurn(s8 mode) {
             }
             if (!g_BattleTargetCycleMode)
                 PLAY_TABLE_SOUND(0x44C)
-            g_BattlePendingCommand = D_8009D2A4;
+            g_BattlePendingCommand = g_MenuFrameCommand;
         } else if (command == -1) {
             mode = 0;
         }
@@ -471,7 +471,7 @@ int Battle_StepEnemyTurn(s8 mode) {
 }
 
 /* COMMON supplies small-data metadata to MASPSX. */
-u8 g_BattleActionQueueCount, D_8009CE60;
+u8 g_BattleActionQueueCount, g_BattleSlotCancelPending;
 u8 D_8009D2D8, g_BattleRemainingActions;
 
 /* Step the turn index back to the first slot of the action that ends at
@@ -495,8 +495,8 @@ static inline void RewindTurn(s16 initial)
 
 static inline void RestorePending(int index)
 {
-    if (D_8009CE60) {
-        D_8009CE60 = 0;
+    if (g_BattleSlotCancelPending) {
+        g_BattleSlotCancelPending = 0;
         g_BattleActionQueueCount = index;
     }
 }
@@ -532,7 +532,7 @@ void Battle_AdvanceTurnSlot(void)
         g_BattleRemainingActions = g_ActiveActor->action->turnWord & 15;
     } else if (kind < 0x197) {
         D_8009D2D8++;
-        if (!D_8009CE60)
+        if (!g_BattleSlotCancelPending)
             BattleCmd_UndoPending();
         savedIndex = g_BattleActionQueueCount;
         {
@@ -871,7 +871,7 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
                  * test, in the branch delay slot. */
                 register int room asm("$4") = 0x5B;
                 if (actor == g_BattleActionQueue[index].actor) {
-                    D_8009D208 = Scene_LoadRoomAssets(room, actor);
+                    g_BattleAilmentPmSlot = Scene_LoadRoomAssets(room, actor);
                     g_BattleActionActorCount = 0;
                 }
             }

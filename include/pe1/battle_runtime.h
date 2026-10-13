@@ -8,9 +8,9 @@
 
 extern Combatant *g_ActiveActor;
 extern BattleEntity *D_8009D254;
-extern s16 D_8009D2A4;
-extern int D_8009D200;
-extern u8 D_8009D294;
+extern s16 g_MenuFrameCommand;
+extern int g_BattleAttackPmSlot;
+extern u8 g_BattleHitPending;
 
 typedef struct BattleEvasionOutcome {
     s8 status;   /* -1: invalid target, 0: unresolved, 1: resolved */
@@ -31,7 +31,7 @@ typedef struct BattleEnemySlot {
     EnemyCombatant combatant;
 } BattleEnemySlot;
 
-extern int D_8009D2FC;
+extern int g_BattleImpactPmSlot;
 extern int g_BattleEffectPmSlot;
 extern s8 g_BattleTargetCycleMode; /* item target mode: 0, or 4..7 while picking */
 extern u8 D_8009D2D8;
@@ -44,7 +44,7 @@ extern u8 D_8009D1CE;
  * timer at 0x8009D228 read as a signed count. */
 extern s8 g_BattleSaveOverlayActive;
 extern s16 g_ActorEffectFlag100Timer;
-extern u8 D_8009CE60;
+extern u8 g_BattleSlotCancelPending;
 extern u8 g_BattleActionIndex;
 extern u8 g_BattleActionQueueCount;
 extern unsigned int D_8009D2E8;
@@ -64,12 +64,12 @@ extern u8 g_EscapeBlockedTexts[];
 extern const EnemyCombatant g_EnemyCombatantInitial;
 extern BattleEnemySlot g_BattleEnemySlots[7];
 extern u8 g_EntityInstanceCounter;
-extern s8 D_8009D2A0;
+extern s8 g_BattleLiveEnemyCount;
 extern u8 g_BattleStepIndex;
 extern u8 g_BattleEnemyEscapeFlag;
 /* Frames since the player halted at battle end; Menu_MainUpdate counts it up
  * to 0x5A. */
-extern s8 D_8009CE30;
+extern s8 g_BattleHaltTimer;
 
 /* Per-action tables Battle_SetupEnemyAnims copies to the stack: four facing
  * animation modes plus the action frame word, and the offense scale (x/10). */
@@ -96,7 +96,7 @@ void Draw_ResetTextboxes(void);
 extern s8 g_BattleTargetIndex;
 extern s8 g_BattleActiveTurnSlot, g_BattleItemMenuState;
 extern unsigned int g_GameStateFlags;
-extern u8 D_8009D288;
+extern u8 g_BattleGaugeCapLatch;
 extern unsigned int D_8009D1F4;
 
 void Battle_SetupEntityTarget(BattleEntity *actor);
@@ -138,7 +138,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(BattleEnemySlot, combatant) == 4, battle_enemy_sl
 PE1_STATIC_ASSERT(sizeof(BattleEnemySlot) == 0xDC, battle_enemy_slot_size);
 
 /* Aya action sequencer state and its render/scene dependencies. */
-extern u8 D_8009D25C;
+extern u8 g_AyaActionStep;
 extern s8 g_AyaAttackStep;
 /* The BattleEvasionOutcome Battle_CheckEvasion fills for the current hit.
  * g_EvasionReaction names its second byte for units whose assembler

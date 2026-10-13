@@ -53,13 +53,13 @@ extern BattleStatusLinePrim g_BattleStatusBarTiles[6];
 /* The same packets seen as the three shaded status-bar tiles of each draw
  * buffer (Battle_DrawHPBar). */
 #define BATTLE_STATUS_TILES ((RenderColorTilePacket (*)[3])g_BattleStatusBarTiles)
-extern BattleStatusMarkerBody D_8009E888[2];
+extern BattleStatusMarkerBody g_BattleStatusValueMarkerSlots[2];
 extern RenderPagedSpritePacket g_BattleStatusValueDigits[2][2];  /* ammo digits */
 extern BattleGaugePrim g_BattleTargetHighlightSprites[2][3];
 extern BattleGaugePrim g_BattleStatusPointerSprites[2];
 /* Status symbols use the same texture-page and sprite packet layout. */
 extern BattleGaugePrim D_8009E730[2];
-extern BattleGaugePrim D_8009E768[2];
+extern BattleGaugePrim g_BattleAmmoLabelSprites[2];
 extern RenderPagedSpritePacket g_BattleAmmoDigitSprites[2][4];  /* ammo count digits */
 
 void AddPrim(unsigned int *orderingEntry, unsigned int *primitive);
@@ -132,7 +132,7 @@ extern BattleDigitSlot g_BattleHpDigitSlots[2][4], g_BattleMaxHpDigitSlots[2][5]
 /* HP label packets. */
 extern RenderPagedSpritePacket g_BattleHpLabels[2];
 /* Further HUD sprite packets Battle_DrawHPBar initializes. */
-extern RenderPagedSpritePacket D_8009E500[2][10];
+extern RenderPagedSpritePacket g_BattleRemainingActionSprites[2][10];
 extern RenderPagedSpritePacket g_BattleStatusValueMarkers[2];
 extern RenderPagedSpritePacket g_BattleStatusSymbolSprites[2];
 extern u8 D_8009E976[];

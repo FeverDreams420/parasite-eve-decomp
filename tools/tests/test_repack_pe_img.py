@@ -291,12 +291,12 @@ class ElfTableTests(unittest.TestCase):
     def test_reads_the_three_tables_by_symbol(self):
         source = """
         .data
-        .globl D_800930D8, g_SceneSectorDirectory, D_80093378
-        D_800930D8: .half 0, 1, 2, 0
+        .globl g_PeImageSectorTable, g_SceneSectorDirectory, g_RoomSectorTable
+        g_PeImageSectorTable: .half 0, 1, 2, 0
         g_SceneSectorDirectory: .word 2
                     .half 0, 0, 0
         .align 2
-        D_80093378: .word 2, 2 << 20, 4, 3 << 20, 7, 1 | 2 << 8, 10, 2 << 20, 12, 0
+        g_RoomSectorTable: .word 2, 2 << 20, 4, 3 << 20, 7, 1 | 2 << 8, 10, 2 << 20, 12, 0
         """
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)

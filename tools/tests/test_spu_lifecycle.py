@@ -26,11 +26,11 @@ CASES = [('s_ini',
   '_spu_memList = 0x8009B464;\n'
   '_spu_trans_mode = 0x8009B38C;\n'
   '_spu_transMode = 0x8009B418;\n'
-  'D_8009B388 = 0x8009B388;\n'
-  'D_8009B3B4 = 0x8009B3B4;\n'
-  'D_8009B3B0 = 0x8009B3B0;\n'
-  'D_8009B3E8 = 0x8009B3E8;\n'
-  'D_8009B3EC = 0x8009B3EC;\n'
+  '_spu_keystat = 0x8009B388;\n'
+  '_spu_RQmask = 0x8009B3B4;\n'
+  '_spu_RQvoice = 0x8009B3B0;\n'
+  '_spu_env = 0x8009B3E8;\n'
+  '_spu_isCalled = 0x8009B3EC;\n'
   'EnterCriticalSection = 0x80072714;\n'
   '_spu_FiDMA = 0x8007D614;\n'
   '_SpuDataCallback = 0x8007DD14;\n'
@@ -43,7 +43,7 @@ CASES = [('s_ini',
  ('s_q',
   116,
   '2a097f77cd77ee87e6df9187c0ec4a3524d90ecc3d95fab8c6b876438fcfcb4a',
-  'D_8009B3EC = 0x8009B3EC;\n'
+  '_spu_isCalled = 0x8009B3EC;\n'
   'EnterCriticalSection = 0x80072714;\n'
   '_spu_transferCallback = 0x8009B434;\n'
   '_spu_IRQCallback = 0x8009B438;\n'

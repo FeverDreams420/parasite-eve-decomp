@@ -81,8 +81,8 @@ class DrawEmitDigitSpriteTests(unittest.TestCase):
                 put(ENTRY, body)
                 put(pointer, initial)
                 word(OT, ot_word)
-                values = dict(D_8009D100=pointer, D_8009D104=ARENA, D_8009D10C=select,
-                              D_8009D110=primary, D_8009D114=alternate, D_8009D11C=OT,
+                values = dict(g_DrawPacketCursor=pointer, g_DrawPacketArenaBase=ARENA, D_8009D10C=select,
+                              D_8009D110=primary, D_8009D114=alternate, g_DrawOrderingTableEntry=OT,
                               D_8009D124=x, D_8009D128=y, g_DrawDigitFontBaseTexU=base_u,
                               g_DrawDigitFontBaseTexV=base_v, g_DrawDigitFontTpageClut=clut)
                 for name, value in values.items(): word(symbols[name], value)
@@ -107,6 +107,6 @@ class DrawEmitDigitSpriteTests(unittest.TestCase):
                     assert machine.reg_read(R.UC_MIPS_REG_PC) == symbols['Inv_BoundsCheckAssertStub']
                 assert bytes(machine.mem_read(pointer & 0x1FFFFFFF, 40)) == expected, case
                 assert bytes(machine.mem_read(OT & 0x1FFFFFFF, 4)) == struct.pack('<I', expected_ot), case
-                values['D_8009D100'] = pointer if failed else pointer + 40
+                values['g_DrawPacketCursor'] = pointer if failed else pointer + 40
                 for name, value in values.items():
                     assert bytes(machine.mem_read(symbols[name] & 0x1FFFFFFF, 4)) == struct.pack('<I', value & 0xFFFFFFFF), (case, name)

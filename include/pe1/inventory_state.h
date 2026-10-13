@@ -18,7 +18,7 @@ extern s16 D_800C2022[];
 extern u8 D_800A1E6D[][32];
 extern s16 D_800A1E76[][16];
 extern int g_InvBonusSlotCount;
-extern s32 D_8009D0A4;
+extern s32 g_InvWeaponSortStatIndex;
 extern u16 *g_InvSortListBase;
 extern s32 g_InvSortListCount;
 extern s32 g_InvAmmoSortStatIndex;

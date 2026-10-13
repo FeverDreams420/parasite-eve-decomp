@@ -317,9 +317,9 @@ image holds about 15000 block-shaped words outside the slices, most of them
 not addresses.
 
 Sizes recorded outside the overlays. Three main tables describe the whole
-image, contiguously: the u16 boundaries at `D_800930D8` (sectors 0..2224),
+image, contiguously: the u16 boundaries at `g_PeImageSectorTable` (sectors 0..2224),
 `g_SceneSectorDirectory` (base 2224 plus u16 offsets, to 8945) and the room
-table `D_80093378` (8-byte rows per map: start sector and three sector
+table `g_RoomSectorTable` (8-byte rows per map: start sector and three sector
 counts, scratch, texture and room section, to 100690, the image end). The
 tool reads them from `build/USA/main.elf` and checks the coverage. Of the 190
 slices, 163 are exactly one range, whose count is then the overlay's size:
@@ -451,7 +451,7 @@ high risk, then by size. `script/sfx_queue` (pilot) is done.
 | 15 | `psyq/libspu/s_stc` | 1 (0 own) | 4 | data 1 | `_spu_transferCallback` | low |
 | 16 | `psyq/libspu/s_sic` | 1 (0 own) | 4 | data 1 | `_spu_IRQCallback` | low |
 | 17 | `psyq/libds/dsready` | 1 (0 own) | 4 | data 1 | `g_DsReadBusy` | low |
-| 18 | `battle/enemy_slots` | 1 (0 own) | 4 | scommon 1 | `D_8009D2A0` | low |
+| 18 | `battle/enemy_slots` | 1 (0 own) | 4 | scommon 1 | `g_BattleLiveEnemyCount` | low |
 | 19 | `psyq/libds/dsread2` | 1 (1 own) | 4 | common 1 | `g_DsStreamNoLocFlag` | low |
 | 20 | `psyq/libcd/c_011` | 1 (0 own) | 4 | common 1 | `g_CdStreamEndState` | low |
 | 21 | `psyq/libetc/vmode` | 1 (1 own) | 6 | data 1 | `g_VideoMode` | low |
@@ -482,7 +482,7 @@ high risk, then by size. `script/sfx_queue` (pilot) is done.
 | 46 | `psyq/libcd/c_007` | 2 (0 own) | 6 | common 2 | `StRingAddr`, `StRingSize` | low (1 aliased) |
 | 47 | `psyq/libsn/snmain` | 2 (2 own) | 8 | rodata 1, engine 1 | `jtbl_80010000`, `D_800C20C8` | low (2 aliased) |
 | 48 | `psyq/libds/dssys_1_8` | 2 (0 own) | 8 | data 2 | `g_DsReadSysEnabled`, `g_DsReadStatusBlock` | low |
-| 49 | `battle/enemy_movement` | 2 (0 own) | 8 | scommon 2 | `D_8009D2A0`, `g_ActiveActor` | low (1 aliased) |
+| 49 | `battle/enemy_movement` | 2 (0 own) | 8 | scommon 2 | `g_BattleLiveEnemyCount`, `g_ActiveActor` | low (1 aliased) |
 | 50 | `fieldfx/geometry` | 2 (2 own) | 8 | common 2 | `D_800B0E18`, `D_800B0E1C` | low (2 aliased) |
 | 51 | `menu/equip_select` | 2 (0 own) | 9 | sbss 2 | `g_InvAmmoSpendActiveList`, `g_MenuSpendArrowDirection` | low |
 | 52 | `fieldfx/sprite_effects` | 2 (0 own) | 12 | data 1, scommon 1 | `g_RoomFloorY`, `g_PlayerEntity` | low (1 aliased) |
@@ -589,7 +589,7 @@ high risk, then by size. `script/sfx_queue` (pilot) is done.
 | 153 | `script/system_opcodes` | 20 (2 own) | 294 | scommon 11, common 8, sbss 1 | `g_CurrentEntity`, `g_FieldMoveLock`, `g_GameStateFlags` | high (6 aliased) |
 | 154 | `item/active_list` | 21 (5 own) | 76 | common 10, sbss 7, bss 4 | `g_EquipItemDataTable`, `g_ItemDropRngXorKeyHigh`, `g_ItemDropRngXorKeyLow` | high (4 aliased) |
 | 155 | `save/game_data` | 21 (6 own) | 134 | common 11, sbss 7, scommon 2, bss 1 | `g_SaveRuntimeState`, `g_SaveMetadataCursor`, `g_SaveMetadataWindowLength` | high (4 aliased) |
-| 156 | `battle/attack` | 21 (14 own) | 204 | scommon 13, sbss 7, bss 1 | `g_ActiveActorRecord`, `g_BattleResultFlagsRecord`, `D_8009D25C` | high (8 aliased) |
+| 156 | `battle/attack` | 21 (14 own) | 204 | scommon 13, sbss 7, bss 1 | `g_ActiveActorRecord`, `g_BattleResultFlagsRecord`, `g_AyaActionStep` | high (8 aliased) |
 | 157 | `akao/voice_bank` | 30 (9 own) | 429 | scommon 13, common 12, func 3, data 1, sdata 1 | `g_AkaoCurTrack`, `g_AkaoCmd`, `g_SpuActiveVoiceMask` | high (3 aliased) |
 | 158 | `memcard/save_flow` | 37 (29 own) | 544 | bss 26, common 6, scommon 3, data 2 | `g_SaveIoCursor`, `g_MemCardPortStates`, `g_GameState` | high (1 aliased) |
 
@@ -608,7 +608,7 @@ overlays on the retail disc.
 | Image size | `PSX_EXE_TEXT_SIZE` = end of the window block - 0x80010000 (retail 0x1EE000) | header `.text size` | not fixed: computed by the link |
 | Overlay window layout | 6 windows as offsets from `overlay_windows_VRAM` | `linkers/USA/overlay_windows.txt` | the 190 overlays in the retail `PE.IMG` are prelinked at these offsets from the retail base 0x8010BCF8; the build relinks them for any base (below) |
 | Retail window base 0x8010BCF8 | `vram:` of the `overlay_windows` segment | `configs/USA/main.yaml` (disassembly only) | the loader window base the shipped overlays were linked for; the link does not use it |
-| `PE.IMG` sector layout | sector numbers and sizes in main's tables (the special-scene table at 0x80094048, `g_SceneSectorDirectory`, `D_800930D8`) | data in main | disc positions, not program addresses; a shift does not change any overlay's size, so rebuilt overlays fit their sectors |
+| `PE.IMG` sector layout | sector numbers and sizes in main's tables (the special-scene table at 0x80094048, `g_SceneSectorDirectory`, `g_PeImageSectorTable`) | data in main | disc positions, not program addresses; a shift does not change any overlay's size, so rebuilt overlays fit their sectors |
 | Save files | card file: 0x100-byte header + 0x12E4-byte copy of `g_SaveRuntimeState` | `memcard/save_flow`, `save/game_data` | the layout is the ABI; no typed field holds a program address, the untyped `inventory` (0x1064) and `remainder` (0x20C) parts still need checking |
 | Kernel and BIOS | 0x80000000 vectors, 0xA000xxxx, LIBCARD's kernel patch at 0xDFFC | PsyQ LIBAPI/LIBCARD | BIOS contract |
 | Hardware and scratchpad | 0x1F80xxxx | GPU, SPU, CD, pad drivers | hardware |
@@ -675,7 +675,7 @@ base. Writing the rebuilt overlays into their sectors (same sizes) is wave 6.
 `g_BootWorkArea` (0x800F34F8, 0x18800 bytes) sits before the block and moves
 with the engine; the entity texture read at its +0x14000
 (`Scene_LoadEntityTextures` case 4) can run past 0x8010BCF8 in retail (the
-`D_800930D8` sector table allows reads of up to 0x20 sectors from index
+`g_PeImageSectorTable` sector table allows reads of up to 0x20 sectors from index
 0x16), so the first window buffer is probably time-shared with it; a RAM
 trace would settle how much of the work area is really needed. Data in
 `PE.IMG` (room directories, scripts, TIM, AKAO) holds no 32-bit pointer into
@@ -794,7 +794,7 @@ with its reason (`KNOWN_LITERALS`):
   half of the multiplier 0x80010003 of a division by 0x7FFF. Not an address.
 - `dtail_gp_post_dsfile` data words: 0x80017FFF twice (the halfword pair
   0x7FFF, 0x8001 inside the AKAO sound entries `g_AkaoLfoWave0`/`g_AkaoLfoWave1`)
-  and 0x80010804 (one word of the random-looking table `D_8009BE78`). Not
+  and 0x80010804 (one word of the random-looking table `g_AkaoLfoWave12`). Not
   addresses.
 
 ### The catalogue

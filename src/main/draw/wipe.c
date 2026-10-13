@@ -12,12 +12,12 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-unsigned char *D_8009D100;
-unsigned char *D_8009D104;
+unsigned char *g_DrawPacketCursor;
+unsigned char *g_DrawPacketArenaBase;
 int g_DrawTextDimmed;
 unsigned int g_DrawPrimColor;
 unsigned int g_DrawColorShaded;
-unsigned int *D_8009D11C;
+unsigned int *g_DrawOrderingTableEntry;
 int g_TextCursorX;
 int g_TextCursorY;
 u16 *g_DrawVertexWritePtr;
@@ -69,8 +69,8 @@ typedef struct ColorTriPair {
 void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode) {
     ColorTriPair *pair = 0;
     ColorTriPair *p;
-    u8 *end = D_8009D104;
-    u8 *old = D_8009D100;
+    u8 *end = g_DrawPacketArenaBase;
+    u8 *old = g_DrawPacketCursor;
     u8 *next = old + sizeof(ColorTriPair);
     DrawVertexPair a, b, farA, farB;
     int magnitude;
@@ -82,7 +82,7 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
 
     magnitude = __builtin_abs(width);
     if (next < end + 0x4000) {
-        D_8009D100 = next;
+        g_DrawPacketCursor = next;
         pair = (ColorTriPair *)old;
     } else Inv_BoundsCheckAssertStub(1);
     if (pair != 0 && pair < pair + 1) {
@@ -134,7 +134,7 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
     p->first.y2 = fay;
     p->second.x0 = COORD(farB).x;
     p->second.y0 = COORD(farB).y;
-    ot = (RenderPacketTag *)D_8009D11C;
+    ot = (RenderPacketTag *)g_DrawOrderingTableEntry;
     p->first.tag.link.address = ot->link.address;
     link.packet = &p->first;
     ot->link.address = link.word;
@@ -344,10 +344,10 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
     u8 *old, *next;
 
     tile = 0;
-    old = D_8009D100;
+    old = g_DrawPacketCursor;
     next = old + sizeof(TilePrim);
-    if (next < D_8009D104 + 0x4000) {
-        D_8009D100 = next;
+    if (next < g_DrawPacketArenaBase + 0x4000) {
+        g_DrawPacketCursor = next;
         tile = (TilePrim *)old;
     } else {
         Inv_BoundsCheckAssertStub(1);
@@ -402,7 +402,7 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         y = g_TextCursorY;
         x = g_TextCursorX;
         tile->y0 = y + 2;
-        ot = D_8009D11C;
+        ot = g_DrawOrderingTableEntry;
         tile->x0 = x + 2;
         otValue = *ot;
         linkedTag = (tag & maskTop) | (otValue & mask24);
@@ -410,14 +410,14 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         lowTile = link.word & mask24;
         asm volatile("" : : "r"(lowTile) : "memory");
         tile->tag.word = linkedTag;
-        old = D_8009D100;
+        old = g_DrawPacketCursor;
         *ot = (*ot & maskTop) | lowTile;
     }
 
     drawMode = 0;
     next = old + sizeof(DrawModePrim);
-    if (next < D_8009D104 + 0x4000) {
-        D_8009D100 = next;
+    if (next < g_DrawPacketArenaBase + 0x4000) {
+        g_DrawPacketCursor = next;
         drawMode = (DrawModePrim *)old;
     } else {
         Inv_BoundsCheckAssertStub(1);
@@ -428,7 +428,7 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
     {
         u32 mask24 = 0xFFFFFF;
         u32 maskTop = 0xFF000000;
-        u32 *ot = D_8009D11C;
+        u32 *ot = g_DrawOrderingTableEntry;
         DrawPrimLink link;
 
         link.packet = drawMode;

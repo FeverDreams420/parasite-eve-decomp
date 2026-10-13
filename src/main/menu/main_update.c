@@ -33,16 +33,16 @@ s16 Entity_ApplyHitAndSetAnim(void *);                 /* static */
 void Entity_UpdateTimers(void);
 /* Separate declarations preserve the original GCC quantities for each tail. */
 /* COMMON supplies small-data metadata to MASPSX. */
-s8 D_8009CE30;
+s8 g_BattleHaltTimer;
 unsigned char g_AyaStatusEffectTimer;
 
 
 static inline u8 Battle_GetReactionTimer(void) {
-    return D_8009D234[0];
+    return g_BattleEnemyHoldTimer[0];
 }
 
 static inline void Battle_SetReactionTimer(u8 value) {
-    D_8009D234[0] = value;
+    g_BattleEnemyHoldTimer[0] = value;
 }
 
 void Menu_MainUpdate(s32 arg0) {
@@ -254,7 +254,7 @@ void Menu_MainUpdate(s32 arg0) {
         if (D_8009D254->actionMode != 0x12) {
             ((void (*)(BattleEntity *, int, int))Entity_SetActionMode)(D_8009D254, 0x12U, var_a2);
         }
-        if (D_8009CE30 == 0x5A) {
+        if (g_BattleHaltTimer == 0x5A) {
             s32 reset_flags;
             u32 reset_operand;
 
@@ -263,7 +263,7 @@ void Menu_MainUpdate(s32 arg0) {
             reset_operand = ~0x2000U;
             reset_flags &= reset_operand;
             reset_operand = (u32) g_ActiveActor;
-            D_8009CE30 = 0;
+            g_BattleHaltTimer = 0;
             *temp_s2 = reset_flags;
             ((Combatant *)reset_operand)->exp_or_acc = 0x10000;
             D_800B0158[0] = 0xFF;
@@ -291,7 +291,7 @@ void Menu_MainUpdate(s32 arg0) {
             D_800B01B9[0] = 0x13;
             D_800B01BA[0] = 1;
         } else {
-            D_8009CE30 += 1;
+            g_BattleHaltTimer += 1;
             D_8009D254->motionX = 0;
             D_8009D254->motionY = 0;
             D_8009D254->motionZ = 0;
@@ -707,13 +707,13 @@ void Menu_MainUpdate(s32 arg0) {
     if (temp_a0_4 <= 0) {
         *temp_s2 |= 0x2000;
         if (Pad_GetMenuPressedBitOrDisabled() != g_BattleActionIndex) {
-            if (D_8009D200 != -1) {
-                Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
-                D_8009D200 = -1;
+            if (g_BattleAttackPmSlot != -1) {
+                Pm_SendCmd(g_BattleAttackPmSlot, 0, 0, 2, 0, 0);
+                g_BattleAttackPmSlot = -1;
             }
-            if (D_8009D2FC != -1) {
-                Pm_SendCmd(D_8009D2FC, 0, 0, 2, 0, 0);
-                D_8009D2FC = -1;
+            if (g_BattleImpactPmSlot != -1) {
+                Pm_SendCmd(g_BattleImpactPmSlot, 0, 0, 2, 0, 0);
+                g_BattleImpactPmSlot = -1;
             }
         }
         Battle_FlushScriptSounds();
@@ -889,13 +889,13 @@ void Menu_MainUpdate(s32 arg0) {
         }
         Draw_ResetTextboxes();
         if (Pad_GetMenuPressedBitOrDisabled() != g_BattleActionIndex) {
-            if (D_8009D200 != -1) {
-                Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
-                D_8009D200 = -1;
+            if (g_BattleAttackPmSlot != -1) {
+                Pm_SendCmd(g_BattleAttackPmSlot, 0, 0, 2, 0, 0);
+                g_BattleAttackPmSlot = -1;
             }
-            if (D_8009D2FC != -1) {
-                Pm_SendCmd(D_8009D2FC, 0, 0, 2, 0, 0);
-                D_8009D2FC = -1;
+            if (g_BattleImpactPmSlot != -1) {
+                Pm_SendCmd(g_BattleImpactPmSlot, 0, 0, 2, 0, 0);
+                g_BattleImpactPmSlot = -1;
             }
         }
         Battle_FlushScriptSounds();

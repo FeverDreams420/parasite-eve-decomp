@@ -371,12 +371,10 @@ D_80084B20 = 0x80084B20;
 D_80084B78 = 0x80084B78;
 D_80084C4C = 0x80084C4C;
 D_8008E23C = 0x8008E23C;
-g_EntityTexLbaStartTbl = 0x800930D8;
 g_ActiveSaveMenu = 0x8009D030;
 D_8009D058 = 0x8009D058;
 g_InvLookupPtr = 0x8009D0B4;
 g_CurrentInput = 0x8009D0F0;
-g_ActiveDrawBuffer = 0x8009D100;
 g_PumpSFXLoop = 0x8009D180;
 D_8009DCCC = 0x8009DCCC;
 D_8009DCCE = 0x8009DCCE;
@@ -501,7 +499,6 @@ g_CdEnqueueCmdQueue = 0x800A3610;
 g_CdReadInProgress = 0x8009B6CC;
 g_CdStreamRingSize = 0x800C20C4;
 g_CdStreamRingWritePtr = 0x800BE9EC;
-g_DrawPacketBufferBase = 0x8009D104;
 g_EntityAllocBlockTable = 0x800A7624;
 g_FontGlyphCode = 0x80091A1E;
 g_FontGlyphCodeTable = 0x8009EE22;
@@ -512,7 +509,6 @@ g_MemCardCounterIrqQueueNode = 0x800A5AB0;
 g_MemCardObjStorage = 0x800A5B70;
 g_MemCardPort1DebounceTimer = 0x800A5AC0;
 g_MemCardPort2DebounceTimer = 0x800A5AC4;
-g_OtListTail = 0x8009D11C;
 g_PadStateMirrorWord3 = 0x800A76DE;
 g_CurrentStoryDay = 0x800B0CE4;
 g_PendingStoryDay = 0x800B0CE5;
@@ -533,8 +529,6 @@ g_StStreamModeFlag = 0x800A801C;
 g_StStreamReadState = 0x800A5D54;
 g_StStreamState = 0x800A8018;
 g_StatLevelOffsetType3 = 0x800A1B3C;
-g_MemCardFilenameBuf = 0x8009EE70;
-g_MemCardFilenameFormatPtr = 0x80092224;
 // g_AyaStatOffense: rando:AyaOffenseStat ghack:AyaOffense
 g_AyaStatOffense = 0x800C0E2A;
 // g_AyaStatDefense: rando:AyaDefenseStat ghack:AyaDefense
@@ -547,7 +541,6 @@ g_AyaStatStatusRecovery = 0x800C0E30;
 g_AyaStatItemCapacity = 0x800C0E34;
 g_FontGlyphLbaTbl = 0x80093176;
 g_EntityTexLbaEndTbl = 0x800930DA;
-g_RoomDataLbaTbl = 0x80093378;
 g_RoomDataOffsetTbl = 0x8009337C;
 _spu_mem_mode_plus = 0x8009B424;
 _spu_mem_mode_unit = 0x8009B428;
@@ -563,7 +556,6 @@ D_800C8A18 = 0x800C8A18;
 // g_GameThrottle: rando
 g_GameThrottle = 0x80073A9C;
 // g_GameClock: rando
-g_GameClock = 0x8009CDEC;
 // g_DeathAnimTimer: rando
 g_DeathAnimTimer = 0x8009CE70;
 // g_DeathAnimation: rando

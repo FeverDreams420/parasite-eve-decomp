@@ -372,12 +372,12 @@ void Akao_Cmd_F1(void) {
 
 int Spu_PollOrWaitSeqBusy(int mode) {
     if (mode == 0) {
-        while (D_8009D2E0 & 1) {
+        while (g_AkaoSeqBusyFlags & 1) {
         }
         return 0;
     }
 
-    return D_8009D2E0 & 1;
+    return g_AkaoSeqBusyFlags & 1;
 }
 
 int Spu_UploadSampleBlockBlocking(void *arg0, int arg1) {
@@ -501,9 +501,9 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
         rebase_instruments = instruments;
         rebase_address = address;
         next_address = address + upload_size;
-        D_8009D2BC = next_address;
+        g_AkaoInstrumentUploadAddress = next_address;
         remaining_payload = payload_size - upload_size;
-        D_8009D2E4 = remaining_payload;
+        g_AkaoInstrumentUploadRemaining = remaining_payload;
         Spu_RebaseStreamAddrs(rebase_instruments, rebase_address, count);
         address_offset = address == 0x8000 ? 0x20 : 0x50;
         address_offset <<= 6;
@@ -517,15 +517,15 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
             instruments += 4;
         } while (upload_size);
         g_AkaoStreamUploadMode &= ~1U;
-        return D_8009D2E4;
+        return g_AkaoInstrumentUploadRemaining;
     }
-    SpuSetTransferStartAddr(D_8009D2BC);
+    SpuSetTransferStartAddr(g_AkaoInstrumentUploadAddress);
     upload_size = available;
-    if (upload_size >= D_8009D2E4) upload_size = D_8009D2E4;
+    if (upload_size >= g_AkaoInstrumentUploadRemaining) upload_size = g_AkaoInstrumentUploadRemaining;
     Spu_UploadWithPrepare(input, upload_size);
-    D_8009D2BC += upload_size;
-    D_8009D2E4 -= upload_size;
-    return D_8009D2E4;
+    g_AkaoInstrumentUploadAddress += upload_size;
+    g_AkaoInstrumentUploadRemaining -= upload_size;
+    return g_AkaoInstrumentUploadRemaining;
 }
 
 int Spu_SetStreamModeB(void) {
@@ -1230,7 +1230,7 @@ void Akao_SetVoiceKeyOff(AkaoTrack *voice, u32 voice_mask, int index) {
 
     if ((flags & AKAO_TRACK_FLAG_10) != 0) {
         int pitch;
-        value = D_8009D2CE;
+        value = g_AkaoGlobalPitchScale;
         pitch = voice[-1].pitch + voice->pitch_lfo_value + (s16)(voice->voice_mask_a >> 16);
         if (value != 0) {
             if (value < 0x80) {
@@ -1243,7 +1243,7 @@ void Akao_SetVoiceKeyOff(AkaoTrack *voice, u32 voice_mask, int index) {
         voice->update_flags |= AKAO_VOICE_PARAM_PITCH;
     } else if ((voice->update_flags & AKAO_VOICE_PARAM_PITCH) != 0) {
         int pitch;
-        value = D_8009D2CE;
+        value = g_AkaoGlobalPitchScale;
         pitch = voice->pitch_base + voice->pitch_lfo_value + (s16)(voice->voice_mask_a >> 16);
         if (value != 0) {
             if (value < 0x80) {

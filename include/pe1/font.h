@@ -67,7 +67,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FontGlyphLoadState, buffer) == 0x94,
                   font_glyph_load_buffer_offset);
 
 extern FontGlyphSelectionState g_FontSelectionState;
-extern FontGlyphTable D_8009ECD8;
+extern FontGlyphTable g_FontActiveGlyphTable;
 extern u8 *D_800B0E6C;
 extern u16 D_80093176[2];
 

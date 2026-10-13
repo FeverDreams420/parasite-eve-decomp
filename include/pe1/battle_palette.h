@@ -11,7 +11,7 @@ extern u32 D_800915E0[];
 extern unsigned int g_GameStateFlags;
 extern unsigned int D_8009D2E8;
 extern u8 g_EntityInstanceCounter;
-extern s8 D_8009D2A0;
+extern s8 g_BattleLiveEnemyCount;
 
 void Battle_FlushScriptSounds(void);
 void BattleCmd_SyncActiveAmmo(void);

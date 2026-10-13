@@ -2178,7 +2178,7 @@ boundary, not evidence of an original object boundary.
 
 Matching debt: 11 palette register pins, eight empty compiler barriers, two
 gotos and a 416-byte unused stack reservation. A signed one-byte matching
-view preserves the retail `LB` of `D_8009D2A0`; wide declarations elsewhere
+view preserves the retail `LB` of `g_BattleLiveEnemyCount`; wide declarations elsewhere
 preserve absolute references and do not describe real arrays. Separate
 player/frame and read/write views retain retail reloads. Each pin and barrier
 was removed independently on darwine: the menu-open barrier was redundant

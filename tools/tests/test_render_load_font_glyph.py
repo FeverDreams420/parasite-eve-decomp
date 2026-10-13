@@ -49,7 +49,7 @@ class RenderLoadFontGlyphTests(unittest.TestCase):
                            cwd=ROOT, check=True, capture_output=True)
             (work / "glyph.ld").write_text(
                 "D_80093176 = 0x80093176;\n"
-                "D_8009ECD8 = 0x8009ECD8;\n"
+                "g_FontActiveGlyphTable = 0x8009ECD8;\n"
                 "D_800B0DD8 = 0x800B0DD8;\n"
                 "D_800B0E6C = 0x800B0E6C;\n"
                 "CdRom_ReadSectorsFromLba = 0x8006E6A8;\n"

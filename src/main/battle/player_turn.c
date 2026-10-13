@@ -14,7 +14,7 @@ u8 D_8009CE39;
 u8 D_8009CE3B;
 u8 g_BattleActionQueueCount;
 u8 g_BattleActionIndex;
-int D_8009D200;
+int g_BattleAttackPmSlot;
 s16 g_BattlePlayerAimHeight;
 
 int Battle_StepCharacterAction(BattleInitSlot *slot);
@@ -73,9 +73,9 @@ void Battle_UpdatePlayerTurn(void)
         g_BattleActionIndex++;
         if (g_BattleActionIndex != g_BattleActionQueueCount) return;
         if (g_ActiveActor->action->actionCode.actionId != 8)
-            Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
+            Pm_SendCmd(g_BattleAttackPmSlot, 0, 0, 2, 0, 0);
         {
-            int sound = D_8009D2FC;
+            int sound = g_BattleImpactPmSlot;
             if (sound != -1)
                 Pm_SendCmd(sound, 0, 0, 2, 0, 0);
         }

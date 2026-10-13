@@ -135,7 +135,7 @@ address,old_name,name,review,proposer_confidence,evidence
 0x80092428,D_80092428,g_InvSortRankTableC,ok,likely,Inv_SortInventoryByMode case 0 assigns it to g_InvSortRankTable; same 24-entry kind-rank layout as g_InvSortRankTableA.
 0x80092440,D_80092440,g_InvSortRankTableD,ok,likely,Inv_SortInventoryByMode case 2 assigns it to g_InvSortRankTable; same 24-entry kind-rank layout as g_InvSortRankTableA.
 0x800930A8,D_800930A8,g_WipeRectEdgeList,ok,verified,"Draw_EmitWipeBarRect, Draw_AllocColorGradient and Draw_AllocColorTriGradient pass it to Draw_EmitWipeBar; bytes 00 01 00 02 FF 01 03 02 03 FF are vertex-index pairs of a quad outline with 0xFF list terminators."
-0x800930DA,D_800930DA,g_PeImageSectorBoundsNext,ok,likely,"Scene_LoadEntityTexture(s) read D_800930DA[i] - D_800930D8[i] as the sector count, so it is the same table one entry ahead."
+0x800930DA,D_800930DA,g_PeImageSectorBoundsNext,ok,likely,"Scene_LoadEntityTexture(s) read D_800930DA[i] - g_PeImageSectorTable[i] as the sector count, so it is the same table one entry ahead."
 0x800930E4,D_800930E4,g_PeImageTimTexturesEndSector,ok,likely,Asset_LoadTimTextures uses it as the end of the TIM texture sector range.
 0x80093166,D_80093166,g_BootDisplayDataLbaTbl,fix,likely,"disc_tables.c:270-272 reads it as a sector range into D_80011610 and boot_display uses g_MainAssetLbaTbl[0]-D_80093166 as image offset (image_display.c:236), i.e. display data, not audio."
 0x8009316C,D_8009316C,g_SmallTexLbaTbl,fix,likely,"disc_tables.c:203 loads object_texture_blob from it exactly when bit 0x2000 is clear, mirroring g_LargeTexLbaTbl; 'ObjectTex' does not distinguish them."
@@ -268,7 +268,7 @@ address,old_name,name,review,proposer_confidence,evidence
 0x8009CECC,D_8009CECC,g_TextboxHighlightColorB,ok,likely,Blue component of the textbox highlight colour.
 0x8009D070,D_8009D070,g_InvCompareLeftItem,ok,likely,Left item pointer of the inventory sort comparison.
 0x8009D074,D_8009D074,g_InvCompareRightItem,ok,likely,Right item pointer of the inventory sort comparison.
-0x8009D0A8,D_8009D0A8,g_InvAmmoSortStatIndex,fix,likely,"armor_capacity.c:638 copies it to g_InvSortStatIndex in Inv_SortAmmoSubrange (a stat index 0..2 used by the comparator at :560), mirroring D_8009D0A4 for weapons."
+0x8009D0A8,D_8009D0A8,g_InvAmmoSortStatIndex,fix,likely,"armor_capacity.c:638 copies it to g_InvSortStatIndex in Inv_SortAmmoSubrange (a stat index 0..2 used by the comparator at :560), mirroring g_InvWeaponSortStatIndex for weapons."
 0x8009D0CC,D_8009D0CC,g_InvRebuildFilterMode,fix,likely,game_data.c:909-911 sets it under INV_CMD_SET_REBUILD_FILTER and 689/708 branch on it to pick the list mask; 'BonusSlot' is unproven.
 0x8009D0D0,D_8009D0D0,g_InvRebuildMinFirstStat,fix,likely,"game_data.c:697 compares baseStats[0]+bonusStats[0] against it (beside minSecond/minThird) and :911 sets it from INV_CMD_SET_REBUILD_FILTER; it is a minimum stat, not a slot threshold."
 0x8009D0F8,D_8009D0F8,g_MenuInputRepeatTimer,fix,likely,"input_queue.c:200-212 resets to 0x10 on change, decrements 2 per call and triggers repeat when negative."

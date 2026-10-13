@@ -21,19 +21,19 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-s8 D_8009CE30;
-u16 D_8009D298;
+s8 g_BattleHaltTimer;
+u16 g_BattleHitActionPending;
 u8 g_BattleActionAnimModes[4];
 u8 D_8009CE39;
 u8 D_8009CE3A;
 u8 D_8009CE3B;
 s8 g_BattleTargetCycleMode;
-u8 D_8009CE60;
+u8 g_BattleSlotCancelPending;
 u8 g_BattleRemainingActions;
-int D_8009D200;
-s32 D_8009D208;
+int g_BattleAttackPmSlot;
+s32 g_BattleAilmentPmSlot;
 s32 g_BattleEffectPmSlot;
-u8 D_8009D294;
+u8 g_BattleHitPending;
 u8 D_8009D2D8;
 unsigned char g_BattleActionQueueCount;
 s8 g_BattleTargetIndex;
@@ -56,7 +56,7 @@ void Battle_BeginPlayerAction(void) {
     *entityFlags = flags;
     stateFlags = &actor->stateFlags;
     *stateFlags |= 0x10000;
-    D_8009D298 = 0;
+    g_BattleHitActionPending = 0;
     Entity_SetActionMode(player, 0x12);
     Battle_FlushScriptSounds();
 }
@@ -100,7 +100,7 @@ void Battle_HaltOnPositiveX(void) {
         state2 = g_ActiveActor;
         actor2 = (BattleEntity *)g_PlayerEntity;
         flags = state2->stateFlags;
-        D_8009CE30 = 0;
+        g_BattleHaltTimer = 0;
         flags |= 0x2000;
         state2->stateFlags = flags;
         actor2->entityFlags &= ~0x100;
@@ -115,9 +115,9 @@ void Battle_InitEntityColors(void) {
     Entity_SetActionMode(D_8009D254, g_ActiveActor->actionMode12);
     stateFlags = &g_ActiveActor->stateFlags;
     flags = *stateFlags;
-    D_8009CE30 = 0;
+    g_BattleHaltTimer = 0;
     *stateFlags = flags & ~0x2000;
-    D_8009D298 = 0;
+    g_BattleHitActionPending = 0;
     D_800B0158[0] = 0xFF;
     D_800B0159[0] = 0x3D;
     D_800B015A[0] = 0x81;
@@ -173,10 +173,10 @@ void Battle_Init(void)
     Pm_StopAll();
     index = 0;
     records = g_BattleActionQueue;
-    D_8009D200 = -1;
-    D_8009D2FC = -1;
+    g_BattleAttackPmSlot = -1;
+    g_BattleImpactPmSlot = -1;
     g_BattleEffectPmSlot = -1;
-    D_8009D208 = -1;
+    g_BattleAilmentPmSlot = -1;
 
     do {
         g_BattleActionQueue[index].actor = 0;
@@ -189,7 +189,7 @@ void Battle_Init(void)
     config0 = *action;
     g_BattleTargetIndex = 0;
     g_BattleTargetCycleMode = 0;
-    D_8009D294 = 0;
+    g_BattleHitPending = 0;
     config1 = *action;
     D_8009D2D8 = (config0->turnWord >> 4) & 3;
     config2 = *action;
@@ -206,7 +206,7 @@ void Battle_Init(void)
     D_8009D1CE = 0;
     g_BattleResultFlags &= ~0x300;
     Battle_InitFadeVars();
-    D_8009CE60 = 0;
+    g_BattleSlotCancelPending = 0;
 }
 
 unsigned char g_BattleActionQueueCount;
@@ -241,7 +241,7 @@ int Pad_IsMenuConfirmAvailable(void) {
 /* MASPSX_FORCE_G0 keeps the battle pointers and the effect result absolute,
  * as retail; the COMMON asset result supplies the small-data metadata of the
  * one $gp-relative word. */
-int D_8009D200;
+int g_BattleAttackPmSlot;
 
 void Battle_DispatchEntityEffect(void) {
     int action_id;
@@ -260,12 +260,12 @@ void Battle_DispatchEntityEffect(void) {
         if ((action->attackWord & 0x3FF) == 0) {
             BattleCmd_CommitAmmoAndUpdate(action);
         }
-        D_8009D200 = Scene_LoadRoomAssets(3, D_8009D254);
+        g_BattleAttackPmSlot = Scene_LoadRoomAssets(3, D_8009D254);
         return;
     }
 
     if (action_id == 8) {
-        D_8009D2FC = Scene_LoadRoomAssets(6, D_8009D254);
+        g_BattleImpactPmSlot = Scene_LoadRoomAssets(6, D_8009D254);
         return;
     }
 
@@ -290,8 +290,8 @@ void Battle_DispatchEntityEffect(void) {
         next_id = 4;
     }
 
-    D_8009D200 = result;
-    D_8009D2FC = Scene_LoadRoomAssets(next_id, next_entity);
+    g_BattleAttackPmSlot = result;
+    g_BattleImpactPmSlot = Scene_LoadRoomAssets(next_id, next_entity);
 }
 
 void Battle_CheckEvasion(BattleEntity *actor, BattleEvasionOutcome *outcome,

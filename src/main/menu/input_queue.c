@@ -322,10 +322,10 @@ int g_TextCursorY;
 int g_DrawGradientBlendColor;
 int *g_TextCursorStackPtr;
 DrawFrameBuffer *g_DrawCurrentFrameBuffer;
-u8 *D_8009D100;
-u8 *D_8009D104;
+u8 *g_DrawPacketCursor;
+u8 *g_DrawPacketArenaBase;
 u32 *g_DrawOrderingTableBase;
-u32 *D_8009D11C;
+u32 *g_DrawOrderingTableEntry;
 void Draw_InitBuffers(void) {
     g_DrawFrameBuffers[0].frontBufferBase = g_RenderFrontBufferBase[0];
     g_DrawFrameBuffers[1].frontBufferBase = g_RenderBackBufferBase[0];

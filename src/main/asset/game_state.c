@@ -90,8 +90,8 @@ int Render_InitDisplayLists(int mode)
      * not reproducible with structured loops in stock GCC 2.7.2 (loop.c
      * hoists the read constants out of the restart path). */
 retryNotice:
-    while (CdRom_ReadSectorsFromLba(g_GameState.pe_image_base_lba + D_800930D8[0],
-               g_GameState.loaded_scene_assets, D_800930D8[1] - D_800930D8[0]) == -1)
+    while (CdRom_ReadSectorsFromLba(g_GameState.pe_image_base_lba + g_PeImageSectorTable[0],
+               g_GameState.loaded_scene_assets, g_PeImageSectorTable[1] - g_PeImageSectorTable[0]) == -1)
         ;
     for (;;) {
         status = CdRom_PollReady();
@@ -101,8 +101,8 @@ retryNotice:
             goto retryNotice; /* Recorded debt: CD retry restart (goto). */
     }
 retryFog:
-    while (CdRom_ReadSectorsFromLba(g_GameState.pe_image_base_lba + D_800930D8[1],
-               g_GameState.scene_load_scratch, D_800930D8[2] - D_800930D8[1]) == -1)
+    while (CdRom_ReadSectorsFromLba(g_GameState.pe_image_base_lba + g_PeImageSectorTable[1],
+               g_GameState.scene_load_scratch, g_PeImageSectorTable[2] - g_PeImageSectorTable[1]) == -1)
         ;
     for (;;) {
         status = CdRom_PollReady();

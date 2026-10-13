@@ -25,10 +25,10 @@ u32 _spu_rev_offsetaddr;
 int _spu_AllocBlockNum, _spu_AllocLastNum, _spu_trans_mode;
 SPU_MALLOC *_spu_memList;
 static SPU_MALLOC memListSentinel;
-int _spu_transMode, D_8009B388, D_8009B3B4, D_8009B3B0, D_8009B3E8;
+int _spu_transMode, _spu_keystat, _spu_RQmask, _spu_RQvoice, _spu_env;
 static int phase, expectedMode;
 static int *late[] = {&_spu_AllocBlockNum, &_spu_AllocLastNum, &_spu_trans_mode,
-    &_spu_transMode, &D_8009B388, &D_8009B3B4, &D_8009B3B0, &D_8009B3E8};
+    &_spu_transMode, &_spu_keystat, &_spu_RQmask, &_spu_RQvoice, &_spu_env};
 int ResetCallback(void) { assert(phase == 0); phase = 1; return 0; }
 int _spu_init(int mode) { assert(phase == 1 && mode == expectedMode); phase = 2; return 0; }
 void SpuStart(void) {

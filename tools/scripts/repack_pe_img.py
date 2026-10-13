@@ -65,12 +65,12 @@ DD_RE = re.compile(
 # without touching this tool.
 TABLE_SYMBOLS = {
     # u16 sector boundaries of the boot, font, menu and effect assets.
-    "asset": ("g_PeImageSectorTable", "D_800930D8"),
+    "asset": ("g_PeImageSectorTable",),
     # u32 base sector, then u16 sector offsets of the stream/sound ranges.
     "stream": ("g_SceneSectorDirectory",),
     # 8-byte rows per map: u32 start sector, then scratch:8, texture:12,
     # room:12 sector counts (SceneRoomSectorRange).
-    "room": ("g_RoomSectorTable", "D_80093378"),
+    "room": ("g_RoomSectorTable",),
 }
 ROOM_PARTS = (("scratch", 0, 8), ("texture", 8, 12), ("room", 20, 12))
 POINTERS = Path(__file__).resolve().parents[2] / "linkers" / "USA" / "pe_img_pointers.txt"

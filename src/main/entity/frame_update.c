@@ -224,8 +224,8 @@ void Entity_FrameUpdate(void) {
                 g_GameStateBlock.flags |= 4;
                 g_GameState.flags |= 0x9000;
             }
-            D_8009D2A4 = Menu_RunFrameWithArg((int)&g_BattleMenuActionRecord);
-            if (D_8009D2A4 != 0) {
+            g_MenuFrameCommand = Menu_RunFrameWithArg((int)&g_BattleMenuActionRecord);
+            if (g_MenuFrameCommand != 0) {
                 Render_BeginSceneLoad();
                 g_GameStateBlock.flags &= ~4;
                 g_GameState.flags &= ~0x9000;

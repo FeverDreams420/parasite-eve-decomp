@@ -506,7 +506,7 @@ void Menu_DrawWeaponModSlots(s32 arg0) {
             Draw_OffsetCursor(0x12, 2);
             Draw_AllocSprite(0x22U);
             Draw_OffsetCursor(0xC, -2);
-            var_a0 = D_800922CC[temp_s0];
+            var_a0 = g_MenuModSlotThirdGlyphs[temp_s0];
             Draw_AllocSprite(var_a0);
         }
     } else {
@@ -521,7 +521,7 @@ void Menu_DrawWeaponModSlots(s32 arg0) {
             Draw_OffsetCursor(0x12, 4);
             Draw_AllocSprite(0x22U);
             Draw_OffsetCursor(0xC, -4);
-            Draw_AllocSprite(D_800922CC[temp_s0]);
+            Draw_AllocSprite(g_MenuModSlotThirdGlyphs[temp_s0]);
             var_a0 = 0x68;
             Draw_AllocSprite(var_a0);
         }

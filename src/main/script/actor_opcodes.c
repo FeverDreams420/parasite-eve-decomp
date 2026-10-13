@@ -1124,7 +1124,7 @@ int Script_RunInvCommand(ScriptInvCommandArgs *args) {
         return 0;
     }
 
-    result = D_8009D2A4;
+    result = g_MenuFrameCommand;
     if (result != 0) {
         *args->result = result;
         g_ScriptNodePool->flags &= 0xFFDF;

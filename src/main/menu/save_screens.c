@@ -29,7 +29,7 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-int D_8009CF4C;
+int g_SaveSelectedSlotState;
 int D_8009CFA4;
 int g_InvItemUsableFlag;
 int g_InvSelectedItemIndex;
@@ -666,10 +666,10 @@ s32 Menu_StepSaveSelect(MenuWidgetNode *arg0, s32 arg1) {
             if (temp_v0_2 != NULL) {
                 temp_cf50 = g_McDialogMode;
                 if ((temp_cf50 != 0) || (temp_v0_2->state != MEMCARD_SLOT_EMPTY)) {
-                    D_8009CF4C = temp_v0_2->state;
+                    g_SaveSelectedSlotState = temp_v0_2->state;
                     if (temp_cf50 != 0) {
                         Save_SetTitleStyleFlag(g_MenuMemCardConfirmPending);
-                        if (D_8009CF4C != MEMCARD_SLOT_EMPTY) {
+                        if (g_SaveSelectedSlotState != MEMCARD_SLOT_EMPTY) {
                             temp_v0_3 = MenuWidget_CreateSimpleNode(0x29, temp_s2, 0, 1);
                             temp_s2_2 = MenuWidget_CreateNode(0x29, temp_v0_3, temp_v0_3);
                             temp_v0_3->draw = Menu_DrawItemLabel;

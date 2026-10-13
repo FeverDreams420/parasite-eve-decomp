@@ -20,7 +20,7 @@ s16 *g_InvItemPtr;
 s32 g_InvSlotLimit;
 u32 *g_InvSelectionBits;
 s32 g_InvSelectionBitWords;
-s32 D_8009D080;
+s32 g_InvActiveListSlotCount;
 s16 *g_InvActiveItemList;
 s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
@@ -317,13 +317,13 @@ int Inv_StepScrollDisplay2(int special) {
                 }
             }
         }
-        D_8009D080 = 80 + found;
+        g_InvActiveListSlotCount = 80 + found;
     } else {
         g_InvActiveItemList = g_WayneStorageItems;
-        D_8009D080 = 100;
+        g_InvActiveListSlotCount = 100;
     }
     g_InvActiveListOverride = g_InvActiveItemList;
-    return g_InvOverrideSlotLimit = D_8009D080;
+    return g_InvOverrideSlotLimit = g_InvActiveListSlotCount;
 }
 
 void Menu_DrawArmorItemDetail(int slot) {

@@ -31,7 +31,7 @@ typedef union AkaoInstrumentAddress {
 } AkaoInstrumentAddress;
 /* Instrument records replaced by Spu_UploadSampleBlock. */
 extern AkaoInstrument g_AkaoInstrumentTable[];
-extern unsigned g_AkaoStreamUploadMode, g_AkaoStreamAAddress, g_AkaoStreamARemaining, D_8009D2BC, D_8009D2E4;
+extern unsigned g_AkaoStreamUploadMode, g_AkaoStreamAAddress, g_AkaoStreamARemaining, g_AkaoInstrumentUploadAddress, g_AkaoInstrumentUploadRemaining;
 
 extern void *g_AkaoBgmHandle[];
 

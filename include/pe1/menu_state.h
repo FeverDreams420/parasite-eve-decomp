@@ -102,7 +102,7 @@ extern unsigned char g_MenuBlendColorPanelPoints[];
  *   g_MenuWidgetCurrentNode  MenuWidget node-pool pointer : NULL in field -> 0x800a2370 in menu
  *   g_MenuWidgetFreeListHead  active widget/draw pointer    : 0x800a22e0  -> 0x800a2640
  *   g_MenuDrawPhase  menu draw phase / step        : field 0x01  -> menu 0x08
- *   D_8009D100  active draw buffer pointer     : switches with the layer
+ *   g_DrawPacketCursor  active draw buffer pointer     : switches with the layer
  *   (The g_DrawScratchBuffer..g_MenuWidgetSavedNode cluster is the MenuWidget pool head/free/tail,
  *    managed by MenuWidget_InitPool / MenuWidget_CreateNode; non-null only
  *    while a menu owns it -> a clean "is a menu open?" test.)

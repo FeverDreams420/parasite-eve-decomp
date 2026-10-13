@@ -18,7 +18,7 @@
  * display until the expected disc is in the drive.
  */
 
-extern u16 D_800930D8[];
+extern u16 g_PeImageSectorTable[];
 extern s32 g_ActiveDrawSlot;
 /* Ordering table of each draw slot (Boot_InitMemoryLayout). */
 extern RenderBufferPrefix D_800B0E38;

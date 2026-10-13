@@ -44,19 +44,16 @@ typedef union DrawPrimLink {
 } DrawPrimLink;
 
 /* Semantic C names for the existing, independently addressed linker objects. */
-extern unsigned char *D_8009D100;
-extern unsigned char *D_8009D104;
+extern unsigned char *g_DrawPacketCursor;
+extern unsigned char *g_DrawPacketArenaBase;
 extern int g_DrawBufferIndex;
 extern unsigned int g_DrawPrimColor;
 extern unsigned int g_DrawColorShaded;
-extern unsigned int *D_8009D11C;
+extern unsigned int *g_DrawOrderingTableEntry;
 
-#define g_DrawPacketCursor D_8009D100
-#define g_DrawPacketArenaBase D_8009D104
 #define g_DrawColorSelect g_DrawTextDimmed
 #define g_DrawPrimaryColor g_DrawPrimColor
 #define g_DrawAlternateColor g_DrawColorShaded
-#define g_DrawOrderingTableEntry D_8009D11C
 #define g_TextCursorStack g_TextCursorStackPtr
 #define g_DrawSpriteX g_TextCursorX
 #define g_DrawSpriteY g_TextCursorY

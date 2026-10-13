@@ -17,7 +17,7 @@ void Seq_GetGlobalPitch(unsigned int *out)
 }
 
 void Seq_ApplyGlobalPitch(void) {
-    unsigned short value = D_8009D2B6;
+    unsigned short value = g_AkaoCdInputVolume;
     SpuCommonAttr *regs;
 
     regs = (SpuCommonAttr *)D_800C0D90;
@@ -62,16 +62,16 @@ void Spu_StepReverbLoad(void)
     int count;
     AkaoTrack *track;
     AkaoSequencerBank *bank;
-    if ((++D_8009CDEC & 3) != 0)
+    if ((++g_AkaoGlobalSlideTick & 3) != 0)
         return;
     if (g_AkaoGlobalPitchSlideCounter != 0) {
         g_AkaoGlobalPitchSlideCounter--;
-        D_8009D2B4 += g_AkaoGlobalPitchSlideStep;
+        g_AkaoCdInputVolumeAccum += g_AkaoGlobalPitchSlideStep;
         Seq_ApplyGlobalPitch();
     }
     if (g_AkaoGlobalD2D0SlideCounter != 0) {
         g_AkaoGlobalD2D0SlideCounter--;
-        D_8009D2D0 += g_AkaoGlobalD2D0SlideStep;
+        g_AkaoTempoScaleAccum += g_AkaoGlobalD2D0SlideStep;
     }
     if (g_AkaoGlobalD2CCSlideCounter != 0) {
         oldGlobalParam = g_AkaoGlobalPitchDepth;
@@ -156,7 +156,7 @@ void Akao_Tick(void)
 
     Akao_ProcessVoiceQueue();
     if (D_8009D2C8->timing.active_voice_mask) {
-        scale = D_8009D2D2;
+        scale = g_AkaoTempoScale;
         tempo = D_8009D2C8->timing.tempo.half.integer;
         if (scale) {
             if (scale < 0x80)
@@ -219,7 +219,7 @@ void Akao_Tick(void)
     if (D_8009D2C8[1].timing.active_voice_mask) {
         D_8009D2C8 = D_8009D2C8 + 1;
         tempo = D_8009D2C8->timing.tempo.half.integer;
-        scale = D_8009D2D2;
+        scale = g_AkaoTempoScale;
         if (scale) {
             if (scale < 0x80)
                 tempo += (tempo * scale) >> 7;

@@ -24,12 +24,12 @@ u8 *D_8009D084;
 s32 D_8009D088;
 s32 D_8009D08C;
 s32 D_8009D090;
-s32 D_8009D094;
+s32 g_InvSavedSelectionIndex1;
 s32 D_8009D098;
-s32 D_8009D09C;
+s32 g_InvSavedSelectionFromStorage1;
 s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
-s32 D_8009D0A4;
+s32 g_InvWeaponSortStatIndex;
 s32 g_InvAmmoSortStatIndex;
 unsigned char *g_InvSortRankTable;
 unsigned char *g_InvSortTypeRankTable;
@@ -257,8 +257,8 @@ static inline void RestoreList(int storage) {
 void Inv_BuildStorageDisplay(void) {
     RestoreList(D_8009D098);
     *LookupTrackedItem(D_8009D090) = g_InvSavedSelectionRecord0;
-    RestoreList(D_8009D09C);
-    *LookupTrackedItem(D_8009D094) = D_800A206C;
+    RestoreList(g_InvSavedSelectionFromStorage1);
+    *LookupTrackedItem(g_InvSavedSelectionIndex1) = D_800A206C;
 }
 
 static inline ItemDataRecord *LookupActiveItem(int index) {
@@ -594,7 +594,7 @@ void Inv_SortWeaponSubrange(void) {
     u16 tmpu;
 
     var_s0 = g_InvSortListBase;
-    g_InvSortStatIndex = D_8009D0A4;
+    g_InvSortStatIndex = g_InvWeaponSortStatIndex;
     mask = 0x1FE;
     if (var_s0 < g_InvSortListBase + g_InvSortListCount) {
         while (*(s16 *) var_s0 != 0) {
@@ -683,7 +683,7 @@ void Inv_SortInventoryByMode(s32 arg0, s32 arg1) {
         break;
     case 1:
         g_InvSortRankTable = g_InvSortRankTableA;
-        D_8009D0A4 = arg1;
+        g_InvWeaponSortStatIndex = arg1;
         break;
     case 2:
         g_InvSortRankTable = g_InvSortRankTableD;
@@ -752,7 +752,7 @@ void Inv_SortContainerItems(int arg0) {
 
 void Inv_SortInventoryItems(int arg0, int arg1) {
     if (arg0 != 0) {
-        D_8009D0A4 = arg1;
+        g_InvWeaponSortStatIndex = arg1;
         g_InvSortRankTable = g_InvSortRankTableA;
     } else {
         g_InvAmmoSortStatIndex = arg1;

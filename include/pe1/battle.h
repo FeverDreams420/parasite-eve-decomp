@@ -512,7 +512,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(BattleInitSlot, actionGeneration) == 6,
 extern BattleTarget g_BattleTargetList[];
 /* Incomplete array: retail reads the count absolutely in -G0 units. */
 extern s8 g_BattleTargetCount[];
-extern int D_8009D208; /* last scene asset/effect result selected by battle */
+extern int g_BattleAilmentPmSlot; /* last scene asset/effect result selected by battle */
 
 void Battle_SwapRecords(BattleTargetWords *records, int from, int to);
 void Battle_SortTargets(BattleTargetWords *records, s8 first, s8 last);

@@ -258,15 +258,15 @@ void Battle_DrawHPBar(void) {
                                     0x80, 0x80, 0x80);
         }
         for (i = 0; (u8)i < 10; i++) {
-            Draw_InitDrawModeSprtPacket(&D_8009E500[bufferIndex][(u8)i], hudPage);
-            BATTLE_SET_SPRITE_COLOR(BATTLE_SPRITE_SLOTS(D_8009E500, 10)[bufferIndex][(u8)i].sprite,
+            Draw_InitDrawModeSprtPacket(&g_BattleRemainingActionSprites[bufferIndex][(u8)i], hudPage);
+            BATTLE_SET_SPRITE_COLOR(BATTLE_SPRITE_SLOTS(g_BattleRemainingActionSprites, 10)[bufferIndex][(u8)i].sprite,
                                     0x80, 0x80, 0x80);
         }
-        Draw_InitDrawModeSprtPacket(&D_8009E768[bufferIndex], hudPage);
-        ammoLabel = &D_8009E768[bufferIndex].sprite;
+        Draw_InitDrawModeSprtPacket(&g_BattleAmmoLabelSprites[bufferIndex], hudPage);
+        ammoLabel = &g_BattleAmmoLabelSprites[bufferIndex].sprite;
         ammoLabel->u = 0x58;
         ammoLabel->v = 0xEF;
-        D_8009E768[bufferIndex].sprite.clut = hudClut;
+        g_BattleAmmoLabelSprites[bufferIndex].sprite.clut = hudClut;
         ammoLabel->width = 0x24;
         ammoLabel->height = 5;
         BATTLE_SET_SPRITE_COLOR(*ammoLabel, 0x80, 0x80, 0x80);
@@ -642,7 +642,7 @@ void Battle_DrawSpellName(void) {
             cC = g_ActiveDrawSlotRecord.slot;
             rFD = 0x1FD;
             t3.address = cC * 0x118;
-            tE = *(u16 *)(D_8009E360 + cC * 0x30);
+            tE = *(u16 *)(g_BattleStatusRowPosX + cC * 0x30);
             base.bytes = q508;
             t3.address = t3.address + base.address;
             t3.sprite->y = ys;
@@ -671,7 +671,7 @@ void Battle_DrawSpellName(void) {
     i = 0;
     {
         s32 tx;
-        tx = *(u16 *)(D_8009E360 + c * 0x30);
+        tx = *(u16 *)(g_BattleStatusRowPosX + c * 0x30);
         xs = tx + 0x40;
     }
     if (g_BattleRemainingActions != 0) {
@@ -824,8 +824,8 @@ void Battle_DrawStatusSymbol(s8 which) {
     packet = packetBase + packetOffset;
     ((RenderSpritePacket *)packet)->width = b[0];
     ((RenderSpritePacket *)packet)->height = b[1];
-    ((RenderSpritePacket *)packet)->x = *(u16 *)(D_8009E360 + slot * 48) + c[0];
-    ((RenderSpritePacket *)packet)->y = *(u16 *)(D_8009E360 + slot * 48 + 2) + c[1];
+    ((RenderSpritePacket *)packet)->x = *(u16 *)(g_BattleStatusRowPosX + slot * 48) + c[0];
+    ((RenderSpritePacket *)packet)->y = *(u16 *)(g_BattleStatusRowPosX + slot * 48 + 2) + c[1];
     packetBase -= 8;
     AddPrim(D_800B0E38.ordering[slot] + 4, (unsigned int *)(packetBase + packetOffset));
 }
@@ -844,11 +844,11 @@ void Battle_DrawATBGauge(void)
     y = g_BattleStatusBarTiles[g_ActiveDrawSlot * 3].y0 + 22;
     category = (g_ActiveActor->action->attackWord >> 20) & 3;
     ammo = Inv_GetWeaponCategoryAmmoBase(category - 1);
-    base = &D_8009E768[0].sprite;
+    base = &g_BattleAmmoLabelSprites[0].sprite;
     packet = (BattleGaugePrim *)((char *)base - PE1_OFFSETOF(BattleGaugePrim, sprite));
 
     packet += g_ActiveDrawSlot;
-    sprite = &D_8009E768[g_ActiveDrawSlot].sprite;
+    sprite = &g_BattleAmmoLabelSprites[g_ActiveDrawSlot].sprite;
     ammo += *(unsigned short *)&g_ActiveActor->action->attackWord & 0x3ff;
     sprite->x = g_BattleStatusBarTiles[g_ActiveDrawSlot * 3].x0 + 8;
     sprite->y = y;
@@ -891,7 +891,7 @@ void Battle_DrawStatusValue(int value, int yOffset)
     activeSlot = g_ActiveDrawSlot;
     savedValue = value;
     drawSlot = activeSlot;
-    markerBase = (u8 *)D_8009E888;
+    markerBase = (u8 *)g_BattleStatusValueMarkerSlots;
     anchorOffset = (drawSlot * 3) << 4;
     markerOffset = drawSlot * sizeof(BattleStatusMarkerBody);
     do {
@@ -908,7 +908,7 @@ void Battle_DrawStatusValue(int value, int yOffset)
             y = anchor.line->y0;
         }
         x = (marker->x =
-            *(u16 *)(D_8009E360 + anchorOffset) + 8);
+            *(u16 *)(g_BattleStatusRowPosX + anchorOffset) + 8);
         y += yOffset;
     } while (0);
     marker->y = y;
