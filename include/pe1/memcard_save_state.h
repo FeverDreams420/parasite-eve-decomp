@@ -36,12 +36,6 @@ void Save_LoadCardFileIntoRuntime(void);
 
 /* Card directory path "bu00:" whose port digit is patched before scans. */
 extern char *D_80092230;
-/* Save-file image written by the save flow. */
-extern u8 D_8009EED0[];
-extern int D_800A1704;
-extern int D_800A186C;
-extern int D_800A1864;
-extern MemCardPortState *D_800A1854;
 
 void MemCard_UpdateSaveState(int port);
 

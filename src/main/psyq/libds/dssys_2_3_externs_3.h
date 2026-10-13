@@ -1,4 +1,4 @@
 #ifndef PE1_EXT_828D2680AA2B
 #define PE1_EXT_828D2680AA2B
-extern s32 D_800A3604;
+extern int g_CdDsReadIndex;
 #endif /* PE1_EXT_828D2680AA2B */

@@ -35,7 +35,7 @@ BattleCmdEntry *BattleCmd_AllocSlot(void) {
     BattleCmdEntry *next;
 
     top = g_BattleCmdStackTop;
-    end = (BattleCmdEntry *)D_800A1B30;
+    end = (BattleCmdEntry *)g_StatScaleBase;
     if (top < end) {
         next = top + 1;
         g_BattleCmdStackTop = next;
@@ -496,7 +496,7 @@ void BattleCmd_LoadWeaponModifiers(void)
     ItemDataRecord *item;
     Inv_SelectActiveList(0);
     D_8009D018 = 0;
-    for (i = 6; i >= 0; --i) D_800A1B30[i] = 0;
+    for (i = 6; i >= 0; --i) g_StatScaleBase[i] = 0;
     /* Historical function name notwithstanding, this is the armor index. */
     item = Inv_LookupActiveListData(D_800C0E22[0]);
     if (item) {
@@ -505,10 +505,10 @@ void BattleCmd_LoadWeaponModifiers(void)
             /* These are decoded low-five-bit values, not full ItemMod IDs. */
             switch (mod) {
             case 8: case 9: case 10: D_8009D018 = 1 << (mod - 8); break;
-            case 11: D_800A1B30[0] = 3; break;
-            case 12: D_800A1B30[1] = 2; break;
-            case 13: D_800A1B30[5] = -2; break;
-            case 15: D_800A1B30[1] = -2; break;
+            case 11: g_StatScaleBase[0] = 3; break;
+            case 12: g_StatScaleBase[1] = 2; break;
+            case 13: g_StatScaleBase[5] = -2; break;
+            case 15: g_StatScaleBase[1] = -2; break;
             }
         }
     }
@@ -521,5 +521,5 @@ int Battle_GetScaledMaxHP(int level) {
     unsigned short maxHp;
 
     maxHp = Aya_LookupLevelStats(level)->hp;
-    return ((D_800A1B30[0] + 0x14) * maxHp) / 20;
+    return ((g_StatScaleBase[0] + 0x14) * maxHp) / 20;
 }

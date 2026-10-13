@@ -416,7 +416,7 @@ void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
     i = 0;
     do {
         g_BonusPointStatDeltas[i] = *stat_src++;
-        Aya_StatQueryLevelAndSubLevel(i, g_BonusPointStatDeltas[i], &D_800A18B4.queryResults[i], 0);
+        Aya_StatQueryLevelAndSubLevel(i, g_BonusPointStatDeltas[i], &g_BonusPointStatQueryResults[i], 0);
         g_BonusPointStatMultipliers[i] = (g_MenuLevelDisplayTarget - g_MenuLevelDisplayValue) * 10;
         i++;
     } while (i < 7);

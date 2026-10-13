@@ -29,7 +29,7 @@ int DsCommand(int inCommand, void *inParameter, DslCB inCallback,
         : "0"(parameter), "1"(callback), "2"(command));
     if (D_8009B4BC[command & 255] && parameter) {
 
-        if (D_800A3608 < 8) {
+        if (g_CdPendingReadCount < 8) {
             previous = D_8009B53C;
             serial = previous + 1;
             D_8009B53C = serial;
@@ -51,8 +51,8 @@ int DsCommand(int inCommand, void *inParameter, DslCB inCallback,
             entry->callback = 0;
             entry->count = 0;
             asm("" ::: "memory");
-            D_800A3608++;
-            if (DS_system_status(0) == 1 && D_800A3540[D_800A3604].active == ticket)
+            g_CdPendingReadCount++;
+            if (DS_system_status(0) == 1 && g_CdDsReadQueue[g_CdDsReadIndex].active == ticket)
                 CQ_execute();
             result = ticket;
         } else
@@ -63,7 +63,7 @@ int DsCommand(int inCommand, void *inParameter, DslCB inCallback,
         }
     }
 
-    if (D_800A3608 < 8) {
+    if (g_CdPendingReadCount < 8) {
         previous = D_8009B53C;
         serial = previous + 1;
         D_8009B53C = serial;
@@ -84,8 +84,8 @@ int DsCommand(int inCommand, void *inParameter, DslCB inCallback,
         entry->callback = callback;
         entry->count = count;
         asm("" ::: "memory");
-        D_800A3608++;
-        if (DS_system_status(0) == 1 && D_800A3540[D_800A3604].active == ticket)
+        g_CdPendingReadCount++;
+        if (DS_system_status(0) == 1 && g_CdDsReadQueue[g_CdDsReadIndex].active == ticket)
             CQ_execute();
         result = ticket;
     } else
@@ -152,7 +152,7 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
         item->callback = callback;
         asm("" ::: "memory");
         total = n + 1;
-        if (D_800A3608 + total >= 9) {
+        if (g_CdPendingReadCount + total >= 9) {
             result = 0; return result;
         }
         previous = D_8009B53C;
@@ -185,10 +185,10 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
                 field += 4;
                 entry->count = count;
                 asm("" : "=r"(i), "=r"(list) : "0"(i), "1"(list) : "memory");
-                next = D_800A3608;
+                next = g_CdPendingReadCount;
                 asm("" : "=r"(next), "=r"(i) : "0"(next), "1"(i));
                 i++;
-                D_800A3608 = next + 1;
+                g_CdPendingReadCount = next + 1;
                 list++;
             } while (i < total);
         }
@@ -205,7 +205,7 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
         item->callback = callback;
         asm("" ::: "memory");
         total = n + 1;
-        if (D_800A3608 + total >= 9) {
+        if (g_CdPendingReadCount + total >= 9) {
             result = 0; return result;
         }
         previous = D_8009B53C;
@@ -238,10 +238,10 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
                 field += 4;
                 entry->count = count;
                 asm("" : "=r"(i), "=r"(list) : "0"(i), "1"(list) : "memory");
-                next = D_800A3608;
+                next = g_CdPendingReadCount;
                 asm("" : "=r"(next), "=r"(i) : "0"(next), "1"(i));
                 i++;
-                D_800A3608 = next + 1;
+                g_CdPendingReadCount = next + 1;
                 list++;
             } while (i < total);
         }
@@ -250,7 +250,7 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
         goto failure;
     }
 dispatch:
-    if (DS_system_status(0) == 1 && D_800A3540[D_800A3604].active == ticket)
+    if (DS_system_status(0) == 1 && g_CdDsReadQueue[g_CdDsReadIndex].active == ticket)
         CQ_execute();
     result = ticket;
     return result;
@@ -540,7 +540,7 @@ void CQ_vsync_system(void) {
         if (*pending > 0) {
             result = DS_system_status(0);
             if (result == status) {
-                workAddress = &D_800A3604;
+                workAddress = &g_CdDsReadIndex;
                 work = *workAddress;
                 result = work * 3;
                 result <<= 3;

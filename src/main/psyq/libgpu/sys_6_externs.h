@@ -11,7 +11,6 @@ extern short D_80095752;
 extern unsigned int D_800A3300[];
 extern unsigned int D_800A3328[];
 extern unsigned int *g_GpuGp0Ptr;
-extern unsigned char D_800A3348[];
 extern unsigned char g_GpuControlRegMirror[];
 extern unsigned int *g_GpuDmaBcrPtr;
 

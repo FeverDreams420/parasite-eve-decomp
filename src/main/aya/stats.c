@@ -103,7 +103,7 @@ void Inv_RecalcSlotStats(void) {
 
     Aya_StatQueryLevelAndSubLevel(0, *p++, &level, 0);
     row = Aya_LookupLevelStats(level);
-    hp = ((D_800A1B30[0] + 20) * row->hp) / 20;
+    hp = ((g_StatScaleBase[0] + 20) * row->hp) / 20;
     D_800C0E00.max_hp = hp;
     if (D_8009D254 && (actor = D_8009D254->core)) {
         if ((s16)(actor->maxHP = hp) < (s16)actor->curHP)
@@ -114,20 +114,20 @@ void Inv_RecalcSlotStats(void) {
             D_800C0E00.current_hp = D_800C0E00.max_hp;
 
         Aya_StatQueryLevelAndSubLevel(1, *p++, &level, 0);
-        actor->stat1E = Aya_LookupLevelStats(level + D_800A1B30[1])->offense;
+        actor->stat1E = Aya_LookupLevelStats(level + g_StatScaleBase[1])->offense;
         Aya_StatQueryLevelAndSubLevel(2, *p++, &level, 0);
-        actor->stat20 = Aya_LookupLevelStats(level + D_800A1B30[2])->defense;
+        actor->stat20 = Aya_LookupLevelStats(level + g_StatScaleBase[2])->defense;
         Aya_StatQueryLevelAndSubLevel(3, *p++, &level, 0);
-        row = Aya_LookupLevelStats(level + D_800A1B30[3]);
+        row = Aya_LookupLevelStats(level + g_StatScaleBase[3]);
         actor->maxAtk = row->battleMaxAtk;
         actor->atbRate = row->battleAtbRate;
         actor->atbStep = row->battleAtbStep;
         Aya_StatQueryLevelAndSubLevel(4, *p++, &level, 0);
-        row = Aya_LookupLevelStats(level + D_800A1B30[4]);
+        row = Aya_LookupLevelStats(level + g_StatScaleBase[4]);
         actor->statusStep3C = row->statusStep3C;
         actor->statusStep3E = row->statusStep3E;
         Aya_StatQueryLevelAndSubLevel(5, *p++, &level, 0);
-        actor->stat22 = Aya_LookupLevelStats(level + D_800A1B30[5])->battleStat22;
+        actor->stat22 = Aya_LookupLevelStats(level + g_StatScaleBase[5])->battleStat22;
         Aya_StatQueryLevelAndSubLevel(6, *p, &level, 0);
         actor->stat26 = Aya_LookupLevelStats(level)->inventoryCapacity;
         Inv_SetAyaSlotCount(actor->stat26);
@@ -141,7 +141,7 @@ void Aya_DeriveStats(int *out_max, int *out_current) {
     AyaLevelStats *stats;
 
     Aya_StatQueryLevelAndSubLevel(3, D_800C0E00.stats.levels[3], &base, 0);
-    stats = Aya_LookupLevelStats(base + D_800A1B30[3]);
+    stats = Aya_LookupLevelStats(base + g_StatScaleBase[3]);
 
     if (out_max != 0) {
         *out_max = stats->battleAtbStep;

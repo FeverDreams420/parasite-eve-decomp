@@ -13,7 +13,7 @@ extern ScriptNode *g_ScriptNodeFreeListHead;
 /* Sequence number stamped into each allocated script node (a one-element
  * array: small data in the -G8 pool unit). */
 extern unsigned short g_ScriptNodeSeqCounter[1];
-extern int g_ScriptOperandTable[16];
+extern u32 g_ScriptOperandTable[16];
 extern u16 g_SceneInitLbaTbl0[];
 extern u16 g_SceneInitLbaTbl1[];
 extern u16 g_SceneAssetLbaTbl[];

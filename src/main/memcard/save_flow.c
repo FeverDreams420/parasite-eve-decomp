@@ -56,7 +56,7 @@ void Save_DeserializeTail(void) {
 }
 
 void Save_SetTitleStyleFlag(int value) {
-    D_800A1704 = value;
+    g_SaveTitleStyleFlag = value;
 }
 
 int Save_GetTitleStyleFlag(void) {
@@ -738,14 +738,14 @@ void MemCard_UpdateSaveState(int port) {
                 }
             }
         } else {
-            D_800A1864 = -1;
+            g_MemCardSavePollTimeout = -1;
             state->managerState = 0;
         }
         break;
 
     case 14:
         sprintf(device, g_MemCardSaveSupportData.deviceFormat, port);
-        D_800A1864 = format(device) ? 12 : -1;
+        g_MemCardSavePollTimeout = format(device) ? 12 : -1;
         state->present &= ~4;
         g_McOpPending = 0;
         state->managerState = 0;
@@ -797,7 +797,7 @@ void MemCard_UpdateSaveState(int port) {
             }
         }
         state->fileCount = 15;
-        if (D_800A186C == 0) {
+        if (g_MemCardReadContext == 0) {
             state->managerState = 15;
             g_McOpPending = 0;
             break;
@@ -868,7 +868,7 @@ void MemCard_UpdateSaveState(int port) {
             MemCard_AbortActiveOperation(state);
             break;
         }
-        state->slots[state->selectedSlot].titleStyleFlag = D_800A1704;
+        state->slots[state->selectedSlot].titleStyleFlag = g_SaveTitleStyleFlag;
         MemCard_FormatSlotFileName(state, state->selectedSlot);
         if ((fd = state->fileDescriptor = open(D_8009EE70, 0x10200)) >= 0) {
             close(fd);
@@ -948,7 +948,7 @@ void MemCard_UpdateSaveState(int port) {
                 state->fileDescriptor = -1;
                 state->managerState = 12;
                 state->pendingError = 0;
-                D_800A1854 = 0;
+                g_MemCardActiveState = 0;
                 g_McOpPending = 0;
                 Save_LoadCardFileIntoRuntime();
             }
@@ -975,7 +975,7 @@ void MemCard_UpdateSaveState(int port) {
                 state->fileDescriptor = -1;
                 state->managerState = 3;
                 state->pendingError = 0;
-                D_800A1854 = 0;
+                g_MemCardActiveState = 0;
                 Menu_DestroyMemCardProgressWidget();
                 Menu_CreateNotificationDialog(0x53, 0);
             }
@@ -1219,7 +1219,7 @@ void MemCard_InitState(void) {
     g_MemCardServicedPort = 0;
     g_MemCardInfoPollCountdown = 0;
     g_MemCardConnectDebounce = 0;
-    D_800A184C = 0;
+    g_MemCardConnectPending[1] = 0;
     g_MemCardConnectPending[0] = 0;
     g_McOpPending = 0;
     g_MemCardActiveState = 0;

@@ -47,7 +47,7 @@ typedef union DsCallbackValue {
 
 PE1_STATIC_ASSERT(sizeof(DsCallbackValue) == 4, ds_callback_value_size);
 
-/* Runtime callback pointers at D_800A36A0 are a contiguous four-word window. */
+/* Runtime callback pointers at g_DsPollCallback are a contiguous four-word window. */
 typedef struct DsRuntimeCallbacks {
     DsCallback volatile poll;
     DsEventCallback volatile sync;

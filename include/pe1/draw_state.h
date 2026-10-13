@@ -122,7 +122,6 @@ extern int g_DrawTextBoxWidth;
 extern int D_8009D13C;
 extern int D_8009D140;
 extern int D_8009D144;
-extern DrawVertexPair D_800A22B0[];
 extern u32 D_8009D14C[];
 extern GpuDrawEnabledFlag g_DrawEnabled;
 extern short g_SeqElapsed;

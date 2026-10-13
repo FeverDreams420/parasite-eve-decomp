@@ -126,7 +126,7 @@ void CQ_error_flush(int event, u8 *data) {
         }
     }
     {
-        register DsQueueIndices *indices asm("$3") = &D_800A3600;
+        register DsQueueIndices *indices asm("$3") = (DsQueueIndices *)&g_CdDsReadQueueState;
         asm("" : "=r"(indices) : "0"(indices));
         previous = 0;
         last = -1;
@@ -135,12 +135,12 @@ void CQ_error_flush(int event, u8 *data) {
         if (indices->count > 0)
             do {
                 DsEventCallback callback;
-                id = D_800A3540[index].active;
+                id = g_CdDsReadQueue[index].active;
                 if (id != previous) {
                     CQ_add_result(id, savedEvent, result);
                     previous = id;
                 }
-                callback = D_800A3540[index].callback;
+                callback = g_CdDsReadQueue[index].callback;
                 if (callback) {
                     {
                         register int sentinel asm("$7") = -1;
@@ -161,17 +161,17 @@ void CQ_error_flush(int event, u8 *data) {
                 if (index >= 8)
                     index = 0;
                 i++;
-            } while (i < D_800A3608);
+            } while (i < g_CdPendingReadCount);
     }
-    D_800A3608 = 0;
-    D_800A3604 = 0;
-    D_800A3600.start = 0;
+    g_CdPendingReadCount = 0;
+    g_CdDsReadIndex = 0;
+    g_CdDsReadQueueState = 0;
     {
         register int n;
         register int j;
         register CdDsReadQueueEntry *entry;
         n = 0;
-        entry = D_800A3540;
+        entry = g_CdDsReadQueue;
         for (; n < 8; n++, entry++) {
             asm("" : "=r"(entry) : "0"(entry));
             entry->active = 0;
@@ -225,7 +225,7 @@ int CQ_execute(void) {
         return 0;
     }
 
-    current = &D_800A3604;
+    current = &g_CdDsReadIndex;
     at.entry = QUEUE_FROM_CURRENT(current)->entries;
     at.word = *current * sizeof(CdDsReadQueueEntry) + at.word;
     entry = at.entry;
@@ -243,7 +243,7 @@ void CQ_sync_system(int inEvent, u8 *inResult) {
     register CdDsReadQueueEntry *base asm("$19");
     register CdDsReadQueueEntry *entry;
     register int savedEvent asm("$20");
-    current = &D_800A3604;
+    current = &g_CdDsReadIndex;
     {
         int index = *current;
         asm("" : : "r"(index));
@@ -314,9 +314,9 @@ void CQ_sync_system(int inEvent, u8 *inResult) {
     {
         int ready = DS_system_status(0);
         if (ready == 1) {
-            int *pending = &D_800A3608;
+            int *pending = &g_CdPendingReadCount;
             if (*pending > 0 && DS_system_status(0) == ready) {
-                register int index = D_800A3604;
+                register int index = g_CdDsReadIndex;
                 register CdDsReadQueueEntry *item;
                 {
                     int offset = index * sizeof(CdDsReadQueueEntry);

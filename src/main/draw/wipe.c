@@ -96,9 +96,9 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
             prim++;
         } while (prim < (ColorTriPrim *)(pair + 1));
     }
-    farA = D_800A22B0[firstVertex & 0x7f];
+    farA = ((DrawVertexPair *)g_TextCursorStackTop)[firstVertex & 0x7f];
     a = farA;
-    farB = D_800A22B0[secondVertex & 0x7f];
+    farB = ((DrawVertexPair *)g_TextCursorStackTop)[secondVertex & 0x7f];
     b = farB;
     p = pair;
     p->first.color.bytes.code |= 2;

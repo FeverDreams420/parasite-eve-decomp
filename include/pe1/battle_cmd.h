@@ -95,7 +95,7 @@ BATTLE_CMD_STATIC_ASSERT(
 BATTLE_CMD_STATIC_ASSERT(sizeof(BattleCmdEntry) == 0x24, entry_size);
 
 /* Undo stack of pending battle commands: four entries that end where the
- * equipment modifier words (D_800A1B30) begin, and the next free entry. */
+ * equipment modifier words (g_StatScaleBase) begin, and the next free entry. */
 extern BattleCmdEntry g_BattleCmdStack[];
 extern BattleCmdEntry *g_BattleCmdStackTop;
 

@@ -5,5 +5,4 @@ extern int g_MenuActionTextBase;
 extern int g_MenuActiveItemList;
 extern int D_8009CFA4;
 extern int D_8009CFFC;
-extern unsigned char D_800A19C0[];
 #endif /* PE1_EXT_DACFE9BF419E */

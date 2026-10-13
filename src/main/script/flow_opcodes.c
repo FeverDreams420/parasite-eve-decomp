@@ -324,7 +324,7 @@ void Script_RunQueue(void)
             for (i = 0; i < header; i++) {
                 switch (modes & 7) {
                 case 0: args[i] = &values[i]; break;
-                case 3: args[i] = &D_8009DF70[values[i]]; break;
+                case 3: args[i] = &g_ScriptOperandTable[values[i]]; break;
                 case 1:
                     /* Reload after every handler: it may switch actors. */
                     args[i] = (u32 *)((argument_entity = D_8009D2F0[0]) + 0xAC + values[i] * 4);

@@ -369,7 +369,7 @@ void Menu_CreateNotificationDialog(int message, int suffix) {
     MenuWidget_SetCurrentNode(child);
     Menu_SetDeferredCallback(0);
     messageText = Text_LookupTable4(message);
-    text = D_800A1A20[alternate];
+    text = g_MenuTwoLineDialogText[alternate];
     Text_CopyFFTerminatedBytes(text, messageText);
     if (suffix) {
         Text_AppendFFTerminatedBytes(text, Text_LookupTable4(suffix));
@@ -390,7 +390,7 @@ void Menu_DrawNotificationText(MenuWidgetNode *node) {
     u8 *text;
 
     Draw_OffsetCursor(0, 0xA);
-    text = g_MenuTwoLineDialogText;
+    text = g_MenuTwoLineDialogText[0];
     if (node->selected_base == 0x3D) {
         text += 0x40;
     }
@@ -415,15 +415,15 @@ void Menu_CreateTwoLineDialog(int line0_id, int line1_id) {
     Menu_SetDeferredCallback(0);
 
     text = Text_LookupTable4(line0_id);
-    line0 = D_800A1A20[0];
+    line0 = g_MenuTwoLineDialogText[0];
     Text_CopyFFTerminatedBytes(line0, text);
 
     text = Text_LookupTable4(line1_id);
     line1 = line0 + 0x40;
     Text_CopyFFTerminatedBytes(line1, text);
 
-    width = MAX(100, MAX(Draw_MeasureTextWidth(D_800A1A20[0]),
-                         Draw_MeasureTextWidth(D_800A1A20[1])));
+    width = MAX(100, MAX(Draw_MeasureTextWidth(g_MenuTwoLineDialogText[0]),
+                         Draw_MeasureTextWidth(g_MenuTwoLineDialogText[1])));
     parent->grid_width = width + 0x14;
     parent->x = (0x12C - width) >> 1;
     parent->visible_rows += 0xE;
@@ -435,9 +435,9 @@ void Menu_CreateTwoLineDialog(int line0_id, int line1_id) {
 
 void Menu_DrawTwoLineDialogText(void) {
     Draw_OffsetCursor(0, 0xA);
-    Draw_PrintCenteredText(g_MenuTwoLineDialogText);
+    Draw_PrintCenteredText(g_MenuTwoLineDialogText[0]);
     Draw_OffsetCursor(0, 0xE);
-    Draw_PrintCenteredText(g_MenuTwoLineDialogText + 0x40);
+    Draw_PrintCenteredText(g_MenuTwoLineDialogText[1]);
 }
 
 void Menu_SetDeferredCallback(void (*callback)(void)) {
@@ -834,21 +834,21 @@ void Menu_StepItemGrid2(void) {
         }
 
         if (label != 0) {
-            Text_CopyFFTerminatedBytes(D_800A19C0, label);
+            Text_CopyFFTerminatedBytes(&g_MenuItemLabelBuffer[0x40], label);
         } else {
-            D_800A19C0[0] = 0xFF;
+            g_MenuItemLabelBuffer[0x40] = 0xFF;
         }
         {
             u8 *text_buf;
-            Text_AppendFFTerminatedBytes(D_800A19C0, Text_LookupTable4(0x49));
+            Text_AppendFFTerminatedBytes(&g_MenuItemLabelBuffer[0x40], Text_LookupTable4(0x49));
             D_8009CFA4 = suffix_id;
             /* Recompute the buffer address at each measurement. */
-            asm volatile("" : "=r"(text_buf) : "0"(D_800A19C0));
+            asm volatile("" : "=r"(text_buf) : "0"(&g_MenuItemLabelBuffer[0x40]));
             width = Draw_MeasureTextWidth(text_buf);
             if (width < 0x78) {
                 width = 0x78;
             } else {
-                asm volatile("" : "=r"(text_buf) : "0"(D_800A19C0));
+                asm volatile("" : "=r"(text_buf) : "0"(&g_MenuItemLabelBuffer[0x40]));
                 width = Draw_MeasureTextWidth(text_buf);
             }
         }

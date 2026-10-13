@@ -21,7 +21,6 @@ extern const Tbl20 D_8001074C;
 extern u8 D_8009CE3B;
 extern u16 D_800BE834[];
 extern u8 D_8009E360[];
-extern u16 D_8009E362[];
 /* A status anchor halfword addressed by the slot's byte offset. */
 typedef union BattleHalfwordAddress {
     u16 *half;

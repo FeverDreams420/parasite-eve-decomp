@@ -34,8 +34,8 @@ int DsInit(void) {
         D_800A3535[i] = 0;
     }
     for (j = 0; j < 8; ++j) CQ_clear_queue(&g_CdDsReadQueue[j]);
-    D_800A3604 = 0;
-    D_800A3600.start = 0;
+    g_CdDsReadIndex = 0;
+    g_CdDsReadQueueState = 0;
     g_CdPendingReadCount = 0;
     for (k = 7, offset = 112; k >= 0; --k, offset -= 16)
         ((DsReadCallbackSlot *)((unsigned char *)g_DsReadCallbackSlots + offset))->value = 0;
@@ -73,8 +73,8 @@ int DsReset(void) {
         D_800A3535[i] = 0;
     }
     for (j = 0; j < 8; ++j) CQ_clear_queue(&g_CdDsReadQueue[j]);
-    D_800A3604 = 0;
-    D_800A3600.start = 0;
+    g_CdDsReadIndex = 0;
+    g_CdDsReadQueueState = 0;
     g_CdPendingReadCount = 0;
     for (k = 7, offset = 112; k >= 0; --k, offset -= 16)
         *(int *)((unsigned char *)g_DsReadCallbackSlots + offset) = 0;

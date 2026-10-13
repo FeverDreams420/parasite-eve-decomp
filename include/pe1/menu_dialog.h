@@ -14,8 +14,7 @@ void Menu_SetDeferredCallback(void (*callback)(void));
 void Menu_CreateParasiteSpellInfoPanel(int spell);
 
 /* Two adjacent 64-byte, 0xFF-terminated notification text buffers. */
-extern u8 D_800A1A20[2][64];
-extern u8 g_MenuTwoLineDialogText[];
+extern u8 g_MenuTwoLineDialogText[2][64];
 
 /* Item-action dialogs use two label buffers and their optional primitive lists. */
 extern u8 g_MenuItemLabelBuffer[128];

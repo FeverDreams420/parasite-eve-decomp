@@ -194,7 +194,7 @@ int Gpu_InitDmaQueue(int mode) {
         *g_GpuDmaChcrPtr = 0x401;
         *g_GpuDmaControlRegPtr |= 0x800;
         *g_GpuGp1Ptr = 0;
-        GPU_memset(D_800A3348, 0, 0x100);
+        GPU_memset(g_GpuControlRegMirror, 0, 0x100);
         GPU_memset((unsigned char *)D_800BD030, 0, 0x1800);
         break;
 

@@ -188,7 +188,6 @@ extern int g_MemCardInfoPollCountdown;
 extern int g_MemCardConnectDebounce;
 /* Per port: a card was seen connecting and still has to be serviced. */
 extern int g_MemCardConnectPending[2];
-extern int D_800A184C;
 /* MemCard_InitManager has opened the card events and started LIBCARD. */
 extern int g_MemCardManagerReady;
 extern int g_McOpPending;

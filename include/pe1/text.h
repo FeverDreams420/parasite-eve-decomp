@@ -57,7 +57,7 @@ void Draw_PrintTextById(unsigned int textId);
  * TEXT CURSOR (pen position):
  *   g_TextCursorX (0x8009D124)  cursor X (live: 8 inside the dialogue box)
  *   g_TextCursorY (0x8009D128)  cursor Y (live: 32)
- *   D_8009D12C  cursor stack pointer; bounds D_800A2270 (bottom) .. D_800A22B0
+ *   D_8009D12C  cursor stack pointer; bounds g_TextCursorStackBottom .. g_TextCursorStackTop
  *               (top). Printers push {X,Y} (8 bytes) then pop to restore.
  *   D_8009D0D8  text mode/variant flag read by the quad allocator.
  *

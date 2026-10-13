@@ -26,7 +26,7 @@ void Script_InitNodePool(void) {
     unsigned int j;
     unsigned int rowOffset;
     ScriptNodeAddress base;
-    int *ptr;
+    u32 *ptr;
 
     i = 0;
     base.node = D_8009D310;

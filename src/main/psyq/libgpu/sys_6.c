@@ -276,7 +276,7 @@ void Gpu_WriteControlAndMirror(unsigned int value) {
 
     *g_GpuGp1Ptr = value;
     index = value >> 24;
-    D_800A3348[index] = value;
+    g_GpuControlRegMirror[index] = value;
 }
 
 int Gpu_GetControlMirrorByte(int index) {

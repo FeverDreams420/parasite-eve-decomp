@@ -344,7 +344,7 @@ keep rebases trivial) and every C rename those symbols need.
 | --- | --- | ---: | ---: | --- | --- |
 | 0 | layout: engine boundary to 0x800C20C8, COMMON catch-all, `_end`/BSS-start symbols | 1 | 4 | low | done: engine at 0x800C20C8; `tools/scripts/ld_postpass.py` (run by `make split`) puts main's BSS in `.main`, adds `*(.sdata)` at `__bss_start`, `*(.sbss) *(.scommon)` at the small pool end 0x8009D310 (the gp window: new small data at the end of main overflows `R_MIPS_GPREL16`) and `*(COMMON)` before `_end`; `snmain` uses `__bss_start`/`_end`; a new global and function link and main grows by their size (`test_ld_postpass.py`) |
 | 1 | functions named elsewhere, shadowing pins, field engine labels | 24 | 131 | low | names only |
-| 2 | `.bss` object run | 60 | 1016 | low | mostly `memcard/save_flow` (26) and menus; few aliases |
+| 2 | `.bss` object run | 60 | 1016 | low | stage A done (2a): 58 blob labels in `sym.main.txt`, 18 address-form C names unified, no alias; pinned words 6253 to 5237; stage B open |
 | 2 | `.sbss` object run + `.sdata` | 108 | 1183 | medium | 99 COMMON pins; names used by many menu units |
 | 2 | large COMMON pool | 104 | 1984 | medium | `g_GameState`, AKAO state; record-view aliases |
 | 3 | small COMMON pool | 67 | 1870 | high | `g_CurrentEntity`, `g_PlayerEntity`, `g_ActiveActor`: most aliases and record views, most units |

@@ -3,6 +3,7 @@
 
 #include "pe1/inventory.h"
 #include "pe1/weapon_list_output.h"
+#include "pe1/stat_modifiers.h"
 
 int Inv_IsActiveListOverrideSelected(void);
 void Inv_SelectActiveList(int useOverride);
@@ -11,8 +12,6 @@ struct BattleAttributes;
 extern struct BattleAttributes g_BattleEquipStateBlock;
 void Inv_BuildArmorList(struct BattleAttributes *out);
 
-/* Seven modifier words cleared before scanning the equipped item record. */
-extern int D_800A1B30[7];
 extern int D_8009D018;
 /* Existing byte-array view of the equipped armor index in Aya's save state. */
 extern signed char D_800C0E22[];

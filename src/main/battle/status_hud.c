@@ -308,11 +308,11 @@ void Battle_DrawHPBar(void) {
         for (i = 0; (u8)i < 13; i++) {
             glyph = Draw_LookupGlyphDescriptor(((u8)i) + 0x6A);
             pageCode = GetTPage(0, 0, 0x1C0, 0);
-            Draw_InitDrawModeSprtPacket(&D_8009E960[bufferIndex][(u8)i], pageCode);
-#define GLYPH_SPRITE BATTLE_SPRITE_SLOTS(D_8009E960, 13)[bufferIndex][(u8)i].sprite
+            Draw_InitDrawModeSprtPacket(&g_StatusIconPackets[bufferIndex][(u8)i], pageCode);
+#define GLYPH_SPRITE BATTLE_SPRITE_SLOTS(g_StatusIconPackets, 13)[bufferIndex][(u8)i].sprite
             GLYPH_SPRITE.u = glyph->u;
             GLYPH_SPRITE.v = glyph->v;
-            D_8009E960[bufferIndex][(u8)i].sprite.clut = glyph->clut;
+            g_StatusIconPackets[bufferIndex][(u8)i].sprite.clut = glyph->clut;
             GLYPH_SPRITE.width = glyph->width;
             glyphHeight = glyph->height;
             BATTLE_SET_SPRITE_COLOR(GLYPH_SPRITE, 0x80, 0x80, 0x80);
@@ -320,8 +320,8 @@ void Battle_DrawHPBar(void) {
 #undef GLYPH_SPRITE
         }
         pageCode = GetTPage(0, 0, 0x1C0, 0);
-        Draw_InitDrawModeSprtPacket(&((RenderPagedSpritePacket *)D_8009EC38)[bufferIndex], pageCode);
-        cursorSprite = &((RenderPagedSpritePacket *)D_8009EC38)[bufferIndex].sprite;
+        Draw_InitDrawModeSprtPacket(&g_StatusMarkerPackets[bufferIndex], pageCode);
+        cursorSprite = &g_StatusMarkerPackets[bufferIndex].sprite;
         bufferIndex += 1;
         cursorSprite->width = 0x10;
         cursorSprite->height = 0x10;

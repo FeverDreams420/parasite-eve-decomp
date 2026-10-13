@@ -161,9 +161,9 @@ void *Aya_GetLevelExpTable(void);
  *   int  Aya_StatBinarySearch(...);             // EXP -> level
  *   void Aya_StatQueryLevelAndSubLevel(int cat, int value, int *outLevel, int *outSublevel);
  *   void Aya_DeriveStats(int *out_max, int *out_current);
- *   int  Battle_GetScaledMaxHP(int level);        // (D_800A1B30+0x14)*levelHp/20
+ *   int  Battle_GetScaledMaxHP(int level);        // (g_StatScaleBase[0]+0x14)*levelHp/20
  *   void Inv_RecalcSlotStats(void);          // pushes save-state stats into the active battle slot
- * Stat scaling parameters live at D_800A1B30..D_800A1B44 (per-category offsets).
+ * Stat scaling parameters live in g_StatScaleBase[0..6] (per-category offsets).
  */
 
 void Inv_RecalcSlotStats(void);

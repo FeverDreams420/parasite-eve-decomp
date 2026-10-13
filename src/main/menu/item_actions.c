@@ -792,7 +792,7 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
             for (stat = 0; stat < 7; stat++) {
                 g_BonusPointStatDeltas[stat] = *source++;
                 g_BonusPointStatMultipliers[stat] = 0;
-                Aya_StatQueryLevelAndSubLevel(stat, g_BonusPointStatDeltas[stat], &D_800A18B4.queryResults[stat], 0);
+                Aya_StatQueryLevelAndSubLevel(stat, g_BonusPointStatDeltas[stat], &g_BonusPointStatQueryResults[stat], 0);
             }
         }
         g_MenuBonusPointBarAnimActive = 0;
