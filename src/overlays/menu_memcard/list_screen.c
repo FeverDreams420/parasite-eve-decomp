@@ -524,9 +524,10 @@ s32 func_801909B4(void) {
     g_RenderDispEnvArray[0] = D_801D1550;
     D_800BCE94 = D_801D1564;
     {
-        register s32 screenY asm("$2") = screenYRestore;
-        D_800BCE9E = screenY;
-        D_800BCE8A = screenY;
+        /* Color processing is complete; reuse its scratch for display Y. */
+        packedColor = screenYRestore;
+        D_800BCE9E = packedColor;
+        D_800BCE8A = packedColor;
     }
     MemCard_SetDialogActive(0);
     Draw_SetPresentEnabled(0);
