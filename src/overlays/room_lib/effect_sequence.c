@@ -1361,7 +1361,7 @@ void RoomEffect_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, 
     func_800C3238(2);
     ApplyMatrixSV(transform, &project_seed, projected);
 
-    scale = ((s16)state->drift_value) >> 2;
+    scale = (state->drift_value) >> 2;
     if (state->active_flag == 0) {
         return;
     }
@@ -1391,7 +1391,7 @@ void RoomEffect_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, 
     D_80192C18.depth = state->fade_alpha;
 
     matrix.t[0] = transform->x + projected[0] + (rand() % 20) - 10;
-    matrix.t[1] = transform->y + projected[1] - (((s16)state->vertical_offset) >> 4);
+    matrix.t[1] = transform->y + projected[1] - ((state->vertical_offset) >> 4);
     matrix.t[2] = transform->z + projected[2] + (rand() % 20) - 10;
 
     func_800C3134(&D_80192BFC, state->field30, (char *)&D_80192C18);
