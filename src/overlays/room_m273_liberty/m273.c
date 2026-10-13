@@ -1068,7 +1068,7 @@ int func_80194D54(int mode) {
     else
     {
 mode_one:
-    obj = ANIM_OWNER_AS(FieldFxObjectPrefix)->actor;
+    obj = D_800F32D0->actor;
     state = obj->state->action_state;
     frame = obj->anim.parts.integer;
     /* High half of anim_prev, the previous whole frame. */
@@ -1285,7 +1285,7 @@ int func_801955E8(int mode) {
 
         if (D_8019AEF8)
             return 2;
-        candidate = ((RoomM273RingController *)ANIM_OWNER_AS(RoomM273BossActor))->actor;
+        candidate = ANIM_OWNER_AS(RoomM273RingController)->actor;
         if (candidate->mode != 11)
             return 0;
         actor = candidate;
@@ -1824,7 +1824,7 @@ int func_801969D8(int mode) {
                 particle->position.pad=0; particle->touched=0;
                 i++;
             } while(i<4);
-            Asset_Find08w(0x5D1,((RoomM273EffectStateContext *)ANIM_OWNER_AS(RoomM273BossActor))->state.directed_rings->owner->value,D_8019AEFC.x,D_8019AEFC.y,D_8019AEFC.z);
+            Asset_Find08w(0x5D1,ANIM_OWNER_AS(RoomM273EffectStateContext)->state.directed_rings->owner->value,D_8019AEFC.x,D_8019AEFC.y,D_8019AEFC.z);
         }
         break;
     }

@@ -31,7 +31,10 @@ extern FieldFxTaskSlot *D_800F33E0;
 extern FieldFxObjectPrefix *D_800F32D0;
 
 /* Each effect reads the pool and the active owner through its own view of
- * the record; the cast is free (a pointer copy). */
+ * the record; the cast is free (a pointer copy). The argument names the
+ * view the caller reads, so a call site never casts the result again;
+ * code that needs only the common prefix (the owner's actor) reads
+ * D_800F32D0 directly. */
 #define ANIM_POOL_AS(type) ((type *)D_800F33E0)
 #define ANIM_OWNER_AS(type) ((type *)D_800F32D0)
 /* The same for the running task context, which effects read as their own

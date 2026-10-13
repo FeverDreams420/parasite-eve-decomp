@@ -579,7 +579,7 @@ int func_80193A58(int mode, SceneE18WaveEffect *effect) {
     func_800CEE20((struct GteShortVector *)effect, (struct GteRotation *)&effect->field08, effect->wave, effect->wave,
                   0x40, palette & 0xffff, 3, effect->size, 0);
     position[0] = effect->x;
-    position[1] = ANIM_OWNER_AS(FieldFxObjectPrefix)->actor->render_object.model_matrix.translation[1];
+    position[1] = D_800F32D0->actor->render_object.model_matrix.translation[1];
     position[2] = effect->z;
     params[0] = 0x400;
     params[1] = (D_800E27EC * 3) << 6;

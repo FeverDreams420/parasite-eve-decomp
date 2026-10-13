@@ -470,7 +470,7 @@ int func_8019360C(int event) {
                              (FieldFxCallbackListCallback)func_80192E4C);
         case 1:
     {
-        SweepTrapFlowInstance *instance = ((RoomM350ControllerChannel *)ANIM_OWNER_AS(RoomM350TrapChannel))->instance;
+        SweepTrapFlowInstance *instance = ANIM_OWNER_AS(RoomM350ControllerChannel)->instance;
         int frame;
         int previous;
         int i;
@@ -487,7 +487,7 @@ int func_8019360C(int event) {
                 particle->done = 0;
             }
             {
-                SweepTrapFlowInstance *current = ((RoomM350ControllerChannel *)ANIM_OWNER_AS(RoomM350TrapChannel))->instance;
+                SweepTrapFlowInstance *current = ANIM_OWNER_AS(RoomM350ControllerChannel)->instance;
                 Asset_Find08w(0x5C6,current->owner->soundMode,
                     *(short *)&current->transforms->position[0],
                     *(short *)&current->transforms->position[1],
