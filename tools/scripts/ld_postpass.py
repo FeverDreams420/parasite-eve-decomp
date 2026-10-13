@@ -18,8 +18,15 @@ file and memory, so this pass rewrites `linkers/USA/main.ld`
 - startup symbols: `_edata` and `__bss_start` at `main_sbss` (end of .sdata,
   where the startup's BSS clear starts) and `_end` at the end of main, where
   the clear stops and the heap begins;
-- an assertion that the field engine has no NOLOAD BSS: its BSS still lives
-  in the `dtail_0D0860` blob together with the overlay windows (plan 3.4).
+- an assertion that the field engine has no NOLOAD BSS: its zero data is the
+  in-image blob `engine_bss_800E21A8`, followed by Boot_InitMemoryLayout's
+  work area (plan 3.4);
+- the overlay windows anchored at their ABI address: the `overlay_windows`
+  segment keeps its fixed VMA, its file offset follows from that VMA (not
+  from the end of the engine, so a shorter engine leaves a zero gap in the
+  file instead of moving the windows), and the link fails when main, the
+  engine and the work area reach the window. `overlay_windows_HEADROOM` is
+  the room left (0 in the retail layout).
 
 The catch-alls come after every explicit input of their kind, because ld
 gives an input section to the first statement in the script that matches it.
@@ -58,6 +65,16 @@ SDATA_END = "        main_main_sbss_OFFSET = .;\n"
 SCOMMON_END = "        main_main_scommon_OFFSET = .;\n"
 ENGINE_BSS_END = ("        field_engine_BSS_SIZE = ABSOLUTE(field_engine_BSS_END - field_engine_BSS_START);\n"
                   "    }\n")
+WINDOWS_START = re.compile(
+    r"    overlay_windows_ROM_START = __romPos;\n"
+    r"    overlay_windows_VRAM = ADDR\(\.overlay_windows\);\n"
+    r"    \.overlay_windows (?P<vram>0x[0-9A-Fa-f]+) : AT\(overlay_windows_ROM_START\) SUBALIGN\(4\)\n")
+WINDOWS_END = re.compile(
+    r"    \}\n"
+    r"    __romPos \+= SIZEOF\(\.overlay_windows\);\n")
+ENGINE_END = "    field_engine_VRAM_END = .;\n"
+WINDOW_MESSAGE = ("main, the field engine and the boot work area run into the first overlay "
+                  "window{} (docs/SHIFTABILITY_PLAN.md 3.4)")
 
 
 class PostPassError(Exception):
@@ -83,6 +100,14 @@ def rewrite(text: str) -> str:
         raise PostPassError("`main_sbss` and `main_scommon` must be in that order inside main's data")
     if text.count(ENGINE_BSS_END) != 1:
         raise PostPassError("expected one .field_engine_bss section")
+    windows = list(WINDOWS_START.finditer(text))
+    if len(windows) != 1:
+        raise PostPassError("expected one `overlay_windows` segment at a fixed vram (configs/USA/main.yaml)")
+    windows_end = WINDOWS_END.search(text, windows[0].end())
+    if not windows_end:
+        raise PostPassError("the `overlay_windows` section is not followed by its __romPos advance")
+    if text.count(ENGINE_END) != 1 or not text.index(ENGINE_END) < windows[0].start():
+        raise PostPassError("the field engine must end before the `overlay_windows` segment")
 
     in_image = (
         f"        {MARKER}\n"
@@ -93,6 +118,25 @@ def rewrite(text: str) -> str:
         "        main_BSS_END = .;\n"
         "        main_BSS_SIZE = ABSOLUTE(main_BSS_END - main_BSS_START);\n"
         "        _end = .;\n")
+    # The window block's VMA is the ABI; its file offset follows from it. The
+    # assertions compare against the section's own address, so a scratch
+    # relink that rebases the window (shift_test.py) stays consistent.
+    win_start, win_end = windows[0], windows_end
+    text = (text[:win_start.start()]
+            + "    /* ld_postpass: overlay windows at their ABI address */\n"
+            "    overlay_windows_VRAM = ADDR(.overlay_windows);\n"
+            f"    .overlay_windows {win_start.group('vram')} : "
+            "AT(main_ROM_START + (ADDR(.overlay_windows) - ADDR(.main))) SUBALIGN(4)\n"
+            + text[win_start.end():win_end.start()]
+            + "    }\n"
+            "    overlay_windows_ROM_START = LOADADDR(.overlay_windows);\n"
+            "    ASSERT(field_engine_VRAM_END <= overlay_windows_VRAM,\n"
+            f"        \"{WINDOW_MESSAGE.format('')}\")\n"
+            "    ASSERT(field_engine_ROM_END <= overlay_windows_ROM_START,\n"
+            f"        \"{WINDOW_MESSAGE.format(' in the file')}\")\n"
+            "    overlay_windows_HEADROOM = ABSOLUTE(overlay_windows_VRAM - field_engine_VRAM_END);\n"
+            "    __romPos = overlay_windows_ROM_START + SIZEOF(.overlay_windows);\n"
+            + text[win_end.end():])
     data_end = ends[-1]
     text = (text[:data_end.start()] + data_end.group(1) + in_image + data_end.group(2)
             + "    main_bss_VRAM = main_BSS_START;\n" + text[block.end():])
@@ -103,7 +147,7 @@ def rewrite(text: str) -> str:
         ENGINE_BSS_END,
         ENGINE_BSS_END + "    /* No semicolon: ASSERT is a statement inside SECTIONS. */\n"
         "    ASSERT(SIZEOF(.field_engine_bss) == 0,\n"
-        "        \"field engine BSS is not in the image yet (docs/SHIFTABILITY_PLAN.md 3.4)\")\n")
+        "        \"field engine BSS must be in the image, before the work area (docs/SHIFTABILITY_PLAN.md 3.4)\")\n")
     return text
 
 

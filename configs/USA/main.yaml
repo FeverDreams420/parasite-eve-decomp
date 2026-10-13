@@ -988,6 +988,30 @@ segments:
       # The angle helpers keep -fno-schedule-insns (FieldFx_TurnToward is lev 2
       # without it, the vector helpers do not match with it).
       - [0xD07B8, c, fieldfx/angle]
-      - [0xD0860, data, main/dtail_0D0860]
+      # The engine's initialised data (with three unreferenced code fragments
+      # at its start), then its zero-initialised data. Both are labelled blobs
+      # inside the image and move with the engine.
+      - [0xD0860, data, engine/engine_data_800E0060]
+      - [0xD29A8, data, engine/engine_bss_800E21A8]
+      # Boot_InitMemoryLayout's work area: buffers carved at constant offsets
+      # (0x1800, 0x6000, 0x14000) from the engine's end up to the first overlay
+      # window. It moves with the engine; ld_postpass.py asserts that it still
+      # ends at or before the window (docs/SHIFTABILITY_PLAN.md 3.4).
+      - [0xE3CF8, data, engine/boot_work_area]
+
+  # Overlay load windows and the runtime buffers that share them, from the
+  # mdec_diag window up to the end of the image. A disc ABI: the overlays in
+  # PE.IMG are linked for these addresses, so this segment keeps its retail
+  # address and file offset however main and the engine grow
+  # (tools/scripts/ld_postpass.py fails the link when they reach it).
+  - name: overlay_windows
+    type: code
+    start: 0xFC4F8
+    vram: 0x8010BCF8
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0xFC4F8, data, main/overlay_windows]
 
   - [0x1ee800]

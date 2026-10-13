@@ -354,6 +354,8 @@ keep rebases trivial) and every C rename those symbols need.
 | 5 | stage B by unit, object runs first (`.bss`, then `.data`, then `.sbss` once MASPSX allows) | | | per unit | uses the per-module table below |
 | 6 | overlays link against built main, `PE.IMG` repack | | | high | needed before a shifted build can boot |
 
+Wave 0b status (3.4): done, byte-identical. `dtail_0D0860` is split into `engine/engine_data_800E0060`, `engine/engine_bss_800E21A8` and `engine/boot_work_area` (all in `.field_engine`, moving with main) and a new `overlay_windows` segment anchored at 0x8010BCF8 (VMA and file offset fixed; `ld_postpass.py` asserts that main and the engine end before it and defines `overlay_windows_HEADROOM`). The "free gap" is not free: 0x800F34F8..0x8010BCF8 is `g_BootWorkArea` (was `D_800F34F8`), the 0x18800-byte area `Boot_InitMemoryLayout` carves at 0x1800/0x6000/0x14000, so the retail headroom is 0 and main can grow only by shrinking it (`test_ld_postpass.py` shows growth past the window failing and growth into 0x100 bytes of room moving the engine and work area as a unit).
+
 Wave 1 status: done, byte-identical; 18 function pins, `g_DsReadStatusBlock`, 3 `fieldfx/burst` labels and 4 `FieldFx_*` symbolic aliases gone (pinned words 6253 to 6140); `D_800C20C8` (`_end`) is left to wave 0, `func_800119CC` (rodata) to the data package.
 
 Within a package, work from the least shared symbols to the most shared. A
@@ -549,6 +551,29 @@ documented place (an ABI symbol file), not literals spread through the code.
 | Kernel and BIOS | 0x80000000 vectors, 0xA000xxxx, LIBCARD's kernel patch at 0xDFFC | PsyQ LIBAPI/LIBCARD | BIOS contract |
 | Hardware and scratchpad | 0x1F80xxxx | GPU, SPU, CD, pad drivers | hardware |
 | External cheat devices | e.g. JP debug flag 0x8009CD3C | none | not ours; a shifted build breaks GameShark codes, accepted |
+
+Main's own references to fixed window addresses (wave 0b scan of every
+main object's undefined symbols that resolve at or above 0x8010BCF8). All are
+labels in the `overlay_windows` segment, so they keep their addresses when
+main grows, and none lies below the first window, so a grown main cannot
+collide with them as long as the window assertion holds:
+
+| addresses | referenced by | what |
+| --- | --- | --- |
+| `D_8010BCF8`, `D_80120D00`, `g_StrFileDirArea` (0x8018EFF0), `g_PmTaskProgramArea` (0x801ED7F8) | `rodata_001E0C` words | window bases (+8 for the last two) |
+| `D_8010BD00`, `D_80120D08`, `D_801ED800` | `Boot_InitMemoryLayout` (`asset/game_state`, `pm/disc_tables`) | OT, render and scene-load buffers inside the mdec_diag, menu_memcard and task-program windows |
+| `func_801216C4`, `func_80121C04`, `func_801223A8`; `func_80121A00`, `func_80122040` | `script/actor_opcodes`; `boot/frame_loop` | menu_memcard overlay entry points |
+| `func_801235DC`; `func_801909B4`, `func_8019234C` | `boot/main` | boot_display and room-window entry points |
+| `D_801F1BD8`..`D_801F1EF0` (7); `D_801F1F38` | `pm/process`; `battle/attack` | process slots above the task program buffer |
+
+`g_BootWorkArea` (0x800F34F8, 0x18800 bytes) is below the windows and moves
+with the engine; the entity texture read at its +0x14000 (`Scene_LoadEntityTextures`
+case 4) can run past 0x8010BCF8 in retail (the `D_800930D8` sector table
+allows reads of up to 0x20 sectors from index 0x16), so the first window
+buffer is probably time-shared with it; a RAM trace would settle how much of
+the work area is really needed. 137 unreferenced catalogue assignments in
+`undefined_syms_manual.txt` lie in the engine and window range; no main
+object uses them.
 
 Not in the list because the scan found none: data in `PE.IMG` (room
 directories, scripts, TIM, AKAO) holding a 32-bit pointer into main. The room

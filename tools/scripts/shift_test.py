@@ -20,7 +20,10 @@ the same content in the shifted image (address + PAD):
 Sections placed at a fixed VMA in the linker script cannot follow the shift.
 The test first links with the script unchanged to show which sections pin the
 layout, then rebases those sections (and `_gp`) by PAD in the scratch copy so
-the comparison can run over the whole image.
+the comparison can run over the whole image. The overlay window block is
+fixed on purpose (a disc ABI, ABI_SECTIONS): it is reported as an anchor with
+the room main has before it (`overlay_windows_HEADROOM`), and the unchanged
+script is expected to fail when PAD exceeds that room.
 """
 from __future__ import annotations
 
@@ -44,10 +47,15 @@ LD = tool("mipsel-none-elf-ld")
 OBJCOPY = tool("mipsel-none-elf-objcopy")
 FIXED_VMA_RE = re.compile(r"^(\s*)(\.[\w.]+)\s+(0x[0-9A-Fa-f]+)(\s*(?:\(NOLOAD\))?\s*:)", re.M)
 GP_RE = re.compile(r"^(\s*_gp\s*=\s*)(0x[0-9A-Fa-f]+)(\s*;)", re.M)
+# Fixed on purpose: the overlays in PE.IMG are linked for these addresses
+# (configs/USA/main.yaml, tools/scripts/ld_postpass.py).
+ABI_SECTIONS = (".overlay_windows",)
 
 
 def pad_script(text: str, pad: int, rebase: bool) -> tuple[str, list[str]]:
-    """Insert PAD at the start of .main; optionally rebase fixed VMAs and _gp."""
+    """Insert PAD at the start of .main; optionally rebase fixed VMAs and _gp.
+
+    The returned list names the fixed placements, ABI anchors included."""
     marker = re.search(r"^(\s*\.main\s+0x[0-9A-Fa-f]+\s*:[^\n]*\n\s*\{\n\s*FILL\([^)]*\);\n)", text, re.M)
     if not marker:
         raise SystemExit("could not find the start of .main in the linker script")
@@ -225,10 +233,26 @@ HIDDEN = ("pinned_symbol_reference", "gprel_to_pinned", "literal_data_word", "li
           "relocated_unchanged_other")
 
 
+def split_anchors(placements: list[str]) -> tuple[list[str], list[str]]:
+    """(fixed placements that should not be fixed, ABI anchors)."""
+    anchored = [p for p in placements if p.split(" @ ")[0] in ABI_SECTIONS]
+    return [p for p in placements if p not in anchored], anchored
+
+
+def symbol_value(elf_path: Path, name: str) -> int | None:
+    from elftools.elf.elffile import ELFFile
+
+    with open(elf_path, "rb") as fh:
+        syms = ELFFile(fh).get_section_by_name(".symtab").get_symbol_by_name(name)
+    return syms[0]["st_value"] if syms else None
+
+
 @dataclass
 class Measurement:
     base_identical: bool
-    pinned: list[str]
+    pinned: list[str]  # fixed placements other than the ABI anchors
+    anchored: list[str]  # ABI_SECTIONS placements
+    headroom: int | None  # room before the first ABI anchor in the base link
     plain_errors: list[str] | None  # None when the unchanged script links
     shifted_error: str | None
     counts: Counter
@@ -253,33 +277,41 @@ def measure(pad: int, scratch: Path) -> Measurement:
     same = (scratch / "base.exe").read_bytes() == retail
 
     # 1. shift with the layout as written: which sections pin it?
-    plain, pinned = pad_script(text, pad, rebase=False)
+    plain, placements = pad_script(text, pad, rebase=False)
+    pinned, anchored = split_anchors(placements)
+    headroom = symbol_value(base_elf, "overlay_windows_HEADROOM")
     (scratch / "plain.ld").write_text(plain)
     res = link(scratch / "plain.ld", scratch / "plain.elf", extra)
     plain_errors = None
     if res.returncode:
-        plain_errors = [l.strip() for l in res.stderr.splitlines() if "error" in l or "overlap" in l]
+        plain_errors = [l.strip() for l in res.stderr.splitlines()
+                        if "warning" not in l and "alignment discrepancies" not in l]
 
     # 2. shift with the fixed placements rebased in the scratch copy.
     rebased, _ = pad_script(text, pad, rebase=True)
     (scratch / "shifted.ld").write_text(rebased)
     res = link(scratch / "shifted.ld", scratch / "shifted.elf", extra)
     if res.returncode:
-        return Measurement(same, pinned, plain_errors, "\n".join(res.stderr.splitlines()[:20]),
-                           Counter(), {})
+        return Measurement(same, pinned, anchored, headroom, plain_errors,
+                           "\n".join(res.stderr.splitlines()[:20]), Counter(), {})
     base = load_image(base_elf)
     shifted = load_image(scratch / "shifted.elf")
     layout = Layout(parse_map_sections((scratch / "base.map").read_text()))
     counts, findings = compare(base, shifted, pad, layout)
-    return Measurement(same, pinned, plain_errors, None, counts, findings)
+    return Measurement(same, pinned, anchored, headroom, plain_errors, None, counts, findings)
 
 
 def run(pad: int, scratch: Path, verbose: int) -> int:
     m = measure(pad, scratch)
     print(f"base relink identical to build/USA/main.exe: {m.base_identical}")
     print(f"fixed placements in the script: {', '.join(m.pinned) or 'none'}")
+    if m.anchored:
+        room = "unknown" if m.headroom is None else f"0x{m.headroom:X}"
+        print(f"ABI anchors: {', '.join(m.anchored)}; room before them: {room}")
     if m.plain_errors is not None:
-        print("shift with the script unchanged: link FAILS")
+        expected = m.headroom is not None and pad > m.headroom and not m.pinned
+        print("shift with the script unchanged: link FAILS"
+              + (" (as expected: the pad exceeds the room before the ABI anchor)" if expected else ""))
         for line in m.plain_errors[:6]:
             print(f"  {line}")
     else:

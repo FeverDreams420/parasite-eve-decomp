@@ -53,7 +53,7 @@ int Draw_InitDisplay(int mode) {
     slots = g_OtBufferTable;
     asm volatile("" : "=r"(slots) : "0"(slots));
 
-    ptr = D_800F34F8;
+    ptr = g_BootWorkArea;
     ptr2 = ptr + 0x1800;
     D_800B0E24 = ptr;
     ptr += 0x6000;

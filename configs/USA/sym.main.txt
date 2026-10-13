@@ -2611,3 +2611,8 @@ g_AkaoTimerDeltaHist0 = 0x8009B7F8; // size:0x4
 g_AkaoDefaultVoiceProgram = 0x8009B8F4; // size:0x4
 g_AkaoSoundEntryTable = 0x8009C080; // size:0x40
 g_SpuReverbPresetRegisters = 0x8009C8C0; // size:0x30
+// Shiftability wave 0b: the field engine / overlay window split. The
+// work area Boot_InitMemoryLayout carves (0x1800, 0x6000, 0x14000) starts
+// at the engine's end and runs to the mdec_diag window; it moves with the
+// engine (configs/USA/main.yaml, engine/boot_work_area).
+g_BootWorkArea = 0x800F34F8; // size:0x18800

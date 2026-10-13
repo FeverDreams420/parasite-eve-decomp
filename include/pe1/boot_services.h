@@ -22,8 +22,10 @@ void Asset_ResetGameState(void);
 /* End-of-frame pass: draws the fade primitives and sends queued AKAO commands. */
 void Boot_FinishFrame(void);
 
-/* Fixed work areas carved up by Boot_InitMemoryLayout. */
-extern u8 D_800F34F8[];
+/* Work areas carved up by Boot_InitMemoryLayout. g_BootWorkArea follows the
+ * field engine and moves with it; the other three are buffers inside the
+ * overlay window block, at fixed addresses (configs/USA/main.yaml). */
+extern u8 g_BootWorkArea[];
 extern u8 D_8010BD00[];
 extern u8 D_80120D08[];
 extern u8 D_801ED800[];
