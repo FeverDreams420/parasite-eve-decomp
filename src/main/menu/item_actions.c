@@ -603,8 +603,7 @@ void Menu_StepSaveLoadScreen(void)
 {
     MenuWidgetNode *container;
     MenuWidgetNode *parent;
-    /* Matching debt: retain the shared transfer callback in $s0. */
-    register MenuWidgetItemAction transfer asm("$16");
+    MenuWidgetItemAction transfer;
     MenuWidgetNode *list;
     int slot;
 
@@ -629,8 +628,8 @@ void Menu_StepSaveLoadScreen(void)
     list = MenuWidget_CreateNode(14, parent, parent);
     parent->update = Menu_InventoryInputHandler;
     list->draw = Menu_DrawSelectableEquipSlotList;
-    list->refreshItems = Menu_RebuildSelectableMask;
     list->itemAction = transfer;
+    list->refreshItems = Menu_RebuildSelectableMask;
     list->cursor_x = -1;
     g_InvSwapTargetIndex = -1;
     g_InvSelectedItemIndex = -1;
