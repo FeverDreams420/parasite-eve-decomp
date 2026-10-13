@@ -127,7 +127,7 @@ int Script_SetEntityActionAndWait(int **arg0) {
         }
     } else {
         FieldActor *state;
-        int keep;
+        s16 keep;
 
         state = g_CurrentEntity;
         if (state->action == 0) {
@@ -135,7 +135,7 @@ int Script_SetEntityActionAndWait(int **arg0) {
             return 1;
         }
         if (state->anim_step >= 0) {
-            register unsigned int lhs asm("$2") = state->anim.fixed;
+            unsigned int lhs = state->anim.fixed;
             unsigned int rhs = state->anim_prev;
             int result = lhs < rhs;
             keep = result;
