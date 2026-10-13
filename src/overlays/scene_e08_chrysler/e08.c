@@ -154,7 +154,7 @@ void func_8018F3C4(RoomEnt *ent, void *arg1, SceneE08LinkInitState *state) {
     FieldFx_SetScriptContext(state);
 
     state->link = ent->link;
-    matrix = (SceneE08MatrixFields *)state->link->p238;
+    matrix = state->link->p238;
     state->matrix = *matrix;
     state->asset = Asset_SearchByKeyType(0x2E);
 
@@ -230,7 +230,7 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
     SceneShiftedPosition *ownerCursor;
     unsigned i;
 
-    owner = (SceneFadeOwner *)FieldFx_GetScriptContext();
+    owner = FieldFx_GetScriptContext();
     seed.raw = D_8018EFF4;
 
     ownerCursor = &owner->position;
@@ -503,7 +503,7 @@ void func_80190060(RoomEnt *ent, void *unused, SceneE08State *state) {
 
     FieldFx_SetScriptContext(state);
     state->link = ent->link;
-    matrix = (SceneE08MatrixWords *)state->link->p238;
+    matrix = state->link->p238;
     state->matrix = *matrix;
     state->asset = Asset_SearchByKeyType(0x2E);
     state->timer = 30;
@@ -1005,7 +1005,7 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     FieldFx_SetScriptContext(state);
     D_80199528 = Asset_FindTable08ByU32Key(*sound, 0x10D8704);
     state->link = ent->link;
-    matrix = (SceneE08MatrixWords *)state->link->p238;
+    matrix = state->link->p238;
     state->matrix = *matrix;
     asset = Asset_SearchByKeyType(0x2E);
     intensity = 0x80;
@@ -1079,7 +1079,7 @@ void func_80191748(SceneGrabHead *arg0, RoomFxControl *arg1) {
                 flags = *(int **)D_8009D254;
                 flags[0x13] |= 0x4000;
 
-                objectFlags = (int *)&arg0->actor->state->core_flags;
+                objectFlags = &arg0->actor->state->core_flags;
                 *objectFlags |= 0x80000000;
                 Battle_InitEntityColors();
             }
@@ -1632,7 +1632,7 @@ void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect)
     SceneE08Vector transformed, v;
     /* Keep the matrix scale live before the first rendering setup call. */
     register s16 scale asm("$19") = 0x1000;
-    char *table = (char *)D_801996A0;
+    char *table = D_801996A0;
     Ovl178Position *owner;
     unsigned i;
 
@@ -2214,7 +2214,7 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     s16 *alphaBase;
     u8 *red;
 
-    owner = (char *)FieldFx_GetScriptContext();
+    owner = FieldFx_GetScriptContext();
     func_800C2EAC(((Ovl178Position *)owner)->spriteMode);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
