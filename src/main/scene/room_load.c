@@ -547,12 +547,14 @@ retry_room:
             if (sample[i].flags & 0x20) {
                 int key = sample[i].u.track.key;
 
+                /* The id words of the voice-bank entries, indexed as one
+                 * halfword run from entry 1. */
                 if ((u16)key & 1) {
-                    D_80094494[sample[i].source.bytes.slot] = key;
-                    D_80094494[sample[i].source.bytes.slot + 8] = sample[i].u.track.key;
+                    g_AkaoVoiceBankEntries[1].ids[sample[i].source.bytes.slot] = key;
+                    g_AkaoVoiceBankEntries[1].ids[sample[i].source.bytes.slot + 8] = sample[i].u.track.key;
                 } else {
-                    D_80094494[sample[i].source.bytes.slot - 4] = key;
-                    D_80094494[sample[i].source.bytes.slot + 4] = sample[i].u.track.key;
+                    g_AkaoVoiceBankEntries[1].ids[sample[i].source.bytes.slot - 4] = key;
+                    g_AkaoVoiceBankEntries[1].ids[sample[i].source.bytes.slot + 4] = sample[i].u.track.key;
                 }
             }
         }
