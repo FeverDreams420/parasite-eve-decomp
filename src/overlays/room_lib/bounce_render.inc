@@ -41,8 +41,7 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
         int vz;
         int rawVy;
         int nextVy;
-        /* Pinned: unpinned, the height lands in another register than retail's. */
-        register int y asm("$2");
+        register int y;
 
         fx->timer++;
         fx->x += fx->vx;
@@ -59,7 +58,6 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
         }
         rawVy = (unsigned short)fx->vy;
         fx->vz = vz >> 9;
-        asm volatile("" : : "m"(fx->vy));
         y = fx->y;
         nextVy = rawVy - ROOMLIB_BOUNCE_GRAVITY;
         fx->vy = nextVy;
