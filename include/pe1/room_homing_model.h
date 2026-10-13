@@ -11,6 +11,7 @@
 #include "pe1/floor_polygon.h"
 #include "pe1/gte_sine_table.h"
 #include "pe1/gte_types.h"
+#include "pe1/pm.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
@@ -110,8 +111,6 @@ typedef struct RoomHomingModelEntity {
 extern struct BattleEntity *D_8009D254;
 
 extern void Akao_Cmd_21(int handle, int arg);
-extern int Scene_LoadRoomAssets(int id, void *actor);
-extern void Pm_SendCmd(int handle, int, int index, int value, int, int);
 
 /* The projectile's constant seeds: the spark sprite's rotation and colour,
  * the model words reported to the scene script, and the floor ring's
