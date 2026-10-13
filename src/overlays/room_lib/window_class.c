@@ -129,7 +129,7 @@ int RoomLib_WindowClassNop3(void) {
 int RoomLib_UpdateWindowClass(RoomEnt *o) {
     switch (func_800DFB78()) {
     case 0:
-        ((void (*)(RoomEnt *))o->sub.cb)(o);
+        o->sub.cb(o);
         return 0;
     case 1:
         RoomLib_ReleaseWindowClass((char *)o);

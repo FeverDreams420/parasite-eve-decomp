@@ -181,7 +181,7 @@ int RoomLib_UpdateHandlerD(RoomEnt *o) {
         if (o->link->variant < 2) {
             return 0;
         }
-        ((void (*)(RoomEnt *))o->sub.cb)(o);
+        o->sub.cb(o);
         return 0;
     case 1:
         RoomLib_ReleaseHandlerD(o);
@@ -673,7 +673,7 @@ int RoomLib_UpdateHandlerE(RoomEnt *o) {
         if (o->link->variant < 2) {
             return 0;
         }
-        ((void (*)(RoomEnt *))o->sub.cb)(o);
+        o->sub.cb(o);
         return 0;
     case 1:
         RoomLib_ReleaseHandlerE(o);

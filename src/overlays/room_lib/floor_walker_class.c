@@ -175,7 +175,8 @@ void RoomLib_HandlerG(RoomEnt *o) {
  * frame); a creature already outside turns away from the player instead.
  * The vertical hop rises with velocity and falls with gravity until it lands
  * on the floor, where it rests before the next hop. */
-void RoomLib_HandlerGFloorWalker(RoomFloorWalkerObject *object) {
+void RoomLib_HandlerGFloorWalker(RoomEnt *obj) {
+    RoomFloorWalkerObject *object = (RoomFloorWalkerObject *)obj;
     RoomFloorWalkerState *state = &object->state;
     RoomFloorWalkerCore *core = object->core;
     RoomFloorWalkerScratch *scratch = ROOM_FLOOR_WALKER_SCRATCH;

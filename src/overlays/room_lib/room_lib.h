@@ -102,7 +102,7 @@ extern void RoomLib_HandlerB(struct RoomEnt *obj);
 extern void RoomLib_HandlerC(struct RoomEnt *obj);
 extern void RoomLib_HandlerD(struct RoomEnt *obj);
 extern void RoomLib_HandlerE(struct RoomEnt *obj);
-extern void RoomLib_HandlerF();
+extern void RoomLib_HandlerF(struct RoomEnt *obj);
 extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
 /* Field object status: 0 no model, 1 model without data, 2 inactive,
  * 3 active, 4 disabled object, 5 the player. */
@@ -166,7 +166,7 @@ typedef struct RoomEnt {
     int w04;                      /* 0x04 */
     RoomLink *link;               /* 0x08 */
     struct RoomSub {
-        void (*cb)(void);         /* 0x0C: armed FX handler */
+        void (*cb)(struct RoomEnt *); /* 0x0C: armed FX handler */
         int *signal;              /* 0x10: completion word (0/1/2) */
     } sub;
     short active;                 /* 0x14 */
@@ -682,61 +682,6 @@ extern void func_800DFB20(void *state);
         } \
     }
 
-/* argument parser variant whose comparison value is stored as the fallback handler */
-#define ROOMLIB_ARG_DISPATCH_REARM_FALLBACK(name, rearm) \
-    int name(RoomEnt *o, int arg1, unsigned int op, int arg3, int sp10, int sp14) { \
-        int value = 0xA; \
-        if (op == value) { \
-            goto case10; \
-        } \
-        value = op < 0xB; \
-        if (value == 0) { \
-            goto high; \
-        } \
-        value = 4; \
-        if (op == value) { \
-            goto case4; \
-        } \
-        goto store; \
-    high: \
-        value = 0x19; \
-        if (op == value) { \
-            goto case25; \
-        } \
-        value = 0x1C; \
-        if (op == value) { \
-            goto case28; \
-        } \
-        goto store; \
-    case25: \
-        if (arg1 != 1) { \
-            goto done; \
-        } \
-        o->sub.signal = arg3; \
-        *(int *)arg3 = arg1; \
-        value = 1; \
-        goto store; \
-    case4: \
-        o->pos[0] = arg3; \
-        o->pos[1] = sp10; \
-        o->h44 = sp14; \
-        goto store; \
-    case28: \
-        o->h48 = arg3; \
-        o->h46 = sp10; \
-        goto store; \
-    case10: \
-        value = (int)rearm; \
-    store: \
-        *(volatile unsigned char *)&o->t16 = arg3; \
-        o->sub.cb = (void (*)(void))value; \
-    done: \
-        return 0; \
-    }
-
-extern char RoomLib_TableA[];
-extern char RoomLib_TableB[];
-
 /* six-argument passthrough to the field engine spawn */
 #define ROOMLIB_SPAWN6(name) \
     int name(int a, int b, int c, int d, int e, int f) { \
@@ -1142,7 +1087,7 @@ int RoomLib_ConfigureHandlerG(RoomEnt *o, int mode, unsigned int op,
                               int arg0, int arg1, int arg2);
 int RoomLib_HandlerGNop3(void);
 void RoomLib_HandlerG(RoomEnt *o);
-void RoomLib_HandlerGFloorWalker(struct RoomFloorWalkerObject *object);
+void RoomLib_HandlerGFloorWalker(struct RoomEnt *obj);
 int RoomLib_ReleaseHandlerG(RoomEnt *o);
 int RoomLib_HandlerGNop6(void);
 
