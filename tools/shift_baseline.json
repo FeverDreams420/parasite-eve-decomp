@@ -24,20 +24,17 @@
   "src:overlays:alias_address_named_owned": 3,
   "src:overlays:pointer_integer_cast": 74,
   "undefined_addr_aliases.main.txt:data_asm_blob": 1,
-  "undefined_addr_aliases.main.txt:data_asm_blob/named_elsewhere": 1,
-  "undefined_addr_aliases.main.txt:data_c_unit": 21,
-  "undefined_addr_aliases.main.txt:data_c_unit/named_elsewhere": 1,
+  "undefined_addr_aliases.main.txt:data_c_unit": 17,
+  "undefined_addr_aliases.main.txt:data_c_unit/named_elsewhere": 6,
   "undefined_addr_aliases.main.txt:kernel": 1,
   "undefined_addr_aliases.main.txt:zero_blob/named_elsewhere": 2,
   "undefined_syms_manual.txt:common_pin": 34,
-  "undefined_syms_manual.txt:data_asm_blob": 22,
-  "undefined_syms_manual.txt:data_asm_blob/named_elsewhere": 72,
-  "undefined_syms_manual.txt:data_c_unit": 17,
-  "undefined_syms_manual.txt:data_c_unit/named_elsewhere": 2,
+  "undefined_syms_manual.txt:data_asm_blob/named_elsewhere": 93,
+  "undefined_syms_manual.txt:data_c_unit": 11,
+  "undefined_syms_manual.txt:data_c_unit/named_elsewhere": 7,
   "undefined_syms_manual.txt:hardware": 10,
   "undefined_syms_manual.txt:kernel": 4,
   "undefined_syms_manual.txt:symbolic_alias": 8,
-  "undefined_syms_manual.txt:zero_blob": 54,
-  "undefined_syms_manual.txt:zero_blob/named_elsewhere": 77
+  "undefined_syms_manual.txt:zero_blob/named_elsewhere": 133
  }
 }
