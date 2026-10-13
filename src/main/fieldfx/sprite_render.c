@@ -27,28 +27,28 @@ void FieldFx_SetSpriteTexturePreset(u8 mode) {
         g_FieldFxSpriteTpageY = 0x100;
         g_FieldFxSpriteClutX = 0;
         g_FieldFxSpriteClutY = 0x1D7;
-        D_800F3422 = 0;
+        g_FieldFxSpriteCellVBase = 0;
     }
     if (mode == 1) {
         g_FieldFxSpriteTpageX = 0x340;
         g_FieldFxSpriteTpageY = 0x160;
         g_FieldFxSpriteClutY = 0x1DB;
         g_FieldFxSpriteClutX = 0;
-        D_800F3422 = 0x60;
+        g_FieldFxSpriteCellVBase = 0x60;
     }
     if (mode == 2) {
         g_FieldFxSpriteTpageX = 0x340;
         g_FieldFxSpriteTpageY = 0x100;
         g_FieldFxSpriteClutX = 0;
         g_FieldFxSpriteClutY = 0x1D6;
-        D_800F3422 = 0;
+        g_FieldFxSpriteCellVBase = 0;
     }
     if (mode == 3) {
         g_FieldFxSpriteTpageX = 0x380;
         g_FieldFxSpriteTpageY = 0x100;
         g_FieldFxSpriteClutX = 0;
         g_FieldFxSpriteClutY = 0x1C8;
-        D_800F3422 = 0;
+        g_FieldFxSpriteCellVBase = 0;
     }
 
     g_FieldFxSpriteTpageValue = GetTPage(g_FieldFxSpriteColorMode, g_FieldFxSpriteBlendRate, g_FieldFxSpriteTpageX, g_FieldFxSpriteTpageY);
@@ -445,7 +445,7 @@ void FieldFx_DrawGlowSprite(FieldGlowSprite *sprite, GteMatrix *placement, u8 mo
     FieldFx_ScaleColor((s16)sprite->depth, &sprite->r, &packet->r0);
     gte_ldv3(g_FieldFxCellQuad, &g_FieldFxCellQuad[1], &g_FieldFxCellQuad[2]);
     gte_rtpt_padded();
-    g_FieldFxScratch->v = D_800F3422 + (sprite->cell & 0xF0);
+    g_FieldFxScratch->v = g_FieldFxSpriteCellVBase + (sprite->cell & 0xF0);
     g_FieldFxScratch->u = (sprite->cell - g_FieldFxScratch->v) << 4;
     g_FieldFxScratch->clutX = sprite->clut << 4;
     g_FieldFxScratch->clutY = sprite->clut >> 4;

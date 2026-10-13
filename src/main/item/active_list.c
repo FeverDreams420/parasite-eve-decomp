@@ -268,7 +268,7 @@ void Inv_BuildItemGridFromCategory(void)
     Inv_SelectActiveList(0);
 
     i = 0x31;
-    clear = D_800C0EAA;
+    clear = &g_AyaInventoryItems[0x31];
     do {
         *clear = 0;
         i--;
@@ -298,7 +298,7 @@ void Inv_BuildItemGridFromCategory(void)
     } while (++i < 9);
 
     i = 0x63;
-    clear = D_800C1F7E;
+    clear = &g_WayneStorageItems[0x63];
     do {
         *clear = 0;
         i--;
@@ -306,7 +306,7 @@ void Inv_BuildItemGridFromCategory(void)
     } while (i >= 0);
 
     i = 0x51;
-    clear = D_800C2022;
+    clear = (s16 *)&g_InvItemArray[0x51];
     do {
         *clear = 0;
         i--;

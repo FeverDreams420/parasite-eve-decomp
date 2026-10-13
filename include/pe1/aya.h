@@ -58,7 +58,7 @@ typedef struct AyaSaveState {
     /* 0x06 */ u16 max_hp;               /* g_AyaHpMax  [CONFIRMED] max HP (status "45/45" right side) */
     /* 0x08 */ u16 current_hp;           /* g_AyaHpCurrent  [CONFIRMED] current HP (status left side); synced from battle slot +0x0C */
     /* 0x0A */ u8  level;                /* g_AyaSaveLevel: 0-based, status shows +1 [CONFIRMED 0 -> "LEVEL 1"]; clamp 0..0x62 */
-    /* 0x0B */ u8  pad_0B;
+    /* 0x0B */ u8  new_game_count;       /* Inv_DispatchCommand INV_CMD_START_NEW_GAME adds 1, up to 99 */
     /* 0x0C */ u8 inventory_slot_count; /* g_AyaInventorySlotCount [CONFIRMED 10 at new game]; <=0x32 */
     /* 0x0D */ u8 pad_0D[3];
     /* 0x10 */ u32 bonus_points;         /* g_AyaBonusPoints [CONFIRMED 0 -> "BONUS POINT 0"]; clamp 0x1869F */
@@ -78,7 +78,7 @@ typedef struct AyaSaveState {
     /* 0x28 */ AyaStatAllocationWords stats;
 
     /* 0x3A */ u8  pad_3A[6];
-    /* 0x40 */ u16 menu_clamp_value;     /* D_800C0E40  [CONFIRMED 0x3D] set via Menu_ClampRange(0x3D) at init */
+    /* 0x40 */ u16 menu_clamp_value;     /* [CONFIRMED 0x3D] set via Menu_ClampRange(0x3D) at init */
     /* 0x42 */ u8  pad_42[2];
     /* 0x44 */ u32 blend_color;         /* Saved draw blend color, initialized to 0x404040. */
     /* 0x48 */ s16 inventory_items[50];   /* g_AyaInventoryItems: 50 item-ID slots */

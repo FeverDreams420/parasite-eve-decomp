@@ -50,7 +50,7 @@ void Menu_SaveOverlayDraw(void);
 
 /* g_GameTimers[0].current as its own word: the item seed reads it there. */
 extern unsigned int D_800A76A4[];
-extern unsigned char g_CursorRenderDataBlock[], D_800C20B4[];
+extern unsigned char g_CursorRenderDataBlock[];
 
 /* The save-title formatter consumes four numeric fields and two variant
  * arguments from this contiguous six-word slot array. Each variant slot is
@@ -80,10 +80,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SaveSjisFormatArguments, secondary) == 0x14,
 
 extern SaveSjisFormatArguments g_SaveSjisFormatArguments;
 void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt);
-
-/* Save header block copied by Save_BuildHeader/Save_RestoreHeader; the
- * item search uses its address as the end of the item records. */
-extern u16 D_800C1EAC[];
 
 /* Save title and card file assembly (memcard/save_flow.c). */
 extern u8 g_SaveTitleBuffer[];

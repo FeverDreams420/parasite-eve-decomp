@@ -959,8 +959,8 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
         Inv_RebuildSelectionBitset();
         g_GameState.pending_story_day = 1;
         Menu_SetMemCardConfirmPending();
-        if (g_AyaSaveState.pad_0B + 1 < 100) g_AyaSaveState.pad_0B++;
-        else g_AyaSaveState.pad_0B = 99;
+        if (g_AyaSaveState.new_game_count + 1 < 100) g_AyaSaveState.new_game_count++;
+        else g_AyaSaveState.new_game_count = 99;
         Inv_InitNewGameInventory();
         return 0;
     case INV_CMD_INIT_BONUS_POINTS:
@@ -1020,7 +1020,7 @@ void Save_InitMetadataState(void) {
     MenuWidget_SetColumnLayoutMode(0);
     Menu_SetActionSubmenuSelection(1);
     g_CursorRenderDataBlock[0] = 255;
-    D_800C20B4[0] = 255;
+    g_CursorRenderDataBlock[0x10] = 255;
 }
 
 int Save_GetCurrentMapNumber(void) {
