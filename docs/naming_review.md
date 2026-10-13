@@ -110,13 +110,13 @@ gone:
   `g_SaveRuntimeState`/`g_AyaSaveState`, `g_FieldFxSpriteParams` and
   inventory array labels;
 - second spellings of a named object kept for a type, qualifier or overlay
-  declaration (`g_GameClockFlags`, `D_800A76A4`, `D_800B0CE2`, `D_800B0DBA`,
+  declaration (`D_800A76A0`, `D_800A76A4`, `D_800B0CE2`, `D_800B0DBA`,
   `D_800B0DBC`, `D_800B0DCD`, `D_800B0E38`, `D_800B0E3C`, `D_800B0E4C`,
   `D_800B0E50`, `D_800B0E54`, `D_800B0E58`, `D_800B0E64`, `D_800B0E6C`,
   `D_800B89F8`, `D_800BCF88`);
 - no reader: written-only words, unreferenced tails after a sized object
   and the pad words after the 0x2C-byte effect states;
-- role not established: `func_800C6C18`, `FieldFx_LoopLinkedAnimation`, `g_EntityBankBuffer`,
+- role not established: `func_800C6C18`, `func_800DFB20`, `D_800B0E2C`,
   `D_800B0E48`, `D_800B6914`, `D_800E21D0`, and the mdec_diag window bytes
   `D_8010BD00` (the window start itself is `g_MdecOverlayArea`);
 - used only in `fieldfx/geometry.c`, `render/object.c` or
@@ -125,3 +125,45 @@ gone:
   `D_800F32D8`, `D_800F336C`, `D_800F3374`, `D_800F3418`), and
   `D_800BCFA4`, which keeps its name;
 - `D_800B0D88`, behind the asm-label views of `battle/encounter.c`.
+
+## Third pass, main names left in src/ and include/
+
+`docs/naming_review_main4.csv` lists the 46 main address names this pass
+removed from `src/` and `include/` (address, old name, name or member path,
+evidence). 26 aliases of `linkers/USA/undefined_syms_manual.txt` went with
+them. Most were second spellings that the earlier passes kept for a type:
+in the `MASPSX_FORCE_G0` units a scalar and an array spelling compile the
+same, so the owner's declaration could take the other spelling's shape (one
+word instead of an incomplete array, the unsigned type when the owner is
+only stored to) and every unit now uses the name. Where one function still
+needs its own view, the view is named after its owner
+(`g_DrawEnabledByte`, `g_SeqElapsedRecord`, `g_InvSavedSelectionIndex0`) or
+after the object it really is (`g_DrawBlendColorPair`, `g_BattleScanPanel`,
+`g_GameClockFlags`, `g_MovieWide`).
+
+44 remain, by reason:
+
+- used in `fieldfx/geometry.c`, `render/object.c` or
+  `field/actor_collision.c`, which this pass did not touch (`D_8009D254`,
+  `D_8009D2E8`, `D_800A636C`, `D_800B0E38`, `D_800B0E98`, `D_800B1640`,
+  `D_800B1644`, `D_800BCFA4`, `D_800C2258`, `D_800E21A8`, `D_800F32D8`,
+  `D_800F336C`, `D_800F3374`, `D_800F3418`);
+- PsyQ library words: qualifier or small-data views whose owner spelling
+  changes the code (`D_80095674`, `D_8009B46C`, `D_8009B784`, `D_8009B788`),
+  the LIBPAD hook pair and its enable word that PE never writes
+  (`D_8009B750`, `D_8009B754`, `D_8009B760`) and the LIBCD word
+  `D_800B6914`;
+- no reader or no writer: `D_8009CDAC` (0x123, never written),
+  `D_8009CDC8` (zero, never written), `D_8009CE78`, `D_8009CEB4`..
+  `D_8009CEC0`, `D_8009CFA4`, `D_8009D084`, `D_8009D088`, `D_8009D08C`,
+  `D_800A1FE8`, `D_800A1898`, `D_800A5D50`, `D_800B0E48`;
+- role not established: `D_8009CFBC` (set when Inv_CheckItemEquippable
+  returns 5);
+- views whose owner spelling changes the code: `D_8009D2C8` (the
+  AkaoTickBank view of `g_AkaoCurTrack`, about 80 uses), `D_8009D2F0` (one
+  byte-pointer use in the script dispatch), `D_800BCF88` (volatile
+  read-modify-write in the grab effects) and the asm-label views of
+  `D_800B0D88`;
+- `D_8010BD00` and `D_80120D08`, buffers in the mdec_diag and menu_memcard
+  overlay windows: a main name would also label those overlays' own data
+  there (`make overlay-collision-check`).
