@@ -729,10 +729,10 @@ void func_80190914(void *object, void *timer, ScenePlayerOrb *orb)
         func_800C3134(D_801987E4, orb->fade, (unsigned char *)&orb->head);
         func_800C3134(D_801987E4, orb->fade, (unsigned char *)&orb->tail);
         func_800D3114(orb->trailA, orb->count - 1, 0x3C, 0x20, 0x90, 0x51, 0x10,
-                      (u16)GetTPage(1, 0, 0x340, 0x100), (u16)GetClut(0, 0x1D9),
+                      GetTPage(1, 0, 0x340, 0x100), GetClut(0, 0x1D9),
                       orb->alpha, &orb->head, &orb->tail, 1);
         func_800D3114(orb->trailB, orb->count - 1, 0x3C, 0x20, 0x90, 0x51, 0x10,
-                      (u16)GetTPage(1, 0, 0x340, 0x100), (u16)GetClut(0, 0x1D9),
+                      GetTPage(1, 0, 0x340, 0x100), GetClut(0, 0x1D9),
                       orb->alpha, &color, &color, 2);
         matrix.m[2][2] = 0x1000;
         matrix.m[1][1] = 0x1000;
@@ -1286,7 +1286,7 @@ void func_80191E78(void *object, void *timer, SceneParticleSlots *slots)
             palette += 4;
         }
         func_800CEE20(&position, (GteRotation *)&offset, scale, scale, 0,
-                      (u16)GetClut(0, palette), 1, slots->verticalOffset[i], 0);
+                      GetClut(0, palette), 1, slots->verticalOffset[i], 0);
     }
     D_800F3368.parameter00 = 0x40;
     D_800F3368.parameter02 = 4;
@@ -1305,7 +1305,7 @@ void func_80191E78(void *object, void *timer, SceneParticleSlots *slots)
             palette += 4;
         }
         func_800CEE20(&position, (GteRotation *)&slots->offset[i], scale, scale, 0x80,
-                      (u16)GetClut(0x80, palette), 2, slots->verticalOffset[i], 0);
+                      GetClut(0x80, palette), 2, slots->verticalOffset[i], 0);
     }
 }
 
@@ -1543,7 +1543,7 @@ void func_80192904(int unused, SceneMovingState *state, SceneMovingSlots *slots)
             }
         }
         if (slots->active[i] != 0) {
-            slots->angle[i] = (u16)slots->angle[i] + ((s16)slots->range[i] >> 4);
+            slots->angle[i] = (u16)slots->angle[i] + (slots->range[i] >> 4);
             if (slots->active[i] == 1) {
                 if (slots->extraRadius[i] < 20) {
                     slots->active[i] = 2;
@@ -1568,9 +1568,9 @@ void func_80192904(int unused, SceneMovingState *state, SceneMovingSlots *slots)
             slots->vector[i].x = (rsin(slots->angle[i]) * slots->extraRadius[i] >> 12) + D_8019956C;
             slots->vector[i].y = rcos(slots->angle[i]) * slots->extraRadius[i] >> 12;
             slots->vector[i].z = (rcos(slots->angle[i]) * slots->extraRadius[i] >> 12) + D_8019957C;
-            slots->vector[i].combinedX = ((s16)slots->vector[i].x + (s16)slots->vector[i].dx) >> 1;
-            slots->vector[i].combinedY = ((s16)slots->vector[i].y + (s16)slots->vector[i].dy) >> 1;
-            slots->vector[i].combinedZ = ((s16)slots->vector[i].z + (s16)slots->vector[i].dz) >> 1;
+            slots->vector[i].combinedX = (slots->vector[i].x + slots->vector[i].dx) >> 1;
+            slots->vector[i].combinedY = (slots->vector[i].y + slots->vector[i].dy) >> 1;
+            slots->vector[i].combinedZ = (slots->vector[i].z + slots->vector[i].dz) >> 1;
         }
     }
     if (state->elapsedFrames >= 181) {
@@ -1756,12 +1756,12 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
     matrix.t[2] = D_8019957C;
     FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80199528, 0, 0);
     if (owner->mode == 0) {
-        int tpage = (u16)GetTPage(0, 1, 0x340, 0x100);
-        FieldFx_ModelSetTexture(tpage, (u16)GetClut(0, 0x1D7));
+        int tpage = GetTPage(0, 1, 0x340, 0x100);
+        FieldFx_ModelSetTexture(tpage, GetClut(0, 0x1D7));
     }
     if (owner->mode == 1) {
-        int tpage = (u16)GetTPage(0, 1, 0x340, 0x160);
-        FieldFx_ModelSetTexture(tpage, (u16)GetClut(0, 0x1DB));
+        int tpage = GetTPage(0, 1, 0x340, 0x160);
+        FieldFx_ModelSetTexture(tpage, GetClut(0, 0x1DB));
     }
     func_800C3134(D_80198860, timer->ticks, (unsigned char *)&color);
     FieldFx_ModelSetSemiTrans(1);
@@ -1898,9 +1898,9 @@ void func_801935A8(void *object, void *timer, SceneLimbBeams *beams)
             points[4].z = target->translation[2];
             func_800C3134(D_801989BC, beams->fade[i], (unsigned char *)&head);
             func_800C3134(D_801989D0, beams->fade[i], (unsigned char *)&tail);
-            tpage = (u16)GetTPage(0, 0, 0x340, 0x100);
+            tpage = GetTPage(0, 0, 0x340, 0x100);
             func_800D3114(points, 4, 100, 0x40, 0x80, 0x9C, 0x10, tpage,
-                          (u16)GetClut(0, 0x1D7), 0x80, &tail, &tail, mode);
+                          GetClut(0, 0x1D7), 0x80, &tail, &tail, mode);
         }
     }
 }
@@ -2624,9 +2624,9 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
     points[6].x = matrices[22].translation[0];
     points[6].y = matrices[22].translation[1];
     points[6].z = matrices[22].translation[2];
-    tpage = (u16)GetTPage(0, 0, 0x340, 0x100);
+    tpage = GetTPage(0, 0, 0x340, 0x100);
     func_800D3114(points, 7, 300, 0x40, 0x80, 0x9C, 0x10, tpage,
-                  (u16)GetClut(0, 0x1D7), 0x80, &head, &tail, 1);
+                  GetClut(0, 0x1D7), 0x80, &head, &tail, 1);
 }
 
 void func_80195210(void *unused, Ovl178EffectController *state,
