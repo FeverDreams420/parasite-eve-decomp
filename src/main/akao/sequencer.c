@@ -2219,7 +2219,7 @@ void SeqOp_LoadNestedStreams(AkaoTrack *track) {
         D_800B89DC = *panpot >> 8;
         D_800B89E0 = *expression >> 23;
     }
-    Seq_StartNestedStreams((AkaoNestedSource *)&D_800B89D0, first, second);
+    Seq_StartNestedStreams(&g_AkaoNestedSource, first, second);
     *(u8 **)track += 4;
 }
 

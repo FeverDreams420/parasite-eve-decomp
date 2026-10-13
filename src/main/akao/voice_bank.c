@@ -468,7 +468,7 @@ void Seq_StartNestedTrack(AkaoTrack *track, AkaoNestedSource *source, unsigned i
     track_reg = track;
     track_reg->key_off_mask = source->key_off_mask;
     track_reg->key_on_mask = source->key_on_mask;
-    pan = source->pan << 8;
+    pan = source->pan.value << 8;
     track_reg->panpot_slide_duration = 0;
     track_reg->panpot = pan;
     pan_target = source->pan_target;
@@ -877,7 +877,7 @@ void Seq_StartDefaultNestedStream(AkaoNestedSource *source) {
     source->key_off_mask = 0x400;
     source->key_on_mask = 0x1000000;
     /* Retail initializes the pan byte and its padding as one word. */
-    *(u32 *)&source->pan = 0x80;
+    source->pan.word = 0x80;
     source->pan_target = 0x7F;
     Seq_StartNestedStreams(source, (void *)old1, (void *)old2);
 }

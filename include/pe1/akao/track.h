@@ -129,12 +129,17 @@ typedef char AkaoVoiceEnvelopeSlotSizeCheck[
     (sizeof(AkaoVoiceEnvelopeSlot) == 8) ? 1 : -1];
 
 /* Source descriptor passed when a nested AKAO stream allocates a voice. */
+/* The pan is read as a byte and written as a whole word. */
+typedef union AkaoNestedPan {
+    AkaoU8 value;
+    AkaoU32 word;
+} AkaoNestedPan;
+
 typedef struct AkaoNestedSource {
     /* 0x00 */ unsigned char pad_00[4];
     /* 0x04 */ AkaoU32 key_off_mask;
     /* 0x08 */ AkaoU32 key_on_mask;
-    /* 0x0C */ AkaoU8 pan;
-    /* 0x0D */ unsigned char pad_0D[3];
+    /* 0x0C */ AkaoNestedPan pan;
     /* 0x10 */ AkaoU32 pan_target;
 } AkaoNestedSource;
 
