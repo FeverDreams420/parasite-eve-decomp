@@ -92,7 +92,7 @@ static inline void Scene_LinkContactTask(FieldActor *self, FieldActor *other)
 
     if (self->script_cursor_1a0 != 0) {
         found = 0;
-        node = (ScriptNode *)self->script_node_lists[1];
+        node = self->script_node_lists[1];
         while (!found) {
             if (node == 0) {
                 break;
@@ -109,7 +109,7 @@ static inline void Scene_LinkContactTask(FieldActor *self, FieldActor *other)
             node->trigger_value = other->field_sfx_id;
             node->target18.coordinate = other->type_id;
             node->target1c = other->sub_id;
-            head = (ScriptNode *)self->script_node_lists[1];
+            head = self->script_node_lists[1];
             if (head != 0) {
                 node->next = head;
                 head->prev = node;
