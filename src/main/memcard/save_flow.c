@@ -1106,13 +1106,13 @@ int Save_StartReadSlot(int port, int slot)
   if (state->present == 1)
   {
     MemCard_CloseAll();
- { buffer = g_MemCardFileBuffer;  asm volatile("" : : : "memory"); }
+    buffer = g_MemCardFileBuffer;
+    state->transferData = buffer;
     state->transferSize = 0x2000;
     state->retryCount = 10;
     state->pendingError = 2;
     state->managerState = 1;
     state->nextState = 5;
-    state->transferData = buffer;
     state->selectedSlot = saved_slot;
     g_MemCardActiveState = state;
     g_MemCardActiveBytesRemaining = 0x2000;
