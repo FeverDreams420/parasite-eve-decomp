@@ -317,7 +317,7 @@ s32 Render_DrawWireframeModel(RenderAnimFrame *frame, void *position, s32 scale,
                     edge_end = index2;
                     line_a = screen1;
                     goto far_edge;
-                } else if ((s16)y0_short == 0 && y2 == 0) {
+                } else if (y0_short == 0 && y2 == 0) {
                     edge_start = index0;
                     edge_end = index2;
                     line_a = screen0;
