@@ -131,7 +131,7 @@ void MenuCard_AttachFadePayload(void) {
         node = node->next;
     }
 
-    node->payload = &MenuCard_StepFadeToImagesAtLoad;
+    node->payload = &D_80193200;
 }
 
 void MenuCard_CreateImageGroup(void);

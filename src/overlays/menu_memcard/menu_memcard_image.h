@@ -19,14 +19,14 @@ extern MemcardImageNode *g_MemcardFreeImageNodes, *g_MemcardPendingNodeTail, *g_
 extern MemcardImageNode *g_MemcardActiveNodeTail; /* Active-list tail. */
 extern MemcardImageNode g_MemcardImageNodePool[8];
 extern MemcardImagePreset g_MemcardImagePresets[];
-extern u8 MenuCard_AdvanceFadeAtLoad[];
+extern u8 D_80193084[];
 extern s32 g_MemcardImageOffsets[];
-extern u8 g_MemcardImageBundle[], MenuCard_UpdateFadeCounterAtLoad[];
+extern u8 g_MemcardImageBundle[], D_80192FE8[];
 
 MemcardImageNode *MenuCard_CreateImageNode(s32 kind);
 void MenuCard_CreateFixedImageNode(void);
 void MenuCard_CreateImageGroup(void);
-extern u8 MenuCard_UpdateFadeDisplayAtLoad[], MenuCard_InitFadeForNodeAtLoad[];
+extern u8 D_801930D8[], D_80192F98[];
 
 void MenuCard_BlendImage(MemcardImageNode *node, u8 *destination, s32 padding);
 
@@ -35,7 +35,7 @@ void MenuCard_BlendRotatedImage(MemcardImageNode *node, u8 *destination, s32 pad
 /* Memory card list screen input. */
 extern s32 g_MemcardPrevPad; /* Pad state of the previous frame. */
 extern s32 g_MemcardScreenTimer;
-extern u8 MenuCard_AttachFadePayloadAtLoad[], MenuCard_DecreaseFadeAtLoad[];
+extern u8 D_801931BC[], D_8019316C[];
 s32 Draw_RemapStatusFlags(void); /* Draw_RemapStatusFlags: pad state */
 s32 MemCard_IsPortPresent(s32 port); /* MemCard_IsPortPresent */
 s32 MemCard_HasAnyPresentFile(void);

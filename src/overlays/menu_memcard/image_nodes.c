@@ -391,7 +391,7 @@ MemcardImageNode *MenuCard_CreateImageNode(s32 kind) {
         s32 y = node->y;
         s32 parameter;
         parameter = preset->parameter;
-        node->draw = MenuCard_UpdateFadeCounterAtLoad; node->update = MenuCard_BlendImage;
+        node->draw = D_80192FE8; node->update = MenuCard_BlendImage;
         node->targetY = y; node->parameter = parameter;
     }
     node->stepY = -16;
@@ -431,7 +431,7 @@ void MenuCard_CreateFixedImageNode(void) {
     }
     {
         register s32 parameter = preset->parameter;
-        node->draw = MenuCard_AdvanceFadeAtLoad;
+        node->draw = D_80193084;
         node->update = MenuCard_BlendImage;
         node->parameter = parameter;
     }
@@ -477,7 +477,7 @@ void MenuCard_CreateImageGroup(void) {
     }
     MenuCard_CreateImageNode(3);
     MenuCard_CreateFixedImageNode();
-    MenuCard_CreateImageNode(5)->field14 = MenuCard_InitFadeForNodeAtLoad;
+    MenuCard_CreateImageNode(5)->field14 = D_80192F98;
     {
         register s32 kind;
         MemcardImageNode *node = g_MemcardFreeImageNodes;
@@ -511,7 +511,7 @@ void MenuCard_CreateImageGroup(void) {
         }
         {
             register s32 parameter = preset->parameter;
-            node->draw = MenuCard_UpdateFadeDisplayAtLoad;
+            node->draw = D_801930D8;
             node->update = MenuCard_BlendRotatedImage;
             node->parameter = parameter;
         }

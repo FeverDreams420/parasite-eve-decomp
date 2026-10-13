@@ -13,7 +13,7 @@ void BootDisplay_RunDisplay(void) {
     }
     g_BootDisplayCallbacks->init();
     if (!(g_GameStateFlags & 0x10000)) {
-        BootDisplay_InitPlaybackFileAtLoad();
+        func_8012562C();
         BootDisplay_StartPlayback();
         if (g_GameStateFlags & 0x20000) {
             Spu_SetVoiceVolume(144);

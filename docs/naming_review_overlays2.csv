@@ -214,14 +214,6 @@ address,overlay,old_name,name,evidence
 0x801D1498,menu_memcard,D_801D1498,g_MemcardListSavedDrawEnv[0],"saved DRAWENV copy of g_RenderDrawEnvArray[0], restored at the end of the list screen"
 0x801D14F4,menu_memcard,D_801D14F4,g_MemcardListSavedDrawEnv[1],second saved DRAWENV (0x5C stride)
 0x801D11C0,menu_memcard,D_801D11C0,g_MemcardSecondScreenView,third pointer view of the second MemcardScreenBuffer slot (same address as g_MemcardSecondScreen)
-0x80192F98,menu_memcard,D_80192F98,MenuCard_InitFadeForNodeAtLoad,node->field14 callback; equals the fade.c function MenuCard_InitFadeForNode (map 0x80192F4C) plus the 0x4C difference between link and load base (yaml comment)
-0x80192FE8,menu_memcard,D_80192FE8,MenuCard_UpdateFadeCounterAtLoad,map 0x80192F9C + 0x4C
-0x80193084,menu_memcard,D_80193084,MenuCard_AdvanceFadeAtLoad,map 0x80193038 + 0x4C
-0x801930D8,menu_memcard,D_801930D8,MenuCard_UpdateFadeDisplayAtLoad,map 0x8019308C + 0x4C
-0x8019316C,menu_memcard,D_8019316C,MenuCard_DecreaseFadeAtLoad,map 0x80193120 + 0x4C
-0x8019319C,menu_memcard,D_8019319C,MenuCard_CreateFadeImageNodeAtLoad,"fade.c function after DecreaseFade, + 0x4C"
-0x801931BC,menu_memcard,D_801931BC,MenuCard_AttachFadePayloadAtLoad,"0x20 bytes later, matches the tail copy MenuCard_AttachFadePayload layout"
-0x80193200,menu_memcard,D_80193200,MenuCard_StepFadeToImagesAtLoad,"the payload AttachFadePayload stores; 0x44 after the previous, matching the tail copy"
 0x80120FF4,menu_memcard,D_80120FF4,g_MenuCardVideoDirectory,"asciz ""\FMV1"": video_open.inc strcat()s it before the file name when the movie number is below 21 (first player copy)"
 0x80120FFC,menu_memcard,D_80120FFC,g_MenuCardVideoDirectoryLate,"""\FMV2"" prefix for movie numbers 21 and up (first copy)"
 0x8018F2E4,menu_memcard,D_8018F2E4,g_MenuCardScreenVideoDirectory,"""\FMV1"" prefix for movies below 21 (second copy)"
@@ -233,5 +225,4 @@ address,overlay,old_name,name,evidence
 0x80125B1C,boot_display,D_80125B1C,g_BootDisplayUppercaseWidths,"g_BootDisplayLowercaseWidths (0x80125A9C, 4 bytes per character) + 0x80 = entry for character-32; BootDisplay_GetGlyphWidth indexes it by an uppercase letter and the style"
 0x80125B1E,boot_display,D_80125B1E,g_BootDisplayUppercaseWidthsStyle2,"same table at column 2 (the style==2 branch of BootDisplay_GetGlyphWidth)"
 0x80172CFA,boot_display,D_80172CFA,g_BootDisplayPlaybackAltCount,"playback.c: incremented and returned by BootDisplay_StepPlaybackTransfer for modes other than 1 (mode 1 advances g_BootDisplayPlaybackRingIndex); reset in BootDisplay_InitPlaybackFile"
-0x8012562C,boot_display,func_8012562C,BootDisplay_InitPlaybackFileAtLoad,"called by BootDisplay_RunDisplay right before BootDisplay_StartPlayback; it is BootDisplay_InitPlaybackFile (playback_file.c, linked 0xE8 below its load address per the yaml): offset 0x2688 of the overlay"
 0x8010BF94,boot_display;mdec_diag,func_8010BF94,MdecDiag_ReadHalfword,"body in mdec_diag/decdct.c is `return *value` on an unsigned short pointer; boot_display passes the first halfword of a credit image bitstream to DecDCTvlcSize2"

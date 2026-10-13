@@ -29,7 +29,7 @@ void MenuCard_HandleListInput(void) {
             if (node->stepY == 0) {
                 node->stepY = 1;
                 node->parameter = 8;
-                node->field14 = MenuCard_AttachFadePayloadAtLoad;
+                node->field14 = D_801931BC;
                 g_MemcardScreenTimer = 0;
                 Menu_PlayConfirmSound();
             }
@@ -46,7 +46,7 @@ void MenuCard_HandleListInput(void) {
             if (node->y == 200 && MemCard_HasAnyPresentFile() != 0) {
                 node = MenuCard_FindImageNode(6);
                 if (node->targetY == 0) {
-                    node->draw = MenuCard_UpdateFadeDisplayAtLoad;
+                    node->draw = D_801930D8;
                     node->update = MenuCard_BlendRotatedImage;
                     node->targetY = 20;
                     node->stepY = 1;
@@ -63,7 +63,7 @@ void MenuCard_HandleListInput(void) {
         if (MemCard_HasAnyPresentFile() == 0) {
             node = MenuCard_FindImageNode(6);
             if (node->targetY == 0x54) {
-                node->draw = MenuCard_DecreaseFadeAtLoad;
+                node->draw = D_8019316C;
             }
             if (node->intensity != 0) {
                 node->stepY = -1;
@@ -358,7 +358,7 @@ s32 func_801909B4(void) {
         g_MemcardPendingNodeHead = 0;
         g_MemcardActiveNodeTail = 0;
         g_MemcardActiveNodeHead = 0;
-        MenuCard_CreateImageNode(1)->field14 = MenuCard_CreateFadeImageNodeAtLoad;
+        MenuCard_CreateImageNode(1)->field14 = D_8019319C;
         g_MemcardScreenTimer = titleMode;
         if (titleMode < 0x3E8) {
             do {

@@ -65,7 +65,6 @@ g_BootDisplayPlaybackRingIndex = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CF8; /* boot_di
 g_BootDisplayPlaybackAltCount = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CFA; /* boot_display */
 g_BootDisplayReportedPos = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CFC; /* boot_display */
 g_BootDisplayPlaybackSectorBuffer = OVERLAY_WINDOW_FX_SECTOR17 + 0x2D00; /* boot_display */
-BootDisplay_InitPlaybackFileAtLoad = OVERLAY_WINDOW_BOOT_DISPLAY + 0x2688; /* boot_display */
 
 /* owner: asset[71], the credits data (PE.IMG sectors 1111..1276), read
  * to 0x80120D00 together with boot_display, which lies inside it.
@@ -208,14 +207,6 @@ g_MemcardGlintOrigin = OVERLAY_WINDOW_TASK_PROGRAM + 0x4730; /* menu_memcard */
 g_MemcardCosineColor = OVERLAY_WINDOW_TASK_PROGRAM + 0x4738; /* menu_memcard */
 g_MemcardSineColor = OVERLAY_WINDOW_TASK_PROGRAM + 0x473C; /* menu_memcard */
 g_MenuCardCrossFlashRaised = OVERLAY_WINDOW_TASK_PROGRAM + 0x4742; /* menu_memcard */
-MenuCard_InitFadeForNodeAtLoad = OVERLAY_WINDOW_ROOM + 0x3FB0; /* menu_memcard */
-MenuCard_UpdateFadeCounterAtLoad = OVERLAY_WINDOW_ROOM + 0x4000; /* menu_memcard */
-MenuCard_AdvanceFadeAtLoad = OVERLAY_WINDOW_ROOM + 0x409C; /* menu_memcard */
-MenuCard_UpdateFadeDisplayAtLoad = OVERLAY_WINDOW_ROOM + 0x40F0; /* menu_memcard */
-MenuCard_DecreaseFadeAtLoad = OVERLAY_WINDOW_ROOM + 0x4184; /* menu_memcard */
-MenuCard_CreateFadeImageNodeAtLoad = OVERLAY_WINDOW_ROOM + 0x41B4; /* menu_memcard */
-MenuCard_AttachFadePayloadAtLoad = OVERLAY_WINDOW_ROOM + 0x41D4; /* menu_memcard */
-MenuCard_StepFadeToImagesAtLoad = OVERLAY_WINDOW_ROOM + 0x4218; /* menu_memcard */
 
 /* owner: scene_e20_cruiser.
  * reason: the overlay's own memory past the end of its extracted
