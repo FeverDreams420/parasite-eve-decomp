@@ -43,7 +43,7 @@ void RoomLib_InitTwelveEffectPackets(RoomEnt *obj, void *unused, RoomLibFxMatrix
     state->asset.index = Asset_SearchByKeyType(0xB);
     owner = obj->link;
     state->link = owner;
-    words = (RoomLibFxMatrixWords *)owner->p238;
+    words = owner->p238;
     state->matrix = *words;
     state->reload = 0x28;
     state->cooldown = 0;
