@@ -43,7 +43,7 @@ void *RoomLib_InitPairedGlowSprite(RoomEnt *obj, s32 arg1, RoomLibFxMatrixState 
     FieldFx_SetScriptContext(state);
     owner = obj->link;
     state->link = owner;
-    src = (RoomLibFxMatrixWords *)owner->p238;
+    src = owner->p238;
     state->matrix = *src;
     state->cooldown = 0;
     state->hit = 0;
