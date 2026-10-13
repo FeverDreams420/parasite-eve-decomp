@@ -664,7 +664,7 @@ s32 func_801940B0(int mode, void *effect) {
 
     switch (mode) {
     case 1:
-        updateKind = (s16) state->kind;
+        updateKind = state->kind;
         switch (updateKind) {
         case 0:
             state->frame = 0;
@@ -735,7 +735,7 @@ s32 func_801940B0(int mode, void *effect) {
                 if (squaredSpeed < 0) {
                     squaredSpeed += 0xF;
                 }
-                func_800CFB7C(motionAngles, (s32) (squaredSpeed << 0xC) >> 0x10, (GteShortVector *)&delta.x);
+                func_800CFB7C(motionAngles, (squaredSpeed << 0xC) >> 0x10, (GteShortVector *)&delta.x);
                 state->x = (s16) ((u16) state->x + delta.x);
                 state->y = (s16) ((u16) state->y + delta.y);
                 state->z = (s16) ((u16) state->z + delta.z);
@@ -821,7 +821,7 @@ s32 func_801940B0(int mode, void *effect) {
         case 2:
             {
                 register unsigned frame asm("$3") = *(volatile u16 *)&state->frame;
-                register int vx asm("$6") = (s16)state->motionX;
+                register int vx asm("$6") = state->motionX;
                 register unsigned coordinate asm("$2");
                 register unsigned vxBits asm("$5");
                 int dampX;
@@ -842,7 +842,7 @@ s32 func_801940B0(int mode, void *effect) {
                 state->y = coordinate + vy;
                 state->z = z + vz;
                 state->motionX = dampX / 64;
-                dampZ = (s16)state->motionZ * 63;
+                dampZ = state->motionZ * 63;
                 if (dampZ < 0) dampZ += 63;
                 vy = (u16)state->motionY;
                 state->motionZ = dampZ >> 6;
@@ -1021,7 +1021,7 @@ checkLifetime:
             pulseCosine = rcos(state->frame << 6);
             fade = pulseCosine >> 5;
             if (pulseCosine < 0) {
-                fade = (s32) (pulseCosine + 0x1F) >> 5;
+                fade = (pulseCosine + 0x1F) >> 5;
             }
             pulseExtent = 0x40;
             D_800F3368.parameter00 = pulseExtent;
@@ -1058,7 +1058,7 @@ checkLifetime:
                 impactCosine = rcos(((state->frame << 10) / 12));
                 fade = impactCosine >> 5;
                 if (impactCosine < 0) {
-                    fade = (s32) (impactCosine + 0x1F) >> 5;
+                    fade = (impactCosine + 0x1F) >> 5;
                 }
                 D_800F3368.parameter00 = 0x20;
                 *spriteFrame = 2;
