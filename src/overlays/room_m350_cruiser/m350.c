@@ -1568,7 +1568,7 @@ case 2:
         int rawPage;
         int kind;
         int i;
-        register int size asm("$17");
+        register int size;
         int *in,*out;
         Matrix *transforms;
         i=0;
