@@ -87,3 +87,30 @@ address,overlay,old_name,name,evidence
 0x8019BFFC,fx_common,D_8019BFFC,g_FxCommonAutoVariant,variant FxCommon_InitScene selects when g_FxCommonAutoPlay is 1 (set together with it by FxCommon_SelectRoomVariant)
 0x8019C000,fx_common,D_8019C000,g_FxCommonConfirmExit,FxCommon_SelectRoomVariant sets 1 for the areas where confirming the variant in D_8019C004 leaves the scene at once (FxCommon_StepEffects)
 0x8019C004,fx_common,D_8019C004,g_FxCommonConfirmExitVariant,variant whose confirm leaves the scene when g_FxCommonConfirmExit is 1 (FxCommon_StepEffects compares it with g_FxCommonRoomVariant)
+0x8019C148,fx_common,D_8019C148,g_FxCommonEchoNodes[0],Interior of g_FxCommonEchoNodes (sym 0x8019C148): FxCommon_InitScene creates four type 0x53 nodes into it; FxCommon_DrawSceneNodes copies the flyers' matrices onto them.
+0x8019C14C,fx_common,D_8019C14C,g_FxCommonEchoNodes[1],"Same array, element 1 (type 0x53 node)."
+0x8019C150,fx_common,D_8019C150,g_FxCommonEchoNodes[2],"Same array, element 2 (type 0x53 node)."
+0x8019C154,fx_common,D_8019C154,g_FxCommonEchoNodes[3],"Same array, element 3 (type 0x53 node)."
+0x801EA578,fx_common,D_801EA578,g_FxCommonPathNodes[0],"Element 0 of g_FxCommonPathNodes (sym 0x801EA578); InitScene creates it as a type 0x52 node, the camera code reads its translation (matrix.t) as the look-at target."
+0x801EA57C,fx_common,D_801EA57C,g_FxCommonPathNodes[1],Element 1 of g_FxCommonPathNodes; type 0x52 node created next to element 0.
+0x801EA580,fx_common,D_801EA580,g_FxCommonPathNodes[2],Element 2 of g_FxCommonPathNodes; its translation is the view-mode 2 camera position in FxCommon_StepEffects.
+0x801EA584,fx_common,D_801EA584,g_FxCommonPathNodes[3],"Element 3 of g_FxCommonPathNodes (type 0x52 node, copy of element 2 each frame)."
+0x801EA588,fx_common,D_801EA588,g_FxCommonPathTailNodes[0],"Element 0 of g_FxCommonPathTailNodes (sym 0x801EA588): type 0x23 node, drawn with two depth biases by FxCommon_DrawSceneNodes."
+0x801EA58C,fx_common,D_801EA58C,g_FxCommonPathTailNodes[1],Element 1 of g_FxCommonPathTailNodes: type 0x23 node whose translation is the view-mode 1 camera position (minus 0x12C in y).
+0x8019C180,fx_common,D_8019C180,g_FxCommonType51Node,Node FxCommon_InitScene creates with type 0x51 and FxCommon_DrawSceneNodes draws after the 0x28..0x32 group.
+0x8019CDA0,fx_common,D_8019CDA0,g_FxCommonSceneNodes[0],"Nodes of types 0x28 to 0x32 are created in address order by FxCommon_InitScene into eleven consecutive pointers (0x8019CDA0..0x8019CDC8); FxCommon_DrawSceneNodes draws them with depth biases 1000, 0xF3B, 0xF3A, 0xF39 and 0. Element 0 is type 0x28."
+0x8019CDA4,fx_common,D_8019CDA4,g_FxCommonSceneNodes[1],Type 0x29 (see g_FxCommonSceneNodes[0]).
+0x8019CDA8,fx_common,D_8019CDA8,g_FxCommonSceneNodes[2],Type 0x2A.
+0x8019CDAC,fx_common,D_8019CDAC,g_FxCommonSceneNodes[3],Type 0x2B.
+0x8019CDB0,fx_common,D_8019CDB0,g_FxCommonSceneNodes[4],Type 0x2C.
+0x8019CDB4,fx_common,D_8019CDB4,g_FxCommonSceneNodes[5],Type 0x2D.
+0x8019CDB8,fx_common,D_8019CDB8,g_FxCommonSceneNodes[6],Type 0x2E.
+0x8019CDBC,fx_common,D_8019CDBC,g_FxCommonSceneNodes[7],Type 0x2F.
+0x8019CDC0,fx_common,D_8019CDC0,g_FxCommonSceneNodes[8],Type 0x30.
+0x8019CDC4,fx_common,D_8019CDC4,g_FxCommonSceneNodes[9],Type 0x31.
+0x8019CDC8,fx_common,D_8019CDC8,g_FxCommonSceneNodes[10],Type 0x32.
+0x8019CC20,fx_common,D_8019CC20,g_FxCommonType21Nodes[0],Two nodes of type 0x21 created back to back by FxCommon_InitScene; drawn with force=1 at depth bias 0 (element 0) and 800 mirrored (element 1).
+0x8019CC24,fx_common,D_8019CC24,g_FxCommonType21Nodes[1],Second type 0x21 node (mirrored draw).
+0x8019CC28,fx_common,D_8019CC28,g_FxCommonType54Node,Type 0x54 node; FxCommon_DrawSceneNodes draws it first at depth bias 0xFA1 when the view mode is not 0.
+0x8019C820,fx_common,D_8019C820,g_FxCommonLodNodes[0],"Node FxCommon_InitScene creates with FxCommon_CreateConfiguredNode(0x22, 0x20, 0x20) and far/near depths 0x2710/0x1F40; drawn with FxCommon_DrawLodNode at bias 0 beside g_FxCommonPairedNodes[0] (same parameters)."
+0x8019C824,fx_common,D_8019C824,g_FxCommonLodNodes[1],"Second configured LOD node (depths 0x14/0xA), drawn at bias 1000 beside g_FxCommonPairedNodes[1] (same parameters)."

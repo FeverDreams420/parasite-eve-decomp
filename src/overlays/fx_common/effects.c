@@ -182,10 +182,10 @@ void func_8019234C(void)
         FxCommon_DrawSceneNodes();
         FxCommon_StepPathNodes();
         if (!started) {
-            handle = FxCommon_SendTableCommand3d(0xABE, D_801EA578->state);
+            handle = FxCommon_SendTableCommand3d(0xABE, g_FxCommonPathNodes[0]->matrix.t);
             started = 1;
         } else if (g_FxCommonDemoExiting == 0) {
-            FxCommon_Apply3dPan(handle, D_801EA578->state);
+            FxCommon_Apply3dPan(handle, g_FxCommonPathNodes[0]->matrix.t);
         }
         if (g_FxCommonViewMode == 10 || (g_FxCommonPlaying == 1 && g_FxCommonPlayAdvance == 0))
             Menu_DrawTextboxEntries();
@@ -280,7 +280,7 @@ void FxCommon_DrawSceneNodes(void)
 
     if (g_FxCommonViewMode != 0) {
         g_FxCommonDepthBias = 0xFA1;
-        DRAW(D_8019CC28, 1, 1, 0);
+        DRAW(g_FxCommonType54Node, 1, 1, 0);
     }
     g_FxCommonDepthBias = 0xFA0;
     DRAW(g_FxCommonRuntime.node25, 1, 1, 0);
@@ -303,22 +303,22 @@ void FxCommon_DrawSceneNodes(void)
         g_FxCommonType26Nodes[3]->state[0] = -0x6328;
 
     g_FxCommonDepthBias = 1000;
-    DRAW(D_8019CDA4, 0, 1, 0);
-    DRAW(D_8019CDAC, 0, 1, 0);
+    DRAW(g_FxCommonSceneNodes[1], 0, 1, 0);
+    DRAW(g_FxCommonSceneNodes[3], 0, 1, 0);
     g_FxCommonDepthBias = 0xF3B;
-    DRAW(D_8019CDA0, 1, 1, 0);
-    DRAW(D_8019CDA8, 1, 1, 0);
+    DRAW(g_FxCommonSceneNodes[0], 1, 1, 0);
+    DRAW(g_FxCommonSceneNodes[2], 1, 1, 0);
     g_FxCommonDepthBias = 0xF3A;
-    DRAW(D_8019CDB0, 1, 1, 0);
+    DRAW(g_FxCommonSceneNodes[4], 1, 1, 0);
     g_FxCommonDepthBias = 0xF39;
-    DRAW(D_8019CDB4, 1, 1, 0);
+    DRAW(g_FxCommonSceneNodes[5], 1, 1, 0);
     g_FxCommonDepthBias = 0;
-    DRAW(D_8019CDB8, 0, 1, 0);
-    DRAW(D_8019CDBC, 0, 1, 0);
-    DRAW(D_8019CDC0, 0, 1, 0);
-    DRAW(D_8019CDC4, 0, 1, 0);
-    DRAW(D_8019CDC8, 0, 1, 0);
-    DRAW(D_8019C180, 0, 1, 0);
+    DRAW(g_FxCommonSceneNodes[6], 0, 1, 0);
+    DRAW(g_FxCommonSceneNodes[7], 0, 1, 0);
+    DRAW(g_FxCommonSceneNodes[8], 0, 1, 0);
+    DRAW(g_FxCommonSceneNodes[9], 0, 1, 0);
+    DRAW(g_FxCommonSceneNodes[10], 0, 1, 0);
+    DRAW(g_FxCommonType51Node, 0, 1, 0);
 
     if (g_FxCommonPathNodes[0]->kind == 0x24) {
         g_FxCommonPathNodes[0]->kind = 0x52;
@@ -341,10 +341,10 @@ void FxCommon_DrawSceneNodes(void)
         DRAW(g_FxCommonPathNodes[3], 0, 0, 1);
 
     g_FxCommonDepthBias = 0;
-    DRAW_PAIR(D_8019C820, 1, 0);
+    DRAW_PAIR(g_FxCommonLodNodes[0], 1, 0);
     DRAW_PAIR(g_FxCommonPairedNodes[0], 1, 0);
     g_FxCommonDepthBias = 1000;
-    DRAW_PAIR(D_8019C824, 1, 2);
+    DRAW_PAIR(g_FxCommonLodNodes[1], 1, 2);
     DRAW_PAIR(g_FxCommonPairedNodes[1], 1, 2);
 
     g_FxCommonDepthBias = 0;
@@ -354,9 +354,9 @@ void FxCommon_DrawSceneNodes(void)
     DRAW(g_FxCommonPathTailNodes[0], 0, 0, 1);
     DRAW(g_FxCommonPathTailNodes[1], 0, 0, 1);
     g_FxCommonDepthBias = 0;
-    DRAW(D_8019CC20, 0, 1, 0);
+    DRAW(g_FxCommonType21Nodes[0], 0, 1, 0);
     g_FxCommonDepthBias = 800;
-    DRAW(D_8019CC24, 0, 1, 1);
+    DRAW(g_FxCommonType21Nodes[1], 0, 1, 1);
 
     if (g_FxCommonNight == 1) {
         D_8019C0D0[0] += (s16)(rand() % 40 + 20);
@@ -1092,20 +1092,20 @@ void FxCommon_StepEffects(void)
         }
     }
     if ((g_FxCommonViewMode == 1) && (g_FxCommonMotionRemaining0 == 0) && (g_FxCommonMotionRemaining1 == 0)) {
-        ((FxCommonVec3 *)&g_FxCommonCameraPosition)->x = D_801EA58C->state[0];
-        g_FxCommonCameraPosition.y = D_801EA58C->state[1] - 0x12C;
-        g_FxCommonCameraPosition.z = D_801EA58C->state[2];
-        ((FxCommonVec3 *)&g_FxCommonCameraTarget)->x = D_801EA578->state[0];
-        g_FxCommonCameraTarget.y = D_801EA578->state[1];
-        g_FxCommonCameraTarget.z = D_801EA578->state[2];
+        ((FxCommonVec3 *)&g_FxCommonCameraPosition)->x = g_FxCommonPathTailNodes[1]->matrix.t[0];
+        g_FxCommonCameraPosition.y = g_FxCommonPathTailNodes[1]->matrix.t[1] - 0x12C;
+        g_FxCommonCameraPosition.z = g_FxCommonPathTailNodes[1]->matrix.t[2];
+        ((FxCommonVec3 *)&g_FxCommonCameraTarget)->x = g_FxCommonPathNodes[0]->matrix.t[0];
+        g_FxCommonCameraTarget.y = g_FxCommonPathNodes[0]->matrix.t[1];
+        g_FxCommonCameraTarget.z = g_FxCommonPathNodes[0]->matrix.t[2];
     }
     if ((g_FxCommonViewMode == 2) && (g_FxCommonMotionRemaining0 == 0) && (g_FxCommonMotionRemaining1 == 0)) {
-        ((FxCommonVec3 *)&g_FxCommonCameraPosition)->x = D_801EA580->state[0];
-        g_FxCommonCameraPosition.y = D_801EA580->state[1];
-        g_FxCommonCameraPosition.z = D_801EA580->state[2];
-        ((FxCommonVec3 *)&g_FxCommonCameraTarget)->x = D_801EA578->state[0];
-        g_FxCommonCameraTarget.y = D_801EA578->state[1];
-        g_FxCommonCameraTarget.z = D_801EA578->state[2];
+        ((FxCommonVec3 *)&g_FxCommonCameraPosition)->x = g_FxCommonPathNodes[2]->matrix.t[0];
+        g_FxCommonCameraPosition.y = g_FxCommonPathNodes[2]->matrix.t[1];
+        g_FxCommonCameraPosition.z = g_FxCommonPathNodes[2]->matrix.t[2];
+        ((FxCommonVec3 *)&g_FxCommonCameraTarget)->x = g_FxCommonPathNodes[0]->matrix.t[0];
+        g_FxCommonCameraTarget.y = g_FxCommonPathNodes[0]->matrix.t[1];
+        g_FxCommonCameraTarget.z = g_FxCommonPathNodes[0]->matrix.t[2];
     }
     if (g_FxCommonReplayCamera == 1) {
         FxCommon_SamplePath(g_FxCommonCameraPathPosition, g_FxCommonEffectSetup[g_FxCommonRoomVariant].motionIndices[3], Draw_GetTimTableEntry((&g_FxCommonTimTable), 2), &g_FxCommonCameraPosition, &sampleExtra);
