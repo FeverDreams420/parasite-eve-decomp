@@ -148,8 +148,11 @@ void func_80196498(void)
     textureIndexOrHasPoints = 0;
     do {
         textureY = D_80091648[textureIndexOrHasPoints].y;
-        D_80091648[textureIndexOrHasPoints].tpage = ((u32) (textureY & 0x100) >> 4) | (((D_80091648[textureIndexOrHasPoints].x & 0x3FF) >> 6) | 0x20) | ((textureY & 0x200) * 4);
-        D_80091648[textureIndexOrHasPoints].clut = (D_80091648[textureIndexOrHasPoints].h << 6) | (((u16) D_80091648[textureIndexOrHasPoints].w >> 4) & 0x3F);
+        D_80091648[textureIndexOrHasPoints].tpage =
+            BG_SLOT_TPAGE(D_80091648[textureIndexOrHasPoints].x, textureY);
+        D_80091648[textureIndexOrHasPoints].clut =
+            BG_SLOT_CLUT(D_80091648[textureIndexOrHasPoints].clut_x,
+                         D_80091648[textureIndexOrHasPoints].clut_y);
         textureIndexOrHasPoints++;
     } while (textureIndexOrHasPoints < 2);
     if ((D_8019C008 != 0) || (Render_SetupFogLayer(Draw_GetTimTableEntry(&D_801D0260, 0)), (D_8019C008 != 0))) {

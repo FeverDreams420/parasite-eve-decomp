@@ -21,7 +21,7 @@
   "src:main:alias_named_owned": 2,
   "src:main:int_to_pointer_literal": 6,
   "src:main:pointer_integer_cast": 8,
-  "src:overlays:pointer_integer_cast": 64,
+  "src:overlays:pointer_integer_cast": 61,
   "undefined_addr_aliases.main.txt:kernel": 1,
   "undefined_syms_manual.txt:hardware": 10,
   "undefined_syms_manual.txt:kernel": 2,

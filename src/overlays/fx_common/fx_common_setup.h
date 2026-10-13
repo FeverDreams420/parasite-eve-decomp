@@ -1,15 +1,11 @@
 #ifndef FX_COMMON_SETUP_H
 #define FX_COMMON_SETUP_H
 
+#include "pe1/field_bg_load.h"
 #include "pe1/psyq_gpu.h"
 
 #include "fx_common.h"
 
-typedef struct FxTextureSetup { s16 x,y,w,h,tpage,clut; s32 reserved; } FxTextureSetup;
-typedef char FxTextureSetupSizeCheck[sizeof(FxTextureSetup)==16 ? 1 : -1];
-typedef char FxTextureSetupTpageCheck[(u32)&((FxTextureSetup*)0)->tpage==8 ? 1 : -1];
-typedef char FxTextureSetupClutCheck[(u32)&((FxTextureSetup*)0)->clut==10 ? 1 : -1];
-extern FxTextureSetup D_80091648[];
 extern u32 D_800A77FC;
 
 /* Room and area identifiers in the main executable's scene state. */
