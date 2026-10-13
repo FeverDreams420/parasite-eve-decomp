@@ -57,7 +57,7 @@ typedef struct SceneE18WaveEffect {
  * widening slow down, it brightens until frame 16 and fades after frame
  * 18. It finishes (setting the model's stage byte to 4) once the model's
  * seventh animation reaches its last frame. */
-int func_801924E8(int mode, SceneE18SpinShell *shell) {
+int SceneE18_SpinShell(int mode, SceneE18SpinShell *shell) {
     GteMatrix matrix;
     GteVector scaleArg;
     GteVector scale;
@@ -67,8 +67,8 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
 
     switch (mode) {
     case 0:
-        D_801941C0 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C7704);
-        FieldFx_ModelScrollUv(D_801941C0, 0, 0);
+        g_SceneE18ShellModel = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C7704);
+        FieldFx_ModelScrollUv(g_SceneE18ShellModel, 0, 0);
         shell->width = 0x400;
         shell->heightGrowth = 0x40;
         shell->height = 0;
@@ -143,10 +143,10 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
                                                                          : palette + 4));
         }
         FieldFx_ModelSetSemiTrans(1);
-        FieldFx_ModelSaveColors(D_801941C0);
-        FieldFx_ModelScaleColors(D_801941C0, shell->brightness);
-        FieldFx_ModelDraw(D_801941C0, &matrix);
-        FieldFx_ModelRestoreColors(D_801941C0);
+        FieldFx_ModelSaveColors(g_SceneE18ShellModel);
+        FieldFx_ModelScaleColors(g_SceneE18ShellModel, shell->brightness);
+        FieldFx_ModelDraw(g_SceneE18ShellModel, &matrix);
+        FieldFx_ModelRestoreColors(g_SceneE18ShellModel);
         break;
     }
     return 0;
@@ -155,8 +155,8 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
 /* Flank model particle: swings around the room model while it widens and
  * fades; the leading particle releases the actor once the player comes
  * within a quarter of its width. Each particle that fades out counts
- * D_801941C8 down. */
-int func_801928CC(int mode, SceneE18FlankParticle *particle) {
+ * g_SceneE18FlankRemaining down. */
+int SceneE18_FlankParticleCallback(int mode, SceneE18FlankParticle *particle) {
     GteMatrix matrix;
     GteVector scaleArg;
     GteVector scale;
@@ -185,7 +185,7 @@ int func_801928CC(int mode, SceneE18FlankParticle *particle) {
         }
         particle->brightness -= 10;
         if (particle->brightness < 10) {
-            D_801941C8--;
+            g_SceneE18FlankRemaining--;
             return 1;
         }
     } else if (mode == 2) {
@@ -212,10 +212,10 @@ int func_801928CC(int mode, SceneE18FlankParticle *particle) {
         matrix.t[0] = particle->position[0];
         matrix.t[1] = particle->position[1];
         matrix.t[2] = particle->position[2];
-        FieldFx_ModelSaveColors(D_801941C4);
-        FieldFx_ModelScaleColors(D_801941C4, particle->brightness > 0x80 ? 0x80 : particle->brightness);
-        FieldFx_ModelDraw(D_801941C4, &matrix);
-        FieldFx_ModelRestoreColors(D_801941C4);
+        FieldFx_ModelSaveColors(g_SceneE18FlankModel);
+        FieldFx_ModelScaleColors(g_SceneE18FlankModel, particle->brightness > 0x80 ? 0x80 : particle->brightness);
+        FieldFx_ModelDraw(g_SceneE18FlankModel, &matrix);
+        FieldFx_ModelRestoreColors(g_SceneE18FlankModel);
     }
     return 0;
 }
@@ -223,21 +223,21 @@ int func_801928CC(int mode, SceneE18FlankParticle *particle) {
 /* Flank model emitter: loads the flank model, then every sixth frame
  * releases one of four model particles on alternating sides of the room
  * model (the first one plays the two launch sounds at the model's root
- * joint) and finishes once the particles have counted D_801941C8 down. */
-int func_80192B8C(int mode, SceneE18EmitterState *state) {
+ * joint) and finishes once the particles have counted g_SceneE18FlankRemaining down. */
+int SceneE18_FlankEmitter(int mode, SceneE18EmitterState *state) {
     SceneE18FlankParticle *particle;
     SceneE18Actor *actor;
     int side;
 
     switch (mode) {
     case 0:
-        D_801941C8 = 4;
-        D_801941C4 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C7704);
-        FieldFx_ModelScrollUv(D_801941C4, 0, 0);
+        g_SceneE18FlankRemaining = 4;
+        g_SceneE18FlankModel = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C7704);
+        FieldFx_ModelScrollUv(g_SceneE18FlankModel, 0, 0);
         state->count = 0;
         state->delay = 0;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(SceneE18Emitter)->pool, 0x14, 4,
-                             (FieldFxCallbackListCallback)func_801928CC);
+                             (FieldFxCallbackListCallback)SceneE18_FlankParticleCallback);
     case 1:
         if (state->count < 4) {
             state->delay++;
@@ -272,7 +272,7 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
             }
             break;
         }
-        if (D_801941C8 != 0) break;
+        if (g_SceneE18FlankRemaining != 0) break;
         return 1;
     case 2:
         {
@@ -329,7 +329,7 @@ int SceneE18_ExpandingRingCallback(int mode, Effect *effect) {
 /* Pulse ring particle: a pair of light rings around the room model that
  * shrink away. While it lives it advances the model's stage byte; the last
  * ring releases the actor once the player is within 3/8 of its radius. */
-int func_80193018(int mode, SceneE18PulseRing *ring) {
+int SceneE18_PulseRingCallback(int mode, SceneE18PulseRing *ring) {
     GteShortVector position;
     GteRotation spin;
     SceneE18Instance *instance;
@@ -384,7 +384,7 @@ int func_80193018(int mode, SceneE18PulseRing *ring) {
     return 0;
 }
 
-int func_8019330C(int mode, SceneE18PulseState *state) {
+int SceneE18_PulseRingEmitter(int mode, SceneE18PulseState *state) {
     SceneE18PulseParticle *particle;
     int stage;
 
@@ -400,7 +400,7 @@ int func_8019330C(int mode, SceneE18PulseState *state) {
         state->stage = 0;
         state->ticks = 0;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(SceneE18Emitter)->pool, 8, 4,
-                             (FieldFxCallbackListCallback)func_80193018);
+                             (FieldFxCallbackListCallback)SceneE18_PulseRingCallback);
 
     }
 update:
@@ -442,7 +442,7 @@ done:
     return 0;
 }
 
-int func_80193488(int mode, SceneE18PaletteEffect *effect) {
+int SceneE18_RisingParticleCallback(int mode, SceneE18PaletteEffect *effect) {
     int size, kind, palette, texture, base;
     int firstFrame, secondFrame;
     int sample;
@@ -475,7 +475,7 @@ int func_80193488(int mode, SceneE18PaletteEffect *effect) {
 /* Every fourth frame spawns a rising particle at a random model joint,
  * pushed out by a random horizontal offset that grows with the spawn
  * count, until the script raises the stop flag. */
-int func_801935F0(int mode, SceneE18EmitterState *state) {
+int SceneE18_RisingParticleEmitter(int mode, SceneE18EmitterState *state) {
     switch (mode) {
     case 0: {
         SceneE18Instance *instance = ANIM_OWNER_AS(SceneE18Actor)->instance;
@@ -485,9 +485,9 @@ int func_801935F0(int mode, SceneE18EmitterState *state) {
                       (s16)matrix->t[1], (s16)matrix->t[2]);
         state->count = 0;
         state->delay = 60;
-        D_801941D0 = 0;
+        g_SceneE18RisingStop = 0;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(SceneE18Emitter)->pool, 12, 10,
-                             (FieldFxCallbackListCallback)func_80193488);
+                             (FieldFxCallbackListCallback)SceneE18_RisingParticleCallback);
     }
     case 1: {
         SceneE18RisingParticle *particle;
@@ -500,7 +500,7 @@ int func_801935F0(int mode, SceneE18EmitterState *state) {
         int count;
         int divisor;
 
-        if (D_801941D0) return 2;
+        if (g_SceneE18RisingStop) return 2;
         if (state->delay-- > 0) break;
         particle = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(SceneE18Emitter)->pool);
         if (particle == 0) break;
@@ -560,7 +560,7 @@ int func_801935F0(int mode, SceneE18EmitterState *state) {
     return 0;
 }
 
-int func_80193A58(int mode, SceneE18WaveEffect *effect) {
+int SceneE18_WaveRingCallback(int mode, SceneE18WaveEffect *effect) {
     s16 position[4];
     s16 params[4];
     int palette;
@@ -594,13 +594,13 @@ ret0:
 
 /* Emits up to 24 wave rings from random model joints, one every 12 to 19
  * frames, and freezes the model animation at frame 3 once it has played. */
-int func_80193C24(int mode, SceneE18EmitterState *state) {
+int SceneE18_WaveRingEmitter(int mode, SceneE18EmitterState *state) {
     switch (mode) {
     case 0:
         state->count = 0;
         state->delay = 0;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(SceneE18Emitter)->pool, 24, 8,
-                             (FieldFxCallbackListCallback)func_80193A58);
+                             (FieldFxCallbackListCallback)SceneE18_WaveRingCallback);
     case 1:
         if (state->count < 24) {
             SceneE18WaveParticle *particle;
@@ -645,7 +645,7 @@ int func_80193C24(int mode, SceneE18EmitterState *state) {
             }
             break;
         }
-        D_801941D0 = 1;
+        g_SceneE18RisingStop = 1;
         return 2;
     case 2:
         g_FieldFxSpriteParams.parameter00 = 64;

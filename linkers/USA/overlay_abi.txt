@@ -254,11 +254,11 @@ g_RoomEruptionRingPacket = OVERLAY_WINDOW_ROOM + 0x31A8; /* scene_e04_chrysler, 
 D_8019411C = OVERLAY_WINDOW_ROOM + 0x5134; /* scene_e18_cruiser */
 D_80194180 = OVERLAY_WINDOW_ROOM + 0x5198; /* scene_e18_cruiser */
 D_80194184 = OVERLAY_WINDOW_ROOM + 0x519C; /* scene_e18_cruiser */
-D_801941C0 = OVERLAY_WINDOW_ROOM + 0x51D8; /* scene_e18_cruiser */
-D_801941C4 = OVERLAY_WINDOW_ROOM + 0x51DC; /* scene_e18_cruiser */
-D_801941C8 = OVERLAY_WINDOW_ROOM + 0x51E0; /* scene_e18_cruiser */
+g_SceneE18ShellModel = OVERLAY_WINDOW_ROOM + 0x51D8; /* scene_e18_cruiser */
+g_SceneE18FlankModel = OVERLAY_WINDOW_ROOM + 0x51DC; /* scene_e18_cruiser */
+g_SceneE18FlankRemaining = OVERLAY_WINDOW_ROOM + 0x51E0; /* scene_e18_cruiser */
 D_801941CC = OVERLAY_WINDOW_ROOM + 0x51E4; /* scene_e18_cruiser */
-D_801941D0 = OVERLAY_WINDOW_ROOM + 0x51E8; /* scene_e18_cruiser */
+g_SceneE18RisingStop = OVERLAY_WINDOW_ROOM + 0x51E8; /* scene_e18_cruiser */
 
 /* owner: scene_e09_chrysler, scene_e10_chrysler.
  * reason: the overlay's own memory past the end of its extracted
