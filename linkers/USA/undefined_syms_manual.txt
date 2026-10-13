@@ -56,7 +56,6 @@ D_8009D14C = g_DrawBlendColor;
  * named in configs/USA/sym.main.txt. */
 D_800A76A0 = g_GameTimers;
 D_800A76A4 = g_GameTimeTable;
-g_ScriptVariableBank = g_EntityWorkBuffer;
 D_800B0CD8 = g_GameState;
 D_800B0CE2 = g_SceneAreaType;
 D_800B0DBA = g_DrawEnabled;

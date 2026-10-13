@@ -19,9 +19,10 @@ Left unnamed on purpose:
 - `unsure` rows, which have no reader that supports a role;
 - 540 symbols the proposers could not explain.
 
-Existing names found to be wrong, not yet changed:
-`g_EntityWorkBuffer` (0x800A77F0) is the script variable
-bank; `g_PlayTimeSeconds` (0x800A76BC) counts frames.
+Existing names found to be wrong were changed: `g_EntityWorkBuffer`
+(0x800A77F0) is `g_ScriptVariableBank`, and `g_PlayTimeSeconds` (0x800A76BC,
+counting frames) and the combat countdown words are members of
+`g_GameTimers`.
 
 The fields of the scroll state at 0x800BCF88 (`g_GeomScroll`, with the tint
 block `g_ScreenTint`) are reached as struct members; the former

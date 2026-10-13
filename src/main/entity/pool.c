@@ -7,6 +7,7 @@
 #include "pe1/game_state.h"
 #include "pe1/player_entity.h"
 #include "pe1/script_node.h"
+#include "pe1/script_queue.h"
 
 /* A pool record cell as the word retail adds the row and column offsets to. */
 typedef union EntityPoolAddress {
@@ -39,7 +40,7 @@ void Entity_ResetAllPools(void)
     g_FieldMoveLock = 0;
 
     i = 0;
-    ptr = (int *)g_EntityWorkBuffer;
+    ptr = (int *)g_ScriptVariableBank;
     do {
         *ptr = 0;
         i++;

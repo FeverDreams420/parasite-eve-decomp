@@ -23,11 +23,10 @@ typedef union EntityAllocationAddress {
     u32 word;
 } EntityAllocationAddress;
 
-/* Entity pool storage cleared by Entity_ResetAllPools: the 0x800-byte work
- * buffer (also saved in the save tail), the 14 0x280-byte actor records at
+/* Entity pool storage cleared by Entity_ResetAllPools besides the script
+ * variable bank (g_ScriptVariableBank): the 14 0x280-byte actor records at
  * g_EntityPool (D_800BEA94 is the free-list link word of the first) and the
  * pool's trailing record. */
-extern char g_EntityWorkBuffer[];
 extern char g_EntityPool[];
 extern char D_800BEA94[];
 extern int D_800C0B14[];

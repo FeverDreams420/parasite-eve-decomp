@@ -11,6 +11,7 @@
 #include "pe1/save.h"
 #include "pe1/save_blob.h"
 #include "pe1/save_tail_state.h"
+#include "pe1/script_queue.h"
 
 /* The save tail is a packed byte stream: each record is copied as an
  * unaligned byte block at the IO cursor, which then advances past it. */
@@ -19,7 +20,7 @@
     g_SaveIoCursor += sizeof(type)
 
 void Save_SerializeTail(void) {
-    SAVE_PUT(SaveBytes800, g_EntityWorkBuffer);
+    SAVE_PUT(SaveBytes800, g_ScriptVariableBank);
     SAVE_PUT(SaveBytes4, &D_8009D2E8);
     SAVE_PUT(SaveBytes4, &g_SceneDispatchToken);
     SAVE_PUT(SaveBytes4, &g_GameStateFlags);
@@ -39,7 +40,7 @@ void Save_SerializeTail(void) {
     g_SaveIoCursor += sizeof(type)
 
 void Save_DeserializeTail(void) {
-    SAVE_GET(SaveBytes800, g_EntityWorkBuffer);
+    SAVE_GET(SaveBytes800, g_ScriptVariableBank);
     SAVE_GET(SaveBytes4, &D_8009D2E8);
     SAVE_GET(SaveBytes4, &g_SceneDispatchToken);
     SAVE_GET(SaveBytes4, &g_GameStateFlags);

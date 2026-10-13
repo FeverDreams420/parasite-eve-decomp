@@ -1,3 +1,6 @@
+#include "common.h"
+#include "pe1/script_queue.h"
+
 #include "fx_common.h"
 #include "fx_common_motion.h"
 #include "fx_common_render.h"
@@ -24,10 +27,10 @@ void func_80192030(void)
     int i;
 
     fade = 1;
-    night = D_800A77F4.flags & 0x2000;
-    D_800A77F4.room = 999;
+    night = g_ScriptVariableBank[SCRIPT_VAR_FLAGS] & 0x2000;
+    g_ScriptVariableBank[SCRIPT_VAR_ROOM] = 999;
     D_8009D280 = 0xA9400048;
-    room = D_800A77F4.area;
+    room = g_ScriptVariableBank[SCRIPT_VAR_AREA];
     if (room == 0x80) {
         D_8009D280 = 0xA80650C8;
     } else if (room == 0x78) {

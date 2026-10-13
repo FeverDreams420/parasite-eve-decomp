@@ -2094,7 +2094,7 @@ What is left, and why:
   the C name moves every overlay reference to a name main lacks until
   overlays link against main's symbols (step 3 below).
 - fx_common's views of main data (`g_FxTextureSetup`, `g_FxCommonSceneIds`,
-  `g_FxCommonGameFlags` on `g_FieldBgTextureSlots`, `D_800A77F4`, `D_800B0CD8`) have
+  `g_FxCommonGameFlags` on `g_FieldBgTextureSlots`, `D_800B0CD8`) have
   types that differ from main's declarations (signed fields, a record over a
   word), so they wait for the same step.
 - `psyq_cd.h`'s halfword view of `g_CdStreamReady` (memory card overlay)

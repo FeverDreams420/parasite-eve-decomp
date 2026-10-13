@@ -7,6 +7,7 @@
 #include "pe1/game_state.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
+#include "pe1/script_queue.h"
 
 #include "camera_externs.h"
 #include "fx_common.h"
@@ -831,94 +832,94 @@ void func_80191854(void)
     }
 
     D_8019CC52 = -1;
-    if (D_800A77F4.room == 0x179)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x179)
         D_8019CC52 = 6;
-    if (D_800A77F4.room == 0x18)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x18)
         D_8019CC52 = 6;
-    if (D_800A77F4.room == 0x2E)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x2E)
         D_8019CC52 = 7;
-    if (D_800A77F4.room == 0x75)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x75)
         D_8019CC52 = 7;
-    if (D_800A77F4.room == 0x67)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x67)
         D_8019CC52 = 7;
-    if (D_800A77F4.room == 0xBF)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xBF)
         D_8019CC52 = 9;
-    if (D_800A77F4.room == 0xC0)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xC0)
         D_8019CC52 = 9;
-    if (D_800A77F4.room == 0x5D)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x5D)
         D_8019CC52 = 2;
-    if (D_800A77F4.room == 0x60)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x60)
         D_8019CC52 = 2;
-    if (D_800A77F4.room == 0x3A)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x3A)
         D_8019CC52 = 8;
-    if (D_800A77F4.room == 0x176)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x176)
         D_8019CC52 = 8;
-    if (D_800A77F4.room == 0x7D)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x7D)
         D_8019CC52 = 4;
-    if (D_800A77F4.room == 0x104)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x104)
         D_8019CC52 = 3;
-    if (D_800A77F4.room == 0xA1)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xA1)
         D_8019CC52 = 1;
-    if (D_800A77F4.room == 0xB7)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xB7)
         D_8019CC52 = 0;
-    if (D_800A77F4.room == 0x122)
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x122)
         D_8019CC52 = 5;
     if (D_8019CC52 == -1)
         D_8019CC52 = 7;
 
-    if (D_800A77F4.area == 0x80)
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x80)
         D_8019BFF4 = 0;
-    if (D_800A77F4.area == 0x208)
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x208)
         D_8019BFF4 = 7;
-    if (D_800A77F4.area == 0xB8) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xB8) {
         D_8019C000 = 1;
         D_8019C004 = 9;
     }
-    if (D_800A77F4.area == 0xC0) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xC0) {
         D_8019BFF8 = 1;
         D_8019BFFC = 9;
     }
-    if (D_800A77F4.area == 0xD0) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xD0) {
         D_8019C000 = 1;
         D_8019C004 = 7;
     }
-    if (D_800A77F4.area == 0xD8) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xD8) {
         D_8019BFF8 = 1;
         D_8019BFFC = 7;
     }
-    if (D_800A77F4.area == 0xE0) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xE0) {
         D_8019C000 = 1;
         D_8019C004 = 8;
     }
-    if (D_800A77F4.area == 0xE4) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0xE4) {
         D_8019BFF8 = 1;
         D_8019BFFC = 8;
     }
-    if (D_800A77F4.area == 0x148) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x148) {
         D_8019C000 = 1;
         D_8019C004 = 9;
     }
-    if (D_800A77F4.area == 0x160) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x160) {
         D_8019BFF8 = 1;
         D_8019BFFC = 9;
     }
-    if (D_800A77F4.area == 0x178) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x178) {
         D_8019C000 = 1;
         D_8019C004 = 7;
     }
-    if (D_800A77F4.area == 0x180) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x180) {
         D_8019BFF8 = 1;
         D_8019BFFC = 7;
     }
-    if (D_800A77F4.area == 0x1C0) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x1C0) {
         D_8019C000 = 1;
         D_8019C004 = 4;
     }
-    if (D_800A77F4.area == 0x1C8) {
+    if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x1C8) {
         D_8019BFF8 = 1;
         D_8019BFFC = 4;
     }
-    if (D_800A77F4.flags & 0x2000)
+    if (g_ScriptVariableBank[SCRIPT_VAR_FLAGS] & 0x2000)
         D_8019C1F0 = 1;
     else
         D_8019C1F0 = 0;

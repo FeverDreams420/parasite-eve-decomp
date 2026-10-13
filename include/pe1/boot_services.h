@@ -12,17 +12,6 @@ void Draw_ReportError(char *message, char *detail, int value, unsigned char seve
 
 /* Soft-reset and start-up services (asset/game_state.c). */
 extern int g_SceneDispatchToken;
-/* Scene return state: the room word (Boot_Shutdown saves the dispatch token
- * there, the effect sequences set 999 and pick their room by it), the
- * flags word and the area word. */
-typedef struct SceneReturnIds {
-    s32 room;          /* 0x000 */
-    s32 pad04;
-    u32 flags;         /* 0x008 */
-    u8 pad0C[0x118];
-    s32 area;          /* 0x124 */
-} SceneReturnIds;
-extern SceneReturnIds D_800A77F4;
 void Boot_SyncShutdown(void);
 int Draw_SetBaseY(int unused, u32 y);
 void Boot_InitMemoryLayout(void);
