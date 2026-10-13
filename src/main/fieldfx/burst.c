@@ -263,7 +263,7 @@ int func_800CC480(void *arg0, FieldFxSlot *params, FieldFxPointSprite *anim) {
         value_v1 = 0;
     }
 
-    base_a0 = (short *)&D_800F3430.oriented.brightness;
+    base_a0 = &D_800F3430.oriented.brightness;
     base_a0[0] = value_v1;
     value_v0 = pointData->point.x;
     output = (FieldBillboard *)((u8 *)base_a0 -
