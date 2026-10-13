@@ -189,8 +189,8 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         }
         }
         }
-        { register BattleAction *attackAction asm("$4") = active->action;
-        if (attackAction->attackWord & 0x3FF) {
+        { activeAction = active->action;
+        if (activeAction->attackWord & 0x3FF) {
             { height = turnSlot->actor->renderObject.target_y; angle = height - D_8009D27C; }
             { facingAngle = ratan2(angle, Battle_CalcDistToPlayer(turnSlot->actor, D_8009D254));
         if (facingAngle < -0xAB) direction = 0; else { predicate = facingAngle < 0xE4; if (predicate) direction = 1; else direction = 2; } }
