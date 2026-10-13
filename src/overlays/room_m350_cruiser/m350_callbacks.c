@@ -66,13 +66,13 @@ typedef struct { short count, delay; } EmissionState;
 
 typedef struct { signed int scale:16; signed int shade:16; } EffectEntry;
 
-int func_80196E04(int event) {
+int RoomM350_AreaController(int event) {
     Animation *animation = ANIM_OWNER_AS(Animation *)[2];
     if (event == 0) {
-        D_8019A828 = 4;
-        D_8019A82E = 0;
-        D_8019A82F = 0;
-        D_8019A830 = 0;
+        g_RoomM350AreaRepeats = 4;
+        g_RoomM350AreaDone = 0;
+        g_RoomM350AreaPlayerInside = 0;
+        g_RoomM350AreaEntered = 0;
     } else if (event == 1) {
         register short frame;
         if (animation->actor) {
@@ -81,7 +81,7 @@ int func_80196E04(int event) {
         }
         frame = animation->frame.halves[1];
         if (animation->animation == 9) {
-            short *remaining = &D_8019A828;
+            short *remaining = &g_RoomM350AreaRepeats;
             if (*remaining > 0) {
                 if (frame >= 22) {
                     animation->frame.word = 0x30000;
@@ -89,7 +89,7 @@ int func_80196E04(int event) {
                 }
             } else if (frame >= animation->frameCount - 1) {
                 if (animation->actor) *animation->actor->state = 4;
-                D_8019A82E = 1;
+                g_RoomM350AreaDone = 1;
                 return 1;
             }
         }
@@ -100,7 +100,7 @@ int func_80196E04(int event) {
 /* Falling drop: moves until it passes the floor (splash) or touches the
  * player, otherwise queues its position for the trail; draws a glow and a
  * floor ring. */
-int func_80196F2C(int mode, RoomM350Drop *drop) {
+int RoomM350_DropCallback(int mode, RoomM350Drop *drop) {
     GteShortVector position;
 
     if (mode == 1) {
@@ -116,10 +116,10 @@ int func_80196F2C(int mode, RoomM350Drop *drop) {
             g_RoomEffectTrailPositions.hit_x = drop->x;
             g_RoomEffectTrailPositions.hit_y = drop->y - 0xA0;
             g_RoomEffectTrailPositions.hit_z = drop->z;
-            func_8019721C((short *)drop, 200);
+            RoomM350_TestDropPlayerHit((short *)drop, 200);
             return 1;
         }
-        if (func_8019721C((short *)drop, 0x50)) {
+        if (RoomM350_TestDropPlayerHit((short *)drop, 0x50)) {
             g_RoomEffectTrailPositions.touched = 1;
             g_RoomEffectTrailPositions.hit_x = drop->x;
             g_RoomEffectTrailPositions.hit_y = drop->y;
@@ -165,8 +165,8 @@ int func_80196F2C(int mode, RoomM350Drop *drop) {
     return 0;
 }
 
-int func_8019721C(short *point, int radius) {
-    short *gate = &D_8019A86C;
+int RoomM350_TestDropPlayerHit(short *point, int radius) {
+    short *gate = &g_RoomM350DropHitCooldown;
     int dx, dz;
     WorldActor *world;
     if (*gate != 0) return 0;
@@ -185,7 +185,7 @@ int func_8019721C(short *point, int radius) {
     return 1;
 }
 
-int func_80197364(int event)
+int RoomM350_DropEmitter(int event)
 {
     Matrix matrix;
     Vector vector;
@@ -198,7 +198,7 @@ int func_80197364(int event)
         goto done;
         }
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool, 16, 4,
-                             (FieldFxCallbackListCallback)func_80196F2C);
+                             (FieldFxCallbackListCallback)RoomM350_DropCallback);
     }
 update:
     {
@@ -208,7 +208,7 @@ update:
         Player *player;
         int dx, dz, dy;
         int angle;
-        if (D_8019A86E) return 2;
+        if (g_RoomM350DropDone) return 2;
         if (!D_8019A855) return 0;
         effect = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if (!effect) return 0;
@@ -256,13 +256,13 @@ update:
                     x, effect->y, effect->z);
             }
         }
-        D_8019A86A = 8;
+        g_RoomM350DropLungeTimer = 8;
     }
 done:
     return 0;
 }
 
-int func_80197594(int event, short *position) {
+int RoomM350_DropHitCallback(int event, short *position) {
     if (event == 1) {
         if (g_FieldFxCurrentAge >= 16) return 1;
         position[1] -= position[3];
@@ -281,15 +281,15 @@ int func_80197594(int event, short *position) {
     return 0;
 }
 
-int func_801976C8(int event)
+int RoomM350_DropHitEmitter(int event)
 {
     switch (event) {
     case 0:
 
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 4,
-                             (FieldFxCallbackListCallback)func_80197594);
+                             (FieldFxCallbackListCallback)RoomM350_DropHitCallback);
         case 1:
-    if (D_8019A86E) return 2;
+    if (g_RoomM350DropDone) return 2;
     if (D_8019A857) {
         short *effect = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if (!effect) return 0;
@@ -321,14 +321,14 @@ int func_801976C8(int event)
 
 /* Retail writes both fields twice during configuration. */
 
-int func_8019784C(int event)
+int RoomM350_DropTrailEmitter(int event)
 {
     switch (event) {
     case 0:
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 16,
-                             (FieldFxCallbackListCallback)func_8019A014);
+                             (FieldFxCallbackListCallback)RoomM350_DropTrailCallback);
     case 1:
-    if (D_8019A86E) return 2;
+    if (g_RoomM350DropDone) return 2;
     {
         int i;
         for (i = 0; i < D_8019A85C; i++) {
@@ -365,7 +365,7 @@ int func_8019784C(int event)
     return 0;
 }
 
-int func_80197A04(int event, short *object)
+int RoomM350_DropBurstCallback(int event, short *object)
 {
     short position[4];
     if (event == 1) {
@@ -396,16 +396,16 @@ int func_80197A04(int event, short *object)
 }
 /* Retail writes both fields twice during configuration. */
 
-int func_80197B98(int event)
+int RoomM350_DropBurstEmitter(int event)
 {
     switch (event) {
     case 0:
 
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 16,
-                             (FieldFxCallbackListCallback)func_80197A04);
+                             (FieldFxCallbackListCallback)RoomM350_DropBurstCallback);
         case 1:
-    if (D_8019A86E) return 2;
-    if (D_8019A859) {
+    if (g_RoomM350DropDone) return 2;
+    if (g_RoomM350DropBurstCount) {
         register int i asm("$18") = 0;
         while (i < 2) {
             Matrix matrix;
@@ -432,7 +432,7 @@ offset:
             ApplyMatrixSV(&matrix, &vector, (Vector *)effect);
         }
         {
-            unsigned char *request = &D_8019A859;
+            unsigned char *request = &g_RoomM350DropBurstCount;
             *request = *request - 1;
         }
     }
@@ -461,8 +461,8 @@ offset:
     return 0;
 }
 
-int func_80197DA8(int event,short *cursor) {
-    Events events=D_8018F1CC;
+int RoomM350_DropController(int event,short *cursor) {
+    Events events=g_RoomM350DropEvents;
     Vector movement;
     Instance *instance=(Instance *)ANIM_OWNER_AS(RoomM350Actor)->instance;
     int frame,previous;
@@ -470,10 +470,10 @@ int func_80197DA8(int event,short *cursor) {
     if (event==0) {
         *(int *)&D_8019A854=0;
         D_8019A858=0;
-        D_8019A86E=0;
+        g_RoomM350DropDone=0;
         D_8019A85C=0;
-        D_8019A86A=0;
-        D_8019A86C=0;
+        g_RoomM350DropLungeTimer=0;
+        g_RoomM350DropHitCooldown=0;
         *cursor=0;
     } else {
         if (event!=1) return 0;
@@ -482,23 +482,23 @@ int func_80197DA8(int event,short *cursor) {
         if (instance->state && *instance->state->action_state==1)
         *instance->state->action_state=2;
         {
-        short *timer=&D_8019A86C;
+        short *timer=&g_RoomM350DropHitCooldown;
         if (*timer) --*timer;
         }
         if (instance->mode==6) {
         if ((short)frame<6) return 0;
-        if ((short)previous<6) D_8019A859=5;
+        if ((short)previous<6) g_RoomM350DropBurstCount=5;
         return 0;
         }
-        if (D_8019A85E>0) {
+        if (g_RoomM350DropRepeats>0) {
         if ((short)frame>=31) {
         instance->anim.fixed=0x60000;
         asm volatile("" ::: "memory");
-        D_8019A85E--;
+        g_RoomM350DropRepeats--;
         }
         } else if ((short)frame>=instance->action-1) {
         if (instance->state) *instance->state->action_state=4;
-        D_8019A86E=1;
+        g_RoomM350DropDone=1;
         return 1;
         }
         if ((unsigned int)(frame-7)<8) phase=15-frame;
@@ -517,7 +517,7 @@ int func_80197DA8(int event,short *cursor) {
         if ((unsigned short)*cursor>=8) *cursor=2;
         }
         {
-        short *timer=&D_8019A86A;
+        short *timer=&g_RoomM350DropLungeTimer;
         int remaining;
         remaining=*timer;
         if (remaining>0) {
@@ -535,7 +535,7 @@ done:
     return 0;
 }
 
-int func_801981D0(int event, RoomM350FlareParticle *particle)
+int RoomM350_RushFlareCallback(int event, RoomM350FlareParticle *particle)
 {
     GteShortVector position;
     GteRotation rotation;
@@ -550,7 +550,7 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
         position.y = particle->y;
         position.z = particle->z;
         {
-            register GteMatrix *matrix asm("$8") = &D_8019A870;
+            register GteMatrix *matrix asm("$8") = &g_RoomM350RushMatrix;
             GteShortVector *out;
             gte_ldrotmatrix(matrix);
             gte_ldtransmatrix(matrix);
@@ -559,9 +559,9 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
             gte_rtv0tr_mac();
             gte_stsv(out);
         }
-        position.x += D_8019A890[0];
-        position.y += D_8019A890[1];
-        position.z += D_8019A890[2];
+        position.x += g_RoomM350RushCenter[0];
+        position.y += g_RoomM350RushCenter[1];
+        position.z += g_RoomM350RushCenter[2];
         rotation.x = (unsigned int)g_FieldFxCurrentAge * 384;
         rotation.y = ((FieldActor *)ANIM_OWNER_AS(RoomM350EffectActor)->instance)->rot_y;
         rotation.z = 0;
@@ -588,7 +588,7 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
 
 /* The endpoint records' X words, read whole through GteShortVector views. */
 
-int func_80198400(int event) {
+int RoomM350_RushFlareEmitter(int event) {
     GteShortVector offset,vertices[4];
     GteShortVector *previousEndpoint;
     const GteShortVector *currentEndpoint;
@@ -600,7 +600,7 @@ int func_80198400(int event) {
     case 0:
 
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,8,4,
-                             (FieldFxCallbackListCallback)func_801981D0);
+                             (FieldFxCallbackListCallback)RoomM350_RushFlareCallback);
         case 1:
     previousEndpoint=&D_8019A8A8;
     previousOppositeEndpoint=&D_8019A8B0;
@@ -615,7 +615,7 @@ int func_80198400(int event) {
             particle->z=(random>>2)+64;
         }
     }
-    if(D_8019A8C0 || instance->mode!=9) return 0;
+    if(g_RoomM350RushPlayerHit || instance->mode!=9) return 0;
     *previousEndpoint=*currentEndpoint;
     *previousOppositeEndpoint=*currentOppositeEndpoint;
     offset.x=256; offset.y=0; offset.z=0;
@@ -661,8 +661,8 @@ int func_80198400(int event) {
             {
                 FieldActor *player=g_PlayerEntity;
                 asm("" : : "r"(player));
-                D_8019A8C0=1;
-                asm volatile("" : : "m"(D_8019A8C0));
+                g_RoomM350RushPlayerHit=1;
+                asm volatile("" : : "m"(g_RoomM350RushPlayerHit));
                 player->state->flags|=0x4000;
                 if(instance->state) instance->state->core_flags|=0x80000000u;
             }
@@ -674,7 +674,7 @@ int func_80198400(int event) {
     {
         short i=0;
         int index,color;
-        short *destination=D_8019A890;
+        short *destination=g_RoomM350RushCenter;
         GteMatrix *transforms;
         transforms=(GteMatrix *)instance->render_object.matrices;
         for(;i<3;i++) destination[i]=(transforms[11].t[i]+transforms[15].t[i])>>1;
@@ -691,7 +691,7 @@ int func_80198400(int event) {
     return 0;
 }
 
-int func_80198860(int event,RoomM350CloudParticle *particle)
+int RoomM350_RushCloudCallback(int event,RoomM350CloudParticle *particle)
 {
     if(event==1) {
         int timer=g_FieldFxCurrentAge;
@@ -736,7 +736,7 @@ int func_80198860(int event,RoomM350CloudParticle *particle)
     }
     return 0;
 }
-int func_80198ABC(int event)
+int RoomM350_RushCloudEmitter(int event)
 {
     GteMatrix matrix;
     GteShortVector vector;
@@ -744,11 +744,11 @@ int func_80198ABC(int event)
     case 0:
 
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,20,16,
-                             (FieldFxCallbackListCallback)func_80198860);
+                             (FieldFxCallbackListCallback)RoomM350_RushCloudCallback);
         case 1:
     {
         int i;
-        if(D_8019A8B8.complete) return 2;
+        if(g_RoomM350RushState.complete) return 2;
         for(i=0;i<2;i++) {
             int firstRandom;
             int combinedRandom;
@@ -790,7 +790,7 @@ offset_start:
     return 0;
 }
 
-int func_80198CF8(int event,State *state)
+int RoomM350_RushController(int event,State *state)
 {
     Instance *instance=(Instance *)ANIM_OWNER_AS(RoomM350Actor)->instance;
     Vector offset;
@@ -799,7 +799,7 @@ int func_80198CF8(int event,State *state)
     if(event==0) {
         RenderMatrix *matrix;
         state->speed=0; state->targetSpeed=0; state->heightPhase=0; state->mode=0;
-        D_8019A8B8.complete=0; D_8019A8C0=0; D_8019A89E=0;
+        g_RoomM350RushState.complete=0; g_RoomM350RushPlayerHit=0; D_8019A89E=0;
         asm volatile("" : : : "memory");
         matrix=instance->render_object.matrices;
         state->asset=Asset_Find08w(0x5CB,instance->state->progress,
@@ -816,22 +816,22 @@ int func_80198CF8(int event,State *state)
         {
             register int current asm("$3")=instance->anim.parts.integer;
             frame=current;
-        if(D_8019A8B8.repeats>0) {
+        if(g_RoomM350RushState.repeats>0) {
             height=(short)current;
             if(height>=30) {
                 instance->anim.fixed=0x50000;
-                D_8019A8B8.repeats--;
+                g_RoomM350RushState.repeats--;
             }
         } else if((short)current>=instance->action-1) {
             if(instance->state) instance->state->action_state[0]=4;
-            D_8019A8B8.complete=1;
+            g_RoomM350RushState.complete=1;
             Akao_Cmd_21(state->asset,0);
             return 1;
         }
         }
-        D_8019A8B8.playerDistance=FieldFx_GetDistanceXZ((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
+        g_RoomM350RushState.playerDistance=FieldFx_GetDistanceXZ((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
         angle=FieldFx_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x)&4095;
-        D_8019A8B8.playerAngle=angle;
+        g_RoomM350RushState.playerAngle=angle;
         delta=(angle-(unsigned short)instance->rot_y)&4095;
         {
             if (state->mode != 0) {
@@ -841,8 +841,8 @@ int func_80198CF8(int event,State *state)
                 }
             } else {
                 if(state->speed<=1280) instance->rot_y=FieldFx_TurnToward(instance->rot_y,angle,80);
-                if(state->speed<=state->targetSpeed && ((instance->rot_y-D_8019A8B8.playerAngle+64)&4095)<=256) {
-                    state->mode=1; state->targetSpeed=1536; D_8019A8C0=0;
+                if(state->speed<=state->targetSpeed && ((instance->rot_y-g_RoomM350RushState.playerAngle+64)&4095)<=256) {
+                    state->mode=1; state->targetSpeed=1536; g_RoomM350RushPlayerHit=0;
                 }
                 goto apply_cruise_speed;
             }
@@ -870,13 +870,13 @@ apply_cruise_speed:
         cosine=rcos(instance->rot_y+2048);
         sine=rsin(instance->rot_y+2048);
         {
-        GteMatrix *matrix=&D_8019A870;
+        GteMatrix *matrix=&g_RoomM350RushMatrix;
         Vector *vector=&offset;
-        matrix->m[0][0]=cosine; D_8019A870.m[0][2]=sine; D_8019A870.m[2][0]=0u-(unsigned int)sine;
-        D_8019A870.m[2][2]=cosine;
-        D_8019A870.t[2]=0; D_8019A870.t[1]=0; D_8019A870.t[0]=0;
-        D_8019A870.m[2][1]=0; D_8019A870.m[1][2]=0; D_8019A870.m[1][0]=0; D_8019A870.m[0][1]=0;
-        D_8019A870.m[1][1]=4096;
+        matrix->m[0][0]=cosine; g_RoomM350RushMatrix.m[0][2]=sine; g_RoomM350RushMatrix.m[2][0]=0u-(unsigned int)sine;
+        g_RoomM350RushMatrix.m[2][2]=cosine;
+        g_RoomM350RushMatrix.t[2]=0; g_RoomM350RushMatrix.t[1]=0; g_RoomM350RushMatrix.t[0]=0;
+        g_RoomM350RushMatrix.m[2][1]=0; g_RoomM350RushMatrix.m[1][2]=0; g_RoomM350RushMatrix.m[1][0]=0; g_RoomM350RushMatrix.m[0][1]=0;
+        g_RoomM350RushMatrix.m[1][1]=4096;
         offset.x=0; offset.y=0; offset.z=state->speed;
         ApplyMatrixSV(matrix,vector,vector);
         }
@@ -908,7 +908,7 @@ apply_cruise_speed:
     return 0;
 }
 
-int func_80199148(int event, RoomM350FadingParticle *object)
+int RoomM350_BodyDebrisCallback(int event, RoomM350FadingParticle *object)
 {
     /* Retail initializes two unused stack words; their original type is unknown. */
     struct { int x, y; } unused;
@@ -942,7 +942,7 @@ int func_80199148(int event, RoomM350FadingParticle *object)
     }
     return 0;
 }
-int func_801992A0(int event,FadingModelState *state)
+int RoomM350_BodyDebrisEmitter(int event,FadingModelState *state)
 {
     Vector offset;
     RenderMatrix rotation;
@@ -955,9 +955,9 @@ int func_801992A0(int event,FadingModelState *state)
             Instance *instance=(Instance *)ANIM_OWNER_AS(RoomM350Actor)->instance;
             RenderMatrix *matrix=instance->render_object.matrices;
             Asset_Find08w(0x549,instance->state->progress,(short)matrix->translation[0],(short)matrix->translation[1],(short)matrix->translation[2]);
-            state->count=0; state->delay=0; D_8019A8C4=0;
+            state->count=0; state->delay=0; g_RoomM350BodyDone=0;
             return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool,20,10,
-                                 (FieldFxCallbackListCallback)func_80199148);
+                                 (FieldFxCallbackListCallback)RoomM350_BodyDebrisCallback);
         }
         case 1:
     {
@@ -972,7 +972,7 @@ int func_801992A0(int event,FadingModelState *state)
         int cosine,divisor;
         int sine;
         int product;
-        if(D_8019A8C4) return 2;
+        if(g_RoomM350BodyDone) return 2;
         state->delay=(unsigned short)state->delay+1;
         if(state->delay<4) return 0;
         particle=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
@@ -1072,7 +1072,7 @@ int func_801992A0(int event,FadingModelState *state)
     return 0;
 }
 
-int func_801996BC(int event, RoomM350SineParticle *object)
+int RoomM350_BodyRingCallback(int event, RoomM350SineParticle *object)
 {
     GteShortVector position;
     GteRotation texture;
@@ -1103,7 +1103,7 @@ int func_801996BC(int event, RoomM350SineParticle *object)
     return 0;
 }
 
-int func_8019988C(int event, EmissionState *state)
+int RoomM350_BodyRingEmitter(int event, EmissionState *state)
 {
     switch (event) {
     case 0:
@@ -1111,7 +1111,7 @@ int func_8019988C(int event, EmissionState *state)
         state->count = 0;
         state->delay = 0;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350EffectEmitter)->pool, 24, 8,
-                             (FieldFxCallbackListCallback)func_801996BC);
+                             (FieldFxCallbackListCallback)RoomM350_BodyRingCallback);
         case 1:
     if (state->count < 24) {
         RoomM350SineParticle *effect;
@@ -1171,7 +1171,7 @@ int func_8019988C(int event, EmissionState *state)
         effect->rotation.z = 0;
         effect->rotation.flags = 0;
     } else {
-        D_8019A8C4 = 1;
+        g_RoomM350BodyDone = 1;
         return 2;
     }
         break;
@@ -1191,31 +1191,31 @@ int func_8019988C(int event, EmissionState *state)
 }
 
 /* Walks the actor list for the first live actor of the given type and sub
- * id and leaves it in D_8019A774. */
-FieldActor **func_80199B0C(s32 arg0, s32 arg1, s32 arg2) {
+ * id and leaves it in g_RoomM350HandActor. */
+FieldActor **RoomM350_HandConfigure(s32 arg0, s32 arg1, s32 arg2) {
     FieldActor **slot;
     FieldActor **iter;
     FieldActor *node;
 
-    slot = &D_8019A774;
+    slot = &g_RoomM350HandActor;
     if ((*slot = g_FieldActorListHead) != 0) {
         iter = slot;
         while (1) {
-            node = D_8019A774;
+            node = g_RoomM350HandActor;
             if ((node->type_id == arg1) && (node->sub_id == arg2) && ((node->flags & 0x10) == 0)) {
                 break;
             }
 
-            if ((*iter = D_8019A774->next) == 0) {
+            if ((*iter = g_RoomM350HandActor->next) == 0) {
                 break;
             }
         }
     }
 
-    return &D_8019A774;
+    return &g_RoomM350HandActor;
 }
 
-s32 func_80199B94(s32 mode, GteShortVector *ctx) {
+s32 RoomM350_HandSparkCallback(s32 mode, GteShortVector *ctx) {
     s32 tex;
 
     if (mode == 1) {
@@ -1242,40 +1242,40 @@ ret0:
 }
 
 /* Walks the actor list for the first live actor of the given type and sub
- * id, leaves it in D_8019A7F8 and returns the joint position slot. */
-GteShortVector *func_80199CA4(s32 arg0, s32 arg1, s32 arg2) {
+ * id, leaves it in g_RoomM350OrbActor and returns the joint position slot. */
+GteShortVector *RoomM350_OrbConfigure(s32 arg0, s32 arg1, s32 arg2) {
     FieldActor **slot;
     FieldActor **iter;
     FieldActor *node;
 
-    slot = &D_8019A7F8;
+    slot = &g_RoomM350OrbActor;
     if ((*slot = g_FieldActorListHead) != 0) {
         iter = slot;
         while (1) {
-            node = D_8019A7F8;
+            node = g_RoomM350OrbActor;
             if ((node->type_id == arg1) && (node->sub_id == arg2) && ((node->flags & 0x10) == 0)) {
                 break;
             }
 
-            if ((*iter = D_8019A7F8->next) == 0) {
+            if ((*iter = g_RoomM350OrbActor->next) == 0) {
                 break;
             }
         }
     }
 
-    return &D_8019A7A0;
+    return &g_RoomM350OrbSpawnPoint;
 }
 
-char *func_80199D2C(void *arg0, char arg1, short arg2, short arg3) {
-    char *ptr = &D_8019A831;
+char *RoomM350_AreaConfigure(void *arg0, char arg1, short arg2, short arg3) {
+    char *ptr = &g_RoomM350AreaTrackPlayer;
 
     *ptr = arg1;
-    D_8019A82A[0] = arg2;
+    g_RoomM350AreaConfigYaw[0] = arg2;
     D_8019A82C = arg3;
     return ptr - 0x29;
 }
 
-s32 func_80199D50(s32 arg0) {
+s32 RoomM350_AreaPlayerPulseEmitter(s32 arg0) {
     char *obj;
     char *actor;
 
@@ -1288,10 +1288,10 @@ s32 func_80199D50(s32 arg0) {
         }
         obj = ANIM_POOL_AS(char *)[2];
         return FieldFx_InitCallbackList(obj, 8, 2,
-                             (FieldFxCallbackListCallback)func_80196C64);
-    } else if ((char)D_8019A82E != 0) {
+                             (FieldFxCallbackListCallback)RoomM350_AreaPlayerPulseCallback);
+    } else if ((char)g_RoomM350AreaDone != 0) {
         return 2;
-    } else if ((char)D_8019A830 != 0) {
+    } else if ((char)g_RoomM350AreaEntered != 0) {
         obj = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(char *)[2]);
         if (obj != 0) {
             actor = (char *)D_8009D254;
@@ -1301,21 +1301,21 @@ s32 func_80199D50(s32 arg0) {
                 s32 value = *(s32 *)(actor + 0x204);
                 *(short *)(obj + 4) = value;
             }
-            D_8019A830 = 0;
+            g_RoomM350AreaEntered = 0;
         }
     }
 
     return 0;
 }
 
-short *func_80199E3C(void *arg0, short arg1) {
-    short *ptr = &D_8019A85E;
+short *RoomM350_DropConfigure(void *arg0, short arg1) {
+    short *ptr = &g_RoomM350DropRepeats;
 
     *ptr = arg1;
     return ptr - 0x15;
 }
 
-s32 func_80199E50(s32 arg0) {
+s32 RoomM350_DropFlareEmitter(s32 arg0) {
     char *obj;
 
     if (arg0 != 1) {
@@ -1326,8 +1326,8 @@ s32 func_80199E50(s32 arg0) {
             return 0;
         }
         return FieldFx_InitCallbackList(g_FieldFxActiveTaskSlot->end, 4, 2,
-                             (FieldFxCallbackListCallback)func_8019A134);
-    } else if ((char)D_8019A86E != 0) {
+                             (FieldFxCallbackListCallback)RoomM350_DropFlareCallback);
+    } else if ((char)g_RoomM350DropDone != 0) {
         return 2;
     } else if (D_8019A854 != 0) {
         obj = FieldFx_AcquireCallbackSlot(g_FieldFxActiveTaskSlot->end);
@@ -1341,7 +1341,7 @@ s32 func_80199E50(s32 arg0) {
     return 0;
 }
 
-s32 func_80199F2C(s32 arg0) {
+s32 RoomM350_DropSplashEmitter(s32 arg0) {
     char *obj;
 
     if (arg0 != 1) {
@@ -1352,8 +1352,8 @@ s32 func_80199F2C(s32 arg0) {
             return 0;
         }
         return FieldFx_InitCallbackList(ANIM_POOL_AS(char *)[2], 8, 6,
-                             (FieldFxCallbackListCallback)func_8019A21C);
-    } else if ((char)D_8019A86E != 0) {
+                             (FieldFxCallbackListCallback)RoomM350_DropSplashCallback);
+    } else if ((char)g_RoomM350DropDone != 0) {
         return 2;
     } else if (D_8019A856 != 0) {
         obj = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(char *)[2]);
@@ -1368,7 +1368,7 @@ s32 func_80199F2C(s32 arg0) {
     return 0;
 }
 
-s32 func_8019A014(s32 mode, void *ctx) {
+s32 RoomM350_DropTrailCallback(s32 mode, void *ctx) {
     s32 tex;
 
     if (mode == 1) {
@@ -1396,14 +1396,14 @@ ret0:
     return 0;
 }
 
-short *func_8019A120(void *arg0, short arg1) {
-    short *ptr = &D_8019A8B8.repeats;
+short *RoomM350_RushConfigure(void *arg0, short arg1) {
+    short *ptr = &g_RoomM350RushState.repeats;
 
     *ptr = arg1;
     return ptr - 0x24;
 }
 
-int func_8019A134(int event, int **position) {
+int RoomM350_DropFlareCallback(int event, int **position) {
     short point[4];
     int shade;
     int *colors;
@@ -1421,7 +1421,7 @@ int func_8019A134(int event, int **position) {
     return 0;
 }
 
-int func_8019A21C(int event, void *context) {
+int RoomM350_DropSplashCallback(int event, void *context) {
     short rotation[4];
     short *entry;
     int scale;

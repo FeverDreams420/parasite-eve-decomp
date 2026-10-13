@@ -18,7 +18,7 @@
 
 /* Signed high-half view avoids LHU followed by explicit sign extension. */
 
-int func_80196C64(int event, void *object)
+int RoomM350_AreaPlayerPulseCallback(int event, void *object)
 {
     /* Match note: retail leaves sp+0x28..0x2F unused; original local unknown. */
     char frameGap[8];

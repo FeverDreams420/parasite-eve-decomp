@@ -35,7 +35,7 @@ extern RoomM350TrailQueue g_RoomEffectTrailPositions;
 extern GteRotation D_8019A3C0;
 extern RenderColor D_8019A61C[3];
 
-int func_80196F2C(int mode, RoomM350Drop *drop);
-int func_8019721C(short *point, int radius);
+int RoomM350_DropCallback(int mode, RoomM350Drop *drop);
+int RoomM350_TestDropPlayerHit(short *point, int radius);
 
 #endif

@@ -79,9 +79,9 @@ typedef struct RoomM350TableShadeEntry {
 
 PE1_STATIC_ASSERT(sizeof(RoomM350TableShadeEntry) == 4,
                   room_m350_table_shade_entry_size);
-extern unsigned char D_8019A86E;
-extern unsigned char D_8019A82E;
-extern unsigned char D_8019A830;
-extern short D_8019A82A[];
+extern unsigned char g_RoomM350DropDone;
+extern unsigned char g_RoomM350AreaDone;
+extern unsigned char g_RoomM350AreaEntered;
+extern short g_RoomM350AreaConfigYaw[];
 
 #endif /* ROOM_M350_SHARED_H */

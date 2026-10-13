@@ -14,21 +14,21 @@
 extern RenderColor D_8019A3C8;
 extern RenderColor D_8019A3D0;
 
-/* Actor found by func_80199B0C (type and sub id lookup), and the pair of
+/* Actor found by RoomM350_HandConfigure (type and sub id lookup), and the pair of
  * anchor positions the paired effects attach to. */
-extern FieldActor *D_8019A774;
-extern GteShortVector D_8019A778[];
+extern FieldActor *g_RoomM350HandActor;
+extern GteShortVector g_RoomM350HandPoints[];
 
-/* Actor found by func_80199CA4, and the joint position it returns. */
-extern FieldActor *D_8019A7F8;
-extern GteShortVector D_8019A7A0;
+/* Actor found by RoomM350_OrbConfigure, and the joint position it returns. */
+extern FieldActor *g_RoomM350OrbActor;
+extern GteShortVector g_RoomM350OrbSpawnPoint;
 
 /* First animation event slot; the event controller clears the four slots
  * as one word and sets them byte by byte from here. */
 extern unsigned char D_8019A854;
 
 /* Rotation matrix the cloud controller builds and the swept flare uses. */
-extern GteMatrix D_8019A870;
+extern GteMatrix g_RoomM350RushMatrix;
 
 /* Repeat budget and player distance used by the cloud controller. */
 typedef struct RoomM350CloudTracking {
@@ -37,7 +37,7 @@ typedef struct RoomM350CloudTracking {
     short playerAngle;
     unsigned char complete;
 } RoomM350CloudTracking;
-extern RoomM350CloudTracking D_8019A8B8;
+extern RoomM350CloudTracking g_RoomM350RushState;
 
 /* Shared counters for the homing trail producer and its two queue consumers. */
 typedef struct RoomM350TrailSequence {
@@ -47,9 +47,9 @@ typedef struct RoomM350TrailSequence {
     short activeCount;
     unsigned char completionFlags[3];
 } RoomM350TrailSequence;
-extern RoomM350TrailSequence D_8019A7FC;
+extern RoomM350TrailSequence g_RoomM350OrbState;
 
 /* Draw callback for position-only particles emitted by the pulsed pair. */
-s32 func_80199B94(s32 mode, GteShortVector *position);
+s32 RoomM350_HandSparkCallback(s32 mode, GteShortVector *position);
 
 #endif /* ROOM_M350_DATA_H */

@@ -11,7 +11,7 @@
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
 
-/* room_m350 sweeping beam trap (func_80192E4C): a column of sprites swept
+/* room_m350 sweeping beam trap (RoomM350_HandSweepTrapCallback): a column of sprites swept
  * down from the actor's head, a flare and two fan blades towards the
  * anchor, and a quad test that tags the player once. */
 typedef struct RoomM350SweepTrap {
@@ -62,7 +62,7 @@ extern RenderColor D_8019A3C8;
 extern RenderColor D_8019A43C;
 extern RenderColor D_8019A440;
 extern GteShortVector D_8019A444[];
-extern u8 D_8019A79C;
+extern u8 g_RoomM350HandSweepHit;
 int Math_IntSqrt(int value);
 
 #endif
