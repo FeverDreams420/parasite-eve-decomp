@@ -55,6 +55,11 @@ segments:
         type: databin
         name: D_801900A0
         dir: room_m065_central_park
+      - [0x185A0, data, D_801A7588]
+      - start: 0x18840
+        type: databin
+        name: D_801A7828
+        dir: room_m065_central_park
       - [0x1EFD0, data, D_801ADFB8]
       - [0x1F010, data, D_801ADFF8]
       - [0x1F030, data, D_801AE018]
