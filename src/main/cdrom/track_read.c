@@ -319,7 +319,7 @@ int CdRom_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
             if (g_CdTrackBank == -1) {
                 for (i = 0; i < 2; i++) {
                     if (state->scene_audio.tracks.keys[i][0] == key) {
-                        g_CdTrackBank = (s8)state->scene_audio.tracks.banks[i];
+                        g_CdTrackBank = state->scene_audio.tracks.banks[i];
                         g_CdTrackRecord = 0;
                         break;
                     }
