@@ -1,0 +1,8 @@
+address,overlay,old_name,new_name,evidence
+0x8018EFF4,room_m005_theater,D_8018EFF4,g_RoomM005OrbiterJointAnchor,"RoomM005_Orbiter case 0 copies it to a local and passes it as the local point to FieldFx_TransformMatrixPoint(pool, 20, ..): bytes {0,0,-60}, a point on joint 0x14 the orbiting sprite starts from."
+0x8018EFFC,room_m005_theater,D_8018EFFC,g_RoomM005CrossFlareFlashAnchor,"RoomM005_CrossFlare case 2: local point {0,0,-70} transformed on joint 0x14 (0x14) into the position of the ring bands and the large flash sprite."
+0x8018F004,room_m005_theater,D_8018F004,g_RoomM005CrossFlareTwinAnchor,"RoomM005_CrossFlare case 2: local point {0,16,60} transformed on joint 9 into the position of the two small twin quads drawn at x-16 and x+16."
+0x8018F00C,room_m005_theater,D_8018F00C,g_RoomM005BeaconTint,RoomM005_BeaconDriftCallback copies the 0x80808080 rgb word into its draw colour (neutral grey tint).
+0x8018F010,room_m005_theater,D_8018F010,g_RoomM005JointBeaconAnchor,"RoomM005_JointBeacon case 0: local point {0,-40,-92} transformed on joint 0x14 into the beacon state position (header comment: rides joint 0x14)."
+0x80190B84,room_m005_theater,D_80190B84,g_RoomM005ScriptAnchorView,"Interior of g_RoomScriptRecord (RoomM005_Dialog.h4, the dialog anchor x/y/z); the orbiter passes its own address to FieldFx_GetActorPosition. Member access (&record.h4) shares the record base and shrinks RoomM005_Orbiter by 12 bytes, so it is a one-field view."
+0x80190B8C,room_m005_theater,D_80190B8C,g_RoomM005ScriptFadeView,"Interior of g_RoomScriptRecord (RoomM005_Dialog.hC, the fade target block RoomM005_FxOrbiter reads); the orbiter writes the transformed point there. Member access does not stay byte-identical, so a one-field view."
