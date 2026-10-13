@@ -66,8 +66,6 @@ ROOMLIB_CLOSE_TARGET(RoomLib_ThreeParticleClose)
  * bytes after each room's twelve-byte rodata header.
  */
 
-int *FieldFx_VarPtr(int index);
-
 /* Rotation seed of the draw pass, copied into its stack frame. */
 static const RoomFxSeed8 s_ThreeParticleSeed = {
     {0x04, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}

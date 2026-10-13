@@ -146,8 +146,6 @@ typedef struct {
     s16 timer;
 } Ovl178EffectController;
 
-void FieldFx_SetScriptContext(void *arg0);
-
 void func_8018F3C4(RoomEnt *ent, void *arg1, SceneE08LinkInitState *state) {
     SceneE08MatrixFields *matrix;
 
@@ -1058,7 +1056,6 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
 void func_80191740(void) {
 }
 
-int *FieldFx_VarPtr(int arg0);
 void Battle_HaltOnPositiveX(void);
 void Battle_InitEntityColors(void);
 int FieldFx_GetStatus(void *arg0);
@@ -1949,8 +1946,6 @@ ROOMLIB_RETURN_ZERO(SceneE08_LayeredSpriteNop6)
 
 /* The 0x80199560 glow sprite, field by field as Scene_DrawLayeredSprite
  * stores its colour. */
-void FieldFx_SetScriptContext(void *);
-
 void func_80193C68(SceneGrabHead *actor, void *unused, SceneE08Context *state) {
     FieldActor *source;
     RenderMatrix *block;
