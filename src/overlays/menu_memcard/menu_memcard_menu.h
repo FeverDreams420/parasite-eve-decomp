@@ -4,6 +4,7 @@
 #include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/render_buffers.h"
 #include "pe1/render_packets.h"
 
 #include "menu_memcard_image.h"
@@ -19,7 +20,7 @@ extern DISPENV g_MemcardListSavedDispEnv[2];
 extern DRAWENV g_MemcardListSavedDrawEnv[2];
 extern signed char g_PeImageMountFlags;
 extern s32 g_LogoFadePlayed, g_ActiveDrawSlot;
-extern u8 *g_CdLoadAreaBase, *D_800B0E3C, *D_800B0E50, *D_800B0E54;
+extern u8 *g_CdLoadAreaBase;
 extern RenderBufferPrefix D_800B0E38;
 extern u8 g_MenuCardCreateFadeImageNodeEntry[];
 

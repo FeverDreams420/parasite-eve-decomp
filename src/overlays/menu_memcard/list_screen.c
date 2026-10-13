@@ -242,12 +242,12 @@ s32 MenuCard_RunListScreen(void) {
     g_MemcardListSavedDrawEnv[1] = g_RenderDrawEnvArray[1];
     firstMemory = g_CdLoadAreaBase;
     secondMemory = firstMemory + 0x1C080;
-    D_800B0E50 = firstMemory + 0x4080;
+    g_RenderFrontBufferBase[0] = firstMemory + 0x4080;
     g_MemcardScreenBuffers[0] = (MemcardScreenBuffer *) firstMemory;
     g_MemcardSecondScreen.value = (MemcardScreenBuffer *) secondMemory;
-    D_800B0E54 = secondMemory + 0x4080;
+    g_RenderBackBufferBase[0] = secondMemory + 0x4080;
     D_800B0E38.ordering[0] = (u32 *)(firstMemory + 0x80);
-    D_800B0E3C = secondMemory + 0x80;
+    g_RenderOtBufferBaseAlt[0] = secondMemory + 0x80;
     Draw_SetPresentEnabled(1);
     result = -1;
     do {
