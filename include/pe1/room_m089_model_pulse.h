@@ -9,7 +9,7 @@
 #include "pe1/room_m089_spin_model.h"
 #include "pe1/room_swirl_rise.h"
 
-/* room_m089 pulsing model burst (func_80193618): three turning layers of
+/* room_m089 pulsing model burst (RoomM089_ModelPulse): three turning layers of
  * one model and a fourth model over a glow strip, while swirl/rise sprites
  * spawn around the anchor and the player is tagged on contact. */
 typedef struct RoomM089ModelPulse {
@@ -53,10 +53,10 @@ typedef struct RoomM089PulseEvent {
 } RoomM089PulseEvent;
 
 extern struct BattleEntity *D_8009D254;
-extern u8 *D_8019416C;
-extern u8 D_801940F8[];
+extern u8 *g_RoomM089PulseModel;
+extern u8 g_RoomM089PulseColorTrack[];
 
-int func_80193200(int mode, RoomSwirlRiseState *state);
+int RoomM089_SwirlSpriteCallback(int mode, RoomSwirlRiseState *state);
 int rand(void);
 
 #endif

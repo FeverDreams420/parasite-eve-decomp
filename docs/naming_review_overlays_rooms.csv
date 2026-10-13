@@ -496,3 +496,13 @@ address,overlay,old_name,new_name,evidence
 0x80190B8C,room_m086_central_park,D_80190B8C,g_RoomM086BounceGlintParams,record written by RoomM086_SetBounceGlintParams and returned to the engine as the params of RoomM086_BounceGlint
 0x80190B88,room_m086_central_park,D_80190B88,g_RoomM086SeekerModelA,model asset key 0xC5465704 loaded first in RoomM086_SeekerController mode 0 and drawn with FieldFx_ModelDraw
 0x80190B84,room_m086_central_park,D_80190B84,g_RoomM086SeekerModelB,model asset key 0xC5865704 loaded second in RoomM086_SeekerController mode 0 and drawn with FieldFx_ModelDraw
+0x801924F8,room_m089_central_park,func_801924F8,RoomM089_SpiralTrailCallback,source comment: spiral trail with a 15 halfword position history and a flash angle of timer * 128; installed by RoomM089_SpiralTrail via FieldFx_InitCallbackList (0x38 byte records)
+0x80192A30,room_m089_central_park,func_80192A30,RoomM089_SpiralTrail,copies the anchor into the new effect and installs RoomM089_SpiralTrailCallback; slot 0 of effect set D_80194128
+0x80192CD4,room_m089_central_park,func_80192CD4,RoomM089_SpinModel,"source comment: spinning model loading its model, swelling a glow over the anchor for two stages and drawing the model twice (inner copy at half scale); slot 1 of effect set D_80194128"
+0x80193200,room_m089_central_park,func_80193200,RoomM089_SwirlSpriteCallback,source comment: swirl/rise sprite for room_m089; installed by RoomM089_ModelPulse via FieldFx_InitCallbackList
+0x80193618,room_m089_central_park,func_80193618,RoomM089_ModelPulse,"source comment: pulsing model burst spawning a ring of swirl sprites on the first frame and rising sprites every other frame, tagging the player while close and drawing three turning model layers; slot 2 of effect set D_80194128"
+0x80193FF0,room_m089_central_park,func_80193FF0,RoomM089_SetAnchor,slot 12 of effect set D_80194128: mode 1 stores three shorts into g_RoomM089Anchor and returns the record (passed as the anchor argument of the three effects)
+0x80194128,room_m089_central_park,D_80194128,g_RoomM089Effects,"effect set table: slots 0..2 RoomM089_SpiralTrail, RoomM089_SpinModel, RoomM089_ModelPulse, slot 12 RoomM089_SetAnchor"
+0x80194160,room_m089_central_park,D_80194160,g_RoomM089Anchor,"GteShortVector-sized record (x, y, z) written by RoomM089_SetAnchor and returned to the engine as the anchor argument of RoomM089_SpiralTrail, RoomM089_SpinModel and RoomM089_ModelPulse"
+0x8019416C,room_m089_central_park,D_8019416C,g_RoomM089PulseModel,model asset key 0xC5464704 loaded by RoomM089_ModelPulse mode 0 and drawn as the three turning layers
+0x801940F8,room_m089_central_park,D_801940F8,g_RoomM089PulseColorTrack,colour track sampled by RoomM089_ModelPulse for the glow strip

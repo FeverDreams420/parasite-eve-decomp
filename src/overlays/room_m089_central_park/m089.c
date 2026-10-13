@@ -13,7 +13,7 @@
  * loads all fifteen halfwords before the first store), and the flash angle
  * is `timer * 128`, which keeps the signed lh that `timer << 7` loses. */
 
-int func_801924F8(int mode, RoomM089SpiralTrail *trail, GteShortVector *anchor) {
+int RoomM089_SpiralTrailCallback(int mode, RoomM089SpiralTrail *trail, GteShortVector *anchor) {
     GteRotation rotation;
     RenderColor head = D_8018F1CC;
     RenderColor tail = D_8018F1D0;
@@ -108,7 +108,7 @@ int func_801924F8(int mode, RoomM089SpiralTrail *trail, GteShortVector *anchor) 
     return 0;
 }
 
-int func_80192A30(int mode, unsigned short *dst, unsigned short *src) {
+int RoomM089_SpiralTrail(int mode, unsigned short *dst, unsigned short *src) {
     short *effect;
     RoomChanCtx *channel;
     int random;
@@ -120,7 +120,7 @@ int func_80192A30(int mode, unsigned short *dst, unsigned short *src) {
     dst[1] = src[1];
     dst[2] = src[2];
     return FieldFx_InitCallbackList((char *)channel->w8, 0x38, 8,
-                         (FieldFxCallbackListCallback)func_801924F8);
+                         (FieldFxCallbackListCallback)RoomM089_SpiralTrailCallback);
 
     case 1:
     if (g_FieldFxCurrentAge < 9) {
@@ -203,7 +203,7 @@ int func_80192A30(int mode, unsigned short *dst, unsigned short *src) {
  * saved registers, which spills the model intensity to the frame), and the
  * palette kind/palette pair is block-local per draw. */
 
-int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
+int RoomM089_SpinModel(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
     GteShortVector position;
     GteShortVector rotation;
     RenderColor color = D_8018F1D4;
@@ -433,7 +433,7 @@ int RoomM089_SwirlRiseSprite(int mode, RoomSwirlRiseState *state,
  * rising sprites every other frame, tags the player while it is close, and
  * draws three turning layers of one model, a fourth model and a glow strip
  * that fade out over the first 0x31 frames. */
-int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
+int RoomM089_ModelPulse(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
     GteShortVector rotation;
     RenderColor color;
     GteMatrix matrix;
@@ -468,12 +468,12 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
                 if (*flag == 1) *flag = 2;
             }
         }
-        D_8019416C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5464704);
-        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_8019416C, 0, 0);
+        g_RoomM089PulseModel = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5464704);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)g_RoomM089PulseModel, 0, 0);
         D_80194168 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5864704);
         FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80194168, 0, 0);
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM089SpawnChannel)->pool, 0x10, 0x18,
-                             (FieldFxCallbackListCallback)func_80193200);
+                             (FieldFxCallbackListCallback)RoomM089_SwirlSpriteCallback);
     case 1:
         if (g_FieldFxCurrentAge == 1) {
             for (i = 0; i < 16; i++) {
@@ -542,10 +542,10 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             scale.y = tall;
             scale.z = outer;
             ScaleMatrix(&matrix, &scale);
-            FieldFx_ModelSaveColors(D_8019416C);
-            FieldFx_ModelScaleColors(D_8019416C, fade);
-            FieldFx_ModelDraw((union FieldTexturedModel *)D_8019416C, &matrix);
-            FieldFx_ModelRestoreColors(D_8019416C);
+            FieldFx_ModelSaveColors(g_RoomM089PulseModel);
+            FieldFx_ModelScaleColors(g_RoomM089PulseModel, fade);
+            FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM089PulseModel, &matrix);
+            FieldFx_ModelRestoreColors(g_RoomM089PulseModel);
             rotation.x = 0;
             rotation.z = 0;
             rotation.y = g_FieldFxCurrentAge << 5;
@@ -557,10 +557,10 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             wideScale.y = low;
             wideScale.z = wide;
             ScaleMatrix(&wideMatrix, &wideScale);
-            FieldFx_ModelSaveColors(D_8019416C);
-            FieldFx_ModelScaleColors(D_8019416C, glow);
-            FieldFx_ModelDraw((union FieldTexturedModel *)D_8019416C, &wideMatrix);
-            FieldFx_ModelRestoreColors(D_8019416C);
+            FieldFx_ModelSaveColors(g_RoomM089PulseModel);
+            FieldFx_ModelScaleColors(g_RoomM089PulseModel, glow);
+            FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM089PulseModel, &wideMatrix);
+            FieldFx_ModelRestoreColors(g_RoomM089PulseModel);
             rotation.x = 0;
             rotation.z = 0;
             rotation.y = g_FieldFxCurrentAge << 4;
@@ -572,10 +572,10 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             lowScale.y = low * 3 / 2;
             lowScale.z = outer;
             ScaleMatrix(&lowMatrix, &lowScale);
-            FieldFx_ModelSaveColors(D_8019416C);
-            FieldFx_ModelScaleColors(D_8019416C, glow);
-            FieldFx_ModelDraw((union FieldTexturedModel *)D_8019416C, &lowMatrix);
-            FieldFx_ModelRestoreColors(D_8019416C);
+            FieldFx_ModelSaveColors(g_RoomM089PulseModel);
+            FieldFx_ModelScaleColors(g_RoomM089PulseModel, glow);
+            FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM089PulseModel, &lowMatrix);
+            FieldFx_ModelRestoreColors(g_RoomM089PulseModel);
         }
         if (g_FieldFxCurrentAge < 0x19) {
             u16 *index;
@@ -610,7 +610,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             FieldFx_ModelRestoreColors(D_80194168);
         }
         if (g_FieldFxCurrentAge < 0x31) {
-            FieldFx_SampleColorTrack(D_801940F8, &color, g_FieldFxCurrentAge);
+            FieldFx_SampleColorTrack(g_RoomM089PulseColorTrack, &color, g_FieldFxCurrentAge);
             FieldFx_DrawStarFan(&state->position, 0x1F4, 0x1F4, 0xC, 0, 0x1000, 0x1000, &color, 0, 0x80, 1);
         }
         g_FieldFxSpriteParams.parameter00 = 0x20;
@@ -626,12 +626,12 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
     return 0;
 }
 
-short *func_80193FF0(int arg0, short arg1, short arg2, short arg3) {
+short *RoomM089_SetAnchor(int arg0, short arg1, short arg2, short arg3) {
     if (arg0 == 1) {
-        D_80194160 = arg1;
+        g_RoomM089Anchor = arg1;
         D_80194162 = arg2;
         D_80194164 = arg3;
     }
 
-    return &D_80194160;
+    return &g_RoomM089Anchor;
 }
