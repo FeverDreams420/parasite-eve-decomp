@@ -179,7 +179,7 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         }
         }
         { EnemyCombatant *enemy;
-        { BattleInitSlotAddress at; at.slot = D_800BE830; at.address = at.address + offset; enemy = (EnemyCombatant *)at.slot->actor->core; }
+        { BattleInitSlotAddress at; at.slot = D_800BE830; at.address = at.address + offset; enemy = at.slot->actor->core; }
         if (!(enemy->hpAlive > 0 && enemy)) {
             Entity_SetActionMode(D_8009D254, active->actionMode12);
             g_BattleActionIndex++;
@@ -220,7 +220,7 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         if (activeAction->attackWord & 0x3FF) {
             indexAlt = g_BattleActionIndex;
             {
-                EnemyCombatant *enemy = (EnemyCombatant *)D_800BE830[indexAlt].actor->core;
+                EnemyCombatant *enemy = D_800BE830[indexAlt].actor->core;
                 int nextRetry;
                 if (enemy->hpAlive > 0) {
 asm volatile("" : : "r"(enemy));
