@@ -80,11 +80,11 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
         case 1:
             spark->timer++;
             spark->y -= 8;
-            if ((s16)spark->timer < 8) break;
+            if (spark->timer < 8) break;
             return 1;
         case 2:
             spark->timer++;
-            if ((s16)spark->timer < 16) break;
+            if (spark->timer < 16) break;
             return 1;
         }
         break;
