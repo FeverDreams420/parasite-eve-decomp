@@ -70,7 +70,7 @@ OBJS := $(ASM_OBJS) $(C_OBJS)
 C_DEPS := $(C_OBJS:.o=.o.d)
 -include $(C_DEPS)
 
-.PHONY: expected objdiff-config progress-audit report report-audit all build check check-sources source-policy-check ci verify verify-clean clean diff distclean overlay-build overlay-build-all overlay-check overlay-check-all overlay-clean overlay-extract overlay-split pe-img-repack pe-img-check permute progress debt debt-check debt-baseline organization-check organization-baseline test drop-pins drop-barriers drop-aliases shift-audit shift-test shift-full-test shift-check shift-baseline split split-if-needed tools
+.PHONY: overlay-collision-check overlay-collision-baseline overlay-collisions expected objdiff-config progress-audit report report-audit all build check check-sources source-policy-check ci verify verify-clean clean diff distclean overlay-build overlay-build-all overlay-check overlay-check-all overlay-clean overlay-extract overlay-split pe-img-repack pe-img-check permute progress debt debt-check debt-baseline organization-check organization-baseline test drop-pins drop-barriers drop-aliases shift-audit shift-test shift-full-test shift-check shift-baseline split split-if-needed tools
 
 all: verify
 
@@ -147,6 +147,7 @@ ci: check-sources source-policy-check debt-check organization-check
 # shift-check reads the build, so it runs after `check` has produced it.
 verify: ci check
 	@$(MAKE) --no-print-directory shift-check
+	@$(MAKE) --no-print-directory overlay-collision-check
 
 # Use before merging structural, toolchain, manifest, or shared-header changes.
 verify-clean:
@@ -212,6 +213,20 @@ shift-check:
 
 shift-baseline:
 	@$(PY) tools/scripts/shift_audit.py --update-baseline
+
+# Overlay global names that more than one overlay defines
+# (docs/OVERLAY_SYMBOL_COLLISIONS.md). The check fails when a new conflicting
+# name or a name private to one overlay appears; it needs `make overlay-build-all`
+# and is skipped with a message when the overlays are not built (CI sets
+# SHIFT_REQUIRE_OVERLAYS=1 so it is never skipped there).
+overlay-collision-check:
+	@$(PY) tools/scripts/overlay_symbol_collisions.py --check $(if $(SHIFT_REQUIRE_OVERLAYS),--require-overlays,)
+
+overlay-collision-baseline:
+	@$(PY) tools/scripts/overlay_symbol_collisions.py --update-baseline --write
+
+overlay-collisions:
+	@$(PY) tools/scripts/overlay_symbol_collisions.py --write
 
 # Disassemble the retail binaries into objdiff's target objects. This is a
 # fresh second split against an empty source tree - never a copy of our own

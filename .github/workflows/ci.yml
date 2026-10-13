@@ -197,6 +197,11 @@ jobs:
       - name: Check that no fixed-address count grew
         run: make shift-check SHIFT_REQUIRE_OVERLAYS=1
 
+      # Overlay global names must stay unique per meaning
+      # (tools/overlay_collisions_baseline.json, docs/OVERLAY_SYMBOL_COLLISIONS.md).
+      - name: Check overlay symbol collisions
+        run: make overlay-collision-check SHIFT_REQUIRE_OVERLAYS=1
+
       - name: Generate the target objects and the progress report
         run: make report
 
