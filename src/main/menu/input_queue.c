@@ -327,8 +327,8 @@ u8 *D_8009D104;
 u32 *D_8009D118;
 u32 *D_8009D11C;
 void Draw_InitBuffers(void) {
-    g_DrawFrameBuffers[0].frontBufferBase = (u8 *)g_RenderFrontBufferBase[0];
-    g_DrawFrameBuffers[1].frontBufferBase = (u8 *)g_RenderBackBufferBase[0];
+    g_DrawFrameBuffers[0].frontBufferBase = g_RenderFrontBufferBase[0];
+    g_DrawFrameBuffers[1].frontBufferBase = g_RenderBackBufferBase[0];
     g_DrawFrameBuffers[0].orderingTableBase = (u32 *)g_OtBufferTable[0];
     g_DrawFrameBuffers[1].orderingTableBase = (u32 *)g_RenderOtBufferBaseAlt[0];
     SetDefDrawEnv(&g_DrawFrameBuffers[0].draw, 0, 0, 0x140, 0xE0);
