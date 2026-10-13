@@ -696,7 +696,7 @@ int CdRom_DetectDiscChange(void) {
  * The shifted state view preserves the bank-row address calculation. */
 int Scene_LoadEntityTexture(void)
 {
-    int bank = *D_800B0CE2;
+    int bank = g_SceneAreaType;
     u32 lba = g_DiscLoadState.baseLba;
     Pe1GameState *state = &g_GameState;
     SceneAssetBlob *blob;

@@ -56,7 +56,6 @@ D_8009D14C = g_DrawBlendColor;
  * named in configs/USA/sym.main.txt. */
 D_800A76A0 = g_GameTimers;
 g_GameStateFlagsWord = g_GameState;
-D_800B0CE2 = g_SceneAreaType;
 g_DrawEnabledByte = g_DrawEnabled;
 g_SeqElapsedRecord = g_SeqElapsed;
 g_DiscLoadState = g_PeImageBaseLba;
