@@ -66,6 +66,59 @@ D_80172CFA = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CFA; /* boot_display */
 D_80172CFC = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CFC; /* boot_display */
 D_80172D00 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2D00; /* boot_display */
 
+/* owner: asset[71], the credits data (PE.IMG sectors 1111..1276), read
+ * to 0x80120D00 together with boot_display, which lies inside it.
+ * reason: boot_display's credit tables point into it: the XA stream path,
+ * the staff lines before the overlay and the image chunks after it. The
+ * asset is data, not an overlay, so its layout inside the window is the
+ * retail one. */
+D_80120D04 = OVERLAY_WINDOW_MENU_MEMCARD + 0x4; /* boot_display */
+D_80122EC8 = OVERLAY_WINDOW_MENU_MEMCARD + 0x21C8; /* boot_display */
+D_80122ED8 = OVERLAY_WINDOW_MENU_MEMCARD + 0x21D8; /* boot_display */
+D_80122EE8 = OVERLAY_WINDOW_MENU_MEMCARD + 0x21E8; /* boot_display */
+D_80122EF8 = OVERLAY_WINDOW_MENU_MEMCARD + 0x21F8; /* boot_display */
+D_80122F10 = OVERLAY_WINDOW_MENU_MEMCARD + 0x2210; /* boot_display */
+D_80122F20 = OVERLAY_WINDOW_MENU_MEMCARD + 0x2220; /* boot_display */
+D_80122F28 = OVERLAY_WINDOW_MENU_MEMCARD + 0x2228; /* boot_display */
+D_80122F30 = OVERLAY_WINDOW_MENU_MEMCARD + 0x2230; /* boot_display */
+D_80122F4C = OVERLAY_WINDOW_MENU_MEMCARD + 0x224C; /* boot_display */
+D_80122F5C = OVERLAY_WINDOW_MENU_MEMCARD + 0x225C; /* boot_display */
+D_80122F6C = OVERLAY_WINDOW_MENU_MEMCARD + 0x226C; /* boot_display */
+D_80122F80 = OVERLAY_WINDOW_MENU_MEMCARD + 0x2280; /* boot_display */
+D_80122F84 = OVERLAY_WINDOW_MENU_MEMCARD + 0x2284; /* boot_display */
+D_80122F98 = OVERLAY_WINDOW_MENU_MEMCARD + 0x2298; /* boot_display */
+D_8012E86C = OVERLAY_WINDOW_BOOT_DISPLAY + 0xB8C8; /* boot_display */
+D_80130494 = OVERLAY_WINDOW_BOOT_DISPLAY + 0xD4F0; /* boot_display */
+D_80132024 = OVERLAY_WINDOW_BOOT_DISPLAY + 0xF080; /* boot_display */
+D_80135538 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x12594; /* boot_display */
+D_801368EC = OVERLAY_WINDOW_BOOT_DISPLAY + 0x13948; /* boot_display */
+D_80138438 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x15494; /* boot_display */
+D_8013A848 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x178A4; /* boot_display */
+D_8013C710 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x1976C; /* boot_display */
+D_8013E37C = OVERLAY_WINDOW_BOOT_DISPLAY + 0x1B3D8; /* boot_display */
+D_80140E70 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x1DECC; /* boot_display */
+D_801428F8 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x1F954; /* boot_display */
+D_8014438C = OVERLAY_WINDOW_BOOT_DISPLAY + 0x213E8; /* boot_display */
+D_80145F8C = OVERLAY_WINDOW_BOOT_DISPLAY + 0x22FE8; /* boot_display */
+D_80147240 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x2429C; /* boot_display */
+D_8014907C = OVERLAY_WINDOW_BOOT_DISPLAY + 0x260D8; /* boot_display */
+D_8014AA14 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x27A70; /* boot_display */
+D_8014CA2C = OVERLAY_WINDOW_BOOT_DISPLAY + 0x29A88; /* boot_display */
+D_80151528 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x2E584; /* boot_display */
+D_80153024 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x30080; /* boot_display */
+D_8015712C = OVERLAY_WINDOW_BOOT_DISPLAY + 0x34188; /* boot_display */
+D_8015A66C = OVERLAY_WINDOW_BOOT_DISPLAY + 0x376C8; /* boot_display */
+D_8015C094 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x390F0; /* boot_display */
+D_8015D994 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x3A9F0; /* boot_display */
+D_8015F0BC = OVERLAY_WINDOW_BOOT_DISPLAY + 0x3C118; /* boot_display */
+D_8016152C = OVERLAY_WINDOW_BOOT_DISPLAY + 0x3E588; /* boot_display */
+D_801636D8 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x40734; /* boot_display */
+D_80166D90 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x43DEC; /* boot_display */
+D_80168D84 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x45DE0; /* boot_display */
+D_8016AE00 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x47E5C; /* boot_display */
+D_8016CEBC = OVERLAY_WINDOW_BOOT_DISPLAY + 0x49F18; /* boot_display */
+D_8016F150 = OVERLAY_WINDOW_BOOT_DISPLAY + 0x4C1AC; /* boot_display */
+
 /* owner: menu_memcard (the memory card menu block).
  * reason: the block's own code and data reached at the bases it was
  * linked or loaded at (0x80120D44 load base, 0x801EB7F8 link base,
