@@ -46,3 +46,10 @@ address,overlay,old_name,new_name,evidence
 0x8019019C,room_m349_cruiser,D_8019019C,g_RoomM349FlareParams.radius,"Same block: radius at +0x08, read as params->radius in RoomM349_FlareRing."
 0x801901A0,room_m349_cruiser,D_801901A0,g_RoomM349FlareParams.period,Same block: period at +0x0C.
 0x801901A4,room_m349_cruiser,D_801901A4,g_RoomM349FlareParams.lastFrame,Same block: lastFrame at +0x10.
+0x8018F1CC,room_m404_chrysler,D_8018F1CC,g_RoomM404DropFanTilt,"RoomM404_SinkingDropCallback state 2: local rotation {0x400,0,0,flags 1} passed as the GteRotation of the pool's FieldFx_DrawStarFan."
+0x8018F1D4,room_m404_chrysler,D_8018F1D4,g_RoomM404DropFanColor,"Same call: local colour (rgb 60,08,46) is the colour0 of the pool star fan."
+0x8018F1D8,room_m404_chrysler,D_8018F1D8,g_RoomM404DropGlowColor,"RoomM404_SinkingDropCallback states 0 and 1: local colour (rgb 00,80,C8) passed to FieldFx_DrawShapeQuads and the star fan of the falling drop glow."
+0x8018F208,room_m404_chrysler,D_8018F208,g_RoomM404SinkingDropAnchor,"C-defined template {0,-30}: RoomM404_SinkingDrop passes it to FieldFx_TransformMatrixPoint on joint 3 as the spawn point."
+0x8018F210,room_m404_chrysler,D_8018F210,g_RoomM404DebrisSparkRotation,"C-defined zero rotation: RoomM404_DebrisSparkCallback copies it, sets z each frame and passes it to FieldFx_DrawShapeQuads."
+0x8018F218,room_m404_chrysler,D_8018F218,g_RoomM404DebrisSparkColor,"C-defined colour (6E,3C,3C): RoomM404_DebrisSparkCallback uses it for FieldFx_DrawPointTile."
+0x8018F21C,room_m404_chrysler,D_8018F21C,g_RoomM404DebrisBurstAnchor,"C-defined template {0,0x2BC}: RoomM404_DebrisBurst transforms it on joint 0 into the burst origin."
