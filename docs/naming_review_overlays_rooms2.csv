@@ -18,3 +18,10 @@ address,overlay,old_name,new_name,evidence
 0x80190B80,room_m086_central_park,D_80190B80,g_RoomM086ControllerParams[3],"Same block, arg1 store of the arg0==2 branch of RoomM086_SetControllerParams."
 0x80190B90,room_m086_central_park,D_80190B90,g_RoomM086BounceGlintParams[1],Interior of the 3-word block g_RoomM086BounceGlintParams (0x80190B8C): RoomM086_SetBounceGlintParams stores arg2 there through its base pointer; int[3] view.
 0x80190B94,room_m086_central_park,D_80190B94,g_RoomM086BounceGlintParams[2],"Same block, arg3 store of RoomM086_SetBounceGlintParams."
+0x8018F1CC,room_m089_central_park,D_8018F1CC,g_RoomM089TrailHeadColor,"RoomM089_SpiralTrailCallback copies it (rgb A0,50,FF) to a local passed as the head colour of the five FieldFx_DrawGlowLine segments and the end glow."
+0x8018F1D0,room_m089_central_park,D_8018F1D0,g_RoomM089TrailTailColor,"Same function: local tail colour (rgb 32,00,C8), the second colour of FieldFx_DrawGlowLine."
+0x8018F1D4,room_m089_central_park,D_8018F1D4,g_RoomM089SpinGlowColor,"RoomM089_SpinModel: initialises the local colour (80,20,32) passed to the glow draw of the swelling anchor glow."
+0x8018F1D8,room_m089_central_park,D_8018F1D8,g_RoomM089SwirlSpriteColor,"RoomM089_SwirlRiseSprite case entry: color = it (A0,A0,A0) and later passed as the sprite colour to the draw call."
+0x80194168,room_m089_central_park,D_80194168,g_RoomM089CoreModel,"Model pointer set from Asset_FindTable08ByU32Key(scene block, 0xC5864704) by RoomM089_SpinModel and RoomM089_ModelPulse and drawn by both (spin model and pulse core); the pulse's separate model is g_RoomM089PulseModel."
+0x80194162,room_m089_central_park,D_80194162,g_RoomM089Anchor[1],"Interior of g_RoomM089Anchor (0x80194160, three shorts): RoomM089_SetAnchor stores arg2 there. Declared short[3]; byte-identical."
+0x80194164,room_m089_central_park,D_80194164,g_RoomM089Anchor[2],"Same block, arg3 store of RoomM089_SetAnchor."

@@ -22,5 +22,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomSwirlRiseState, radius) == 0x0C,
                   room_swirl_rise_radius_offset);
 
 extern RenderColor g_RoomM089_D_8018F1D8;
+extern RenderColor g_RoomM089SwirlSpriteColor;
 
 #endif
