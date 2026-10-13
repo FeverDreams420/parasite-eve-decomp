@@ -176,12 +176,12 @@ void Inv_SetActiveList(int mode, int *slot) {
             register BattleAction *data asm("$5") = active->action;
             ItemDataRecord *item = *(ItemDataRecord **)selection;
             register u32 word asm("$3") = data->attackWord;
-            register int mask asm("$4") = -0x400;
             int kind;
             int encoded;
             u32 flags2;
             register u32 shifted asm("$2");
-            word = (word & mask) | (item->ammo & 0x3FF);
+            encoded = -0x400;
+            word = (word & encoded) | (item->ammo & 0x3FF);
             data->attackWord = word;
                     item = *(ItemDataRecord **)selection;
             kind = item->kind;
