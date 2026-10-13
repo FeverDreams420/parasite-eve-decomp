@@ -16,7 +16,7 @@
 typedef RoomM273PointerPoolEffect Effect;
 typedef struct { unsigned char unknown[58]; unsigned short value; } Object;
 
-int func_8019A4CC(int mode,Effect *effect) {
+int RoomM273_HandRingBandCallback(int mode,Effect *effect) {
     GteRotation parameters;
     /* Layout only: purpose of these eight original frame bytes is unknown. */
     int stack_pad[2];
@@ -40,7 +40,7 @@ int func_8019A4CC(int mode,Effect *effect) {
 
 /* Arc spawn-state helper, callback, and pool controller. */
 
-void *func_8019A5D4(int unused, int value, int flag) {
+void *RoomM273_SweepConfigure(int unused, int value, int flag) {
     D_8019AF56 = value;
     D_8019AF58 = value;
     value++;
@@ -48,10 +48,10 @@ void *func_8019A5D4(int unused, int value, int flag) {
     D_8019AF5A = flag;
     D_8019AF64 = flag != 0 ? 0x52 : 0xE;
 
-    return &D_8019AEFC;
+    return &g_RoomM273SweepPoint;
 }
 
-s32 func_8019A628(s32 arg0) {
+s32 RoomM273_SweepArcEmitter(s32 arg0) {
     char *obj;
 
     if (arg0 != 1) {
@@ -62,7 +62,7 @@ s32 func_8019A628(s32 arg0) {
             return 0;
         }
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 5,
-                             (FieldFxCallbackListCallback)func_8019A720);
+                             (FieldFxCallbackListCallback)RoomM273_SweepArcCallback);
     }
 
     if (D_8019AF6B != 0) {
@@ -74,7 +74,7 @@ s32 func_8019A628(s32 arg0) {
 
     obj = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM273PoolContext)->pool);
     if (obj != 0) {
-        *(u16 *)(obj + 0) = D_8019AEFC.x;
+        *(u16 *)(obj + 0) = g_RoomM273SweepPoint.x;
         *(u16 *)(obj + 2) = D_8019AEFE;
         *(u16 *)(obj + 4) = D_8019AF00;
         *(u16 *)(obj + 6) = 0;
@@ -83,14 +83,14 @@ s32 func_8019A628(s32 arg0) {
     return 0;
 }
 
-short *func_8019A70C(void *arg0, short arg1) {
+short *RoomM273_SwayConfigure(void *arg0, short arg1) {
     short *ptr = &D_8019AF9A;
 
     *ptr = arg1;
     return ptr - 0x17;
 }
 
-s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
+s32 RoomM273_SweepArcCallback(s32 mode, RoomM273ArcCallbackState *state) {
     s32 day;
     s32 rotationValue;
     s32 packed;
@@ -124,7 +124,7 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
         FieldFx_DrawStarFan((GteShortVector *)callState, 0x100, 0x100, count, (GteRotation *)&rotation,
         ((packed << 16) >> 16) + 0x400,
         ((packed << 16) >> 16) + 0x400,
-        (struct RenderColor *)D_8019AB70, (struct RenderColor *)D_8019AD7C, packed >> 21, 1);
+        (struct RenderColor *)g_RoomM273BlackColor, (struct RenderColor *)D_8019AD7C, packed >> 21, 1);
         }
     }
 return_zero:

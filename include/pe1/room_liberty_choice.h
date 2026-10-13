@@ -12,6 +12,6 @@ typedef struct RoomLibertyChoiceInputs {
 
 PE1_STATIC_ASSERT(sizeof(RoomLibertyChoiceInputs) == 8, room_liberty_choice_inputs_size);
 
-s32 func_80193114(s32 value, RoomLibertyChoiceInputs *inputs);
+s32 RoomM273_ChooseWeightedAction(s32 value, RoomLibertyChoiceInputs *inputs);
 
 #endif

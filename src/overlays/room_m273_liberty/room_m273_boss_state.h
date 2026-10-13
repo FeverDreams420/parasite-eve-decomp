@@ -26,6 +26,6 @@ typedef struct RoomM273BossState {
     u8 spinning;
 } RoomM273BossState;
 
-extern RoomM273BossState D_8019AE9C;
+extern RoomM273BossState g_RoomM273HandTrailState;
 
 #endif /* ROOM_M273_BOSS_STATE_H */

@@ -93,7 +93,7 @@ void RoomLib_GrabOnApproach(SceneGrabHead *head) {
                  0xFFF) < 0x100) {
                 if (FieldFx_GetDistanceXZ((Vec3Fixed *)&g_PlayerEntity->pos_x, (void *)0x1F800008) <
                     0x180) {
-                    typedState->callback = func_80192838;
+                    typedState->callback = RoomM273_GrabHoldStep;
                     Battle_BeginPlayerAction();
                     {
                         FieldActor *activePlayer = g_PlayerEntity;
@@ -120,10 +120,10 @@ void RoomLib_GrabOnApproach(SceneGrabHead *head) {
 
     *((RoomSelectionState *)stateBytes)->signal = 3;
     ((RoomSelectionState *)stateBytes)->callback =
-        func_80192D50;
+        RoomM273_GrabWaitRelease;
 }
 
-void func_80192838(RoomSelectionState *state) {
+void RoomM273_GrabHoldStep(RoomSelectionState *state) {
     FieldActor *actor = state->actor;
     RoomPlacementState *stateTail = (RoomPlacementState *)&state->callback;
     u16 currentFrame;
@@ -138,7 +138,7 @@ void func_80192838(RoomSelectionState *state) {
     if (!stateTail->placement_checked) {
         FieldActorState *playerState = g_PlayerEntity->state;
         if (playerState == 0 || playerState->amount <= 0) {
-            func_80192C00(actor, stateTail);
+            RoomM273_ReturnPlayerToPlacement(actor, stateTail);
             stateTail->phase_countdown = 0;
             stateTail->placement_checked = 1;
         }
@@ -173,7 +173,7 @@ void func_80192838(RoomSelectionState *state) {
         } else if ((s16)previousFrame < 50 && (s16)currentFrame >= 50) {
             if (stateTail->placement_checked == 0) {
                 Battle_ReturnToIdle();
-                func_80192C00(actor, stateTail);
+                RoomM273_ReturnPlayerToPlacement(actor, stateTail);
             }
         } else if ((s16)previousFrame < 3 && (s16)currentFrame >= 3) {
             FieldActorState *playerState = g_PlayerEntity->state;
@@ -188,7 +188,7 @@ void func_80192838(RoomSelectionState *state) {
                 u8 *substate = ((RoomM273ActorState *)actor->state)->substate;
                 substate[0] = 4;
             }
-            func_80192D8C(state);
+            RoomM273_GrabRelease(state);
         }
         if (stateTail->vertical_ticks != 0) {
             actor->pos_y += stateTail->vertical_step;
@@ -207,12 +207,12 @@ void func_80192838(RoomSelectionState *state) {
         return;
 
     default:
-        func_80192D8C(state);
+        RoomM273_GrabRelease(state);
         return;
     }
 }
 
-void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
+void RoomM273_ReturnPlayerToPlacement(RoomPlacementOwner *owner, RoomPlacementState *state) {
     FieldActor *player = g_PlayerEntity;
     RoomPlacementMap *placement;
     int *script = g_FloorPolygonVertices;
@@ -253,15 +253,15 @@ void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
     }
 }
 
-void func_80192D50(RoomSelectionState *state) {
+void RoomM273_GrabWaitRelease(RoomSelectionState *state) {
     FieldActor *slot = state->actor;
 
     if (slot->anim.parts.integer >= 0x3B) {
-        func_80192D8C(state);
+        RoomM273_GrabRelease(state);
     }
 }
 
-s32 func_80192D8C(RoomSelectionState *selection) {
+s32 RoomM273_GrabRelease(RoomSelectionState *selection) {
     RoomPlacementState *placementState;
     char *target;
     FieldActorState *actorState;
@@ -281,21 +281,21 @@ s32 func_80192D8C(RoomSelectionState *selection) {
                 Battle_ReturnToIdle();
             }
         }
-        func_80192C00((RoomPlacementOwner *)selection->actor, placementState);
+        RoomM273_ReturnPlayerToPlacement((RoomPlacementOwner *)selection->actor, placementState);
     }
 
     return 0;
 }
 
-int func_80192E3C(void) {
+int RoomM273_GrabNop6(void) {
     return 0;
 }
 
-int func_80192E44(void) {
+int RoomM273_OscillationNop0(void) {
     return 0;
 }
 
-int func_80192E4C(RoomOscillationEffect *obj) {
+int RoomM273_OscillationInit(RoomOscillationEffect *obj) {
     obj->params.angleOut = 0;
     obj->params.distanceOut = 0;
     obj->params.signal = 0;
@@ -303,7 +303,7 @@ int func_80192E4C(RoomOscillationEffect *obj) {
     return 0;
 }
 
-int func_80192E64(RoomOscillationEffect *base, int unused, unsigned int operation, int arg3,
+int RoomM273_OscillationConfigure(RoomOscillationEffect *base, int unused, unsigned int operation, int arg3,
                   int arg4, int arg5) {
     RoomOscillationParams *fields = &base->params;
 
@@ -328,7 +328,7 @@ int func_80192E64(RoomOscillationEffect *base, int unused, unsigned int operatio
         break;
     }
     case 3:
-        *(s32 *)arg4 = func_80193114(*(s32 *)arg3, (RoomLibertyChoiceInputs *)fields);
+        *(s32 *)arg4 = RoomM273_ChooseWeightedAction(*(s32 *)arg3, (RoomLibertyChoiceInputs *)fields);
         break;
     case 4:
         fields->angleOut = (int *)arg3;
@@ -344,11 +344,11 @@ int func_80192E64(RoomOscillationEffect *base, int unused, unsigned int operatio
 
 int Math_IntSqrt(int squaredDistance);
 
-int func_80192F54(void) {
+int RoomM273_OscillationNop3(void) {
     return 0;
 }
 
-int func_80192F5C(RoomOscillationEffect *effect) {
+int RoomM273_OscillationUpdate(RoomOscillationEffect *effect) {
     int **outs = &effect->params.angleOut;
     FieldActor *actor = effect->actor;
 
@@ -393,7 +393,7 @@ int func_80192F5C(RoomOscillationEffect *effect) {
     return 0;
 }
 
-int func_801930E8(RoomOscillationEffect *obj) {
+int RoomM273_OscillationRelease(RoomOscillationEffect *obj) {
     if (obj->params.signal != 0) {
         obj->params.signal = 0;
     }
@@ -402,11 +402,11 @@ int func_801930E8(RoomOscillationEffect *obj) {
     return 0;
 }
 
-int func_8019310C(void) {
+int RoomM273_OscillationNop6(void) {
     return 0;
 }
 
-s32 func_80193114(s32 arg0, RoomLibertyChoiceInputs *inputs) {
+s32 RoomM273_ChooseWeightedAction(s32 arg0, RoomLibertyChoiceInputs *inputs) {
     s32 variant;
     s32 distanceBand;
     s32 threshold;
@@ -441,7 +441,7 @@ s32 func_80193114(s32 arg0, RoomLibertyChoiceInputs *inputs) {
     return i;
 }
 
-int func_8019320C(int mode, RoomM273SampledLayerEffect *effect) {
+int RoomM273_GrabPlacementFanCallback(int mode, RoomM273SampledLayerEffect *effect) {
     RoomM273Vector position, rotation;
     if (mode == 1) {
         if (g_FieldFxCurrentAge >= 8) return 1;
@@ -461,7 +461,7 @@ int func_8019320C(int mode, RoomM273SampledLayerEffect *effect) {
         i = 0;
         do {
             FieldFx_DrawStarFan(&position, 128, 128, 12, (GteRotation *)&rotation,
-                          size, size, (RenderColor *)D_8019AB70,
+                          size, size, (RenderColor *)g_RoomM273BlackColor,
                           (RenderColor *)effect->parameter, shade, 1);
             shade = shade >> 1;
             size = size * 3 / 2;
@@ -472,11 +472,11 @@ int func_8019320C(int mode, RoomM273SampledLayerEffect *effect) {
     return 0;
 }
 
-int func_801933A0(int mode) {
+int RoomM273_GrabPlacementFanEmitter(int mode) {
     switch(mode) {
     case 0:
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,12,9,
-                             (FieldFxCallbackListCallback)func_8019320C);
+                             (FieldFxCallbackListCallback)RoomM273_GrabPlacementFanCallback);
     case 1: {
         RoomM273SampledLayerEffect *effect;
         RoomPlacementMap *transform;
@@ -505,7 +505,7 @@ int func_801933A0(int mode) {
 
 /* The emitter owns the twelve-byte records rendered by this callback. */
 
-int func_8019353C(int mode,RoomM273ScaledLayerEffect *effect) {
+int RoomM273_GrabPlacementScaledFanCallback(int mode,RoomM273ScaledLayerEffect *effect) {
     Vector position,rotation;
     /* Layout only: purpose of these eight original frame bytes is unknown. */
     int unknownFrame[2];
@@ -523,7 +523,7 @@ int func_8019353C(int mode,RoomM273ScaledLayerEffect *effect) {
         position=effect->position;
         i=0;
         do {
-            FieldFx_DrawStarFan(&position,128,128,12,(GteRotation *)&rotation,size,size,(struct RenderColor *)D_8019AB70,(struct RenderColor *)effect->parameter,shade,1);
+            FieldFx_DrawStarFan(&position,128,128,12,(GteRotation *)&rotation,size,size,(struct RenderColor *)g_RoomM273BlackColor,(struct RenderColor *)effect->parameter,shade,1);
             shade>>=1;
             size=size*3/2;
             i++;
@@ -533,13 +533,13 @@ int func_8019353C(int mode,RoomM273ScaledLayerEffect *effect) {
     return 0;
 }
 
-int func_801936F0(int mode) {
+int RoomM273_GrabPlacementScaledFanEmitter(int mode) {
     /* Layout only: purpose of these eight original frame bytes is unknown. */
     int unknownFrame[2];
     switch(mode) {
     case 0:
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,12,9,
-                             (FieldFxCallbackListCallback)func_8019353C);
+                             (FieldFxCallbackListCallback)RoomM273_GrabPlacementScaledFanCallback);
     case 1: {
         RoomM273ScaledLayerEffect *effect;
         Transform *transform;
@@ -565,7 +565,7 @@ int func_801936F0(int mode) {
     return 0;
 }
 
-int func_80193870(int mode, RoomM273SpritePoolEffect *state) {
+int RoomM273_GrabPlayerPulseCallback(int mode, RoomM273SpritePoolEffect *state) {
     if (mode == 1) {
         if (g_FieldFxCurrentAge >= 16) return 1;
     } else if (mode == 2) {
@@ -590,18 +590,18 @@ int func_80193870(int mode, RoomM273SpritePoolEffect *state) {
         sprite.x = x;
         kind = g_FieldFxSpriteParams.palette;
         palette = g_FieldFxPaletteTable[kind];
-        FieldFx_DrawShapeQuads((GteShortVector *)&sprite, &D_8019AB68, size, size, 102,
+        FieldFx_DrawShapeQuads((GteShortVector *)&sprite, &g_RoomM273FloorRotation, size, size, 102,
                         GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 9 : palette + 5), 1, shade, 0);
     }
     return 0;
 }
 
-int func_801939B4(int mode) {
+int RoomM273_GrabPlayerPulseEmitter(int mode) {
     switch (mode) {
     case 0:
         D_8019AE5C = 0;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool, 4, 1,
-                             (FieldFxCallbackListCallback)func_80193870);
+                             (FieldFxCallbackListCallback)RoomM273_GrabPlayerPulseCallback);
     case 1:
         if (g_FieldFxCurrentAge >= 20) return 2;
         if (D_8019AE5C) return 2;
@@ -639,7 +639,7 @@ int func_801939B4(int mode) {
 
 void *Asset_FindTable08ByU32Key(void *base, s32 key);
 
-int func_80193B5C(int mode, ThresholdPairBand **arg1) {
+int RoomM273_GrabModelRingCallback(int mode, ThresholdPairBand **arg1) {
     short params[4];
     short i;
     ThresholdPairBand **objp = arg1;
@@ -683,7 +683,7 @@ ret1:
     return 1;
 }
 
-int func_80193CB8(int mode,ThresholdTripleEffect *effect) {
+int RoomM273_GrabModelCallback(int mode,ThresholdTripleEffect *effect) {
     ThresholdTripleMatrix matrix;
     ThresholdTripleVector copy,scale;
     if(mode==1) {
@@ -721,7 +721,7 @@ int func_80193CB8(int mode,ThresholdTripleEffect *effect) {
         palette=g_FieldFxPaletteTable[kind];
         FieldFx_ModelSetTexture(page,GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 11 : palette + 7));
         FieldFx_ModelSetSemiTrans(1);
-        asset=&D_8019AE8C.asset;
+        asset=&g_RoomM273GrabModel.asset;
         FieldFx_ModelSaveColors(*asset);
         FieldFx_ModelScaleColors(*asset,effect->parameter12);
         cosine=rcos(effect->phase);
@@ -746,16 +746,16 @@ int func_80193CB8(int mode,ThresholdTripleEffect *effect) {
     return 0;
 }
 
-int func_80193F30(int mode) {
+int RoomM273_GrabModelEmitter(int mode) {
     switch(mode) {
     case 0: {
         int size;
-        D_8019AE8C.asset=Asset_FindTable08ByU32Key(D_800B0E64[0],0xC5941704);
-        FieldFx_ModelScrollUv(D_8019AE8C.asset,0,0);
+        g_RoomM273GrabModel.asset=Asset_FindTable08ByU32Key(D_800B0E64[0],0xC5941704);
+        FieldFx_ModelScrollUv(g_RoomM273GrabModel.asset,0,0);
         size=FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,16,6,
-                           (FieldFxCallbackListCallback)func_80193CB8);
+                           (FieldFxCallbackListCallback)RoomM273_GrabModelCallback);
         asm("" : : "r"(size));
-        return size+FieldFx_AllocCallbackList(&D_8019AE8C.pool,size,4,2,func_80193B5C);
+        return size+FieldFx_AllocCallbackList(&g_RoomM273GrabModel.pool,size,4,2,RoomM273_GrabModelRingCallback);
     }
     case 1: {
         RoomM273ThresholdEntityState *state;
@@ -787,7 +787,7 @@ int func_80193F30(int mode) {
     return 0;
 }
 
-int func_80194128(int mode, GteRotation *rotation) {
+int RoomM273_GrabPlayerStreakCallback(int mode, GteRotation *rotation) {
     GteShortVector position;
     int frame, size, kind, palette;
     u16 clut;
@@ -817,11 +817,11 @@ int func_80194128(int mode, GteRotation *rotation) {
     return 0;
 }
 
-int func_80194284(int mode) {
+int RoomM273_GrabPlayerStreakEmitter(int mode) {
     switch (mode) {
     case 0:
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 4,
-                             (FieldFxCallbackListCallback)func_80194128);
+                             (FieldFxCallbackListCallback)RoomM273_GrabPlayerStreakCallback);
     case 1: {
         RoomM273EffectModeState *state;
         if (D_8019AE9A) return 2;
@@ -858,7 +858,7 @@ int func_80194284(int mode) {
     return 0;
 }
 
-int func_80194470(int mode, Vector *input) {
+int RoomM273_GrabPlayerTrailCallback(int mode, Vector *input) {
     Vector *position = input;
     if (mode == 1) {
         if (g_FieldFxCurrentAge >= 9) return 1;
@@ -883,12 +883,12 @@ int func_80194470(int mode, Vector *input) {
     return 0;
 }
 
-int func_801945A8(int mode) {
+int RoomM273_GrabPlayerTrailEmitter(int mode) {
     switch(mode) {
     case 0:
         D_8019AE60=0; D_8019AE64=0;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,4,
-                             (FieldFxCallbackListCallback)func_80194470);
+                             (FieldFxCallbackListCallback)RoomM273_GrabPlayerTrailCallback);
     case 1: {
         RoomM273EffectModeState *state;
         if(D_8019AE9A) return 2;
@@ -929,7 +929,7 @@ int func_801945A8(int mode) {
     return 0;
 }
 
-int func_801947CC(int mode, RoomM273PaletteInput *input)
+int RoomM273_GrabStarBurstCallback(int mode, RoomM273PaletteInput *input)
 {
     RoomM273TrigEntry *entry;
     RoomM273PaletteEffect *effect;
@@ -948,7 +948,7 @@ int func_801947CC(int mode, RoomM273PaletteInput *input)
         entry = &rcossin_tbl[(((unsigned int)frame << 7) & 0x3F80) / sizeof(RoomM273TrigEntry)];
         input->size = (entry->low * 3 * 2048) / 4096 + 4096;
         if (frame >= 24) return 0;
-        effect = FieldFx_AcquireCallbackSlot(D_8019AE94);
+        effect = FieldFx_AcquireCallbackSlot(g_RoomM273GrabSparkPool);
         if (!effect) return 0;
         effect->source = input->source;
         effect->size = (input->size * 3 * 256) / 4096;
@@ -975,20 +975,20 @@ int func_801947CC(int mode, RoomM273PaletteInput *input)
         rotation.flags = 0;
         FieldFx_DrawStarFan(&position, 256, 256, 12, &rotation,
                        input->size, input->size,
-                       (RenderColor *)D_8019AB70,
+                       (RenderColor *)g_RoomM273BlackColor,
                        (RenderColor *)&D_8019ABFC[D_8019AE98],
                        entry->high >> 5, 1);
     }
     return 0;
 }
 
-int func_801949EC(int mode) {
+int RoomM273_GrabStarBurstEmitter(int mode) {
     switch (mode) {
     case 0: {
         int size = FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 2,
-                                 (FieldFxCallbackListCallback)func_801947CC);
+                                 (FieldFxCallbackListCallback)RoomM273_GrabStarBurstCallback);
         asm("" : : "r"(size));
-        return size + FieldFx_AllocCallbackList(&D_8019AE94, size, 16, 9, func_80199F84);
+        return size + FieldFx_AllocCallbackList(&g_RoomM273GrabSparkPool, size, 16, 9, RoomM273_GrabSparkTriangleCallback);
     }
     case 1: {
         RoomM273EffectModeState *state;
@@ -1001,17 +1001,17 @@ int func_801949EC(int mode) {
                 if (effect) effect->position = g_PlayerEntity->render_object.matrices->translation;
             }
         }
-        FieldFx_UpdateCallbackList(D_8019AE94);
+        FieldFx_UpdateCallbackList(g_RoomM273GrabSparkPool);
         break;
     }
     case 2:
-        FieldFx_DrawCallbackList(D_8019AE94);
+        FieldFx_DrawCallbackList(g_RoomM273GrabSparkPool);
         break;
     }
     return 0;
 }
 
-int func_80194B5C(int mode, GteShortVector *input)
+int RoomM273_GrabHoldFlareCallback(int mode, GteShortVector *input)
 {
     GteRotation rotation;
     GteShortVector position;
@@ -1029,7 +1029,7 @@ int func_80194B5C(int mode, GteShortVector *input)
         size = (entry->low * 5 * 2048) / 4096 + 2048;
         position = *input;
         indexPtr = &D_8019AE98;
-        sprite = (RenderColor *)D_8019AB70;
+        sprite = (RenderColor *)g_RoomM273BlackColor;
         rotation.x = 0;
         rotation.y = 0;
         rotation.z = frame * 204;
@@ -1047,7 +1047,7 @@ int func_80194B5C(int mode, GteShortVector *input)
     return 0;
 }
 
-int func_80194D54(int mode) {
+int RoomM273_GrabEffectController(int mode) {
     FieldActor *obj;
     unsigned char *state;
     unsigned char obj_mode;
@@ -1108,7 +1108,7 @@ ret_one:
 
 /* Falling trail record: spins down from the boss, records where it lands or
  * touches the player, and draws a fading two-point trail ring behind it. */
-int func_80194E6C(int mode, RoomM273FallingTrail *trail) {
+int RoomM273_HandTrailCallback(int mode, RoomM273FallingTrail *trail) {
     GteMatrix matrix;
     GteShortVector vector;
     GteShortVector point;
@@ -1144,16 +1144,16 @@ int func_80194E6C(int mode, RoomM273FallingTrail *trail) {
             trail->position.y = floor;
             trail->landed = 1;
         }
-        if (trail->position.y >= D_8019AE9C.floor && g_PlayerEntity->mode >= 4) {
+        if (trail->position.y >= g_RoomM273HandTrailState.floor && g_PlayerEntity->mode >= 4) {
             int dx = g_PlayerEntity->render_object.model_matrix.translation[0] - trail->position.x;
             int dz = g_PlayerEntity->render_object.model_matrix.translation[2] - trail->position.z;
             if (Math_IntSqrt(dx * dx + dz * dz) < 0x140) {
                 trail->landed = 1;
                 source = &trail->position.x;
                 for (i = 0; i < 3; i++) {
-                    D_8019AE9C.hit[i] = (g_PlayerEntity->render_object.matrices->translation[i] + source[i]) / 2;
+                    g_RoomM273HandTrailState.hit[i] = (g_PlayerEntity->render_object.matrices->translation[i] + source[i]) / 2;
                 }
-                D_8019AE9C.hit_flag = 1;
+                g_RoomM273HandTrailState.hit_flag = 1;
                 g_PlayerEntity->state->flags |= 0x4000;
                 if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner) {
                     ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
@@ -1161,10 +1161,10 @@ int func_80194E6C(int mode, RoomM273FallingTrail *trail) {
             }
         }
         if (trail->landed) {
-            i = D_8019AE9C.landing_count++;
-            D_8019AE9C.landing_x[i] = trail->position.x;
-            D_8019AE9C.landing_y[i] = trail->position.y;
-            D_8019AE9C.landing_z[i] = trail->position.z;
+            i = g_RoomM273HandTrailState.landing_count++;
+            g_RoomM273HandTrailState.landing_x[i] = trail->position.x;
+            g_RoomM273HandTrailState.landing_y[i] = trail->position.y;
+            g_RoomM273HandTrailState.landing_z[i] = trail->position.z;
         }
         trail->head = (trail->head - 1) & 7; i = trail->head;
         gte_ldv0(&D_8019ACAC);
@@ -1260,7 +1260,7 @@ int func_80194E6C(int mode, RoomM273FallingTrail *trail) {
     return 0;
 }
 
-int func_801955E8(int mode) {
+int RoomM273_HandTrailEmitter(int mode) {
     s16 nextIndex;
     FieldActor *actor;
     FieldActor *candidate;
@@ -1277,7 +1277,7 @@ int func_801955E8(int mode) {
         D_8019AE74 = (Inv_ScrambleGrid() & 7) + 4;
         D_8019AE78 = (Inv_ScrambleGrid() & 7) + 4;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool, 100, 10,
-                             (FieldFxCallbackListCallback)func_80194E6C);
+                             (FieldFxCallbackListCallback)RoomM273_HandTrailCallback);
     }
     case 1: {
         s16 pathY[2];
@@ -1364,10 +1364,10 @@ particleSetup:
             RoomM273FallingTrail *particle = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM273PoolContext)->pool);
             if (particle == 0)
                 break;
-            particle->position.x = D_8019AE9C.hands[i].x;
-            particle->position.y = D_8019AE9C.hands[i].y;
+            particle->position.x = g_RoomM273HandTrailState.hands[i].x;
+            particle->position.y = g_RoomM273HandTrailState.hands[i].y;
             pathOffset = i * 2;
-            particle->position.z = D_8019AE9C.hands[i].z;
+            particle->position.z = g_RoomM273HandTrailState.hands[i].z;
             particle->yaw = actor->rot_y + size * 4;
             pathAddress = (s16 *)((u8 *)pathY + pathOffset);
             nextIndex = i + 1;
@@ -1401,7 +1401,7 @@ particleSetup:
     return 0;
 }
 
-int func_80195984(int mode, RoomM273PulseInput *input)
+int RoomM273_HandTrailLandingPulseCallback(int mode, RoomM273PulseInput *input)
 {
     GteShortVector position;
     int frame;
@@ -1439,21 +1439,21 @@ int func_80195984(int mode, RoomM273PulseInput *input)
     return 0;
 }
 
-int func_80195BD0(int mode) {
+int RoomM273_HandTrailLandingEmitter(int mode) {
     /* Layout only: purpose of these eight original frame bytes is unknown. */
     int unknownFrame[2];
     switch(mode) {
     case 0: {
         int size=FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,12,10,
-                               (FieldFxCallbackListCallback)func_80195984);
+                               (FieldFxCallbackListCallback)RoomM273_HandTrailLandingPulseCallback);
         asm("" : : "r"(size));
-        return size+FieldFx_AllocCallbackList(&D_8019AE7C,size,4,10,func_8019A290);
+        return size+FieldFx_AllocCallbackList(&g_RoomM273HandTrailLandingFanPool,size,4,10,RoomM273_HandTrailLandingFanCallback);
     }
     case 1: {
         int i;
         register unsigned char *stopped asm("$3")=&D_8019AEF8;
         if(*stopped) {
-            FieldFx_UpdateCallbackList(D_8019AE7C);
+            FieldFx_UpdateCallbackList(g_RoomM273HandTrailLandingFanPool);
             return 2;
         }
         i=0;
@@ -1469,7 +1469,7 @@ int func_80195BD0(int mode) {
                 register int offset asm("$4");
                 unsigned short y;
                 if(!effect) break;
-                pointer=FieldFx_AcquireCallbackSlot(D_8019AE7C);
+                pointer=FieldFx_AcquireCallbackSlot(g_RoomM273HandTrailLandingFanPool);
                 offset=i*2;
                 asm("" : : "r"(offset));
                 effect->x=*x;
@@ -1487,13 +1487,13 @@ int func_80195BD0(int mode) {
             } while(i<count);
         }
         D_8019AEE8=0;
-        FieldFx_UpdateCallbackList(D_8019AE7C);
+        FieldFx_UpdateCallbackList(g_RoomM273HandTrailLandingFanPool);
         break;
     }
     case 2: {
         unsigned int index;
         unsigned short palette;
-        FieldFx_DrawCallbackList(D_8019AE7C);
+        FieldFx_DrawCallbackList(g_RoomM273HandTrailLandingFanPool);
         index=g_FieldFxTpageSlot3;
         g_FieldFxSpriteParams.parameter00=32; g_FieldFxSpriteParams.parameter02=2;
         g_FieldFxSpriteParams.extent_x=32; g_FieldFxSpriteParams.extent_y=32;
@@ -1509,8 +1509,8 @@ int func_80195BD0(int mode) {
 
 /* The rising-sprite callback and its poll/reset controller share one TU. */
 
-int func_80195E10(int mode, Particle *particle) {
-    Color color = D_8018F1E4;
+int RoomM273_HandTrailHitCallback(int mode, Particle *particle) {
+    Color color = g_RoomM273HandTrailHitColor;
     if (mode == 1) {
         if (g_FieldFxCurrentAge >= 16) return 1;
         else {
@@ -1542,8 +1542,8 @@ int func_80195E10(int mode, Particle *particle) {
 
 #define ROOMLIB_POLL_RESET_POOL_CONTEXT_DECL
 #define ROOMLIB_POLL_RESET_POOL_EXPR ANIM_POOL_AS(RoomM273PoolContext)->pool
-#define ROOMLIB_POLL_RESET_FUNC func_80195F78
-#define ROOMLIB_POLL_RESET_CALLBACK func_80195E10
+#define ROOMLIB_POLL_RESET_FUNC RoomM273_HandTrailHitEmitter
+#define ROOMLIB_POLL_RESET_CALLBACK RoomM273_HandTrailHitCallback
 #define ROOMLIB_POLL_RESET_FLAG D_8019AEF8
 #define ROOMLIB_POLL_RESET_COUNTER D_8019AEB2
 #define ROOMLIB_POLL_RESET_SEED D_8019AEAC
@@ -1551,14 +1551,14 @@ int func_80195E10(int mode, Particle *particle) {
 
 typedef RoomM273EffectModeState State;
 
-int func_801960F4(int mode) {
+int RoomM273_HandGlowEmitter(int mode) {
     /* Layout only: purpose of these eight original frame bytes is unknown. */
     int unknownFrame[2];
     switch(mode) {
     case 0: {
         int size=FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,4,6,RoomM273_PulseSpriteCallback);
         asm("" : : "r"(size));
-        return size+FieldFx_AllocCallbackList(&D_8019AE80,size,4,6,func_8019A4CC);
+        return size+FieldFx_AllocCallbackList(&g_RoomM273HandRingBandPool,size,4,6,RoomM273_HandRingBandCallback);
     }
     case 1: {
         unsigned char *stopped=&D_8019AEF8;
@@ -1582,9 +1582,9 @@ int func_801960F4(int mode) {
                     i++;
                 } while(i<2);
                 i=0;
-                positions=D_8019AE9C.hands;
+                positions=g_RoomM273HandTrailState.hands;
                 do {
-                    Vector **out=FieldFx_AcquireCallbackSlot(D_8019AE80);
+                    Vector **out=FieldFx_AcquireCallbackSlot(g_RoomM273HandRingBandPool);
                     unsigned long address;
                     if(!out) break;
                     address=i*8;
@@ -1593,14 +1593,14 @@ int func_801960F4(int mode) {
                     i++;
                 } while(i<2);
             }
-            FieldFx_UpdateCallbackList(D_8019AE80);
+            FieldFx_UpdateCallbackList(g_RoomM273HandRingBandPool);
         }
         break;
     }
     case 2: {
         unsigned int index;
         unsigned short palette;
-        FieldFx_DrawCallbackList(D_8019AE80);
+        FieldFx_DrawCallbackList(g_RoomM273HandRingBandPool);
         index=g_FieldFxTpageSlot11;
         g_FieldFxSpriteParams.parameter00=32; g_FieldFxSpriteParams.parameter02=2;
         g_FieldFxSpriteParams.extent_x=32; g_FieldFxSpriteParams.extent_y=32;
@@ -1625,22 +1625,22 @@ int func_801960F4(int mode) {
 
 /* Tracks the boss's two hand positions, turns it toward the player (or by
  * a scripted spin) during animation 11 and bobs its height. */
-int func_80196348(int mode) {
+int RoomM273_HandTrailController(int mode) {
     RoomM273BossInstance *instance = ANIM_OWNER_AS(RoomM273BossActor)->instance;
     int frame;
     int value;
     GteShortVector *hand;
 
     if (mode == 0) {
-        D_8019AE9C.done = 0;
-        D_8019AE9C.landing_count = 0;
-        D_8019AE9C.hit_flag = 0;
-        D_8019AE9C.spin = 0;
-        D_8019AE9C.tick = 0;
-        D_8019AE9C.floor = g_RoomFloorY->raw - 0x200;
-        D_8019AE9C.base_height = instance->height;
+        g_RoomM273HandTrailState.done = 0;
+        g_RoomM273HandTrailState.landing_count = 0;
+        g_RoomM273HandTrailState.hit_flag = 0;
+        g_RoomM273HandTrailState.spin = 0;
+        g_RoomM273HandTrailState.tick = 0;
+        g_RoomM273HandTrailState.floor = g_RoomFloorY->raw - 0x200;
+        g_RoomM273HandTrailState.base_height = instance->height;
     } else if (mode == 1) {
-        hand = D_8019AE9C.hands;
+        hand = g_RoomM273HandTrailState.hands;
         for (value = 0; value < 2; value++) {
             GteMatrix *m = instance->transforms;
             s32 *t = value ? m[18].t : m[13].t;
@@ -1652,36 +1652,36 @@ int func_80196348(int mode) {
         frame = instance->time.parts.frame;
         if (instance->animation != 11) return 0;
         if ((s16)frame >= instance->frame_count - 1) {
-            D_8019AE9C.done = 1;
+            g_RoomM273HandTrailState.done = 1;
             if (instance->owner) *instance->owner->status = 4;
             return 1;
         }
         if ((s16)frame >= 0x22) {
-            if (D_8019AE9C.repeat-- > 0) instance->time.fixed = 0x40000;
+            if (g_RoomM273HandTrailState.repeat-- > 0) instance->time.fixed = 0x40000;
         }
-        if (D_8019AE9C.spinning) {
-            if (D_8019AE9C.spin > D_8019AE9C.spin_target) D_8019AE9C.spin -= D_8019AE9C.spin_step;
-            else if (D_8019AE9C.spin < D_8019AE9C.spin_target) D_8019AE9C.spin += D_8019AE9C.spin_step;
-            instance->yaw = (instance->yaw + D_8019AE9C.spin) & 0xFFF;
-            if (D_8019AE9C.tick >= D_8019AE9C.tick_limit) D_8019AE9C.spin_target = 0;
+        if (g_RoomM273HandTrailState.spinning) {
+            if (g_RoomM273HandTrailState.spin > g_RoomM273HandTrailState.spin_target) g_RoomM273HandTrailState.spin -= g_RoomM273HandTrailState.spin_step;
+            else if (g_RoomM273HandTrailState.spin < g_RoomM273HandTrailState.spin_target) g_RoomM273HandTrailState.spin += g_RoomM273HandTrailState.spin_step;
+            instance->yaw = (instance->yaw + g_RoomM273HandTrailState.spin) & 0xFFF;
+            if (g_RoomM273HandTrailState.tick >= g_RoomM273HandTrailState.tick_limit) g_RoomM273HandTrailState.spin_target = 0;
         } else {
             /* The heading is turned half way round in 16.16 form. */
             value = FieldFx_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation, (Vec3Fixed *)instance->position);
             instance->yaw = FieldFx_TurnToward(instance->yaw, (short)((value << 16) + 0x8000000 >> 16), 0x20);
         }
-        if (D_8019AE9C.tick < 0x77) {
-            value = (D_8019AE9C.tick << 13) / 118;
+        if (g_RoomM273HandTrailState.tick < 0x77) {
+            value = (g_RoomM273HandTrailState.tick << 13) / 118;
             value = rcossin_tbl[(value - 0x800) & 0xFFF].bits.cos + 0x1000;
-            instance->height = ((-(value * 384) / 8192) << 16) + D_8019AE9C.base_height;
+            instance->height = ((-(value * 384) / 8192) << 16) + g_RoomM273HandTrailState.base_height;
         }
-        D_8019AE9C.tick++;
+        g_RoomM273HandTrailState.tick++;
     }
     return 0;
 }
 
 /* Falling drop: queues its landing position, then knocks the player back on
  * contact; draws two rings before landing and a splash flash after. */
-int func_8019665C(int mode, RoomM273Drop *drop) {
+int RoomM273_SweepDropCallback(int mode, RoomM273Drop *drop) {
     GteShortVector ring;
     GteShortVector unused;
     int i;
@@ -1695,10 +1695,10 @@ int func_8019665C(int mode, RoomM273Drop *drop) {
             if (drop->position.y >= (s16)floor->raw) {
                 drop->position.y = floor->raw;
                 drop->position.pad = 1;
-                i = D_8019AF04.count++;
-                D_8019AF04.x[i] = drop->position.x;
-                D_8019AF04.y[i] = floor->raw;
-                D_8019AF04.z[i] = drop->position.z;
+                i = g_RoomM273SweepState.count++;
+                g_RoomM273SweepState.x[i] = drop->position.x;
+                g_RoomM273SweepState.y[i] = floor->raw;
+                g_RoomM273SweepState.z[i] = drop->position.z;
             }
             if (drop->touched) return 0;
             if (drop->position.y < D_8019AF62) return 0;
@@ -1707,8 +1707,8 @@ int func_8019665C(int mode, RoomM273Drop *drop) {
                              (g_PlayerEntity->render_object.model_matrix.translation[2] - drop->position.z) *
                                  (g_PlayerEntity->render_object.model_matrix.translation[2] - drop->position.z)) < 0x80) {
                 drop->touched = 1;
-                D_8019AF04.hit.vector = drop->position;
-                D_8019AF04.hit.vector.pad = 1;
+                g_RoomM273SweepState.hit.vector = drop->position;
+                g_RoomM273SweepState.hit.vector.pad = 1;
                 g_PlayerEntity->state->flags |= 0x4000;
                 if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner)
                     ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
@@ -1733,7 +1733,7 @@ int func_8019665C(int mode, RoomM273Drop *drop) {
             int kind = g_FieldFxSpriteParams.palette;
             int palette = g_FieldFxPaletteTable[kind];
             if (kind == 4 && g_FieldFxAltPaletteFlag) palette += 4;
-            FieldFx_DrawShapeQuads(&drop->position, &D_8019AB68, size, size, 0xDC,
+            FieldFx_DrawShapeQuads(&drop->position, &g_RoomM273FloorRotation, size, size, 0xDC,
                           GetClut(0x30, palette), 1, shade, &D_8019AD5C);
         }
     }
@@ -1742,13 +1742,13 @@ int func_8019665C(int mode, RoomM273Drop *drop) {
 
 /* room_m273, file offset 0x79F0, 1364 retail-matching bytes. */
 
-int func_801969D8(int mode) {
+int RoomM273_SweepDropEmitter(int mode) {
     Vector playerPosition;
     Matrix matrix;
     switch(mode) {
     case 0:
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,24,40,
-                             (FieldFxCallbackListCallback)func_8019665C);
+                             (FieldFxCallbackListCallback)RoomM273_SweepDropCallback);
     case 1: {
         register unsigned char *stopped asm("$17")=&D_8019AF69;
         Player *player;
@@ -1756,11 +1756,11 @@ int func_801969D8(int mode) {
         if(*stopped) return 2;
         player=g_PlayerEntity;
         playerPosition.x=x=((Pe1Fixed16_16 *)&player->pos_x)->parts.integer;
-        dx=x-D_8019AEFC.x;
+        dx=x-g_RoomM273SweepPoint.x;
         playerPosition.y=y=((Pe1Fixed16_16 *)&player->pos_y)->parts.integer;
         playerPosition.z=z=((Pe1Fixed16_16 *)&player->pos_z)->parts.integer;
-        dz=z-D_8019AEFC.z;
-        dy=y-D_8019AEFC.y;
+        dz=z-g_RoomM273SweepPoint.z;
+        dy=y-g_RoomM273SweepPoint.y;
         angle=ratan2(dy,Math_IntSqrt((unsigned int)dx*dx+(unsigned int)dz*dz))&4095;
         if(angle>768) angle=768;
         if(angle<384) angle=384;
@@ -1824,7 +1824,7 @@ int func_801969D8(int mode) {
                 particle->position.pad=0; particle->touched=0;
                 i++;
             } while(i<4);
-            Asset_Find08w(0x5D1,ANIM_OWNER_AS(RoomM273EffectStateContext)->state.directed_rings->owner->value,D_8019AEFC.x,D_8019AEFC.y,D_8019AEFC.z);
+            Asset_Find08w(0x5D1,ANIM_OWNER_AS(RoomM273EffectStateContext)->state.directed_rings->owner->value,g_RoomM273SweepPoint.x,g_RoomM273SweepPoint.y,g_RoomM273SweepPoint.z);
         }
         break;
     }
@@ -1845,7 +1845,7 @@ int func_801969D8(int mode) {
 
 /* The batch emitter fills the eight-byte records rendered by this callback. */
 
-int func_80196F2C(int mode, GteShortVector *position) {
+int RoomM273_SweepSplashCallback(int mode, GteShortVector *position) {
     if (mode == 1) {
         if (g_FieldFxCurrentAge >= 16) return 1;
         position->y -= 6;
@@ -1863,13 +1863,13 @@ int func_80196F2C(int mode, GteShortVector *position) {
     return 0;
 }
 
-int func_8019706C(int mode) {
+int RoomM273_SweepSplashEmitter(int mode) {
     /* Layout only: purpose of these eight original frame bytes is unknown. */
     int stack_pad[2];
     switch(mode) {
     case 0:
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,40,
-                             (FieldFxCallbackListCallback)func_80196F2C);
+                             (FieldFxCallbackListCallback)RoomM273_SweepSplashCallback);
     case 1: {
         int i;
         unsigned short *x,*y;
@@ -1921,7 +1921,7 @@ int func_8019706C(int mode) {
 
 /* Sprite callback and poll/reset controller share one pool and layout. */
 
-int func_80197230(int mode, Vector *position) {
+int RoomM273_SweepDropHitCallback(int mode, Vector *position) {
     if (mode == 1) {
         if (g_FieldFxCurrentAge >= 8) return 1;
     } else if (mode == 2) {
@@ -1943,15 +1943,15 @@ int func_80197230(int mode, Vector *position) {
 
 #define ROOMLIB_POLL_RESET_POOL_CONTEXT_DECL
 #define ROOMLIB_POLL_RESET_POOL_EXPR ANIM_POOL_AS(RoomM273PoolContext)->pool
-#define ROOMLIB_POLL_RESET_FUNC func_80197360
-#define ROOMLIB_POLL_RESET_CALLBACK func_80197230
+#define ROOMLIB_POLL_RESET_FUNC RoomM273_SweepDropHitEmitter
+#define ROOMLIB_POLL_RESET_CALLBACK RoomM273_SweepDropHitCallback
 #define ROOMLIB_POLL_RESET_FLAG D_8019AF69
 #define ROOMLIB_POLL_RESET_COUNTER D_8019AF0A
-#define ROOMLIB_POLL_RESET_SEED D_8019AF04.hit
+#define ROOMLIB_POLL_RESET_SEED g_RoomM273SweepState.hit
 #include "../room_lib/poll_reset_actor.inc"
 
 /* The timed emitter fills the eight-byte records rendered by this callback. */
-int func_801974DC(int mode, Particle *input) {
+int RoomM273_SweepRisingCallback(int mode, Particle *input) {
     Particle *particle = input;
     /* Layout only: original purpose of these eight frame bytes is unknown. */
     int stack_pad[2];
@@ -1989,12 +1989,12 @@ int func_801974DC(int mode, Particle *input) {
     return 0;
 }
 
-int func_80197648(int mode) {
+int RoomM273_SweepRisingEmitter(int mode) {
     switch(mode) {
     case 0:
         D_8019AE84=0;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,12,
-                             (FieldFxCallbackListCallback)func_801974DC);
+                             (FieldFxCallbackListCallback)RoomM273_SweepRisingCallback);
     case 1: {
         Particle *output;
         if(D_8019AF69) return 2;
@@ -2002,7 +2002,7 @@ int func_80197648(int mode) {
         if(D_8019AE84-- > 0) return 0;
         output=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM273PoolContext)->pool);
         if(!output) return 0;
-        ((volatile Particle *)output)->x=D_8019AEFC.x;
+        ((volatile Particle *)output)->x=g_RoomM273SweepPoint.x;
         ((volatile Particle *)output)->y=D_8019AEFE-256;
         output->z=D_8019AF00;
         D_8019AE84=2;
@@ -2031,7 +2031,7 @@ int func_80197648(int mode) {
 }
 
 /* The position emitter fills the eight-byte records rendered by this callback. */
-int func_801977F8(int mode,Vector *input) {
+int RoomM273_SweepFlashCallback(int mode,Vector *input) {
     Vector rotation,position;
     if(mode==1) {
         if(g_FieldFxCurrentAge>=16) return 1;
@@ -2055,26 +2055,26 @@ int func_801977F8(int mode,Vector *input) {
         secondSample=rcossin_tbl[((unsigned int)(u8)frame<<6)&0xFC0].word;
         shade=secondSample>>21;
         size=(short)secondSample+1024;
-        FieldFx_DrawStarFan(&position,512,512,16,(GteRotation *)&rotation,size,size,(struct RenderColor *)D_8019AB70,(struct RenderColor *)D_8019AD74,shade,1);
+        FieldFx_DrawStarFan(&position,512,512,16,(GteRotation *)&rotation,size,size,(struct RenderColor *)g_RoomM273BlackColor,(struct RenderColor *)D_8019AD74,shade,1);
         rotation.x=1024; rotation.y=0; rotation.z=(unsigned int)frame<<8; rotation.pad=1;
         position.y=g_RoomFloorY->raw;
-        FieldFx_DrawStarFan(&position,768,768,8,(GteRotation *)&rotation,4096,4096,(struct RenderColor *)D_8019AD78,(struct RenderColor *)D_8019AB70,shade,1);
+        FieldFx_DrawStarFan(&position,768,768,8,(GteRotation *)&rotation,4096,4096,(struct RenderColor *)D_8019AD78,(struct RenderColor *)g_RoomM273BlackColor,shade,1);
     }
     return 0;
 }
 
-int func_80197A48(int mode) {
+int RoomM273_SweepFlashEmitter(int mode) {
     switch(mode) {
     case 0:
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,4,
-                             (FieldFxCallbackListCallback)func_801977F8);
+                             (FieldFxCallbackListCallback)RoomM273_SweepFlashCallback);
     case 1: {
         Vector *output;
         if(D_8019AF69) return 2;
         if(!D_8019AF68) return 0;
         output=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM273PoolContext)->pool);
         if(!output) return 0;
-        ((volatile Vector *)output)->x=D_8019AEFC.x;
+        ((volatile Vector *)output)->x=g_RoomM273SweepPoint.x;
         ((volatile Vector *)output)->y=D_8019AEFE;
         output->z=D_8019AF00;
         break;
@@ -2112,7 +2112,7 @@ int func_80197A48(int mode) {
 /* Animation 13 controller: turns the boss toward the player on entry, loops
  * the sweep window while loops remain, publishes the sweep attack angle and
  * transforms the sweep point. */
-int func_80197BBC(int mode) {
+int RoomM273_SweepController(int mode) {
     RoomM273BossInstance *instance = ANIM_OWNER_AS(RoomM273BossActor)->instance;
     RoomM273SweepStep *step;
     GteShortVector offset;
@@ -2121,66 +2121,66 @@ int func_80197BBC(int mode) {
     s16 value;
 
     if (mode == 0) {
-        D_8019AF04.started = 0;
-        D_8019AF04.done = 0;
-        D_8019AF04.in_window = 0;
-        D_8019AF04.in_contact = 0;
-        D_8019AF04.step = 0;
-        D_8019AF04.count = 0;
-        D_8019AF04.hit.vector.pad = 0;
-        D_8019AF04.floor = g_RoomFloorY->raw - 0x180;
+        g_RoomM273SweepState.started = 0;
+        g_RoomM273SweepState.done = 0;
+        g_RoomM273SweepState.in_window = 0;
+        g_RoomM273SweepState.in_contact = 0;
+        g_RoomM273SweepState.step = 0;
+        g_RoomM273SweepState.count = 0;
+        g_RoomM273SweepState.hit.vector.pad = 0;
+        g_RoomM273SweepState.floor = g_RoomFloorY->raw - 0x180;
         instance->owner->flags |= 0x40000000;
     } else if (mode == 1) {
         if (*instance->owner->status == 1) *instance->owner->status = 2;
         if (instance->animation == 13) {
             frame = instance->time.bits.frame;
-            step = &D_8019AD80[D_8019AF04.side];
+            step = &g_RoomM273SweepSteps[g_RoomM273SweepState.side];
             if (frame == 0) {
                 instance->time.fixed = step->start << 16;
                 angle = (ratan2(instance->x - g_PlayerEntity->pos_x,
                                        instance->z - g_PlayerEntity->pos_z)
                          - instance->yaw) & 0xFFF;
-                if (D_8019AF04.side != 0) {
-                    if (angle <= 0x800) D_8019AF04.turn = angle >> 6;
-                    else D_8019AF04.turn = 0;
+                if (g_RoomM273SweepState.side != 0) {
+                    if (angle <= 0x800) g_RoomM273SweepState.turn = angle >> 6;
+                    else g_RoomM273SweepState.turn = 0;
                 } else {
                     angle = 0x1000 - angle;
-                    if (angle <= 0x800) D_8019AF04.turn = -angle >> 6;
-                    else D_8019AF04.turn = 0;
+                    if (angle <= 0x800) g_RoomM273SweepState.turn = -angle >> 6;
+                    else g_RoomM273SweepState.turn = 0;
                 }
             } else {
                 if (frame >= step->end) {
-                    D_8019AF04.done = 1;
+                    g_RoomM273SweepState.done = 1;
                     if (instance->owner) *instance->owner->status = 4;
                     return 1;
                 }
-                if (frame >= step->loop_end && D_8019AF04.loops > 0) {
+                if (frame >= step->loop_end && g_RoomM273SweepState.loops > 0) {
                     instance->time.fixed = step->loop_start << 16;
-                    D_8019AF04.loops--;
+                    g_RoomM273SweepState.loops--;
                 }
             }
-            if (frame >= step->loop_start) D_8019AF04.started = 1;
-            D_8019AF04.in_window = frame >= step->loop_start && frame <= step->loop_end;
+            if (frame >= step->loop_start) g_RoomM273SweepState.started = 1;
+            g_RoomM273SweepState.in_window = frame >= step->loop_start && frame <= step->loop_end;
             {
                 RoomM273BossInstance *current = ANIM_OWNER_AS(RoomM273BossActor)->instance;
                 s16 previous;
                 frame = current->time.bits.frame;
                 previous = current->previous.bits.frame;
-                D_8019AF04.in_contact = frame >= D_8019AF04.contact && previous < D_8019AF04.contact;
+                g_RoomM273SweepState.in_contact = frame >= g_RoomM273SweepState.contact && previous < g_RoomM273SweepState.contact;
             }
             if (frame >= step->loop_start && frame <= step->loop_end) {
-                value = step->scale * D_8019AF04.step / D_8019AF04.divisor;
+                value = step->scale * g_RoomM273SweepState.step / g_RoomM273SweepState.divisor;
                 instance->attack_kind = 0x15;
                 instance->attack_power = 2;
                 instance->attack_angle = value;
-                D_8019AF04.target = step->offset + (value + instance->yaw);
-                D_8019AF04.step++;
+                g_RoomM273SweepState.target = step->offset + (value + instance->yaw);
+                g_RoomM273SweepState.step++;
             } else {
                 instance->attack_kind = 0;
                 instance->attack_power = 0;
             }
-            if (frame > step->loop_end) D_8019AF04.turn >>= 1;
-            instance->yaw += D_8019AF04.turn;
+            if (frame > step->loop_end) g_RoomM273SweepState.turn >>= 1;
+            instance->yaw += g_RoomM273SweepState.turn;
         }
     }
     offset.x = 0;
@@ -2193,13 +2193,13 @@ int func_80197BBC(int mode) {
         gte_ldtransmatrix(matrix);
         gte_ldv0(&offset);
         gte_rtv0tr_mac();
-        out = &D_8019AEFC;
+        out = &g_RoomM273SweepPoint;
         gte_stsv(out);
     }
     return 0;
 }
 
-int func_80198060(int mode, GteShortVector *position) {
+int RoomM273_SwayShardTrailCallback(int mode, GteShortVector *position) {
     int frame, sample, size, kind, palette;
     u16 clut;
 
@@ -2230,12 +2230,12 @@ int func_80198060(int mode, GteShortVector *position) {
 /* Sway shard: flies until it hits the player or the floor (recording the
  * impact in the sway point table), leaving a trail; draws a glow, two
  * crossed flares and two floor rings. */
-int func_801981A4(int mode, RoomM273SwayShard *shard) {
+int RoomM273_SwayShardCallback(int mode, RoomM273SwayShard *shard) {
     GteShortVector position;
     GteRotation spin;
 
     if (mode == 1) {
-        if (shard->state == 0 && D_8019AF74.cooldown == 0 &&
+        if (shard->state == 0 && g_RoomM273SwayState.cooldown == 0 &&
             shard->position.y > (s16)g_RoomFloorY->raw - 0x240) {
             s16 dx = g_PlayerEntity->render_object.model_matrix.translation[0] - shard->position.x;
             s16 dz = g_PlayerEntity->render_object.model_matrix.translation[2] - shard->position.z;
@@ -2244,13 +2244,13 @@ int func_801981A4(int mode, RoomM273SwayShard *shard) {
                 g_PlayerEntity->state->flags |= 0x4000;
                 if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner)
                     ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
-                D_8019AF74.hits[shard->side].x = shard->position.x;
-                D_8019AF74.hits[shard->side].y = shard->position.y;
-                D_8019AF74.hits[shard->side].z = shard->position.z;
-                D_8019AF74.hits[shard->side].pad = 2;
+                g_RoomM273SwayState.hits[shard->side].x = shard->position.x;
+                g_RoomM273SwayState.hits[shard->side].y = shard->position.y;
+                g_RoomM273SwayState.hits[shard->side].z = shard->position.z;
+                g_RoomM273SwayState.hits[shard->side].pad = 2;
                 Asset_Find08w(0x5FC, ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->sound, shard->position.x,
                               shard->position.y, shard->position.z);
-                D_8019AF74.cooldown = 0x28;
+                g_RoomM273SwayState.cooldown = 0x28;
                 return 1;
             }
         }
@@ -2258,10 +2258,10 @@ int func_801981A4(int mode, RoomM273SwayShard *shard) {
         shard->position.y += shard->velocity.y;
         shard->position.z += shard->velocity.z;
         if (shard->position.y >= (s16)g_RoomFloorY->raw) {
-            D_8019AF74.hits[shard->side].x = shard->position.x;
-            D_8019AF74.hits[shard->side].y = shard->position.y;
-            D_8019AF74.hits[shard->side].z = shard->position.z;
-            D_8019AF74.hits[shard->side].pad = 3;
+            g_RoomM273SwayState.hits[shard->side].x = shard->position.x;
+            g_RoomM273SwayState.hits[shard->side].y = shard->position.y;
+            g_RoomM273SwayState.hits[shard->side].z = shard->position.z;
+            g_RoomM273SwayState.hits[shard->side].pad = 3;
             Asset_Find08w(0x5FC, ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->sound, shard->position.x,
                           shard->position.y, shard->position.z);
             return 1;
@@ -2270,7 +2270,7 @@ int func_801981A4(int mode, RoomM273SwayShard *shard) {
             GteShortVector *trail;
             if (frame < 4) shard->frame = frame;
             else shard->frame = frame + 12;
-            trail = FieldFx_AcquireCallbackSlot(D_8019AF70);
+            trail = FieldFx_AcquireCallbackSlot(g_RoomM273SwayShardTrailPool);
             if (trail == 0) return 0;
             trail->x = shard->position.x;
             trail->y = shard->position.y;
@@ -2295,7 +2295,7 @@ int func_801981A4(int mode, RoomM273SwayShard *shard) {
         spin.flags = 1;
         for (i = 0; i < 2; i++) {
             FieldFx_DrawRingBand(&position, 0x60, 0x88, 8, &spin, 0x1000, 0x1000, &D_8019AE04,
-                          (RenderColor *)D_8019AB70, 0x80, 1);
+                          (RenderColor *)g_RoomM273BlackColor, 0x80, 1);
             spin.y = spin.x;
             spin.x = 0;
         }
@@ -2304,17 +2304,17 @@ int func_801981A4(int mode, RoomM273SwayShard *shard) {
         spin.flags = 0;
         spin.z = g_FieldFxCurrentAge << 8;
         FieldFx_DrawStarFan(&position, 0x100, 0x100, 8, &spin, 0x1000, 0x1000, &D_8019AE08,
-                      (RenderColor *)D_8019AB70, 0x80, 1);
+                      (RenderColor *)g_RoomM273BlackColor, 0x80, 1);
         position.y = g_RoomFloorY->raw;
         FieldFx_DrawStarFan(&position, 0xC0, 0xC0, 8, 0, 0x1000, 0x1000, &D_8019AE0C,
-                      (RenderColor *)D_8019AB70, 0x80, 1);
+                      (RenderColor *)g_RoomM273BlackColor, 0x80, 1);
     }
     return 0;
 }
 
 /* Spawns a shard from each sway point aimed at the player while animation
  * 15 swings through, and draws the shard and glow pools. */
-int func_801986E8(int mode) {
+int RoomM273_SwayShardEmitter(int mode) {
     GteShortVector target;
     GteShortVector angles;
     GteMatrix matrix;
@@ -2323,13 +2323,13 @@ int func_801986E8(int mode) {
     switch (mode) {
     case 0:
         count = FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool, 0x14, 4,
-                              (FieldFxCallbackListCallback)func_801981A4);
-        count += FieldFx_AllocCallbackList(&D_8019AF70, count, 8, 0x14, func_80198060);
+                              (FieldFxCallbackListCallback)RoomM273_SwayShardCallback);
+        count += FieldFx_AllocCallbackList(&g_RoomM273SwayShardTrailPool, count, 8, 0x14, RoomM273_SwayShardTrailCallback);
         return count;
     case 1:
-        if (D_8019AF74.done) return 2;
-        if (ANIM_OWNER_AS(RoomM273BossActor)->instance->animation == 15 && D_8019AF74.frame >= 4 &&
-            D_8019AF74.frame_1A < 4) {
+        if (g_RoomM273SwayState.done) return 2;
+        if (ANIM_OWNER_AS(RoomM273BossActor)->instance->animation == 15 && g_RoomM273SwayState.frame >= 4 &&
+            g_RoomM273SwayState.frame_1A < 4) {
             int i;
             for (i = 0; i < 2; i++) {
                 RoomM273SwayShard *shard = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM273PoolContext)->pool);
@@ -2341,9 +2341,9 @@ int func_801986E8(int mode) {
                 shard->side = i;
                 shard->state = 0;
                 player = (RoomM273BossPlayer *)g_PlayerEntity;
-                shard->position.x = D_8019AF74.points[i].x;
-                shard->position.y = D_8019AF74.points[i].y;
-                shard->position.z = D_8019AF74.points[i].z;
+                shard->position.x = g_RoomM273SwayState.points[i].x;
+                shard->position.y = g_RoomM273SwayState.points[i].y;
+                shard->position.z = g_RoomM273SwayState.points[i].z;
                 target.x = player->location[0].parts.integer;
                 target.y = player->location[1].parts.integer;
                 target.z = player->location[2].parts.integer;
@@ -2358,13 +2358,13 @@ int func_801986E8(int mode) {
                 RotMatrixYXZ(&angles, &matrix);
                 ApplyMatrixSV(&matrix, &D_8019AE10, &shard->velocity);
             }
-            target.x = (D_8019AF74.points[0].x + D_8019AF74.points[1].x) / 2;
-            target.y = (D_8019AF74.points[0].y + D_8019AF74.points[1].y) / 2;
-            target.z = (D_8019AF74.points[0].z + D_8019AF74.points[1].z) / 2;
+            target.x = (g_RoomM273SwayState.points[0].x + g_RoomM273SwayState.points[1].x) / 2;
+            target.y = (g_RoomM273SwayState.points[0].y + g_RoomM273SwayState.points[1].y) / 2;
+            target.z = (g_RoomM273SwayState.points[0].z + g_RoomM273SwayState.points[1].z) / 2;
             Asset_Find08w(0x5D2, ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->sound, target.x, target.y,
                           target.z);
         }
-        FieldFx_UpdateCallbackList(D_8019AF70);
+        FieldFx_UpdateCallbackList(g_RoomM273SwayShardTrailPool);
         break;
     case 2:
         g_FieldFxSpriteParams.parameter00 = 0x10;
@@ -2381,7 +2381,7 @@ int func_801986E8(int mode) {
             g_FieldFxSpriteParams.depth = 0;
             g_FieldFxSpriteParams.tpage = tpage;
         }
-        FieldFx_DrawCallbackList(D_8019AF70);
+        FieldFx_DrawCallbackList(g_RoomM273SwayShardTrailPool);
         g_FieldFxSpriteParams.parameter00 = 0x20;
         g_FieldFxSpriteParams.parameter02 = 2;
         g_FieldFxSpriteParams.extent_x = 0x20;
@@ -2401,7 +2401,7 @@ int func_801986E8(int mode) {
 
 /* The emitter owns the eight-byte pool whose entries this callback renders. */
 
-int func_80198B1C(int mode,Vector *input) {
+int RoomM273_SwayGroundCallback(int mode,Vector *input) {
     Vector position;
     if(mode==1) {
         if(g_FieldFxCurrentAge>=32) return 1;
@@ -2420,26 +2420,26 @@ int func_80198B1C(int mode,Vector *input) {
         clut=GetClut(0,(kind==4 && g_FieldFxAltPaletteFlag) ? palette+8 : palette+4);
         FieldFx_DrawShapeQuads(&position,0,(short)size,(short)size,100,clut,1,(short)shade,0);
         position.y=g_RoomFloorY->raw;
-        FieldFx_DrawStarFan(&position,384,384,8,&D_8019AB68,4096,4096,
-            (RenderColor *)D_8019AE18,(RenderColor *)D_8019AB70,(short)shade,1);
+        FieldFx_DrawStarFan(&position,384,384,8,&g_RoomM273FloorRotation,4096,4096,
+            (RenderColor *)D_8019AE18,(RenderColor *)g_RoomM273BlackColor,(short)shade,1);
     }
     return 0;
 }
 
-int func_80198CD4(int mode) {
+int RoomM273_SwayGroundEmitter(int mode) {
     switch(mode) {
     case 0:
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,4,
-                             (FieldFxCallbackListCallback)func_80198B1C);
+                             (FieldFxCallbackListCallback)RoomM273_SwayGroundCallback);
     case 1: {
         Record *source;
         int i;
-        if(D_8019AF74.done) return 2;
-        if(D_8019AF74.animation!=15) return 0;
-        if(D_8019AF74.frame<4) return 0;
-        if(D_8019AF74.frame_1A>=4) break;
+        if(g_RoomM273SwayState.done) return 2;
+        if(g_RoomM273SwayState.animation!=15) return 0;
+        if(g_RoomM273SwayState.frame<4) return 0;
+        if(g_RoomM273SwayState.frame_1A>=4) break;
         i=0;
-        source=(Record *)D_8019AF74.points;
+        source=(Record *)g_RoomM273SwayState.points;
         for(;i<2;++i) {
             Record *output=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM273PoolContext)->pool);
             if(!output) break;
@@ -2473,7 +2473,7 @@ int func_80198CD4(int mode) {
 /* Ground ring: while it opens (frames up to 24) it knocks the player back
  * once when the player stands inside the pulsing radius; while drawing it
  * shows the swelling ring model, a short flash and two rotating rings. */
-int func_80198E94(int mode, GteShortVector *position) {
+int RoomM273_SwayGroundRingCallback(int mode, GteShortVector *position) {
     GteRotation rotation;
     GteMatrix matrix;
     GteVector scale;
@@ -2489,7 +2489,7 @@ int func_80198E94(int mode, GteShortVector *position) {
         if (now >= 0x28) return 1;
         if (now >= 0x19) return 0;
         if (position->pad != 0) return 0;
-        if (D_8019AF74.cooldown != 0) return 0;
+        if (g_RoomM273SwayState.cooldown != 0) return 0;
         {
             int radius = rcossin_tbl[((now << 11) / 40) & 0xFFF].bits.sin / 16 + 0x80;
             int dx = g_PlayerEntity->render_object.model_matrix.translation[0] - position->x;
@@ -2500,7 +2500,7 @@ int func_80198E94(int mode, GteShortVector *position) {
         g_PlayerEntity->state->flags |= 0x4000;
         if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner) {
             ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
-            D_8019AF74.cooldown = 0x28;
+            g_RoomM273SwayState.cooldown = 0x28;
         }
         return 0;
     }
@@ -2522,8 +2522,8 @@ int func_80198E94(int mode, GteShortVector *position) {
         size = value >> 2;
         FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag != 0) ? palette + 6 : palette + 2));
         FieldFx_ModelSetSemiTrans(1);
-        FieldFx_ModelSaveColors(D_8019AF04.model);
-        FieldFx_ModelScaleColors(D_8019AF04.model, (u16)fade);
+        FieldFx_ModelSaveColors(g_RoomM273SweepState.model);
+        FieldFx_ModelScaleColors(g_RoomM273SweepState.model, (u16)fade);
         cosine = rcos(frame << 8);
         sine = rsin(frame << 8);
         matrix.m[0][2] = sine;
@@ -2546,8 +2546,8 @@ int func_80198E94(int mode, GteShortVector *position) {
         matrix.t[0] = position->x;
         matrix.t[1] = position->y;
         matrix.t[2] = position->z;
-        FieldFx_ModelDraw((union FieldTexturedModel *)D_8019AF04.model, &matrix);
-        FieldFx_ModelRestoreColors(D_8019AF04.model);
+        FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM273SweepState.model, &matrix);
+        FieldFx_ModelRestoreColors(g_RoomM273SweepState.model);
     }
     g_FieldFxSpriteParams.parameter00 = 0x20;
     g_FieldFxSpriteParams.parameter02 = 2;
@@ -2580,13 +2580,13 @@ int func_80198E94(int mode, GteShortVector *position) {
     return 0;
 }
 
-int func_801993F0(int mode) {
+int RoomM273_SwayGroundRingEmitter(int mode) {
     switch (mode) {
     case 0:
         D_8019AF6C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5541704);
         FieldFx_ModelScrollUv(D_8019AF6C, 0, 0);
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 4,
-                             (FieldFxCallbackListCallback)func_80198E94);
+                             (FieldFxCallbackListCallback)RoomM273_SwayGroundRingCallback);
     case 1: {
         int i;
         unsigned char *flags;
@@ -2620,7 +2620,7 @@ int func_801993F0(int mode) {
     return 0;
 }
 
-int func_80199568(int mode, RoomM273RisingParticle *particle) {
+int RoomM273_SwayBurstCallback(int mode, RoomM273RisingParticle *particle) {
     if (mode == 1) {
         int frame = g_FieldFxCurrentAge;
         if (frame >= 36) return 1;
@@ -2647,7 +2647,7 @@ int func_80199568(int mode, RoomM273RisingParticle *particle) {
     return 0;
 }
 
-int func_801996C4(int mode)
+int RoomM273_SwayBurstEmitter(int mode)
 {
     RoomM273TemplatePoint *template;
     RoomM273DelayedBurstRecord *particle;
@@ -2666,7 +2666,7 @@ int func_801996C4(int mode)
 
     switch (mode) {
     case 0:
-        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 24, func_80199568);
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 24, RoomM273_SwayBurstCallback);
     case 1:
         stop = &D_8019AFA2;
         if (*stop) return 2;
@@ -2717,11 +2717,11 @@ int func_801996C4(int mode)
     return 0;
 }
 
-/* Pointer sprite pool and boss sway state share D_8019AF74 points. */
+/* Pointer sprite pool and boss sway state share g_RoomM273SwayState points. */
 
 /* The emitter owns the pointer entries rendered by this callback. */
 
-int func_80199950(int mode, RoomM273PointerPoolEffect *effect) {
+int RoomM273_SwayPointerCallback(int mode, RoomM273PointerPoolEffect *effect) {
     /* Layout only: the original purpose of these eight frame bytes is unknown. */
     int stack_pad[2];
     if (mode == 1) {
@@ -2747,23 +2747,23 @@ int func_80199950(int mode, RoomM273PointerPoolEffect *effect) {
     return 0;
 }
 
-int func_80199A90(int mode) {
+int RoomM273_SwayPointerEmitter(int mode) {
     switch(mode) {
     case 0:
         D_8019AE88=0;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool,4,6,
-                             (FieldFxCallbackListCallback)func_80199950);
+                             (FieldFxCallbackListCallback)RoomM273_SwayPointerCallback);
     case 1: {
         int i;
         Position *position;
         if(D_8019AE88) return 2;
-        if(D_8019AF74.animation==15 && D_8019AF74.frame>=25) {
+        if(g_RoomM273SwayState.animation==15 && g_RoomM273SwayState.frame>=25) {
             D_8019AE88=1;
             return 2;
         }
         if(g_FieldFxCurrentAge&7) return 0;
         i=0;
-        position=D_8019AF74.points;
+        position=g_RoomM273SwayState.points;
         for(;i<2;++i) {
             RoomM273PointerPoolEffect *output=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM273PoolContext)->pool);
             if(!output) break;
@@ -2796,7 +2796,7 @@ int func_80199A90(int mode) {
 
 /* Animation 15 controller: transforms two model points, then sways the
  * boss toward or away from the player for eight frames. */
-int func_80199C50(int mode) {
+int RoomM273_SwayController(int mode) {
     RoomM273BossInstance *instance = ANIM_OWNER_AS(RoomM273BossActor)->instance;
     GteShortVector offset;
     int value; /* loop index, then the player heading */
@@ -2805,25 +2805,25 @@ int func_80199C50(int mode) {
     GteShortVector *point;
 
     if (mode == 0) {
-        D_8019AF74.done = 0;
+        g_RoomM273SwayState.done = 0;
         instance->owner->flags |= 0x40000000;
-        D_8019AF74.points[0].pad = 0;
-        D_8019AF74.points[1].pad = 1;
-        D_8019AF74.hits[0].pad = 0;
-        D_8019AF74.hits[1].pad = 0;
-        D_8019AF74.sway_timer = 0;
-        D_8019AF74.cooldown = 0;
+        g_RoomM273SwayState.points[0].pad = 0;
+        g_RoomM273SwayState.points[1].pad = 1;
+        g_RoomM273SwayState.hits[0].pad = 0;
+        g_RoomM273SwayState.hits[1].pad = 0;
+        g_RoomM273SwayState.sway_timer = 0;
+        g_RoomM273SwayState.cooldown = 0;
     } else if (mode == 1) {
         if (*instance->owner->status == 1) *instance->owner->status = 2;
         frame = instance->time.parts.frame;
         frame_1A = instance->previous.parts.frame;
-        D_8019AF74.animation = instance->animation;
-        D_8019AF74.frame = frame;
-        D_8019AF74.frame_1A = frame_1A;
+        g_RoomM273SwayState.animation = instance->animation;
+        g_RoomM273SwayState.frame = frame;
+        g_RoomM273SwayState.frame_1A = frame_1A;
         offset.x = 0;
         offset.y = 0;
         offset.z = -0x130;
-        point = D_8019AF74.points;
+        point = g_RoomM273SwayState.points;
         for (value = 0; value < 2; value++) {
             GteMatrix *m = instance->transforms;
             if (value) m += 36;
@@ -2836,40 +2836,40 @@ int func_80199C50(int mode) {
         }
         if (instance->animation == 15) {
             if ((s16)frame >= instance->frame_count - 1) {
-                D_8019AF74.done = 1;
+                g_RoomM273SwayState.done = 1;
                 if (instance->owner) *instance->owner->status = 4;
                 return 1;
             }
             if ((s16)frame >= 0x16) {
-                if (D_8019AF74.repeat-- > 0) instance->time.fixed = 0;
+                if (g_RoomM273SwayState.repeat-- > 0) instance->time.fixed = 0;
             }
         }
-        if (D_8019AF74.repeat && (s16)frame >= 0xF && (s16)frame_1A < 0xF) {
+        if (g_RoomM273SwayState.repeat && (s16)frame >= 0xF && (s16)frame_1A < 0xF) {
             int step;
-            D_8019AF74.sway_timer = 8;
+            g_RoomM273SwayState.sway_timer = 8;
             value = (s16)FieldFx_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation, (Vec3Fixed *)instance->position);
             step = 0x20;
             if ((value - instance->yaw) & 0x800) step = -0x20;
-            D_8019AF74.sway_step = step;
+            g_RoomM273SwayState.sway_step = step;
         }
-        if (D_8019AF74.sway_timer) {
-            instance->yaw += D_8019AF74.sway_step *
-                             rcossin_tbl[(D_8019AF74.sway_timer << 7) & 0xF80].bits.sin / 4096;
-            D_8019AF74.sway_timer--;
+        if (g_RoomM273SwayState.sway_timer) {
+            instance->yaw += g_RoomM273SwayState.sway_step *
+                             rcossin_tbl[(g_RoomM273SwayState.sway_timer << 7) & 0xF80].bits.sin / 4096;
+            g_RoomM273SwayState.sway_timer--;
         }
-        if (D_8019AF74.cooldown) D_8019AF74.cooldown--;
+        if (g_RoomM273SwayState.cooldown) g_RoomM273SwayState.cooldown--;
     }
     return 0;
 }
 
-short *func_80199F70(void *arg0, void *arg1, short arg2) {
+short *RoomM273_GrabEffectConfigure(void *arg0, void *arg1, short arg2) {
     short *ptr = &D_8019AE98;
 
     *ptr = arg2;
     return ptr - 6;
 }
 
-int func_80199F84(int mode, RoomM273PulseState *state) {
+int RoomM273_GrabSparkTriangleCallback(int mode, RoomM273PulseState *state) {
     RoomM273Vector position, rotation;
     s32 frame;
     s32 *source;
@@ -2891,7 +2891,7 @@ int func_80199F84(int mode, RoomM273PulseState *state) {
         frame = g_FieldFxCurrentAge - 1;
         scaleX = state->scaleX;
         scaleY = state->scaleY;
-        texture = D_8019AB70;
+        texture = g_RoomM273BlackColor;
         position.x = positionX;
         FieldFx_DrawRotatedTriangle(&position, (GteRotation *)&rotation, scaleX, scaleY, (RenderColor *)state,
                        (RenderColor *)texture, (RenderColor *)texture,
@@ -2901,7 +2901,7 @@ int func_80199F84(int mode, RoomM273PulseState *state) {
 }
 
 
-s32 func_8019A068(s32 state) {
+s32 RoomM273_GrabHoldFlareEmitter(s32 state) {
     GteShortVector *obj;
     RoomM273PlayerActorView *root;
     RoomM273ThresholdTransform *source;
@@ -2916,7 +2916,7 @@ s32 func_8019A068(s32 state) {
         }
         D_8019AE68 = 0;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 5,
-                             (FieldFxCallbackListCallback)func_80194B5C);
+                             (FieldFxCallbackListCallback)RoomM273_GrabHoldFlareCallback);
     }
     if (D_8019AE68 != 0) {
         return 2;
@@ -2943,7 +2943,7 @@ s32 func_8019A068(s32 state) {
     return 0;
 }
 
-void *func_8019A1A0(void *unused, int mode) {
+void *RoomM273_HandTrailConfigure(void *unused, int mode) {
     int direction;
     int value;
 
@@ -2972,10 +2972,10 @@ void *func_8019A1A0(void *unused, int mode) {
         D_8019AEF6 = value;
         break;
     }
-    return &D_8019AE9C;
+    return &g_RoomM273HandTrailState;
 }
 
-int func_8019A290(int mode, RoomM273PhaseState *state) {
+int RoomM273_HandTrailLandingFanCallback(int mode, RoomM273PhaseState *state) {
     RoomM273Vector position;
     int frame, size;
     RoomM273TrigEntry *entry;
@@ -2991,7 +2991,7 @@ int func_8019A290(int mode, RoomM273PhaseState *state) {
         position.z = state->source[2];
         FieldFx_DrawStarFan(&position, 192, 192, 10,
                        (GteRotation *)(D_8019ACCC + ((frame & 1) << 3)), size, size,
-                       (RenderColor *)D_8019AB70, (RenderColor *)D_8019ACC8, entry->high >> 5, 1);
+                       (RenderColor *)g_RoomM273BlackColor, (RenderColor *)D_8019ACC8, entry->high >> 5, 1);
     }
     return 0;
 }

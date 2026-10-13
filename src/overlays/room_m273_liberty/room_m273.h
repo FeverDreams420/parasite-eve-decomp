@@ -81,13 +81,13 @@ extern int D_8019ABFC[];
 extern s16 D_8019ACC0[];
 extern u8 D_8019AFA2;
 extern u8 D_8019AF8A[];
-extern void *D_8019AE94;
+extern void *g_RoomM273GrabSparkPool;
 extern RoomM273PaletteWord D_8019AC30[];
-extern unsigned char D_8019AB70[];
+extern unsigned char g_RoomM273BlackColor[];
 extern char D_8019ACC8[];
 extern char D_8019ACCC[];
 int Inv_ScrambleGrid(void);
-int func_80199568(int mode, RoomM273RisingParticle *particle);
+int RoomM273_SwayBurstCallback(int mode, RoomM273RisingParticle *particle);
 
 typedef struct RoomPlacementMap {
     u8 pad_000[0x594];
@@ -160,7 +160,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomSelectionState, callback) +
  * substate the grab sequence flips to 2 and 4. */
 typedef FieldActorScriptState RoomM273ActorState;
 
-s32 func_80192D8C(RoomSelectionState *selection);
+s32 RoomM273_GrabRelease(RoomSelectionState *selection);
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomPlacementOwner, map) == 0x238,
                   room_placement_map_offset);
@@ -185,13 +185,13 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomPlacementState, vertical_ticks) == 0x3C,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomPlacementState, placement_checked) == 0x3E,
                   room_placement_checked_offset);
 
-void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state);
+void RoomM273_ReturnPlayerToPlacement(RoomPlacementOwner *owner, RoomPlacementState *state);
 
-/* The oscillation module object (class methods func_80192E4C, the
- * command handler func_80192E64, func_80192F5C, func_801930E8): bobs the
+/* The oscillation module object (class methods RoomM273_OscillationInit, the
+ * command handler RoomM273_OscillationConfigure, RoomM273_OscillationUpdate, RoomM273_OscillationRelease): bobs the
  * actor up and down and reports the player angle and distance through the
  * two output words the script hands it (command 4). Its first two words
- * double as the choice inputs of func_80193114 (command 3). */
+ * double as the choice inputs of RoomM273_ChooseWeightedAction (command 3). */
 typedef struct RoomOscillationParams {
     int *angleOut;          /* 0x00 */
     int *distanceOut;       /* 0x04 */
@@ -217,6 +217,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOscillationEffect, params.frame) == 0x18,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOscillationEffect, params.period) == 0x24,
                   room_oscillation_period_offset);
 
-int func_80192F5C(RoomOscillationEffect *effect);
+int RoomM273_OscillationUpdate(RoomOscillationEffect *effect);
 
 #endif

@@ -7,11 +7,11 @@
 #include "m273_class_externs.h"
 #include "room_m273.h"
 
-int func_80192504(void) {
+int RoomM273_GrabNop0(void) {
     return 0;
 }
 
-int func_8019250C(RoomSelectionState *obj) {
+int RoomM273_GrabInit(RoomSelectionState *obj) {
     int ret;
 
     obj->callback = RoomLib_GrabAwaitStance;
@@ -31,7 +31,7 @@ int func_8019250C(RoomSelectionState *obj) {
     return ret - ret;
 }
 
-int func_801925B0(void *obj, int mode, int event, int arg3, int index) {
+int RoomM273_GrabConfigure(void *obj, int mode, int event, int arg3, int index) {
     switch (event) {
     case 0x19:
         if (mode == 1) {
@@ -48,6 +48,6 @@ int func_801925B0(void *obj, int mode, int event, int arg3, int index) {
     return 0;
 }
 
-int func_80192608(void) {
+int RoomM273_GrabNop3(void) {
     return 0;
 }
