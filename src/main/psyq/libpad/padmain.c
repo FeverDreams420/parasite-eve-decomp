@@ -3,7 +3,6 @@
 
 #include "common.h"
 #include "pe1/psyq_bios.h"
-#include "pe1/psyq_nop.h"
 #include "pe1/psyq_pad_main.h"
 
 #include "padmain_externs.h"
@@ -373,7 +372,6 @@ int MemCard_WriteByte(CardObj *obj, int value)
 
     {
         MemCardSioRegisters *ready_sio = D_8009B788;
-        PE1_NOP();
         do {
             poll_status = ready_sio->status;
         } while ((poll_status & 2) == 0);
@@ -464,7 +462,6 @@ void MemCard_WaitStatusBit2(void) {
     MemCardSioRegisters *ptr = g_MemCardSioRegs;
 
     /* Keep the poll loop target on the lhu, not the load-delay nop. */
-    PE1_NOP();
     while ((ptr->status & 2) == 0) {
     }
 }
