@@ -171,7 +171,7 @@ int Script_WaitAnimRange(void) {
     int frame;
     int max_frame;
     int cmp;
-    register int divisor asm("$2");
+    int divisor;
 
     entity = g_CurrentEntity;
     node = g_ScriptNodePool;
@@ -206,7 +206,9 @@ int Script_WaitAnimRange(void) {
         divisor = max_frame + 1;
         max_frame <<= 16;
         if (next < 0) {
-            next = (divisor + (frame % divisor)) << 16;
+            /* The original frame comparison is complete; reuse its scratch. */
+            current = divisor;
+            next = (current + (frame % divisor)) << 16;
             if (max_frame >= target) {
                 cmp = next < target;
                 if (cmp) {
