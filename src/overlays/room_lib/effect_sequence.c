@@ -365,7 +365,7 @@ void RoomEffect_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxM
     D_80192C34 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0x498704);
     link = ent->link;
     state->link = link;
-    matrix = (RoomLibFxMatrixWords *)link->p238;
+    matrix = link->p238;
     state->matrix = *matrix;
     value = Asset_SearchByKeyType(0xE);
     state->asset.index = value;
@@ -1649,7 +1649,7 @@ void RoomEffect_DrawScaledEffect(void *unused0, void *unused1, RoomLibScaledEffe
     int scale;
     unsigned short depthValue;
 
-    roots = (RoomLibEffectRootTable *)FieldFx_GetScriptContext();
+    roots = FieldFx_GetScriptContext();
     view = roots->root->view;
     seed = s_EffectProjectSeed;
     matrix = view->matrix;
