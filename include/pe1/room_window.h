@@ -150,9 +150,22 @@ extern int FieldFx_IntSqrt(int value);
 struct RoomEnt;
 
 /* The window actor class (src/overlays/room_lib/window_class.c). */
+int RoomLib_WindowClassNop0(void);
+int RoomLib_InitWindowClass(RoomWindowObject *ctx);
+int RoomLib_ConfigureWindowClass(RoomWindowObject *obj, int query, unsigned int op,
+                                 int a, int b, int c);
+int RoomLib_WindowClassNop3(void);
+int RoomLib_UpdateWindowClass(struct RoomEnt *o);
+int RoomLib_WindowClassNop6(void);
 void RoomLib_WindowHandler(RoomWindowObject *obj);
 void RoomLib_WindowArrived(void *ctx);
 void RoomLib_ArmWindowClass(struct RoomEnt *o);
 int RoomLib_ReleaseWindowClass(char *ctx);
+
+/* Its row of a room's class table (g_RoomClassTable, pe1/room_module.h). */
+#define ROOMLIB_WINDOW_CLASS \
+    { RoomLib_WindowClassNop0, RoomLib_InitWindowClass, RoomLib_ConfigureWindowClass, \
+      RoomLib_WindowClassNop3, RoomLib_UpdateWindowClass, RoomLib_ReleaseWindowClass, \
+      RoomLib_WindowClassNop6 }
 
 #endif
