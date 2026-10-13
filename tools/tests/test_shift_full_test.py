@@ -87,12 +87,18 @@ class HeaderTests(unittest.TestCase):
 class BuiltShiftTests(unittest.TestCase):
     def test_main_and_an_overlay_shift_with_every_difference_explained(self):
         with tempfile.TemporaryDirectory(prefix="shift_full_") as tmp:
-            report = sf.measure(0x10, Path(tmp), ["mdec_diag", "room_m005_theater"], jobs=2)
+            report = sf.measure(0x10, Path(tmp), ["mdec_diag", "room_m005_theater", "room_m022_theater"],
+                                jobs=3)
         self.assertTrue(sf.passed(report), sf.render(report, 5))
         self.assertEqual(report["block"]["shifted_base"] - report["block"]["base"], 0x10)
         self.assertEqual(report["main"]["counts"]["header_text_size"], 1)
         self.assertEqual(report["main"]["counts"]["header_entry_point"], 1)
         self.assertGreater(report["overlays"]["counts"]["shifted_address_field"], 0)
+        # room_m022's actor class table is a databin blob: its handler
+        # addresses stay numbers (RoomLib_HandlerDNop0 at 0x8018F1CC first).
+        literal = report["overlays"]["literal_code_words"]
+        self.assertEqual(sorted(literal), ["room_m022_theater"])
+        self.assertEqual(literal["room_m022_theater"][0][:2], (0x801924E8, 0x8018F1CC))
 
 
 if __name__ == "__main__":

@@ -35,6 +35,7 @@ startup reserves.
 from __future__ import annotations
 
 import argparse
+import bisect
 import concurrent.futures
 import json
 import subprocess
@@ -189,6 +190,45 @@ def file_relocations(elf_path: Path) -> tuple[dict[int, Reloc], list[tuple[str, 
     return relocs, sections
 
 
+def literal_code_words(elf_path: Path) -> list[tuple[int, int, str]]:
+    """Words outside the functions of a linked overlay that hold the address
+    of one of its functions without a relocation: a function pointer kept
+    as a number (typically a class or handler table inside a `databin` blob
+    or a byte-typed data symbol). A shifted link leaves it at the retail
+    address. (address, value, nearest label) of each."""
+    from elftools.elf.elffile import ELFFile
+    from elftools.elf.relocation import RelocationSection
+
+    with open(elf_path, "rb") as fh:
+        elf = ELFFile(fh)
+        symtab = elf.get_section_by_name(".symtab")
+        funcs = sorted((s["st_value"], s["st_value"] + max(s["st_size"], 4))
+                       for s in symtab.iter_symbols() if s["st_info"]["type"] == "STT_FUNC")
+        starts = {lo for lo, _ in funcs}
+        labels = sorted((s["st_value"], s.name) for s in symtab.iter_symbols()
+                        if s.name and isinstance(s["st_shndx"], int)
+                        and s["st_info"]["type"] not in ("STT_SECTION", "STT_FILE"))
+        relocated = {rel["r_offset"] for sec in elf.iter_sections() if isinstance(sec, RelocationSection)
+                     for rel in sec.iter_relocations()}
+        found = []
+        for sec in elf.iter_sections():
+            if sec["sh_type"] != "SHT_PROGBITS" or not sec["sh_flags"] & 2:
+                continue
+            data, base = sec.data(), sec["sh_addr"]
+            for off in range(0, len(data) - 3, 4):
+                addr = base + off
+                value = int.from_bytes(data[off:off + 4], "little")
+                if value not in starts or addr in relocated:
+                    continue
+                i = bisect.bisect_right(funcs, (addr, 0xFFFFFFFF)) - 1
+                if i >= 0 and funcs[i][0] <= addr < funcs[i][1]:
+                    continue  # an instruction that happens to equal an address
+                j = bisect.bisect_right(labels, (addr, "\U0010FFFF")) - 1
+                where = f"{labels[j][1]}+0x{addr - labels[j][0]:X}" if j >= 0 else "?"
+                found.append((addr, value, where))
+    return found
+
+
 def elf_symbols(elf_path: Path) -> dict[str, int]:
     from elftools.elf.elffile import ELFFile
 
@@ -269,6 +309,7 @@ class OverlayResult:
     sections_moved: bool = False
     comparison: Comparison = field(default_factory=Comparison)
     highest_reference: int = 0  # highest retail block address the overlay links to
+    literal_code_words: list = field(default_factory=list)  # (address, value, where)
 
 
 def overlay_link(name: str, main_elf: Path, out: Path) -> tuple[Path | None, str | None]:
@@ -339,6 +380,7 @@ def check_overlay(name: str, base_main: Path, shifted_main: Path, pad: int, scra
     compare_words(base_bin, shifted_bin, relocs, pad, result.comparison, name)
     result.highest_reference = highest_block_reference(
         scratch / "base" / name / f"link_symbols.{name}.txt", table)
+    result.literal_code_words = literal_code_words(base_elf)
     return result
 
 
@@ -413,6 +455,8 @@ def measure(pad: int, scratch: Path, names: list[str], jobs: int) -> dict:
             "sections_not_moved": [r.name for r in results if not r.error and not r.sections_moved],
             "counts": dict(overlay_counts),
             "findings": {k: v[:50] for k, v in findings.items()},
+            "literal_code_words": {r.name: [(a, v, w) for a, v, w in r.literal_code_words]
+                                   for r in results if r.literal_code_words},
         },
         "windows_moved": windows_moved,
         "block": {
@@ -459,6 +503,14 @@ def render(report: dict, verbose: int) -> str:
             out.append(f"\n{title} {kind}: (first {min(len(items), verbose or 10)})")
             for where, info in items[:verbose or 10]:
                 out.append(f"  {where:08X} {info}")
+    literal = ovl.get("literal_code_words", {})
+    if literal:
+        out.append(f"\noverlays: {sum(len(v) for v in literal.values())} unrelocated data words hold the "
+                   f"address of one of their functions, in {len(literal)} overlays (they keep the retail "
+                   f"address in a shifted link; not counted as failures):")
+        for name, words in sorted(literal.items(), key=lambda kv: -len(kv[1]))[:verbose or 10]:
+            addr, value, where = words[0]
+            out.append(f"  {name:28} {len(words):5}  first {addr:08X} = {value:08X} at {where}")
     out.append("")
     out.append(f"image end 0x{block['image_end']:08X}, initial stack pointer 0x{block['stack_top']:08X}: "
                f"main may grow by 0x{block['headroom']:X} bytes before the link fails "
