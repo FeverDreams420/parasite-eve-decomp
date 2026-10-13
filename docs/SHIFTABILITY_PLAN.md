@@ -285,6 +285,41 @@ overlays into `PE.IMG` (same sizes, patched in place at their sectors; the
 ISO target currently reuses the retail `PE.IMG`). Until then a shifted main
 is shiftable source but not a playable disc.
 
+The repack exists: `tools/scripts/repack_pe_img.py` (`make pe-img-repack`,
+after `make overlay-build-all`) copies `PE.IMG` and overwrites each overlay's
+slice (the `dd` comment of its config) with the built binary, zero padded;
+an overlay larger than its slice fails with its excess, overlapping slices
+(`fx_common_sector17` in `fx_common`) must agree, and the report gives the
+slack per slice. `make pe-img-check` compares the result with the retail
+SHA-1 (`PE_IMG_SHA`); the retail build gives back the original image. Every
+retail slice is full (slack 0), so today an overlay can change but not grow.
+
+Sizes recorded outside the overlays. Three main tables describe the whole
+image, contiguously: the u16 boundaries at `D_800930D8` (sectors 0..2224),
+`g_SceneSectorDirectory` (base 2224 plus u16 offsets, to 8945) and the room
+table `D_80093378` (8-byte rows per map: start sector and three sector
+counts, scratch, texture and room section, to 100690, the image end). The
+tool reads them from `build/USA/main.elf` and checks the coverage. Of the 190
+slices, 163 are exactly one range, whose count is then the overlay's size:
+the 162 rooms (room section of their map) and `mdec_diag` (boundaries 67..68).
+24 open a larger range: the 22 scene sets and `fx_field` (room section of
+maps 411..437 and 12, followed by more data) and `fx_common` (boundaries
+75..76, read whole into the string-directory window). `boot_display` lies
+inside boundaries 71..72 (read whole to 0x80120D00) and `fx_common_sector17`
+inside 75..76; `menu_memcard` covers boundaries 68..70 in part, of which the
+loader reads only 68..69 as code. Inside `PE.IMG`, every room section opens
+with two words that its overlay holds as literal data: the payload size
+(word 0, which the room table's count must hold: `ceil(size / 2048)` equals
+it for all 185 room-table overlays) and the directory offset (word 1). The
+tool checks both relations for the built overlays. Growing an overlay past
+its slice therefore needs (a) the header words expressed as symbols in the
+overlay source, (b) the room-table count and every later start sector, or
+the boundary entries after the slice, recomputed; for the room table that is
+a pure function of the section sizes (`count = ceil(size / 2048)`, starts
+cumulative), but it moves every later sector and changes main's data, so it
+is a relayout of the image and a generated table in main, not an in-place
+repack, and is not implemented.
+
 ## 4. Byte identity and the recipe
 
 Every step keeps the retail layout byte-identical: the manifest reproduces
@@ -357,6 +392,8 @@ keep rebases trivial) and every C rename those symbols need.
 Wave 0b status (3.4): done, byte-identical. `dtail_0D0860` is split into `engine/engine_data_800E0060`, `engine/engine_bss_800E21A8` and `engine/boot_work_area` (all in `.field_engine`, moving with main) and a new `overlay_windows` segment anchored at 0x8010BCF8 (VMA and file offset fixed; `ld_postpass.py` asserts that main and the engine end before it and defines `overlay_windows_HEADROOM`). The "free gap" is not free: 0x800F34F8..0x8010BCF8 is `g_BootWorkArea` (was `D_800F34F8`), the 0x18800-byte area `Boot_InitMemoryLayout` carves at 0x1800/0x6000/0x14000, so the retail headroom is 0 and main can grow only by shrinking it (`test_ld_postpass.py` shows growth past the window failing and growth into 0x100 bytes of room moving the engine and work area as a unit).
 
 Floating window block status: done, byte-identical. The `overlay_windows` segment follows the boot work area; its six windows are offsets in `linkers/USA/overlay_windows.txt`, overlays link at them from the built main, the header's text size and `$sp` come from the link and the limit is the initial stack (0x1FF0 bytes of room). `make shift-full-test` relinks main and all 190 overlays shifted by a pad and explains every differing word (section 6).
+
+Wave 6 status (`PE.IMG` repack): `make pe-img-repack`/`pe-img-check` rebuild `PE.IMG` in place from the built overlays, byte-identical at retail; the sector tables and room headers that record overlay sizes are checked (3.7).
 
 Wave 1 status: done, byte-identical; 18 function pins, `g_DsReadStatusBlock`, 3 `fieldfx/burst` labels and 4 `FieldFx_*` symbolic aliases gone (pinned words 6253 to 6140); `D_800C20C8` (`_end`) is left to wave 0, `func_800119CC` (rodata) to the data package.
 

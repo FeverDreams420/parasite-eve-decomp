@@ -14,6 +14,8 @@ SRC_DIR    := src/$(BASENAME)
 LD_SCRIPT  := linkers/$(VERSION)/$(BASENAME).ld
 TARGET_BIN := assets/$(VERSION)/$(BASENAME).exe
 PE_IMG     := disc/extracted/PE.IMG
+PE_IMG_SHA := 146c0ce7308bf9fdc2ba5a84230e198db0663f3b
+PE_IMG_OUT := $(BUILD)/PE.IMG
 OVERLAY    ?= fx_field
 OVERLAY_CONFIG_DIR ?= configs/$(VERSION)/overlays
 OVERLAY_CONFIGS = $(wildcard $(OVERLAY_CONFIG_DIR)/*.yaml)
@@ -68,7 +70,7 @@ OBJS := $(ASM_OBJS) $(C_OBJS)
 C_DEPS := $(C_OBJS:.o=.o.d)
 -include $(C_DEPS)
 
-.PHONY: expected objdiff-config progress-audit report report-audit all build check check-sources source-policy-check ci verify verify-clean clean diff distclean overlay-build overlay-build-all overlay-check overlay-check-all overlay-clean overlay-extract overlay-split permute progress debt debt-check debt-baseline organization-check organization-baseline test drop-pins drop-barriers drop-aliases shift-audit shift-test shift-full-test shift-check shift-baseline split split-if-needed tools
+.PHONY: expected objdiff-config progress-audit report report-audit all build check check-sources source-policy-check ci verify verify-clean clean diff distclean overlay-build overlay-build-all overlay-check overlay-check-all overlay-clean overlay-extract overlay-split pe-img-repack pe-img-check permute progress debt debt-check debt-baseline organization-check organization-baseline test drop-pins drop-barriers drop-aliases shift-audit shift-test shift-full-test shift-check shift-baseline split split-if-needed tools
 
 all: verify
 
@@ -315,6 +317,17 @@ overlay-check: overlay-build
 overlay-check-all:
 	@test -n "$(OVERLAY_NAMES)" || { echo "no configured overlays in configs/$(VERSION)/overlays"; exit 1; }
 	@$(PY) tools/scripts/check_overlay_hashes.py
+
+# PE.IMG with every overlay slice replaced in place by its built binary
+# (after `make overlay-build-all`). Fails when an overlay outgrows its slice
+# and checks main's PE.IMG sector tables; the retail build must give back the
+# original image (pe-img-check). The image itself is never committed.
+pe-img-repack:
+	@$(PY) tools/scripts/repack_pe_img.py --pe-img $(PE_IMG) --input-sha1 $(PE_IMG_SHA) \
+	    --configs $(OVERLAY_CONFIG_DIR) --main-elf $(ELF) --out $(PE_IMG_OUT)
+
+pe-img-check: pe-img-repack
+	@echo "$(PE_IMG_SHA)  $(PE_IMG_OUT)" | shasum -c -
 
 overlay-clean:
 	rm -rf $(OVERLAY_ORIG_DIR) asm/$(VERSION)/overlays linkers/$(VERSION)/overlays $(BUILD)/overlays
