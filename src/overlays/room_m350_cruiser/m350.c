@@ -544,13 +544,14 @@ int func_801938E4(int event) {
         FallingTexturePairParticle *particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
         RoomM350TransformOwner *player;
         if(!particle) return 0;
-        do {
+        {
             player=(RoomM350TransformOwner *)g_PlayerEntity;
             particle->x=player->transforms->position[0];
             particle->y=player->transforms->position[1];
             particle->z=player->transforms->position[2];
             particle->frame=0;
-        } while (0);
+            asm volatile("" : : : "memory");
+        }
         D_8019A79C=0;
     }
         break;

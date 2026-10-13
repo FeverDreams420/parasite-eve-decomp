@@ -1115,7 +1115,7 @@ void Draw_QueuePrimitive(void) {
  * back 8 bytes for the packet; see CODE_ORGANIZATION.md. */
 #define INDEX_STRIDE(i) ((((((i) << 1) + (i)) << 3) - (i)) << 2) - (i)
 
-#define EMIT_CODED(code_expr) do { \
+#define EMIT_CODED(code_expr) ({ asm volatile(""); ({  \
     int packet_code; \
     register char *base asm("$6"); \
     register int code_off asm("$3"); \
@@ -1139,9 +1139,9 @@ void Draw_QueuePrimitive(void) {
     ot = g_OtBufferTable[idx]; \
     s0 += s3; \
     AddPrim((u32 *)ot + 7, prim); \
-} while (0)
+ }); })
 
-#define EMIT_BASE(base_sym) do { \
+#define EMIT_BASE(base_sym) { \
     char *base; \
     int idx; \
     void *prim; \
@@ -1156,9 +1156,9 @@ void Draw_QueuePrimitive(void) {
     ((RenderSpritePacket *)packet)->y = s2; \
     s0 += s3; \
     AddPrim((u32 *)g_OtBufferTable[idx] + 7, prim); \
-} while (0)
+}
 
-#define EMIT_BASE_LAST(base_sym) do { \
+#define EMIT_BASE_LAST(base_sym) { \
     int idx; \
     char *base; \
     int idx_off; \
@@ -1172,7 +1172,7 @@ void Draw_QueuePrimitive(void) {
     ((RenderSpritePacket *)packet)->x = s0; \
     ((RenderSpritePacket *)packet)->y = s2; \
     AddPrim(*(char **)((char *)g_OtBufferTable + idx) + 0x1C, (char *)idx_off + (int)base); \
-} while (0)
+}
 
 void Draw_StatusIcons(void) {
     Combatant *s1;

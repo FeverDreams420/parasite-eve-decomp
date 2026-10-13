@@ -133,7 +133,7 @@ int g_ItemDropRngIndex;
 #define D_800A76A4_VALUE (D_800A76A4[0])
 
 #define SCRAMBLE_RANDOM_BYTES()                    \
-    do {                                           \
+    {                                           \
         int scramble_i_;                           \
         for (scramble_i_ = 0; scramble_i_ < 0x20; scramble_i_++) { \
             g_ItemDropRngTable[scramble_i_] ^= g_ItemDropRngXorKeyLow[scramble_i_]; \
@@ -141,7 +141,7 @@ int g_ItemDropRngIndex;
         for (scramble_i_ = 0x20; scramble_i_ < 0x209; scramble_i_++) { \
             g_ItemDropRngTable[scramble_i_] ^= g_ItemDropRngXorKeyHigh[scramble_i_]; \
         }                                          \
-    } while (0)
+    }
 
 void Inv_SetDefaultItemId(void) {
     u32 state[0x209];

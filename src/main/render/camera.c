@@ -207,8 +207,8 @@ int Render_SetEntryFlags(int index, int bits) {
     return 0;
 }
 
-/* The do { } while (0) blocks are load-bearing: their loop notes fence the
- * cc1 scheduler so the flag load/stores keep the retail order (permuter zero). */
+/* The empty asm barrier fences the cc1 scheduler so the flag load/stores
+ * keep the retail order. */
 int Menu_SetSlotEntry(int index, unsigned int limit, unsigned int slot)
 {
     GeomStateAddress table, base;
@@ -227,15 +227,16 @@ int Menu_SetSlotEntry(int index, unsigned int limit, unsigned int slot)
     positionWord &= 0xFF;
     offset = entry->slot_offset;
     hi = limit << 16;
-    do {
+    
         entry->elapsed = 0;
         positionWord |= hi;
-        do {
+        {
+            asm volatile("" : : : "memory");
             flags = entry->head.b.flags;
             table.word += offset;
             slots = table.slots;
             entry->position.packed = positionWord;
-        } while (0);
+        }
         neg = -1;
         flags |= 6;
         entry->head.b.flags = flags;
@@ -245,7 +246,7 @@ int Menu_SetSlotEntry(int index, unsigned int limit, unsigned int slot)
             entry->step = -(u16)entry->step;
         }
         return 0;
-    } while (0);
+    
 }
 
 /* Resets the view state at the start of a room draw: render flags, the

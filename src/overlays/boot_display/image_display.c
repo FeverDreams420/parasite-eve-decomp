@@ -94,7 +94,7 @@ void BootDisplay_PresentFrame(void) {
 }
 
 /* RGB24 pixels receive saturated brightness from four packed palette indices. */
-#define BRIGHTEN_NIBBLE(mask, shift) do { \
+#define BRIGHTEN_NIBBLE(mask, shift) { \
     u32 index = bits & (mask); \
     if (index) { \
         u32 brightness = (((u16 *)D_80172C9C)[index >> (shift)] & 31) << 3; \
@@ -109,7 +109,7 @@ void BootDisplay_PresentFrame(void) {
     greenPixel += 3; \
     asm("" : "=r"(greenPixel) : "0"(greenPixel)); \
     ++pixel; \
-} while (0)
+}
 void BootDisplay_BrightenGlyph(s32 x, s32 y, u8 character) {
     s32 savedX = x;
     register s32 row asm("$18") = y;

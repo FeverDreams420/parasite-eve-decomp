@@ -76,12 +76,10 @@ int Render_MoveGridCursor(PrimObj *obj, u32 *entries, u8 ascending, u8 restart) 
             value = entries[i];
             if (ENTRY_Y(value) == bestY && (int)ENTRY_X(value) < bestX) {
                 bestX = ENTRY_X(value);
-                /* Matching debt: the loop notes of this one-pass block raise
-                 * best's reference weight so the allocator ranks it ahead of
-                 * found and later (see docs/CODE_ORGANIZATION.md). */
-                do {
-                    best = i;
-                } while (0);
+                /* The output barrier keeps best's reference weight so the
+                 * allocator ranks it ahead of found and later. */
+                best = i;
+                asm volatile("" : "=r"(best) : "0"(best));
             }
         }
     } else {

@@ -718,11 +718,11 @@ void Menu_DrawStatsList(void) {
     } while (var_s2 < 7);
 }
 
-#define CLOSE_SELECT_VIEWS() do { \
+#define CLOSE_SELECT_VIEWS() { \
     MenuWidget_NavScrollTo(0x2d); \
     MenuWidget_NavScrollTo(0x18); \
     MenuWidget_NavScrollTo(0x12); \
-} while (0)
+}
 
 /* Matching debt: the three inventory-root arguments retain retail registers.
  * Empty barriers preserve the return paths and call delay slots. */

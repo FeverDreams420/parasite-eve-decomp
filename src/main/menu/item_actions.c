@@ -1262,7 +1262,7 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
     return 1;
 }
 #undef g_BonusPointStatDeltas
-#define CLAMP_EQUIP_PREVIEW(out, item, stat_index, active_stat) do { \
+#define CLAMP_EQUIP_PREVIEW(out, item, stat_index, active_stat) { \
     int desired_ = (active_stat); \
     int current_ = D_8009CFC8; \
     int raw_ = (item)->bonusStats[(stat_index)]; \
@@ -1275,7 +1275,7 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
     } else { \
         (out) = 999; \
     } \
-} while (0)
+}
 
 void Menu_StepEquipSlotSelect2(void) {
     MenuWidgetNode *node;

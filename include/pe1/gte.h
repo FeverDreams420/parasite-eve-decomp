@@ -184,7 +184,7 @@
  * t[0] and t[1] packed into VXY0 (narrowed to lhu), t[2] by lwc2 into VZ0.
  * source is an s32 * lvalue so callers can reuse the constrained address. */
 #define gte_ldv0_word3(source) \
-    do { \
+    { \
         register unsigned int packed asm("$12"); \
         register unsigned int high asm("$13"); \
         asm volatile("" : "=r"(source) : "0"(source)); \
@@ -196,7 +196,7 @@
         asm volatile("mtc2 %0,$0\n\t" \
                      "lwc2 $1,8(%1)" \
                      : : "r"(packed), "r"(source) : "memory"); \
-    } while (0)
+    }
 
 #define gte_ldv0_word3_at(vec) \
     do { \
@@ -229,7 +229,7 @@
 
 /* Store IR1..3 back to a strided matrix column. */
 #define gte_stir123_column(out) \
-    do { \
+    ({ \
         register int x asm("$12"); \
         register int y asm("$13"); \
         register int z asm("$14"); \
@@ -241,7 +241,8 @@
         ((short *)(out))[0] = x; \
         ((short *)(out))[3] = y; \
         ((short *)(out))[6] = z; \
-    } while (0)
+        asm volatile(""); \
+    })
 
 /* PSY-Q gte_stsv: store IR1..3 as a short vector (mfc2 into $12..$14, then
  * three halfword stores inside the same statement, as the SDK macro does). */
@@ -255,10 +256,10 @@
                  : : "r"(out) : "$12", "$13", "$14", "memory")
 
 #define gte_stir123_column_at(column) \
-    do { \
+    { \
         volatile short *out = (volatile short *)(column); \
         gte_stir123_column(out); \
-    } while (0)
+    }
 
 #define gte_rtv0tr_sf0() \
     asm volatile(".word 0x4A480012")
@@ -494,11 +495,11 @@
     register void *gte_out2 asm("$10")
 
 #define gte_bind_three_outputs(out0, out1, out2)                            \
-    do {                                                                     \
+    {                                                                     \
         gte_out0 = (out0);                                                   \
         gte_out1 = (out1);                                                   \
         gte_out2 = (out2);                                                   \
-    } while (0)
+    }
 
 #define gte_dpct_separate()                                                 \
     asm volatile("nop\n\t"                                                \
@@ -637,16 +638,16 @@
 #define gte_set_shift12() (gte_shift = 12)
 
 #define gte_load_byte2(input)                                                \
-    do {                                                                     \
+    {                                                                     \
         gte_x = ((unsigned char *)(input))[0];                               \
         gte_y = ((unsigned char *)(input))[1];                               \
-    } while (0)
+    }
 
 #define gte_load_byte3(input)                                                \
-    do {                                                                     \
+    {                                                                     \
         gte_load_byte2(input);                                               \
         gte_z = ((unsigned char *)(input))[2];                               \
-    } while (0)
+    }
 
 #define gte_ldir0_ir12(scale)                                                \
     asm volatile("mtc2 %0,$8\n\t"                                          \
@@ -767,12 +768,12 @@
                  : : : "$8", "$9", "$10", "$11")
 
 #define gte_bind_separate_outputs(out1, out2, depth, flags)                  \
-    do {                                                                     \
+    {                                                                     \
         gte_out1 = (out1);                                                   \
         gte_out2 = (out2);                                                   \
         gte_depth_out = (depth);                                             \
         gte_flags_out = (flags);                                             \
-    } while (0)
+    }
 
 #define gte_stsxy0(out)                                                     \
     asm volatile("swc2 $12,0(%0)" : : "r"(out) : "memory")

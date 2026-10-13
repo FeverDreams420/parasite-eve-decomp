@@ -964,9 +964,9 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         quadPacket0->uv0 = quadUv0->packed;
                         quadPacket0->uv1 = scratchpad->midpointUv[0].packed;
                         quadPacket0->uv2 = scratchpad->midpointUv[1].packed;
-                        do {
+                        {
                             quadPacket0->uv3 = scratchpad->midpointUv[2].packed;
-                        } while (0);
+                         asm volatile(""); }
                         quadUv3Cursor += 20;
                         {
                             u32 earlyQuadTag0 = var_t1_2->tag.packed;

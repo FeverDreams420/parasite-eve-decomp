@@ -9,8 +9,8 @@
  * Matching debt (not counted by crutch_debt.py): the four unused
  * scratch-word initialisers reproduce retail's unused 32-byte frame range
  * sp+0x50..0x6F; the dead "line_b = scale" store, the identical-arm screen
- * tests, the do-while(0) blocks and the shared far_edge tail keep GCC's
- * register allocation (best lev without each: 26, 169..232, 68 and 14). */
+ * tests, the do-while(0) around the tpage link, and the shared far_edge
+ * tail keep GCC's register allocation. */
 
 #include "common.h"
 #include "pe1/gte.h"
@@ -463,14 +463,14 @@ s32 Render_DrawWireframeModel(RenderAnimFrame *frame, void *position, s32 scale,
                                 ot_edge_page = (u32 *)ot - (-positive_depth);
                                 cursor.line->tag.raw = (cursor.line->tag.raw & command_mask) | (*ot_edge_page & address_mask);
                             } while (0);
-                            do {
+                            
                                 link_word = cursor.word & address_mask;
                                 ot_word = *ot_edge_page;
                                 cursor.bytes += 8;
                                 ot_word &= command_mask;
                                 ot_word |= link_word;
                                 *ot_edge_page = ot_word;
-                            } while (0);
+                            
                         }
                     }
                     edge += 1;

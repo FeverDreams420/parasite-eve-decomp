@@ -293,12 +293,12 @@ int func_801976C8(int event)
     if (D_8019A857) {
         short *effect = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if (!effect) return 0;
-        do {
+        {
             effect[0] = D_8019A864[0];
             effect[1] = D_8019A864[1];
             effect[2] = D_8019A864[2];
             effect[3] = 0;
-        } while (0);
+         asm volatile(""); }
         D_8019A857 = 0;
     }
         break;

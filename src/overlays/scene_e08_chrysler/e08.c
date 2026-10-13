@@ -2100,7 +2100,7 @@ void func_80194090(void *arg0, void *arg1, char *effects) {
     i = 0;
     alpha = &D_8019955A;
     /* This single-pass block preserves the original setup scheduling. */
-    do {
+    { asm volatile("" : : : "memory"); 
         state = (SceneE08PositionSample *)base;
         phase = (SceneE08TrailLane *)base;
         angleOffset = 0x30;
@@ -2108,7 +2108,7 @@ void func_80194090(void *arg0, void *arg1, char *effects) {
         func_800C2FF0(0x40, 0x20);
         func_800C3098(0x10);
         func_800C3238(2);
-    } while (0);
+     }
 
     for (; i < 3; ++i, angleOffset += 8) {
         RotMatrix((GteShortVector *)(base + angleOffset), &matrix);

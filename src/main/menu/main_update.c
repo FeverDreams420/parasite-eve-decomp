@@ -156,7 +156,7 @@ void Menu_MainUpdate(s32 arg0) {
             var_a2 = 0x83;
             var_a1 = 0x13;
             {
-            do { } while (0);
+            asm volatile("");
             var_v1 = g_ActiveDrawSlot;
             do { } while (0);
             var_a0 = 1;
@@ -179,7 +179,7 @@ void Menu_MainUpdate(s32 arg0) {
             var_a2 = 0xC1;
             var_a1 = 0x28;
             {
-            do { } while (0);
+            asm volatile("");
             var_v1 = g_ActiveDrawSlot;
             do { } while (0);
             var_a0 = 0x41;
@@ -205,7 +205,7 @@ void Menu_MainUpdate(s32 arg0) {
             var_a2 = 0xFF;
             var_a1 = 0x3D;
             {
-            do { } while (0);
+            asm volatile("");
             var_v1 = g_ActiveDrawSlot;
             do { } while (0);
             var_a0 = 0x81;
@@ -230,7 +230,7 @@ void Menu_MainUpdate(s32 arg0) {
             var_a2 = 0xC1;
             var_a1 = 0x28;
             {
-            do { } while (0);
+            asm volatile("");
             var_v1 = g_ActiveDrawSlot;
             do { } while (0);
             var_a0 = 0x41;
@@ -312,7 +312,7 @@ void Menu_MainUpdate(s32 arg0) {
                     var_a2 = 0x4A;
                     var_a1 = 0xFF;
                     {
-                    do { } while (0);
+                    asm volatile("");
                     var_v1 = g_ActiveDrawSlot;
                     do { } while (0);
                     var_a0_2 = 0x3B;
@@ -335,7 +335,7 @@ void Menu_MainUpdate(s32 arg0) {
                     var_a2 = 0x25;
                     var_a1 = 0xC1;
                     {
-                    do { } while (0);
+                    asm volatile("");
                     var_v1 = g_ActiveDrawSlot;
                     do { } while (0);
                     var_a0_2 = 0x39;
@@ -360,7 +360,7 @@ void Menu_MainUpdate(s32 arg0) {
                     var_a2 = 0x3B;
                     var_a1 = 0x82;
                     {
-                    do { } while (0);
+                    asm volatile("");
                     var_v1 = g_ActiveDrawSlot;
                     do { } while (0);
                     var_a0_2 = 0x36;
@@ -383,7 +383,7 @@ void Menu_MainUpdate(s32 arg0) {
                     var_a2 = 0x25;
                     var_a1 = 0xC1;
                     {
-                    do { } while (0);
+                    asm volatile("");
                     var_v1 = g_ActiveDrawSlot;
                     do { } while (0);
                     var_a0_2 = 0x39;

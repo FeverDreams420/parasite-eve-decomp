@@ -218,12 +218,12 @@ decimal:
                 value = q;
                 count++;
             }
-            do {
+            
                 while (count < work.spec.precision) {
                     *--src = zero;
                     count++;
                 }
-            } while (0);
+            
             {
                 s32 psgn = work.spec.header.bytes.prefix;
                 s32 pch = *(u8 *)&work.spec.header.bytes.prefix;
@@ -259,12 +259,12 @@ decimal:
                 *--src = zero;
                 count++;
             }
-            do {
+            
                 while (count < work.spec.precision) {
                     *--src = zero;
                     count++;
                 }
-            } while (0);
+            
             break;
 
         case 'p':
@@ -304,12 +304,12 @@ hexadecimal:
                 value >>= 4;
                 count++;
             }
-            do {
+            
                 while (count < work.spec.precision) {
                     *--src = zero;
                     count++;
                 }
-            } while (0);
+            
             if ((work.spec.header.flags >> 2) & 1) {
                 --src;
                 *src = c;
