@@ -447,7 +447,7 @@ int func_801900CC(int mode, RoomBounceGlint *glint, int *size) {
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800CEE20((GteShortVector *)glint, 0, extent, extent,
                               (s16)D_800F3368.parameter02 * (s16)(glint->timer / 6),
-                              (u16)GetClut(0, palette), 2, intensity, 0);
+                              GetClut(0, palette), 2, intensity, 0);
             } else {
                 int kind;
                 int palette;
@@ -458,7 +458,7 @@ int func_801900CC(int mode, RoomBounceGlint *glint, int *size) {
                 func_800CEE20((GteShortVector *)glint, 0, extent * 3 / 2,
                               extent * 3 / 2,
                               (s16)D_800F3368.parameter02 * ((glint->timer / 2) & 3),
-                              (u16)GetClut(0, palette), 1, intensity, 0);
+                              GetClut(0, palette), 1, intensity, 0);
             }
             break;
         case 1: {
@@ -482,7 +482,7 @@ int func_801900CC(int mode, RoomBounceGlint *glint, int *size) {
             func_800CEE20((GteShortVector *)glint, &rotation, extent * 3 / 2,
                           extent * 3 / 2,
                           (s16)D_800F3368.parameter02 * glint->flag + 0x1A,
-                          (u16)GetClut(0x70, palette), 0xFF, 0x80, 0);
+                          GetClut(0x70, palette), 0xFF, 0x80, 0);
             break;
         }
         }
