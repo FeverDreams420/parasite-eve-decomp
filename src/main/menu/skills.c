@@ -90,7 +90,7 @@ void Menu_StepSkillList(MenuWidgetNode *arg0, s32 arg1) {
     if ((g_MenuEquipMode != 0) || (Inv_GetPackedListCount() != 0)) {
         parent = MenuWidget_CreateSimpleNode(7, saved_arg0, 0, 0);
         child = MenuWidget_CreateNode(7, parent, parent);
-        parent->update = (void (*)())Menu_StepEquipConfirm;
+        parent->update = Menu_StepEquipConfirm;
         {
             s32 temp_v1 = g_MenuLayoutLocked;
             child->draw = &Menu_DrawEquipSelectionList;
@@ -307,7 +307,7 @@ void Menu_CreateSkillActionScreen(MenuWidgetNode *arg0) {
 
     parent = MenuWidget_CreateSimpleNode(8, arg0, 0, 0);
     child = MenuWidget_CreateNode(8, parent, parent);
-    parent->update = (void (*)())Menu_SkillActionHandler;
+    parent->update = Menu_SkillActionHandler;
     child->draw = Menu_DrawEquipModList;
     child->selectionAvailable = Menu_GetItemSlotAvailability;
     MenuWidget_SetCurrentNode(child);
@@ -416,7 +416,7 @@ void Menu_CreateInvSwapView(MenuWidgetNode *parent, int mode) {
     mode_offset = mode;
     node = MenuWidget_CreateSimpleNode(mode_offset + 0x3A, parent, 0, 0);
     current = MenuWidget_CreateNode(mode_offset + 0x3A, node, node);
-    node->update = (void (*)())Menu_EquipOptionsInputHandler;
+    node->update = Menu_EquipOptionsInputHandler;
     current->draw = Menu_DrawEquipOptionsList;
     MenuWidget_SetCurrentNode(current);
     MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0x33));
@@ -459,10 +459,10 @@ void Menu_OpenInventoryOrSwapView(s32 showList) {
         if (showList != 0) {
             current = MenuWidget_GetCurrentNode();
             current->cursor_y = 0;
-            MenuWidget_CreateSimpleNode(0x1B, NULL, 0, 0)->draw = (void (*)())&Menu_DrawAmmoTypeHeader;
+            MenuWidget_CreateSimpleNode(0x1B, NULL, 0, 0)->draw = &Menu_DrawAmmoTypeHeader;
             panel = MenuWidget_CreateSimpleNode(1, current, 0, 0);
             list = MenuWidget_CreateNode(1, panel, panel);
-            panel->update = (void (*)())Menu_InventoryInputHandler;
+            panel->update = Menu_InventoryInputHandler;
             list->draw = Menu_DrawSelectableEquipSlotList;
             MenuWidget_SetCurrentNode(list);
             list->itemAction = (MenuWidgetItemAction)Inv_SwapSlots;
@@ -548,9 +548,9 @@ s32 Menu_EquipOptionsInputHandler(void *arg0, s32 arg1) {
             if (temp_a1 == 2) {
                 temp_v0_2 = MenuWidget_CreateSimpleNode(0x3B, temp_v0, 0, 0);
                 temp_v0_3 = MenuWidget_CreateNode(0x3B, temp_v0_2, temp_v0_2);
-                temp_v0_2->update = (void (*)())&Menu_EquipGridHandler;
+                temp_v0_2->update = &Menu_EquipGridHandler;
                 MenuWidget_OffsetPosition(temp_v0_2, 0x70 - temp_v0_2->x, 0x48 - temp_v0_2->y);
-                temp_v0_3->draw = (void (*)())&Menu_DrawEquipSortToggleList;
+                temp_v0_3->draw = &Menu_DrawEquipSortToggleList;
                 MenuWidget_SetCurrentNode(temp_v0_3);
             } else {
             case 2:
