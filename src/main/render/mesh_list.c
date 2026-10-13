@@ -188,8 +188,8 @@ int Render_DrawSpriteEntry(GeomEntry *input)
                                 ot_index >>= 14;
                                 ot.word = ot_index + ordering.word;
                                 sprite_tag = *(u32 *)sprite_cursor;
-                                ((RenderTilePacket *)sprite_cursor)->x = draw_x;
-                                ((RenderTilePacket *)sprite_cursor)->y = draw_y;
+                                (sprite_cursor)->x = draw_x;
+                                (sprite_cursor)->y = draw_y;
                                 LINK_PACKET_PRELOADED(sprite_cursor, ot.bytes, sprite_tag, mask24, maskTop);
                                 LINK_PAGE(page_cursor, ot.bytes, mask24, maskTop);
                             }
@@ -235,8 +235,8 @@ int Render_DrawSpriteEntry(GeomEntry *input)
                             ot_index >>= 14;
                             ot.word = ot_index + ordering.word;
                             sprite_tag = *(u32 *)sprite_cursor;
-                            ((RenderTilePacket *)sprite_cursor)->x = draw_x;
-                            ((RenderTilePacket *)sprite_cursor)->y = draw_y;
+                            (sprite_cursor)->x = draw_x;
+                            (sprite_cursor)->y = draw_y;
                             LINK_PACKET_PRELOADED(sprite_cursor, ot.bytes, sprite_tag, mask24, maskTop);
                             LINK_PAGE(page_cursor, ot.bytes, mask24, maskTop);
                         }
