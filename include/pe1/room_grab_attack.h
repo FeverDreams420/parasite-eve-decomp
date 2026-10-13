@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/akao_send.h"
 #include "pe1/battle_context.h"
+#include "pe1/battle_setup.h"
 #include "pe1/field_collision.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_vector_math.h"
@@ -68,8 +69,6 @@ int RoomEffect_OrbitTrailParticle(int mode, RoomOrbitTrailParticle *p);
 int RoomEffect_RisingSprayParticle(int mode, RoomSpraySpark *spark);
 
 void Render_FindAnimEntry(void *object, int count, void *out);
-void Battle_BeginPlayerAction(void);
-void Battle_ReturnToIdle(void);
 void Akao_Cmd_21(int handle, int arg);
 void func_800D2B58(void *, void *, void *, void *, int, int, int);
 

@@ -2,6 +2,7 @@
 #define PE1_SCENE_GRAB_TRIGGER_H
 
 #include "common.h"
+#include "pe1/battle_setup.h"
 #include "pe1/field_actor.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/player_entity.h"
@@ -42,7 +43,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneGrabTrigger, control.player_matrix) == 0x1C,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneGrabTrigger, control.grabbed) == 0x44,
                   scene_grab_flag_offset);
 
-void Battle_BeginPlayerAction(void);
 s32 func_80192D04(char *obj);
 void func_80192878();
 void SceneE19_RunAfterFrame37();

@@ -9,6 +9,7 @@
 #include "pe1/battle_hud_colors.h"
 #include "pe1/battle_reset_stats.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/battle_setup.h"
 #include "pe1/battle_update.h"
 #include "pe1/draw_slot_record.h"
 #include "pe1/entity_animation.h"
@@ -23,7 +24,6 @@
 
 #define NULL ((void *)0)
 
-M2C_UNK Battle_ReturnToIdle();                            /* extern */
 s8 Pad_GetMenuPressedBitOrDisabled(void);
 struct BattleStatusPanel;
 void Battle_DrawStatusPanel(s32, struct BattleStatusPanel *);

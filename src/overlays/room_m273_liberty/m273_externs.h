@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/battle.h"
+#include "pe1/battle_setup.h"
 #include "pe1/field_actor.h"
 #include "pe1/gte_types.h"
 #include "pe1/room_fx.h"
@@ -38,10 +39,8 @@ typedef struct {
 } RoomM273PhaseState;
 
 extern FieldActor *g_PlayerEntity;
-extern void Battle_BeginPlayerAction(void);
 void func_80192838(RoomSelectionState *state);
 void func_80192D50(char *obj);
-extern void Battle_ReturnToIdle(void);
 extern struct BattleEntity *D_8009D254;
 extern u8 D_8019A8C8[];
 extern s32 Inv_ScrambleGrid(void);

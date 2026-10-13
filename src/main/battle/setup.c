@@ -9,6 +9,7 @@
 #include "pe1/battle_hud_colors.h"
 #include "pe1/battle_reset_stats.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/battle_setup.h"
 #include "pe1/game_state.h"
 #include "pe1/gte_types.h"
 #include "pe1/inventory.h"
