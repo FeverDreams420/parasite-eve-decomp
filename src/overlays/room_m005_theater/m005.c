@@ -172,7 +172,6 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
             D_800F3368.extent_x = 16;
             D_800F3368.extent_y = 16;
             palette = D_800E2850[idx];
-            PE1_COMPILER_MEMORY_BARRIER();
             D_800F3368.palette = 2;
             D_800F3368.parameter06 = 0;
             D_800F3368.parameter0A = 0;

@@ -45,8 +45,6 @@ int func_80196C64(int event, void *object)
         D_800F3368.extent_x = unit;
         D_800F3368.extent_y = unit;
         palette = D_800E2850[paletteIndex];
-        /* Capture the palette before reading the animation frame. */
-        asm volatile("" : : "r"(palette));
         frame = D_800E27EC;
         clutX = 0;
         D_800F3368.palette = mode;
@@ -54,7 +52,6 @@ int func_80196C64(int event, void *object)
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = unit;
         sampleOffset = ((unsigned int)(frame - 1) << 9) & 0x3E00;
-        asm("" : "=r"(sampleOffset) : "0"(sampleOffset) : "memory");
         D_800F3368.tpage = palette;
         size = *(short *)((char *)D_800966EC + sampleOffset);
         size = size * 2 + 4096;

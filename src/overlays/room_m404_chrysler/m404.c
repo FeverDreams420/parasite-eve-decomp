@@ -285,7 +285,6 @@ int func_80193368(int mode, void *unused, char *state) {
         D_800F3368.extent_x = 32;
         D_800F3368.extent_y = 32;
         palette = D_800E2850[idx];
-        PE1_COMPILER_MEMORY_BARRIER();
         D_800F3368.palette = 3;
         D_800F3368.parameter06 = 0;
         D_800F3368.parameter0A = 0;

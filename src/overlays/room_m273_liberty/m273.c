@@ -771,7 +771,6 @@ int func_80193F30(int mode) {
                     ThresholdTripleEffect *effect=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                     if(!effect) break;
                     effect->x=state->transform->x;
-                    asm("" : : : "memory");
                     effect->y=g_RoomFloorY->raw;
                     effect->z=state->transform->z;
                     effect->phase=i*384;
@@ -1323,7 +1322,6 @@ deterministicPattern: {
             pathY[0] = offset;
             pulse = (pulse >> 15) + 0x80;
             D_8019ACA8 = pulse;
-            PE1_COMPILER_MEMORY_BARRIER();
             size = phase << 6;
             goto particleSetup;
         }
@@ -1332,11 +1330,9 @@ randomPattern: {
             int center = 0x20 - random;
                 if (D_8019AE6C & 1) {
                     pathY[0] = center - 0x340;
-                    PE1_COMPILER_MEMORY_BARRIER();
                     pathY[1] = center - 0x2A0;
                 } else {
                     pathY[1] = center - 0x2A0;
-                    PE1_COMPILER_MEMORY_BARRIER();
                     pathY[0] = center - 0x340;
             }
             size = 0x10;
@@ -1351,14 +1347,12 @@ phasePattern: {
                     s16 pathValue;
                     pathValue = offset - 0x3C0;
                     pathY[0] = pathValue;
-                    PE1_COMPILER_MEMORY_BARRIER();
                     pathValue = offset - 0x2A0;
                     pathY[1] = pathValue;
                 } else {
                     s16 pathValue;
                     pathValue = offset - 0x2A0;
                     pathY[1] = pathValue;
-                    PE1_COMPILER_MEMORY_BARRIER();
                     pathValue = offset - 0x3C0;
                     pathY[0] = pathValue;
             }
@@ -1377,7 +1371,6 @@ particleSetup:
             pathOffset = i * 2;
             particle->position.z = D_8019AE9C.hands[i].z;
             particle->yaw = actor->rot_y + size * 4;
-            PE1_COMPILER_MEMORY_BARRIER();
             pathAddress = (s16 *)((u8 *)pathY + pathOffset);
             nextIndex = i + 1;
             particle->pitch = *pathAddress;
