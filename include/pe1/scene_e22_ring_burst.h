@@ -30,25 +30,25 @@ extern RenderColor D_8018F1D0;
 extern RenderColor D_8018F1D4;
 extern GteShortVector D_801994EC;
 extern int rand(void);
-extern int func_80192548(int mode, RoomOrbitTrailParticle *p);
+extern int SceneE22_RingBurstParticleCallback(int mode, RoomOrbitTrailParticle *p);
 
-/* Orbit ring trail particle (func_80192548): its colour seed and trail
+/* Orbit ring trail particle (SceneE22_RingBurstParticleCallback): its colour seed and trail
  * track, and the trail strip renderer. */
 extern RenderColor D_8018F1CC;
 extern u8 D_80199168[];
 extern void FieldFx_DrawGlowLine(void *, void *, void *, void *, int, int, int);
 
-/* Damped glow particle (func_801931B8): its glow colour track. */
+/* Damped glow particle (SceneE22_LinkBeamSparkCallback): its glow colour track. */
 extern u8 D_80199190[];
 
-/* Twisting trail particle (func_801962FC): spin template, colour track and
+/* Twisting trail particle (SceneE22_TwistTrailCallback): spin template, colour track and
  * the bent trail renderer. */
 extern GteRotation D_8018F1F4;
 extern u8 D_80199434[];
 extern u8 D_8019944C[];
 extern void FieldFx_OffsetPointByAngles(void *, void *, int, void *, int, int);
 
-/* Twist beam particle (func_8019702C): its colours, trail track, the beam
+/* Twist beam particle (SceneE22_TwistBeamCallback): its colours, trail track, the beam
  * release flag and the beam sprite colour row. */
 extern RenderColor D_8018F21C;
 extern RenderColor D_8018F220;

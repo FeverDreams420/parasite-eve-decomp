@@ -393,3 +393,38 @@ address,overlay,old_name,new_name,evidence
 0x8019B484,scene_e19_cruiser,D_8019B484,g_SceneE19EmberFlareColorTrack,colour track sampled by SceneE19_EmberFlareParticleCallback
 0x8019B4FC,scene_e19_cruiser,D_8019B4FC,g_SceneE19OrbitTrailColorTrack,colour track sampled by SceneE19_OrbitTrailParticleCallback
 0x8019B55C,scene_e19_cruiser,D_8019B55C,g_SceneE19GlintRibbonJoints,per-joint parameter array indexed 0..2 and passed to FieldFx_TransformMatrixPoint by SceneE19_GlintRibbon
+0x80192548,scene_e22_liberty,func_80192548,SceneE22_RingBurstParticleCallback,"source comment: ring burst particle sweeping out from the orbit centre drawing a coloured trail, flashing as a spinning sprite or drifting as a widening ring; installed by SceneE22_RingBurst via FieldFx_InitCallbackList"
+0x80192AF0,scene_e22_liberty,func_80192AF0,SceneE22_RingBurst,source comment: ring burst bursting falling sparks and sweeping trails from the anchor in the first three frames and publishing the anchor as the orbit centre; slot 0 of effect set D_8019928C
+0x801931B8,scene_e22_liberty,func_801931B8,SceneE22_LinkBeamSparkCallback,source comment: damped glow particle drifting and bouncing on the floor for 8 frames; installed by SceneE22_LinkBeam via FieldFx_InitCallbackList
+0x80193414,scene_e22_liberty,func_80193414,SceneE22_LinkBeam,source comment: link beam strings two light ribbons across three actor joints (g_SceneE22LinkBeamJoints[jointSet]) and sheds glow sparks for 33 frames; slot 1 of effect set D_801991C4 and D_80199228
+0x80193940,scene_e22_liberty,func_80193940,SceneE22_EmberDriftParticleCallback,source comment: embers drift and bounce off the floor while a wide glow pulses in place; installed by SceneE22_EmberDrift via FieldFx_InitCallbackList
+0x8019408C,scene_e22_liberty,func_8019408C,SceneE22_EmberDrift,"source comment: ember drift controller riding the room actor, glowing up for 16 frames then spraying orbiting sparks, embers and smoke; slot 0 of effect set D_801992E8"
+0x8019485C,scene_e22_liberty,func_8019485C,SceneE22_EmberColumnParticleCallback,"source comment: rising ember on a slowly turning circle, sparks coasting to rest; installed by SceneE22_EmberColumn via FieldFx_InitCallbackList"
+0x80194F60,scene_e22_liberty,func_80194F60,SceneE22_EmberColumn,"source comment: ember column controller riding the room actor, spraying rising embers and coasting sparks for 32 frames; slot 0 of effect set D_80199368"
+0x801957CC,scene_e22_liberty,func_801957CC,SceneE22_SwirlRingParticleCallback,source comment: ring growing and fading for 12 frames or a glow swinging out along its turning heading; installed by SceneE22_SwirlRing via FieldFx_InitCallbackList
+0x80195B40,scene_e22_liberty,func_80195B40,SceneE22_SwirlRing,"source comment: swirl ring controller riding an actor joint, spraying four swirl rings per frame for the first eight and bursting eight swirling glows; slot 0 of effect set D_801993F0"
+0x801962FC,scene_e22_liberty,func_801962FC,SceneE22_TwistTrailCallback,source comment: twisting trail particle drawing a glow at the end of a bent trail for 32 frames; installed by SceneE22_TwistModel via FieldFx_InitCallbackList
+0x80196554,scene_e22_liberty,func_80196554,SceneE22_TwistModel,"source comment: model bolt riding an actor joint along its heading, advancing for 16 frames after a 16 frame wait and shedding a twisting trail per frame; loads model key 0xC54C4704; slot 1 of effect set D_801993F0"
+0x8019702C,scene_e22_liberty,func_8019702C,SceneE22_TwistBeamCallback,"source comment: twisting trail glow, flickering beam held until the release flag, or swelling ring; installed by SceneE22_SweepBolt via FieldFx_InitCallbackList"
+0x8019753C,scene_e22_liberty,func_8019753C,SceneE22_SweepBolt,"source comment: sweep bolt swinging out from its origin over sixteen frames shedding twist beam particles, then hovering for 24 frames shaking the screen; slot 2 of effect set D_801993F0"
+0x801981B0,scene_e22_liberty,func_801981B0,SceneE22_QuakeSparkCallback,"rising shape quad (y -= speed*24/4096, 32 frames) with brightness from the particle speed; installed by SceneE22_QuakeBlast via FieldFx_InitCallbackList"
+0x80198348,scene_e22_liberty,func_80198348,SceneE22_QuakeBlast,"source comment: quake blast lighting the actor on frame 6 when within the target radius, spraying sparks and drawing a floor glow, halo, ring and shock models; slot 3 of effect set D_801993F0"
+0x80198F44,scene_e22_liberty,func_80198F44,SceneE22_GetBurstAnchor,"slot 12 of effect sets D_801991C4, D_80199228 and D_8019928C: returns &g_SceneE22BurstAnchor"
+0x80198F54,scene_e22_liberty,func_80198F54,SceneE22_PlayerGate,"clears bit 0x10000000 of the player state on init, then ends with complete/signaled set when that bit is set or after 100 frames; slot 2 of effect set D_8019928C"
+0x80199028,scene_e22_liberty,func_80199028,SceneE22_EmberDriftConfigure,slot 12 of effect set D_801992E8: returns &g_SceneE22BurstAnchor
+0x80199038,scene_e22_liberty,func_80199038,SceneE22_EmberColumnConfigure,slot 12 of effect set D_80199368: returns &g_SceneE22BurstAnchor
+0x80199048,scene_e22_liberty,func_80199048,SceneE22_ConfigureBlastTarget,"slot 12 of effect set D_801993F0: mode 1 stores value and extra with the floor Y and the player position into g_SceneE22BlastTarget, other modes store a radius of at least 1"
+0x801991C4,scene_e22_liberty,D_801991C4,g_SceneE22LinkBeamEffectsA,"effect set table: slot 1 SceneE22_LinkBeam, slot 12 SceneE22_GetBurstAnchor"
+0x80199228,scene_e22_liberty,D_80199228,g_SceneE22LinkBeamEffectsB,"effect set table: slot 1 SceneE22_LinkBeam, slot 12 SceneE22_GetBurstAnchor"
+0x8019928C,scene_e22_liberty,D_8019928C,g_SceneE22RingBurstEffects,"effect set table: slot 0 SceneE22_RingBurst, slot 2 SceneE22_PlayerGate, slot 12 SceneE22_GetBurstAnchor"
+0x801992E8,scene_e22_liberty,D_801992E8,g_SceneE22EmberDriftEffects,"effect set table: slot 0 SceneE22_EmberDrift, slot 12 SceneE22_EmberDriftConfigure"
+0x80199368,scene_e22_liberty,D_80199368,g_SceneE22EmberColumnEffects,"effect set table: slot 0 SceneE22_EmberColumn, slot 12 SceneE22_EmberColumnConfigure"
+0x801993F0,scene_e22_liberty,D_801993F0,g_SceneE22SwirlBoltEffects,"effect set table: slots 0..3 SceneE22_SwirlRing, SceneE22_TwistModel, SceneE22_SweepBolt, SceneE22_QuakeBlast, slot 12 SceneE22_ConfigureBlastTarget"
+0x801994F4,scene_e22_liberty,D_801994F4,g_SceneE22BlastTarget,"target record (position, floor Y, radius) written by SceneE22_ConfigureBlastTarget and passed as the third argument of SceneE22_SweepBolt and SceneE22_QuakeBlast"
+0x80199500,scene_e22_liberty,D_80199500,g_SceneE22BoltModel,model asset key 0xC54C4704 loaded in mode 0 of SceneE22_TwistModel and SceneE22_SweepBolt and drawn with FieldFx_ModelDraw
+0x80199508,scene_e22_liberty,D_80199508,g_SceneE22QuakeModel0,model asset key 0xC58C4704 loaded in SceneE22_QuakeBlast mode 0
+0x8019950C,scene_e22_liberty,D_8019950C,g_SceneE22QuakeModel1,model asset key 0xC5CC4704 loaded in SceneE22_QuakeBlast mode 0
+0x801991B8,scene_e22_liberty,D_801991B8,g_SceneE22LinkBeamJoints,"table of {first, middle, last} joint indices indexed by beam->jointSet in SceneE22_LinkBeam"
+0x80199308,scene_e22_liberty,D_80199308,g_SceneE22EmberDriftColorTrack,colour track sampled by SceneE22_EmberDriftParticleCallback
+0x80199388,scene_e22_liberty,D_80199388,g_SceneE22EmberColumnColorTrack,colour track sampled by SceneE22_EmberColumnParticleCallback and SceneE22_EmberColumn
+0x8019948C,scene_e22_liberty,D_8019948C,g_SceneE22QuakeColorTrack,colour track sampled by SceneE22_QuakeBlast

@@ -20,7 +20,7 @@
 #include "pe1/room_orbit_trail.h"
 #include "pe1/scene_archive.h"
 
-/* Quake blast controller (scene_e22 func_80198348): a blast at the target
+/* Quake blast controller (scene_e22 SceneE22_QuakeBlast): a blast at the target
  * that lights the actor once it stands in reach, sprays sparks for six
  * frames, then draws a floor glow, a halo, a ring and three expanding
  * shock models. */
@@ -89,9 +89,9 @@ typedef struct SceneE22QuakeActor {
 
 extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
 /* Texture page indices: [0] the shared effect page, [8] this scene's. */
-extern void *D_80199508;
-extern void *D_8019950C;
-extern u8 D_8019948C[];
+extern void *g_SceneE22QuakeModel0;
+extern void *g_SceneE22QuakeModel1;
+extern u8 g_SceneE22QuakeColorTrack[];
 extern GteRotation D_8018F1FC;
 extern RenderColor D_8018F228;
 

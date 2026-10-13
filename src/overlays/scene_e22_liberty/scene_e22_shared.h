@@ -36,7 +36,7 @@ PE1_STATIC_ASSERT(sizeof(SceneE22RangeCallbackState) == 0x18,
 
 extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
 extern GteShortVector D_801994EC;
-extern s16 D_801994F4, D_801994F6, D_801994F8;
+extern s16 g_SceneE22BlastTarget, D_801994F6, D_801994F8;
 extern int D_801994FC;
 
 #endif /* SCENE_E22_SHARED_H */

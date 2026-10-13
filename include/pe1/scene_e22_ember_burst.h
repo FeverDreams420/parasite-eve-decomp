@@ -69,7 +69,7 @@ extern int rand(void);
 extern void Battle_HaltOnPositiveX(void);
 extern void Battle_InitEntityColors(void);
 
-/* Link beam controller (func_80193414): two light ribbons strung across
+/* Link beam controller (SceneE22_LinkBeam): two light ribbons strung across
  * three actor joints picked by the scene event's joint set; the last joint
  * sheds glow sparks along its heading, then the ribbons fade. */
 typedef struct SceneE22LinkBeam {
@@ -85,7 +85,7 @@ typedef struct SceneE22LinkJoints {
     s16 first, middle, last;
 } SceneE22LinkJoints;
 
-/* Swirl ring controller (func_80195B40): rides an actor joint, swells a
+/* Swirl ring controller (SceneE22_SwirlRing): rides an actor joint, swells a
  * glow while it sprays swirl ring particles, then fades a halo and ring. */
 typedef struct SceneE22SwirlRing {
     s16 x, y, z;                  /* 0x00 */
@@ -96,10 +96,10 @@ typedef struct SceneE22SwirlRing {
     s16 ring;                     /* 0x0E */
 } SceneE22SwirlRing;
 
-/* Ember column controller (func_80194F60): its spin template and halo
+/* Ember column controller (SceneE22_EmberColumn): its spin template and halo
  * colour, and the rising ember particle it sprays. */
 
-/* Twist model controller (func_80196554): a model bolt that rides an
+/* Twist model controller (SceneE22_TwistModel): a model bolt that rides an
  * actor joint along its heading, sheds twisting trail particles, then
  * draws as a spinning model with glows and flares. */
 typedef struct SceneE22TwistModel {
@@ -125,7 +125,7 @@ extern void FieldFx_DrawPulledSprite(GteShortVector *position, int scale_x, int 
                           int texture, int clut, int page, int intensity, int arg7,
                           int size);
 
-/* Sweep bolt controller (func_8019753C): the twist model's sibling that
+/* Sweep bolt controller (SceneE22_SweepBolt): the twist model's sibling that
  * sweeps the bolt out from its origin, sheds twist beam particles, then
  * hovers with a ring and halo. */
 typedef struct SceneE22SweepBolt {
