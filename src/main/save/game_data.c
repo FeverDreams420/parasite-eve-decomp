@@ -398,10 +398,10 @@ unsigned char *Save_GetMetadataCursor(void) {
 char *Save_GetActiveMetadataBuffer(void) {
     char *buffer;
 
-    buffer = (char *)g_SaveRuntimeState.windows.metadata[0].text;
+    buffer = g_SaveRuntimeState.windows.metadata[0].text;
 
     if (g_SaveMetadataWindowIndex != 0) {
-        buffer = (char *)g_SaveRuntimeState.windows.metadata[1].text;
+        buffer = g_SaveRuntimeState.windows.metadata[1].text;
     }
 
     return buffer;
@@ -1056,7 +1056,7 @@ void Inv_InitMaxLevelInventory(s32 arg0) {
         g_InvSlotLimit = Inv_GetAyaSlotLimit();
     }
     g_AyaSaveLevel[0] = 0x62;
-    expTable = (s32 *)Aya_GetLevelExpTable();
+    expTable = Aya_GetLevelExpTable();
     g_AyaSaveTotalExp[0] = expTable[D_800C0E00.level];
     levelStats = Aya_LookupLevelStats(0x62);
     unlockedSpells = 0xFFFFF;
