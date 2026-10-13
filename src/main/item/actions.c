@@ -80,7 +80,7 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
     int i;
     register int result asm("$19");
     int mask;
-    register int modifier asm("$4");
+    int modifier;
     int existing;
     int different_slot;
 
@@ -151,7 +151,8 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
         }
 
         if (i >= item_b->tailCount) {
-            modifier = item_a->tailData[mod_index] & 0xE0;
+            modifier = item_a->tailData[mod_index];
+            modifier &= 0xE0;
             if (modifier == 0) {
                 return 3;
             }
