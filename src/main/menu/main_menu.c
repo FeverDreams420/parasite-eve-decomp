@@ -161,14 +161,14 @@ void Menu_OpenBlendColorScreen(MenuWidgetNode *arg0) {
 
     parent = MenuWidget_CreateSimpleNode(0x2E, arg0, 0, 0);
     panel = MenuWidget_CreateNode(0x2E, parent, parent);
-    parent->draw = (void (*)())Menu_DrawBlendColorArrows;
-    parent->update = (void (*)())Menu_StepColorSelect;
+    parent->draw = Menu_DrawBlendColorArrows;
+    parent->update = Menu_StepColorSelect;
     parent->appearance.gradientPoints = g_MenuBlendColorPanelPoints;
     parent->disabled = 1;
-    panel->draw = (void (*)())Menu_DrawBlendColorChannelList;
+    panel->draw = Menu_DrawBlendColorChannelList;
     panel->flags = 1;
     options = MenuWidget_CreateNode(0x31, parent, parent);
-    options->draw = (void (*)())Menu_DrawBlendColorOptionList;
+    options->draw = Menu_DrawBlendColorOptionList;
     panel->linkedNext = options;
     options->linkedPrevious = panel;
     MenuWidget_SetCurrentNode(panel->cursor_x < 0 ? options : panel);
@@ -304,8 +304,8 @@ void Menu_OpenScreenAdjustView(MenuWidgetNode *parent) {
     MenuWidgetNode *node;
 
     node = MenuWidget_CreateSimpleNode(0x38, parent, 0, 1);
-    node->draw = (void (*)())Menu_DrawScreenAdjustPanel;
-    node->update = (void (*)())Menu_ScreenAdjustInputHandler;
+    node->draw = Menu_DrawScreenAdjustPanel;
+    node->update = Menu_ScreenAdjustInputHandler;
     MenuWidget_SetCurrentNode(node);
     g_MenuScreenBaseYBackup = Draw_GetBaseY();
 }
@@ -775,15 +775,15 @@ s32 Menu_OpenEquipSlotSwap(s32 arg0) {
     temp_s2 = MenuWidget_FindByModeAndSelectedBase(1, 1) != NULL;
     if (temp_s2 == 0) {
         MenuInput_InitQueue();
-        MenuWidget_CreateSimpleNode(0x1B, 0, 0, 0)->draw = (void (*)())Menu_DrawAmmoTypeHeader;
+        MenuWidget_CreateSimpleNode(0x1B, 0, 0, 0)->draw = Menu_DrawAmmoTypeHeader;
         temp_v0 = MenuWidget_CreateSimpleNode(1, 0, 0, 0);
         temp_s1 = MenuWidget_CreateNode(1, temp_v0, temp_v0);
         temp_a0 = temp_s1;
-        temp_v0->update = (void (*)())Menu_InventoryInputHandler;
-        temp_s1->draw = (void (*)())Menu_DrawSelectableEquipSlotList;
+        temp_v0->update = Menu_InventoryInputHandler;
+        temp_s1->draw = Menu_DrawSelectableEquipSlotList;
         MenuWidget_SetCurrentNode(temp_a0);
         temp_s1->itemAction = (MenuWidgetItemAction)Inv_SwapSlots;
-        temp_s1->refreshItems = (void (*)(void))Menu_RebuildSelectableMask;
+        temp_s1->refreshItems = Menu_RebuildSelectableMask;
         Inv_RebuildSelectableMask();
         g_InvSwapTargetIndex = -1;
         g_InvSelectedItemIndex = -1;
