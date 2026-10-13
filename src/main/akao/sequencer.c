@@ -111,9 +111,9 @@ void Spu_StepReverbLoad(void)
         do {
             if (pending & count) {
                 if (track->panpot_duration) {
-                    oldPanTarget = (s16)track->pan_target;
+                    oldPanTarget = track->pan_target;
                     track->panpot_duration--;
-                    value = oldPanTarget + (s16)track->pan_delta;
+                    value = oldPanTarget + track->pan_delta;
                     if ((value & 0xFF00) != (oldPanTarget & 0xFF00))
                         track->update_flags |= 3;
                     track->pan_target = value;
@@ -121,7 +121,7 @@ void Spu_StepReverbLoad(void)
                 if (track->panpot_slide_duration) {
                     oldPanpot = track->panpot;
                     track->panpot_slide_duration--;
-                    value = oldPanpot + (s16)track->panpot_delta;
+                    value = oldPanpot + track->panpot_delta;
                     if ((value & 0xFF00) != (oldPanpot & 0xFF00))
                         track->update_flags |= 3;
                     track->panpot = value;
@@ -1281,13 +1281,13 @@ void Akao_PlayNote(AkaoTrack *track, unsigned int mask) {
             if ((g_AkaoCurTrack->allocated_voice_mask & mask & g_SpuActiveVoiceMask) == 0) {
                 track->update_flags |= AKAO_VOICE_PARAM_PITCH;
                 track->pitch_base =
-                    (unsigned int)(track->pitch_base * instrument->pitch[0]) /
+                    (track->pitch_base * instrument->pitch[0]) /
                     (unsigned int)g_AkaoPitchPeriodTable[old_note * 16];
             }
         } else {
             track->update_flags |= AKAO_VOICE_PARAM_PITCH;
             track->pitch_base =
-                (unsigned int)(track->pitch_base * instrument->pitch[0]) /
+                (track->pitch_base * instrument->pitch[0]) /
                 (unsigned int)g_AkaoPitchPeriodTable[old_note * 16];
         }
     }
@@ -1322,13 +1322,13 @@ void Akao_TieNote(AkaoTrack *track, unsigned int mask) {
             if ((g_AkaoCurTrack->allocated_voice_mask & mask & g_SpuActiveVoiceMask) == 0) {
                 track->update_flags |= AKAO_VOICE_PARAM_PITCH;
                 track->pitch_base =
-                    (unsigned int)(track->pitch_base * instrument->pitch[0]) /
+                    (track->pitch_base * instrument->pitch[0]) /
                     (unsigned int)g_AkaoPitchPeriodTable[old_note * 16];
             }
         } else {
             track->update_flags |= AKAO_VOICE_PARAM_PITCH;
             track->pitch_base =
-                (unsigned int)(track->pitch_base * instrument->pitch[0]) /
+                (track->pitch_base * instrument->pitch[0]) /
                 (unsigned int)g_AkaoPitchPeriodTable[old_note * 16];
         }
     }
@@ -1506,9 +1506,9 @@ void SeqOp_SetPitchLFO(void *ptr) {
     /* Each arm finishes the depth; the identical multiply tails merge at the join. */
     if (use_base_scale == 0) {
         scaled = ((scale << 4) - scale) >> 8;
-        lfo_depth = (unsigned int)(depth * scaled) >> 7;
+        lfo_depth = (depth * scaled) >> 7;
     } else {
-        lfo_depth = (unsigned int)(depth * scale) >> 7;
+        lfo_depth = (depth * scale) >> 7;
     }
     track->pitch_lfo_depth = lfo_depth;
     table = g_AkaoSoundEntryTable[track->pitch_lfo_selector];
@@ -1717,7 +1717,7 @@ void SeqOp_ClearTrack34Mask(AkaoTrack *track, u32 mask) {
 
 void SeqOp_SetMask(AkaoTrack *track, u32 mask) {
     if (track->parent_track_id == 0) {
-        ((AkaoSequencerBank *)g_AkaoCurTrack)->adsr_dirty_mask |= mask;
+        (g_AkaoCurTrack)->adsr_dirty_mask |= mask;
     } else if ((track->flags & 0x10000) != 0) {
         g_AkaoTrack3CMask |= mask;
     }
@@ -1727,7 +1727,7 @@ void SeqOp_SetMask(AkaoTrack *track, u32 mask) {
 
 void SeqOp_ClearTrack3CMask(AkaoTrack *track, u32 mask) {
     if (track->parent_track_id == 0) {
-        ((AkaoSequencerBank *)g_AkaoCurTrack)->adsr_dirty_mask &= ~mask;
+        (g_AkaoCurTrack)->adsr_dirty_mask &= ~mask;
     } else {
         g_AkaoTrack3CMask &= ~mask;
     }
@@ -2280,7 +2280,7 @@ void SeqOp_NoteOnWithPitchSlide(AkaoTrack *track, u32 voice_mask) {
     cursor = track->pc;
     pitch_base = track->pitch_slide_current & 0xFF00;
     track->pc = cursor + 1;
-    delta = ((int)(cursor[0] << 24) >> 16) - pitch_base;
+    delta = ((cursor[0] << 24) >> 16) - pitch_base;
     track->pitch_slide_current = pitch_base;
     track->pitch_slide_delta = delta / track->pitch_slide_duration;
 
