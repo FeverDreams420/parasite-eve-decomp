@@ -13,7 +13,7 @@
  * Retail range 0x80197BA0..0x8019959C; source boundary is provisional. */
 void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
     register u32 *gteScreen1 asm("$3");
-    register u32 *gteScreen0 asm("$4");
+    register u32 *gteScreen0;
     register FxCommonRenderScratchpad *scratchpad asm("$16");
     FxCommonVector *quadMidpoint13;
     FxCommonBuffer *buffer;
