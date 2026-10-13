@@ -12,7 +12,7 @@
 /* Declarations used only by the scene e20 flare particle callback. */
 extern RenderColor D_8018EFF4;
 extern RenderColor D_8018EFF8;
-extern u8 D_80190804[];
+extern u8 g_SceneE20FlareColorTrack[];
 /* Texture page indices: [0] is the shared effect page, [8] this scene's. */
 
 #endif

@@ -37,14 +37,14 @@ typedef struct SceneE20Pool { SceneE20Node *node; u8 reserved04[0x264]; SceneE20
 typedef struct SceneE20Channel { int reserved[2]; SceneE20Pool *pool; } SceneE20Channel;
 extern SceneE20Color D_8018EFFC, D_8018F000, D_8018F004, D_8018F008;
 extern struct BattleEntity *D_8009D254;
-extern void *D_8019085C;
+extern void *g_SceneE20HoverOrbModel;
 int SceneE20_HoverOrbController(int mode, SceneE20TrailEffect *effect, SceneEffectSlot *command);
-extern SceneEffectSlot D_80190860[];
+extern SceneEffectSlot g_SceneE20EffectSlots[];
 int rand(void);
 void FieldFx_DrawGlowLine(void *from, void *to, void *color0, void *color1, int scale0,
                   int scale1, int mode);
 
-extern s32 D_80190800;
+extern s32 g_SceneE20HoverOrbHitCooldown;
 
 PE1_STATIC_ASSERT(sizeof(SceneEffectSlot) == 0x18, scene_e20_slot_size);
 PE1_STATIC_ASSERT(sizeof(SceneE20TrailEffect) == 0xC4, scene_e20_trail_size);

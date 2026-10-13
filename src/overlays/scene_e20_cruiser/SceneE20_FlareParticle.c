@@ -76,7 +76,7 @@ int SceneE20_FlareParticle(int mode, SceneE20Particle *p)
             rotation.flags = 1;
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
-            FieldFx_SampleColorTrack(D_80190804, &color, p->timer);
+            FieldFx_SampleColorTrack(g_SceneE20FlareColorTrack, &color, p->timer);
             kind = g_FieldFxSpriteParams.palette;
             palette = g_FieldFxPaletteTable[kind] + ((kind == 4 && g_FieldFxAltPaletteFlag != 0) ? 8 : 4);
             FieldFx_DrawShapeQuads(&p->position, &rotation, scale * 3, scale * 3, 4,
@@ -86,7 +86,7 @@ int SceneE20_FlareParticle(int mode, SceneE20Particle *p)
                 int top = 0x40;
                 int streakKind;
                 glow = rcos(angle) / 32;
-                FieldFx_SampleColorTrack(D_80190804, &color, p->timer << 1);
+                FieldFx_SampleColorTrack(g_SceneE20FlareColorTrack, &color, p->timer << 1);
                 streakKind = g_FieldFxSpriteParams.palette;
                 palette = g_FieldFxPaletteTable[streakKind] + ((streakKind == 4 && g_FieldFxAltPaletteFlag != 0) ? 7 : 3);
                 FieldFx_DrawRotatedQuad(&p->position, &rotation, 500, 0x168, width, top, 0x1F, 0x1F,
@@ -139,7 +139,7 @@ int SceneE20_FlareParticle(int mode, SceneE20Particle *p)
         case 2:
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
-            FieldFx_SampleColorTrack(D_80190804, &color, (p->timer << 4) / 20);
+            FieldFx_SampleColorTrack(g_SceneE20FlareColorTrack, &color, (p->timer << 4) / 20);
             FieldFx_DrawPointTile(&p->position, (unsigned char *)&color, 0x80, 1);
             break;
         }

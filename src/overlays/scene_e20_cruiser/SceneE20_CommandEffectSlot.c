@@ -2,7 +2,7 @@
 #include "pe1/scene_e20_hover_orb.h"
 
 SceneEffectSlot *SceneE20_CommandEffectSlot(unsigned int command, int index, int value, int z) {
-    SceneEffectSlot *slot = &D_80190860[index];
+    SceneEffectSlot *slot = &g_SceneE20EffectSlots[index];
     int random;
 
     slot->pending = 1;

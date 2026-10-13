@@ -103,7 +103,7 @@ initialize:
             effect->position.z = (s16) (u16) effect->target.z;
 
             temp_v0 = Asset_FindTable08ByU32Key(D_800B0E64[0], assetKey | 0x3704U);
-            D_8019085C = temp_v0;
+            g_SceneE20HoverOrbModel = temp_v0;
             FieldFx_ModelScrollUv(temp_v0, 0, 0);
             FieldFx_DrawHistoryTrail(&effect->position, &effect->position, 0x3EE, (unsigned char *)initColor0, (unsigned char *)initColor1, 0x80, (struct FieldTrailPair *)effect->history, initialMode);
             return FieldFx_InitCallbackList((char *)ANIM_POOL_AS(SceneE20Channel)->pool, 0x14, 0x20,
@@ -239,7 +239,7 @@ update: {
         break;
     case 5:                                         /* switch 1 */
         effect->timer = (u16) effect->timer + 1;
-        if ((FieldFx_IsPlayerWithinRadius(&effect->endpoint, 0x42) != 0) && (D_80190800 == 0)) {
+        if ((FieldFx_IsPlayerWithinRadius(&effect->endpoint, 0x42) != 0) && (g_SceneE20HoverOrbHitCooldown == 0)) {
             temp_v1_3 = ANIM_OWNER_AS(SceneE20Channel)->pool->node;
             *(u8 *)((u8 *)temp_v1_3 + ((temp_v1_3->flags >> 17) & 0x70) + 0x1C) = 2;
             if (FX_TASK_AS(SceneE20Event)->active != 0) {
@@ -252,7 +252,7 @@ update: {
                     temp_a0_2->flags |= 0x80000000;
                 }
             }
-            D_80190800 = 0x74;
+            g_SceneE20HoverOrbHitCooldown = 0x74;
         }
         if (effect->timer >= 8) {
             effect->phase = 0;
@@ -290,11 +290,11 @@ update: {
             effect->phase = 6;
             effect->timer = 0;
         }
-        if (D_80190800 > 0) {
-            D_80190800 -= 1;
+        if (g_SceneE20HoverOrbHitCooldown > 0) {
+            g_SceneE20HoverOrbHitCooldown -= 1;
             return 0;
         }
-        D_80190800 = 0;
+        g_SceneE20HoverOrbHitCooldown = 0;
         return 0;
     }
 render: {
@@ -386,10 +386,10 @@ block_63:
             scale[2] = modelScale;
             matrix.t[2] = translationZ;
             ScaleMatrix(&matrix, &scale[0]);
-            FieldFx_ModelSaveColors(D_8019085C);
-            FieldFx_ModelScaleColors(D_8019085C, (u16) effect->alpha);
-            FieldFx_ModelDraw(D_8019085C, (GteMatrix *)&matrix);
-            FieldFx_ModelRestoreColors(D_8019085C);
+            FieldFx_ModelSaveColors(g_SceneE20HoverOrbModel);
+            FieldFx_ModelScaleColors(g_SceneE20HoverOrbModel, (u16) effect->alpha);
+            FieldFx_ModelDraw(g_SceneE20HoverOrbModel, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(g_SceneE20HoverOrbModel);
             FieldFx_DrawHistoryTrail(&effect->trailHead, &effect->trailTail, 6, (unsigned char *)&beamColor, (unsigned char *)&edgeColor, (s32) effect->alpha, (struct FieldTrailPair *)effect->history, 1);
             g_FieldFxSpriteParams.depth = 0x33;
             var_s0 = effect->alpha;
