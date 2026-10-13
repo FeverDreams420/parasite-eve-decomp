@@ -58,7 +58,6 @@ extern BattleAttackBits g_BattleMenuAttackBits;
 extern BattleTurnBits g_BattleMenuTurnBits;
 extern s8 D_8009D2B0;
 extern struct FieldActor *g_FieldActorListHead; /* actor list head */
-extern void *D_8009D1F8;
 extern u8 g_EscapeFailedTexts[];
 extern u8 g_EscapeBlockedTexts[];
 extern const EnemyCombatant g_EnemyCombatantInitial;

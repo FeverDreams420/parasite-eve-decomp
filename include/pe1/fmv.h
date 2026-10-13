@@ -17,11 +17,11 @@
  *
  * == STATE-MACHINE BRACKETING (verified live) ==
  *   FMV is dispatched as its own SCENE through the boot/main.c dispatcher on
- *   D_8009D280 (0x8009D280, the scene-dispatch token; see boot/main.c). For the
+ *   g_SceneDispatchToken (0x8009D280, the scene-dispatch token; see boot/main.c). For the
  *   opening movie:
- *       before FMV : D_8009D280 = 0xA80001C8   flags = 0x40000000
- *       FMV playing: D_8009D280 = 0xA8067148   flags = 0x4000A240
- *       after  FMV : D_8009D280 = 0xA8000248   flags = 0x40002000
+ *       before FMV : g_SceneDispatchToken = 0xA80001C8   flags = 0x40000000
+ *       FMV playing: g_SceneDispatchToken = 0xA8067148   flags = 0x4000A240
+ *       after  FMV : g_SceneDispatchToken = 0xA8000248   flags = 0x40002000
  *   (token values are per-scene; the point is FMV gets a distinct token and
  *    returns to a gameplay token on completion.)
  *

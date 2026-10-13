@@ -101,9 +101,9 @@ int Battle_RollEscapeChance(void) {
         int attempts;
         D_8009D1CE = 1;
         if (result == -1)
-            D_8009D1F8 = g_EscapeBlockedTexts + Save_GetMetadataWindowIndex() * 14;
+            g_CurItemEffectData = g_EscapeBlockedTexts + Save_GetMetadataWindowIndex() * 14;
         else
-            D_8009D1F8 = g_EscapeFailedTexts + Save_GetMetadataWindowIndex() * 17;
+            g_CurItemEffectData = g_EscapeFailedTexts + Save_GetMetadataWindowIndex() * 17;
         player = g_ActiveActor;
         attempts = ((unsigned int)player->stateFlags >> 25) & 7;
         if (attempts < 5)

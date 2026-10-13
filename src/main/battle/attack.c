@@ -335,12 +335,12 @@ void Battle_ResolveHitOnTimer(void)
                         {
                             EnemyCombatant *enemy = selectedSlot->actor->core;
                             D_8009D1CE = 1;
-                            D_8009D1F8 = Inv_GetItemEffectData(enemy->stealItemId, 2);
+                            g_CurItemEffectData = Inv_GetItemEffectData(enemy->stealItemId, 2);
                         }
                         else
                         {
                             D_8009D1CE = 1;
-                            D_8009D1F8 = Inv_GetItemEffectData(((EnemyCombatant *)selectedSlot->actor->core)->stealItemId, 1);
+                            g_CurItemEffectData = Inv_GetItemEffectData(((EnemyCombatant *)selectedSlot->actor->core)->stealItemId, 1);
                             ((EnemyCombatant *)selectedSlot->actor->core)->stealItemId = 0;
                         }
                     }

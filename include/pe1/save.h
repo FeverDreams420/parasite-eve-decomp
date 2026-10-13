@@ -45,7 +45,7 @@ void Save_LoadMetadataWindowText(void);
 extern unsigned char D_8009D1CE;
 extern unsigned char g_MenuActiveMode;
 extern unsigned char g_SaveOverlayTimer;
-extern void *D_8009D1F8;
+extern u8 *g_CurItemEffectData;
 void Menu_SaveOverlayDraw(void);
 
 extern unsigned char g_CursorRenderDataBlock[];

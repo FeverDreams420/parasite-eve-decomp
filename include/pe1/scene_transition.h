@@ -6,7 +6,7 @@
  * snapshot-diff across transitions plus code; confirmed live.
  *
  * CURRENT ROOM ID:
- *   D_8009D280  current room id (32-bit, packed) -- the argument to
+ *   g_SceneDispatchToken  current room id (32-bit, packed) -- the argument to
  *               Scene_LoadRoom. Reverts per room (live: room A=0xA8000148,
  *               room B=0xA80001C8, back to A=0xA8000148). The high half
  *               (0xA8000000) appears to be area/disc flags; the low half is the
@@ -16,7 +16,7 @@
  *         that did not revert on return; ignore it for room identity).
  *
  * LOAD PATH:
- *   Draw_InitPipeline()           -> Scene_LoadRoom(D_8009D280)
+ *   Draw_InitPipeline()           -> Scene_LoadRoom(g_SceneDispatchToken)
  *   Scene_LoadRoom(s32 roomId):
  *     Text_EncodeBase32(buf, roomId)  -> 6-char room name (table g_Base32CharTable)
  *     Text_ParseMapNumber(buf)        -> 3-digit map number from name[2..4]
@@ -42,7 +42,7 @@
  *   s32  Scene_LoadSceneData(...);            // 0x8006A9E4
  *   int  Text_EncodeBase32(char *out, u32 v);  // room id -> 6-char name
  *   int  Text_ParseMapNumber(char *name);      // 0x8006E454; name -> map number
- *   void Draw_InitPipeline(void);              // calls Scene_LoadRoom(D_8009D280)
+ *   void Draw_InitPipeline(void);              // calls Scene_LoadRoom(g_SceneDispatchToken)
  *   int  Render_BeginSceneLoad(void);          // updates render transition flags
  *   g_PeImageBaseLba   base LBA of PE.IMG (room data source)
  *   g_MapIdTable = 0x800917E4

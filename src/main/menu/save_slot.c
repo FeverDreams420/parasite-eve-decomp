@@ -12,7 +12,7 @@
 unsigned char g_MenuActiveMode;
 unsigned char g_SaveOverlayTimer;
 u8 D_8009D1CE;
-void *D_8009D1F8;
+u8 *g_CurItemEffectData;
 
 void Save_DrawSlotMetadata(void)
 {
@@ -107,7 +107,7 @@ void Menu_SaveOverlayDraw(void)
         value = D_8009D1CE;
         g_TextboxEntries[0].state = 2;
         g_SaveOverlayTimer = 75;
-        g_TextboxEntries[0].message = D_8009D1F8;
+        g_TextboxEntries[0].message = g_CurItemEffectData;
         value++;
         D_8009D1CE = value;
         g_TextboxEntries[0].control.flags |= 0x2000000;

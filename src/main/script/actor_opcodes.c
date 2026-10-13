@@ -925,30 +925,30 @@ int Scene_SelectMapById(int **args) {
         state = Menu_GetEquipSlotStateOrIndex();
         if (state < 2) {
             Menu_ResetEquipSlotState();
-            D_8009D280 = Text_ParseBase32Id(g_MapNameOverrideA);
+            g_SceneDispatchToken = Text_ParseBase32Id(g_MapNameOverrideA);
         } else {
             Menu_ResetEquipSlotState();
-            D_8009D280 = Text_ParseBase32Id(g_MapNameOverrideB);
+            g_SceneDispatchToken = Text_ParseBase32Id(g_MapNameOverrideB);
         }
         return 1;
     }
 
     if ((u8)(raw_selection - 6) < 2 || selection == 8) {
         if ((s16)Draw_PackPrimColor(0, 100) < 60) {
-            D_8009D280 = Text_ParseBase32Id(g_MapIdTable);
+            g_SceneDispatchToken = Text_ParseBase32Id(g_MapIdTable);
         } else {
-            D_8009D280 = Text_ParseBase32Id(g_MapIdTable + ((s16)Draw_PackPrimColor(1, 4) << 3));
+            g_SceneDispatchToken = Text_ParseBase32Id(g_MapIdTable + ((s16)Draw_PackPrimColor(1, 4) << 3));
         }
     } else {
         state = (u8)(Menu_GetEquipSlotStateOrIndex() - 1);
         state /= 10;
         select_index = g_MapSelectIndexTable + state;
-        D_8009D280 = Text_ParseBase32Id(
+        g_SceneDispatchToken = Text_ParseBase32Id(
             g_MapFilenameTable[select_index->filename_index[selection]].name);
     }
 
     raw_selection = 1;
-    if (g_SceneDispatchCur == D_8009D280) {
+    if (g_SceneDispatchCur == g_SceneDispatchToken) {
         game_state = &g_GameState.flags;
         state_flags = g_GameStateFlags;
         map_flags = game_state[0];

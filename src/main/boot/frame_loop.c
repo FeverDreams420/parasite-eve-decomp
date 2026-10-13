@@ -23,7 +23,7 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-u32 D_8009D280;
+int g_SceneDispatchToken;
 int g_SceneDispatchCur;
 unsigned int g_GameStateFlags;
 u32 g_GlobalFrameCounter[1];
@@ -87,7 +87,7 @@ void Boot_RunFrame(void)
     RenderTintTargetView *fade;
 
     Draw_InitPipeline();
-    if (g_SceneDispatchCur == D_8009D280) {
+    if (g_SceneDispatchCur == g_SceneDispatchToken) {
         scene_flags = &g_GameState.bank_state_12;
         state = &g_GameState;
         fade = (RenderTintTargetView *)&g_ScreenTint.targetR;
@@ -162,7 +162,7 @@ void Boot_RunFrame(void)
             }
 loop_end_check:
             ;
-        } while (g_SceneDispatchCur == D_8009D280);
+        } while (g_SceneDispatchCur == g_SceneDispatchToken);
     }
 
     if (g_GameStateFlagsWord & 0x200) {

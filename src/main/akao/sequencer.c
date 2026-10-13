@@ -208,12 +208,12 @@ void Akao_Tick(void)
                         if (++D_8009D2C8->timing.beat == D_8009D2C8->timing.beats_per_measure) {
                             D_8009D2C8->timing.beat = 0;
                             D_8009D2C8->timing.measure++;
-                            if (D_8009D22C)
-                                D_8009D22C--;
+                            if (g_AkaoSeqLoopCounter)
+                                g_AkaoSeqLoopCounter--;
                         }
                     }
                 }
-            } while (D_8009D22C);
+            } while (g_AkaoSeqLoopCounter);
         }
     }
 
@@ -263,8 +263,8 @@ void Akao_Tick(void)
                     if (++D_8009D2C8->timing.beat == D_8009D2C8->timing.beats_per_measure) {
                         D_8009D2C8->timing.beat = 0;
                         D_8009D2C8->timing.measure++;
-                        if (D_8009D22C)
-                            D_8009D22C--;
+                        if (g_AkaoSeqLoopCounter)
+                            g_AkaoSeqLoopCounter--;
                     }
                 }
             }
