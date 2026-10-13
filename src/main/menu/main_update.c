@@ -105,7 +105,7 @@ void Menu_MainUpdate(s32 arg0) {
             if ((temp_v1 == 0x40) || (temp_v1 == 0x80)) {
                 state0->hpAlive = temp_a1 - ((state0->scaledOffense * 2) / 5);
             } else if (temp_a2 & 0x100) {
-                state0->hpAlive = temp_a1 + ((u16) state0->scaledOffense >> 1);
+                state0->hpAlive = temp_a1 + (state0->scaledOffense >> 1);
             }
             temp_a1_2 = g_ActiveActor;
             if ((temp_a1_2->exp_or_acc < temp_a1_2->maxAtk) && !(*temp_s2 & 0x2600)) {
@@ -135,7 +135,7 @@ void Menu_MainUpdate(s32 arg0) {
                 !((g_ActiveActor->attributes->effectFlags & 0x4000) && (g_ActiveActor->stateFlags & 0x4000) &&
                   (Pad_GetMenuPressedBitOrDisabled() << 0x18) > 0)) {
                 D_8009D2E8 &= ~1;
-            } else if ((u8) D_8009D254->actionMode >= 0xEU) {
+            } else if (D_8009D254->actionMode >= 0xEU) {
                 D_8009D2E8 &= ~1;
             } else {
                 D_8009D2E8 |= 1;
@@ -546,7 +546,7 @@ void Menu_MainUpdate(s32 arg0) {
                                 temp_v1_9 = *temp_s2;
                                 if (!(temp_v1_9 & 0x01000000) && (temp_v1_5->hpAlive > 0)) {
                                     if (!(temp_v1_9 & 0x200)) {
-                                        g_ActiveActor->curHP = (s16) ((u16) g_ActiveActor->curHP - temp_v1_5->contactDamage);
+                                        g_ActiveActor->curHP = (s16) (g_ActiveActor->curHP - temp_v1_5->contactDamage);
                                     }
                                     {
                                     s32 s2_flags2;
@@ -595,7 +595,7 @@ void Menu_MainUpdate(s32 arg0) {
                                     D_8009D254->entityFlags = D_8009D254->entityFlags & clear_flags;
                                     g_ActiveActor->knockbackAngle = Entity_ApplyHitAndSetAnim(var_s0);
                                     }
-                                    g_ActiveActor->knockbackDistance = (u8) temp_v1_5->contactKnockback;
+                                    g_ActiveActor->knockbackDistance = temp_v1_5->contactKnockback;
                                     g_ActiveActor->knockbackFrames = 6;
                                 }
                             }
@@ -639,7 +639,7 @@ void Menu_MainUpdate(s32 arg0) {
                     }
                     g_ActiveActor->stateFlags = g_ActiveActor->stateFlags & 0xFFFF7FFF;
                 }
-                g_ActiveActor->hpMirror = (u16) g_ActiveActor->curHP;
+                g_ActiveActor->hpMirror = g_ActiveActor->curHP;
             }
             }
         }
@@ -688,7 +688,7 @@ void Menu_MainUpdate(s32 arg0) {
         state0->panelB_y = (s16) (var_v0.value - 8);
         post_state->panelB_flag = 1; }
         }
-        g_ActiveActor->hpMirror = (u16) g_ActiveActor->curHP;
+        g_ActiveActor->hpMirror = g_ActiveActor->curHP;
     }
     }
     temp_a1_2 = g_ActiveActor;
@@ -702,7 +702,7 @@ void Menu_MainUpdate(s32 arg0) {
         g_ActiveActor->panelAux_timer = (u8) (g_ActiveActor->panelAux_timer - 1);
     }
     temp_a0_4 = g_ActiveActor->exp_or_acc;
-    g_ActiveActor->hpMirror = (u16) g_ActiveActor->curHP;
+    g_ActiveActor->hpMirror = g_ActiveActor->curHP;
     if (temp_a0_4 <= 0) {
         *temp_s2 |= 0x2000;
         if (Pad_GetMenuPressedBitOrDisabled() != g_BattleActionIndex) {
