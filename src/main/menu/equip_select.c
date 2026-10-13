@@ -40,7 +40,7 @@ void Menu_CreateAmmoSpendPanel(MenuWidgetNode *parent) {
     ItemDataRecord *item;
 
     node = MenuWidget_CreateSimpleNode(0x3E, parent, 0, 1);
-    node->update = (void (*)())Menu_AmmoSpendInputHandler;
+    node->update = Menu_AmmoSpendInputHandler;
     node->draw = Menu_DrawAmmoSpendPanel;
     node->flags = 1;
     MenuWidget_SetCurrentNode(node);
@@ -130,7 +130,7 @@ void Menu_CreateEquipItemSelectionView(MenuWidgetNode *parent)
     root = MenuWidget_CreateSimpleNode(5, parent, 0, 0);
     node = MenuWidget_CreateNode(5, root, root);
     root->draw = Menu_StepEquipSlotSelect;
-    root->update = (void (*)())Menu_StepSkillScreen;
+    root->update = Menu_StepSkillScreen;
     node->draw = Menu_DrawSoundTestList;
     if (g_MenuLayoutLocked != 0) {
         MenuWidget_ClearColumnLayout(node);
@@ -142,7 +142,7 @@ void Menu_CreateEquipItemSelectionView(MenuWidgetNode *parent)
     }
     root->disabled = 1;
     node = MenuWidget_CreateNode(0x1B, root, root);
-    node->draw = (void (*)())Menu_DrawItemListInvPanel;
+    node->draw = Menu_DrawItemListInvPanel;
     MenuWidget_ClearColumnLayout(node);
 }
 
@@ -387,7 +387,7 @@ void Menu_CreateInventoryListView(MenuWidgetNode *parent) {
 
     root = MenuWidget_CreateSimpleNode(6, parent, 0, 0);
     node = MenuWidget_CreateNode(6, root, root);
-    root->update = (void (*)())Menu_InventoryPageInputHandler;
+    root->update = Menu_InventoryPageInputHandler;
     root->disabled = 1;
     node->draw = Menu_DrawUsableItemActionList;
     node->layout_flags |= 0x80;
