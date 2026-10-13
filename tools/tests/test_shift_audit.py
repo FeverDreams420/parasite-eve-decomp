@@ -18,6 +18,37 @@ class ParseAssignmentsTests(unittest.TestCase):
         ])
 
 
+class OwnerBlockTests(unittest.TestCase):
+    TEXT = (
+        "/* Header without a kind. */\n"
+        "\n"
+        "/* hardware: SPU registers (akao). More text\n"
+        " * on a second line. */\n"
+        "D_1F801D88 = 0x1F801D88;\n"
+        "D_1F801D8A = 0x1F801D8A;\n"
+        "\n"
+        "D_80012018 = 0x80012018;\n"
+        "/* alias, wave 2c: record views. */\n"
+        "g_A = g_B;\n"
+        "/* Not a kind: x. */\n"
+        "g_C = g_D;\n"
+    )
+
+    def test_block_owners(self):
+        owners = sa.block_owners(self.TEXT)
+        self.assertEqual(owners["D_1F801D88"], "hardware: SPU registers (akao).")
+        self.assertEqual(owners["D_1F801D8A"], owners["D_1F801D88"])
+        self.assertNotIn("D_80012018", owners)  # after a blank line
+        self.assertEqual(owners["g_A"], "alias, wave 2c: record views.")
+        self.assertNotIn("g_C", owners)
+
+    def test_owner_kind_must_match(self):
+        self.assertTrue(sa.owner_matches("hardware: x", "hardware"))
+        self.assertTrue(sa.owner_matches("alias, wave 3b: x", "symbolic_alias"))
+        self.assertFalse(sa.owner_matches("alias: x", "data_asm_blob"))
+        self.assertFalse(sa.owner_matches("kernel: x", "unreferenced"))
+
+
 class RegionTests(unittest.TestCase):
     def test_regions(self):
         self.assertEqual(sa.address_region(0x1F800010), "scratchpad")

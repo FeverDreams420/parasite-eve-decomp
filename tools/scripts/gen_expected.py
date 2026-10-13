@@ -326,13 +326,16 @@ def harvest(module, config, table):
 def linker_symbols(table):
     """Names the linker binds to absolute retail addresses.
 
-    undefined_syms_manual.txt is the project's own registry of extern data,
-    and undefined_addr_aliases is generated from splat's auto files; both
-    carry retail addresses by construction, so both sides of a data reference
-    can call the address by the same name.
+    undefined_syms_manual.txt holds the absolute addresses main still links
+    (hardware, kernel), symbol_catalogue.main.txt the names nothing links
+    against any more (kept for the disassembly), and undefined_addr_aliases
+    is generated from splat's auto files; all carry retail addresses by
+    construction, so both sides of a data reference can call the address by
+    the same name.
     """
-    for name in ("undefined_syms_manual.txt", "undefined_addr_aliases.main.txt"):
-        path = ROOT / "linkers" / VERSION / name
+    for path in (ROOT / "linkers" / VERSION / "undefined_syms_manual.txt",
+                 ROOT / "configs" / VERSION / "symbol_catalogue.main.txt",
+                 ROOT / "linkers" / VERSION / "undefined_addr_aliases.main.txt"):
         if path.exists():
             table.add_file(path)
 

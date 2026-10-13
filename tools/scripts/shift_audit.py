@@ -4,9 +4,13 @@
 Read-only. It inspects the linker symbol files, the sources, the built main
 executable and the built overlays, and prints one table per area:
 
-  (a) absolute symbol assignments under linkers/USA, classified by what the
+  (a) absolute symbol assignments under linkers/USA (and the unlinked
+      catalogue configs/USA/symbol_catalogue.main.txt), classified by what the
       address is: hardware, kernel, an overlay load window, a function, data
       owned by a C unit, data inside an anonymous asm blob, or nothing built;
+      the hand-written linked file is also grouped by owner block (each block
+      comment starts with its kind, `hardware:`, `kernel:` or `alias`), and an
+      assignment outside a block of its own kind counts as `unowned`;
   (b) fixed addresses written in C: address-named alias declarations,
       integer-to-pointer casts of program addresses, literal program
       addresses and the pointer-integer casts counted by the crutch ratchet;
@@ -101,6 +105,40 @@ class Assignment:
     rhs: str
     path: str
     provide: bool = False  # PROVIDE() yields to an object definition
+
+
+BLOCK_COMMENT_RE = re.compile(r"/\*(.*?)\*/", re.S)
+OWNER_KINDS = ("hardware", "kernel", "alias")
+
+
+def block_owners(text: str) -> dict[str, str]:
+    """name -> the owner line of the comment block above its assignment.
+
+    A block is a comment followed by assignments up to the next blank line
+    or comment. The owner line is the comment's first sentence, which in the
+    linked symbol files starts with the kind (`hardware:`, `kernel:`,
+    `alias`); a name in no block, or in a block that does not start with one
+    of OWNER_KINDS, has no owner.
+    """
+    owners: dict[str, str] = {}
+    owner = ""
+    pos = 0
+    for m in BLOCK_COMMENT_RE.finditer(text + "/**/"):
+        chunk = text[pos:m.start()]
+        if pos:  # the rest of the line that closed the previous comment
+            chunk = chunk.split("\n", 1)[1] if "\n" in chunk else ""
+        for line in chunk.splitlines(keepends=True):
+            if not line.strip():
+                owner = ""
+                continue
+            a = ASSIGN_RE.match(line)
+            if a and owner:
+                owners[a.group(2)] = owner
+        body = " ".join(part.strip(" *") for part in m.group(1).splitlines()).strip()
+        first = re.split(r"(?<=\.)\s", body, maxsplit=1)[0] if body else ""
+        owner = first if first.split(":")[0].split(",")[0].strip() in OWNER_KINDS else ""
+        pos = m.end()
+    return owners
 
 
 def parse_assignments(text: str, path: str = "") -> list[Assignment]:
@@ -271,6 +309,31 @@ def classify_main_assignment(a: Assignment, defined: set[str], referenced: set[s
         # renamed to that symbol (or the object can export this alias).
         kind += "/named_elsewhere"
     return kind
+
+
+CATALOGUE = ROOT / "configs" / VERSION / "symbol_catalogue.main.txt"
+# (report name, path) of every symbol file of main; only the linked ones bind
+# addresses. The catalogue and splat's auto files are reference data.
+LINKER_SYMBOL_FILES = (
+    ("undefined_syms_manual.txt", LINKERS / "undefined_syms_manual.txt"),
+    ("undefined_addr_aliases.main.txt", LINKERS / "undefined_addr_aliases.main.txt"),
+    ("symbol_catalogue.main.txt", CATALOGUE),
+    ("undefined_syms_auto.main.txt", LINKERS / "undefined_syms_auto.main.txt"),
+    ("undefined_funcs_auto.main.txt", LINKERS / "undefined_funcs_auto.main.txt"),
+)
+LINKED_SYMBOL_FILES = ("undefined_syms_manual.txt", "undefined_addr_aliases.main.txt")
+# Hand-written linked files: every assignment must sit in a block whose
+# comment names its kind and owner (block_owners), and the kind must be one
+# that can stay: hardware, kernel/BIOS, or a relative alias.
+OWNED_SYMBOL_FILES = ("undefined_syms_manual.txt",)
+ALLOWED_KINDS = {"hardware": ("hardware", "scratchpad"), "kernel": ("kernel",),
+                 "alias": ("symbolic_alias",)}
+
+
+def owner_matches(owner: str, kind: str) -> bool:
+    """The block's declared kind agrees with what the address is."""
+    declared = owner.split(":")[0].split(",")[0].strip()
+    return kind in ALLOWED_KINDS.get(declared, ())
 
 
 # --------------------------------------------------------------------------
@@ -670,15 +733,17 @@ def collect(with_relocs: bool = True) -> dict:
 
     # (a)
     files = {}
-    for name in ("undefined_syms_manual.txt", "undefined_addr_aliases.main.txt",
-                 "undefined_syms_auto.main.txt", "undefined_funcs_auto.main.txt"):
-        path = LINKERS / name
+    for name, path in LINKER_SYMBOL_FILES:
         if not path.exists():
             continue
-        linked = name in ("undefined_syms_manual.txt", "undefined_addr_aliases.main.txt")
+        linked = name in LINKED_SYMBOL_FILES
         counts = Counter()
         examples = defaultdict(list)
-        assigns = parse_assignments(path.read_text(), name)
+        text = path.read_text()
+        assigns = parse_assignments(text, name)
+        owners = block_owners(text)
+        by_owner = Counter()
+        unowned = []
         shadowed = {a.name for a in assigns if a.value is not None and a.name in defined}
         own = object_addresses(shadowed, layout) if shadowed else {}
         for a in assigns:
@@ -688,8 +753,17 @@ def collect(with_relocs: bool = True) -> dict:
             counts[kind] += 1
             if len(examples[kind]) < 4:
                 examples[kind].append(f"{a.name}={a.rhs}")
+            if name in OWNED_SYMBOL_FILES:
+                owner = owners.get(a.name)
+                if owner and owner_matches(owner, kind):
+                    by_owner[(kind, owner)] += 1
+                else:
+                    unowned.append(f"{a.name}={a.rhs} ({kind})")
         files[name] = {"linked": linked, "total": sum(counts.values()),
                        "categories": dict(counts), "examples": dict(examples)}
+        if name in OWNED_SYMBOL_FILES:
+            files[name]["owners"] = [[kind, owner, n] for (kind, owner), n in sorted(by_owner.items())]
+            files[name]["unowned"] = unowned
     report["linker_assignments"] = files
 
     # (b)
@@ -755,6 +829,14 @@ def render(report: dict) -> str:
             out.append(f"  {name if first else '':38} {('yes' if info['linked'] else 'no') if first else '':6} {cat:22} {n:6}")
             first = False
         out.append(f"  {'':38} {'':6} {'TOTAL':22} {info['total']:6}")
+    for name, info in report["linker_assignments"].items():
+        if "owners" not in info:
+            continue
+        out.append(f"  {name} by owner block (kind: owner):")
+        for kind, owner, n in info["owners"]:
+            out.append(f"    {n:5}  {kind:16} {owner[:100]}")
+        out.append(f"    {len(info['unowned']):5}  without an owner block of a matching kind"
+                   + (": " + ", ".join(info["unowned"][:6]) if info["unowned"] else ""))
     out.append("")
     out.append("(b) fixed addresses in C")
     keys = SOURCE_KEYS
@@ -813,6 +895,8 @@ def flat_counts(report: dict) -> dict[str, int]:
             for cat, n in info["categories"].items():
                 if cat not in UNCOUNTED:
                     flat[f"{name}:{cat}"] = n
+            if "unowned" in info:
+                flat[f"{name}:unowned"] = len(info["unowned"])
     for scope, c in report["source"].items():
         for k, n in c.items():
             flat[f"src:{scope}:{k}"] = n
