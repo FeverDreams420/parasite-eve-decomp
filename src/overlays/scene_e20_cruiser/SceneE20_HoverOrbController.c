@@ -71,10 +71,10 @@ s32 SceneE20_HoverOrbController(s32 mode, SceneE20TrailEffect *effect, SceneEffe
     u16 temp_v0_3;
     void *temp_v0;
 
-    beamColor = D_8018EFFC;
-    edgeColor = D_8018F000;
-    flashA = D_8018F004;
-    flashB = D_8018F008;
+    beamColor = g_SceneE20OrbBeamColor;
+    edgeColor = g_SceneE20OrbEdgeColor;
+    flashA = g_SceneE20OrbFlashColorOdd;
+    flashB = g_SceneE20OrbFlashColorEven;
     initColor0 = &beamColor; initColor1 = &edgeColor;
     oddColor = &flashA;
     initialMode = 1;
@@ -102,7 +102,7 @@ initialize:
             effect->position.y = (s16) (u16) effect->target.y;
             effect->position.z = (s16) (u16) effect->target.z;
 
-            temp_v0 = Asset_FindTable08ByU32Key(D_800B0E64[0], assetKey | 0x3704U);
+            temp_v0 = Asset_FindTable08ByU32Key(g_LoadedSceneAssetBlock[0], assetKey | 0x3704U);
             g_SceneE20HoverOrbModel = temp_v0;
             FieldFx_ModelScrollUv(temp_v0, 0, 0);
             FieldFx_DrawHistoryTrail(&effect->position, &effect->position, 0x3EE, (unsigned char *)initColor0, (unsigned char *)initColor1, 0x80, (struct FieldTrailPair *)effect->history, initialMode);
