@@ -1945,23 +1945,27 @@ baseline to commit with the change that lowered it.
 
 ### Inventory (2026-10-13)
 
-Linked absolute assignments for main, by what the address is:
+Linked assignments for main, by what the address is (after wave 4a, see
+[SHIFTABILITY_PLAN.md](SHIFTABILITY_PLAN.md#9-remnants-and-catalogue-wave-4a)):
 
 | category | manual | generated aliases | remedy |
 | --- | ---: | ---: | --- |
-| unreferenced by any main object | 1549 | 0 | catalogue only; move to a symbol file or drop |
-| bss inside a zero-filled asm blob (196 of them already labelled there) | 199 | 4 | own the variable in a C unit's `.bss`/`.sbss` |
-| tentative COMMON pinned (no BSS placement yet) | 138 | 0 | place BSS/SBSS in the manifest |
-| initialised data inside an asm blob, labelled there | 96 | 2 | name the blob label, or move the data into C |
-| function address that a linked object already names | 10 | 8 | reference the defining name |
-| data inside a C unit's section | 19 | 23 | point at the owning symbol plus offset, or split the definition |
-| a definition at the same address | 2 | 0 | drop the pin |
-| hardware (I/O registers) | 10 | 0 | unavoidable |
-| kernel/BIOS RAM (0x80000000, 0xA000xxxx, 0xDFFC) | 4 | 1 | unavoidable (BIOS contract) |
-| symbolic aliases (`a = b;`) | 4 | 0 | not fixed; rename callers eventually |
+| hardware (SPU voice registers) | 10 | 0 | unavoidable |
+| kernel/BIOS RAM (LIBCARD patch at 0xDFFC, 0xA000DFxx) | 2 | 1 | unavoidable (BIOS contract) |
+| symbolic aliases (`a = b;`, record and type views) | 77 | 0 | not fixed; unify the C type where a byte-identical shape exists |
+| anything else (pins of program code or data) | 0 | 0 | none left |
 
-`undefined_syms_auto.main.txt` (506) and `undefined_funcs_auto.main.txt`
-(empty) are splat catalogues and are not linked.
+Every assignment in `linkers/USA/undefined_syms_manual.txt` sits in a block
+whose comment starts with its kind (`hardware:`, `kernel:`, `alias`) and
+names the owner; `shift_audit.py` groups the file by those blocks and counts
+an assignment outside a block of its own kind as `unowned` (ratcheted at 0).
+The 1224 names that nothing links against (address-form names from earlier
+disassemblies, cheat-device and randomizer names, unused kernel vectors) are
+in `configs/USA/symbol_catalogue.main.txt`, which is not linked;
+`gen_expected.py` still reads it for the retail disassembly's labels. 319
+names outside the 2 MiB RAM (misdecoded jump targets) were dropped.
+`undefined_syms_auto.main.txt` (495) and `undefined_funcs_auto.main.txt`
+(empty) are splat catalogues and are not linked either.
 
 Fixed addresses in C (comments stripped): 10 alias declarations
 (`asm("name")`) whose target is pinned somewhere (none in `src/main`, 6 in
@@ -1972,12 +1976,14 @@ in main, 11 in `include` and 74 in overlays; they do not bind an address.
 What is left, and why:
 
 - `Draw_InitGpuHwRegs` and `Draw_FlushPrimQueue` (`draw/gpu_regs.c`,
-  `draw/prim_queue.c`) load the register block at 0x80070E04..0x80070E50 (a
-  0x50-byte gap in `.text` after `Draw_PackPrimColor`) with `lui`/`ori`. A
-  symbol reference assembles to `lui`/`addiu`, and an `ori` with a `%lo`
-  relocation would be wrong for a low half of 0x8000 or more, so the
-  addresses stay literal until the block is placed and the encoding can
-  change.
+  `draw/prim_queue.c`) load the primitive queue block at
+  0x80070E04..0x80070E50 (a 0x50-byte gap in `.text` after
+  `Draw_PackPrimColor`) with `lui`/`ori`. No C form reaches those bytes with
+  a symbol: GCC emits `la`, which assembles to `lui`/`addiu` (opcode 0x09,
+  not 0x0D), and MASPSX expands `li` only for numeric operands. The proof
+  and the consequence (a shifted `.text` moves the block but not these six
+  literals) are in SHIFTABILITY_PLAN.md section 9; `shift_audit.py` lists
+  them with that reason.
 - Three `cdrom.h` views of `D_800B0E08`, `g_GameStateBlock`
   (`D_8009D1A0`) and `g_ActiveDrawSlot` (`D_8009CDDC`, also in the
   boot_display overlay) are second names that keep retail's reloads (see
@@ -2115,10 +2121,9 @@ gp-relative offsets, 21 literal data words and 17 literal `lui` halves.
 1. Done: 931 manual assignments that duplicated a definition at the same
    address in a linked object. Byte-identical; they only hid the object's
    ownership.
-2. Unreferenced manual entries (1549): no object needs them; their names
-   feed `gen_expected.py`'s label table, so move the useful names into
-   `configs/USA/sym.main.txt` (or drop generic ones) and check the expected
-   split. Mechanical, about one commit.
+2. Done (wave 4a): the unreferenced manual entries moved to the unlinked
+   `configs/USA/symbol_catalogue.main.txt` (1224 kept for
+   `gen_expected.py`'s label table, 319 out-of-RAM names dropped).
 3. Overlays link against the built main symbols (`ld --just-symbols` on the
    main ELF, or generated assignments taken from `build/USA/main.map`), and
    `overlay_extra_undefineds.py` stops pinning names the overlay defines

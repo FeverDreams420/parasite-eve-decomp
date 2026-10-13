@@ -11,6 +11,12 @@ Measured on 2026-10-13 with `make build shift-audit shift-test` (and the
 `--json` outputs), after the pilot and layout commits described in sections 3
 and 7.
 
+Status (wave 4a, remnants and catalogue, section 9): no word of main refers
+to a pinned program symbol any more (pinned words 4 to 0, gp-relative words
+to pins 6 to 0, relocations to absolute program symbols 10 to 0). The linked
+symbol file holds only hardware, kernel and relative aliases, each in an
+owner block; the 1224 names nothing links against are an unlinked catalogue.
+
 ## Key conclusions
 
 1. **Retail's data layout is the PsyQ link model, and it is recoverable from
@@ -720,3 +726,97 @@ byte-identical image).
   splat change or a small checked rewrite of `main.ld` after `make split`.
 - **Relative linker aliases** (`old = new;`) as the fallback when unifying
   names would change code: allowed as migration state?
+
+## 9. Remnants and catalogue (wave 4a)
+
+### The last pins
+
+| pin | words | now |
+| --- | ---: | --- |
+| `g_ScriptCameraBytes` (0x8009CDF8, `script/flow_opcodes`, a tentative global) | 6 gp-relative | blob label in `sym.main.txt`; it is the first word of the `.sbss` object run, which the startup now finds as `__bss_start`, so the label no longer stands for two things |
+| `jtbl_80010000` (`psyq/libsn/snmain`, `__main` and `__do_global_dtors`) | 4 | `__sn_ctor_table` and `__sn_dtor_table`, defined by `ld_postpass.py` at the start of `.main`: SN's constructor and destructor tables, both empty in this game, which is why retail's linker put them at the image's first address |
+
+After this, `shift_test.py` reports 0 pinned words and 0 gp-relative words to
+pins, and the executable has no relocation against an absolute program
+symbol.
+
+### Literals that stay, with the proof
+
+`shift_audit.py` (c) lists every address-shaped word without a relocation
+with its reason (`KNOWN_LITERALS`):
+
+- `Draw_InitGpuHwRegs` (`draw/gpu_regs.c`) and `Draw_FlushPrimQueue`
+  (`draw/prim_queue.c`), 6 `lui` halves and the 6 integer-to-pointer casts
+  of the source scan. Retail:
+
+  ```
+  80070D10  3C088007  lui   t0,0x8007
+  80070D14  35080E0C  ori   t0,t0,0xe0c      ; queue table base
+  80070D48  3C098007  lui   t1,0x8007
+  80070D4C  35290E04  ori   t1,t1,0xe04      ; head offset
+  80070D50  3C0A8007  lui   t2,0x8007
+  80070D54  354A0E08  ori   t2,t2,0xe08      ; tail offset
+  80070D6C..80070D80  the same three pairs (t0, t7, t8) in Draw_FlushPrimQueue
+  ```
+
+  The block they address, 0x80070E04..0x80070E50, is a 0x50-byte zero gap in
+  `.text` after `Draw_PackPrimColor` (`pad` row at file offset 0x61604). A
+  symbol reference cannot produce these words from C: cc1 2.7.2 emits
+  `la reg,sym` for an address, which GNU as (and ASPSX) expand to
+  `lui`/`addiu` with `%hi`/`%lo` (low instruction 0x25xxxxxx, not
+  0x35xxxxxx), and MASPSX expands `li` only for a numeric operand
+  (`expand_load_immediate`). `ori` with a `%lo` relocation would need hand
+  assembly, which is not allowed, and would also be wrong for a block whose
+  low half reaches 0x8000. Retail's `lui`/`ori` is therefore the shape of a
+  numeric constant in the original source. Consequence: this is the one
+  real shift hazard left in main. When `.text` grows before 0x80070E04 the
+  block moves with the code but the six constants do not; a shifted build
+  needs the block given a symbol and the two functions compiled with `la`
+  (not byte-identical, so only in a non-matching build).
+- `Render_LoadFontGlyphAlt` (`render/font.c`): `lui s0,0x8001` is the upper
+  half of the multiplier 0x80010003 of a division by 0x7FFF. Not an address.
+- `dtail_gp_post_dsfile` data words: 0x80017FFF twice (the halfword pair
+  0x7FFF, 0x8001 inside the AKAO sound entries `D_8009BAF8`/`D_8009BB10`)
+  and 0x80010804 (one word of the random-looking table `D_8009BE78`). Not
+  addresses.
+
+### The catalogue
+
+`linkers/USA/undefined_syms_manual.txt` held 1640 assignments. It now holds
+only what main links: 10 SPU registers (hardware), the 2 LIBCARD patch
+addresses (kernel) and the relative aliases below, each in a block whose
+comment starts with the kind and names the owner. `shift_audit.py` groups
+the file by these blocks and counts an assignment that is outside a block
+of its own kind as `unowned` (ratchet 0). `undefined_addr_aliases.main.txt`
+(generated) adds `D_A000DF80`, the LIBCARD patch entry, as a kernel address.
+
+The 1224 names nothing linked against (address-form names of code and data
+from earlier disassemblies, cheat-device and randomizer names in the
+overlay windows, the unused kernel vectors `func_80000000`/`D_80000004`)
+are in `configs/USA/symbol_catalogue.main.txt`. It is not a linker input;
+`gen_expected.py` reads it for the retail disassembly's labels and
+`shift_audit.py` reports it uncounted. 319 names outside the 2 MiB RAM
+(`func_80302040` and the like, misdecoded jump targets) were dropped. A name
+from the catalogue that code needs again goes into `sym.main.txt`, never
+back into a linker file. No overlay took any of the moved names from main.
+
+### Relative aliases: which can go
+
+84 at the start of the wave. Each was tried mechanically (delete the old
+name's declarations, rename its uses to the label, or `label[0]` for a
+scalar view of an array label; accept only a byte-identical `make check`,
+no new declaration conflict, then a clean rebuild of every main object and
+all overlays, because the Makefile does not track header dependencies):
+
+| result | aliases |
+| --- | --- |
+| removed (6) | `D_800A76F0` (u32[] view of `g_FieldRenderFlagTable`), `D_800B6A80` (`g_ScriptNodeActiveFlags`), `D_800BCF8E` (now `g_CameraClampedY[0]`), `D_800BCFEE` (now `g_ScreenTransitionState[0]`), `D_800C0DC0` (s32 view of `g_CdStreamMask`), `D_800C1F80` (s16[] view of `g_InvItemArray`) |
+| unused, moved to the catalogue (1) | `g_GpuDmaState` |
+| overlay spellings (17): the old name is what overlay C uses, with an overlay-local type; goes when the overlay declarations take main's name and type | `D_800BCFA4`, `g_PlayerEntity` (FieldActor view, 21 rooms), `D_800B0CD8`, `D_800B0DBA`, `D_800B0DBC`, `D_800B0DCD`, `D_800B0DD8`, `D_800B0E38`, `D_800B0E3C`, `D_800B0E4C`, `D_800B0E50`, `D_800B0E54`, `D_800B0E58`, `D_800B0E64`, `D_800BCF88`, `D_8009D1F4`, `D_8009D280` |
+| type differs only in signedness or qualifier; the rename compiles but changes code (`lh`/`lhu`, a `volatile` reload) | `D_800BCFEA`, `D_800BCFF2` (s16 views of u16), `D_80095674`, `D_8009B784` (volatile views), `g_CdRingBufPtr` (u8 * view of `StHEADER *StRingAddr`), `D_8009D1E0`, `D_8009D090`, `g_EquippedWeaponSlot`, `g_EquippedArmorSlot` (scalar views of s8 arrays) |
+| record views: a struct over a word or a block, used where the record form keeps retail's code (`pe1/battle_word_records.h` and friends); needs one struct type for the label | `g_PlayerEntityRecord`, `g_ActiveDrawSlotRecord`, `g_ActiveActorRecord`, `g_GameStateFlagsRecord`, `g_GameStateBlock`, `g_BattleResultFlagsRecord`, `g_FieldMoveLockRecord`, `g_PmTables`, `g_GpuDmaRegisterWindow`, `g_CursorRenderMetadataWindows`, `D_8009D1A8`, `D_800C0E00`, `D_800C0E20`, `D_800B8AC0`, `D_800BC000`, `D_8009D2C8`, `D_800A76A0` |
+| scalar/array and width views that do not compile as one declaration (one unit uses the word as a scalar, another indexes it, or reads a different width) | the other 34: `D_8009CE00`, `D_8009D098`, `D_8009D14C`, `D_800A76A4`, `D_800A76BC`, `D_800A77F0`, `D_800B0CE2`, `D_800B0E6C`, `D_800B89F8`, `D_800BD024`, `D_800BE9A0`, `D_800C0D90`, `D_8009B788`, `D_8009B46C`, `g_AyaInventorySlotCount`, `D_8009D1CE`, `D_8009D1D0`, `D_8009D1E4`, `D_8009D1F0`, `D_8009D1F8`, `D_8009D228`, `D_8009D22C`, `D_8009D235`, `D_8009D238`, `D_8009D250`, `g_EntityCollisionWallParam`, `g_EntityCollisionWallSlot`, `D_8009D290`, `D_8009D29A`, `D_8009D29C`, `D_8009D2B0`, `D_8009D2D8`, `D_8009D2E8`, `D_8009D2F0` |
+
+None of them is a fixed address: a relative alias moves with its label.
+They are naming debt; the record and overlay groups are the ones worth a
+dedicated pass.

@@ -442,6 +442,35 @@ def find_unrelocated(data: bytes, base: int, relocated: set[int], text: bool):
             yield addr, word, "data_word"
 
 
+# Address-shaped words without a relocation that are explained, by owner
+# (object path suffix) and value. They stay counted by the ratchet; the
+# reason only says why each one is left (docs/SHIFTABILITY_PLAN.md, section 9).
+KNOWN_LITERALS = (
+    ("src/main/draw/gpu_regs.c.o", None,
+     "the primitive queue block inside .text (0x80070E04..0x80070E50), loaded with lui/ori; "
+     "C emits lui/addiu for a symbol, so retail's bytes need the literal (SHIFTABILITY_PLAN 9)"),
+    ("src/main/draw/prim_queue.c.o", None,
+     "the same primitive queue block as Draw_InitGpuHwRegs (lui/ori, SHIFTABILITY_PLAN 9)"),
+    ("src/main/render/font.c.o", 0x3C108001,
+     "not an address: upper half of the multiplier 0x80010003 (division by 0x7FFF)"),
+    ("asm/USA/main/data/main/dtail_gp_post_dsfile.data.s.o", 0x80017FFF,
+     "not an address: halfword pair 0x7FFF, 0x8001 of an AKAO sound table"),
+    ("asm/USA/main/data/main/dtail_gp_post_dsfile.data.s.o", 0x80010804,
+     "not an address: one word of the random-looking table D_8009BE78"),
+)
+
+
+def short_obj(obj: str) -> str:
+    return obj[len("build/USA/"):] if obj.startswith("build/USA/") else obj
+
+
+def literal_reason(obj: str, word: int) -> str | None:
+    for suffix, value, reason in KNOWN_LITERALS:
+        if obj.endswith(suffix) and (value is None or value == word):
+            return reason
+    return None
+
+
 def emit_relocs_link(scratch: Path) -> Path:
     """Relink main with --emit-relocs into scratch; the repository is untouched."""
     out = scratch / "main_relocs.elf"
@@ -797,6 +826,8 @@ def collect(with_relocs: bool = True) -> dict:
         by_obj = Counter(o for _, _, _, o in unrel)
         report["executable"] = {
             "unrelocated": dict(by_kind),
+            "unrelocated_words": [[f"0x{a:08X}", f"0x{w:08X}", k, short_obj(o), literal_reason(o, w)]
+                                  for a, w, k, o in sorted(unrel)],
             "unrelocated_worst": [(str(Path(o).relative_to("build/USA")) if o.startswith("build/USA") else o, n)
                                   for o, n in by_obj.most_common(12)],
             "relocs_to_absolute": dict(rel["abs_relocs"]),
@@ -853,8 +884,8 @@ def render(report: dict) -> str:
         ex = report["executable"]
         out.append("(c) built main executable")
         out.append(f"  unrelocated address-shaped words: {ex['unrelocated']}")
-        for o, n in ex["unrelocated_worst"]:
-            out.append(f"    {n:5}  {o}")
+        for addr, word, kind, obj, reason in ex.get("unrelocated_words", []):
+            out.append(f"    {addr} {word} {kind:9} {obj:44} {reason or 'UNEXPLAINED'}")
         out.append(f"  relocations resolving to absolute symbols: {ex['relocs_to_absolute']} "
                    f"({ex['absolute_symbols_used']} distinct program-range symbols)")
         for o, n in ex["abs_worst_files"]:
