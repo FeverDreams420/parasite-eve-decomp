@@ -67,8 +67,8 @@ void Scene_TickTimers(void) {
     }
 
     i = 0;
-    flags_p = (u32 *)&D_800A76A0;
-    entry = (GameTimerEntry *)flags_p;
+    flags_p = &g_GameTimers[0].flags;
+    entry = g_GameTimers;
     limit_p = &entry->limit;
     current_p = &entry->current;
 
