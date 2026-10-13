@@ -1013,7 +1013,7 @@ void func_80191EFC(int handle, volatile s32 *state)
     struct FxCommonApplyScratch {
         int size;
         int pad14;
-        FxCommonShortVec3 vector;
+        AkaoPackedRect3 vector;
         s16 pad1E;
         int valueA;
         int valueB;

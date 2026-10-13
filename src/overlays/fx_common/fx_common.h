@@ -2,6 +2,7 @@
 #define FX_COMMON_H
 
 #include "common.h"
+#include "pe1/akao/pan3d.h"
 #include "pe1/akao_send.h"
 #include "pe1/asset_tim.h"
 #include "pe1/gte_types.h"
@@ -269,7 +270,6 @@ int func_8018F55C(u32 position, int radius, void *allocation,
                    FxCommonVec3 *vector, GteShortVector *angles);
 void *PushMatrix(void);
 int PopMatrix(void);
-void Akao_Calc3DPan(FxCommonShortVec3 *input, int *outA, int *outB);
 void Akao_Cmd_A0(int handle, int index, int value);
 void Akao_Cmd_A2(int handle, int index, int value);
 void Draw_CloseTextboxPage(int resourceId);
