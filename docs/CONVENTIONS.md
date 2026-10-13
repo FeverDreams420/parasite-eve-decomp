@@ -247,7 +247,13 @@ name is the configured overlay name.
   `configs/USA/sym.main.txt`, so a main label at an overlay-window address
   would label each overlay image too. Such a label goes in
   `configs/USA/sym.main_only.txt`, which only `main.yaml` lists
-  (`g_StrFileDirArea`).
+  (`g_StrFileDirArea`, `g_MdecOverlayArea`, `g_CdLoadArea`).
+- **Main's labels for overlay entry points:** main calls into a window by
+  address, and splat labels that address in main's `overlay_windows` blob
+  (`func_80122040`). The label names a window address, not one function,
+  so it keeps its address name; the overlay that defines the function
+  there gives it a role name (`MenuCardFirst_StepVideo`) and does not
+  repeat main's label.
 
 ## Headers
 

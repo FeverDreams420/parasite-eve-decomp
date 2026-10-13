@@ -6,3 +6,9 @@
 // file directory (asset 70) to the room window plus 8, the address the
 // third header word of a room image and the start of fx_common occupy.
 g_StrFileDirArea = 0x8018EFF0;
+
+// The load areas g_MdecOverlayLoadBase and g_CdLoadAreaBase point at: the
+// mdec_diag window and the menu_memcard window, where the disc loader puts
+// those images (their first words are the overlays' own header data).
+g_MdecOverlayArea = 0x8010BCF8;
+g_CdLoadArea = 0x80120D00;

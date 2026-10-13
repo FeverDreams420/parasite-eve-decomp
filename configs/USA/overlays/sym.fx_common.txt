@@ -191,3 +191,4 @@ g_FxCommonSceneNodes = 0x8019CDA0;
 g_FxCommonType21Nodes = 0x8019CC20;
 g_FxCommonType54Node = 0x8019CC28;
 g_FxCommonLodNodes = 0x8019C820;
+FxCommon_RunFrameLoop = 0x8019234C; // type:func

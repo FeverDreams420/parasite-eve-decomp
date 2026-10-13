@@ -37,8 +37,17 @@ start green and duration. Two one-field record views remain where retail
 addresses the word itself: `g_ViewMatrixSlot` (0x800BCFA4, the view matrix
 pointer, formerly `g_GeomVramPacketDst`) and `g_ProjectionSlot` (0x800BCFA8).
 
-Two functions at overlay addresses (`func_801909B4`, `func_8019234C`) keep their
-address names: the same address is a different function in other overlays.
+Main's labels for overlay entry points (`func_801216C4`, `func_80121A00`,
+`func_80121C04`, `func_80122040`, `func_801223A8`, `func_801235DC`,
+`func_801909B4`, `func_8019234C`) keep their address names: they name a
+window address, and the same address is a different function in other
+overlays. The overlay that defines the function there names it
+(`MenuCardFirst_InitVideoBuffers`, `MenuCardFirst_OpenVideo`,
+`MenuCardFirst_StepVideo`, `MenuCard_RunListScreen`,
+`FxCommon_RunFrameLoop`), so no name is defined by both main and an
+overlay (docs/OVERLAY_SYMBOL_COLLISIONS.md). Main's labels at the window
+starts that the load-base pointers hold are `g_MdecOverlayArea` and
+`g_CdLoadArea` (configs/USA/sym.main_only.txt).
 
 A name for a symbol that lives in an asm data blob needs a line in
 `configs/USA/sym.main.txt`; renaming only the C use leaves the label as
@@ -109,7 +118,7 @@ gone:
   and the pad words after the 0x2C-byte effect states;
 - role not established: `func_800C6C18`, `func_800DFB20`, `D_800B0E2C`,
   `D_800B0E48`, `D_800B6914`, `D_800E21D0`, and the mdec_diag window bytes
-  `D_8010BCF8`/`D_8010BD00`;
+  `D_8010BD00` (the window start itself is `g_MdecOverlayArea`);
 - used only in `fieldfx/geometry.c`, `render/object.c` or
   `field/actor_collision.c`, which this pass did not touch (`D_800A636C`,
   `D_800B0E98`, `D_800B1640`, `D_800B1644`, `D_800C2258`, `D_800E21A8`,

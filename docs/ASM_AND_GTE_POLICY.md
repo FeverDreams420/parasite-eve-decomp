@@ -320,8 +320,9 @@ entry `main` in `boot/main`.
 
 Why C cannot express it: the retail code runs one call with `$sp` moved into
 the 1 KiB scratchpad. It parks the caller's `$sp` in the top word
-(0x1F8003FC), points `$sp` one word lower, calls `func_8019234C`, then steps
-back up and reloads the old `$sp`. C has no way to name or assign the stack
+(0x1F8003FC), points `$sp` one word lower, calls `func_8019234C`
+(fx_common's `FxCommon_RunFrameLoop`), then steps back up and reloads the
+old `$sp`. C has no way to name or assign the stack
 pointer, and no compiler option produces this sequence.
 
 The macro owns only that window. A first `asm volatile` copies the address
@@ -2231,7 +2232,7 @@ aggregate macros are outside this change.
 
 ## Memory-card screen controller
 
-`menu_memcard::func_801909B4` (`Memcard_RunScreen.c`) matches all 3908 bytes
+`menu_memcard::MenuCard_RunListScreen` (`Memcard_RunScreen.c`) matches all 3908 bytes
 at 0x801909B4 with stock native GCC 2.7.2 (`-G0`,
 `-fno-cse-skip-blocks`) and unmodified MASPSX 2.56. Linked score is 0;
 SHA-256 is `9072713338b26c335c1a31964282105dcd5f14951950c2d24585fa5948554d30`.

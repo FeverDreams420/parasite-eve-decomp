@@ -202,7 +202,7 @@ void MenuCard_ShowLogoFade(void) {
 
 /* Run the title/card-selection screen, then restore the game display.
  * Five pins and the header's two symbol views retain retail allocation. */
-s32 func_801909B4(void) {
+s32 MenuCard_RunListScreen(void) {
     u8 *firstMemory;
     s32 searchKind;
     s32 wantedKind;

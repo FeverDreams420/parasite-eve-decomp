@@ -117,3 +117,7 @@ g_MenuCardVideoDirectory = 0x80120FF4; // type:asciz
 g_MenuCardVideoDirectoryLate = 0x80120FFC;
 g_MenuCardScreenVideoDirectory = 0x8018F2E4; // type:asciz
 g_MenuCardScreenVideoDirectoryLate = 0x8018F2EC; // type:asciz
+MenuCardFirst_InitVideoBuffers = 0x801216C4; // type:func
+MenuCardFirst_OpenVideo = 0x80121C04; // type:func
+MenuCardFirst_StepVideo = 0x80122040; // type:func
+MenuCard_RunListScreen = 0x801909B4; // type:func

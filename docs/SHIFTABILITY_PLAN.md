@@ -633,7 +633,7 @@ file. One table names the windows:
 
 - Main: `main.ld` INCLUDEs the table (`ld_postpass.py`), so `main.elf`
   defines the window symbols. Main's own references into the block are
-  labels of the `main/overlay_windows` blob (`D_8010BCF8`, `D_80120D00`,
+  labels of the `main/overlay_windows` blob (`g_MdecOverlayArea`, `g_CdLoadArea`,
   `g_StrFileDirArea`, `g_PmTaskProgramArea`, `D_8010BD00`, `g_SceneLoadScratchArea`,
   the menu_memcard and boot entry points, the process slots
   `g_FieldFxTaskProgramCmd108`..`D_801F1F38`), so they move with the block.

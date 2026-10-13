@@ -534,7 +534,7 @@ so the numbers say what the unit scores with `--no-expand-div` or
 | `overlays/mdec_diag/decdct.c` | `ASSEMBLER: GNU`: lev 18 (MdecDiag_Reset 10, DecDCTReset 2, DecDCTPutEnv 2) |
 | `overlays/boot_display/sprites.c` | maspsx `--expand-div`: lev 22 (BootDisplay_StepImageSprite 22) |
 | `overlays/menu_memcard/page_flip.c` | cc1 `-fno-cse-skip-blocks`: lev 12 (MenuCard_FlipScreenPages 12) |
-| `overlays/menu_memcard/list_screen.c` | cc1 `-fno-cse-skip-blocks`: lev 71 (func_801909B4 59, func_80190660 12) |
+| `overlays/menu_memcard/list_screen.c` | cc1 `-fno-cse-skip-blocks`: lev 71 (MenuCard_RunListScreen 59, func_80190660 12) |
 | `overlays/room_lib/dropped_flare.c` | maspsx `--expand-div`: lev 63 (RoomEffect_DroppedFlareParticle 63) |
 | `overlays/room_lib/line_burst.c` | maspsx `--expand-div`: lev 36 (RoomEffect_LineBurstController 36) |
 | `overlays/room_lib/spark_attacks.c` | maspsx `--expand-div`: lev 37 (RoomEffect_BeamSparkController 37) |

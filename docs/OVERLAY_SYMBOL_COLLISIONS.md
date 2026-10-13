@@ -11,15 +11,15 @@ and `conflicting` otherwise. Rules for resolving the conflicting names are in
 
 | Class | Names |
 | --- | ---: |
-| Global names defined by any overlay | 4267 |
-| Defined in more than one overlay, identical | 902 |
-| Defined in more than one overlay, conflicting | 1 |
-| - of which already non-auto names | 1 |
-|   - room interface (a shared source names it) | 1 |
+| Global names defined by any overlay | 4271 |
+| Defined in more than one overlay, identical | 901 |
+| Defined in more than one overlay, conflicting | 0 |
+| - of which already non-auto names | 0 |
+|   - room interface (a shared source names it) | 0 |
 |   - also a main symbol | 0 |
 |   - private to one overlay's own code (must be renamed) | 0 |
 | - of which auto names (`func_`/`D_`/`jtbl_`/`__D_..._databin`) | 0 |
-| Overlay global that main also defines | 7 |
+| Overlay global that main also defines | 0 |
 | - of which non-auto names | 0 |
 
 ## Conflicting, private to an overlay
@@ -32,9 +32,7 @@ None.
 
 Each overlay defines the name and a source shared by several overlays (`src/overlays/room_lib`, `include/pe1`) refers to it. Add it to `include/pe1/room_interface.h` and suffix its symbol-file entries with `__<overlay>` (docs/CONVENTIONS.md, Overlays).
 
-| Name | Overlays | Kinds | Sizes |
-| --- | --- | --- | --- |
-| `g_RoomCaptureFrameWord` | room_m156_hospital, room_m291_chrysler, room_m380_hospital | .data | 239180,251300,251320 |
+None.
 
 ## Conflicting, also a main symbol
 
@@ -50,12 +48,4 @@ None.
 
 ## Overlay global also defined by main
 
-| Name | Overlays |
-| --- | --- |
-| `D_8010BCF8` | mdec_diag |
-| `D_80120D00` | menu_memcard |
-| `func_801216C4` | menu_memcard |
-| `func_80121C04` | menu_memcard |
-| `func_80122040` | menu_memcard |
-| `func_801909B4` | menu_memcard |
-| `func_8019234C` | fx_common |
+None.

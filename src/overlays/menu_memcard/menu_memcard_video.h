@@ -66,7 +66,7 @@ typedef struct VideoFrameCount { s16 value; } VideoFrameCount;
 extern VideoFrameCount D_800B0DBC;
 
 s32 MenuCard_InitVideoBuffers(s8 count, u8 **buffers);
-s32 func_801216C4(s8 count, u8 **buffers);
+s32 MenuCardFirst_InitVideoBuffers(s8 count, u8 **buffers);
 /* Buffers and saved environments of the first video player copy. */
 extern u8 *g_MenuCardVideoDecodeBuffer0, *g_MenuCardVideoDecodeBuffer1, *g_MenuCardVideoSliceBuffer0, *g_MenuCardVideoSliceBuffer1, *g_MenuCardVideoVlcTable, *g_MenuCardVideoStreamRing;
 extern DISPENV g_MenuCardVideoSavedDispEnv[2];
@@ -93,12 +93,12 @@ extern char g_MenuCardVideoDirectory[], g_MenuCardVideoDirectoryLate[], g_MenuCa
 extern void strcat(char *, char *), StSetRing(void *, s32);
 extern void DecDCTvlc2(void *, void *, void *), MenuCardFirst_UploadVideoSlice(void);
 extern s32 DsRead2(CdlLOC *, s32);
-s32 func_80121C04(s32 number);
+s32 MenuCardFirst_OpenVideo(s32 number);
 s32 MenuCard_OpenVideo(s32 number);
 
 /* Per-frame video step: decode, restart the stream on a stall, page flip. */
 extern u8 g_MenuCardVideoDecodeMode, g_MenuCardVideoDepthFlip, g_MenuCardScreenVideoDecodeMode;
 extern void DecDCTin(void *, s32);
-s32 func_80122040(void);
+s32 MenuCardFirst_StepVideo(void);
 
 #endif

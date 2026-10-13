@@ -1,32 +1,16 @@
 {
  "counts": {
-  "identical": 902,
-  "conflicting": 1,
-  "conflicting_named": 1,
+  "identical": 901,
+  "conflicting": 0,
+  "conflicting_named": 0,
   "conflicting_auto": 0,
-  "conflicting_interface": 1,
+  "conflicting_interface": 0,
   "conflicting_main": 0,
   "conflicting_private": 0,
-  "overlay_vs_main": 7,
+  "overlay_vs_main": 0,
   "overlay_vs_main_named": 0
  },
- "conflicting": [
-  "g_RoomCaptureFrameWord"
- ],
- "conflicting_locations": {
-  "g_RoomCaptureFrameWord": [
-   "room_m156_hospital:0x80192C3C",
-   "room_m291_chrysler:0x80192C3C",
-   "room_m380_hospital:0x80192C3C"
-  ]
- },
- "overlay_vs_main": [
-  "D_8010BCF8",
-  "D_80120D00",
-  "func_801216C4",
-  "func_80121C04",
-  "func_80122040",
-  "func_801909B4",
-  "func_8019234C"
- ]
+ "conflicting": [],
+ "conflicting_locations": {},
+ "overlay_vs_main": []
 }

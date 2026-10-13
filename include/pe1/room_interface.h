@@ -58,6 +58,8 @@
 #define g_RoomScatterBurstLayer PE_OVERLAY_SYM(g_RoomScatterBurstLayer)
 /* pe1/room_spark_ring_burst.h */
 #define g_RoomSparkSlot PE_OVERLAY_SYM(g_RoomSparkSlot)
+/* pe1/room_spark_attacks.h */
+#define g_RoomCaptureFrameWord PE_OVERLAY_SYM(g_RoomCaptureFrameWord)
 
 /* Shared room_lib functions that read or write one of the names above (or
  * call such a function). Each overlay's copy works on that overlay's data,
@@ -72,6 +74,7 @@
 #define RoomLib_SetArgs3 PE_OVERLAY_SYM(RoomLib_SetArgs3)
 #define RoomLib_SetTaskVar0 PE_OVERLAY_SYM(RoomLib_SetTaskVar0)
 #define RoomLib_SlotSet PE_OVERLAY_SYM(RoomLib_SlotSet)
+#define RoomLib_CaptureFrameSample PE_OVERLAY_SYM(RoomLib_CaptureFrameSample)
 #define RoomLib_GrabAwaitStance PE_OVERLAY_SYM(RoomLib_GrabAwaitStance)
 #define RoomLib_InitPairedGlowSprite PE_OVERLAY_SYM(RoomLib_InitPairedGlowSprite)
 #define RoomLib_DrawPairedGlowSprite PE_OVERLAY_SYM(RoomLib_DrawPairedGlowSprite)

@@ -37,7 +37,7 @@
 #undef MENUCARD_VIDEO_FLIP
 #undef MENUCARD_VIDEO_SET_DISPLAY
 
-#define MENUCARD_INIT_VIDEO_BUFFERS_NAME func_801216C4
+#define MENUCARD_INIT_VIDEO_BUFFERS_NAME MenuCardFirst_InitVideoBuffers
 #define MENUCARD_VIDEO_PTR0 g_MenuCardVideoDecodeBuffer0
 #define MENUCARD_VIDEO_PTR1 g_MenuCardVideoDecodeBuffer1
 #define MENUCARD_VIDEO_PTR2 g_MenuCardVideoSliceBuffer0
@@ -82,7 +82,7 @@
 #undef MENUCARD_SLOT92_SOURCE
 #undef PE1_EXT_6E76AD431068
 
-#define MENUCARD_OPEN_VIDEO_NAME func_80121C04
+#define MENUCARD_OPEN_VIDEO_NAME MenuCardFirst_OpenVideo
 #define MENUCARD_VIDEO_TABLE g_MenuCardVideoTable
 #define MENUCARD_VIDEO_ENTRY g_MenuCardVideoEntry
 #define MENUCARD_VIDEO_SET_DISPLAY MenuCardFirst_SetVideoDisplay
@@ -121,7 +121,7 @@
 #undef MENUCARD_VIDEO_UPDATE_FRAME
 #undef MENUCARD_VIDEO_FINISHED
 
-#define MENUCARD_STEP_VIDEO_NAME func_80122040
+#define MENUCARD_STEP_VIDEO_NAME MenuCardFirst_StepVideo
 #define MENUCARD_VIDEO_SET_DISPLAY MenuCardFirst_SetVideoDisplay
 #define MENUCARD_VIDEO_UPDATE_FRAME MenuCardFirst_UpdateVideoFrame
 #define MENUCARD_VIDEO_MODE g_MenuCardVideoDecodeMode

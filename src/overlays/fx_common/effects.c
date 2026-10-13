@@ -139,7 +139,7 @@ void FxCommon_EndSequence(void)
 /* The effect overlay's own frame loop: run every effect system, compact the
  * ordering table, present the frame and flip the double buffer until the
  * scene asks to leave. */
-void func_8019234C(void)
+void FxCommon_RunFrameLoop(void)
 {
     FxCommonBuffer *next;
     int last;

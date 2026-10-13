@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
+#include "pe1/room_interface.h"
 #include "pe1/room_spark.h"
 
 /* The spark attacks linked by room_m156, room_m291 and room_m380
