@@ -123,7 +123,7 @@ void Battle_AdvancePhase(void) {
         return;
     }
     if (g_ActiveActor->stateFlags & 0x200000) {
-        sp18 = D_8001074C;
+        sp18 = g_BattleActionEffectIds;
         copy_dst = (u8 *)sp30.soundId;
         copy_src = (const u8 *)g_BattleActionSoundIds.soundId;
         copy_end = copy_src + 0x20;

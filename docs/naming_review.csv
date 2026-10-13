@@ -105,7 +105,7 @@ address,old_name,name,review,proposer_confidence,evidence
 0x8001208C,D_8001208C,g_SpuTimeoutFormatIrq,ok,verified,"printf in libspu/s_si.c:17,28."
 0x8001209C,D_8001209C,g_SpuWaitIrqOnText,ok,verified,printf argument in libspu/s_si.c:17.
 0x800120AC,D_800120AC,g_SpuWaitIrqOffText,ok,verified,printf argument in libspu/s_si.c:28.
-0x8007E584,D_8007E584,g_CardExitHookTemplate,ok,verified,End.c comment: three-NOP template D_8007E584..D_8007E590 that _ExitCard copies over the C0 card hook (src/main/psyq/libcard/end.c:25).
+0x8007E584,D_8007E584,g_CardExitHookTemplate,ok,verified,End.c comment: three-NOP template D_8007E584..g_CardExitHookTemplateEnd that _ExitCard copies over the C0 card hook (src/main/psyq/libcard/end.c:25).
 0x800910A0,D_800910A0,g_ScriptQueueOpcodeHandlers,ok,verified,Script_RunQueue (script/flow_opcodes.c) calls D_800910A0[opcode](args) in a do-while; the table holds Script_* and Akao_ProcessCommand function pointers (dtail_gp_pre_s016.data.s).
 0x80091474,D_80091474,g_AnalyzeHpFormatText,ok,likely,"Save_DrawSlotMetadata uses it as the textbox message when prompt==phase; decodes to ""HP <FB>8;<FB>8"" (HP with two number escapes)."
 0x80091480,D_80091480,g_TextSusceptibleToPoison,fix,verified,"save_slot.c:62 picks D_80091480[windowIndex] for prompt bit 0x1000 and row 1 (0x80091496) decodes to ""Susceptible to poison""; the Analyze attribution is unproven."

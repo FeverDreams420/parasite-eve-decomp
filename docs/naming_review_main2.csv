@@ -1,0 +1,19 @@
+address,old_name,name,evidence
+0x800451D0,func_800451D0,Menu_CreateAmmoSpendPanel,Stale configs/USA/sym.main.txt line for a function the C (menu/equip_select.c) already defines under this name; the line now carries the C name.
+0x80046B58,func_80046B58,Menu_SkillActionHandler,Stale sym.main.txt line; the C definition already has this name (build/USA/main.map).
+0x800471BC,func_800471BC,Menu_DrawEquipOptionsList,Stale sym.main.txt line; the C definition already has this name (build/USA/main.map).
+0x800471E4,func_800471E4,Menu_EquipOptionsInputHandler,Stale sym.main.txt line; the C definition already has this name (build/USA/main.map).
+0x80047D74,func_80047D74,Menu_EquipStatsInputHandler,Stale sym.main.txt line; the C definition already has this name (build/USA/main.map).
+0x800490B0,func_800490B0,Menu_ExitBonusPointAllocation,Stale sym.main.txt line; the C definition already has this name (build/USA/main.map).
+0x8004BB80,func_8004BB80,Menu_ConfirmExpAllocation,Stale sym.main.txt line; the C definition already has this name (build/USA/main.map).
+0x8004D18C,func_8004D18C,Menu_OpenStartupMemCardDialog,Stale sym.main.txt line; the C definition already has this name (build/USA/main.map).
+0x8004DCA4,func_8004DCA4,Menu_OpenSaveLoadEntryPoint,Stale sym.main.txt line; the C definition already has this name (build/USA/main.map).
+0x80057D18,func_80057D18,Inv_ClearActiveListSlot,Stale sym.main.txt line; the C definition already has this name (build/USA/main.map).
+0x8005DB8C,func_8005DB8C,Aya_GetStatGrowthTable,Comment-only mention in include/pe1/aya.h of the already-named function (src/main/text/tables.c).
+0x8005DC4C,func_8005DC4C,Text_LookupTable4,Comment-only mention in include/pe1/text.h of the already-named function.
+0x80064A54,func_80064A54,MenuWidget_SaveColumnLayout,Stale sym.main.txt line; the C definition already has this name (build/USA/main.map).
+0x8006E834,func_8006E834,CdRom_LoadInitialImage,Stale sym.main.txt line; the C definition already has this name (build/USA/main.map).
+0x8001074C,D_8001074C,g_BattleActionEffectIds,"u8[20] rodata table; Battle_AdvancePhase (battle/phase.c:126) copies it beside g_BattleActionSoundIds and passes entry [spell index] (phase.c:287) to Scene_LoadRoomAssets as the FieldFx program id (values 0x5C..0x6A)."
+0x8001160C,D_8001160C,g_MdecOverlayLoadBase,"Rodata pointer to 0x8010BCF8 (the mdec_diag overlay window); CdRom_LoadBootAudio (pm/disc_tables.c:258), actor_opcodes.c:578 and MenuCard_PlayVideo (menu_memcard/video_playback.c:143) read sectors into it; sibling of g_CdLoadAreaBase."
+0x8007E590,D_8007E590,g_CardExitHookTemplateEnd,"_ExitCard (psyq/libcard/end.c:27) loads its address as the end bound of the g_CardExitHookTemplate copy into the C0 table."
+0x80086D68,func_80086D68,Akao_Cmd_CA,"akao/voice_driver.c:292 stages opcode 0xCA with three args and calls Akao_EnqueueStagedCommand, same shape as neighbours Akao_Cmd_C9/Akao_Cmd_D0."

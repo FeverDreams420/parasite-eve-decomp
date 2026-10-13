@@ -255,7 +255,7 @@ retry_first:
     range = g_SceneInitLbaTbl0;
     retry = -1;
     do {
-        status = CdRom_ReadSectors(D_800B0DD8.baseLba + range[0], 0, D_8001160C, range[1] - range[0]);
+        status = CdRom_ReadSectors(D_800B0DD8.baseLba + range[0], 0, g_MdecOverlayLoadBase, range[1] - range[0]);
     } while (status == retry);
 
     while ((status = CdRom_PollReady()) != 0) {

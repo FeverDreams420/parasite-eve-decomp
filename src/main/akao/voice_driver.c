@@ -289,7 +289,7 @@ void Akao_Cmd_C9(int arg0, int arg1) {
     Akao_EnqueueStagedCommand();
 }
 
-void func_80086D68(int arg0, int arg1, int arg2) {
+void Akao_Cmd_CA(int arg0, int arg1, int arg2) {
     g_AkaoCmd.opcode = 0xCA;
     g_AkaoCmd.arg0.value = arg0;
     g_AkaoCmd.arg1 = arg1;

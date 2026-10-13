@@ -108,7 +108,7 @@ extern VideoPlaybackEntry D_801D0E00[];
 extern VideoDiscRange D_8009315E;
 extern u16 D_80093160;
 extern u16 D_80093162;
-extern void *D_8001160C;
+extern void *g_MdecOverlayLoadBase;
 extern u8 *g_CdLoadAreaBase;
 extern u32 D_800B0DD8;
 extern u32 D_8009D26C;

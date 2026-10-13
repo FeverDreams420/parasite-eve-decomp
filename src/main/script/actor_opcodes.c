@@ -575,7 +575,7 @@ retry_first:
         u16 *range = g_SceneInitLbaTbl0;
         s32 minus_one = -1;
         do {
-            ret = CdRom_ReadSectorsFromLba(base[0x40] + range[0], D_8001160C, range[1] - range[0]);
+            ret = CdRom_ReadSectorsFromLba(base[0x40] + range[0], g_MdecOverlayLoadBase, range[1] - range[0]);
         } while (ret == minus_one);
     }
     {
