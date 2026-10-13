@@ -20,7 +20,7 @@
 #include "pe1/room_m005_drifting_sprite.h"
 #include "pe1/scene_archive.h"
 
-/* room_m005 joint beacon (func_8018FDC4): follows joint 0x14 of the actor,
+/* room_m005 joint beacon (RoomM005_JointBeacon): follows joint 0x14 of the actor,
  * sheds drifting sprites, swells and shrinks, tags the player on contact and
  * draws four passes of a model, three glow sprites and a turning second
  * model while the effect starts. */
@@ -88,10 +88,10 @@ typedef struct RoomM005BeaconColor {
 
 extern struct BattleEntity *D_8009D254;
 extern RoomM005BeaconOffset D_8018F010;
-extern u8 *D_80190B94;
-extern u8 *D_80190B98;
-extern GteShortVector D_80190BA0;
-extern GteShortVector D_80190BA8;
+extern u8 *g_RoomM005BeaconModel0;
+extern u8 *g_RoomM005BeaconModel1;
+extern GteShortVector g_RoomM005BeaconOffset;
+extern GteShortVector g_RoomM005BeaconCenter;
 
 void FieldFx_ModelShiftColors(u8 *data, int r, int g, int b);
 int FieldFx_IsPlayerInSegmentBand(void *position, GteShortVector *target, int radius);

@@ -108,7 +108,7 @@ ret0:
 
 #undef RoomM005_ScriptDialog
 
-int func_8018F330(int mode, RoomM005OrbiterState *state) {
+int RoomM005_Orbiter(int mode, RoomM005OrbiterState *state) {
     RoomM005Seed8 seed = D_8018EFF4;
     s16 target[4];
     char *pool;
@@ -190,7 +190,7 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
  * the final size share one, and parameter02 is written second: each of
  * these decides retail's register choice. */
 
-int func_8018F614(int mode) {
+int RoomM005_CrossFlare(int mode) {
     GteShortVector position;
     GteRotation rotation;
     RoomM005Seed8 outer = D_8018EFFC;
@@ -260,13 +260,13 @@ int func_8018F614(int mode) {
             if ((unsigned int)step < 17) {
                 size = rcos(step << 6);
                 width = 600 - step * 100;
-                FieldFx_SampleColorTrack(D_80190AF4, &color, step * 2);
+                FieldFx_SampleColorTrack(g_RoomM005CrossFlareColorTrack, &color, step * 2);
                 FieldFx_DrawRingBand(&position, width, 700, 0x18, 0, size, size,
                               0, &color, 0x40, 1);
                 FieldFx_DrawRingBand(&position, 700, 800, 0x18, 0, size, size,
                               &color, 0, 0x40, 1);
             }
-            FieldFx_SampleColorTrack(D_80190AF4, &color, g_FieldFxCurrentAge);
+            FieldFx_SampleColorTrack(g_RoomM005CrossFlareColorTrack, &color, g_FieldFxCurrentAge);
             g_FieldFxSpriteParams.parameter00 = 0x40;
             g_FieldFxSpriteParams.parameter02 = 4;
             g_FieldFxSpriteParams.extent_x = 0x40;
@@ -295,7 +295,7 @@ int func_8018F614(int mode) {
 
 /* Sprite that drifts by a fixed velocity for six frames, then draws itself
  * at a room offset with a cosine-driven intensity. */
-int func_8018FB84(int mode, RoomM005DriftingSpriteState *state) {
+int RoomM005_BeaconDriftCallback(int mode, RoomM005DriftingSpriteState *state) {
     GteShortVector position;
     RenderColor color;
     RenderMatrixSlot *matrixSlot;
@@ -321,9 +321,9 @@ int func_8018FB84(int mode, RoomM005DriftingSpriteState *state) {
         position.x = state->x;
         position.y = state->y;
         position.z = state->z;
-        position.x += D_80190BA0.x;
-        position.y += D_80190BA0.y;
-        position.z += D_80190BA0.z;
+        position.x += g_RoomM005BeaconOffset.x;
+        position.y += g_RoomM005BeaconOffset.y;
+        position.z += g_RoomM005BeaconOffset.z;
         u = (g_FieldFxCurrentAge & 1) << 7;
         v = ((g_FieldFxCurrentAge << 3) & 0x10) + 0x20;
         scale = rcos((g_FieldFxCurrentAge << 10) / 6) / 24;
@@ -331,7 +331,7 @@ int func_8018FB84(int mode, RoomM005DriftingSpriteState *state) {
         palette = g_FieldFxPaletteTable[kind];
         if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
         clut = GetClut(0, palette);
-        FieldFx_DrawRotatedQuad(&D_80190BA8, (GteRotation *)&position, 0x44C, 0x6E, u, v,
+        FieldFx_DrawRotatedQuad(&g_RoomM005BeaconCenter, (GteRotation *)&position, 0x44C, 0x6E, u, v,
                       0x7F, 0xF, clut, &color, &color, (short)scale, 1);
         break;
     }
@@ -341,7 +341,7 @@ int func_8018FB84(int mode, RoomM005DriftingSpriteState *state) {
 /* Joint beacon: rides joint 0x14, sheds drifting sprites for the first
  * frames, swells and shrinks, tags the player on contact; draws four passes
  * of a model, three glow sprites and a turning second model. */
-int func_8018FDC4(int mode, RoomM005Beacon *state) {
+int RoomM005_JointBeacon(int mode, RoomM005Beacon *state) {
     GteVector scale;
     GteShortVector position;
     GteShortVector rotation;
@@ -371,12 +371,12 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
                 if (*flag == 1) *flag = 2;
             }
         }
-        D_80190B94 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5462704);
-        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80190B94, 0, 0);
-        D_80190B98 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5862704);
-        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80190B98, 0, 0);
+        g_RoomM005BeaconModel0 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5462704);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)g_RoomM005BeaconModel0, 0, 0);
+        g_RoomM005BeaconModel1 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5862704);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)g_RoomM005BeaconModel1, 0, 0);
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool, 0x10, 8,
-                             (FieldFxCallbackListCallback)func_8018FB84);
+                             (FieldFxCallbackListCallback)RoomM005_BeaconDriftCallback);
     case 1:
         if (g_FieldFxCurrentAge < 10) {
             sprite = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool);
@@ -450,30 +450,30 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             FieldFx_ModelSetTexture(page, GetClut(0x30, palette));
         }
         FieldFx_ModelSetSemiTrans(1);
-        FieldFx_ModelSaveColors(D_80190B94);
-        FieldFx_ModelScaleColors(D_80190B94, 0x32);
-        FieldFx_ModelDraw((union FieldTexturedModel *)D_80190B94, &matrix);
-        FieldFx_ModelRestoreColors(D_80190B94);
-        FieldFx_ModelSaveColors(D_80190B94);
+        FieldFx_ModelSaveColors(g_RoomM005BeaconModel0);
+        FieldFx_ModelScaleColors(g_RoomM005BeaconModel0, 0x32);
+        FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM005BeaconModel0, &matrix);
+        FieldFx_ModelRestoreColors(g_RoomM005BeaconModel0);
+        FieldFx_ModelSaveColors(g_RoomM005BeaconModel0);
         scale.z = 0x1000;
         scale.x = scale.y = 0x2000;
         ScaleMatrix(&matrix, &scale);
-        FieldFx_ModelShiftColors(D_80190B94, -0xFF, -0x82, 0x30);
-        FieldFx_ModelDraw((union FieldTexturedModel *)D_80190B94, &matrix);
-        FieldFx_ModelRestoreColors(D_80190B94);
-        FieldFx_ModelSaveColors(D_80190B94);
+        FieldFx_ModelShiftColors(g_RoomM005BeaconModel0, -0xFF, -0x82, 0x30);
+        FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM005BeaconModel0, &matrix);
+        FieldFx_ModelRestoreColors(g_RoomM005BeaconModel0);
+        FieldFx_ModelSaveColors(g_RoomM005BeaconModel0);
         scale.x = scale.y = 0x400;
         ScaleMatrix(&matrix, &scale);
-        FieldFx_ModelScaleColors(D_80190B94, 0xC8);
-        FieldFx_ModelDraw((union FieldTexturedModel *)D_80190B94, &matrix);
-        FieldFx_ModelRestoreColors(D_80190B94);
-        FieldFx_ModelSaveColors(D_80190B94);
+        FieldFx_ModelScaleColors(g_RoomM005BeaconModel0, 0xC8);
+        FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM005BeaconModel0, &matrix);
+        FieldFx_ModelRestoreColors(g_RoomM005BeaconModel0);
+        FieldFx_ModelSaveColors(g_RoomM005BeaconModel0);
         matrix.t[1] = g_RoomFloorY->y;
         scale.x = scale.y = 0x2000;
         ScaleMatrix(&matrix, &scale);
-        FieldFx_ModelScaleColors(D_80190B94, 0x18);
-        FieldFx_ModelDraw((union FieldTexturedModel *)D_80190B94, &matrix);
-        FieldFx_ModelRestoreColors(D_80190B94);
+        FieldFx_ModelScaleColors(g_RoomM005BeaconModel0, 0x18);
+        FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM005BeaconModel0, &matrix);
+        FieldFx_ModelRestoreColors(g_RoomM005BeaconModel0);
         g_FieldFxSpriteParams.parameter00 = 0x20;
         g_FieldFxSpriteParams.parameter02 = 2;
         g_FieldFxSpriteParams.extent_x = 0x20;
@@ -551,10 +551,10 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             spin.t[2] = state->position.z;
             spinScale.z = spinScale.y = spinScale.x = size / 2;
             ScaleMatrix(&spin, &spinScale);
-            FieldFx_ModelSaveColors(D_80190B98);
-            FieldFx_ModelScaleColors(D_80190B98, alpha / 2);
-            FieldFx_ModelDraw((union FieldTexturedModel *)D_80190B98, &spin);
-            FieldFx_ModelRestoreColors(D_80190B98);
+            FieldFx_ModelSaveColors(g_RoomM005BeaconModel1);
+            FieldFx_ModelScaleColors(g_RoomM005BeaconModel1, alpha / 2);
+            FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM005BeaconModel1, &spin);
+            FieldFx_ModelRestoreColors(g_RoomM005BeaconModel1);
         }
         g_FieldFxSpriteParams.parameter00 = 0x20;
         g_FieldFxSpriteParams.parameter02 = 2;
@@ -565,13 +565,13 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         g_FieldFxSpriteParams.parameter06 = 0;
         g_FieldFxSpriteParams.parameter0A = 0;
         g_FieldFxSpriteParams.depth = 4;
-        D_80190BA8.x = state->position.x;
-        D_80190BA8.y = state->position.y;
-        D_80190BA8.z = state->position.z;
-        D_80190BA0.x = state->rotation.x;
-        D_80190BA0.y = state->rotation.y;
-        D_80190BA0.z = 0;
-        D_80190BA0.x = 0;
+        g_RoomM005BeaconCenter.x = state->position.x;
+        g_RoomM005BeaconCenter.y = state->position.y;
+        g_RoomM005BeaconCenter.z = state->position.z;
+        g_RoomM005BeaconOffset.x = state->rotation.x;
+        g_RoomM005BeaconOffset.y = state->rotation.y;
+        g_RoomM005BeaconOffset.z = 0;
+        g_RoomM005BeaconOffset.x = 0;
         break;
     }
     return 0;

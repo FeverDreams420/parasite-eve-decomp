@@ -47,15 +47,15 @@ extern RoomM005Seed8 D_8018EFF4;
 extern u8 D_80190B84[];
 extern u8 D_80190B8C[];
 extern int rand(void);
-int func_8018F330(int mode, RoomM005OrbiterState *state);
+int RoomM005_Orbiter(int mode, RoomM005OrbiterState *state);
 
 extern RenderColor D_8018F00C;
-extern GteShortVector D_80190BA0; /* drift offset, written by the joint beacon */
-extern GteShortVector D_80190BA8;
+extern GteShortVector g_RoomM005BeaconOffset; /* drift offset, written by the joint beacon */
+extern GteShortVector g_RoomM005BeaconCenter;
 
-/* Cross flare (func_8018F614): two joint templates and the flash track. */
+/* Cross flare (RoomM005_CrossFlare): two joint templates and the flash track. */
 extern RoomM005Seed8 D_8018EFFC;
 extern RoomM005Seed8 D_8018F004;
-extern u8 D_80190AF4[];
+extern u8 g_RoomM005CrossFlareColorTrack[];
 
 #endif

@@ -15,6 +15,6 @@ typedef struct RoomM005DriftingSpriteState {
     unsigned short vz;            /* 0x0C */
 } RoomM005DriftingSpriteState;
 
-int func_8018FB84(int mode, RoomM005DriftingSpriteState *state);
+int RoomM005_BeaconDriftCallback(int mode, RoomM005DriftingSpriteState *state);
 
 #endif /* PE1_ROOM_M005_DRIFTING_SPRITE_H */

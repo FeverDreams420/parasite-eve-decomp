@@ -506,3 +506,13 @@ address,overlay,old_name,new_name,evidence
 0x80194160,room_m089_central_park,D_80194160,g_RoomM089Anchor,"GteShortVector-sized record (x, y, z) written by RoomM089_SetAnchor and returned to the engine as the anchor argument of RoomM089_SpiralTrail, RoomM089_SpinModel and RoomM089_ModelPulse"
 0x8019416C,room_m089_central_park,D_8019416C,g_RoomM089PulseModel,model asset key 0xC5464704 loaded by RoomM089_ModelPulse mode 0 and drawn as the three turning layers
 0x801940F8,room_m089_central_park,D_801940F8,g_RoomM089PulseColorTrack,colour track sampled by RoomM089_ModelPulse for the glow strip
+0x8018F330,room_m005_theater,func_8018F330,RoomM005_Orbiter,"plays sounds 0x5AB/0x5AC at frame 7, spawns an orbiting child per frame until frame 25 and installs RoomM005_FxOrbiter as the callback; slot 0 of effect set D_80190B44"
+0x8018F614,room_m005_theater,func_8018F614,RoomM005_CrossFlare,"source comment: cross flare drawing two small sprites either side of joint 9 while the frame counter is below 35, then a flash track, two streaks and a large turning sprite at joint 20; slot 1 of effect set D_80190B44"
+0x8018FB84,room_m005_theater,func_8018FB84,RoomM005_BeaconDriftCallback,source comment: sprite drifting by a fixed velocity for six frames then drawing at a room offset (g_RoomM005BeaconOffset) with a cosine-driven intensity; installed by RoomM005_JointBeacon via FieldFx_InitCallbackList
+0x8018FDC4,room_m005_theater,func_8018FDC4,RoomM005_JointBeacon,"source comment: joint beacon riding joint 0x14, shedding drifting sprites for the first frames, swelling and shrinking, tagging the player on contact; slot 2 of effect set D_80190B44"
+0x80190B44,room_m005_theater,D_80190B44,g_RoomM005Effects,"effect set table: slots 0..2 RoomM005_Orbiter, RoomM005_CrossFlare, RoomM005_JointBeacon"
+0x80190AF4,room_m005_theater,D_80190AF4,g_RoomM005CrossFlareColorTrack,colour track sampled by RoomM005_CrossFlare for the flash and streaks
+0x80190B94,room_m005_theater,D_80190B94,g_RoomM005BeaconModel0,model asset key 0xC5462704 loaded first in RoomM005_JointBeacon mode 0 and drawn in four passes
+0x80190B98,room_m005_theater,D_80190B98,g_RoomM005BeaconModel1,model asset key 0xC5862704 loaded second in RoomM005_JointBeacon mode 0 and drawn as the turning second model
+0x80190BA0,room_m005_theater,D_80190BA0,g_RoomM005BeaconOffset,"offset vector (rotation.x/y, z = 0) written by RoomM005_JointBeacon and added to the position in RoomM005_BeaconDriftCallback"
+0x80190BA8,room_m005_theater,D_80190BA8,g_RoomM005BeaconCenter,beacon position written by RoomM005_JointBeacon and used as the quad position in RoomM005_BeaconDriftCallback (FieldFx_DrawRotatedQuad)
