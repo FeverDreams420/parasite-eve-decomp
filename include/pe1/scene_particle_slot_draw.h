@@ -10,8 +10,8 @@
 
 /* Scene e08 particle slots draw: four textured sprites at the slot offsets
  * around the scene anchor, then their four shadows on the floor. */
-extern int D_8019956C;
-extern int D_8019957C;
+extern int g_SceneE08CentreX;
+extern int g_SceneE08CentreZ;
 extern GteShortVector D_8018F040;
 extern RenderColor D_8018F048;
 

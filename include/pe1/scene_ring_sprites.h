@@ -34,11 +34,11 @@ typedef struct SceneRingShade {
     /* 0x16 */ u8 pad16[2];
 } SceneRingShade;
 
-extern GteRotation D_8018F018;
-extern GteVector D_8018F020;
-extern GteVector D_8018F030;
-extern FieldGlowSprite D_801995A8;
-extern FieldGlowSprite D_801995B8;
-extern SceneRingShade D_801995C8[2];
+extern GteRotation g_SceneE08RingSpritesRotation;
+extern GteVector g_SceneE08RingSpritesFlashScale;
+extern GteVector g_SceneE08RingSpritesGlowScale;
+extern FieldGlowSprite g_SceneE08RingSpritesFlashSprite;
+extern FieldGlowSprite g_SceneE08RingSpritesGlowSprite;
+extern SceneRingShade g_SceneE08RingSpritesRings[2];
 
 #endif

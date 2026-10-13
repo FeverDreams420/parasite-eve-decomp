@@ -38,10 +38,10 @@ typedef struct SceneGlowModelColor {
     u8 bytes[8];
 } SceneGlowModelColor;
 
-extern u8 *D_80199528;
-extern int D_8019956C;
-extern int D_8019957C;
-extern u8 D_80198860[];
+extern u8 *g_SceneE08GlowModel;
+extern int g_SceneE08CentreX;
+extern int g_SceneE08CentreZ;
+extern u8 g_SceneE08GlowModelRamp[];
 extern FieldGlowSprite D_801996B0;
 
 #endif

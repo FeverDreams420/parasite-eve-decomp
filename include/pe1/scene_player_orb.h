@@ -31,7 +31,7 @@ typedef struct ScenePlayerOrbAnchor {
     /* 0x2C */ s16 orbHit;
 } ScenePlayerOrbAnchor;
 
-/* The same scene object as its init (func_80193C68) fills it before
+/* The same scene object as its init (SceneE08_InitLayeredSpriteContext) fills it before
  * making it the script context: the source actor, a copy of that actor's
  * root bone matrix whose translation is the anchor position above, the
  * sprite asset handle whose low byte is the mode above, and the re-arming
@@ -70,11 +70,11 @@ typedef struct ScenePlayerOrb {
     /* 0xAA */ u8 count;
 } ScenePlayerOrb;
 
-extern GteRotation D_8018EFFC;
-extern RenderColor D_8018F004;
-extern GteVector D_8018F008;
-extern u8 D_801987E4[];
-extern FieldGlowSprite D_80199690;
+extern GteRotation g_SceneE08PlayerOrbRotationSeed;
+extern RenderColor g_SceneE08PlayerOrbTrailBColor;
+extern GteVector g_SceneE08PlayerOrbPointScale;
+extern u8 g_SceneE08PlayerOrbRamp[];
+extern FieldGlowSprite g_SceneE08PlayerOrbPointSprite;
 
 int *FieldFx_RegPtr(int index);
 
@@ -94,10 +94,10 @@ typedef struct SceneLimbBeams {
     /* 0x24 */ u8 mode[10];
 } SceneLimbBeams;
 
-extern SceneLimbBeamShape D_801994D8[10];
-extern u16 D_80199658[10];
-extern u8 D_801989BC[];
-extern u8 D_801989D0[];
+extern SceneLimbBeamShape g_SceneE08LimbBeamOffsets[10];
+extern u16 g_SceneE08LimbBeamAngles[10];
+extern u8 g_SceneE08LimbBeamsHeadRamp[];
+extern u8 g_SceneE08LimbBeamsTailRamp[];
 
 /* Scene e08 arm glow: a ribbon from the player's hand bone (matrix 32) to
  * the elbow bone (matrix 22) with a scaled glow sprite on each end. */
@@ -109,8 +109,8 @@ typedef struct SceneArmGlow {
 } SceneArmGlow;
 
 
-extern FieldGlowSprite D_801994C8;
-extern RenderColor D_8018F060;
-extern RenderColor D_8018F064;
+extern FieldGlowSprite g_SceneE08ArmGlowSprite;
+extern RenderColor g_SceneE08ArmGlowHeadColor;
+extern RenderColor g_SceneE08ArmGlowTailColor;
 
 #endif

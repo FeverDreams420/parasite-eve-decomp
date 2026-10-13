@@ -146,7 +146,7 @@ typedef struct {
     s16 timer;
 } Ovl178EffectController;
 
-void func_8018F3C4(RoomEnt *ent, void *arg1, SceneE08LinkInitState *state) {
+void SceneE08_InitContext(RoomEnt *ent, void *arg1, SceneE08LinkInitState *state) {
     SceneE08MatrixFields *matrix;
 
     FieldFx_SetScriptContext(state);
@@ -156,14 +156,14 @@ void func_8018F3C4(RoomEnt *ent, void *arg1, SceneE08LinkInitState *state) {
     state->matrix = *matrix;
     state->asset = Asset_SearchByKeyType(0x2E);
 
-    D_80199670.cell = 0x46;
-    D_80199670.clut = 3;
-    D_80199670.offset = -0x1E;
-    D_80199670.depth = 0x80;
-    D_80199670.r = 0xA0;
-    D_80199670.g = 0x80;
-    D_80199670.b = 0xF0;
-    D_80199670.flip = 0;
+    g_SceneE08GlowRingsSprite.cell = 0x46;
+    g_SceneE08GlowRingsSprite.clut = 3;
+    g_SceneE08GlowRingsSprite.offset = -0x1E;
+    g_SceneE08GlowRingsSprite.depth = 0x80;
+    g_SceneE08GlowRingsSprite.r = 0xA0;
+    g_SceneE08GlowRingsSprite.g = 0x80;
+    g_SceneE08GlowRingsSprite.b = 0xF0;
+    g_SceneE08GlowRingsSprite.flip = 0;
     D_801994A8.cell = 0x46;
     D_801994A8.clut = 3;
     D_801994A8.offset = -0x190;
@@ -174,16 +174,16 @@ void func_8018F3C4(RoomEnt *ent, void *arg1, SceneE08LinkInitState *state) {
     D_801994A8.flip = 0;
 }
 
-void func_8018F4FC(void) {
+void SceneE08_DrawContext(void) {
 }
 
-void func_8018F504(void *arg0, unsigned char *state) {
+void SceneE08_UpdateContext(void *arg0, unsigned char *state) {
     if (FieldFx_IsLastSlotHalted() == 1) {
         state[1] = 2;
     }
 }
 
-void func_8018F53C(void *unused0, void *unused1, Ovl178FadeState *state)
+void SceneE08_InitGlowRings(void *unused0, void *unused1, Ovl178FadeState *state)
 {
     unsigned i;
     int offset;
@@ -220,7 +220,7 @@ void func_8018F53C(void *unused0, void *unused1, Ovl178FadeState *state)
 void FieldFx_SetSpriteCellSize(int, int);
 void FieldFx_SetSpriteColorMode(int);
 
-void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
+void SceneE08_DrawGlowRings(void *unused, s16 *args, Ovl178FadeState *state) {
     RoomSpriteMatrix matrix;
     SceneFadeSeed seed;
     RoomFxVec4 scale, sourceScale;
@@ -229,14 +229,14 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
     unsigned i;
 
     owner = FieldFx_GetScriptContext();
-    seed.raw = D_8018EFF4;
+    seed.raw = g_SceneE08GlowRingsRotationSeed;
 
     ownerCursor = &owner->position;
     FieldFx_SetSpriteTexturePreset(owner->drawMode);
     FieldFx_SetSpriteCellSize(0x20, 0x20);
     FieldFx_SetSpriteColorMode(0x10);
     FieldFx_SetSpriteBlendMode(2);
-    FieldFx_InterpolateColorRamp(D_801986F8, args[1], (u8 *)&D_80199670);
+    FieldFx_InterpolateColorRamp(g_SceneE08GlowRingsGlowRamp, args[1], (u8 *)&g_SceneE08GlowRingsSprite);
     for (i = 0; i < 4; ++i) {
         seed.fields.angle = state->glowAngle[i];
         RotMatrix(&seed.raw.vector, &matrix);
@@ -249,8 +249,8 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
         matrix.t[0] = ownerCursor->x;
         matrix.t[1] = ownerCursor->y;
         matrix.t[2] = ownerCursor->z;
-        D_80199670.depth = state->glowDepth;
-        FieldFx_DrawGlowSprite(&D_80199670, &matrix, 1);
+        g_SceneE08GlowRingsSprite.depth = state->glowDepth;
+        FieldFx_DrawGlowSprite(&g_SceneE08GlowRingsSprite, &matrix, 1);
     }
     for (i = 0; i < 2; ++i) {
         matrix.m[2][2] = 0x1000;
@@ -274,12 +274,12 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
         matrix.t[0] = ownerCursor->x;
         matrix.t[1] = ownerCursor->y;
         matrix.t[2] = ownerCursor->z;
-        FieldFx_InterpolateColorRamp(D_80198708, args[1], &state->emitters[i].color1[0]);
+        FieldFx_InterpolateColorRamp(g_SceneE08GlowRingsRingRamp, args[1], &state->emitters[i].color1[0]);
         FieldFx_DrawShadedRing(&state->emitters[i], &matrix, 1);
     }
 }
 
-void func_8018F8B0(void *arg0, Ovl178FadeInput *input, Ovl178FadeState *state) {
+void SceneE08_UpdateGlowRings(void *arg0, Ovl178FadeInput *input, Ovl178FadeState *state) {
     unsigned int i;
     s16 value;
 
@@ -305,7 +305,7 @@ void func_8018F8B0(void *arg0, Ovl178FadeInput *input, Ovl178FadeState *state) {
     }
 }
 
-void func_8018F958(int unused0, int unused1, SceneParticleCluster *slots) {
+void SceneE08_InitParticleCluster(int unused0, int unused1, SceneParticleCluster *slots) {
     unsigned int i;
 
     for (i = 0; i < 30; ++i) {
@@ -352,7 +352,7 @@ void func_8018F958(int unused0, int unused1, SceneParticleCluster *slots) {
 void FieldFx_SetSpriteCellSize(int, int);
 void FieldFx_SetSpriteColorMode(int);
 
-void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots) {
+void SceneE08_DrawParticleCluster(void *unused0, void *unused1, SceneParticleCluster *argSlots) {
     SceneParticleCluster *slots = argSlots;
     Matrix matrix;
     Vec4 scratch, draw;
@@ -422,7 +422,7 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
     }
 }
 
-void func_8018FDA8(void *unused, RoomFxControl *signal, u8 *state) {
+void SceneE08_UpdateParticleCluster(void *unused, RoomFxControl *signal, u8 *state) {
     SceneParticleCluster *slots = (SceneParticleCluster *)state;
     int eight;
     unsigned i;
@@ -496,7 +496,7 @@ ROOMLIB_CLOSE_TARGET(SceneE08_OrbClose)
 
 ROOMLIB_RETURN_ZERO(SceneE08_OrbNop6)
 
-void func_80190060(RoomEnt *ent, void *unused, SceneE08State *state) {
+void SceneE08_InitOrbContext(RoomEnt *ent, void *unused, SceneE08State *state) {
     SceneE08MatrixWords *matrix;
 
     FieldFx_SetScriptContext(state);
@@ -517,40 +517,40 @@ void func_80190060(RoomEnt *ent, void *unused, SceneE08State *state) {
     D_801994B8.b = 64;
     D_801994B8.flip = 0;
 
-    D_801995A8.cell = 0xA4;
-    D_801995A8.clut = 10;
-    D_801995A8.offset = -30;
-    D_801995A8.depth = 128;
-    D_801995A8.r = 160;
-    D_801995A8.g = 128;
-    D_801995A8.b = 240;
-    D_801995A8.flip = 0;
+    g_SceneE08RingSpritesFlashSprite.cell = 0xA4;
+    g_SceneE08RingSpritesFlashSprite.clut = 10;
+    g_SceneE08RingSpritesFlashSprite.offset = -30;
+    g_SceneE08RingSpritesFlashSprite.depth = 128;
+    g_SceneE08RingSpritesFlashSprite.r = 160;
+    g_SceneE08RingSpritesFlashSprite.g = 128;
+    g_SceneE08RingSpritesFlashSprite.b = 240;
+    g_SceneE08RingSpritesFlashSprite.flip = 0;
 
-    D_801995B8.cell = 0x44;
-    D_801995B8.clut = 2;
-    D_801995B8.offset = -30;
-    D_801995B8.depth = 128;
-    D_801995B8.r = 160;
-    D_801995B8.g = 128;
-    D_801995B8.b = 240;
-    D_801995B8.flip = 0;
+    g_SceneE08RingSpritesGlowSprite.cell = 0x44;
+    g_SceneE08RingSpritesGlowSprite.clut = 2;
+    g_SceneE08RingSpritesGlowSprite.offset = -30;
+    g_SceneE08RingSpritesGlowSprite.depth = 128;
+    g_SceneE08RingSpritesGlowSprite.r = 160;
+    g_SceneE08RingSpritesGlowSprite.g = 128;
+    g_SceneE08RingSpritesGlowSprite.b = 240;
+    g_SceneE08RingSpritesGlowSprite.flip = 0;
 
-    D_80199690.cell = 0x4C;
-    D_80199690.clut = 5;
-    D_80199690.offset = -30;
-    D_80199690.depth = 128;
-    D_80199690.r = 160;
-    D_80199690.g = 128;
-    D_80199690.b = 240;
-    D_80199690.flip = 0;
+    g_SceneE08PlayerOrbPointSprite.cell = 0x4C;
+    g_SceneE08PlayerOrbPointSprite.clut = 5;
+    g_SceneE08PlayerOrbPointSprite.offset = -30;
+    g_SceneE08PlayerOrbPointSprite.depth = 128;
+    g_SceneE08PlayerOrbPointSprite.r = 160;
+    g_SceneE08PlayerOrbPointSprite.g = 128;
+    g_SceneE08PlayerOrbPointSprite.b = 240;
+    g_SceneE08PlayerOrbPointSprite.flip = 0;
 }
 
-void func_80190244(void) {
+void SceneE08_DrawOrbContext(void) {
 }
 
-ROOM_REARM_TIMER_TICK(func_8019024C, 0x28)
+ROOM_REARM_TIMER_TICK(SceneE08_UpdateOrbContext, 0x28)
 
-void func_801902CC(int unused0, int unused1, SceneEmitterSlots *slots) {
+void SceneE08_InitFadeSlots(int unused0, int unused1, SceneEmitterSlots *slots) {
     unsigned int i;
     SceneActorPositionTail *origin = (SceneActorPositionTail *)((s32 *)FieldFx_GetScriptContext() + 1);
 
@@ -580,7 +580,7 @@ void func_801902CC(int unused0, int unused1, SceneEmitterSlots *slots) {
 void FieldFx_SetSpriteCellSize(int, int);
 void FieldFx_SetSpriteColorMode(int);
 
-void func_80190460(void *unused0, void *unused1, char *effect) {
+void SceneE08_DrawFadeSlots(void *unused0, void *unused1, char *effect) {
     Matrix matrix;
     Vec4 scratch, draw;
     FieldGlowSprite *sprite;
@@ -662,7 +662,7 @@ void SceneE08_UpdateFadeSlots(int unused, u8 *sceneState, SceneFadeSlots *slots)
 
 /* Spawn the orb 150 units around the player, rotate that offset around the
  * scene anchor by the anchor's heading, and set the trail colours. */
-void func_801906BC(void *object, void *timer, ScenePlayerOrb *orb)
+void SceneE08_InitPlayerOrb(void *object, void *timer, ScenePlayerOrb *orb)
 {
     GteShortVector offset;
     GteShortVector rotated;
@@ -671,7 +671,7 @@ void func_801906BC(void *object, void *timer, ScenePlayerOrb *orb)
     ScenePlayerOrbAnchor *anchor;
 
     anchor = FieldFx_GetScriptContext();
-    rotation = D_8018EFFC;
+    rotation = g_SceneE08PlayerOrbRotationSeed;
     orb->count = 3;
     orb->anchor.x = anchor->x;
     orb->anchor.y = anchor->y;
@@ -709,7 +709,7 @@ void func_801906BC(void *object, void *timer, ScenePlayerOrb *orb)
 }
 
 /* Draw the orb's two fading ribbons and the eight trail sprites. */
-void func_80190914(void *object, void *timer, ScenePlayerOrb *orb)
+void SceneE08_DrawPlayerOrb(void *object, void *timer, ScenePlayerOrb *orb)
 {
     RenderColor color;
     GteMatrix matrix;
@@ -718,14 +718,14 @@ void func_80190914(void *object, void *timer, ScenePlayerOrb *orb)
     u32 i;
 
     anchor = FieldFx_GetScriptContext();
-    color = D_8018F004;
+    color = g_SceneE08PlayerOrbTrailBColor;
     FieldFx_SetSpriteTexturePreset(anchor->mode);
     FieldFx_SetSpriteColorMode(0x10);
     FieldFx_SetSpriteBlendMode(2);
     FieldFx_SetSpriteCellSize(0x10, 0x10);
     if (orb->active != 0) {
-        FieldFx_InterpolateColorRamp(D_801987E4, orb->fade, (unsigned char *)&orb->head);
-        FieldFx_InterpolateColorRamp(D_801987E4, orb->fade, (unsigned char *)&orb->tail);
+        FieldFx_InterpolateColorRamp(g_SceneE08PlayerOrbRamp, orb->fade, (unsigned char *)&orb->head);
+        FieldFx_InterpolateColorRamp(g_SceneE08PlayerOrbRamp, orb->fade, (unsigned char *)&orb->tail);
         FieldFx_DrawTexturedRibbon(orb->trailA, orb->count - 1, 0x3C, 0x20, 0x90, 0x51, 0x10,
                       GetTPage(1, 0, 0x340, 0x100), GetClut(0, 0x1D9),
                       orb->alpha, &orb->head, &orb->tail, 1);
@@ -744,13 +744,13 @@ void func_80190914(void *object, void *timer, ScenePlayerOrb *orb)
         matrix.m[1][0] = 0;
         matrix.m[0][2] = 0;
         matrix.m[0][1] = 0;
-        scale = D_8018F008;
+        scale = g_SceneE08PlayerOrbPointScale;
         ScaleMatrix(&matrix, &scale);
         for (i = 0; i < 8; i++) {
             matrix.t[0] = orb->points[i].x;
             matrix.t[1] = orb->points[i].y;
             matrix.t[2] = orb->points[i].z;
-            FieldFx_DrawGlowSprite(&D_80199690, &matrix, 1);
+            FieldFx_DrawGlowSprite(&g_SceneE08PlayerOrbPointSprite, &matrix, 1);
         }
     }
 }
@@ -758,7 +758,7 @@ void func_80190914(void *object, void *timer, ScenePlayerOrb *orb)
 /* After the start delay, slide the orb's ribbon from the anchor toward its
  * target in sixteenth steps, burst it at step 12, and scatter the trail
  * sprites around the ribbon head. */
-void func_80190B98(void *object, ScenePlayerOrbTimer *timer, ScenePlayerOrb *orb)
+void SceneE08_UpdatePlayerOrb(void *object, ScenePlayerOrbTimer *timer, ScenePlayerOrb *orb)
 {
     GteShortVector step;
     ScenePlayerOrbAnchor *anchor;
@@ -817,7 +817,7 @@ void func_80190B98(void *object, ScenePlayerOrbTimer *timer, ScenePlayerOrb *orb
     }
 }
 
-void func_80190F0C(void *unused0, void *unused1, SceneRingSpritesState *effect) {
+void SceneE08_InitRingSprites(void *unused0, void *unused1, SceneRingSpritesState *effect) {
     u8 *mid = D_801995D4;
     u8 *source;
     int width;
@@ -844,7 +844,7 @@ void func_80190F0C(void *unused0, void *unused1, SceneRingSpritesState *effect) 
     D_801995CE = 0;
     D_801995D6 = 1800;
     D_801995D8 = 1200;
-    source = D_80198B90;
+    source = g_SceneE08RingSpritesSource;
     base[0].source = source;
     FieldFx_BuildRingGeometry(base);
 
@@ -868,7 +868,7 @@ void func_80190F0C(void *unused0, void *unused1, SceneRingSpritesState *effect) 
  * untyped data argument is read through two typed views and then reused for
  * the matrix pointer of the second half, as retail's register use shows
  * (the incoming copy serves the flash block, a second copy the rest). */
-void func_8019104C(void *object, void *timer, void *data)
+void SceneE08_DrawRingSprites(void *object, void *timer, void *data)
 {
     GteRotation rotation;
     GteMatrix matrix;
@@ -880,7 +880,7 @@ void func_8019104C(void *object, void *timer, void *data)
     SceneRingSpritesState *state;
 
     owner = FieldFx_GetScriptContext();
-    rotation = D_8018F018;
+    rotation = g_SceneE08RingSpritesRotation;
     ring = data;
     state = data;
     FieldFx_SetSpriteTexturePreset(owner->mode);
@@ -900,14 +900,14 @@ void func_8019104C(void *object, void *timer, void *data)
         matrix.m[1][0] = 0;
         matrix.m[0][2] = 0;
         matrix.m[0][1] = 0;
-        scale = D_8018F020;
+        scale = g_SceneE08RingSpritesFlashScale;
         ScaleMatrix(&matrix, &scale);
         matrix.t[0] = ring->x;
         matrix.t[1] = ring->y;
         matrix.t[2] = ring->z;
-        D_801995A8.depth = ring->depth;
-        D_801995A8.cell = (ring->ticks % 12 & 0xFE) - 0x5C;
-        FieldFx_DrawGlowSprite(&D_801995A8, &matrix, 1);
+        g_SceneE08RingSpritesFlashSprite.depth = ring->depth;
+        g_SceneE08RingSpritesFlashSprite.cell = (ring->ticks % 12 & 0xFE) - 0x5C;
+        FieldFx_DrawGlowSprite(&g_SceneE08RingSpritesFlashSprite, &matrix, 1);
     }
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -921,14 +921,14 @@ void func_8019104C(void *object, void *timer, void *data)
     matrix.m[1][0] = 0;
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
-    scale = D_8018F030;
+    scale = g_SceneE08RingSpritesGlowScale;
     data = &matrix;
     ScaleMatrix(data, &scale);
     matrix.t[0] = state->x;
     matrix.t[1] = state->y;
     matrix.t[2] = state->z;
-    D_801995B8.depth = state->depth >> 2;
-    FieldFx_DrawGlowSprite(&D_801995B8, data, 1);
+    g_SceneE08RingSpritesGlowSprite.depth = state->depth >> 2;
+    FieldFx_DrawGlowSprite(&g_SceneE08RingSpritesGlowSprite, data, 1);
     RotMatrix(&rotation, data);
     memset(&source, 0, 0x10);
     source.x = state->size;
@@ -939,13 +939,13 @@ void func_8019104C(void *object, void *timer, void *data)
     matrix.t[0] = state->x;
     matrix.t[1] = state->y;
     matrix.t[2] = state->z;
-    D_801995C8[0].depth = state->depth;
-    FieldFx_DrawShadedRing(&D_801995C8[0], data, 0);
-    D_801995C8[1].depth = state->depth;
-    FieldFx_DrawShadedRing(&D_801995C8[1], data, 0);
+    g_SceneE08RingSpritesRings[0].depth = state->depth;
+    FieldFx_DrawShadedRing(&g_SceneE08RingSpritesRings[0], data, 0);
+    g_SceneE08RingSpritesRings[1].depth = state->depth;
+    FieldFx_DrawShadedRing(&g_SceneE08RingSpritesRings[1], data, 0);
 }
 
-void func_80191348(s32 arg0, RoomFxControl *rec, SceneRingSpritesState *p) {
+void SceneE08_UpdateRingSprites(s32 arg0, RoomFxControl *rec, SceneRingSpritesState *p) {
     SceneRingSpritesState *q;
     s16 zero;
     s32 step;
@@ -988,7 +988,7 @@ ROOMLIB_CLOSE_TARGET(SceneE08_SlotsClose)
 
 ROOMLIB_RETURN_ZERO(SceneE08_SlotsNop6)
 
-void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
+void SceneE08_InitSlotsContext(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     SceneE08MatrixWords *matrix;
     void *asset;
     s16 half;
@@ -1001,7 +1001,7 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     int playerX;
 
     FieldFx_SetScriptContext(state);
-    D_80199528 = Asset_FindTable08ByU32Key(*sound, 0x10D8704);
+    g_SceneE08GlowModel = Asset_FindTable08ByU32Key(*sound, 0x10D8704);
     state->link = ent->link;
     matrix = state->link->p238;
     state->matrix = *matrix;
@@ -1046,21 +1046,21 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     asm volatile("" : : "r"(handle));
     intensity = Pe1Fixed_Integer(&player->pos_z);
     playerX = Pe1Fixed_Integer(&player->pos_x);
-    D_8019956C = playerX;
-    D_8019957C = intensity;
+    g_SceneE08CentreX = playerX;
+    g_SceneE08CentreZ = intensity;
     if (handle != 0) {
         Akao_SendTableCommand(*sound, 0x603, 0, 0x80, 0x7F);
     }
 }
 
-void func_80191740(void) {
+void SceneE08_DrawSlotsContext(void) {
 }
 
 void Battle_HaltOnPositiveX(void);
 void Battle_InitEntityColors(void);
 int FieldFx_GetStatus(void *arg0);
 
-void func_80191748(SceneGrabHead *arg0, RoomFxControl *arg1) {
+void SceneE08_UpdateSlotsContext(SceneGrabHead *arg0, RoomFxControl *arg1) {
     int *status;
     int *flags;
     int *objectFlags;
@@ -1088,7 +1088,7 @@ void func_80191748(SceneGrabHead *arg0, RoomFxControl *arg1) {
     }
 }
 
-void func_80191830(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
+void SceneE08_InitCentreGlow(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
     glow->x = 0;
     glow->y = 0;
     glow->z = 0;
@@ -1100,7 +1100,7 @@ void func_80191830(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
 void FieldFx_SetSpriteCellSize(s32 arg0, s32 arg1);
 void FieldFx_SetSpriteColorMode(s32 arg0);
 
-void func_80191850(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
+void SceneE08_DrawCentreGlow(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
     SceneE08Matrix matrix;
     SceneE08Vector scratch_scale;
     SceneE08Vector draw_scale;
@@ -1132,19 +1132,19 @@ void func_80191850(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
     scratch_scale = draw_scale;
     ScaleMatrix(&matrix, &scratch_scale);
 
-    matrix.t[0] = glow->x + D_8019956C;
+    matrix.t[0] = glow->x + g_SceneE08CentreX;
     matrix.t[1] = glow->y;
-    matrix.t[2] = glow->z + D_8019957C;
+    matrix.t[2] = glow->z + g_SceneE08CentreZ;
     FieldFx_DrawGlowSprite((FieldGlowSprite *)D_801996A0, &matrix, 1);
 }
 
-void func_80191970(void *arg0, RoomFxControl *control, void *arg2) {
+void SceneE08_UpdateCentreGlow(void *arg0, RoomFxControl *control, void *arg2) {
     if (control->frame >= 0x79) {
         control->state = 2;
     }
 }
 
-void func_80191990(void *arg0, void *arg1, SceneMovingSlots *slots) {
+void SceneE08_InitRadialRibbons(void *arg0, void *arg1, SceneMovingSlots *slots) {
     unsigned int i;
 
     for (i = 0; i < 16; i++) {
@@ -1152,7 +1152,7 @@ void func_80191990(void *arg0, void *arg1, SceneMovingSlots *slots) {
     }
 }
 
-void func_801919B0(s32 arg0, s32 arg1, SceneMovingSlots *base) {
+void SceneE08_DrawRadialRibbons(s32 arg0, s32 arg1, SceneMovingSlots *base) {
     Ovl178Position *st;
     u32 i;
     u8 buf38[8];
@@ -1168,8 +1168,8 @@ void func_801919B0(s32 arg0, s32 arg1, SceneMovingSlots *base) {
         if (type == 1) {
             s32 v64;
             s32 vAA;
-            FieldFx_InterpolateColorRamp(D_8019880C, base->life[i], buf38);
-            FieldFx_InterpolateColorRamp(D_8019880C, base->life[i], buf40);
+            FieldFx_InterpolateColorRamp(g_SceneE08RadialRibbonsRamp, base->life[i], buf38);
+            FieldFx_InterpolateColorRamp(g_SceneE08RadialRibbonsRamp, base->life[i], buf40);
             buf40[0] = 0;
             buf40[1] = 0;
             buf40[2] = 0;
@@ -1183,7 +1183,7 @@ void func_801919B0(s32 arg0, s32 arg1, SceneMovingSlots *base) {
     }
 }
 
-void func_80191B14(int unused, SceneMovingState *state, SceneMovingSlots *slots) {
+void SceneE08_UpdateRadialRibbons(int unused, SceneMovingState *state, SceneMovingSlots *slots) {
     unsigned int i;
 
     for (i = 0; i < 16; ++i) {
@@ -1200,8 +1200,8 @@ void func_80191B14(int unused, SceneMovingState *state, SceneMovingSlots *slots)
             }
             {
                 int randomValue = rand();
-                int x = D_8019956C;
-                int z = D_8019957C;
+                int x = g_SceneE08CentreX;
+                int z = g_SceneE08CentreZ;
                 slots->radius[i] = randomValue % 1500 + 300;
                 slots->vector[i].y = 0;
                 slots->vector[i].x = x;
@@ -1214,9 +1214,9 @@ void func_80191B14(int unused, SceneMovingState *state, SceneMovingSlots *slots)
             if (--slots->timer[i] == 0) {
                 slots->active[i] = 0;
             }
-            slots->vector[i].dx = (rsin(slots->angle[i]) * slots->radius[i] >> 12) + D_8019956C;
+            slots->vector[i].dx = (rsin(slots->angle[i]) * slots->radius[i] >> 12) + g_SceneE08CentreX;
             slots->vector[i].dy = rcos(slots->angle[i]) * slots->radius[i] >> 12;
-            slots->vector[i].dz = (rcos(slots->angle[i]) * slots->radius[i] >> 12) + D_8019957C;
+            slots->vector[i].dz = (rcos(slots->angle[i]) * slots->radius[i] >> 12) + g_SceneE08CentreZ;
             slots->vector[i].combinedX = (u16)slots->vector[i].x + (u16)slots->vector[i].dx;
             slots->vector[i].combinedY = (u16)slots->vector[i].y + (u16)slots->vector[i].dy;
             slots->vector[i].combinedZ = (u16)slots->vector[i].z + (u16)slots->vector[i].dz;
@@ -1244,7 +1244,7 @@ void SceneE08_InitParticleSlots(int unused0, int unused1, SceneParticleSlots *sl
 
 /* Draw each slot's sprite at its offset from the scene anchor (doubled in
  * depth), then each slot's shadow sprite using the raw offset. */
-void func_80191E78(void *object, void *timer, SceneParticleSlots *slots)
+void SceneE08_DrawParticleSlots(void *object, void *timer, SceneParticleSlots *slots)
 {
     GteShortVector position;
     GteShortVector offset;
@@ -1255,9 +1255,9 @@ void func_80191E78(void *object, void *timer, SceneParticleSlots *slots)
     u32 i;
 
     memset(&offset, 0, 8);
-    offset.x = D_8019956C;
+    offset.x = g_SceneE08CentreX;
     offset.y = 0;
-    offset.z = D_8019957C;
+    offset.z = g_SceneE08CentreZ;
     position = offset;
     offset = D_8018F040;
     color = D_8018F048;
@@ -1306,7 +1306,7 @@ void func_80191E78(void *object, void *timer, SceneParticleSlots *slots)
     }
 }
 
-void func_801921C8(int unused, u8 *state, SceneParticleSlots *slots)
+void SceneE08_UpdateParticleSlots(int unused, u8 *state, SceneParticleSlots *slots)
 {
     unsigned int i;
     u16 oldPhase;
@@ -1341,7 +1341,7 @@ void func_801921C8(int unused, u8 *state, SceneParticleSlots *slots)
 
 void FieldFx_BuildRingGeometry(void *);
 
-void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect) {
+void SceneE08_InitRingEffect(void *unused0, void *unused1, SceneE08RingEffectState *effect) {
     u8 *mid = (u8 *)&D_80199604;
     u8 *source;
     FieldRingGeometry *ring;
@@ -1365,7 +1365,7 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     span = 0x960;
     record->intensity = intensity;
     record->color1[2] = 0x78;
-    asm volatile("" : "=r"(source) : "0"(D_80198C90));
+    asm volatile("" : "=r"(source) : "0"(g_SceneE08RingEffectSource));
     record->color0[0] = 0;
     record->color0[1] = 0;
     record->color0[2] = 0;
@@ -1408,7 +1408,7 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     FieldFx_BuildRingGeometry(record);
 }
 
-void func_80192544(void *unused, RoomFxControl *time, SceneE08RingEffectState *record) {
+void SceneE08_DrawRingEffect(void *unused, RoomFxControl *time, SceneE08RingEffectState *record) {
     Matrix matrix;
     Vec4 scratchScale, firstScale, secondScale;
 
@@ -1423,10 +1423,10 @@ void func_80192544(void *unused, RoomFxControl *time, SceneE08RingEffectState *r
     firstScale.z = record->firstScale;
     scratchScale = firstScale;
     ScaleMatrix(&matrix, &scratchScale);
-    matrix.t[0] = D_8019956C;
+    matrix.t[0] = g_SceneE08CentreX;
     matrix.t[1] = 0;
-    matrix.t[2] = D_8019957C;
-    FieldFx_DrawShadedRing(D_801995F8, &matrix, 1);
+    matrix.t[2] = g_SceneE08CentreZ;
+    FieldFx_DrawShadedRing(g_SceneE08RingEffectRings, &matrix, 1);
     if (time->frame >= 0x3D) {
         FieldFx_SetSpriteBlendMode(2);
         record->rotation[0] = 0x400;
@@ -1439,14 +1439,14 @@ void func_80192544(void *unused, RoomFxControl *time, SceneE08RingEffectState *r
         secondScale.z = record->secondScale;
         firstScale = secondScale;
         ScaleMatrix(&matrix, &firstScale);
-        matrix.t[0] = D_8019956C;
+        matrix.t[0] = g_SceneE08CentreX;
         matrix.t[1] = 0;
-        matrix.t[2] = D_8019957C;
-        FieldFx_DrawShadedRing(D_801995F8 + 0x18, &matrix, 0);
+        matrix.t[2] = g_SceneE08CentreZ;
+        FieldFx_DrawShadedRing(g_SceneE08RingEffectRings + 0x18, &matrix, 0);
     }
 }
 
-void func_80192704(s32 arg0, s16 *rec, SceneE08RingEffectState *p) {
+void SceneE08_UpdateRingEffect(s32 arg0, s16 *rec, SceneE08RingEffectState *p) {
     u16 *q;
     s16 pad;
 
@@ -1465,7 +1465,7 @@ void func_80192704(s32 arg0, s16 *rec, SceneE08RingEffectState *p) {
     }
 }
 
-void func_80192788(void *arg0, void *arg1, SceneMovingSlots *slots) {
+void SceneE08_InitSpiralRibbons(void *arg0, void *arg1, SceneMovingSlots *slots) {
     unsigned int i;
 
     for (i = 0; i < 16; i++) {
@@ -1475,7 +1475,7 @@ void func_80192788(void *arg0, void *arg1, SceneMovingSlots *slots) {
 
 void FieldFx_SetSpriteColorMode(int);
 
-void func_801927A8(void *unused0, void *unused1, SceneMovingSlots *effect) {
+void SceneE08_DrawSpiralRibbons(void *unused0, void *unused1, SceneMovingSlots *effect) {
     unsigned int i;
     SceneMovingVector *dst;
     SceneMovingWordLane *step;
@@ -1489,7 +1489,7 @@ void func_801927A8(void *unused0, void *unused1, SceneMovingSlots *effect) {
 
     owner = FieldFx_GetScriptContext();
     i = 0;
-    table = D_80198820;
+    table = g_SceneE08SpiralRibbonsRamp;
     scratchPtr = scratchB;
     FieldFx_SetSpriteTexturePreset(owner->spriteMode);
     FieldFx_SetSpriteColorMode(0x10);
@@ -1521,7 +1521,7 @@ void func_801927A8(void *unused0, void *unused1, SceneMovingSlots *effect) {
     }
 }
 
-void func_80192904(int unused, SceneMovingState *state, SceneMovingSlots *slots) {
+void SceneE08_UpdateSpiralRibbons(int unused, SceneMovingState *state, SceneMovingSlots *slots) {
     unsigned int i;
 
     for (i = 0; i < 16; ++i) {
@@ -1557,14 +1557,14 @@ void func_80192904(int unused, SceneMovingState *state, SceneMovingSlots *slots)
             }
             slots->life[i]++;
             slots->vector[i].dx = (rsin(slots->angle[i]) *
-                                   (slots->extraRadius[i] + slots->radius[i]) >> 12) + D_8019956C;
+                                   (slots->extraRadius[i] + slots->radius[i]) >> 12) + g_SceneE08CentreX;
             slots->vector[i].dy = rcos(slots->angle[i]) *
                                   (slots->extraRadius[i] + slots->radius[i]) >> 12;
             slots->vector[i].dz = (rcos(slots->angle[i]) *
-                                   (slots->extraRadius[i] + slots->radius[i]) >> 12) + D_8019957C;
-            slots->vector[i].x = (rsin(slots->angle[i]) * slots->extraRadius[i] >> 12) + D_8019956C;
+                                   (slots->extraRadius[i] + slots->radius[i]) >> 12) + g_SceneE08CentreZ;
+            slots->vector[i].x = (rsin(slots->angle[i]) * slots->extraRadius[i] >> 12) + g_SceneE08CentreX;
             slots->vector[i].y = rcos(slots->angle[i]) * slots->extraRadius[i] >> 12;
-            slots->vector[i].z = (rcos(slots->angle[i]) * slots->extraRadius[i] >> 12) + D_8019957C;
+            slots->vector[i].z = (rcos(slots->angle[i]) * slots->extraRadius[i] >> 12) + g_SceneE08CentreZ;
             slots->vector[i].combinedX = (slots->vector[i].x + slots->vector[i].dx) >> 1;
             slots->vector[i].combinedY = (slots->vector[i].y + slots->vector[i].dy) >> 1;
             slots->vector[i].combinedZ = (slots->vector[i].z + slots->vector[i].dz) >> 1;
@@ -1575,19 +1575,19 @@ void func_80192904(int unused, SceneMovingState *state, SceneMovingSlots *slots)
     }
 }
 
-void func_80192C78(void *arg0, void *arg1, SceneE08ScreenFade *fade) {
+void SceneE08_InitScreenFade(void *arg0, void *arg1, SceneE08ScreenFade *fade) {
     fade->reserved = 0;
     fade->level = 0;
 }
 
-void func_80192C84(void *arg0, void *arg1, SceneE08ScreenFade *fade) {
+void SceneE08_DrawScreenFade(void *arg0, void *arg1, SceneE08ScreenFade *fade) {
     SceneE08FourBytes local;
 
-    local = D_8018F04C;
+    local = g_SceneE08ScreenFadeColor;
     FieldFx_DrawScreenTint((unsigned char *)&local, fade->level, 1, 8);
 }
 
-void func_80192CCC(void *arg0, RoomFxControl *control, SceneE08ScreenFade *fade) {
+void SceneE08_UpdateScreenFade(void *arg0, RoomFxControl *control, SceneE08ScreenFade *fade) {
     if (control->frame < 0x3D) {
         fade->phase = 1;
     } else {
@@ -1613,7 +1613,7 @@ void func_80192CCC(void *arg0, RoomFxControl *control, SceneE08ScreenFade *fade)
     }
 }
 
-void func_80192D70(void *arg0, void *arg1, char *arg2) {
+void SceneE08_InitOrbitParticles(void *arg0, void *arg1, char *arg2) {
     char *end = arg2 + 0x20;
 
     do {
@@ -1623,7 +1623,7 @@ void func_80192D70(void *arg0, void *arg1, char *arg2) {
 
 void FieldFx_SetSpriteCellSize(int, int);
 void FieldFx_SetSpriteColorMode(int);
-void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect) {
+void SceneE08_DrawOrbitParticles(void *unused0, void *unused1, SceneE08OrbitParticles *effect) {
     SceneE08Matrix matrix;
     s16 temp[3];
     SceneE08Vector transformed, v;
@@ -1663,16 +1663,16 @@ void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect)
             v.z = scale;
             transformed = v;
             ScaleMatrix(&matrix, &transformed);
-            matrix.t[0] = temp[0] + D_8019956C;
+            matrix.t[0] = temp[0] + g_SceneE08CentreX;
             matrix.t[1] = temp[1];
-            matrix.t[2] = temp[2] + D_8019957C;
-            FieldFx_InterpolateColorRamp(D_80198848, effect->frame[i], table);
+            matrix.t[2] = temp[2] + g_SceneE08CentreZ;
+            FieldFx_InterpolateColorRamp(g_SceneE08OrbitParticlesRamp, effect->frame[i], table);
             FieldFx_DrawGlowSprite((FieldGlowSprite *)table, &matrix, 1);
         }
     }
 }
 
-void func_80192F50(void *unused, RoomFxControl *condition_arg, SceneE08OrbitParticles *effect) {
+void SceneE08_UpdateOrbitParticles(void *unused, RoomFxControl *condition_arg, SceneE08OrbitParticles *effect) {
     /* The byte cursor and loop-limit base remain pinned for matching. */
     RoomFxControl *condition = condition_arg;
     register char *base asm("$18") = (char *)effect;
@@ -1714,7 +1714,7 @@ void func_80192F50(void *unused, RoomFxControl *condition_arg, SceneE08OrbitPart
     }
 }
 
-void func_80193114(void *arg0, void *arg1, short *state) {
+void SceneE08_InitGlowModel(void *arg0, void *arg1, short *state) {
     state[1] = -0x1000;
     state[4] = 0;
     state[5] = 0;
@@ -1729,7 +1729,7 @@ void func_80193114(void *arg0, void *arg1, short *state) {
 
 /* Draw the scene model with the owner's texture page, then a glow sprite
  * whose size grows with the timer after tick 10 (capped at 0x7D00). */
-void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState *state)
+void SceneE08_DrawGlowModel(void *object, SceneGlowModelTimer *timer, SceneGlowModelState *state)
 {
     RoomSpriteMatrix matrix;
     SceneGlowModelColor color;
@@ -1748,10 +1748,10 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
     source.z = model->scaleZ;
     scale = source;
     ScaleMatrix(&matrix, &scale);
-    matrix.t[0] = D_8019956C;
+    matrix.t[0] = g_SceneE08CentreX;
     matrix.t[1] = g_RoomFloorY->y + model->height;
-    matrix.t[2] = D_8019957C;
-    FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80199528, 0, 0);
+    matrix.t[2] = g_SceneE08CentreZ;
+    FieldFx_ModelScrollUv((union FieldTexturedModel *)g_SceneE08GlowModel, 0, 0);
     if (owner->mode == 0) {
         int tpage = GetTPage(0, 1, 0x340, 0x100);
         FieldFx_ModelSetTexture(tpage, GetClut(0, 0x1D7));
@@ -1760,12 +1760,12 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
         int tpage = GetTPage(0, 1, 0x340, 0x160);
         FieldFx_ModelSetTexture(tpage, GetClut(0, 0x1DB));
     }
-    FieldFx_InterpolateColorRamp(D_80198860, timer->ticks, (unsigned char *)&color);
+    FieldFx_InterpolateColorRamp(g_SceneE08GlowModelRamp, timer->ticks, (unsigned char *)&color);
     FieldFx_ModelSetSemiTrans(1);
-    FieldFx_ModelSaveColors(D_80199528);
-    FieldFx_ModelScaleColors(D_80199528, model->depth);
-    FieldFx_ModelDraw((union FieldTexturedModel *)D_80199528, &matrix);
-    FieldFx_ModelRestoreColors(D_80199528);
+    FieldFx_ModelSaveColors(g_SceneE08GlowModel);
+    FieldFx_ModelScaleColors(g_SceneE08GlowModel, model->depth);
+    FieldFx_ModelDraw((union FieldTexturedModel *)g_SceneE08GlowModel, &matrix);
+    FieldFx_ModelRestoreColors(g_SceneE08GlowModel);
     if (timer->ticks > 10) {
         size = (timer->ticks - 10) << 9;
         if (size > 0x7D00)
@@ -1791,14 +1791,14 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
         source.y = size;
         source.z = size;
         ScaleMatrix(&matrix, &source);
-        matrix.t[0] = D_8019956C;
+        matrix.t[0] = g_SceneE08CentreX;
         matrix.t[1] = 0;
-        matrix.t[2] = D_8019957C;
+        matrix.t[2] = g_SceneE08CentreZ;
         FieldFx_DrawGlowSprite(&D_801996B0, &matrix, 1);
     }
 }
 
-void func_80193400(void *arg0, RoomFxControl *signal, SceneGlowModelState *work) {
+void SceneE08_UpdateGlowModel(void *arg0, RoomFxControl *signal, SceneGlowModelState *work) {
     work->seed.vector.y += 0xC8;
     if (signal->frame < 0x10) {
         u16 depth = work->depth;
@@ -1821,12 +1821,12 @@ void func_80193400(void *arg0, RoomFxControl *signal, SceneGlowModelState *work)
     }
 }
 
-void func_80193480(void *unused0, void *unused1, Ovl178RandomizedEffect *effect) {
+void SceneE08_InitLimbBeams(void *unused0, void *unused1, Ovl178RandomizedEffect *effect) {
     unsigned i;
     s32 threshold;
 
     for (i = 0; i < 10; i++) {
-        D_80199658[i] = rand() % 4096;
+        g_SceneE08LimbBeamAngles[i] = rand() % 4096;
         D_80199590[i] = rand() % 4096;
         effect->tail.flags[i] = 0;
         effect->offsets[i] = 0;
@@ -1840,7 +1840,7 @@ void func_80193480(void *unused0, void *unused1, Ovl178RandomizedEffect *effect)
 }
 
 /* Draw the ten limb beams that are switched on (mode 1). */
-void func_801935A8(void *object, void *timer, SceneLimbBeams *beams)
+void SceneE08_DrawLimbBeams(void *object, void *timer, SceneLimbBeams *beams)
 {
     GteShortVector points[10];
     RenderColor head;
@@ -1878,23 +1878,23 @@ void func_801935A8(void *object, void *timer, SceneLimbBeams *beams)
             if (i == 4) {
                 target = &matrices[28];
             }
-            points[0].x = matrices[2].translation[0] + (rsin(D_80199658[i] + D_801994D8[i].swing) >> 5);
+            points[0].x = matrices[2].translation[0] + (rsin(g_SceneE08LimbBeamAngles[i] + g_SceneE08LimbBeamOffsets[i].swing) >> 5);
             points[0].y = matrices[2].translation[1];
-            points[0].z = matrices[2].translation[2] + (rcos(D_80199658[i] + D_801994D8[i].swing) >> 5);
-            points[1].x = D_801994D8[i].rise + matrices[2].translation[0];
-            points[1].y = D_801994D8[i].rise + matrices[2].translation[1];
-            points[1].z = D_801994D8[i].rise + matrices[2].translation[2];
-            points[2].x = D_801994D8[i].bend + ((matrices[2].translation[0] + target->translation[0]) >> 1);
-            points[2].y = D_801994D8[i].bend + ((matrices[2].translation[1] + target->translation[1]) >> 1);
-            points[2].z = D_801994D8[i].bend + ((matrices[2].translation[2] + target->translation[2]) >> 1);
-            points[3].x = D_801994D8[i].reach + target->translation[0];
-            points[3].y = D_801994D8[i].reach + target->translation[1];
-            points[3].z = D_801994D8[i].reach + target->translation[2];
+            points[0].z = matrices[2].translation[2] + (rcos(g_SceneE08LimbBeamAngles[i] + g_SceneE08LimbBeamOffsets[i].swing) >> 5);
+            points[1].x = g_SceneE08LimbBeamOffsets[i].rise + matrices[2].translation[0];
+            points[1].y = g_SceneE08LimbBeamOffsets[i].rise + matrices[2].translation[1];
+            points[1].z = g_SceneE08LimbBeamOffsets[i].rise + matrices[2].translation[2];
+            points[2].x = g_SceneE08LimbBeamOffsets[i].bend + ((matrices[2].translation[0] + target->translation[0]) >> 1);
+            points[2].y = g_SceneE08LimbBeamOffsets[i].bend + ((matrices[2].translation[1] + target->translation[1]) >> 1);
+            points[2].z = g_SceneE08LimbBeamOffsets[i].bend + ((matrices[2].translation[2] + target->translation[2]) >> 1);
+            points[3].x = g_SceneE08LimbBeamOffsets[i].reach + target->translation[0];
+            points[3].y = g_SceneE08LimbBeamOffsets[i].reach + target->translation[1];
+            points[3].z = g_SceneE08LimbBeamOffsets[i].reach + target->translation[2];
             points[4].x = target->translation[0];
             points[4].y = target->translation[1];
             points[4].z = target->translation[2];
-            FieldFx_InterpolateColorRamp(D_801989BC, beams->fade[i], (unsigned char *)&head);
-            FieldFx_InterpolateColorRamp(D_801989D0, beams->fade[i], (unsigned char *)&tail);
+            FieldFx_InterpolateColorRamp(g_SceneE08LimbBeamsHeadRamp, beams->fade[i], (unsigned char *)&head);
+            FieldFx_InterpolateColorRamp(g_SceneE08LimbBeamsTailRamp, beams->fade[i], (unsigned char *)&tail);
             tpage = GetTPage(0, 0, 0x340, 0x100);
             FieldFx_DrawTexturedRibbon(points, 4, 100, 0x40, 0x80, 0x9C, 0x10, tpage,
                           GetClut(0, 0x1D7), 0x80, &tail, &tail, mode);
@@ -1902,15 +1902,15 @@ void func_801935A8(void *object, void *timer, SceneLimbBeams *beams)
     }
 }
 
-void func_801938FC(int unused, SceneE08RandomState *state, SceneE08RandomEntries *entries) {
+void SceneE08_UpdateLimbBeams(int unused, SceneE08RandomState *state, SceneE08RandomEntries *entries) {
     unsigned int i;
     for (i = 0; i < 10; ++i) {
         if (entries->active[i] == 1) {
             ++entries->counter[i];
-            D_801994D8[i].rise = rand() % 160 - 80;
-            D_801994D8[i].bend = rand() % 160 - 80;
-            D_801994D8[i].reach = rand() % 160 - 80;
-            D_801994D8[i].swing = rand() % 512 - 256;
+            g_SceneE08LimbBeamOffsets[i].rise = rand() % 160 - 80;
+            g_SceneE08LimbBeamOffsets[i].bend = rand() % 160 - 80;
+            g_SceneE08LimbBeamOffsets[i].reach = rand() % 160 - 80;
+            g_SceneE08LimbBeamOffsets[i].swing = rand() % 512 - 256;
         } else if (rand() % 20 == 0) {
             entries->active[i] = 1;
         }
@@ -1946,7 +1946,7 @@ ROOMLIB_RETURN_ZERO(SceneE08_LayeredSpriteNop6)
 
 /* The 0x80199560 glow sprite, field by field as Scene_DrawLayeredSprite
  * stores its colour. */
-void func_80193C68(SceneGrabHead *actor, void *unused, SceneE08Context *state) {
+void SceneE08_InitLayeredSpriteContext(SceneGrabHead *actor, void *unused, SceneE08Context *state) {
     FieldActor *source;
     RenderMatrix *block;
     void *sound;
@@ -1982,15 +1982,15 @@ void func_80193C68(SceneGrabHead *actor, void *unused, SceneE08Context *state) {
     *(s16 *)((char *)state + 0x2A) = 0;
     *(s16 *)((char *)state + 0x2C) = 0;
     D_80199558 = scratch;
-    D_80199580.offset = -100;
-    D_80199580.g = 16;
-    D_80199580.b = 5;
+    g_SceneE08TrailGlowFloorSprite.offset = -100;
+    g_SceneE08TrailGlowFloorSprite.g = 16;
+    g_SceneE08TrailGlowFloorSprite.b = 5;
     D_80199564 = 70;
     D_80199565 = 3;
     D_80199568 = 1;
     D_80199540.cell = 96;
     D_80199555 = one;
-    D_80199580.clut = one;
+    g_SceneE08TrailGlowFloorSprite.clut = one;
     soundAddress = (RoomSoundSlot *)D_800B0E64;
     D_80199554 = sixtyFour;
     D_8019955A = half128;
@@ -1998,10 +1998,10 @@ void func_80193C68(SceneGrabHead *actor, void *unused, SceneE08Context *state) {
     D_80199551 = sixtyFour;
     D_80199552 = thirtyTwo;
     D_80199556 = two;
-    D_80199580.cell = sixtyFour;
-    D_80199580.depth = half128;
-    D_80199580.r = thirtyTwo;
-    D_80199580.flip = two;
+    g_SceneE08TrailGlowFloorSprite.cell = sixtyFour;
+    g_SceneE08TrailGlowFloorSprite.depth = half128;
+    g_SceneE08TrailGlowFloorSprite.r = thirtyTwo;
+    g_SceneE08TrailGlowFloorSprite.flip = two;
     D_8019956A = half128;
     D_80199560 = byte128;
     D_80199561 = byte128;
@@ -2014,24 +2014,24 @@ void func_80193C68(SceneGrabHead *actor, void *unused, SceneE08Context *state) {
     D_80199540.g = byte128;
     D_80199540.b = byte128;
     D_80199540.flip = 0;
-    D_80199570.cell = 0;
-    D_80199570.clut = 0;
+    g_SceneE08SpinningGlowSprite.cell = 0;
+    g_SceneE08SpinningGlowSprite.clut = 0;
     minus300 = -300;
-    D_80199570.offset = minus300;
-    D_80199570.depth = half128;
-    D_80199570.r = byte128;
-    D_80199570.g = byte128;
-    D_80199570.b = byte128;
-    D_80199570.flip = 0;
+    g_SceneE08SpinningGlowSprite.offset = minus300;
+    g_SceneE08SpinningGlowSprite.depth = half128;
+    g_SceneE08SpinningGlowSprite.r = byte128;
+    g_SceneE08SpinningGlowSprite.g = byte128;
+    g_SceneE08SpinningGlowSprite.b = byte128;
+    g_SceneE08SpinningGlowSprite.flip = 0;
     sound = *(void *volatile *)&soundAddress->channel;
-    D_801994C8.cell = 68;
-    D_801994C8.clut = two;
-    D_801994C8.offset = minus300;
-    D_801994C8.depth = half128;
-    D_801994C8.r = byte128;
-    D_801994C8.g = sixtyFour;
-    D_801994C8.b = thirtyTwo;
-    D_801994C8.flip = 0;
+    g_SceneE08ArmGlowSprite.cell = 68;
+    g_SceneE08ArmGlowSprite.clut = two;
+    g_SceneE08ArmGlowSprite.offset = minus300;
+    g_SceneE08ArmGlowSprite.depth = half128;
+    g_SceneE08ArmGlowSprite.r = byte128;
+    g_SceneE08ArmGlowSprite.g = sixtyFour;
+    g_SceneE08ArmGlowSprite.b = thirtyTwo;
+    g_SceneE08ArmGlowSprite.flip = 0;
     D_801994A0 = minus300;
     D_801994A2 = half128;
     D_80199490 = 0;
@@ -2052,12 +2052,12 @@ void func_80193C68(SceneGrabHead *actor, void *unused, SceneE08Context *state) {
     }
 }
 
-void func_80193F70(void) {
+void SceneE08_DrawLayeredSpriteContext(void) {
 }
 
-ROOM_REARM_TIMER_TICK(func_80193F78, 0x28)
+ROOM_REARM_TIMER_TICK(SceneE08_UpdateLayeredSpriteContext, 0x28)
 
-void func_80193FF8(s32 arg0, s32 arg1, SceneE08TrailGlow *p) {
+void SceneE08_InitTrailGlow(s32 arg0, s32 arg1, SceneE08TrailGlow *p) {
     Ovl178Position *view;
     s32 z;
 
@@ -2080,7 +2080,7 @@ void func_80193FF8(s32 arg0, s32 arg1, SceneE08TrailGlow *p) {
 
 void FieldFx_SetSpriteCellSize(int, int);
 void FieldFx_SetSpriteColorMode(int);
-void func_80194090(void *arg0, void *arg1, char *effects) {
+void SceneE08_DrawTrailGlow(void *arg0, void *arg1, char *effects) {
     GteMatrix matrix;
     GteVector scratch, vec;
     Ovl178Position *owner;
@@ -2128,10 +2128,10 @@ void func_80194090(void *arg0, void *arg1, char *effects) {
     matrix.t[0] = ((SceneE08TrailGlow *)base)->trail[0].x;
     matrix.t[1] = g_RoomFloorY->y;
     matrix.t[2] = ((SceneE08TrailGlow *)base)->trail[0].z;
-    FieldFx_DrawGlowSprite(&D_80199580, &matrix, 0);
+    FieldFx_DrawGlowSprite(&g_SceneE08TrailGlowFloorSprite, &matrix, 0);
 }
 
-void func_80194214(void *unused, RoomFxControl *phase, SceneE08TrailGlow *effect) {
+void SceneE08_UpdateTrailGlow(void *unused, RoomFxControl *phase, SceneE08TrailGlow *effect) {
     Ovl178Position *owner;
     s16 point[3];
     int i;
@@ -2176,7 +2176,7 @@ void func_80194214(void *unused, RoomFxControl *phase, SceneE08TrailGlow *effect
     }
 }
 
-void func_801943CC(void *arg0, void *arg1, SceneLayeredSpriteState *out)
+void SceneE08_InitLayeredSprite(void *arg0, void *arg1, SceneLayeredSpriteState *out)
 {
     Ovl178Position *position = FieldFx_GetScriptContext();
 
@@ -2200,7 +2200,7 @@ void func_801943CC(void *arg0, void *arg1, SceneLayeredSpriteState *out)
 void FieldFx_SetSpriteCellSize(int, int);
 void FieldFx_SetSpriteColorMode(int);
 
-void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
+void SceneE08_DrawLayeredSprite(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     RoomSpriteMatrix matrix;
     RoomFxVec4 firstScale, layerScale;
     char *owner;
@@ -2216,7 +2216,7 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     FieldFx_SetSpriteBlendMode(2);
 
     RotMatrix(&state->initialSeed.vector, &matrix);
-    firstScale = D_8018F050;
+    firstScale = g_SceneE08LayeredSpriteScale;
     ScaleMatrix(&matrix, &firstScale);
     if (phase[1] & 1) {
         D_80199560 = 0xFF;
@@ -2248,7 +2248,7 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     D_80199562 = 0;
     for (i = 0; i < 5; ++i) {
         RotMatrix(&state->layerSeeds[i].vector, &matrix);
-        layerScale = D_8018F050;
+        layerScale = g_SceneE08LayeredSpriteScale;
         ScaleMatrix(&matrix, &layerScale);
         owner = (char *)alpha;
         matrix.t[0] = state->layers[i].x;
@@ -2259,7 +2259,7 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     }
 }
 
-void func_801946D4(void *unused, RoomFxControl *control, char *state)
+void SceneE08_UpdateLayeredSprite(void *unused, RoomFxControl *control, char *state)
 {
     Ovl178Position *owner = FieldFx_GetScriptContext();
     /* Keeps the later history-copy loop based at its original offset. */
@@ -2367,7 +2367,7 @@ void func_801946D4(void *unused, RoomFxControl *control, char *state)
     }
 }
 
-void func_80194988(void *arg0, void *arg1, Ovl178MotionState *state) {
+void SceneE08_InitSpinningGlow(void *arg0, void *arg1, Ovl178MotionState *state) {
     Ovl178MotionState *state_reg;
     Ovl178Position *position;
     int z;
@@ -2391,7 +2391,7 @@ void func_80194988(void *arg0, void *arg1, Ovl178MotionState *state) {
 void FieldFx_SetSpriteCellSize(s32, s32);
 void FieldFx_SetSpriteColorMode(s32);
 
-void func_801949F4(s32 arg0, RoomFxControl *arg1, Ovl178MotionState *rec) {
+void SceneE08_DrawSpinningGlow(s32 arg0, RoomFxControl *arg1, Ovl178MotionState *rec) {
     Ovl178Position *ctx;
     u32 idx;
     Ovl178MotionState *r;
@@ -2416,16 +2416,16 @@ void func_801949F4(s32 arg0, RoomFxControl *arg1, Ovl178MotionState *rec) {
     vsrc.z = 0x1000;
     vdst = vsrc;
     ScaleMatrix(&buf, &vdst);
-    FieldFx_InterpolateColorRamp(&D_80198AD4, arg1->frame, &D_80199570);
+    FieldFx_InterpolateColorRamp(&g_SceneE08SpinningGlowRamp, arg1->frame, &g_SceneE08SpinningGlowSprite);
     buf.t[0] = r->x;
     buf.t[1] = r->y;
     buf.t[2] = r->z;
-    D_80199570.cell = idx;
-    D_80199570.depth = r->depth;
-    FieldFx_DrawGlowSprite(&D_80199570, &buf, 1);
+    g_SceneE08SpinningGlowSprite.cell = idx;
+    g_SceneE08SpinningGlowSprite.depth = r->depth;
+    FieldFx_DrawGlowSprite(&g_SceneE08SpinningGlowSprite, &buf, 1);
 }
 
-void func_80194B44(s32 arg0, s16 *rec, u16 *p)
+void SceneE08_UpdateSpinningGlow(s32 arg0, s16 *rec, u16 *p)
 {
   u8 *b = (u8 *) p;
   u16 *q;
@@ -2459,7 +2459,7 @@ void func_80194B44(s32 arg0, s16 *rec, u16 *p)
   }
 }
 
-void func_80194C04(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
+void SceneE08_InitExpandingGlow(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
     Ovl178Position *position = FieldFx_GetScriptContext();
 
     glow->x = position->x - 0x15E;
@@ -2470,7 +2470,7 @@ void func_80194C04(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
     glow->depth = 0xFF;
 }
 
-void func_80194C60(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
+void SceneE08_DrawExpandingGlow(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
     SceneE08Matrix matrix;
     SceneE08Vector scratch_scale;
     SceneE08Vector draw_scale;
@@ -2512,7 +2512,7 @@ void func_80194C60(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
     FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)draw_slot - 0xA), &matrix, 1);
 }
 
-void func_80194D74(s32 arg0, RoomFxControl *rec, SceneE08ExpandingGlow *p) {
+void SceneE08_UpdateExpandingGlow(s32 arg0, RoomFxControl *rec, SceneE08ExpandingGlow *p) {
     s16 v;
 
     p->scale += p->growth;
@@ -2526,12 +2526,12 @@ void func_80194D74(s32 arg0, RoomFxControl *rec, SceneE08ExpandingGlow *p) {
     }
 }
 
-void func_80194DD0(void) {
+void SceneE08_InitArmGlow(void) {
 }
 
 /* Draw a glow sprite on the player's hand and elbow bones, then a ribbon
  * bent between them through the five script offsets. */
-void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
+void SceneE08_DrawArmGlow(void *object, void *timer, SceneArmGlow *glow)
 {
     GteMatrix matrix;
     GteShortVector points[7];
@@ -2546,14 +2546,14 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
 
     anchor = FieldFx_GetScriptContext();
     matrices = anchor->actor->render_object.matrices;
-    head = D_8018F060;
-    tail = D_8018F064;
+    head = g_SceneE08ArmGlowHeadColor;
+    tail = g_SceneE08ArmGlowTailColor;
     FieldFx_SetSpriteTexturePreset(anchor->mode);
     FieldFx_SetSpriteCellSize(0x20, 0x20);
     FieldFx_SetSpriteColorMode(0x10);
     FieldFx_SetSpriteBlendMode(2);
     g_FieldFxSpriteParams.depth = 0x1F4;
-    D_801994C8.depth = glow->frame;
+    g_SceneE08ArmGlowSprite.depth = glow->frame;
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
     matrix.m[0][0] = 0x1000;
@@ -2575,7 +2575,7 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
     matrix.t[0] = matrices[32].translation[0];
     matrix.t[1] = matrices[32].translation[1];
     matrix.t[2] = matrices[32].translation[2];
-    FieldFx_DrawGlowSprite(&D_801994C8, &matrix, 1);
+    FieldFx_DrawGlowSprite(&g_SceneE08ArmGlowSprite, &matrix, 1);
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
     matrix.m[0][0] = 0x1000;
@@ -2597,7 +2597,7 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
     matrix.t[0] = matrices[22].translation[0];
     matrix.t[1] = matrices[22].translation[1];
     matrix.t[2] = matrices[22].translation[2];
-    FieldFx_DrawGlowSprite(&D_801994C8, &matrix, 1);
+    FieldFx_DrawGlowSprite(&g_SceneE08ArmGlowSprite, &matrix, 1);
     points[0].x = matrices[32].translation[0];
     points[0].y = matrices[32].translation[1];
     points[0].z = matrices[32].translation[2];
@@ -2624,7 +2624,7 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
                   GetClut(0, 0x1D7), 0x80, &head, &tail, 1);
 }
 
-void func_80195210(void *unused, Ovl178EffectController *state,
+void SceneE08_UpdateArmGlow(void *unused, Ovl178EffectController *state,
                    Ovl178RandomizedEffect *effect) {
     unsigned i;
 

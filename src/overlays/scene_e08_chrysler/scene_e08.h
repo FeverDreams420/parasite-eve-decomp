@@ -41,7 +41,7 @@ typedef struct {
     } tail;
 } Ovl178RandomizedEffect;
 
-/* Full-screen fade (func_80192C78/2C84/2CCC): the level climbs while the
+/* Full-screen fade (SceneE08_*ScreenFade): the level climbs while the
  * phase is 1 and falls back to zero in phase 2. */
 typedef struct {
     s16 reserved;
@@ -49,7 +49,7 @@ typedef struct {
     s16 phase;          /* 0x04 */
 } SceneE08ScreenFade;
 
-/* Single glow sprite (func_80191830/1850): a short position offset from
+/* Single glow sprite (SceneE08_*CentreGlow): a short position offset from
  * the scene centre and the sprite scale. */
 typedef struct {
     s16 x, y, z;
@@ -59,7 +59,7 @@ typedef struct {
     s16 unused0C;
 } SceneE08CentreGlow;
 
-/* Growing glow left of the scene object (func_80194C04/4C60/4D74): the
+/* Growing glow left of the scene object (SceneE08_*ExpandingGlow): the
  * scale grows by an accelerating step while the depth fades. */
 typedef struct {
     s32 x, y, z;
@@ -73,7 +73,7 @@ typedef struct SceneE08PositionSample {
     s32 x, y, z, extra;
 } SceneE08PositionSample;
 
-/* Three-sprite trail (func_80193FF8/4090/4214): the newest sample is
+/* Three-sprite trail (SceneE08_*TrailGlow): the newest sample is
  * slot 0, the update shifts every sample one slot back each frame. */
 typedef struct {
     SceneE08PositionSample trail[3];    /* 0x00 */
@@ -95,7 +95,7 @@ typedef struct {
     GteShortVector scale;               /* 0x48 */
 } SceneE08TrailLane;
 
-/* Spinning glow (func_80194988 init, func_801949F4 draw, func_80194B44
+/* Spinning glow (SceneE08_InitSpinningGlow init, SceneE08_DrawSpinningGlow draw, SceneE08_UpdateSpinningGlow
  * update): the sprite turns about z and shrinks by a growing step while
  * the frame byte selects the animation cell. */
 typedef struct {
@@ -114,9 +114,9 @@ typedef struct {
 s32 *FieldFx_RegPtr(int index);
 s32 *FieldFx_VarPtr(int index);
 extern s16 D_80199590[];
-extern u16 D_80199658[];
-extern s32 D_8019956C;
-extern s32 D_8019957C;
+extern u16 g_SceneE08LimbBeamAngles[];
+extern s32 g_SceneE08CentreX;
+extern s32 g_SceneE08CentreZ;
 void FieldFx_BuildRingGeometry(void *item);
 
 #endif
