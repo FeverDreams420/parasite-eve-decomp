@@ -713,7 +713,7 @@ int func_80193CB8(int mode,ThresholdTripleEffect *effect) {
             effect->parameter12=parameter>>6;
         }
     } else if(mode==2) {
-        int flags=((int (*)(int,int,int,int))GetTPage)(0,1,0,0);
+        u16 flags=GetTPage(0,1,0,0);
         int page=(unsigned short)(D_800E2850[D_800E11FA]|flags);
         int kind=D_800F3368.palette,palette;
         int cosine,sine;

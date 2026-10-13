@@ -1565,7 +1565,7 @@ case 1:
 case 2:
     {
         int page,palette;
-        int rawPage;
+        u16 rawPage;
         int kind;
         int i;
         register int size;
@@ -1576,7 +1576,7 @@ case 2:
         transforms=(Matrix *)instance->render_object.matrices;
         out=base.t; in=transforms[33].t;
         for(;i<3;i++) *out++=*in++;
-        rawPage=((int (*)(int,int,int,int))GetTPage)(0,1,0,0);
+        rawPage=GetTPage(0,1,0,0);
         page=(unsigned short)(D_800E2850[D_800E11FA]|rawPage);
         kind=D_800F3368.palette;
         palette=D_800E1204[kind];

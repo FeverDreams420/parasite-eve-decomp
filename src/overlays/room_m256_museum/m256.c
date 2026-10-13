@@ -631,7 +631,7 @@ s32 func_801940B0(int mode, void *effect) {
     RoomM256TrailPalettes *palettes;
     u16 *paletteIndex;
     s16 *floorHeight;
-    int tpage;
+    u16 tpage;
     int clut;
     s16 impactY;
     int historyCount;
@@ -989,7 +989,7 @@ checkLifetime:
             D_800F336C = 3;
             D_800F3368.parameter06 = 0;
             D_800F3368.tpage = renderPalette;
-            tpage = ((int (*)(int, int, int, int))GetTPage)(pageDepth, pageBlend, pageX, 0);
+            tpage = GetTPage(pageDepth, pageBlend, pageX, 0);
             }
             modelPage = (*(u16 *)((char *)D_800E2850 + ((unsigned)*paletteIndex << 1)) | tpage) & 0xFFFF;
             modelClutY = D_800E1204[D_800F336C];

@@ -315,7 +315,7 @@ int func_8019326C(int mode, RoomShakeSweepParticle *p) {
         {
             int kind;
             int palette;
-            int rawPage = ((int (*)(int, int, int, int))GetTPage)(0, 1, 0, 0);
+            u16 rawPage = GetTPage(0, 1, 0, 0);
             page = (u16)(tpages[*index] | rawPage);
             kind = D_800F336C;
             palette = D_800E1204[kind];
@@ -2147,7 +2147,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
             {
                 int kind;
                 int palette;
-                int rawPage = ((int (*)(int, int, int, int))GetTPage)(0, 1, 0, 0);
+                u16 rawPage = GetTPage(0, 1, 0, 0);
                 page = (u16)(tpages[*index] | rawPage);
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
