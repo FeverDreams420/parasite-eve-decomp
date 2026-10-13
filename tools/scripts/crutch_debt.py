@@ -255,8 +255,7 @@ def write_reports(per_sub, totals, dirty_files) -> None:
 
     def badge_message(counts):
         return (f"{counts['pins']} pins / {counts['barriers']} barriers / "
-                f"{counts['nop_barriers']} nops / {counts['gotos']} gotos / "
-                f"{counts['aliases']} aliases")
+                f"{counts['nop_barriers']} nops / {counts['gotos']} gotos")
 
     for group, counts in groups.items():
         heavy_total = sum(counts[k] for k in HEAVY)
