@@ -20,7 +20,5 @@ extern FxCommonNode g_FxCommonListTailNodes[];
 extern short g_FxCommonIndexFreeNext[];
 extern short g_FxCommonIndexLast;
 void FxCommon_ResetTransformNode(FxCommonTransformNode *node);
-extern u16 D_80093170[];
-extern u16 D_80093174[];
-extern u16 D_80093172[];
+extern u16 g_PeImageSectorTable[];
 #endif /* PE1_EXT_CAMERA */

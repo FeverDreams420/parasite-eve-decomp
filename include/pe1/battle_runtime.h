@@ -97,7 +97,7 @@ extern s8 g_BattleTargetIndex;
 extern s8 g_BattleActiveTurnSlot, g_BattleItemMenuState;
 extern unsigned int g_GameStateFlags;
 extern u8 g_BattleGaugeCapLatch;
-extern unsigned int D_8009D1F4;
+extern unsigned int g_FieldPadPressed;
 
 void Battle_SetupEntityTarget(BattleEntity *actor);
 void Battle_DispatchEntityEffect(void);

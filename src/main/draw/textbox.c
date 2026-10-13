@@ -503,7 +503,7 @@ void Menu_DrawTextboxEntries(void) {
                     cursor.y += lineHeight;
                     break;
                 case 0xF8:
-                    if ((textbox->state == 2) && (D_8009D1F4 & 0x100)) {
+                    if ((textbox->state == 2) && (g_FieldPadPressed & 0x100)) {
                         do {
                             temp_v0 = *stream;
                             stream++;
@@ -517,7 +517,7 @@ void Menu_DrawTextboxEntries(void) {
                     stopDrawing = 1;
                     break;
                 case 0xFF:
-                    if ((textbox->state == 2) && (D_8009D1F4 & 0x100) &&
+                    if ((textbox->state == 2) && (g_FieldPadPressed & 0x100) &&
                         !(textbox->control.flags & 0x02000000)) {
                         textbox->state = 0U;
                     }
@@ -630,7 +630,7 @@ void Menu_DrawTextboxEntries(void) {
                         break;
                     case 6: {
                         s32 sectionTerminator = 6;
-                        if (D_8009D1F4 & 0x100) {
+                        if (g_FieldPadPressed & 0x100) {
                         section_again:
                             workingValue = textbox->control.flags;
                             if (sectionIndex == ((workingValue >> 16) & 15)) {
@@ -727,21 +727,21 @@ void Menu_DrawTextboxEntries(void) {
                         workingValue = (temp_v1_7 & 0xFE3FFFFF) | ((*stream & 7) << 0x16);
                         textbox->control.flags = workingValue;
                         temp_v1_9 = (workingValue >> 0x16) & 7;
-                        if (D_8009D1F4 & 0x20) {
+                        if (g_FieldPadPressed & 0x20) {
                             temp_v0_5 = g_DialogueChoiceCursor + 1;
                             g_DialogueChoiceCursor = temp_v0_5;
                             if ((s8)temp_v0_5 >= temp_v1_9) {
                                 g_DialogueChoiceCursor = temp_v1_9 - 1;
                             }
                         }
-                        if (D_8009D1F4 & 8) {
+                        if (g_FieldPadPressed & 8) {
                             temp_v0_6 = g_DialogueChoiceCursor - 1;
                             g_DialogueChoiceCursor = temp_v0_6;
                             if ((s8)temp_v0_6 < 0) {
                                 g_DialogueChoiceCursor = 0;
                             }
                         }
-                        if (D_8009D1F4 & 0x100) {
+                        if (g_FieldPadPressed & 0x100) {
                             g_MenuEquipSlotIndex = g_DialogueChoiceCursor;
                         }
                         stream++;

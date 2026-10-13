@@ -45,7 +45,7 @@ void RoomM256_SwingStep(RoomM256Swing *state) {
     timer = (u16)state->cycle.tick + 1;
     phase = ((timer << 16) >> 5) / state->cycle.length;
     state->cycle.tick = timer;
-    value = (-D_800966EE[(phase & 0xFFF) * 2] + 0x1000) *
+    value = (-g_RcossinTblCos[(phase & 0xFFF) * 2] + 0x1000) *
             state->cycle.sweep;
     if (value < 0) {
         value += 0x1FFF;

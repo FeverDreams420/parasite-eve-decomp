@@ -99,8 +99,8 @@ void Boot_RunFrame(void)
             g_GameStateFlags = flags & ~0x30u;
 
             if (!(GAME_STATE_OF_SCENE_FLAGS(scene_flags)->flags & 0x8000) && g_GlobalFrameCounter[0] &&
-                (D_8009D1F4 & 4) &&
-                !(D_8009D238 & 0xB0002380u)) {
+                (g_FieldPadPressed & 4) &&
+                !(g_FieldPadLastFrame & 0xB0002380u)) {
                 g_GameStateFlags =
                     ((flags & 1) ? (flags & ~0x30u) | 0x20u
                                  : (flags & ~0x30u) | 0x10u) ^ 1u;

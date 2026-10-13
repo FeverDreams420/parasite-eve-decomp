@@ -15,9 +15,9 @@ class Room350EffectPulseTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_pre_lookup_scale_and_post_lookup_shade(self):
         source = host_unit("RoomM350_HandPulseCallback", under=ROOM)
-        # The two sine-table views alias: D_800966EE is the halfword at +2.
-        source = source.replace('extern short D_800966EE[];',
-            '#define D_800966EE ((short *)rcossin_tbl + 1)')
+        # The two sine-table views alias: g_RcossinTblCos is the halfword at +2.
+        source = source.replace('extern short g_RcossinTblCos[];',
+            '#define g_RcossinTblCos ((short *)rcossin_tbl + 1)')
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
 GteSineWord rcossin_tbl[4096];
@@ -67,7 +67,7 @@ int main(void) {
         for (i = 0; i < 8; ++i) g_FieldFxPaletteTable[i] = h ? 65535 : i * 100;
         g_FieldFxCurrentAge = counter; nextCounter = counter + 1;
         D_800F336C = kind; g_FieldFxAltPaletteFlag = special;
-        D_800966EE[index] = values[s];
+        g_RcossinTblCos[index] = values[s];
         expectedScale = values[s] * 4 + 2048; expectedShade = values[5-s];
         handleValue = h ? -1 : 0x12345;
         memset(&effect, 0xCC, sizeof(effect));

@@ -43,7 +43,7 @@ void RoomM273_GrabHoldStep(RoomSelectionState *state);
 void RoomM273_GrabWaitRelease(RoomSelectionState *state);
 extern u8 g_RoomM273ActionWeights[];
 extern s32 Inv_ScrambleGrid(void);
-extern short D_800966EE[];
+extern short g_RcossinTblCos[];
 extern GteRotation g_RoomM273FloorRotation;
 extern unsigned char g_RoomM273PlayerPulseSpawned;
 extern u8 g_RoomM273GrabEffectStopped;

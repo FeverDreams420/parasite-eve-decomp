@@ -19,9 +19,9 @@ class Room350EffectDelayedTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_delay_saved_size_and_reloaded_shade(self):
         source = callback_source()
-        # D_800966EE is the halfword view of the sine table at +2 bytes.
-        source = source.replace('extern short D_800966EE[];',
-            '#define D_800966EE ((short *)rcossin_tbl + 1)')
+        # g_RcossinTblCos is the halfword view of the sine table at +2 bytes.
+        source = source.replace('extern short g_RcossinTblCos[];',
+            '#define g_RcossinTblCos ((short *)rcossin_tbl + 1)')
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 RenderEffectParameters g_FieldFxSpriteParams;
 RenderColor g_RoomM350GlowSpriteColor;
@@ -40,7 +40,7 @@ u_short GetClut(int x, int y) {
            (D_800F336C == 4 && g_FieldFxAltPaletteFlag ? 4 : 0));
     /* Stub mutations distinguish captured size/vector from later reads. */
     g_FieldFxCurrentAge += 3; D_800F336A = scaleValue;
-    D_800966EE[index] = shadeValue;
+    g_RcossinTblCos[index] = shadeValue;
     object[3] = 123; object[4] = objectScale;
     return handleValue;
 }
@@ -76,7 +76,7 @@ int main(void) {
         D_800F336C = kind; g_FieldFxAltPaletteFlag = special; D_800F336A = 999;
         sizeValue = values[s]; shadeValue = values[5-s];
         scaleValue = values[s]; objectScale = values[m]; vectorY = values[5-m];
-        D_800966EE[index] = sizeValue;
+        g_RcossinTblCos[index] = sizeValue;
         handleValue = h ? -1 : 0x12345;
         object[0] = 11; object[1] = 22; object[2] = 33;
         object[3] = vectorY; object[4] = 999;

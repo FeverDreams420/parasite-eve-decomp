@@ -60,8 +60,8 @@ void BootDisplay_RunDisplay(void) {
         }
         Field_HandleStateTransition();
         if (g_GameStateFlags & 0x10000) {
-            if (D_8009D1F4 & 0x4000000) BootDisplay_SetCdFilter(0);
-            if (D_8009D1F4 & 0x8000000) BootDisplay_SetCdFilter(1);
+            if (g_FieldPadPressed & 0x4000000) BootDisplay_SetCdFilter(0);
+            if (g_FieldPadPressed & 0x8000000) BootDisplay_SetCdFilter(1);
         }
         g_BootDisplayCallbacks->present();
         ++g_BootDisplayFrameCounter;

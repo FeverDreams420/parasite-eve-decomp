@@ -33,7 +33,7 @@ RenderEffectParameters g_FieldFxSpriteParams;
 unsigned short g_FieldFxPaletteTable[8];
 /* The shade is the high half of a sine-table record (bits.cos). */
 GteSineWord rcossin_tbl[4097];
-#define D_800966EE ((short *)rcossin_tbl + 1)
+#define g_RcossinTblCos ((short *)rcossin_tbl + 1)
 static short position[4];
 static int lookups, draws, handleValue, nextCounter, expectedShade, expectedScale;
 u_short GetClut(int mode, int texture) {
@@ -87,7 +87,7 @@ int main(void) {
         g_FieldFxCurrentAge = counter; nextCounter = counter + 1;
         D_800F336C = kind; g_FieldFxAltPaletteFlag = special;
         D_800F336A = 999; expectedScale = values[s]; expectedShade = values[5-s];
-        D_800966EE[index] = expectedShade;
+        g_RcossinTblCos[index] = expectedShade;
         handleValue = h ? -1 : 0x12345;
         memcpy(before, position, sizeof(position));
         lookups = draws = 0;

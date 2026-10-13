@@ -32,7 +32,7 @@ int RoomM350_DropBurstCallback(int event, short *object);
 extern Events g_RoomM350DropEvents;
 extern int D_8019A858;
 extern short g_RoomM350DropTrailCount,g_RoomM350DropRepeats,g_RoomM350DropLungeTimer,g_RoomM350DropHitCooldown;
-extern short D_800966EE[];
+extern short g_RcossinTblCos[];
 extern GteMatrix g_RoomM350RushMatrix;
 extern short g_RoomM350RushCenter[];
 extern int g_RoomM350RushFlareColors[];

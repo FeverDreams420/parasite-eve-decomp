@@ -38,7 +38,7 @@ typedef char d[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 GteShortVector g_RoomM350HandPoints[2];
 int g_FieldFxCurrentAge;
-short D_800966EE[8192];
+short g_RcossinTblCos[8192];
 RenderEffectParameters g_FieldFxSpriteParams;
 u16 g_FieldFxTpageSlot2;
 u16 g_FieldFxTpageTable[65536];
@@ -80,7 +80,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShor
         expected[i].position[j]=half((uint16_t)((short *)out)[j]+(uint16_t)((short *)&g_RoomM350HandPoints[i&1])[j]);
     }
     g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[(i+1)&1];
-    memset(D_800966EE,0,sizeof(D_800966EE));
+    memset(g_RcossinTblCos,0,sizeof(g_RcossinTblCos));
     return out;
 }
 static void reset(void) {
@@ -90,7 +90,7 @@ static void reset(void) {
 static void run(int timer,int sample,int failure) {
     int count=((sample+4096)/2048+1)*2,success,wanted;
     reset(); failAt=failure; g_FieldFxCurrentAge=timer;
-    D_800966EE[((((uint32_t)timer<<7)+2048)&4095)*2]=sample;
+    g_RcossinTblCos[((((uint32_t)timer<<7)+2048)&4095)*2]=sample;
     assert(RoomM350_HandSparkEmitter(1)==(timer>=33 ? 2:0));
     if(timer>=33 || count<=0) wanted=success=0;
     else { success=(failure>=0 && failure<count) ? failure:count; wanted=success+(success<count); }

@@ -422,7 +422,7 @@ typedef struct RoomLibHandlerCState {
     unsigned char finished;       /* 0x96 */
 } RoomLibHandlerCState;
 
-extern short D_800966EE[];
+extern short g_RcossinTblCos[];
 extern struct BattleEntity *D_8009D254;
 struct FieldActorNode;
 extern struct FieldActor *g_FieldActorListHead;

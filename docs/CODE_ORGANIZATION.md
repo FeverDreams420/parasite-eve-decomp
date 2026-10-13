@@ -1054,7 +1054,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
   `g_FieldActorListHead`), the player (`D_8009D254` as a `BattleEntity`
   pointer, `g_PlayerEntity` as a `FieldActor` pointer), `g_ActiveActor`,
   `g_ActiveDrawSlot`/`D_8009CDDC`, `g_GameStateFlags`/`D_8009D1A0`,
-  `D_8009D1F4`, `D_8009D2E8` and the task script cursor `D_8009CE00`.
+  `g_FieldPadPressed`, `D_8009D2E8` and the task script cursor `D_8009CE00`.
   The symbol alias pass applied it to `Battle_EscapeAndPhaseInitFlow`,
   `Battle_DrawStatusPanel`, `Battle_InitEntityColors`,
   `Inv_InitMaxLevelInventory`, the three `-G8` capacity units and the `-G4`

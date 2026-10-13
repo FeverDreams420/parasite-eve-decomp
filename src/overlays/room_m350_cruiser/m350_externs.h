@@ -15,7 +15,7 @@ typedef GteMatrix Matrix;
 
 typedef struct { unsigned char index, alternate; } Entry;
 
-extern short D_800966EE[];
+extern short g_RcossinTblCos[];
 extern int Inv_ScrambleGrid(void);
 extern int g_RoomM350HandPulseColors[];
 extern GteShortVector g_RoomM350HandPoints[];

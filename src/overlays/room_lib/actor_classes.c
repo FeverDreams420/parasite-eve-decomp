@@ -785,7 +785,7 @@ void RoomLib_HandlerE(RoomEnt *o) {
         remain = state->duration;
     }
     if (state->eased != 0) {
-        scale = 0x1000 - D_800966EE[(((remain << 11) / state->duration) & 0xFFF) << 1];
+        scale = 0x1000 - g_RcossinTblCos[(((remain << 11) / state->duration) & 0xFFF) << 1];
         link->pos[0] = state->start[0] + (((state->delta[0] * scale + 0x1000) >> 13) << 12);
         if (state->lockY == 0) {
             link->pos[1] = state->start[1] + (((state->delta[1] * scale + 0x1000) >> 13) << 12);

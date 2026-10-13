@@ -29,7 +29,7 @@ typedef char layout[sizeof(Vector)==8 && __alignof__(Vector)==2 &&
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag;
-short D_800966EE[8192];
+short g_RcossinTblCos[8192];
 unsigned short g_FieldFxPaletteTable[8];
 RoomFloorY g_RoomFloorY[1];
 RenderEffectParameters g_FieldFxSpriteParams;
@@ -41,7 +41,7 @@ static int stage,expectedPalette,expectedSize,expectedShade,sizeIndex,shadeIndex
 u_short GetClut(int x,int y) {
     assert(stage++==0 && x==0 && y==expectedPalette);
     g_FieldFxCurrentAge=999;
-    D_800966EE[sizeIndex]=111; D_800966EE[shadeIndex]=222;
+    g_RcossinTblCos[sizeIndex]=111; g_RcossinTblCos[shadeIndex]=222;
     return 0xF123;
 }
 void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *rotation,
@@ -77,7 +77,7 @@ int main(void) {
         for(i=0;i<9;++i) for(j=0;j<6;++j) for(k=0;k<6;++k) {
             g_FieldFxCurrentAge=frames[i]+1; phase=(unsigned int)frames[i]<<5;
             sizeIndex=(phase&4095)*2; shadeIndex=((phase+1024)&4095)*2;
-            D_800966EE[sizeIndex]=samples[j]; D_800966EE[shadeIndex]=samples[k];
+            g_RcossinTblCos[sizeIndex]=samples[j]; g_RcossinTblCos[shadeIndex]=samples[k];
             expectedSize=(short)(samples[j]*2+4096);
             expectedShade=(short)((unsigned int)(samples[k]+4096)>>5);
             g_FieldFxSpriteParams.palette=kind; g_FieldFxAltPaletteFlag=variant; g_FieldFxPaletteTable[kind]=65535;

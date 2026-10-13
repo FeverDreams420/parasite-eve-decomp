@@ -42,7 +42,7 @@ typedef char g[sizeof(Vector)==8 && sizeof(RenderMatrix)==32 ? 1:-1];
                             r'extern int D_8019A858;',
                             r'extern short g_RoomM350DropTrailCount,g_RoomM350DropRepeats,g_RoomM350DropLungeTimer,g_RoomM350DropHitCooldown;',
                             r'extern GteSineWord rcossin_tbl\[\];',
-                            r'extern short D_800966EE\[\];'):
+                            r'extern short g_RcossinTblCos\[\];'):
             source, count = re.subn(declaration, '', source)
             self.assertGreater(count, 0, declaration)
         prefix = r'''
@@ -61,7 +61,7 @@ static union { int words[4097]; short halves[8194]; } trig;
 #define g_RoomM350DropHitCooldown (globals.halves[12])
 #define g_RoomM350DropDone (globals.bytes[26])
 #define rcossin_tbl ((GteSineWord *)trig.words)
-#define D_800966EE (trig.halves+1)
+#define g_RcossinTblCos (trig.halves+1)
 '''
         harness = prefix + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;
@@ -164,7 +164,7 @@ static void run(int frame,int previous,int start,int animation,int repeat,int re
         assert(i<8);
         if (recoil>0) {
             doMove=1;
-            expectedZ=D_800966EE[((8-recoil)*512 & 0x3E00)/2]/256;
+            expectedZ=g_RcossinTblCos[((8-recoil)*512 & 0x3E00)/2]/256;
             expectedMotion=mutation ? 32767:recoil-1;
         }
     }
@@ -213,7 +213,7 @@ int main(void) {
     for (i=0;i<65536;i++) {
         trig.words[2048]=word(0xF00D0000u+(unsigned)i);
         run(7,6,0,0,0,0,1,1,1);
-        D_800966EE[0]=half(i);
+        g_RcossinTblCos[0]=half(i);
         run(16,15,3,0,0,8,1,1,1);
     }
     run(31,30,6,0,1,1,-1,1,1);

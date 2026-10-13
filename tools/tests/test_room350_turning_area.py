@@ -58,7 +58,7 @@ typedef char f[OFF(Instance,render_object.matrices)==0x238 && OFF(Actor,instance
         # symbols in the unit; bind them to the records they live in.
         for line in ('extern short D_8019A80A,D_8019A80C,D_8019A80E,D_8019A810,D_8019A812,D_8019A814,D_8019A816,D_8019A818;',
                      'extern int g_RoomM350AreaMatrixTxView,D_8019A820,D_8019A824;',
-                     'extern short D_800966EE[];'):
+                     'extern short g_RcossinTblCos[];'):
             self.assertEqual(source.count(line), 1, line)
             source = source.replace(line, '')
         prefix = r'''
@@ -78,7 +78,7 @@ typedef char f[OFF(Instance,render_object.matrices)==0x238 && OFF(Actor,instance
 #define D_8019A820 g_RoomM350AreaMatrix.position[1]
 #define D_8019A824 g_RoomM350AreaMatrix.position[2]
 #define TABLE ((short *)rcossin_tbl)
-#define D_800966EE (TABLE+1)
+#define g_RcossinTblCos (TABLE+1)
 '''
         harness = prefix + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;
@@ -210,7 +210,7 @@ static void update(int timer,int sample,int initialized,int enabled,int distance
         index=(((uint32_t)timer<<8)&0x3F00)/2; TABLE[index]=sample;
         raw=sar(4096-sample,1)+2048;
     } else if(timer>=91) {
-        index=(((uint32_t)(timer-90)<<8)&0x3F00)/2; D_800966EE[index]=sample;
+        index=(((uint32_t)(timer-90)<<8)&0x3F00)/2; g_RcossinTblCos[index]=sample;
         raw=sar(sample,1);
     } else raw=2048;
     expectedSize=raw/3; expectedBright=raw<=2048 ? sar(raw,4):sar(4096-raw,4);
@@ -219,7 +219,7 @@ static void update(int timer,int sample,int initialized,int enabled,int distance
         int span=half(distance)-512; if(span<0) span=0;
         index=((span/4)&4095)*2;
         /* Steering reads the same table and may alias the lifetime sample. */
-        turn=reference_turn(&heading,distance,angle,D_800966EE[index]);
+        turn=reference_turn(&heading,distance,angle,g_RcossinTblCos[index]);
     } else if(!initialized) turn=0;
     expectedYaw=word((uint32_t)heading+(uint32_t)turn);
     before=state;
@@ -313,7 +313,7 @@ int main(void) {
     for(i=-3;i<=4;i++) if(i<0 || i>2) {
         reset(); before=state; assert(RoomM350_AreaZoneEmitter(i,&state)==0 && !calls && memcmp(&before,&state,sizeof(state))==0);
     }
-    for(i=0;i<8192;i++) D_800966EE[i]=half(i*97);
+    for(i=0;i<8192;i++) g_RcossinTblCos[i]=half(i*97);
     for(i=-32768;i<=32767;i++) {
         update(0,i,1,0,0,0,0,0,-1,0,0);
         update(91,i,1,0,0,0,0,0,-1,0,0);

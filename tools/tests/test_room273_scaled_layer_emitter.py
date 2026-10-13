@@ -46,7 +46,7 @@ static unsigned char pool[128];
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
 FieldFxObjectPrefix *g_FieldFxOwner=(FieldFxObjectPrefix *)&state;
 int g_FieldFxCurrentAge;
-short D_800966EE[8192];
+short g_RcossinTblCos[8192];
 GteSineWord rcossin_tbl[4096];
 static int init,allocations,fail,newCounter;
 int RoomM273_GrabPlacementScaledFanCallback(int mode, Effect *input) { assert(0); return 0; }
@@ -72,8 +72,8 @@ int main(void) {
         Effect before;
         newCounter=counters[i]; g_FieldFxCurrentAge=0; g_FieldFxOwner=(FieldFxObjectPrefix *)&state; state.state.scaled_layer=0;
         memset(rcossin_tbl,0x55,sizeof(rcossin_tbl));
-        memset(D_800966EE,0xAA,sizeof(D_800966EE));
-        ((short *)rcossin_tbl)[sampleIndex]=samples[j]; D_800966EE[sampleIndex]=samples[k];
+        memset(g_RcossinTblCos,0xAA,sizeof(g_RcossinTblCos));
+        ((short *)rcossin_tbl)[sampleIndex]=samples[j]; g_RcossinTblCos[sampleIndex]=samples[k];
         memset(&output,0xA5,sizeof(output)); before=output; fail=f; allocations=0;
         assert(RoomM273_GrabPlacementScaledFanEmitter(1)==0 && allocations==1);
         if(f) assert(memcmp(&output,&before,sizeof(output))==0);

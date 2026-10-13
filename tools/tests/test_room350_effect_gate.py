@@ -17,7 +17,7 @@ class Room350EffectGateTests(unittest.TestCase):
         source = host_unit("RoomM350_DropFlareCallback", under=ROOM)
         harness = '#include <assert.h>\n' + source + r'''
 int g_FieldFxCurrentAge, g_RoomM350DropFlareColors[2];
-short D_800966EE[8192];
+short g_RcossinTblCos[8192];
 static int calls, expectedShade, coordinates[3];
 void FieldFx_DrawStarFan(struct GteShortVector *position, int a, int b, int c,
                   struct GteRotation *d, int e, int f, struct RenderColor *first,
@@ -48,10 +48,10 @@ int main(void) {
     }
     for (counter = 1; counter <= 32; ++counter)
     for (t = 0; t < 10; ++t) for (p = 0; p < 4; ++p) {
-        for (i = 0; i < 8192; ++i) D_800966EE[i] = 12345;
+        for (i = 0; i < 8192; ++i) g_RcossinTblCos[i] = 12345;
         g_FieldFxCurrentAge = counter;
         expectedShade = values[t];
-        D_800966EE[((counter - 1) << 9) & 0x1E00] = expectedShade;
+        g_RcossinTblCos[((counter - 1) << 9) & 0x1E00] = expectedShade;
         for (i = 0; i < 3; ++i) coordinates[i] = points[p][i];
         calls = 0;
         assert(RoomM350_DropFlareCallback(2, &position) == 0);

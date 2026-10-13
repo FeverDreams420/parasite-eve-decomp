@@ -552,7 +552,7 @@ int RoomM273_GrabPlacementScaledFanEmitter(int mode) {
         asm("" : : : "memory");
         effect->position.y=transform->y;
         effect->position.z=transform->z;
-        scale=D_800966EE[((g_FieldFxCurrentAge*1024/12)&0xFFF)*2];
+        scale=g_RcossinTblCos[((g_FieldFxCurrentAge*1024/12)&0xFFF)*2];
         effect->parameter[0]=40;
         effect->position.pad=scale;
         effect->parameter[1]=((short *)rcossin_tbl)[((g_FieldFxCurrentAge*1024/12)&0xFFF)*2]*40/4096;
@@ -2407,8 +2407,8 @@ int RoomM273_SwayGroundCallback(int mode,Vector *input) {
         if(g_FieldFxCurrentAge>=32) return 1;
     } else if(mode==2) {
         unsigned int phase=(unsigned int)(g_FieldFxCurrentAge-1)<<5;
-        int shadeSample=*(short *)((char *)D_800966EE+(((phase+1024)&4095)*4));
-        int sizeSample=*(short *)((char *)D_800966EE+((phase&4095)*4));
+        int shadeSample=*(short *)((char *)g_RcossinTblCos+(((phase+1024)&4095)*4));
+        int sizeSample=*(short *)((char *)g_RcossinTblCos+((phase&4095)*4));
         unsigned int shade;
         int size,kind,palette;
         unsigned short clut;

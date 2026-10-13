@@ -124,7 +124,7 @@ int RoomM350_HandSparkEmitter(int event)
         int i;
         Vector *out;
         if(timer>=33) return 2;
-        count=(D_800966EE[((((unsigned int)timer<<7)+2048)&4095)*2]+4096)/2048+1;
+        count=(g_RcossinTblCos[((((unsigned int)timer<<7)+2048)&4095)*2]+4096)/2048+1;
         if(count*2<=0) return 0;
         i=0;
         out=&offset;
@@ -177,7 +177,7 @@ int RoomM350_HandPulseCallback(int event, PulsingPalettePairParticle *effect) {
     if (event == 1) {
         if (g_FieldFxCurrentAge >= 16) return 1;
     } else if (event == 2) {
-        int scale = D_800966EE[((unsigned int)(g_FieldFxCurrentAge - 1) << 8) & 0x1F00] * 4 + 2048;
+        int scale = g_RcossinTblCos[((unsigned int)(g_FieldFxCurrentAge - 1) << 8) & 0x1F00] * 4 + 2048;
         int kind = g_FieldFxSpriteParams.palette;
         int palette = g_FieldFxPaletteTable[kind];
         int handle;
@@ -1124,7 +1124,7 @@ int RoomM350_OrbTrailCallback(int event, PositionQueueParticle *object)
             int size,kind,palette,handle;
             vector[0] = 1024; vector[1] = object->position.pad;
             vector[2] = 1024; vector[3] = 1;
-            size = D_800966EE[((unsigned int)frame << 7) & 0x1F80];
+            size = g_RcossinTblCos[((unsigned int)frame << 7) & 0x1F80];
             kind = g_FieldFxSpriteParams.palette; palette = g_FieldFxPaletteTable[kind];
             if (kind == 4 && g_FieldFxAltPaletteFlag) palette += 4;
             handle = GetClut(0, palette);
@@ -1496,7 +1496,7 @@ case 1:
                 speed=(short)distance-512;
                 if(speed<0) speed=0;
                 factor=1536; if(speed>1024) factor=1024;
-                speed=D_800966EE[((speed/4)&4095)*2]*factor/4096;
+                speed=g_RcossinTblCos[((speed/4)&4095)*2]*factor/4096;
                 if(speed<0) speed=0;
                 speed+=(short)delta;
                 asm volatile("" : : "r"(delta));

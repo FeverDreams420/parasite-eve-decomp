@@ -2213,7 +2213,7 @@ g_CdStreamReady = 0x800B0CD0;
 // Main data that the overlays address directly. Each needs a label of its
 // own so an overlay links it by name from the built executable and follows
 // it when main's layout moves (tools/scripts/overlay_link_symbols.py).
-D_800966EE = 0x800966EE;
+g_RcossinTblCos = 0x800966EE;
 g_FieldFxTpageSlot3 = 0x800E11EA;
 g_FieldFxTpageSlot4 = 0x800E11EC;
 g_FieldFxTpageSlot10 = 0x800E11F8;
@@ -2221,9 +2221,6 @@ g_FieldFxTpageSlot11 = 0x800E11FA;
 g_FieldFxPaletteEntry2 = 0x800E1208;
 g_FieldFxPaletteEntry3 = 0x800E120A;
 g_LogoFadePlayed = 0x8009D1BC;
-D_80093170 = 0x80093170;
-D_80093172 = 0x80093172;
-D_80093174 = 0x80093174;
 
 // Main functions and data the overlays call or read by name.
 Battle_GetEnemyContextField = 0x8003010C;
@@ -2646,9 +2643,9 @@ g_BattleActionIndex = 0x8009D1D4;
 g_CollisionPlaneTable = 0x8009D1D8;
 g_BattleRemainingActions = 0x8009D1DC;
 g_MenuActiveListTarget = 0x8009D1E0;
-g_SceneFlagBits = 0x8009D1E4;
+g_FieldPadReleased = 0x8009D1E4;
 g_BattleItemMenuState = 0x8009D1F0;
-g_BattleControlFlags = 0x8009D1F4;
+g_FieldPadPressed = 0x8009D1F4;
 g_CurItemEffectData = 0x8009D1F8;
 g_CollisionDb = 0x8009D1FC;
 g_BattleAttackPmSlot = 0x8009D200;
@@ -2659,7 +2656,7 @@ g_AkaoGlobalD2D0SlideCounter = 0x8009D220;
 g_ActorEffectFlag100Timer = 0x8009D228;
 g_AkaoSeqLoopCounter = 0x8009D22C;
 g_BattleSpritePrimCountdown = 0x8009D235;
-g_FieldRenderFlags = 0x8009D238;
+g_FieldPadLastFrame = 0x8009D238;
 g_BattleEnemyEscapeFlag = 0x8009D244;
 g_SpuTransferStatus = 0x8009D24C;
 g_FrameRngCounter = 0x8009D250;

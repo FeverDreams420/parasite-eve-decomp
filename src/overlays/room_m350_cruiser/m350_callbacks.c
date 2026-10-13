@@ -523,7 +523,7 @@ int RoomM350_DropController(int event,short *cursor) {
         if (remaining>0) {
         movement.y=0;
         movement.x=0;
-        movement.z=D_800966EE[(((8-remaining)<<9)&0x3E00)/2]/256;
+        movement.z=g_RcossinTblCos[(((8-remaining)<<9)&0x3E00)/2]/256;
         ApplyMatrixSV(&instance->render_object.model_matrix,&movement,&movement);
         instance->pos_x+=(unsigned int)(int)movement.x<<16;
         instance->pos_z+=(unsigned int)(int)movement.z<<16;
@@ -1413,8 +1413,8 @@ int RoomM350_DropFlareCallback(int event, int **position) {
         point[0] = (*position)[0];
         point[1] = (*position)[1];
         point[2] = (*position)[2];
-        shade = D_800966EE[((g_FieldFxCurrentAge - 1) << 9) & 0x1E00];
         colors = g_RoomM350DropFlareColors;
+        shade = g_RcossinTblCos[((g_FieldFxCurrentAge - 1) << 9) & 0x1E00];
         FieldFx_DrawStarFan((struct GteShortVector *)point, 512, 512, 16, 0, (short)shade, (short)shade,
                      (struct RenderColor *)colors, (struct RenderColor *)(colors + 1), (short)shade >> 5, 1);
     }

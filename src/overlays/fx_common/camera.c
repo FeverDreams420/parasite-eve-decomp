@@ -932,7 +932,7 @@ void FxCommon_LoadEffectSectors(void) {
     int result;
 
 first:
-    range = D_80093170;
+    range = &g_PeImageSectorTable[76];
     do {
         result = CdRom_ReadSectorsFromLba(resource->data + range[0],
                                &g_FxCommonTimTable, range[1] - range[0]);
@@ -946,7 +946,7 @@ first:
     if (!(g_FxCommonNight)) {
 
 second:
-    range = D_80093174;
+    range = &g_PeImageSectorTable[78];
     do {
         result = CdRom_ReadSectorsFromLba(resource->data + range[0],
                                &g_FxCommonModelTable, range[1] - range[0]);
@@ -959,7 +959,7 @@ second:
 
     }
 third:
-    range = D_80093172;
+    range = &g_PeImageSectorTable[77];
     do {
         result = CdRom_ReadSectorsFromLba(resource->data + range[0],
                                &g_FxCommonModelTable, range[1] - range[0]);

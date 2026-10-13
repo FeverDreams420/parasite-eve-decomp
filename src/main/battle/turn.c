@@ -120,13 +120,13 @@ s8 g_BattleTargetIndex;
 void Battle_CycleTarget(s8 mode) {
     if (D_8009D2B0 >= 2) {
         if (mode != 1 && mode != 2) {
-            if (D_8009D1F4 & 0x10) {
+            if (g_FieldPadPressed & 0x10) {
                 Battle_MarkActiveEntities(g_BattleTargetList, g_BattleTargetIndex);
                 g_BattleTargetIndex = (g_BattleTargetIndex + 1) % D_8009D2B0;
                 Battle_InitFadeVars();
                 PLAY_TABLE_SOUND(0x44E)
             }
-            if (D_8009D1F4 & 0x40) {
+            if (g_FieldPadPressed & 0x40) {
                 Battle_MarkActiveEntities(g_BattleTargetList, g_BattleTargetIndex);
                 g_BattleTargetIndex = (g_BattleTargetIndex + D_8009D2B0 - 1) % D_8009D2B0;
                 Battle_InitFadeVars();
@@ -249,7 +249,7 @@ int Battle_HandleItemMenu(void) {
         Battle_MarkActiveEntities(g_BattleTargetList,g_BattleTargetIndex);
         PLAY_TABLE_SOUND(0x44C)
     } else {
-        if ((D_8009D1F4&0x2000) && !MenuWidget_FindByModeAndSelectedBase(1,0) && g_BattleItemMenuState!=2) {
+        if ((g_FieldPadPressed&0x2000) && !MenuWidget_FindByModeAndSelectedBase(1,0) && g_BattleItemMenuState!=2) {
             cancelled=1;
             if (g_BattleRemainingActions==(g_ActiveActor->action->turnWord&15))g_BattleSlotCancelPending=1;
             else g_BattleSlotCancelPending=0;
@@ -279,7 +279,7 @@ int Battle_HandleItemMenu(void) {
                     }
                 }
                 Battle_CycleTarget(mode);
-                if ((D_8009D1F4&0x200)&&!cancelled) {
+                if ((g_FieldPadPressed&0x200)&&!cancelled) {
                     g_BattleSlotCancelPending=0;
                     if(D_8009D2B0) {
                         Battle_FillActionQueue(&g_BattleTargetList[g_BattleTargetIndex]);
@@ -291,7 +291,7 @@ int Battle_HandleItemMenu(void) {
                     PLAY_TABLE_SOUND(0x44C)
                 }
             }
-            if(g_BattleRemainingActions==(g_ActiveActor->action->turnWord&15) && (D_8009D1F4&0x80) && g_BattleActiveTurnSlot && !cancelled) {
+            if(g_BattleRemainingActions==(g_ActiveActor->action->turnWord&15) && (g_FieldPadPressed&0x80) && g_BattleActiveTurnSlot && !cancelled) {
                 g_BattleItemMenuState=1;
                 Battle_MarkActiveEntities(g_BattleTargetList,g_BattleTargetIndex);
                 PLAY_TABLE_SOUND(0x44C)
@@ -299,7 +299,7 @@ int Battle_HandleItemMenu(void) {
                 opened=1;
                 Render_BeginSceneLoad();
             }
-            if ((D_8009D1F4&0x400)&&!opened&&!cancelled) {
+            if ((g_FieldPadPressed&0x400)&&!opened&&!cancelled) {
                 Battle_MarkActiveEntities(g_BattleTargetList,g_BattleTargetIndex);
                 if(g_BattleActionQueueCount) {Battle_AdvanceTurnSlot();Battle_InitFadeVars();}
                 else active=0;
@@ -452,7 +452,7 @@ int Battle_StepEnemyTurn(s8 mode) {
         }
     } else if (mode == 2) {
         Battle_CycleTarget(g_BattleTargetCycleMode);
-        if (D_8009D1F4 & 0x200) {
+        if (g_FieldPadPressed & 0x200) {
             SetSlot(g_BattleActionQueueCount, g_BattleTargetList[g_BattleTargetIndex].actor, g_BattlePendingCommand,
                     (s8)D_8009D2D8);
             D_8009D2D8--;
@@ -460,7 +460,7 @@ int Battle_StepEnemyTurn(s8 mode) {
             g_BattleTargetCycleMode = 0;
             mode = 0;
             PLAY_TABLE_SOUND(0x44C)
-        } else if (D_8009D1F4 & 0x400) {
+        } else if (g_FieldPadPressed & 0x400) {
             mode = 0;
             BattleCmd_UndoPending();
             g_BattleTargetIndex = 0;
