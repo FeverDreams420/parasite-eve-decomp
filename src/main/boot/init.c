@@ -232,7 +232,7 @@ void PadSetMainMode(int arg0, int byte1, int byte2);
 void Field_HandleStateTransition(void) {
     u32 flags;
     u32 pad_bits;
-    register u32 base_bits asm("$3");
+    u32 base_bits;
     u32 old_pad_bits;
     register u32 pad_mask asm("$2");
     u32 active_pad;
@@ -297,12 +297,14 @@ void Field_HandleStateTransition(void) {
     }
 
     g_FieldPadBits = 0;
+    /* Decoded input is saved in pad_bits; reuse the scratch for key indices. */
     for (i = 0; i < 0x20; i++) {
-        if (((u16)pad_bits & g_FieldRenderFlagTable[i]) != 0) {
-            g_FieldPadBits |= 1u << i;
-            D_800A7770[i]++;
+        base_bits = i;
+        if (((u16)pad_bits & g_FieldRenderFlagTable[base_bits]) != 0) {
+            g_FieldPadBits |= 1u << base_bits;
+            D_800A7770[base_bits]++;
         } else {
-            D_800A7770[i] = 0;
+            D_800A7770[base_bits] = 0;
         }
     }
 
