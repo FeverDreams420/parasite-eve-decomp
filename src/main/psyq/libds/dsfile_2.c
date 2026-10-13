@@ -27,21 +27,21 @@ int DS_newmedia(void) {
 
     read_status = ds_read(1, 16, g_DsFileSectorBuffer);
     if (read_status != 1) {
-        if (D_8009AFC0 > 0) puts(D_80011EF8);
+        if (CD_debug > 0) puts(D_80011EF8);
         return 0;
     }
     if (strncmp(((IsoVolumePathTable *)g_DsFileSectorBuffer)->identifier,
                 D_80011F24, 5) != 0) {
-        if (D_8009AFC0 > 0) puts(D_80011F2C);
+        if (CD_debug > 0) puts(D_80011F2C);
         return 0;
     }
     end = ((IsoVolumePathTable *)g_DsFileSectorBuffer)->pathTableSectorLE;
     memcpy(&sector, end, 4);
     if (ds_read(1, sector, g_DsFileSectorBuffer) != read_status) {
-        if (D_8009AFC0 > 0) printf(D_80011F5C, sector);
+        if (CD_debug > 0) printf(D_80011F5C, sector);
         return 0;
     }
-    if (D_8009AFC0 > 1) puts(D_80011F80);
+    if (CD_debug > 1) puts(D_80011F80);
     cursor = g_DsFileSectorBuffer;
     end = cursor + 2048;
     count = 0;
@@ -66,7 +66,7 @@ int DS_newmedia(void) {
             memcpy(name, record->name, record->nameLength);
             name[record->nameLength] = 0;
             cursor += record->nameLength + 8 + (record->nameLength & 1);
-            if (D_8009AFC0 > 1)
+            if (CD_debug > 1)
                 printf(D_80011FA0, g_DslDirectoryCache[count].sector,
                        g_DslDirectoryCache[count].directoryId,
                        g_DslDirectoryCache[count].parentDirectoryId, name);
@@ -78,7 +78,7 @@ int DS_newmedia(void) {
 finished:
     if (count < DSL_MAX_DIR) g_DslDirectoryCache[count].parentDirectoryId = 0;
     g_DsCachedDirectory = 0;
-    if (D_8009AFC0 > 1) printf(D_80011FB4, count);
+    if (CD_debug > 1) printf(D_80011FB4, count);
     return 1;
 }
 
@@ -109,10 +109,10 @@ int DS_cachefile(int directory) {
     if (directory == g_DsCachedDirectory) return 1;
     if (ds_read(1, (g_DslDirectoryCache + directory)[-1].sector,
                 g_DsFileSectorBuffer) != 1) {
-        if (D_8009AFC0 > 0) puts(D_80011FD8);
+        if (CD_debug > 0) puts(D_80011FD8);
         return -1;
     }
-    if (D_8009AFC0 > 1) puts(D_80011FF8);
+    if (CD_debug > 1) puts(D_80011FF8);
     cursor = (IsoDirectoryRecord *)g_DsFileSectorBuffer;
     for (count = 0; cursor < (IsoDirectoryRecord *)&g_DsFileSectorBuffer[2048];) {
         if (cursor->recordLength == 0) break;
@@ -130,7 +130,7 @@ int DS_cachefile(int directory) {
             memcpy(g_DslFileCache[count].name, cursor->name, cursor->nameLength);
             g_DslFileCache[count].name[cursor->nameLength] = 0;
         }
-        if (D_8009AFC0 > 1)
+        if (CD_debug > 1)
             printf(D_8001201C, g_DslFileCache[count].pos.minute,
                    g_DslFileCache[count].pos.second,
                    g_DslFileCache[count].pos.sector,
@@ -140,7 +140,7 @@ int DS_cachefile(int directory) {
     }
     g_DsCachedDirectory = directory;
     if (count < DSL_MAX_FILE) g_DslFileCache[count].name[0] = 0;
-    if (D_8009AFC0 > 1) printf(D_80012038, count);
+    if (CD_debug > 1) printf(D_80012038, count);
     return 1;
 }
 

@@ -20,58 +20,58 @@ int getintr(void) {
     int errors = 0;
     int i;
     CdInterruptEvents *events;
-    *D_8009B27C = 1;
-    interrupt = *D_8009B288 & 7;
+    *g_CdRegIndexBase = 1;
+    interrupt = *g_CdRegResponse & 7;
     if (interrupt == 0) return 0;
-    while (interrupt != (*D_8009B288 & 7)) interrupt = *D_8009B288 & 7;
+    while (interrupt != (*g_CdRegResponse & 7)) interrupt = *g_CdRegResponse & 7;
     for (count = 0; count < 8; count++) {
-        if (!(*D_8009B27C & 0x20)) break;
-        result[count] = *D_8009B280;
+        if (!(*g_CdRegIndexBase & 0x20)) break;
+        result[count] = *g_CdRegPort1;
     }
     for (i = count; i < 8; i++) result[i] = 0;
-    *D_8009B27C = 1;
-    *D_8009B288 = 7;
-    *D_8009B284 = 7;
-    if (interrupt != 3 || D_8009B17C[g_CdLastCom]) {
-        if (!(D_8009AFC4 & 0x10) && (result[0] & 0x10)) D_8009AFCC++;
-        D_8009AFC4 = result[0];
-        errors = D_8009AFC4 & 0x1D;
-        D_8009AFC8 = result[1];
+    *g_CdRegIndexBase = 1;
+    *g_CdRegResponse = 7;
+    *g_CdRegDataWrite = 7;
+    if (interrupt != 3 || g_CdCommandTables.update_status_on_ack[g_CdLastCom]) {
+        if (!(g_CdStatus & 0x10) && (result[0] & 0x10)) g_CdLidOpenCount++;
+        g_CdStatus = result[0];
+        errors = g_CdStatus & 0x1D;
+        g_CdStatus1 = result[1];
     }
-    if (interrupt == 5 && D_8009AFC0 > 0) {
+    if (interrupt == 5 && CD_debug > 0) {
         printf(D_80011B44);
-        if (D_8009AFC0 > 0)
-            printf(D_80011B50, D_8009AFDC[g_CdLastCom], D_8009AFC4, D_8009AFC8);
+        if (CD_debug > 0)
+            printf(D_80011B50, g_CdCommandNames[g_CdLastCom], g_CdStatus, g_CdStatus1);
     }
     switch (interrupt) {
     case 3:
         if (errors) {
-            D_8009B294.sync = 5;
+            g_CdInterruptEvents.sync = 5;
             copy_result(D_800A3460, result);
             return 2;
         }
-        if (D_8009B07C[g_CdLastCom]) {
-            D_8009B294.sync = 3;
+        if (g_CdCommandAckOnly[g_CdLastCom]) {
+            g_CdInterruptEvents.sync = 3;
             copy_result(D_800A3460, result);
             return 1;
         }
-        D_8009B294.sync = 2;
+        g_CdInterruptEvents.sync = 2;
         copy_result(D_800A3460, result);
         return 2;
     case 2:
-        D_8009B294.sync = errors ? 5 : 2;
+        g_CdInterruptEvents.sync = errors ? 5 : 2;
         copy_result(D_800A3460, result);
         return 2;
     case 1:
         if (errors && count == 1) errors = 0;
-        events = &D_8009B294;
+        events = &g_CdInterruptEvents;
         events->ready = errors ? 5 : 1;
         copy_result(D_800A3468, result);
-        *D_8009B27C = 0;
-        *D_8009B288 = 0;
+        *g_CdRegIndexBase = 0;
+        *g_CdRegResponse = 0;
         return 4;
     case 4: {
-        CdInterruptEvents *endEvents = &D_8009B294;
+        CdInterruptEvents *endEvents = &g_CdInterruptEvents;
         endEvents->end = 4;
         endEvents->ready = endEvents->end;
         copy_result(D_800A3470, result);
@@ -79,7 +79,7 @@ int getintr(void) {
         return 4;
     }
     case 5: {
-        CdInterruptEvents *errorEvents = &D_8009B294;
+        CdInterruptEvents *errorEvents = &g_CdInterruptEvents;
         errorEvents->ready = 5;
         errorEvents->sync = errorEvents->ready;
         copy_result(D_800A3460, result);

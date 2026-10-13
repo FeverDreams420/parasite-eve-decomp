@@ -18,20 +18,20 @@ int CdSetDebug(int level) {
     return old;
 }
 
-char *CdComstr(unsigned int index) {
+const char *CdComstr(unsigned int index) {
     index &= 0xFF;
     if (index >= 0x1C) {
         return g_CdNoneString;
     }
-    return g_CdCmdNameTable[index];
+    return g_CdCommandNames[index];
 }
 
-char *CdIntstr(unsigned int index) {
+const char *CdIntstr(unsigned int index) {
     index &= 0xFF;
     if (index >= 7) {
         return g_CdNoneString;
     }
-    return g_CdIntrStringTable[index];
+    return g_CdInterruptNames[index];
 }
 
 int CdSync(int mode, u8 *result) {
@@ -45,16 +45,16 @@ int CdReady(int mode, u8 *result) {
 CdlCB CdSyncCallback(CdlCB callback) {
     CdlCB old;
 
-    old = D_8009AFB4;
-    D_8009AFB4 = callback;
+    old = g_CdSyncCallback;
+    g_CdSyncCallback = callback;
     return old;
 }
 
 CdlCB CdReadyCallback(CdlCB callback) {
     CdlCB old;
 
-    old = D_8009AFB8;
-    D_8009AFB8 = callback;
+    old = g_CdReadyCallback;
+    g_CdReadyCallback = callback;
     return old;
 }
 
@@ -90,16 +90,16 @@ int CdControl_Impl(int cmd, void *param, u8 *extra) {
     cmd_byte = cmd_reg & 0xFF;
     table = D_8009AF2C;
 
-    saved = D_8009AFB4;
+    saved = g_CdSyncCallback;
     slot = &table[cmd_byte];
     ret = 0;
 
     minus_one = -1;
 
     do {
-        D_8009AFB4 = 0;
+        g_CdSyncCallback = 0;
         one = 1;
-        if (cmd_byte != one && (*(u8 *)&D_8009AFC4 & 0x10) != 0) {
+        if (cmd_byte != one && (*(u8 *)&g_CdStatus & 0x10) != 0) {
             register int command = 1;
             register void *payload;
             register u8 *result;
@@ -113,14 +113,14 @@ int CdControl_Impl(int cmd, void *param, u8 *extra) {
                 continue;
             }
         }
-        D_8009AFB4 = saved;
+        g_CdSyncCallback = saved;
         if (CD_cw(cmd_reg & 0xFF, param_reg, extra_reg, 0) != 0) {
             continue;
         }
         return ret + 1;
 
     } while (--tries != minus_one);
-    D_8009AFB4 = saved;
+    g_CdSyncCallback = saved;
     ret = -1;
     asm volatile("" : "=r"(ret) : "0"(ret));
     return ret + 1;
@@ -141,7 +141,7 @@ int CdControlF_Impl(int command, void *parameters) {
     int exhausted;
     u32 *flag_table;
 
-    saved_callback = D_8009AFB4;
+    saved_callback = g_CdSyncCallback;
     retries = command;
     parameter = parameters;
     command_word = retries;
@@ -154,21 +154,21 @@ int CdControlF_Impl(int command, void *parameters) {
     exhausted = -1;
 
     do {
-        D_8009AFB4 = 0;
-        if (command_byte != one && (*(u8 *)&D_8009AFC4 & 0x10) != 0) {
+        g_CdSyncCallback = 0;
+        if (command_byte != one && (*(u8 *)&g_CdStatus & 0x10) != 0) {
             CD_cw(1, 0, 0, 0);
         }
         if (parameter != 0 && command_flags[0] != 0 &&
             CD_cw(2, parameter, 0, 0) != 0) {
             continue;
         }
-        D_8009AFB4 = saved_callback;
+        g_CdSyncCallback = saved_callback;
         if (CD_cw(command_word & 0xFF, parameter, 0, 1) == 0) {
             goto done;
         }
     } while (--retries != exhausted);
 
-    D_8009AFB4 = saved_callback;
+    g_CdSyncCallback = saved_callback;
     status = -1;
 done:
     return status + 1;
@@ -184,7 +184,7 @@ int CdControlB(u_char command, u_char *parameter, u_char *result) {
         u32 *table;
         CdlCB previous_callback;
 
-        previous_callback = D_8009AFB4;
+        previous_callback = g_CdSyncCallback;
         retries = 3;
         one = 1;
         command_byte = command & 0xFF;
@@ -192,22 +192,22 @@ int CdControlB(u_char command, u_char *parameter, u_char *result) {
         slot = &table[command_byte];
         retry_end = -1;
         for (; retries != retry_end; --retries) {
-            D_8009AFB4 = 0;
+            g_CdSyncCallback = 0;
 
-            if (command_byte != one && (*(u8 *)&D_8009AFC4 & 0x10) != 0) {
+            if (command_byte != one && (*(u8 *)&g_CdStatus & 0x10) != 0) {
                 CD_cw(1, 0, 0, 0);
             }
 
             if (parameter == 0 || slot[0] == 0 ||
                 CD_cw(2, parameter, result, 0) == 0) {
-                D_8009AFB4 = previous_callback;
+                g_CdSyncCallback = previous_callback;
                 if (CD_cw(command & 0xFF, parameter, result, 0) == 0) {
                     return 0;
                 }
             }
         }
 
-        D_8009AFB4 = previous_callback;
+        g_CdSyncCallback = previous_callback;
         return -1;
     }
 

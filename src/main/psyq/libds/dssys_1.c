@@ -31,6 +31,6 @@ void DS_init(void) {
     g_CdReadyCallback = (CdlCB)LIBDS_DSSYS_1_text_E10;
     VSyncCallbacks(0, LIBDS_DSSYS_1_text_4A4);
 
-    D_8009AFD8 = 1;
+    g_CdDsActive = 1;
     g_DsReadSysEnabled.enabled = 1;
 }

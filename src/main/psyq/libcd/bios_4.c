@@ -6,8 +6,6 @@
 #include "pe1/psyq_callbacks.h"
 #include "pe1/psyq_cd.h"
 
-#include "bios_4_externs.h"
-
 typedef struct CdInitVolFrame {
     u8 packet[4];
     u32 pad04;
@@ -16,28 +14,19 @@ typedef struct CdInitVolFrame {
 register CdInitVolFrame *g_CdInitVolFrame asm("$29");
 register int g_CdInitVolValue asm("$2");
 
-/* BIOS_1.OBJ state. CdSetDebug and DsSetDebug exchange the debug level at
- * +0x0C (CD_debug); nothing in this executable references the word at +0x08. */
-typedef struct CdBiosState {
-    CdlCB sync_callback;
-    CdlCB ready_callback;
-    CdlCB read_callback;
-    s32 debug;
-    u32 status;
-    u32 status1;
-    u32 lid_open_count;
-    u8 position[4];
-    u8 mode;
-    u8 command;
-    u8 pad26[2];
-    u32 ds_active;
-} CdBiosState;
-
-typedef char CdBiosState_size[(sizeof(CdBiosState) == 0x28) ? 1 : -1];
-
-CdBiosState g_CdBiosState __attribute__((section(".data"))) = {
-    0, 0, 0, 0, 0, 0, 0, {2, 0, 0, 0}, 0, 0, {0, 0}, 0,
-};
+/* BIOS_1.OBJ state. Nothing in this executable references
+ * g_CdReadCallback. */
+CdlCB g_CdSyncCallback = 0;
+CdlCB g_CdReadyCallback = 0;
+CdlCB g_CdReadCallback = 0;
+int CD_debug = 0;
+u32 g_CdStatus = 0;
+u32 g_CdStatus1 = 0;
+int g_CdLidOpenCount = 0;
+CdlLOC g_CdLastPos = {2, 0, 0, 0};
+u8 g_CdMode = 0;
+u8 g_CdLastCom = 0;
+u32 g_CdDsActive = 0;
 
 typedef struct CdBiosNames {
     char read_s[12];
@@ -107,74 +96,49 @@ u32 g_CdCommandAckOnly[32] = {
     0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
 };
 
-u32 g_CdCommandClearsReady[32] = {
-    0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+CdCommandTables g_CdCommandTables = {
+    {
+        0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+    },
+    {
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    },
+    {
+        0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0,
+        0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    },
 };
 
-u32 g_CdCommandUpdatesStatus[32] = {
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+/* Hardware register pointers: the CD controller's four ports, the common
+ * delay register (written 0x1325) and the SPU base; after the interrupt
+ * event bytes and the init descriptor, the CD bus delay/size register, the
+ * DMA control register and the channel 3 (CD) address register. */
+volatile u8 *g_CdRegIndexBase = (volatile u8 *)0x1F801800;
+volatile u8 *g_CdRegPort1 = (volatile u8 *)0x1F801801;
+volatile u8 *g_CdRegDataWrite = (volatile u8 *)0x1F801802;
+volatile u8 *g_CdRegResponse = (volatile u8 *)0x1F801803;
+volatile u32 *g_CdRegRequest = (volatile u32 *)0x1F801020;
+u16 *volatile g_CdSpuRegBase = (u16 *)0x1F801C00;
+CdInterruptEvents g_CdInterruptEvents = {0, 0, 0};
+
+CdBiosInitDescriptor g_CdBiosInitDescriptor = {
+    &g_CdInterruptEvents,
+    D_800A3460,
+    &g_CdLastCom,
+    &g_CdStatus,
+    &g_CdLastPos,
+    g_CdBiosVersion,
 };
 
-u32 g_CdCommandParamCount[32] = {
-    0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0,
-    0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-};
-
-typedef struct CdBiosInitDescriptor {
-    CdInterruptEvents *events;
-    u8 *sync_result;
-    u8 *command;
-    u32 *status;
-    u8 *position;
-    const char *version;
-} CdBiosInitDescriptor;
-
-typedef struct CdBiosHardwareState {
-    volatile u8 *index;
-    volatile u8 *port1;
-    volatile u8 *data_write;
-    volatile u8 *response;
-    u32 *request;
-    u16 *spu;
-    CdInterruptEvents events;
-    u8 pad1B;
-    CdBiosInitDescriptor init;
-    volatile u32 *dma_madr;
-    volatile u32 *dma_bcr;
-    void *volatile *dma_address;
-} CdBiosHardwareState;
-
-typedef char CdBiosHardwareState_size[
-    (sizeof(CdBiosHardwareState) == 0x40) ? 1 : -1];
-
-CdBiosHardwareState g_CdBiosHardwareState
-    __attribute__((section(".data"))) = {
-        (volatile u8 *)0x1F801800,
-        (volatile u8 *)0x1F801801,
-        (volatile u8 *)0x1F801802,
-        (volatile u8 *)0x1F801803,
-        (u32 *)0x1F801020,
-        (u16 *)0x1F801C00,
-        {0, 0, 0},
-        0,
-        {
-            &g_CdBiosHardwareState.events,
-            D_800A3460,
-            &g_CdBiosState.command,
-            &g_CdBiosState.status,
-            g_CdBiosState.position,
-            g_CdBiosVersion,
-        },
-        (volatile u32 *)0x1F801018,
-        (volatile u32 *)0x1F8010F0,
-        (void *volatile *)0x1F8010B0,
-    };
+volatile u32 *g_CdRegDelaySize = (volatile u32 *)0x1F801018;
+volatile u32 *g_CdRegDmaPcr = (volatile u32 *)0x1F8010F0;
+void *volatile *g_CdRegDmaMadr = (void *volatile *)0x1F8010B0;
 
 int CD_initvol(void) {
     volatile void *io;
-    io = D_8009B290;
+    io = g_CdSpuRegBase;
     g_CdInitVolValue = ((u16 *)io)[0x1B8 / 2];
     g_CdInitVolFrame--;
     if (g_CdInitVolValue == 0) {
@@ -183,7 +147,7 @@ int CD_initvol(void) {
             g_CdInitVolValue = 0x3FFF;
             ((u16 *)io)[0x180 / 2] = g_CdInitVolValue;
             ((u16 *)io)[0x182 / 2] = g_CdInitVolValue;
-            io = D_8009B290;
+            io = g_CdSpuRegBase;
         }
     }
     g_CdInitVolValue = 0x3FFF;
@@ -228,8 +192,8 @@ int CD_initvol(void) {
 void CD_initintr(void) {
     g_CdReadyCallback = 0;
     g_CdSyncCallback = 0;
-    D_8009AFC8 = 0;
-    D_8009AFC4 = 0;
+    g_CdStatus1 = 0;
+    g_CdStatus = 0;
     ResetCallback();
     InterruptCallback(2, callback);
 }

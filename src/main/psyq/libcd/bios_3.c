@@ -14,17 +14,17 @@ int CD_cw(int command, void *parameters, u8 *result, int mode)
   int i;
 
   opcode = command;
-  if (D_8009AFC0 >= 2)
+  if (CD_debug >= 2)
   {
-    printf(D_80011BB4, D_8009AFDC[(u8) opcode]);
+    printf(D_80011BB4, g_CdCommandNames[(u8) opcode]);
   }
   payload = parameter;
   i = 0;
-  if (D_8009B1FC[(u8) opcode] && (!payload))
+  if (g_CdCommandTables.parameter_counts[(u8) opcode] && (!payload))
   {
-    if (D_8009AFC0 > 0)
+    if (CD_debug > 0)
     {
-      printf(D_80011BBC, D_8009AFDC[(u8) opcode]);
+      printf(D_80011BBC, g_CdCommandNames[(u8) opcode]);
     }
     return -2;
   }
@@ -34,7 +34,7 @@ int CD_cw(int command, void *parameters, u8 *result, int mode)
   {
     for (i = 0; i < 4; i++)
     {
-      D_8009AFD0[i] = payload[i];
+      ((u8 *)&g_CdLastPos)[i] = payload[i];
     }
 
   }
@@ -43,13 +43,13 @@ int CD_cw(int command, void *parameters, u8 *result, int mode)
     g_CdMode = payload[0];
   }
   {
-    CdCommandTables *tables = &D_8009B0FC;
-    D_8009B294.sync = 0;
+    CdCommandTables *tables = &g_CdCommandTables;
+    g_CdInterruptEvents.sync = 0;
     if (tables->ready_flags[(u8) opcode])
     {
-      D_8009B294.ready = 0;
+      g_CdInterruptEvents.ready = 0;
     }
-    *D_8009B27C = 0;
+    *g_CdRegIndexBase = 0;
     {
       int *counts = tables->parameter_counts;
       i = 0;
@@ -58,14 +58,14 @@ int CD_cw(int command, void *parameters, u8 *result, int mode)
         int *count = &counts[(u8) opcode];
         do
         {
-          *D_8009B284 = payload[i];
+          *g_CdRegDataWrite = payload[i];
         }
         while ((++i) < (*count));
       }
     }
   }
   g_CdLastCom = opcode;
-  *D_8009B280 = opcode;
+  *g_CdRegPort1 = opcode;
   if (mode)
   {
     return 0;
@@ -73,11 +73,11 @@ int CD_cw(int command, void *parameters, u8 *result, int mode)
   D_800A3478 = VSync(-1) + 0x3C0;
   D_800A347C = 0;
   D_800A3480 = D_80011BCC;
-  if (!D_8009B294.sync)
+  if (!g_CdInterruptEvents.sync)
   {
-    char **commands = D_8009AFDC;
-    char **events = D_8009B05C;
-    u8 *sync = (u8 *) (&D_8009B294);
+    const char **commands = g_CdCommandNames;
+    const char **events = g_CdInterruptNames;
+    u8 *sync = (u8 *) (&g_CdInterruptEvents);
     u8 *ready = (u8 *)&((CdInterruptEvents *)sync)->ready;
     do
     {
@@ -95,7 +95,7 @@ int CD_cw(int command, void *parameters, u8 *result, int mode)
   copy_result(result, D_800A3460);
   {
     unsigned long status = 0;
-    unsigned short event = D_8009B294.sync;
+    unsigned short event = g_CdInterruptEvents.sync;
     if (event == 5)
     {
       status = -1;
@@ -124,7 +124,7 @@ void CD_flush(void) {
         *g_CdRegResponse = 7;
         *g_CdRegDataWrite = 7;
     }
-    state = &D_8009B294;
+    state = &g_CdInterruptEvents;
     state->end = 0;
     state->ready = state->end;
     {

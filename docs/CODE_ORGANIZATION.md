@@ -2003,8 +2003,9 @@ above and one is the multiplier 0x80010003 of a division by 0x7FFF in
 `Render_LoadFontGlyphAlt`.
 
 The literals removed on 2026-10-13: the LIBCD BIOS descriptor in
-`libcd/bios_4.c` points at the `g_CdBiosState` fields, its own event bytes,
-`D_800A3460` and the bios.c version string; `DsReadCallback` stores
+`libcd/bios_4.c` points at `g_CdLastCom`, `g_CdStatus`, `g_CdLastPos`, the
+event bytes `g_CdInterruptEvents`, `D_800A3460` and the bios.c version
+string; `DsReadCallback` stores
 `g_CdReadCompleteCallback` by name; and six data words in the asm blobs
 assemble as symbol references. `configs/USA/sym.main.txt` labels what they
 point at (`g_StrFileDirArea`, `g_PmTaskProgramArea`,

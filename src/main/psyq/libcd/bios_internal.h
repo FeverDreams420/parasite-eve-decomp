@@ -12,7 +12,7 @@ static inline int count_poll(void) {
     return old;
 }
 
-static inline int timed_out(char **commands, char **events,
+static inline int timed_out(const char **commands, const char **events,
                             CdInterruptEvents *interrupts) {
     if (VSync(-1) > D_800A3478 || count_poll() > 0x3C0000) {
         puts(D_80011B18);
@@ -35,15 +35,15 @@ static inline void copy_result(u8 *destination, const volatile u8 *source) {
 }
 
 static inline void dispatch_interrupts(u8 *sync, u8 *ready) {
-    int bank = *D_8009B27C & 3;
+    int bank = *g_CdRegIndexBase & 3;
     int pending;
     while ((pending = getintr()) != 0) {
-        if ((pending & 4) && D_8009AFB8)
-            D_8009AFB8(*ready, D_800A3468);
-        if ((pending & 2) && D_8009AFB4)
-            D_8009AFB4(*sync, D_800A3460);
+        if ((pending & 4) && g_CdReadyCallback)
+            g_CdReadyCallback(*ready, D_800A3468);
+        if ((pending & 2) && g_CdSyncCallback)
+            g_CdSyncCallback(*sync, D_800A3460);
     }
-    *D_8009B27C = bank;
+    *g_CdRegIndexBase = bank;
 }
 
 #endif

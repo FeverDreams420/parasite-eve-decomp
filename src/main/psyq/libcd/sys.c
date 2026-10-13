@@ -5,7 +5,7 @@
 #include "pe1/psyq_cd.h"
 
 int CdStatus(void) {
-    return *(u8 *)&D_8009AFC4;
+    return *(u8 *)&g_CdStatus;
 }
 
 int CdMode(void) {

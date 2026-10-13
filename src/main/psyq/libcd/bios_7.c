@@ -10,15 +10,15 @@ int CD_getsector(void *destination, int words) {
     volatile u8 *status;
     u32 ready;
 
-    *D_8009B27C = 0;
-    *D_8009B288 = 0x80;
-    *D_8009B2B0 = 0x20943;
-    *D_8009B28C = 0x1323;
-    *D_8009B2B4 |= 0x8000;
-    *D_8009B2B8 = destination;
+    *g_CdRegIndexBase = 0;
+    *g_CdRegResponse = 0x80;
+    *g_CdRegDelaySize = 0x20943;
+    *g_CdRegRequest = 0x1323;
+    *g_CdRegDmaPcr |= 0x8000;
+    *g_CdRegDmaMadr = destination;
     *D_8009B2BC = words | 0x10000;
 
-    status = D_8009B27C;
+    status = g_CdRegIndexBase;
     do {
         ready = *status & 0x40;
     } while (!ready);
@@ -35,7 +35,7 @@ int CD_getsector(void *destination, int words) {
     }
 
     {
-        volatile u32 *request = D_8009B28C;
+        volatile u32 *request = g_CdRegRequest;
 
         *request = 0x1325;
     }
@@ -48,10 +48,10 @@ int CD_getsector2(void *destination, int words) {
 
     *g_CdRegIndexBase = 0;
     *g_CdRegResponse = 0x80;
-    *D_8009B2B0 = 0x21020843;
-    *(volatile u32 *)g_CdRegRequest = 0x1325;
-    *D_8009B2B4 |= 0x8000;
-    *D_8009B2B8 = destination;
+    *g_CdRegDelaySize = 0x21020843;
+    *g_CdRegRequest = 0x1325;
+    *g_CdRegDmaPcr |= 0x8000;
+    *g_CdRegDmaMadr = destination;
     *D_8009B2BC = words | 0x10000;
     index = g_CdRegIndexBase;
     if (!(*index & 0x40)) {
@@ -64,23 +64,23 @@ int CD_getsector2(void *destination, int words) {
 }
 
 void CD_set_test_parmnum(int status) {
-    D_8009B260 = status;
+    g_CdCommandTables.parameter_counts[0x19] = status; /* CdlTest */
 }
 
 void callback(void) {
     int pending;
-    volatile u8 *ready = &g_CdReadyEvent;
-    int bank = *D_8009B27C & 3;
+    volatile u8 *ready = &g_CdInterruptEvents.ready;
+    int bank = *g_CdRegIndexBase & 3;
     volatile u8 *complete = ready - 1;
 
     while ((pending = getintr()) != 0) {
-        if ((pending & 4) && D_8009AFB8) {
-            D_8009AFB8(*ready, D_800A3468);
+        if ((pending & 4) && g_CdReadyCallback) {
+            g_CdReadyCallback(*ready, D_800A3468);
         }
-        if ((pending & 2) && D_8009AFB4) {
-            D_8009AFB4(*complete, D_800A3460);
+        if ((pending & 2) && g_CdSyncCallback) {
+            g_CdSyncCallback(*complete, D_800A3460);
         }
     }
 
-    *D_8009B27C = bank;
+    *g_CdRegIndexBase = bank;
 }

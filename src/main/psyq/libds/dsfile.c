@@ -93,19 +93,19 @@ DslFILE *DsSearchFile(DslFILE *output, char *input_name) {
         if (directory == not_found) { component[0] = 0; break; }
     }
     if (depth >= 8) {
-        if (D_8009AFC0 > 0) printf(D_80011E6C, name, depth);
+        if (CD_debug > 0) printf(D_80011E6C, name, depth);
         return 0;
     }
     if (!*(signed char *)component) {
-        if (D_8009AFC0 > 0) printf(D_80011E88, name);
+        if (CD_debug > 0) printf(D_80011E88, name);
         return 0;
     }
     *cursor = 0;
     if (!DS_cachefile(directory)) {
-        if (D_8009AFC0 > 0) puts(D_80011EA0);
+        if (CD_debug > 0) puts(D_80011EA0);
         return 0;
     }
-    if (D_8009AFC0 > 1) printf(D_80011EBC, component);
+    if (CD_debug > 1) printf(D_80011EBC, component);
     depth = 0;
     base = D_800A36B8[0];
     entry = (DslFILE *)(base - 8);
@@ -114,7 +114,7 @@ DslFILE *DsSearchFile(DslFILE *output, char *input_name) {
          entry++, entry_name += sizeof(DslFILE), depth++, offset += sizeof(DslFILE)) {
         if (!((signed char *)D_800A36B8)[offset]) break;
         if (_cmp(entry_name, component)) {
-            if (D_8009AFC0 > 1) printf(D_80011EDC, component);
+            if (CD_debug > 1) printf(D_80011EDC, component);
             /* Copy the aligned 24-byte record in the retail four-word/two-word order. */
             {
                 u32 word0 = ((u32 *)entry)[0];
@@ -135,7 +135,7 @@ DslFILE *DsSearchFile(DslFILE *output, char *input_name) {
         }
         asm volatile("" : : "r"(depth));
     }
-    if (D_8009AFC0 > 0) printf(D_80011EE8, component);
+    if (CD_debug > 0) printf(D_80011EE8, component);
     return 0;
 }
 

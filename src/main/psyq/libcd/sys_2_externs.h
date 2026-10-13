@@ -3,7 +3,5 @@
 
 extern void CD_flush(void);
 extern char g_CdNoneString[];
-extern char *g_CdCmdNameTable[];
-extern char *g_CdIntrStringTable[];
 
 #endif /* PSYQ_LIBCD_SYS_2_EXTERNS_H */

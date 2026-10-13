@@ -8,8 +8,8 @@
 
 #include "bios_6_externs.h"
 
-static inline int data_timed_out(char **commands, char **events, int limit,
-                                 CdInterruptEvents *state) {
+static inline int data_timed_out(const char **commands, const char **events,
+                                 int limit, CdInterruptEvents *state) {
     if (VSync(-1) > D_800A3478 || D_800A347C++ > limit) {
         puts(D_80011B18);
         printf(D_80011B28, D_800A3480, commands[g_CdLastCom],
@@ -23,17 +23,17 @@ static inline int data_timed_out(char **commands, char **events, int limit,
 int CD_datasync(int mode) {
     int saved_mode = mode;
     int limit;
-    char **commands;
-    char **events;
+    const char **commands;
+    const char **events;
     CdInterruptEvents *state;
 
     D_800A3478 = VSync(-1) + 0x3C0;
     D_800A347C = 0;
     D_800A3480 = D_80011C20;
     limit = 0x3C0000;
-    commands = D_8009AFDC;
-    state = &D_8009B294;
-    events = D_8009B05C;
+    commands = g_CdCommandNames;
+    state = &g_CdInterruptEvents;
+    events = g_CdInterruptNames;
 
     do {
         if (data_timed_out(commands, events, limit, state)) {

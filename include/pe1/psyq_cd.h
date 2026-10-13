@@ -23,15 +23,16 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(CdInterruptEvents, ready) == 1,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(CdInterruptEvents, end) == 2,
                   cd_interrupt_events_end_offset);
 
-extern CdInterruptEvents D_8009B294;
+extern CdInterruptEvents g_CdInterruptEvents;
 
 /* Shared LIBCD hardware pointers: byte-wide indexed ports and word control. */
 extern volatile u8 *g_CdRegIndexBase;
 extern volatile u8 *g_CdRegPort1;
 extern volatile u8 *g_CdRegDataWrite;
 extern volatile u8 *g_CdRegResponse;
-/* DMA code adds volatile through its access pointer; CD_flush writes once. */
-extern u32 *g_CdRegRequest;
+/* The common delay register (0x1F801020); LIBCD writes 0x1325 or 0x1323. */
+extern volatile u32 *g_CdRegRequest;
+extern u16 *volatile g_CdSpuRegBase;
 
 typedef union CdDmaInterruptRegister {
     volatile u32 word;
@@ -52,9 +53,8 @@ extern volatile u8 *D_8009B32C;
 extern char D_80011C2C[];
 
 /* LIBCD keeps DMA register addresses in shared pointer slots. */
-extern volatile u32 *D_8009B28C;
-extern volatile u32 *D_8009B2B0, *D_8009B2B4;
-extern void *volatile *D_8009B2B8;
+extern volatile u32 *g_CdRegDelaySize, *g_CdRegDmaPcr;
+extern void *volatile *g_CdRegDmaMadr;
 extern volatile u32 *D_8009B2BC, *g_CdRegDmaControl;
 
 typedef void (*CdReadCompleteCallback)(int event, void *data);
@@ -335,8 +335,8 @@ CdReadCompleteCallback DsReadCallback(CdReadCompleteCallback callback);
 void DS_stop(void);
 void callback(void);
 /* BIOS_1.OBJ polling state, result buffers and timeout diagnostics. */
-extern char *D_8009AFDC[], *D_8009B05C[];
-extern volatile u8 *D_8009B27C, *D_8009B288;
+extern const char *g_CdCommandNames[], *g_CdInterruptNames[];
+extern u32 g_CdCommandAckOnly[];
 extern u8 D_800A3460[8], D_800A3468[8], D_800A3470[8];
 extern int D_800A3478, D_800A347C;
 extern char *D_800A3480;
@@ -354,13 +354,9 @@ typedef struct CdCommandTables {
 PE1_STATIC_ASSERT(PE1_OFFSETOF(CdCommandTables, parameter_counts) == 0x100,
                   cd_command_parameter_counts_offset);
 PE1_STATIC_ASSERT(sizeof(CdCommandTables) == 0x180, cd_command_tables_size);
-extern CdCommandTables D_8009B0FC;
-extern int D_8009B1FC[];
-extern int D_8009AFC0;
-extern u8 D_8009AFD0[4];
+extern CdCommandTables g_CdCommandTables;
 extern u8 g_CdMode;
 extern u8 g_CdLastCom;
-extern volatile u8 *D_8009B280, *D_8009B284;
 extern char D_80011BB4[], D_80011BBC[], D_80011BCC[];
 /* "$Id: bios.c,v 1.86 ...$", the LIBCD BIOS version string. */
 extern const char g_CdBiosVersion[];
@@ -396,8 +392,18 @@ void DS_read_cbsync(u_char event);
 void DS_read_cbdata(void);
 
 extern CdlLOC g_CdLastPos;
+
+/* LIBCD BIOS descriptor: CD_init prints its address. */
+typedef struct CdBiosInitDescriptor {
+    CdInterruptEvents *events;
+    u8 *sync_result;
+    u8 *command;
+    u32 *status;
+    CdlLOC *position;
+    const char *version;
+} CdBiosInitDescriptor;
+extern CdBiosInitDescriptor g_CdBiosInitDescriptor;
 extern CdlLOC g_CdCurPosPtr;
-extern int D_8009B260;
 extern u32 g_CdStreamMask;
 extern u32 D_800B6918;
 
@@ -438,20 +444,19 @@ extern s32 g_CdStreamRingIndex;
 
 /* Low-level LIBCD command retry wrapper and its shared command state. */
 extern u32 D_8009AF2C[];
-extern CdlCB D_8009AFB4;
-extern CdlCB D_8009AFB8;
 extern CdlCB g_CdSyncCallback;
-/* BIOS.OBJ: set by the CD interrupt when a ready event arrives. */
-extern volatile u8 g_CdReadyEvent;
 extern CdlCB g_CdReadyCallback;
+extern CdlCB g_CdReadCallback;
 extern int CD_debug;
 int CdSetDebug(int level);
 CdlCB CdSyncCallback(CdlCB callback);
 CdlCB CdReadyCallback(CdlCB callback);
 int DsSetDebug(int level);
 /* SDK CD_status occupies one word; public getters read its low byte. */
-extern u32 D_8009AFC4;
-extern u32 D_8009AFC8; /* SDK CD_status1, also stored as a full word. */
+extern u32 g_CdStatus;
+extern u32 g_CdStatus1; /* SDK CD_status1, also stored as a full word. */
+/* Counts status words that newly report the shell (lid) open. */
+extern int g_CdLidOpenCount;
 int CD_cw(int command, void *parameters, u8 *result, int mode);
 void dma_execute(int channel, void *address, int blockCount, int blockSize,
                  volatile u32 control, u8 interrupt, int reserved);

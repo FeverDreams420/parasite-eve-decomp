@@ -13,40 +13,40 @@ int CD_init(void) {
     register int arg asm("$5");
 
     puts(D_80011C08);
-        printf(D_80011C14, D_8009B298);
+        printf(D_80011C14, &g_CdBiosInitDescriptor);
     g_CdLastCom = 0;
     g_CdMode = 0;
-    D_8009AFB8 = 0;
-    D_8009AFB4 = 0;
-    D_8009AFC8 = 0;
-    D_8009AFC4 = 0;
+    g_CdReadyCallback = 0;
+    g_CdSyncCallback = 0;
+    g_CdStatus1 = 0;
+    g_CdStatus = 0;
     ResetCallback();
     InterruptCallback(2, callback);
-    *D_8009B27C = 1;
-    while (*D_8009B288 & 7) {
-        *D_8009B27C = 1;
-        *D_8009B288 = 7;
-        *D_8009B284 = 7;
+    *g_CdRegIndexBase = 1;
+    while (*g_CdRegResponse & 7) {
+        *g_CdRegIndexBase = 1;
+        *g_CdRegResponse = 7;
+        *g_CdRegDataWrite = 7;
     }
     {
         volatile u8 *index;
         CdInterruptEvents *state;
         cmd = 1;
         arg = zero;
-        state = &D_8009B294;
+        state = &g_CdInterruptEvents;
         /* Debt: retain one shared event-state base. */
         asm volatile("" : "=r"(state) : "0"(state));
 
         state->end = 0;
         state->ready = state->end;
-        index = D_8009B27C;
+        index = g_CdRegIndexBase;
         state->sync = 2;
         *index = 0;
     }
-    *D_8009B288 = 0;
-    *D_8009B28C = 0x1325;
+    *g_CdRegResponse = 0;
+    *g_CdRegRequest = 0x1325;
     CD_cw(cmd, arg, zero, zero);
-    if (D_8009AFC4 & 0x10) CD_cw(1, zero, zero, zero);
+    if (g_CdStatus & 0x10) CD_cw(1, zero, zero, zero);
     if (CD_cw(10, zero, zero, zero)) return -1;
     if (!CD_cw(12, zero, zero, zero)) {
         register int status asm("$4") = CD_sync(zero, zero);

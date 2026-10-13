@@ -11,7 +11,7 @@ void StUnSetRing(void) {
     unsigned char *interrupt_enable;
 
     EnterCriticalSection();
-    if (D_8009AFD8 == 1) {
+    if (g_CdDsActive == 1) {
         DsDataCallback(0);
         DsReadyCallback(0);
     } else {
