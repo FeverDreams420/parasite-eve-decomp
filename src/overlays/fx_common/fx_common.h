@@ -264,7 +264,6 @@ extern TimRelativeTable D_801D0260;
 void Akao_Cmd_A9(int mode, int arg1);
 void SetPolyG4(FxCommonGradientQuad *packet);
 void SetSemiTrans(void *packet, int enabled);
-void ClearOTagR(void *allocation, int size);
 s16 func_80193B5C(s16 value);
 int func_8018F55C(u32 position, int radius, void *allocation,
                    FxCommonVec3 *vector, GteShortVector *angles);

@@ -35,7 +35,6 @@ u32 g_GlobalFrameCounter[1];
 
 void Draw_InitPipeline(void);
 void Field_HandleStateTransition(void);
-void ClearOTagR(u32 *address, int length);
 void Scene_UpdateEntityList(void);
 void Entity_FrameUpdate(void);
 int func_80122040(void);

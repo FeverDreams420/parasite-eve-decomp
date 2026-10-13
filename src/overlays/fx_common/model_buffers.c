@@ -2043,7 +2043,6 @@ void SetFogNearFar(int, int, int);
 void SetGeomOffset(int, int);
 void SetGeomScreen(int);
 void func_8019BF8C(void **);
-void ClearOTagR(void *, int);
 
 void func_8019BD78(void) {
     char *base = &D_8019C1F8;

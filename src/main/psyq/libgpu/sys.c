@@ -341,7 +341,7 @@ int DrawPrim(void *primitive) {
 void Gpu_SetDrawEnvBack(DR_ENV *, DRAWENV *);
 void *memcpy(void *, const void *, unsigned int);
 
-int DrawOTag(void *table)
+int DrawOTag(u32 *table)
 {
     if (D_8009574C.queueState.debugLevel >= 2) {
         g_GpuDebugPrintf(D_80011928, table);

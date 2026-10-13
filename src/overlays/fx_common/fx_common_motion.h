@@ -113,7 +113,6 @@ void func_80191EFC(int handle, volatile s32 *state);
 void Menu_DrawTextboxEntries(void);
 void func_80193AB0(void);
 void ResetGraph(s32 value);
-void DrawOTag(void *ordering_table);
 void func_80192030(void);
 void func_8018F344(GteMatrix *out, GteShortVector *eye,
                    GteShortVector *target, GteVector *up);
