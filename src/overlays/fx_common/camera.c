@@ -823,7 +823,6 @@ void FxCommon_SelectRoomVariant(void)
         D_8019C008 = 0;
     else
         D_8019C008 = 0xFF;
-    if (g_GameState.flags & 0x40000000) {
     if (g_GameStateFlagsWord & 0x40000000) {
         D_8019C008 = 0xFF;
         Menu_SetEquipSlotIndex(1);
@@ -928,7 +927,6 @@ void FxCommon_SelectRoomVariant(void)
 }
 
 void FxCommon_LoadEffectSectors(void) {
-    FxAssetSource *resource = (FxAssetSource *)&g_GameState;
     FxAssetSource *resource = (FxAssetSource *)&g_GameStateFlagsWord;
     u16 *range;
     int result;
