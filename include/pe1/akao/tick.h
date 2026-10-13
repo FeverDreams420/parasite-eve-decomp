@@ -63,7 +63,8 @@ extern u32 g_AkaoVoiceUpdateFlags;
 extern u32 g_SpuActiveVoiceMask;
 extern u32 g_AkaoSfxAllocatedVoiceMask;
 extern u32 g_SpuPendingKeyOffMask;
-extern u16 D_800BCD66;
+/* Sound-effect tempo, 16.16; the tick adds its integer half. */
+extern AkaoTickTempo g_AkaoSfxTempo;
 extern u32 g_AkaoSfxTickAccumulator;
 
 void Akao_ProcessVoiceQueue(void);

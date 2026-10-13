@@ -2,6 +2,7 @@
 #include "pe1/akao.h"
 #include "pe1/akao/file_header.h"
 #include "pe1/akao/init_state.h"
+#include "pe1/akao/tick.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_spu_internal.h"
 
@@ -191,7 +192,7 @@ void Spu_InitVoiceState(void) {
     *(int *)&bank[1].allocated_voice_mask = 0;
     *(int *)&bank[1].key_on_request_mask = 0;
     g_AkaoSfxTickAccumulator = 1;
-    D_800BCD64 = 0x66A80000;
+    g_AkaoSfxTempo.value = 0x66A80000;
     g_SpuPendingKeyOffMask = 0;
     g_AkaoSfxAllocatedVoiceMask = 0;
     g_AkaoVoiceMaskScratch = 0;

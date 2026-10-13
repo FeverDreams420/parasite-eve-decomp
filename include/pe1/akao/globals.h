@@ -63,7 +63,6 @@ extern int g_AkaoSeqLoopCounter;
 
 /* Sound-effect sequencer masks next to the 34/38/3C dirty masks. */
 extern unsigned int g_AkaoSfxAllocatedVoiceMask;
-extern unsigned int D_800BCD64;
 
 /* update_flags of the sequencer tracks. */
 extern AkaoTrackUpdateSlot g_AkaoTrackStateArray[];

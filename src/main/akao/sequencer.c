@@ -281,7 +281,7 @@ void Akao_Tick(void)
 
     mask = g_SpuActiveVoiceMask;
     if (mask) {
-        accumulator = g_AkaoSfxTickAccumulator + D_800BCD66;
+        accumulator = g_AkaoSfxTickAccumulator + g_AkaoSfxTempo.half.integer;
         g_AkaoSfxTickAccumulator = accumulator;
         if ((accumulator & 0xFFFF0000) || (g_AkaoSeqPendingFlags & 4)) {
             g_AkaoSfxTickAccumulator = accumulator & 0xFFFF;

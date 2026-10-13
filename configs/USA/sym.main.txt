@@ -2454,6 +2454,7 @@ g_AkaoVoiceStateBackup = 0x800B6B80;
 g_MemCardIconHeader = 0x800B8868;
 g_AkaoTrackStateBackup = 0x800B8968;
 g_AkaoNestedSource = 0x800B89D0;
+g_AkaoSfxTempo = 0x800BCD64;
 g_AkaoSelectedBankId = 0x800B89BC;
 g_CdStreamDataReadyFlag = 0x800B89F4;
 g_EntityRenderScratch = 0x800B89F8;
