@@ -60,7 +60,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
     else if (activeState & 0x100000)
     {
         basePower = (((u16)g_ActiveActor->stat1E / 5U) & 0xFFFF) + (s16) g_ActiveActor->action->powerBonus;
-        attackPower = ((basePower * (((g_ActiveActor->field04.fieldId04 * 7) + 0x78) / 160) * (s16)(g_ActiveActor->exp_or_acc >> 16)) / (s16) (s16)(g_ActiveActor->maxAtk >> 16)) + basePower;
+        attackPower = ((basePower * (((g_ActiveActor->field04.fieldId04 * 7) + 0x78) / 160) * (s16)(g_ActiveActor->exp_or_acc >> 16)) / (s16)(g_ActiveActor->maxAtk >> 16)) + basePower;
     }
     else
     {
@@ -411,7 +411,7 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
             }
         }
 
-        if ((s8)D_8009D2A0 != 0) {
+        if (D_8009D2A0 != 0) {
             return;
         }
 
