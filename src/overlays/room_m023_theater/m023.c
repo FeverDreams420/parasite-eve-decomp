@@ -108,6 +108,7 @@ int RoomM023_DriftPulseCallback(int mode, RoomDriftPulseState *state) {
  * from the tracked model joint or from a random point of a wide band. */
 int RoomM023_ScatterEmitter(int mode, RoomM023ScatterState *state) {
     RoomM023Template template = g_RoomM023_D_8018EFF4;
+    RoomM023Template template = g_RoomM023JointAnchor;
     s16 position[4];
     RoomM023Particle *particle;
 
@@ -173,6 +174,9 @@ int RoomM023_JointGlow(int mode, RoomM023JointGlow *glow) {
     RoomM023Template template = g_RoomM023_D_8018EFF4;
     RenderColor ring = g_RoomM023_D_8018EFFC;
     RenderColor flare = g_RoomM023_D_8018F000;
+    RoomM023Template template = g_RoomM023JointAnchor;
+    RenderColor ring = g_RoomM023RingBandColor;
+    RenderColor flare = g_RoomM023StarFanColor;
     int size;
     int intensity;
     s16 frame;
@@ -276,6 +280,7 @@ int RoomM023_JointBeacon(int mode, RoomM023Beacon *state) {
     GteShortVector position;
     GteShortVector rotation;
     RoomM023Template offset = g_RoomM023_D_8018EFF4;
+    RoomM023Template offset = g_RoomM023JointAnchor;
     GteMatrix matrix;
     GteMatrix spin;
     RoomM023BeaconColor color;
@@ -304,8 +309,8 @@ int RoomM023_JointBeacon(int mode, RoomM023Beacon *state) {
             }
         }
         state->armed = 1;
-        D_80190760 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5463704);
-        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80190760, 0, 0);
+        g_RoomM023BeaconModel = Asset_FindTable08ByU32Key(g_LoadedSceneAssetBlock[0], 0xC5463704);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)g_RoomM023BeaconModel, 0, 0);
         return 0;
     case 1:
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023BeaconChannel)->pool, state->joint, &offset, state);
@@ -389,7 +394,7 @@ int RoomM023_JointBeacon(int mode, RoomM023Beacon *state) {
             size = state->glow;
             size = size * 2 / 3;
             if (g_FieldFxCurrentAge & 1) size = size * 9 / 8;
-            FieldFx_SampleColorTrack(D_801906F0, &color, state->shade);
+            FieldFx_SampleColorTrack(g_RoomM023BeaconColorTrack, &color, state->shade);
             {
                 int kind = g_FieldFxSpriteParams.palette;
                 int palette = g_FieldFxPaletteTable[kind];
@@ -443,26 +448,26 @@ int RoomM023_JointBeacon(int mode, RoomM023Beacon *state) {
             FieldFx_ModelSetTexture(page, GetClut(0x50, palette));
         }
         FieldFx_ModelSetSemiTrans(1);
-        FieldFx_ModelSaveColors(D_80190760);
-        FieldFx_ModelDraw((union FieldTexturedModel *)D_80190760, &matrix);
-        FieldFx_ModelRestoreColors(D_80190760);
-        FieldFx_ModelSaveColors(D_80190760);
+        FieldFx_ModelSaveColors(g_RoomM023BeaconModel);
+        FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM023BeaconModel, &matrix);
+        FieldFx_ModelRestoreColors(g_RoomM023BeaconModel);
+        FieldFx_ModelSaveColors(g_RoomM023BeaconModel);
         scale.z = 0x1000;
         scale.y = 0x1800;
         scale.x = 0x1800;
         ScaleMatrix(&matrix, &scale);
-        FieldFx_ModelShiftColors(D_80190760, -0xFF, -0x8C, -0xFF);
-        FieldFx_ModelDraw((union FieldTexturedModel *)D_80190760, &matrix);
-        FieldFx_ModelRestoreColors(D_80190760);
-        FieldFx_ModelSaveColors(D_80190760);
+        FieldFx_ModelShiftColors(g_RoomM023BeaconModel, -0xFF, -0x8C, -0xFF);
+        FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM023BeaconModel, &matrix);
+        FieldFx_ModelRestoreColors(g_RoomM023BeaconModel);
+        FieldFx_ModelSaveColors(g_RoomM023BeaconModel);
         scale.z = 0x1000;
         scale.y = 0x800;
         scale.x = 0x800;
         matrix.t[1] = g_RoomFloorY->y;
         ScaleMatrix(&matrix, &scale);
-        FieldFx_ModelScaleColors(D_80190760, 0x19);
-        FieldFx_ModelDraw((union FieldTexturedModel *)D_80190760, &matrix);
-        FieldFx_ModelRestoreColors(D_80190760);
+        FieldFx_ModelScaleColors(g_RoomM023BeaconModel, 0x19);
+        FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM023BeaconModel, &matrix);
+        FieldFx_ModelRestoreColors(g_RoomM023BeaconModel);
         break;
     }
     return 0;
