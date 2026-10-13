@@ -43,7 +43,7 @@ typedef union GpuQueueEntryAddress {
     GpuQueueEntry *entry;
     u32 word;
 } GpuQueueEntryAddress;
-extern GpuDmaState D_80095850;
+extern GpuDmaState g_GpuDmaState;
 
 int Gpu_SwapDisplayBuffers(GpuQueueFunction function, u32 *source,
                            int size, u32 argument);

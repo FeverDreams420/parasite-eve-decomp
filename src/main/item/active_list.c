@@ -505,7 +505,7 @@ void Inv_RebuildSelectionBitset(void) {
                 } while (stop >= start);
             }
             range++;
-            asm volatile("" : "=r"(range_end) : "0"(D_800923F8));
+            asm volatile("" : "=r"(range_end) : "0"(D_800923D8 + 8));
             range_stop_ptr += 2;
         } while (range < range_end);
     }

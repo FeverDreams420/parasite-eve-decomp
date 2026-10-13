@@ -27,7 +27,7 @@ static unsigned int gpu;
 volatile unsigned int *g_GpuDmaChcrPtr = &dma;
 unsigned int *g_GpuGp1Ptr = &gpu;
 static GpuCallbacks callbacks;
-GpuCallbacks *D_80095744 = &callbacks;
+GpuCallbacks *g_GpuCallbacks = &callbacks;
 static int packet, polls, idleAt, readyAt, timeoutAt, events, vsyncCalls;
 static void debug(char *message, ...) {
     va_list args;
@@ -39,7 +39,7 @@ static void debug(char *message, ...) {
     assert(events == 0);
     events = 1;
 }
-GpuDebugPrintf D_80095748 = debug;
+GpuDebugPrintf g_GpuDebugPrintf = debug;
 int VSync(int mode) {
     assert(mode == -1 && ++vsyncCalls == 1);
     assert(events == (D_8009574C.queueState.debugLevel >= 2 ? 1 : 0));

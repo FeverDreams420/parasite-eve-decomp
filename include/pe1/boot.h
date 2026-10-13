@@ -32,7 +32,7 @@ extern u16 g_MainAssetLbaTbl[];
 extern u16 g_LargeTexLbaTbl[];
 extern u16 D_8009316C[];
 extern u16 g_FontUiLbaTbl[];
-extern u16 D_8009315E[];
+extern u16 g_SceneInitLbaTbl0[];
 
 /* System start-up (boot/init.c). */
 extern s32 g_FrameRngCounter[];

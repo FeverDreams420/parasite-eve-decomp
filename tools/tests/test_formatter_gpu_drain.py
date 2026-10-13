@@ -30,14 +30,14 @@ CASES = [('sprintf',
 # Function ranges inside merged units: the unit is linked so the function
 # lands at its retail address, then the retail-sized range is hashed.
 RANGES = [('Gpu_SetDisplayBuffer', 0x80076EE4, 608,
-           'D_80095860 = 0x80095860;\n'
+           'g_GpuDmaChcrPtr = 0x80095860;\n'
            'SetIntrMask = 0x80073E10;\n'
-           'D_80095874 = 0x80095874;\n'
-           'D_80095878 = 0x80095878;\n'
+           'g_GpuDmaQueueHead = 0x80095874;\n'
+           'g_GpuDmaQueueTail = 0x80095878;\n'
            'D_80095880 = 0x80095880;\n'
            'D_8009574C = 0x8009574C;\n'
            'DMACallback = 0x80073CF4;\n'
-           'D_80095854 = 0x80095854;\n'
+           'g_GpuDmaRegisterWindow = 0x80095854;\n'
            'D_800BD030 = 0x800BD030;\n',
            'a124857ab6fd91a3b68ea3e5c2efa5337bf6ed5528ef94ca23bc4a781337a78c')]
 

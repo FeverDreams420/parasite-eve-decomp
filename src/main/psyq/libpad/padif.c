@@ -119,7 +119,7 @@ int LIBPAD_PADIF_text_26C(CardObj *inPort) {
     register CardObj *arg;
     D_8009B730(inPort);
     mode = 0;
-    if (D_8009B770) {
+    if (g_MemCardCommandByte) {
         register int id = port->response_3c[0];
         {
             register int eight = 8;
@@ -133,7 +133,7 @@ int LIBPAD_PADIF_text_26C(CardObj *inPort) {
         index = -1;
         offset = -240;
         while (1) {
-            if (--D_8009B79C <= 0)
+            if (--g_MemCardWriteBlockCount <= 0)
                 break;
         /* Keep the incremented byte cursor: typed indexing changes scheduling. */
         if (index >= 0)
@@ -161,7 +161,7 @@ setup:
         register int original = D_8009B764;
         register int opposite;
         opposite = !original;
-        if (D_8009B79C >= 2) {
+        if (g_MemCardWriteBlockCount >= 2) {
             register int *count asm("$16");
             register CardObjAddress table asm("$3");
             register int scaled asm("$2");
@@ -183,12 +183,12 @@ setup:
                     register int scaled asm("$2");
                     register CardObjAddress child asm("$3");
                     scaled = remaining * sizeof(CardObj);
-                    child.obj = D_8009B758;
+                    child.obj = g_MemCardObjArray;
                     child.word = offset + child.word;
                     child.obj = child.obj->subPorts;
                     child.word += scaled;
                     other = child.obj - 1;
-                    D_8009B744(other);
+                    g_MemCardResponseHandler(other);
                 }
                 {
                     register int value = *count;
@@ -210,16 +210,16 @@ setup:
                     {
                 paired:
                     do {
-                    D_8009B744(other - 1);
+                    g_MemCardResponseHandler(other - 1);
                     result = 1;
                     break;
                 primary:
                     {
                         register CardObjAddress base asm("$2");
-                        base.obj = D_8009B758;
+                        base.obj = g_MemCardObjArray;
                         other = (CardObj *)(base.bytes + offset);
                     }
-                    D_8009B744(other);
+                    g_MemCardResponseHandler(other);
                     D_8009B748(other);
                     result = -1;
                     } while (0);
@@ -239,11 +239,11 @@ setup:
                     asm("" : : "r"(result));
                     goto done;
                 }
-                --D_8009B79C;
-            } while (D_8009B79C >= 2);
+                --g_MemCardWriteBlockCount;
+            } while (g_MemCardWriteBlockCount >= 2);
         }
     }
-    while (--D_8009B79C > 0) {
+    while (--g_MemCardWriteBlockCount > 0) {
         result = _padSioRW(port, (u8)D_8009B72C(port, mode));
         if (result < 0)
             return result;

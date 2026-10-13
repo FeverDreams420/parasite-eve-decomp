@@ -43,16 +43,16 @@ PE1_GPU_STATE_STATIC_ASSERT(sizeof(GpuSystemState) == 0x80, gpu_system_state_siz
 #undef PE1_GPU_STATE_OFFSETOF
 #undef PE1_GPU_STATE_STATIC_ASSERT
 
-extern GpuCallbacks *D_80095744;
-extern GpuDebugPrintf D_80095748;
+extern GpuCallbacks *g_GpuCallbacks;
+extern GpuDebugPrintf g_GpuDebugPrintf;
 extern GpuDebugState D_8009574C;
 /* Debug level byte inside the SYS.OBJ state; PutDrawEnv and friends read
  * the state through a byte pointer. */
-extern unsigned char D_8009574E[];
+extern unsigned char g_GraphDebug[];
 extern char D_80011840[];
 
 /* SYS.OBJ caches: DRAWENV follows the 16-byte debug state, then DISPENV. */
 extern DRAWENV D_8009575C;
-extern DISPENV D_800957B8;
+extern DISPENV g_GpuActiveDispEnv;
 
 #endif /* PE1_GPU_STATE_H */

@@ -18,7 +18,7 @@
  * LOAD PATH:
  *   Draw_InitPipeline()           -> Scene_LoadRoom(D_8009D280)
  *   Scene_LoadRoom(s32 roomId):
- *     Text_EncodeBase32(buf, roomId)  -> 6-char room name (table D_800930B4)
+ *     Text_EncodeBase32(buf, roomId)  -> 6-char room name (table g_Base32CharTable)
  *     Text_ParseMapNumber(buf)        -> 3-digit map number from name[2..4]
  *     CdRom_ReadSectorsFromLba(...)  -> stream room data from PE.IMG
  *                                       (base g_PeImageBaseLba)

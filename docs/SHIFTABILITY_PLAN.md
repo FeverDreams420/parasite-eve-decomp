@@ -348,7 +348,7 @@ keep rebases trivial) and every C rename those symbols need.
 | 2 | `.sbss` object run + `.sdata` | 108 | 1183 | medium | 99 COMMON pins; names used by many menu units. Stage A done: 107 pins removed (blob labels; 5 second views are relative aliases); left `g_ScriptCameraBytes` (label shared with the BSS start in `snmain`, wave 0) |
 | 2 | large COMMON pool | 104 | 1984 | medium | stage A done: 103 pins are blob labels (pinned words 6253 to 4293), 28 C renames, 40 relative aliases for differently typed record views; `D_800C20C8` left to the engine boundary |
 | 3 | small COMMON pool | 67 | 1870 | high | `g_CurrentEntity`, `g_PlayerEntity`, `g_ActiveActor`: most aliases and record views, most units |
-| 3 | `.data` and `.rodata` in blobs (game, PsyQ SPU/GPU/pad/DS) | 96 | 1114 | medium | descriptive blob names differ from pinned names in 41 places |
+| 3 | `.data` and `.rodata` in blobs (game, PsyQ SPU/GPU/pad/DS) | 96 | 1114 | medium | stage A done: 93 blob labels for 94 pins, pinned words 6253 to 5151; 7 type/record views kept as relative aliases (`g_PmTables`, `g_GpuDmaState`, `g_GpuDmaRegisterWindow`, `D_80095674`, `D_8009B46C`, `D_8009B784`, `D_8009B788`); the three `engine_800C1CA0` labels belong to the large COMMON pool |
 | 3 | `psyq/libcd` state block in `bios_4.c` | 40 | 388 | high | struct base vs field names across 12 LIBCD units; relative aliases first |
 | 4 | literals: 15 data words, 8 `lui`, 13 casts, header PC | | 23 | medium | |
 | 5 | stage B by unit, object runs first (`.bss`, then `.data`, then `.sbss` once MASPSX allows) | | | per unit | uses the per-module table below |

@@ -73,10 +73,10 @@ typedef char SpuReverbStateDelayCheck[
 typedef char SpuReverbStateFeedbackCheck[
     ((unsigned long)&((SpuReverbState *)0)->feedback == 12) ? 1 : -1];
 extern SpuReverbState D_8009B3A0;
-extern u16 D_8009B3B8[24];
+extern u16 _spu_voice_centerNote[24];
 extern int _spu_rev_flag, _spu_rev_reserve_wa, D_8009B46C;
 extern u32 _spu_rev_offsetaddr;
-extern int D_8009B45C, D_8009B460, D_8009B464, D_8009B38C;
+extern int D_8009B38C;
 extern int D_8009B388, D_8009B3B4, D_8009B3B0, D_8009B3E8;
 void _SpuInit(int mode);
 void _spu_FiDMA(void);

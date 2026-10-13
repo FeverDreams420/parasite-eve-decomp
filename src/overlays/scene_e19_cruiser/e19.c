@@ -2903,7 +2903,7 @@ int func_8019AE8C(int mode) {
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 10,
                              (FieldFxCallbackListCallback)func_8019AC30);
     case 1:
-        if (ANIM_OWNER_AS(struct PmPrimarySlot) != D_800942E4) return 1;
+        if (ANIM_OWNER_AS(struct PmPrimarySlot) != g_PmSlotTable) return 1;
         if (((RoomSparkOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->state->frame < 11) return 1;
         func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)&position);
         for (i = 0; i < 3; i++) {

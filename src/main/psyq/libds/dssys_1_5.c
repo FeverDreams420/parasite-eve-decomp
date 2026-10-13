@@ -74,7 +74,7 @@ void LIBDS_DSSYS_1_text_8B8(int inEvent, u8 *inResult) {
         }
         switch (state->pendingCommand) {
         case 2:
-            D_8009B582 = *(CdlLOC *)g_CdRomEventCommandState.pendingParamBytes;
+            g_CdCurPosPtr = *(CdlLOC *)g_CdRomEventCommandState.pendingParamBytes;
             break;
         case 21:
         case 22: {

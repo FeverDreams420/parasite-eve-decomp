@@ -138,7 +138,7 @@ s32 MenuCard_PlayVideo(s32 index) {
     SetDispMask(0); DrawSync(0); ResetGraph(1);
 retry:
     {
-        VideoDiscRange *range = (VideoDiscRange *)D_8009315E;
+        VideoDiscRange *range = (VideoDiscRange *)g_SceneInitLbaTbl0;
         s32 readError = -1;
         s32 pollError;
         do {} while(CdRom_ReadSectorsFromLba(D_800B0DD8.baseLba+range->start,D_8001160C,range->end-range->start)==readError);
@@ -150,7 +150,7 @@ retry:
         }
     }
     EnterCriticalSection(); FlushCache(); ExitCriticalSection();
-    buffer=D_80011610+((D_80093162[0]-D_80093160)<<11);
+    buffer=D_80011610+((g_SceneAssetLbaTbl[0]-g_SceneInitLbaTbl1)<<11);
     MenuCard_InitVideoBuffers(1,&buffer);
     MenuCard_OpenVideo((s16)entry);
     {

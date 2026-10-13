@@ -80,8 +80,8 @@ int Scene_LoadRoomAssets(u32 command, void *owner)
         return -7;
     if (command - 108 < 7 && !(g_GameState.flags & 0x10000)) {
 retry:
-        while (CdRom_ReadSectorsFromLba(D_800B0DD8.baseLba + D_80093162[0],
-                g_PmTaskProgramBuffer, D_80093162[1] - D_80093162[0]) == -1) {}
+        while (CdRom_ReadSectorsFromLba(D_800B0DD8.baseLba + g_SceneAssetLbaTbl[0],
+                g_PmTaskProgramBuffer, g_SceneAssetLbaTbl[1] - g_SceneAssetLbaTbl[0]) == -1) {}
         while ((ready = CdRom_PollReady()) != 0) {
             if (ready == -1)
                 goto retry;

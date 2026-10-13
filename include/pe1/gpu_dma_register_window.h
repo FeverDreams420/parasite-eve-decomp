@@ -14,7 +14,7 @@ typedef struct GpuDmaRegisterWindow {
     /* 0x08 */ u32 *bcr;
     /* 0x0C */ u32 *chcr;
 } GpuDmaRegisterWindow;
-extern GpuDmaRegisterWindow D_80095854;
+extern GpuDmaRegisterWindow g_GpuDmaRegisterWindow;
 
 #if defined(__mips__)
 PE1_STATIC_ASSERT(sizeof(GpuDmaRegisterWindow) == 0x10,

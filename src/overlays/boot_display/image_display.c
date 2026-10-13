@@ -20,7 +20,7 @@ void BootDisplay_InitDisplayBuffers(void) {
     SetGraphDebug(0);
     SetDispMask(0);
 
-    screenY = &D_80093168;
+    screenY = g_MainAssetLbaTbl;
     g_BootDisplayTextScrollX = 0xE000;
     g_BootDisplayTextScrollStepX = -0x100;
     rect[0] = 0;
@@ -233,7 +233,7 @@ void BootDisplay_StepImageDisplay(void) {
         func_8010C86C(func_8010BF94(D_80125BA4[(u16)g_BootDisplayStateTimer]) >> 4);
         startOffset = 0x38800;
         endOffset = 0x43000;
-        offset = (D_80093168 - D_80093166) * 2048;
+        offset = (g_MainAssetLbaTbl[0] - D_80093166) * 2048;
         base = D_80011610;
         startOffset += offset;
         func_8010C89C(D_80125BA4[(u16)g_BootDisplayStateTimer], base + startOffset, base + (offset + endOffset));
@@ -242,7 +242,7 @@ void BootDisplay_StepImageDisplay(void) {
     }
     case 1: {
         s32 offset;
-        offset = (D_80093168 - D_80093166) * 2048;
+        offset = (g_MainAssetLbaTbl[0] - D_80093166) * 2048;
         if (func_8010C89C(0, 0, D_80011610 + (offset + 0x43000)) == 0) {
             g_BootDisplayState = 2;
             g_BootDisplayTransferProgress = 0;
@@ -253,7 +253,7 @@ void BootDisplay_StepImageDisplay(void) {
         s32 offset;
         g_BootDisplayTransferCursor = g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].decodeTarget;
         func_8010BE3C(0);
-        offset = (D_80093168 - D_80093166) * 2048;
+        offset = (g_MainAssetLbaTbl[0] - D_80093166) * 2048;
         func_8010BFA0(D_80011610 + (offset + 0x38800), 1);
         func_8010C01C(g_BootDisplayTransferCursor, 0x3C00);
         g_BootDisplayState = 3;

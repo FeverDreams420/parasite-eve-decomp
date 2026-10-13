@@ -42,7 +42,6 @@ extern s16 g_BattleCountTable[];
 extern int g_MenuBattleCount;
 extern s32 g_InvCategoryBaseItemId;
 extern InventorySlotRange D_800923D8[];
-extern InventorySlotRange D_800923F8[];
 extern short g_InvPackedList[];
 
 #endif /* PE1_INVENTORY_STATE_H */

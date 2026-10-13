@@ -1,6 +1,5 @@
 #ifndef PE1_EXT_9BD4874FA36D
 #define PE1_EXT_9BD4874FA36D
-extern volatile u32 D_80095874, D_80095878;
+extern volatile u32 g_GpuDmaQueueHead, g_GpuDmaQueueTail;
 extern u32 D_8009587C;
-extern u32 *D_80095860;
 #endif /* PE1_EXT_9BD4874FA36D */

@@ -20,9 +20,9 @@ class CheckRectTests(unittest.TestCase):
         # host build through a variadic shim so arm64 passes its arguments in
         # the ABI locations inspected below.
         source = 'extern void test_debug(char *, ...);\n' + source
-        source = source.replace('D_80095748(format, name);',
+        source = source.replace('g_GpuDebugPrintf(format, name);',
                                 'test_debug(format, name);')
-        source = source.replace('D_80095748(D_800118A4, x, y, width, height);',
+        source = source.replace('g_GpuDebugPrintf(D_800118A4, x, y, width, height);',
                                 'test_debug(D_800118A4, x, y, width, height);')
         harness = source + r'''
 #include <assert.h>

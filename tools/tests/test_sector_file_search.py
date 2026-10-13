@@ -12,7 +12,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 CASES = [('libcd/bios_7',
   720,
   'cf57c86e189e44e052836d51bc43c23062405ef42d40be9b66945cb8fc0ebcd2',
-  'D_8009AFB4 = 0x8009afb4;\nD_8009AFB8 = 0x8009afb8;\nD_8009B260 = 0x8009b260;\nD_8009B27C = 0x8009b27c;\nD_8009B288 = 0x8009b288;\nD_8009B28C = 0x8009b28c;\nD_8009B2B0 = 0x8009b2b0;\nD_8009B2B4 = 0x8009b2b4;\nD_8009B2B8 = 0x8009b2b8;\nD_8009B2BC = 0x8009b2bc;\nD_8009B2C0 = 0x8009b2c0;\nD_800A3460 = 0x800a3460;\nD_800A3468 = 0x800a3468;\ng_CdReadyEvent = 0x8009b295;\ng_CdRegDmaControl = 0x8009b2c0;\ng_CdRegIndexBase = 0x8009b27c;\ng_CdRegRequest = 0x8009b28c;\ng_CdRegResponse = 0x8009b288;\ngetintr = 0x8007aab4;\nSECTIONS { .text 0x8007bf44 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
+  'D_8009AFB4 = 0x8009afb4;\nD_8009AFB8 = 0x8009afb8;\nD_8009B260 = 0x8009b260;\nD_8009B27C = 0x8009b27c;\nD_8009B288 = 0x8009b288;\nD_8009B28C = 0x8009b28c;\nD_8009B2B0 = 0x8009b2b0;\nD_8009B2B4 = 0x8009b2b4;\nD_8009B2B8 = 0x8009b2b8;\nD_8009B2BC = 0x8009b2bc;\ng_CdRegDmaControl = 0x8009b2c0;\nD_800A3460 = 0x800a3460;\nD_800A3468 = 0x800a3468;\ng_CdReadyEvent = 0x8009b295;\ng_CdRegDmaControl = 0x8009b2c0;\ng_CdRegIndexBase = 0x8009b27c;\ng_CdRegRequest = 0x8009b28c;\ng_CdRegResponse = 0x8009b288;\ngetintr = 0x8007aab4;\nSECTIONS { .text 0x8007bf44 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
  ('libds/dsfile',
   768,
   '0e47249fb6a552eda5b9ed324059dcf6a2f680f9d28a61de6a092dbf6c6ba57b',

@@ -311,7 +311,7 @@ int _padSetActAlign(CardObj *obj, u8 *command) {
     int result;
     int active;
 
-    result = D_8009B740(obj);
+    result = g_MemCardIsTransferActiveFn(obj);
     if (result != 0) {
         return 0;
     } else {
@@ -440,7 +440,7 @@ int CardObj_CheckAbortOrDispatch(CardObj *arg0) {
         return 0;
     }
 
-    D_8009B728(arg0);
+    g_MemCardObjResetFn(arg0);
     return 0;
 }
 void _padCmdParaMode(CardObj *obj, unsigned char value) {

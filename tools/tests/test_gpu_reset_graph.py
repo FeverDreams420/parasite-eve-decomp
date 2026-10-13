@@ -31,12 +31,12 @@ class ResetGraphTests(unittest.TestCase):
 #include <stdint.h>
 #include <stddef.h>
 GpuSystemState g_TestGpuState;
-unsigned char D_8009574E[1], D_80095704[4];
+unsigned char g_GraphDebug[1], D_80095704[4];
 char D_800117E0[] = "reset", D_80011800[] = "soft";
 unsigned short D_800957CC[3][2];
 unsigned short D_800957D8[3][2] = {{241, 999}, {481, 999}, {513, 999}};
 static GpuCallbacks callbacks;
-GpuCallbacks *D_80095744 = &callbacks;
+GpuCallbacks *g_GpuCallbacks = &callbacks;
 static int stage, prints, modeExpected, variantExpected, softCalls;
 int testPrintf(const char *format, ...) {
     va_list ap;
@@ -57,7 +57,7 @@ static void debug(char *format, ...) {
     assert(stage == 0 && format == D_80011800 && mode == modeExpected);
     ++prints;
 }
-GpuDebugPrintf D_80095748 = debug;
+GpuDebugPrintf g_GpuDebugPrintf = debug;
 void GPU_memset(unsigned char *ptr, int value, int size) {
     if (stage == 0) {
         assert((void *)ptr == (void *)&g_TestGpuState && value == 0 && size == 128);
@@ -103,7 +103,7 @@ int main(void) {
         int full = (mode & 7) == 0 || (mode & 7) == 3 || (mode & 7) == 5;
         int result;
         __builtin_memset(&g_TestGpuState, 0xA5, sizeof(g_TestGpuState));
-        D_8009574C.queueState.debugLevel = D_8009574E[0] = levels[level];
+        D_8009574C.queueState.debugLevel = g_GraphDebug[0] = levels[level];
         __builtin_memcpy(before, &g_TestGpuState, 128);
         stage = prints = softCalls = 0;
         modeExpected = mode; variantExpected = variant;

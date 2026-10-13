@@ -16,12 +16,12 @@ void *GetDispEnv(void *arg0) {
     void *(*fn)(void *, const void *, unsigned int);
 
     fn = memcpy;
-    fn(arg0, g_GpuActiveDispEnv, 0x14);
+    fn(arg0, &g_GpuActiveDispEnv, sizeof(DISPENV));
     return arg0;
 }
 
 int GetODE(void) {
-    return D_80095744->callback() < 0;
+    return g_GpuCallbacks->callback() < 0;
 }
 
 typedef signed short s16_1;

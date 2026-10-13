@@ -20,7 +20,7 @@ int CdSetDebug(int level) {
 char *CdComstr(unsigned int index) {
     index &= 0xFF;
     if (index >= 0x1C) {
-        return func_800119CC;
+        return g_CdNoneString;
     }
     return g_CdCmdNameTable[index];
 }
@@ -28,7 +28,7 @@ char *CdComstr(unsigned int index) {
 char *CdIntstr(unsigned int index) {
     index &= 0xFF;
     if (index >= 7) {
-        return func_800119CC;
+        return g_CdNoneString;
     }
     return g_CdIntrStringTable[index];
 }

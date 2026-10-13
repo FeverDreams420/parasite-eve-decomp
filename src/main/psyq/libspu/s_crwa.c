@@ -65,7 +65,7 @@ int SpuClearReverbWorkArea(int mode)
         _spu_t(2, address);
         _spu_t(1);
         _spu_t(3, &D_8009C4C0, size);
-        WaitEvent(D_8009B384);
+        WaitEvent(_spu_EVdma);
         length -= 0x400;
         address += 0x400;
     } while (more != 0);

@@ -93,7 +93,7 @@ int MemCard_TimerCallback(void) {
     int active;
     int one;
 
-    active = D_8009B774;
+    active = g_MemCardPort1Present;
     one = 1;
     g_MemCardCallbackPending = one;
     if (active != 0) {
@@ -105,7 +105,7 @@ int MemCard_TimerCallback(void) {
         }
     }
 
-    if (D_8009B778 == 0) {
+    if (g_MemCardPort2Present == 0) {
         timer = &D_800A5AC0[1];
         active = *timer;
         if (active < 0x96) {
@@ -114,11 +114,11 @@ int MemCard_TimerCallback(void) {
         }
     }
 
-    if (D_8009B75C != 0) {
-        index = D_8009B774;
-        limit = D_8009B778;
+    if (g_MemCardServiceReady != 0) {
+        index = g_MemCardPort1Present;
+        limit = g_MemCardPort2Present;
         if (limit >= index) {
-            obj = (void *)((int)D_8009B758 + (((index << 4) - index) << 4));
+            obj = (void *)((int)g_MemCardObjArray + (((index << 4) - index) << 4));
             D_8009B768 = 0;
             D_8009B764 = index;
             if (_padInitSioMode(obj) == 0) {
@@ -126,9 +126,9 @@ int MemCard_TimerCallback(void) {
             }
 
             D_8009B76C = 0;
-            while (D_8009B778 >= D_8009B764) {
+            while (g_MemCardPort2Present >= D_8009B764) {
                 index = D_8009B764;
-                obj = (void *)((int)D_8009B758 + (((index << 4) - index) << 4));
+                obj = (void *)((int)g_MemCardObjArray + (((index << 4) - index) << 4));
                 MemCard_RunCommandStep(obj);
             }
             g_MemCardSioRegs->baud = 0x88;
@@ -148,7 +148,7 @@ int _padChkVsync(void) {
 /* SDK _padStartCom (PADMAIN.OBJ). Constraints are tracked in crutch debt.
  * Provenance: configs/USA/psyq_provenance.json (LIBPAD PADMAIN). */
 void _padStartCom(void) {
-    D_8009B75C = 0;
+    g_MemCardServiceReady = 0;
     EnterCriticalSection();
     SysDeqIntRP(2, D_800A5AB0);
     SysEnqIntRP(2, D_800A5AB0);
@@ -156,15 +156,15 @@ void _padStartCom(void) {
     D_8009B784->mask |= 1;
     ChangeClearRCnt(3, 0);
     ExitCriticalSection();
-    D_8009B728(D_8009B758);
-    D_8009B728(D_8009B758 + 1);
+    g_MemCardObjResetFn(g_MemCardObjArray);
+    g_MemCardObjResetFn(g_MemCardObjArray + 1);
     {
         register int *clear = D_800A5AC0;
         asm("" : "=r"(clear) : "0"(clear));
         clear[1] = 0;
         clear[0] = 0;
     }
-    D_8009B75C = 1;
+    g_MemCardServiceReady = 1;
     return;
 }
 
@@ -204,7 +204,7 @@ int _padInitSioMode(CardObj *port) {
                         count.count = counts;
                         count.word = (D_8009B764 * 4) + count.word;
                         (*count.count)--;
-                        D_8009B744(port->subPorts + *count.count);
+                        g_MemCardResponseHandler(port->subPorts + *count.count);
                     } while (counts[D_8009B764] > 0);
                 }
                 {
@@ -218,7 +218,7 @@ int _padInitSioMode(CardObj *port) {
                         register CardObj *arg asm("$4") = port;
                         void (*callback)(CardObj *);
                         asm("" : : "r"(arg));
-                        callback = D_8009B744;
+                        callback = g_MemCardResponseHandler;
                         *count = value;
                         callback(arg);
                         D_8009B748(port);

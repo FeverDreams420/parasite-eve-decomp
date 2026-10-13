@@ -23,8 +23,8 @@ class GpuQueueRetailTests(unittest.TestCase):
         entry, stop, state = 0x80074C14, 0x80010000, 0x8009574C
         print_cb, reset_cb, table = 0x80010100, 0x80010110, 0x80100000
         dma_cb, format_addr = 0x80073CF4, 0x80011840
-        symbols = dict(D_8009574C=state, D_80095744=0x80095744,
-                       D_80095748=0x80095748, D_80011840=format_addr, DMACallback=dma_cb)
+        symbols = dict(D_8009574C=state, g_GpuCallbacks=0x80095744,
+                       g_GpuDebugPrintf=0x80095748, D_80011840=format_addr, DMACallback=dma_cb)
         retail = (ROOT/'assets/USA/main.exe').read_bytes()[0x65414:0x654B8]
         with tempfile.TemporaryDirectory() as directory:
             compiled = linked_function_bytes(
@@ -57,8 +57,8 @@ class GpuQueueRetailTests(unittest.TestCase):
                 def queue(): return machine.mem_read((state+1) & 0x1FFFFFFF, 1)[0]
                 put(entry, body)
                 put(state, initial)
-                word(symbols['D_80095744'], table)
-                word(symbols['D_80095748'], print_cb)
+                word(symbols['g_GpuCallbacks'], table)
+                word(symbols['g_GpuDebugPrintf'], print_cb)
                 word(table+0x34, reset_cb)
                 machine.reg_write(R.UC_MIPS_REG_A0, mode & 0xFFFFFFFF)
                 machine.reg_write(R.UC_MIPS_REG_RA, stop)

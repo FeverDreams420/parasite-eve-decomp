@@ -39,7 +39,7 @@ int CD_datasync(int mode) {
         if (data_timed_out(commands, events, limit, state)) {
             return -1;
         }
-        if (!(*D_8009B2C0 & 0x1000000)) {
+        if (!(*g_CdRegDmaControl & 0x1000000)) {
             return 0;
         }
     } while (!saved_mode);

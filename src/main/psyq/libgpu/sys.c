@@ -43,7 +43,7 @@ int ResetGraph(int mode) {
         gpuType = &state->status.type;
         GPU_memset((unsigned char *)state, 0, sizeof(*state));
         ResetCallback();
-        GPU_cw((unsigned int)D_80095744 & 0xFFFFFF);
+        GPU_cw((unsigned int)g_GpuCallbacks & 0xFFFFFF);
         *gpuType = Gpu_InitDmaQueue(mode);
         drawCache = &state->drawCache;
         state->status.queueState.queue = 1;
@@ -53,8 +53,8 @@ int ResetGraph(int mode) {
         GPU_memset((unsigned char *)&state->displayCache, -1, sizeof(state->displayCache));
         return *gpuType;
     default:
-        if (D_8009574E[0] >= 2) D_80095748(D_80011800, mode);
-        return D_80095744->reset(1);
+        if (g_GraphDebug[0] >= 2) g_GpuDebugPrintf(D_80011800, mode);
+        return g_GpuCallbacks->reset(1);
     }
 }
 
@@ -77,7 +77,7 @@ int SetGraphDebug(int debugLevel) {
         return result;
     }
 
-    debugPrint = D_80095748;
+    debugPrint = g_GpuDebugPrintf;
     /* Keep the callback load ahead of its arguments. */
         currentLevel = currentDebugLevel[0];
     type = currentDebugLevel[-2];
@@ -96,13 +96,13 @@ int SetGraphQueue(int mode)
         /* Keep the two prior-state paths: stock GCC merges the calls after
          * choosing the retail register lifetimes. Both log exactly once. */
         if (previous) {
-            D_80095748(D_80011840, mode);
+            g_GpuDebugPrintf(D_80011840, mode);
         } else {
-            D_80095748(D_80011840, mode);
+            g_GpuDebugPrintf(D_80011840, mode);
         }
     }
     if (mode != state->queue) {
-        D_80095744->reset(1);
+        g_GpuCallbacks->reset(1);
         state->queue = mode;
         DMACallback(2, 0);
     }
@@ -117,7 +117,7 @@ void *DrawSyncCallback(void *callback) {
     void *previous;
 
     if (D_8009574C.queueState.debugLevel >= 2) {
-        D_80095748(D_80011854, callback);
+        g_GpuDebugPrintf(D_80011854, callback);
     }
 
     previous = (void *)D_8009574C.drawSyncCallback;
@@ -132,7 +132,7 @@ void SetDispMask(int mask) {
     int command;
 
     if (*debug >= 2) {
-        g_GpuDebugPrintf[0](D_80011870, mask);
+        g_GpuDebugPrintf(D_80011870, mask);
     }
 
     clearPointer = debug + 0x6A;
@@ -142,7 +142,7 @@ void SetDispMask(int mask) {
 
     command = 0x03000000;
     asm("" : "+r"(command));
-    callbacks = g_GpuCallbacks[0];
+    callbacks = g_GpuCallbacks;
     if (mask == 0) {
         command |= 1;
     } else {
@@ -156,11 +156,11 @@ int DrawSync(int arg0) {
     GpuCallbacks *callbacks;
 
     if (D_8009574C.queueState.debugLevel >= 2) {
-        fn = D_80095748;
+        fn = g_GpuDebugPrintf;
         fn(D_80011884, arg0);
     }
 
-    callbacks = D_80095744;
+    callbacks = g_GpuCallbacks;
     return callbacks->callback3C(arg0);
 }
 
@@ -181,13 +181,13 @@ void checkRECT(char *name, RECT *rect) {
     default:
         return;
     }
-    D_80095748(format, name);
+    g_GpuDebugPrintf(format, name);
     {
         int x = rect->x;
         int y = rect->y;
         int width = rect->w;
         register int height asm("$3") = rect->h;
-        D_80095748(D_800118A4, x, y, width, height);
+        g_GpuDebugPrintf(D_800118A4, x, y, width, height);
     }
 }
 
@@ -199,7 +199,7 @@ int ClearImage(RECT *rect, u8 r, u8 g, u8 b) {
 
     checkRECT(D_800118BC, rect);
     color = (b << 16) | (g << 8) | r;
-    callbacks = D_80095744;
+    callbacks = g_GpuCallbacks;
     return callbacks->addque2(callbacks->clr, rect, 8, color);
 }
 
@@ -209,7 +209,7 @@ int ClearImage2(RECT *rect, u8 r, u8 g, u8 b) {
 
     checkRECT(D_800118C8, rect);
     color = 0x80000000 | (b << 16) | (g << 8) | r;
-    callbacks = D_80095744;
+    callbacks = g_GpuCallbacks;
     return callbacks->addque2(callbacks->clr, rect, 8, color);
 }
 
@@ -219,7 +219,7 @@ int LoadImage(RECT *rect, void *pixels) {
     GpuCallbacks *callbacks;
 
     checkRECT(D_800118D4, rect);
-    callbacks = D_80095744;
+    callbacks = g_GpuCallbacks;
     return callbacks->addque2(callbacks->u20.load, rect, 8, pixels);
 }
 
@@ -227,7 +227,7 @@ int StoreImage(RECT *rect, void *pixels) {
     GpuCallbacks *callbacks;
 
     checkRECT(D_800118E0, rect);
-    callbacks = D_80095744;
+    callbacks = g_GpuCallbacks;
     return callbacks->addque2(callbacks->u1c.store, rect, 8, pixels);
 }
 
@@ -252,7 +252,7 @@ int MoveImage(RECT *rect, int x, int y) {
         destinationX = x & 0xFFFF;
         destinationPosition |= destinationX;
         sourcePosition = ((GpuRectWords *)rect)->position;
-        callbacks = D_80095744;
+        callbacks = g_GpuCallbacks;
         asm("" : "+r"(sourcePosition), "+r"(callbacks));
         packetSize = 20;
         asm("" : "+r"(packetSize));
@@ -276,7 +276,7 @@ u32 *ClearOTag(u32 *ot, int count) {
     u32 command;
 
     if (D_8009574C.queueState.debugLevel >= 2) {
-        D_80095748(D_800118F8, ot, count);
+        g_GpuDebugPrintf(D_800118F8, ot, count);
     }
 
     if (--count) {
@@ -312,10 +312,10 @@ u32 *ClearOTagR(u32 *ot, int count) {
     u32 command;
 
     if (D_8009574C.queueState.debugLevel >= 2) {
-        D_80095748(D_80011910, ot, count);
+        g_GpuDebugPrintf(D_80011910, ot, count);
     }
 
-    D_80095744->clearOTag(ot, count);
+    g_GpuCallbacks->clearOTag(ot, count);
 
     mask = 0xFFFFFF;
     result = ot;
@@ -335,8 +335,8 @@ int DrawPrim(void *primitive) {
     u8 *bytes = primitive;
     int word_count = bytes[3];
 
-    D_80095744->callback3C(0);
-    return D_80095744->cb14(bytes + 4, word_count);
+    g_GpuCallbacks->callback3C(0);
+    return g_GpuCallbacks->cb14(bytes + 4, word_count);
 }
 
 void Gpu_SetDrawEnvBack(DR_ENV *, DRAWENV *);
@@ -345,10 +345,10 @@ void *memcpy(void *, const void *, unsigned int);
 int DrawOTag(void *table)
 {
     if (D_8009574C.queueState.debugLevel >= 2) {
-        D_80095748(D_80011928, table);
+        g_GpuDebugPrintf(D_80011928, table);
     }
     {
-        GpuCallbacks *callbacks = D_80095744;
+        GpuCallbacks *callbacks = g_GpuCallbacks;
         register void *argument asm("$5") = table;
         int count;
         /* Keep the dispatch load before the independently materialized zeros. */
@@ -361,32 +361,32 @@ int DrawOTag(void *table)
 
 DRAWENV *PutDrawEnv(DRAWENV *environment)
 {
-    unsigned char *state = D_8009574E;
+    unsigned char *state = g_GraphDebug;
     DR_ENV *packet;
     void *(*copy)(void *, const void *, unsigned int) = memcpy;
     if (state[0] >= 2) {
-        D_80095748(D_8001193C, environment);
+        g_GpuDebugPrintf(D_8001193C, environment);
     }
     packet = &environment->dr_env;
     Gpu_SetDrawEnvBack(packet, environment);
     packet->tag |= 0xFFFFFF;
-    D_80095744->addque2(D_80095744->u18.packet, packet, 0x40, 0);
+    g_GpuCallbacks->addque2(g_GpuCallbacks->u18.packet, packet, 0x40, 0);
     copy(state + 14, environment, sizeof(DRAWENV));
     return environment;
 }
 
 void DrawOTagEnv(void *next, DRAWENV *environment)
 {
-    unsigned char *state = D_8009574E;
+    unsigned char *state = g_GraphDebug;
     DR_ENV *packet;
     void *(*copy)(void *, const void *, unsigned int) = memcpy;
     if (state[0] >= 2) {
-        D_80095748(D_80011954, next, environment);
+        g_GpuDebugPrintf(D_80011954, next, environment);
     }
     packet = &environment->dr_env;
     Gpu_SetDrawEnvBack(packet, environment);
     packet->tag = (packet->tag & 0xFF000000) | (PSX_ADDRESS(next) & 0xFFFFFF);
-    D_80095744->addque2(D_80095744->u18.packet, packet, 0x40, 0);
+    g_GpuCallbacks->addque2(g_GpuCallbacks->u18.packet, packet, 0x40, 0);
     copy(state + 14, environment, sizeof(DRAWENV));
 }
 

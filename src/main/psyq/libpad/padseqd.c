@@ -99,10 +99,10 @@ void LIBPAD_PADSEQD_text_108(CardObj *port) {
         port->pad_50[0] == 0) ||
         (!CardObj_IsTransferActive(port) && !port->saved_command && !port->retryCount &&
         port->currentId != old))
-        D_8009B728(port);
+        g_MemCardObjResetFn(port);
     port->retryCount = 0;
     if ((u8)(port->sequenceStep - 2) < 252 && port->response_3c[0] != 0xf3)
-        D_8009B728(port);
+        g_MemCardObjResetFn(port);
     {
         register int state = port->sequenceStep;
         register int one;
@@ -174,7 +174,7 @@ void _dirFailAuto(CardObj *port) {
             return;
         }
         if (port->communicationState)
-            D_8009B728(port);
+            g_MemCardObjResetFn(port);
     }
     if (*port->response_3c != 0xf3) {
         port->output_30[0] = 255;

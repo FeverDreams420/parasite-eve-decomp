@@ -13,7 +13,7 @@ void _SpuInit(int mode) {
     _spu_init(mode);
     if (!mode) {
         unsigned short value = 0xC000;
-        unsigned short *base = D_8009B3B8;
+        unsigned short *base = _spu_voice_centerNote;
         i = 23;
         do {
             base[i] = value;
@@ -35,9 +35,9 @@ void _SpuInit(int mode) {
     reverb->feedback = 0;
     _spu_rev_offsetaddr = D_8009B46C;
     _spu_FsetRXX(reverbRegister, _spu_rev_offsetaddr, 0);
-    D_8009B45C = 0;
-    D_8009B460 = 0;
-    D_8009B464 = 0;
+    _spu_AllocBlockNum = 0;
+    _spu_AllocLastNum = 0;
+    _spu_memList = 0;
     D_8009B38C = 0;
     D_8009B418 = 0;
     D_8009B388 = 0;

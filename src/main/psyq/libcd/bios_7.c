@@ -22,9 +22,9 @@ int CD_getsector(void *destination, int words) {
         ready = *status & 0x40;
     } while (!ready);
 
-    *D_8009B2C0 = 0x11000000;
+    *g_CdRegDmaControl = 0x11000000;
     {
-        volatile u32 *control = D_8009B2C0;
+        volatile u32 *control = g_CdRegDmaControl;
         if (*control & 0x1000000) {
             volatile u32 *pending = control;
             u32 mask = 0x1000000;

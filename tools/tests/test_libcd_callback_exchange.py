@@ -13,7 +13,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 CASES = [('sys_2',
   1380,
   '2f727289bc6dce6fc794dc321cc61b2c97dce1a5db4c3b1ad2d047f67860bdfc',
-  'CD_cw = 0x8007b558;\nCD_datasync = 0x8007bddc;\nCD_debug = 0x8009afc0;\nCD_flush = 0x8007b9ec;\nCD_getsector = 0x8007bf44;\nCD_getsector2 = 0x8007c044;\nCD_ready = 0x8007b290;\nCD_sync = 0x8007b010;\nCD_vol = 0x8007b964;\nDMACallback = 0x80073cf4;\nD_8009AFB4 = 0x8009afb4;\nD_8009AFB8 = 0x8009afb8;\nD_8009AFC4 = 0x8009afc4;\nfunc_800119CC = 0x800119cc;\ng_CdCmdNameTable = 0x8009afdc;\ng_CdIntrStringTable = 0x8009b05c;\nSECTIONS { .text 0x8007a3cc : SUBALIGN(4) { *(.text .text.*) } .data 0x8009af2c : SUBALIGN(4) { *(.data .data.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }')]
+  'CD_cw = 0x8007b558;\nCD_datasync = 0x8007bddc;\nCD_debug = 0x8009afc0;\nCD_flush = 0x8007b9ec;\nCD_getsector = 0x8007bf44;\nCD_getsector2 = 0x8007c044;\nCD_ready = 0x8007b290;\nCD_sync = 0x8007b010;\nCD_vol = 0x8007b964;\nDMACallback = 0x80073cf4;\nD_8009AFB4 = 0x8009afb4;\nD_8009AFB8 = 0x8009afb8;\nD_8009AFC4 = 0x8009afc4;\ng_CdNoneString = 0x800119cc;\ng_CdCmdNameTable = 0x8009afdc;\ng_CdIntrStringTable = 0x8009b05c;\nSECTIONS { .text 0x8007a3cc : SUBALIGN(4) { *(.text .text.*) } .data 0x8009af2c : SUBALIGN(4) { *(.data .data.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }')]
 
 
 class LibcdCallbackExchangeTests(unittest.TestCase):

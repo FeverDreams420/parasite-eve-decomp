@@ -33,17 +33,17 @@ CASES = [('libmath/divdf3',
  ('libgpu/PutDispEnv',
   1272,
   'c8dc390773e463aadf9158ed73f3cb4467a6c8b2af8f853c3950512ef0577ca1',
-  'D_8009574E = 0x8009574E;\n'
+  'g_GraphDebug = 0x8009574E;\n'
   'D_80011970 = 0x80011970;\n'
-  'D_80095748 = 0x80095748;\n'
-  'D_80095744 = 0x80095744;\n'
+  'g_GpuDebugPrintf = 0x80095748;\n'
+  'g_GpuCallbacks = 0x80095744;\n'
   'GetVideoMode = 0x80074A28;\n'
   'D_8009574F = 0x8009574F;\n'
   'D_800957C0 = 0x800957C0;\n'
   'D_80095848 = 0x80095848;\n'
   'D_80095820 = 0x80095820;\n'
   'D_80095822 = 0x80095822;\n'
-  'D_800957B8 = 0x800957B8;\n'
+  'g_GpuActiveDispEnv = 0x800957B8;\n'
   'memcpy = 0x80071A34;\n'
   'SECTIONS { .text 0x800755f0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) '
   '*(.mdebug) } }'),

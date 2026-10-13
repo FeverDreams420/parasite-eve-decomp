@@ -253,7 +253,7 @@ int CdRom_LoadBootAudio(void) {
     Akao_Cmd_F0();
 
 retry_first:
-    range = D_8009315E;
+    range = g_SceneInitLbaTbl0;
     retry = -1;
     do {
         status = CdRom_ReadSectors(D_800B0DD8.baseLba + range[0], 0, D_8001160C, range[1] - range[0]);

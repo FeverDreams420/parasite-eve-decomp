@@ -814,17 +814,17 @@ void Akao_StepSampleLoader(AkaoTrack *track, u32 voice_mask)
             else
                 lfo_depth = depth * period >> 7;
             track->pitch_lfo_depth = lfo_depth;
-            track->pitch_lfo_table = D_8009C080[track->pitch_lfo_selector];
+            track->pitch_lfo_table = g_AkaoSoundEntryTable[track->pitch_lfo_selector];
             track->pitch_lfo_counter = track->pitch_lfo_delay;
             track->pitch_lfo_phase = 1;
         }
         if (opcode & AKAO_TRACK_FLAG_VOLUME_LFO) {
-            track->volume_lfo_table = D_8009C080[track->volume_lfo_selector];
+            track->volume_lfo_table = g_AkaoSoundEntryTable[track->volume_lfo_selector];
             track->volume_lfo_counter = track->volume_lfo_delay;
             track->volume_lfo_phase = 1;
         }
         if (opcode & AKAO_TRACK_FLAG_AUX_LFO) {
-            track->aux_lfo_table = D_8009C080[track->aux_lfo_selector];
+            track->aux_lfo_table = g_AkaoSoundEntryTable[track->aux_lfo_selector];
             track->aux_lfo_phase = 1;
         }
         track->pitch_lfo_value = 0;
@@ -1511,7 +1511,7 @@ void SeqOp_SetPitchLFO(void *ptr) {
         lfo_depth = (unsigned int)(depth * scale) >> 7;
     }
     track->pitch_lfo_depth = lfo_depth;
-    table = D_8009C080[track->pitch_lfo_selector];
+    table = g_AkaoSoundEntryTable[track->pitch_lfo_selector];
     track->pitch_lfo_counter = track->pitch_lfo_delay;
     track->pitch_lfo_phase = 1;
     track->pitch_lfo_table = table;

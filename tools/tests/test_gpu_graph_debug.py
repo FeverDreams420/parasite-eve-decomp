@@ -35,7 +35,7 @@ static void print(char *format, ...) {
     assert(type == expected_type && reverse == expected_reverse);
     ++calls;
 }
-GpuDebugPrintf D_80095748 = print;
+GpuDebugPrintf g_GpuDebugPrintf = print;
 static void check(int old, int level, int type, int reverse) {
     D_8009574C.queueState.debugLevel = old;
     D_8009574C.type = expected_type = type;

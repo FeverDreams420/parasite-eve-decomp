@@ -40,8 +40,8 @@ static void print(char *message, ...) {
     if (mutateOnPrint) D_8009574C.queueState.queue = expectedNew;
 }
 static GpuCallbacks callbacks;
-GpuCallbacks *D_80095744 = &callbacks;
-GpuDebugPrintf D_80095748 = print;
+GpuCallbacks *g_GpuCallbacks = &callbacks;
+GpuDebugPrintf g_GpuDebugPrintf = print;
 PsyqInterruptHandler DMACallback(int channel, PsyqInterruptHandler callback) {
     assert(channel == 2 && callback == 0);
     assert(D_8009574C.queueState.queue == (unsigned char)expectedNew);

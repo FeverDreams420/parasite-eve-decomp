@@ -4,13 +4,11 @@
 extern unsigned char D_80095704[];
 extern char D_800117E0[], D_80011800[];
 extern unsigned short D_800957CC[][2], D_800957D8[][2];
-extern GpuCallbacks *D_80095744;
-extern GpuDebugPrintf D_80095748;
+extern GpuCallbacks *g_GpuCallbacks;
+extern GpuDebugPrintf g_GpuDebugPrintf;
 extern char D_80011814[];
 extern char D_80011854[];
 extern char D_80011870[];
-extern GpuCallbacks *g_GpuCallbacks[];
-extern GpuDebugPrintf g_GpuDebugPrintf[];
 extern u8 g_GraphDebug[];
 extern char D_80011884[];
 extern char D_800118B8[], D_800118A4[], D_80011898[];

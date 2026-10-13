@@ -17,14 +17,14 @@ class GpuQueueDrainTests(unittest.TestCase):
         harness = source + r'''
 #include <assert.h>
 static unsigned int dma, gpu;
-unsigned int *D_80095860 = &dma;
-GpuDmaRegisterWindow D_80095854 = {&gpu};
-volatile unsigned int D_80095874, D_80095878;
+volatile unsigned int *g_GpuDmaChcrPtr = &dma;
+GpuDmaRegisterWindow g_GpuDmaRegisterWindow = {&gpu};
+volatile unsigned int g_GpuDmaQueueHead, g_GpuDmaQueueTail;
 static int resets, dispatches, polls, timeoutAt, releaseAt, drain;
 void Gpu_ResetDmaWaitTimer(void) { ++resets; }
 int Gpu_SetDisplayBuffer(void) {
     ++dispatches;
-    if (drain) D_80095878 = D_80095874;
+    if (drain) g_GpuDmaQueueTail = g_GpuDmaQueueHead;
     return 0;
 }
 int Gpu_DmaTimeoutCheck(void) {
@@ -34,8 +34,8 @@ int Gpu_DmaTimeoutCheck(void) {
     return 0;
 }
 static void setup(int count, int busy, int ready) {
-    D_80095878 = 61;
-    D_80095874 = (61 + count) & 63;
+    g_GpuDmaQueueTail = 61;
+    g_GpuDmaQueueHead = (61 + count) & 63;
     dma = busy ? 0x01000000 : 0;
     gpu = ready ? 0x04000000 : 0;
     resets = dispatches = polls = timeoutAt = releaseAt = 0;

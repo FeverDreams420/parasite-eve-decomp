@@ -25,7 +25,7 @@ int LoadImage2(RECT *rect, unsigned int *data)
         if (Gpu_DmaTimeoutCheck()) return -1;
     }
     DMACallback(2, Gpu_RestoreDmaCallback);
-    D_80095744->u20.load(rect, data);
+    g_GpuCallbacks->u20.load(rect, data);
     return 0;
 }
 
@@ -41,7 +41,7 @@ int StoreImage2(RECT *rect, unsigned int *data)
         if (Gpu_DmaTimeoutCheck()) return -1;
     }
     DMACallback(2, Gpu_RestoreDmaCallback);
-    D_80095744->u1c.store(rect, data);
+    g_GpuCallbacks->u1c.store(rect, data);
     return 0;
 }
 
@@ -61,7 +61,7 @@ int MoveImage2(RECT *rect, int x, int y)
     D_800957EC[0] = *(unsigned int *)&rect->x;
     D_800957EC[1] = ((unsigned int)y << 16) | (x & 0xFFFF);
     D_800957EC[2] = *(unsigned int *)&rect->w;
-    D_80095744->u18.moveImage((char *)D_800957EC - 8);
+    g_GpuCallbacks->u18.moveImage((char *)D_800957EC - 8);
     return 0;
 }
 
@@ -69,7 +69,7 @@ int MoveImage2(RECT *rect, int x, int y)
 
 int DrawOTag2(void *packet)
 {
-    if (D_8009574C.queueState.debugLevel >= 2) D_80095748(D_80011928, packet);
+    if (D_8009574C.queueState.debugLevel >= 2) g_GpuDebugPrintf(D_80011928, packet);
     g_GpuDmaTimeoutDeadline = VSync(-1) + 240;
     g_GpuDmaWaitLoopCounter = 0;
     /* Read GPU readiness only after the volatile DMA status reports idle. */
@@ -77,6 +77,6 @@ int DrawOTag2(void *packet)
         if (Gpu_DmaTimeoutCheck()) return -1;
     }
     DMACallback(2, Gpu_RestoreDmaCallback);
-    D_80095744->u18.moveImage(packet);
+    g_GpuCallbacks->u18.moveImage(packet);
     return 0;
 }

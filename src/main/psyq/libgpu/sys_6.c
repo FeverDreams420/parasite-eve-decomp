@@ -65,7 +65,7 @@ int Gpu_SendOtChain(unsigned int *table, int count)
     unsigned int status;
     unsigned int firstMask;
     int busyBit;
-    *D_80095870 |= 0x08000000;
+    *g_GpuDmaControlRegPtr |= 0x08000000;
     *D_8009586C = 0;
     *D_80095864 = PSX_ADDRESS(&table[count - 1]);
     *D_80095868 = count;
@@ -164,7 +164,7 @@ int Gpu_WaitDmaComplete(RECT *rect, unsigned int *data)
     /* Retail retains the variant branch and this rectangle's register lifetime. */
     asm volatile("" : "+r"(variant), "+r"(rect));
     blocks = words / 16;
-    status = *D_80095854.gp1;
+    status = *g_GpuDmaRegisterWindow.gp1;
     /* Keep the first readiness mask separate from the loop's invariant. */
     asm volatile("" : "+r"(status));
     readyBit = 0x04000000;
@@ -173,11 +173,11 @@ int Gpu_WaitDmaComplete(RECT *rect, unsigned int *data)
     if (!(status & firstMask)) {
         do {
             if (Gpu_DmaTimeoutCheck()) return -1;
-        } while (!(*D_80095854.gp1 & 0x04000000));
+        } while (!(*g_GpuDmaRegisterWindow.gp1 & 0x04000000));
     }
     command = 0xA0000000;
     asm volatile("" : "+r"(command));
-    *D_80095854.gp1 = 0x04000000;
+    *g_GpuDmaRegisterWindow.gp1 = 0x04000000;
     *g_GpuGp0Ptr = 0x01000000;
     port = g_GpuGp0Ptr;
     if (variant) command = 0xB0000000;
@@ -194,10 +194,10 @@ int Gpu_WaitDmaComplete(RECT *rect, unsigned int *data)
         } while (--remainder != -1);
     }
     if (blocks) {
-        *D_80095854.gp1 = 0x04000002;
-        *D_80095854.madr = (unsigned int)data;
-        *D_80095854.bcr = (blocks << 16) | 16;
-        *D_80095854.chcr = 0x01000201;
+        *g_GpuDmaRegisterWindow.gp1 = 0x04000002;
+        *g_GpuDmaRegisterWindow.madr = (unsigned int)data;
+        *g_GpuDmaRegisterWindow.bcr = (blocks << 16) | 16;
+        *g_GpuDmaRegisterWindow.chcr = 0x01000201;
     }
     return 0;
 }
@@ -227,7 +227,7 @@ int Gpu_FlushDisplayBuffer(RECT *rect, unsigned int *data)
     remainder = words % 16;
     asm volatile("" : "+r"(rect));
     blocks = words / 16;
-    commandStatus = *D_80095854.gp1;
+    commandStatus = *g_GpuDmaRegisterWindow.gp1;
     /* The initial test and retry loop materialize their masks separately. */
     asm volatile("" : "+r"(commandStatus));
     firstMask = 0x04000000;
@@ -236,14 +236,14 @@ int Gpu_FlushDisplayBuffer(RECT *rect, unsigned int *data)
     if (!commandStatus) {
         do {
             if (Gpu_DmaTimeoutCheck()) return -1;
-        } while (!(*D_80095854.gp1 & 0x04000000));
+        } while (!(*g_GpuDmaRegisterWindow.gp1 & 0x04000000));
     }
-    *D_80095854.gp1 = 0x04000000;
+    *g_GpuDmaRegisterWindow.gp1 = 0x04000000;
     *g_GpuGp0Ptr = 0x01000000;
     *g_GpuGp0Ptr = 0xC0000000;
     *g_GpuGp0Ptr = ((GpuRectWords *)rect)->position;
     *g_GpuGp0Ptr = ((GpuRectWords *)rect)->size;
-    readStatus = *D_80095854.gp1;
+    readStatus = *g_GpuDmaRegisterWindow.gp1;
     asm volatile("" : "+r"(readStatus));
     firstMask = 0x08000000;
     asm volatile("" : "+r"(firstMask) : "r"(readStatus));
@@ -251,7 +251,7 @@ int Gpu_FlushDisplayBuffer(RECT *rect, unsigned int *data)
     if (!readStatus) {
         do {
             if (Gpu_DmaTimeoutCheck()) return -1;
-        } while (!(*D_80095854.gp1 & 0x08000000));
+        } while (!(*g_GpuDmaRegisterWindow.gp1 & 0x08000000));
     }
     --remainder;
     firstEnd = -1;
@@ -263,10 +263,10 @@ int Gpu_FlushDisplayBuffer(RECT *rect, unsigned int *data)
         } while (--remainder != -1);
     }
     if (blocks) {
-        *D_80095854.gp1 = 0x04000003;
-        *D_80095854.madr = (unsigned int)data;
-        *D_80095854.bcr = (blocks << 16) | 16;
-        *D_80095854.chcr = 0x01000200;
+        *g_GpuDmaRegisterWindow.gp1 = 0x04000003;
+        *g_GpuDmaRegisterWindow.madr = (unsigned int)data;
+        *g_GpuDmaRegisterWindow.bcr = (blocks << 16) | 16;
+        *g_GpuDmaRegisterWindow.chcr = 0x01000200;
     }
     return 0;
 }

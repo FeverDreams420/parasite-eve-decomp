@@ -37,7 +37,7 @@ static void debug(char *message, ...) {
     assert(storage[1] == 0xA5ABCDEF);
     ++calls;
 }
-GpuDebugPrintf D_80095748 = debug;
+GpuDebugPrintf g_GpuDebugPrintf = debug;
 int main(void) {
     int level, count, i;
     for (level = 0; level <= 3; ++level) {

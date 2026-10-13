@@ -39,10 +39,12 @@
  *     D_800930D8 / D_800930DA  entity-texture start / end sectors
  *                              (Scene_LoadEntityTexture(s), Render_InitDisplayLists)
  *     D_80093378 / D_8009337C  room data start / offset (Scene_LoadRoom)
- *     D_8009315E / D_80093160  scene init-data ranges (Script_LoadSceneData)
- *     D_80093162               scene asset ranges (Scene_LoadRoomAssets)
- *     D_80093168 / D_8009316A / D_8009316E  overlay/main asset + font/UI table
- *                              ranges (Boot_LoadOverlayTables)
+ *     g_SceneInitLbaTbl0 / g_SceneInitLbaTbl1
+ *                              scene init-data ranges (Script_LoadSceneData)
+ *     g_SceneAssetLbaTbl       scene asset ranges (Scene_LoadRoomAssets)
+ *     g_MainAssetLbaTbl / g_LargeTexLbaTbl / g_FontUiLbaTbl
+ *                              overlay/main asset + font/UI table ranges
+ *                              (Boot_LoadOverlayTables)
  *     D_80093176               font glyph data (Render_LoadFontGlyph)
  *   These define WHERE each *category* of asset sits inside PE.IMG.
  *

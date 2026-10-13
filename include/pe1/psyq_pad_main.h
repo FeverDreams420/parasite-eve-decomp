@@ -5,12 +5,12 @@
 #include "pe1/memcard_state.h"
 
 /* LIBPAD/PADMAIN.OBJ. Legacy MemCard/Spu names are preserved for callers. */
-extern int D_8009B75C, D_8009B768;
+extern int g_MemCardServiceReady, D_8009B768;
 extern char D_800A5AB0[];
 extern MemCardInterruptRegisters *D_8009B784;
 extern MemCardSioRegisters *D_8009B788;
-extern CardObj *D_8009B758;
-extern void (*D_8009B728)(CardObj *);
+extern CardObj *g_MemCardObjArray;
+extern void (*g_MemCardObjResetFn)(CardObj *);
 /* Per-port idle counters that PadEnableCom and the VSync timer age. */
 extern int D_800A5AC0[2];
 extern int (*D_8009B7A8[])(void);

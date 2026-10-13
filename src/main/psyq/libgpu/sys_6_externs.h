@@ -2,7 +2,7 @@
 #define PSYQ_LIBGPU_GPU_BUILD_EXTERNS_H
 
 extern unsigned int *g_GpuGp1Ptr;
-extern volatile unsigned int *D_80095870;
+extern volatile unsigned int *g_GpuDmaControlRegPtr;
 extern volatile unsigned int *D_8009586C;
 extern volatile unsigned int *D_80095864;
 extern volatile unsigned int *D_80095868;

@@ -1,5 +1,5 @@
 #ifndef PE1_EXT_AAE103433A5E
 #define PE1_EXT_AAE103433A5E
-extern CdlLOC D_8009B582;
+extern CdlLOC g_CdCurPosPtr;
 extern u32 D_8009B578;
 #endif /* PE1_EXT_AAE103433A5E */

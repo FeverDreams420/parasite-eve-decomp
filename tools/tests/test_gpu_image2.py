@@ -26,7 +26,7 @@ unsigned int *g_GpuGp1Ptr = &gpu;
 int g_GpuDmaTimeoutDeadline, g_GpuDmaWaitLoopCounter;
 unsigned int D_800957EC[3];
 static GpuCallbacks table;
-GpuCallbacks *D_80095744 = &table;
+GpuCallbacks *g_GpuCallbacks = &table;
 static RECT rect;
 static int kind, phase, polls, idleAt, readyAt, timeoutAt;
 void checkRECT(char *name, RECT *r) {

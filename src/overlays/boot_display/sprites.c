@@ -35,7 +35,7 @@ void BootDisplay_InitDisplayResources(void) {
     g_BootDisplayClut = GetClut(D_80172C94[0], D_80172C94[1]);
     func_8010BE3C(0);
     offset = 0x43000;
-    func_8010BD4C(D_80011610 + (((D_80093168 - D_80093166) << 11) + offset));
+    func_8010BD4C(D_80011610 + (((g_MainAssetLbaTbl[0] - D_80093166) << 11) + offset));
     SetDispMask(1);
 }
 
@@ -46,11 +46,11 @@ void BootDisplay_SelectFrameBuffers(void) {
     if (g_ActiveDrawSlot != 0) {
         orderingOffset = 0x581E0;
         primitiveOffset = 0x560D0;
-        sectorOffset = (D_80093168 - D_80093166) << 11;
+        sectorOffset = (g_MainAssetLbaTbl[0] - D_80093166) << 11;
     } else {
         orderingOffset = 0x581A0;
         primitiveOffset = 0x54000;
-        sectorOffset = (D_80093168 - D_80093166) << 11;
+        sectorOffset = (g_MainAssetLbaTbl[0] - D_80093166) << 11;
     }
     orderingOffset = sectorOffset + orderingOffset;
 
@@ -119,7 +119,7 @@ void BootDisplay_StepImageSprite(void) {
         func_8010C86C(func_8010BF94(D_80125BA4[(u16)g_BootDisplayStateTimer]) >> 2);
         startOffset = 0x38800;
         endOffset = 0x43000;
-        offset = (D_80093168 - D_80093166) * 2048;
+        offset = (g_MainAssetLbaTbl[0] - D_80093166) * 2048;
         base = D_80011610;
         startOffset += offset;
         func_8010C89C(D_80125BA4[(u16)g_BootDisplayStateTimer], base + startOffset, base + (offset + endOffset));
@@ -128,7 +128,7 @@ void BootDisplay_StepImageSprite(void) {
     }
     case 1: {
         s32 offset;
-        offset = (D_80093168 - D_80093166) * 2048;
+        offset = (g_MainAssetLbaTbl[0] - D_80093166) * 2048;
         if (func_8010C89C(0, 0, D_80011610 + (offset + 0x43000)) == 0) {
             g_BootDisplayState = 2;
             g_BootDisplayTransferProgress = 0;
@@ -137,7 +137,7 @@ void BootDisplay_StepImageSprite(void) {
     }
     case 2: {
         s32 offset;
-        offset = (D_80093168 - D_80093166) * 2048;
+        offset = (g_MainAssetLbaTbl[0] - D_80093166) * 2048;
         g_BootDisplayTransferCursor = D_80011610 + offset;
         func_8010BFA0(D_80011610 + (offset + 0x38800), 0);
         func_8010C01C(g_BootDisplayTransferCursor, 0x2800);

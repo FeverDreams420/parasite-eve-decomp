@@ -21,7 +21,7 @@ class GpuOtcTests(unittest.TestCase):
 #include <assert.h>
 #include <stdint.h>
 static volatile unsigned int priority, control, address, length;
-volatile unsigned int *D_80095870 = &priority;
+volatile unsigned int *g_GpuDmaControlRegPtr = &priority;
 volatile unsigned int *D_8009586C = &control;
 volatile unsigned int *D_80095864 = &address;
 volatile unsigned int *D_80095868 = &length;

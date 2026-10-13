@@ -29,12 +29,12 @@ DISPENV *PutDispEnv(DISPENV *env) {
     asm("" : "=r"(state) : "0"(state));
     mode = 0x08000000;
     if (*state >= 2)
-        D_80095748(D_80011970, e);
+        g_GpuDebugPrintf(D_80011970, e);
     {
         register unsigned opcode = 0x05000000;
         register unsigned y asm("$3") = (unsigned short)e->disp.y;
         register unsigned x asm("$4") = (unsigned short)e->disp.x;
-        register GpuCallbacks *ops asm("$5") = D_80095744;
+        register GpuCallbacks *ops asm("$5") = g_GpuCallbacks;
         y = (y & 0x3ff) << 10;
         x = (x & 0x3ff) | opcode;
         ops->callback10(y | x);
@@ -73,10 +73,10 @@ DISPENV *PutDispEnv(DISPENV *env) {
             if (!small)
                 mode |= 0x24;
         }
-        D_80095744->callback10(mode);
+        g_GpuCallbacks->callback10(mode);
         e->pad0 = 8;
     }
-    rect = (unsigned short *)&D_800957B8.screen;
+    rect = (unsigned short *)&g_GpuActiveDispEnv.screen;
     asm("" : "=r"(rect) : "0"(rect));
     if (SIGNED_HALF(rect) != e->screen.x || SIGNED_HALF(rect + 1) != e->screen.y ||
         SIGNED_HALF(rect + 2) != e->screen.w || SIGNED_HALF(rect + 3) != e->screen.h ||
@@ -153,7 +153,7 @@ DISPENV *PutDispEnv(DISPENV *env) {
             register unsigned y asm("$3") = ((unsigned)hend & 0xfff) << 12;
             unsigned x = ((unsigned)hstart & 0xfff);
             register unsigned opcode = 0x06000000;
-            GpuCallbacks *ops = D_80095744;
+            GpuCallbacks *ops = g_GpuCallbacks;
             x |= opcode;
             ops->callback10(y | x);
         }
@@ -161,13 +161,13 @@ DISPENV *PutDispEnv(DISPENV *env) {
             register unsigned y asm("$3") = ((unsigned)vend & 0x3ff) << 10;
             unsigned x = ((unsigned)vstart & 0x3ff);
             register unsigned opcode = 0x07000000;
-            GpuCallbacks *ops = D_80095744;
+            GpuCallbacks *ops = g_GpuCallbacks;
             x |= opcode;
             ops->callback10(y | x);
         }
     }
     /* An unprototyped call keeps the SDK memcpy call instead of builtin expansion.
      * Pointers and the word-sized count keep the same argument ABI. */
-    ((void *(*)())memcpy)(&D_800957B8, e, sizeof(DISPENV));
+    ((void *(*)())memcpy)(&g_GpuActiveDispEnv, e, sizeof(DISPENV));
     return e;
 }
