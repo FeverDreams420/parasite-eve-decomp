@@ -358,13 +358,13 @@ void Battle_DrawStatusOverlay(RenderObjectEntity *object, int mode, int outOfRan
         case 3: {
             u32 slot;
             u32 packetOffset;
-            register u8 *packetBase asm("$7");
+            u8 *packetBase;
             RenderSpritePacket *packet;
             u8 *packetTagBase;
             Battle_LayoutStatusPrimRow(0x1C);
+            packetBase = (u8 *)&D_8009E730[0].sprite;
             slot = g_ActiveDrawSlot;
             packetOffset = slot * 28;
-            packetBase = (u8 *)&D_8009E730[0].sprite;
             packet = (RenderSpritePacket *)(packetBase + packetOffset);
             packet->x = D_8009E358[slot * 3].x0 + 0x1C;
             packet->y = D_8009E358[slot * 3].y0 + 8;
