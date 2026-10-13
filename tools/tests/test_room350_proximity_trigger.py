@@ -16,13 +16,13 @@ ROOM = 'src/overlays/room_m350_cruiser'
 class Room350ProximityTriggerTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_bounds_flags_and_post_sqrt_pointers(self):
-        source = host_unit("func_8019721C", path=find_definition("func_8019721C", under=ROOM))
+        source = host_unit("RoomM350_TestDropPlayerHit", path=find_definition("RoomM350_TestDropPlayerHit", under=ROOM))
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 /* The player is read both as a FieldActor (state flags) and through the
  * unit's WorldActor view (x/z); both share the leading state pointer. */
 FieldActor *g_PlayerEntity;
 FieldFxObjectPrefix *g_FieldFxOwner;
-short D_8019A86C;
+short g_RoomM350DropHitCooldown;
 RoomFloorY g_RoomFloorY[1];
 static WorldActor world[2];
 static FieldActorState actors[2];
@@ -35,7 +35,7 @@ int Math_IntSqrt(int squared) {
     if (mutate) {
         g_PlayerEntity = (FieldActor *)&world[1];
         g_FieldFxOwner = (FieldFxObjectPrefix *)roomSlots[1];
-        D_8019A86C = 77;
+        g_RoomM350DropHitCooldown = 77;
     }
     return distanceResult;
 }
@@ -63,7 +63,7 @@ int main(void) {
         g_FieldFxOwner = (FieldFxObjectPrefix *)roomSlots[0];
         world[0].x = point[4] + dx; world[0].z = point[6] + dz;
         g_RoomFloorY[0].y = 700; point[5] = 188 + height;
-        D_8019A86C = gate ? 30 : 0;
+        g_RoomM350DropHitCooldown = gate ? 30 : 0;
         calls = 0; mutate = m; distanceResult = radii[r] + delta;
         expectedSquared = dx * dx + dz * dz;
         expectedCalls = !gate && height >= 0 &&
@@ -72,8 +72,8 @@ int main(void) {
         expectedResult = expectedCalls && distanceResult <= radii[r];
         active = expectedCalls && mutate;
         expectedGate = expectedResult ? 30 : active ? 77 : gate ? 30 : 0;
-        assert(func_8019721C(point, radii[r]) == expectedResult);
-        assert(calls == expectedCalls && D_8019A86C == expectedGate);
+        assert(RoomM350_TestDropPlayerHit(point, radii[r]) == expectedResult);
+        assert(calls == expectedCalls && g_RoomM350DropHitCooldown == expectedGate);
         for (i = 0; i < 2; ++i) {
             int changed = expectedResult && i == active;
             assert(actors[i].flags == (0x12340005U | (changed ? 0x4000 : 0)));
@@ -81,8 +81,8 @@ int main(void) {
                    (changed && hasActor ? 0x80000000U : 0)));
         }
     }
-    D_8019A86C = -1; g_PlayerEntity = 0; g_FieldFxOwner = 0; calls = 0;
-    assert(func_8019721C(0, 10) == 0 && calls == 0);
+    g_RoomM350DropHitCooldown = -1; g_PlayerEntity = 0; g_FieldFxOwner = 0; calls = 0;
+    assert(RoomM350_TestDropPlayerHit(0, 10) == 0 && calls == 0);
     return 0;
 }
 '''

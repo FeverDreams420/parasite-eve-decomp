@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-SPAWNER = 'func_8019421C'
+SPAWNER = 'RoomM350_OrbHandSparkEmitter'
 
 
 class ModelShellTests(unittest.TestCase):
@@ -40,7 +40,7 @@ typedef char h[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
         # Helper stubs check CPU behavior, not rotation/GTE arithmetic.
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
-FieldActor *D_8019A7F8;
+FieldActor *g_RoomM350OrbActor;
 int g_FieldFxCurrentAge;
 GteSineWord rcossin_tbl[4096];
 RenderEffectParameters g_FieldFxSpriteParams;
@@ -57,10 +57,10 @@ static int signed_word(uint32_t word) { int result; memcpy(&result,&word,4); ret
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 static int asr1(uint32_t x) { return (int)((int64_t)signed_word(x)/2-(signed_word(x)<0 && (x&1))); }
 static uint32_t rng(int call) { return seed+(uint32_t)call*0x1234567u; }
-int func_8019404C(int e,Particle *p) { return 0; }
+int RoomM350_OrbHandSparkCallback(int e,Particle *p) { return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==12 && count==64);
-    assert(cb==(FieldFxCallbackListCallback)func_8019404C);
+    assert(cb==(FieldFxCallbackListCallback)RoomM350_OrbHandSparkCallback);
     setups++; return setupResult;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
@@ -96,7 +96,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShor
     assert(randoms==i*7+4 && rotations==i+1 && m==rotationMatrix);
     assert(v->x==0 && v->y==0 && v->z==combined%192+128);
     out->x=half(seed); out->y=half(seed*7); out->z=half(seed*31); out->pad=123;
-    D_8019A7F8=&instances[1]; g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1];
+    g_RoomM350OrbActor=&instances[1]; g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1];
     g_FieldFxCurrentAge=signed_word(seed+(uint32_t)i*0x13579u);
     timer=signed_word((uint32_t)g_FieldFxCurrentAge<<11); index=(timer/40)&4095;
     rcossin_tbl[index].word=signed_word(tableWord); expected[i].size=half(tableWord+4096);
@@ -106,7 +106,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShor
 }
 static void reset(void) {
     allocs=randoms=rotations=applications=setups=0;
-    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[0]; D_8019A7F8=&instances[0]; g_FieldFxCurrentAge=40;
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[0]; g_RoomM350OrbActor=&instances[0]; g_FieldFxCurrentAge=40;
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
 }
 int main(void) {
@@ -118,36 +118,36 @@ int main(void) {
         transforms[i][j].translation[k]=signed_word(0x7FFF8000u+i*0x3456u+j*123u+k*17u);
     for(i=0;i<65536;i++) for(f=0;f<3;f++) {
         reset(); failAt=f; seed=0xFEDC0000u|i;
-        assert(func_8019421C(1)==0 && setups==0);
+        assert(RoomM350_OrbHandSparkEmitter(1)==0 && setups==0);
         assert(allocs==(f<2 ? f+1:2) && randoms==f*7 && rotations==f && applications==f);
         assert(memcmp(particles,expected,sizeof(particles))==0);
     }
     for(i=0;i<65536;i++) {
         reset(); failAt=0; g_FieldFxCurrentAge=i-32768;
-        assert(func_8019421C(1)==(g_FieldFxCurrentAge>=41 ? 2:0));
+        assert(RoomM350_OrbHandSparkEmitter(1)==(g_FieldFxCurrentAge>=41 ? 2:0));
         assert(allocs==(g_FieldFxCurrentAge<41) && !randoms);
     }
     for(edge=0;edge<6;edge++) {
         reset(); failAt=2; g_FieldFxCurrentAge=timers[edge]; seed=(uint32_t)timers[edge];
-        assert(func_8019421C(1)==(timers[edge]>=41 ? 2:0));
+        assert(RoomM350_OrbHandSparkEmitter(1)==(timers[edge]>=41 ? 2:0));
         assert(allocs==(timers[edge]>=41 ? 0:2));
         assert(memcmp(particles,expected,sizeof(particles))==0);
     }
     for(setupResult=-2;setupResult<=2;setupResult++) {
-        reset(); assert(func_8019421C(0)==setupResult && setups==1 && !allocs);
+        reset(); assert(RoomM350_OrbHandSparkEmitter(0)==setupResult && setups==1 && !allocs);
     }
     for(i=0;i<65536;i++) {
         reset(); g_FieldFxTpageSlot2=i; g_FieldFxTpageTable[i]=65535-i;
-        assert(func_8019421C(2)==0 && !allocs && !setups);
+        assert(RoomM350_OrbHandSparkEmitter(2)==0 && !allocs && !setups);
         memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams)); g_FieldFxTpageSlot2=i;
-        assert(func_8019421C(2)==0 && !allocs && !setups);
+        assert(RoomM350_OrbHandSparkEmitter(2)==0 && !allocs && !setups);
         assert(g_FieldFxSpriteParams.parameter00==16 && g_FieldFxSpriteParams.parameter02==1);
         assert(g_FieldFxSpriteParams.extent_x==16 && g_FieldFxSpriteParams.extent_y==16);
         assert(g_FieldFxSpriteParams.palette==2 && g_FieldFxSpriteParams.parameter06==0 && g_FieldFxSpriteParams.parameter0A==0);
         assert(g_FieldFxSpriteParams.depth==0 && g_FieldFxSpriteParams.tpage==65535-i);
     }
     for(event=-3;event<=5;event++) if(event<0 || event>2) {
-        reset(); assert(func_8019421C(event)==0 && !allocs && !setups && !randoms);
+        reset(); assert(RoomM350_OrbHandSparkEmitter(event)==0 && !allocs && !setups && !randoms);
     }
     return 0;
 }

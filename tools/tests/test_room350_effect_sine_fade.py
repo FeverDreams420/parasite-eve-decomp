@@ -14,7 +14,7 @@ from csource import host_unit  # noqa: E402
 class Room350EffectSineFadeTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_wave_fade_and_two_render_passes(self):
-        source = host_unit("func_801996BC", under=ROOM)
+        source = host_unit("RoomM350_BodyRingCallback", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
 typedef GteShortVector Vector;
 typedef RoomM350SineParticle Particle;
@@ -103,7 +103,7 @@ static void runUpdate(int brightness) {
     expected.amplitude = amplitudeAfterWave;
     expected.size = sizeReference(waveResult, amplitudeAfterWave);
     expected.brightness = faded;
-    assert(func_801996BC(1, &particle) == (afterWaveFrame >= 8 && faded < 16));
+    assert(RoomM350_BodyRingCallback(1, &particle) == (afterWaveFrame >= 8 && faded < 16));
     assert(waves == 1 && cluts == 0 && firstDraws == 0 && secondDraws == 0);
     assert(memcmp(&particle, &expected, sizeof(particle)) == 0);
 }
@@ -131,14 +131,14 @@ int main(void) {
     for (l = 0; l < 10; ++l) for (m = 0; m < 10; ++m) for (n = 0; n < 8; ++n) {
         kind = kinds[i]; special = flags[j]; palette = rows[k]; handle = rows[(k + 1) % 5];
         renderSize = values[l]; renderBrightness = values[m]; afterRenderFrame = frames[n];
-        reset(); assert(func_801996BC(2, &particle) == 0);
+        reset(); assert(RoomM350_BodyRingCallback(2, &particle) == 0);
         assert(waves == 0 && cluts == 1 && firstDraws == 1 && secondDraws == 1);
         assert(memcmp(&particle, &expected, sizeof(particle)) == 0);
     }
     for (event = -3; event <= 4; ++event) {
         if (event == 1 || event == 2) continue;
         reset(); expected = particle;
-        assert(func_801996BC(event, &particle) == 0 && waves == 0 && cluts == 0);
+        assert(RoomM350_BodyRingCallback(event, &particle) == 0 && waves == 0 && cluts == 0);
         assert(memcmp(&particle, &expected, sizeof(particle)) == 0);
     }
     return 0;

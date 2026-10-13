@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_80194284'
+FUNCTION = 'RoomM273_GrabPlayerStreakEmitter'
 
 
 class ThresholdPair(unittest.TestCase):
@@ -47,10 +47,10 @@ Seed D_8019AC20[2];
 unsigned short g_FieldFxTpageSlot11,g_FieldFxTpageTable[8];
 RenderEffectParameters g_FieldFxSpriteParams;
 static int init,allocations,randomCalls,failAt,randomValue;
-int func_80194128(int mode, GteRotation *rotation) { assert(0); return 0; }
+int RoomM273_GrabPlayerStreakCallback(int mode, GteRotation *rotation) { assert(0); return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)pool && stride==8 && count==4 &&
-           callback==(FieldFxCallbackListCallback)func_80194128);
+           callback==(FieldFxCallbackListCallback)RoomM273_GrabPlayerStreakCallback);
     return 60;
 }
 int Inv_ScrambleGrid(void) { assert(randomCalls++==0 && !allocations); return randomValue; }
@@ -64,7 +64,7 @@ int main(void) {
     int values[]={-32768,-1,0,1,32767};
     int stop,kind,i,j,f,r,n;
     context.pool=pool; stateContext.state.mode=&state;
-    assert(func_80194284(0)==60 && init==1);
+    assert(RoomM273_GrabPlayerStreakEmitter(0)==60 && init==1);
     for(stop=0;stop<2;++stop) for(kind=8;kind<=10;++kind)
         for(i=0;i<5;++i) for(j=0;j<5;++j) for(f=0;f<3;++f) for(r=0;r<2;++r) {
             State before;
@@ -76,7 +76,7 @@ int main(void) {
             D_8019AC20[0].angle=65530; D_8019AC20[1].angle=32768;
             memset(output,0xA5,sizeof(output));
             allocations=randomCalls=0; failAt=f; randomValue=r ? 255:0;
-            assert(func_80194284(1)==(stop ? 2:0));
+            assert(RoomM273_GrabPlayerStreakEmitter(1)==(stop ? 2:0));
             assert(randomCalls==wanted && allocations==(wanted ? (f<2 ? f+1:2):0));
             assert(memcmp(&state,&before,sizeof(state))==0);
             for(n=0;n<2;++n) {
@@ -89,14 +89,14 @@ int main(void) {
         }
     for(i=0;i<8;++i) {
         g_FieldFxTpageSlot11=i; g_FieldFxTpageTable[i]=65535-i;
-        assert(func_80194284(2)==0);
+        assert(RoomM273_GrabPlayerStreakEmitter(2)==0);
         assert(g_FieldFxSpriteParams.parameter00==16 && g_FieldFxSpriteParams.parameter02==1 && g_FieldFxSpriteParams.palette==3 && g_FieldFxSpriteParams.parameter06==1);
         assert(g_FieldFxSpriteParams.tpage==65535-i && g_FieldFxSpriteParams.parameter0A==3 && g_FieldFxSpriteParams.depth==0);
         assert(g_FieldFxSpriteParams.extent_x==16 && g_FieldFxSpriteParams.extent_y==64);
     }
     allocations=randomCalls=0;
-    assert(func_80194284(-1)==0 && func_80194284(3)==0);
-    assert(func_80194284(INT_MIN)==0 && func_80194284(INT_MAX)==0);
+    assert(RoomM273_GrabPlayerStreakEmitter(-1)==0 && RoomM273_GrabPlayerStreakEmitter(3)==0);
+    assert(RoomM273_GrabPlayerStreakEmitter(INT_MIN)==0 && RoomM273_GrabPlayerStreakEmitter(INT_MAX)==0);
     assert(!allocations && !randomCalls && init==1);
     return 0;
 }

@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-SPAWNER = "func_80194CFC"
+SPAWNER = "RoomM350_OrbEmitter"
 
 
 class SequenceSpawnerTests(unittest.TestCase):
@@ -45,7 +45,7 @@ typedef char k[OFF(Particle,tail.value.spawn.state)==24 ? 1:-1];
 typedef RoomM350Particle Particle;
 FieldFxObjectPrefix *g_FieldFxOwner;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
-GteShortVector D_8019A7A0;
+GteShortVector g_RoomM350OrbSpawnPoint;
 unsigned char D_8019A804;
 short D_8019A802;
 RenderEffectParameters g_FieldFxSpriteParams;
@@ -60,10 +60,10 @@ static int half(int value) {
     unsigned int bits=(unsigned int)value & 65535;
     return bits<32768 ? (int)bits:(int)bits-65536;
 }
-int func_801947BC(int e, Particle *p) { return 0; }
+int RoomM350_OrbCallback(int e, Particle *p) { return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pool && stride==28 && count==3);
-    assert(cb==(FieldFxCallbackListCallback)func_801947BC);
+    assert(cb==(FieldFxCallbackListCallback)RoomM350_OrbCallback);
     setups++;
     return setupResult;
 }
@@ -71,7 +71,7 @@ void *FieldFx_AcquireCallbackSlot(char *p) {
     assert(p==(char *)&pool && calls++==0);
     /* Allocation is assumed successful by the target. Probe helper reloads. */
     g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1]; D_8019A802=countAfterAllocation; D_8019A804=255;
-    D_8019A7A0.x=-32768; D_8019A7A0.y=32767; D_8019A7A0.z=-123; D_8019A7A0.pad=99;
+    g_RoomM350OrbSpawnPoint.x=-32768; g_RoomM350OrbSpawnPoint.y=32767; g_RoomM350OrbSpawnPoint.z=-123; g_RoomM350OrbSpawnPoint.pad=99;
     return &particle;
 }
 static void reset(void) {
@@ -79,16 +79,16 @@ static void reset(void) {
     g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[0]; g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitter;
     D_8019A802=123; D_8019A804=0;
     memset(&particle,0x5A,sizeof(particle)); expected=particle;
-    memset(&D_8019A7A0,0,sizeof(D_8019A7A0));
+    memset(&g_RoomM350OrbSpawnPoint,0,sizeof(g_RoomM350OrbSpawnPoint));
 }
 static void run(int animation,int frame,int previous,int stop) {
     int active=!stop && animation==13 && frame>=15 && previous<15;
     reset(); D_8019A804=stop;
     instances[0].animation=animation; instances[0].frame=frame; instances[0].previousFrame=previous;
-    assert(func_80194CFC(1)==(stop ? 2:0));
+    assert(RoomM350_OrbEmitter(1)==(stop ? 2:0));
     assert(calls==active && setups==0);
     if(active) {
-        expected.position=D_8019A7A0; expected.position.pad=16;
+        expected.position=g_RoomM350OrbSpawnPoint; expected.position.pad=16;
         expected.motion.value.spawn.speed=512;
         expected.motion.value.spawn.yaw=half(instances[1].yaw);
         expected.motion.value.spawn.phase=0;
@@ -115,14 +115,14 @@ int main(void) {
         run(13,15,0,0);
     }
     for(setupResult=-2;setupResult<=2;setupResult++) {
-        reset(); assert(func_80194CFC(0)==setupResult && setups==1 && calls==0);
+        reset(); assert(RoomM350_OrbEmitter(0)==setupResult && setups==1 && calls==0);
         assert(D_8019A802==123);
     }
     for(i=0;i<65536;i++) {
         /* Texture slot 3 of g_FieldFxTpageSlots is the halfword at 0x800E11EA. */
         reset(); g_FieldFxTpageSlots[3]=i; g_FieldFxTpageTable[i]=65535-i;
         memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
-        assert(func_80194CFC(2)==0 && calls==0 && setups==0);
+        assert(RoomM350_OrbEmitter(2)==0 && calls==0 && setups==0);
         assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2);
         assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
         assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==64);
@@ -130,7 +130,7 @@ int main(void) {
         assert(g_FieldFxSpriteParams.tpage==65535-i && D_8019A802==123);
     }
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
-        reset(); assert(func_80194CFC(i)==0 && calls==0 && setups==0);
+        reset(); assert(RoomM350_OrbEmitter(i)==0 && calls==0 && setups==0);
         assert(memcmp(&expected,&particle,sizeof(particle))==0 && D_8019A802==123);
     }
     return 0;

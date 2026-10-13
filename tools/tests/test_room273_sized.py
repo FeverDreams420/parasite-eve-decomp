@@ -9,7 +9,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
-FUNCTION = 'func_80197230'
+FUNCTION = 'RoomM273_SweepDropHitCallback'
 
 
 class SizedSprite(unittest.TestCase):
@@ -51,7 +51,7 @@ int main(void) {
     int i,j,kind,variant,frame,sizeIndex;
     for(i=0;i<6;++i) {
         g_FieldFxCurrentAge=times[i];
-        assert(func_80197230(1,&position)==(times[i]>=8));
+        assert(RoomM273_SweepDropHitCallback(1,&position)==(times[i]>=8));
     }
     assert(!cluts && !draws);
     for(kind=0;kind<8;++kind) for(variant=0;variant<2;++variant)
@@ -65,11 +65,11 @@ int main(void) {
             g_FieldFxPaletteTable[kind]=65535;
             expectedPalette=65535+(kind==4 && variant ? 9:5);
             cluts=draws=0;
-            assert(func_80197230(2,&position)==0 && cluts==1 && draws==1);
+            assert(RoomM273_SweepDropHitCallback(2,&position)==0 && cluts==1 && draws==1);
         }
-    assert(func_80197230(0,&position)==0);
-    assert(func_80197230(-1,&position)==0);
-    assert(func_80197230(INT_MAX,&position)==0);
+    assert(RoomM273_SweepDropHitCallback(0,&position)==0);
+    assert(RoomM273_SweepDropHitCallback(-1,&position)==0);
+    assert(RoomM273_SweepDropHitCallback(INT_MAX,&position)==0);
     assert(cluts==1 && draws==1);
     assert(position.x==12 && position.y==34 && position.z==56 && position.pad==78);
     return 0;

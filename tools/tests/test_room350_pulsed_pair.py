@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-SPAWNER = 'func_80192508'
+SPAWNER = 'RoomM350_HandSparkEmitter'
 
 
 class PulsedPairTests(unittest.TestCase):
@@ -36,7 +36,7 @@ typedef char d[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
         # Stubs validate CPU-side helper contracts, not rotation/GTE arithmetic.
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
-GteShortVector D_8019A778[2];
+GteShortVector g_RoomM350HandPoints[2];
 int g_FieldFxCurrentAge;
 short D_800966EE[8192];
 RenderEffectParameters g_FieldFxSpriteParams;
@@ -50,10 +50,10 @@ static uint32_t seed;
 static int word(uint32_t x) { int r; memcpy(&r,&x,4); return r; }
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 static uint32_t rng(int n) { return seed+(uint32_t)n*0x87654321u; }
-int func_80199B94(int e,Particle *p) { return 0; }
+int RoomM350_HandSparkCallback(int e,Particle *p) { return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==8 && count==64);
-    assert(cb==(FieldFxCallbackListCallback)func_80199B94); return -123;
+    assert(cb==(FieldFxCallbackListCallback)RoomM350_HandSparkCallback); return -123;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
     int i=allocs++;
@@ -76,8 +76,8 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShor
     assert(v->x==0 && v->y==0 && v->z==combined%192+64);
     out->x=half(seed+i); out->y=half(seed*7+i); out->z=half(seed*31+i);
     for(j=0;j<3;j++) {
-        ((short *)&D_8019A778[i&1])[j]=half(seed*13+i*257+j);
-        expected[i].position[j]=half((uint16_t)((short *)out)[j]+(uint16_t)((short *)&D_8019A778[i&1])[j]);
+        ((short *)&g_RoomM350HandPoints[i&1])[j]=half(seed*13+i*257+j);
+        expected[i].position[j]=half((uint16_t)((short *)out)[j]+(uint16_t)((short *)&g_RoomM350HandPoints[i&1])[j]);
     }
     g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[(i+1)&1];
     memset(D_800966EE,0,sizeof(D_800966EE));
@@ -91,7 +91,7 @@ static void run(int timer,int sample,int failure) {
     int count=((sample+4096)/2048+1)*2,success,wanted;
     reset(); failAt=failure; g_FieldFxCurrentAge=timer;
     D_800966EE[((((uint32_t)timer<<7)+2048)&4095)*2]=sample;
-    assert(func_80192508(1)==(timer>=33 ? 2:0));
+    assert(RoomM350_HandSparkEmitter(1)==(timer>=33 ? 2:0));
     if(timer>=33 || count<=0) wanted=success=0;
     else { success=(failure>=0 && failure<count) ? failure:count; wanted=success+(success<count); }
     assert(allocs==wanted && randoms==success*4 && applications==success && rotations==success);
@@ -101,7 +101,7 @@ int main(void) {
     int n,j;
     static const int timers[]={INT_MIN,-65537,-32768,-33,-1,0,1,31,32,33,INT_MAX};
     for(n=0;n<2;n++) emitters[n].pool=&pools[n];
-    reset(); assert(func_80192508(0)==-123);
+    reset(); assert(RoomM350_HandSparkEmitter(0)==-123);
     for(n=0;n<65536;n++) for(j=0;j<3;j++) {
         seed=(uint32_t)n*65537; run(-1,half(n),j-1);
     }
@@ -112,13 +112,13 @@ int main(void) {
         seed=(uint32_t)n*0x81234567u; run(half(n),4096,-1);
         g_FieldFxTpageSlot2=n; g_FieldFxTpageTable[n]=n^0xA357;
         memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
-        assert(func_80192508(2)==0 && g_FieldFxSpriteParams.tpage==(unsigned short)(n^0xA357));
+        assert(RoomM350_HandSparkEmitter(2)==0 && g_FieldFxSpriteParams.tpage==(unsigned short)(n^0xA357));
         assert(g_FieldFxSpriteParams.parameter00==16 && g_FieldFxSpriteParams.parameter02==1);
         assert(g_FieldFxSpriteParams.extent_x==16 && g_FieldFxSpriteParams.extent_y==16);
         assert(g_FieldFxSpriteParams.palette==2 && g_FieldFxSpriteParams.parameter06==0);
         assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0);
     }
-    reset(); assert(func_80192508(-1)==0 && func_80192508(3)==0 && allocs==0);
+    reset(); assert(RoomM350_HandSparkEmitter(-1)==0 && RoomM350_HandSparkEmitter(3)==0 && allocs==0);
     return 0;
 }
 '''

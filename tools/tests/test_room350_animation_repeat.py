@@ -14,11 +14,11 @@ from csource import host_unit  # noqa: E402
 class Room350AnimationRepeatTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_repeat_and_completion_transitions(self):
-        source = host_unit("func_80196E04", under=ROOM)
+        source = host_unit("RoomM350_AreaController", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;
-short D_8019A828;
-unsigned char D_8019A82E, D_8019A82F, D_8019A830;
+short g_RoomM350AreaRepeats;
+unsigned char g_RoomM350AreaDone, g_RoomM350AreaPlayerInside, g_RoomM350AreaEntered;
 int main(void) {
     const int events[] = {-1, 0, 1, 2};
     const int frames[] = {-32768, -1, 0, 2, 3, 20, 21, 22, 23, 255, 32767};
@@ -44,8 +44,8 @@ int main(void) {
         animation.animation = n; animation.frameCount = lengths[l];
         animation.frame.halves[0] = 1234; animation.frame.halves[1] = frames[f];
         memcpy(&before, &animation, sizeof(before));
-        actorState = states[s]; D_8019A828 = counts[c];
-        D_8019A82E = 0xA5; D_8019A82F = 0x5A; D_8019A830 = 0xC3;
+        actorState = states[s]; g_RoomM350AreaRepeats = counts[c];
+        g_RoomM350AreaDone = 0xA5; g_RoomM350AreaPlayerInside = 0x5A; g_RoomM350AreaEntered = 0xC3;
         if (event == 0) { expectedCount = 4; expectedFlag = 0; }
         if (event == 1) {
             if (a && expectedState == 1) expectedState = 2;
@@ -61,12 +61,12 @@ int main(void) {
                 }
             }
         }
-        assert(func_80196E04(event) == result);
+        assert(RoomM350_AreaController(event) == result);
         assert(memcmp(&animation, &before, sizeof(animation)) == 0);
-        assert(actorState == expectedState && D_8019A828 == expectedCount);
-        assert(D_8019A82E == expectedFlag);
-        assert(D_8019A82F == (event == 0 ? 0 : 0x5A));
-        assert(D_8019A830 == (event == 0 ? 0 : 0xC3));
+        assert(actorState == expectedState && g_RoomM350AreaRepeats == expectedCount);
+        assert(g_RoomM350AreaDone == expectedFlag);
+        assert(g_RoomM350AreaPlayerInside == (event == 0 ? 0 : 0x5A));
+        assert(g_RoomM350AreaEntered == (event == 0 ? 0 : 0xC3));
     }
     return 0;
 }

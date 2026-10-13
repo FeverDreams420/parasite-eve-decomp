@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-CONTROLLER = "func_8019360C"
+CONTROLLER = "RoomM350_HandSweepTrapEmitter"
 
 
 class PairedAnimationTests(unittest.TestCase):
@@ -44,7 +44,7 @@ typedef char k[OFF(RoomM350SoundOwner,soundMode)==8 ? 1:-1];
 typedef RoomM350SweepTrap Particle;
 FieldFxObjectPrefix *g_FieldFxOwner;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
-GteShortVector D_8019A778[2];
+GteShortVector g_RoomM350HandPoints[2];
 RenderEffectParameters g_FieldFxSpriteParams;
 static RoomM350Actor actors[2];
 static Instance instances[2];
@@ -53,10 +53,10 @@ static Transform transforms[2];
 static RoomM350Emitter emitters[2];
 static int pools[2], calls, sounds, setups, failAt, setupResult;
 static Particle particles[2], expected[2];
-int func_80192E4C(int e, RoomM350SweepTrap *p) { return 0; }
+int RoomM350_HandSweepTrapCallback(int e, RoomM350SweepTrap *p) { return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==8 && count==2);
-    assert(cb==(FieldFxCallbackListCallback)func_80192E4C);
+    assert(cb==(FieldFxCallbackListCallback)RoomM350_HandSweepTrapCallback);
     setups++;
     return setupResult;
 }
@@ -88,11 +88,11 @@ static void run(int animation,int frame,int previous,int failure) {
     reset(); failAt=failure;
     instances[0].animation=animation; instances[0].frame=frame;
     instances[0].previousFrame=previous;
-    assert(func_8019360C(1)==(animation==11 && frame>=50 ? 2:0));
+    assert(RoomM350_HandSweepTrapEmitter(1)==(animation==11 && frame>=50 ? 2:0));
     assert(calls==(active ? (failure==0 ? 1:2):0));
     assert(sounds==active && setups==0);
     for(i=0;i<successes;i++) {
-        expected[i].anchor=&D_8019A778[i]; expected[i].done=0;
+        expected[i].anchor=&g_RoomM350HandPoints[i]; expected[i].done=0;
     }
     assert(memcmp(expected,particles,sizeof(particles))==0);
 }
@@ -113,16 +113,16 @@ int main(void) {
     }
     for(i=0;i<256;i++) for(j=0;j<8;j++) for(k=0;k<3;k++) run(i,edges[j],0,k);
     for(setupResult=-2;setupResult<=2;setupResult++) {
-        reset(); assert(func_8019360C(0)==setupResult && setups==1 && calls==0 && sounds==0);
+        reset(); assert(RoomM350_HandSweepTrapEmitter(0)==setupResult && setups==1 && calls==0 && sounds==0);
     }
     reset();
     memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
-    assert(func_8019360C(2)==0 && calls==0 && sounds==0 && setups==0);
+    assert(RoomM350_HandSweepTrapEmitter(2)==0 && calls==0 && sounds==0 && setups==0);
     assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2);
     assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
     assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0);
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
-        reset(); assert(func_8019360C(i)==0 && calls==0 && sounds==0 && setups==0);
+        reset(); assert(RoomM350_HandSweepTrapEmitter(i)==0 && calls==0 && sounds==0 && setups==0);
     }
     return 0;
 }

@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-CONTROLLER = 'func_801992A0'
+CONTROLLER = 'RoomM350_BodyDebrisEmitter'
 # The GTE stays a boundary in the host harness: keep pe1/gte.h's asm out and
 # route its macros to recording stubs.
 HOST_GTE = r'''
@@ -61,7 +61,7 @@ typedef char h[sizeof(Matrix)==32 && OFF(Matrix,translation)==20 && sizeof(Vecto
 ''' + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
-unsigned char D_8019A8C4;
+unsigned char g_RoomM350BodyDone;
 RenderEffectParameters g_FieldFxSpriteParams;
 u16 g_FieldFxTpageSlots[16];
 u16 g_FieldFxTpageTable[65536];
@@ -81,13 +81,13 @@ static int word(uint32_t x) { int r; memcpy(&r,&x,4); return r; }
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 static int shift(int x,int n) { return x>=0 ? x/(1<<n):-((-(int64_t)x+(1<<n)-1)/(1<<n)); }
 static int rng(int i) { return word(seed+(uint32_t)i*0x87654321u); }
-int func_80199148(int e,Particle *p) { return 0; }
+int RoomM350_BodyDebrisCallback(int e,Particle *p) { return 0; }
 int Asset_Find08w(int id,int asset,int x,int y,int z) {
     sounds++;
     if(id==0x549) {
         assert(asset==owners[0].progress && x==(short)matrices[0][0].translation[0]);
         assert(y==(short)matrices[0][0].translation[1] && z==(short)matrices[0][0].translation[2]);
-        g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1]; state.count=123; state.delay=456; D_8019A8C4=255;
+        g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1]; state.count=123; state.delay=456; g_RoomM350BodyDone=255;
     } else {
         assert(id==0x5FE && asset==owners[mutate ? 2:0].progress && gteStage==7);
         assert(x==expected.x && y==expected.y && z==expected.z);
@@ -97,8 +97,8 @@ int Asset_Find08w(int id,int asset,int x,int y,int z) {
 }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[1] && stride==20 && count==10);
-    assert(cb==(FieldFxCallbackListCallback)func_80199148);
-    assert(sounds==1 && state.count==0 && state.delay==0 && D_8019A8C4==0); return -17;
+    assert(cb==(FieldFxCallbackListCallback)RoomM350_BodyDebrisCallback);
+    assert(sounds==1 && state.count==0 && state.delay==0 && g_RoomM350BodyDone==0); return -17;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
     assert(p==(char *)&pools[0] && allocs++==0 && randoms==0);
@@ -145,13 +145,13 @@ static void store_ir(void *p) {
 static void reset(void) {
     allocs=randoms=scrambles=sounds=cosines=sines=gteStage=0;
     g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[0];
-    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[0]; D_8019A8C4=0;
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[0]; g_RoomM350BodyDone=0;
     memset(&particle,0x5A,sizeof(particle)); memcpy(&expected,&particle,sizeof(particle));
 }
 static void run(int count,int delay,int modelCount,int failure,int mutation,int stop) {
     int next=half((uint16_t)delay+1),success,i,which=mutation ? 1:0;
     reset(); state.count=initialCount=count; state.delay=initialDelay=delay;
-    fail=failure; mutate=mutation; D_8019A8C4=stop;
+    fail=failure; mutate=mutation; g_RoomM350BodyDone=stop;
     models[which].part_count=modelCount;
     success=!stop && next>=4 && !failure;
     size=half(((uint32_t)(mutate ? -32768:count)<<7)+4096); halfSize=shift(size,1);
@@ -163,7 +163,7 @@ static void run(int count,int delay,int modelCount,int failure,int mutation,int 
         expected.velocity=expected.acceleration=expected.counter=0;
         expected.brightness=64; expected.size=size;
     }
-    assert(func_801992A0(1,&state)==(stop ? 2:0));
+    assert(RoomM350_BodyDebrisEmitter(1,&state)==(stop ? 2:0));
     assert(allocs==(!stop && next>=4) && randoms==(success ? 4:0) && scrambles==success);
     assert(sounds==success && gteStage==(success ? 7:0));
     assert(memcmp(&particle,&expected,sizeof(particle))==0);
@@ -178,7 +178,7 @@ int main(void) {
         for(m=0;m<256;m++) for(j=0;j<3;j++) matrices[n][m].translation[j]=word(0x7FFFFF00u+(uint32_t)m*1234567+n*321+j);
     }
     for(n=0;n<2;n++) emitters[n].pool=&pools[n];
-    reset(); assert(func_801992A0(0,&state)==-17);
+    reset(); assert(RoomM350_BodyDebrisEmitter(0,&state)==-17);
     for(n=0;n<65536;n++) for(m=0;m<2;m++) {
         seed=(uint32_t)n*65537; sample=word(seed);
         run(half(n),half(n),n&255,m,0,0);
@@ -193,13 +193,13 @@ int main(void) {
         /* Texture slot 11 of g_FieldFxTpageSlots is the halfword at 0x800E11FA. */
         g_FieldFxTpageSlots[11]=n; g_FieldFxTpageTable[n]=n^0xA357;
         memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
-        assert(func_801992A0(2,&state)==0 && g_FieldFxSpriteParams.tpage==(unsigned short)(n^0xA357));
+        assert(RoomM350_BodyDebrisEmitter(2,&state)==0 && g_FieldFxSpriteParams.tpage==(unsigned short)(n^0xA357));
         assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2);
         assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
         assert(g_FieldFxSpriteParams.palette==3 && g_FieldFxSpriteParams.parameter06==1);
         assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==32);
     }
-    reset(); assert(func_801992A0(-1,&state)==0 && func_801992A0(3,&state)==0 && sounds==0);
+    reset(); assert(RoomM350_BodyDebrisEmitter(-1,&state)==0 && RoomM350_BodyDebrisEmitter(3,&state)==0 && sounds==0);
     return 0;
 }
 '''

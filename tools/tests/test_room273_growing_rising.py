@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_801974DC'
+FUNCTION = 'RoomM273_SweepRisingCallback'
 
 
 class GrowingRisingSprite(unittest.TestCase):
@@ -58,7 +58,7 @@ int main(void) {
     for(i=0;i<7;++i) for(j=0;j<5;++j) for(k=0;k<5;++k) {
         g_FieldFxCurrentAge=times[i]; particle.x=12; particle.z=-34;
         particle.y=values[j]; particle.speed=values[k];
-        assert(func_801974DC(1,&particle)==(times[i]>=32));
+        assert(RoomM273_SweepRisingCallback(1,&particle)==(times[i]>=32));
         assert(particle.x==12 && particle.z==-34);
         assert(particle.y==(unsigned short)(times[i]<32 ? values[j]-values[k]:values[j]));
         assert(particle.speed==(unsigned short)(times[i]<32 ? values[k]+1:values[k]));
@@ -81,12 +81,12 @@ int main(void) {
             wantPalette=65535+(kind==4 && variant ? 4:0);
             particle.x=12; particle.y=65530; particle.z=-34; particle.speed=8;
             cluts=draws=0;
-            assert(func_801974DC(2,&particle)==0 && cluts==1 && draws==1);
+            assert(RoomM273_SweepRisingCallback(2,&particle)==0 && cluts==1 && draws==1);
             assert(particle.x==12 && particle.y==65530 && particle.z==-34 && particle.speed==8);
         }
-    assert(func_801974DC(0,&particle)==0);
-    assert(func_801974DC(-1,&particle)==0);
-    assert(func_801974DC(INT_MAX,&particle)==0);
+    assert(RoomM273_SweepRisingCallback(0,&particle)==0);
+    assert(RoomM273_SweepRisingCallback(-1,&particle)==0);
+    assert(RoomM273_SweepRisingCallback(INT_MAX,&particle)==0);
     assert(draws==1 && cluts==1);
     return 0;
 }

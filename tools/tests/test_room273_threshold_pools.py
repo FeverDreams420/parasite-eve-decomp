@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_801949EC'
+FUNCTION = 'RoomM273_GrabStarBurstEmitter'
 
 
 class ThresholdPools(unittest.TestCase):
@@ -46,19 +46,19 @@ static RenderMatrix object, replacementObject;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
 FieldFxObjectPrefix *g_FieldFxOwner=(FieldFxObjectPrefix *)&stateContext;
 FieldActor *g_PlayerEntity=&scene;
-void *D_8019AE94;
+void *g_RoomM273GrabSparkPool;
 unsigned char D_8019AE9A;
 static int calls,allocations,updates,renders,failAllocation,firstSize,secondSize;
-int func_801947CC(int mode, RoomM273PaletteInput *input) { assert(0); return 0; }
-int func_80199F84(int mode, RoomM273PulseState *state) { assert(0); return 0; }
+int RoomM273_GrabStarBurstCallback(int mode, RoomM273PaletteInput *input) { assert(0); return 0; }
+int RoomM273_GrabSparkTriangleCallback(int mode, RoomM273PulseState *state) { assert(0); return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(calls++==0 && p==(char *)pool && stride==8 && count==2 &&
-           callback==(FieldFxCallbackListCallback)func_801947CC);
+           callback==(FieldFxCallbackListCallback)RoomM273_GrabStarBurstCallback);
     return firstSize;
 }
 int FieldFx_AllocCallbackList(void *out,int offset,int stride,int count,void *callback) {
-    assert(calls++==1 && out==&D_8019AE94 && offset==firstSize);
-    assert(stride==16 && count==9 && callback==(void *)func_80199F84);
+    assert(calls++==1 && out==&g_RoomM273GrabSparkPool && offset==firstSize);
+    assert(stride==16 && count==9 && callback==(void *)RoomM273_GrabSparkTriangleCallback);
     *(void **)out=pool+offset;
     return secondSize;
 }
@@ -66,15 +66,15 @@ void *FieldFx_AcquireCallbackSlot(char *p) {
     assert(p==(char *)pool && !updates && !renders && allocations++==0);
     /* The caller must resolve the scene pointer after allocation. */
     g_PlayerEntity=&replacementScene;
-    D_8019AE94=pool+48;
+    g_RoomM273GrabSparkPool=pool+48;
     return failAllocation ? 0 : &effect;
 }
 int FieldFx_UpdateCallbackList(void *p) {
-    assert(p==D_8019AE94 && updates++==0 && !renders);
+    assert(p==g_RoomM273GrabSparkPool && updates++==0 && !renders);
     return 97;
 }
 int FieldFx_DrawCallbackList(char *p) {
-    assert(p==D_8019AE94 && renders++==0 && !updates && !allocations);
+    assert(p==g_RoomM273GrabSparkPool && renders++==0 && !updates && !allocations);
     return 98;
 }
 int main(void) {
@@ -84,9 +84,9 @@ int main(void) {
     scene.render_object.matrices=&object;
     replacementScene.render_object.matrices=&replacementObject;
     firstSize=36; secondSize=192;
-    assert(func_801949EC(0)==228 && calls==2 && D_8019AE94==pool+36);
+    assert(RoomM273_GrabStarBurstEmitter(0)==228 && calls==2 && g_RoomM273GrabSparkPool==pool+36);
     calls=0; firstSize=40; secondSize=73;
-    assert(func_801949EC(0)==113 && calls==2 && D_8019AE94==pool+40);
+    assert(RoomM273_GrabStarBurstEmitter(0)==113 && calls==2 && g_RoomM273GrabSparkPool==pool+40);
     for(stop=0;stop<3;++stop) for(kind=8;kind<=10;++kind)
         for(i=0;i<7;++i) for(j=0;j<7;++j) for(fail=0;fail<2;++fail) {
             State before;
@@ -95,18 +95,18 @@ int main(void) {
             state.kind=kind; state.value22=values[i]; state.value26=values[j];
             before=state; effect.position=&object;
             D_8019AE9A=stop==2 ? 255:stop;
-            D_8019AE94=pool+36; g_PlayerEntity=&scene;
+            g_RoomM273GrabSparkPool=pool+36; g_PlayerEntity=&scene;
             failAllocation=fail; allocations=updates=renders=0;
-            assert(func_801949EC(1)==(stop ? 2:0));
+            assert(RoomM273_GrabStarBurstEmitter(1)==(stop ? 2:0));
             assert(allocations==wanted && updates==!stop && renders==0);
             assert(effect.position==(wanted && !fail ? (void *)replacementObject.translation:(void *)&object));
             assert(memcmp(&state,&before,sizeof(state))==0);
         }
     allocations=updates=renders=0;
     D_8019AE9A=255;
-    assert(func_801949EC(2)==0 && renders==1);
-    assert(func_801949EC(-1)==0 && func_801949EC(3)==0);
-    assert(func_801949EC(INT_MIN)==0 && func_801949EC(INT_MAX)==0);
+    assert(RoomM273_GrabStarBurstEmitter(2)==0 && renders==1);
+    assert(RoomM273_GrabStarBurstEmitter(-1)==0 && RoomM273_GrabStarBurstEmitter(3)==0);
+    assert(RoomM273_GrabStarBurstEmitter(INT_MIN)==0 && RoomM273_GrabStarBurstEmitter(INT_MAX)==0);
     assert(renders==1 && !updates && !allocations && calls==2);
     return 0;
 }

@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_8019353C'
+FUNCTION = 'RoomM273_GrabPlacementScaledFanCallback'
 
 
 class ScaledLayerPair(unittest.TestCase):
@@ -34,7 +34,7 @@ typedef char layout[sizeof(Vector)==8 && sizeof(Effect)==12 && sizeof(int)==4 &&
 int g_FieldFxCurrentAge;
 GteSineWord rcossin_tbl[4096];
 RoomFloorY g_RoomFloorY[1];
-unsigned char D_8019AB70[4];
+unsigned char g_RoomM273BlackColor[4];
 static Effect input,original;
 static Vector *savedPosition,*savedRotation;
 static int calls,frame,wantedSize,wantedShade;
@@ -42,7 +42,7 @@ void FieldFx_DrawStarFan(struct GteShortVector *p,int w,int h,int count,struct G
                   struct RenderColor *a,struct RenderColor *b,int shade,int flag) {
     Vector *r=(Vector *)rotation;
     assert(w==128 && h==128 && count==12 && flag==1);
-    assert((void *)a==D_8019AB70 && (void *)b==input.parameter);
+    assert((void *)a==g_RoomM273BlackColor && (void *)b==input.parameter);
     assert(sx==wantedSize && sy==sx && shade==wantedShade);
     if(calls++==0) {
         assert(p!=&input.position && r!=p);
@@ -81,15 +81,15 @@ int main(void) {
         wantedSize=(short)(((long long)lows[j]*2+4096)*scales[l]/4096);
         wantedShade=highs[k]>>5;
         calls=0;
-        assert(func_8019353C(2,&input)==0 && calls==2);
+        assert(RoomM273_GrabPlacementScaledFanCallback(2,&input)==0 && calls==2);
         assert(memcmp(&input,&original,sizeof(input))==0);
     }
     calls=0;
-    for(i=-2;i<=9;++i) { g_FieldFxCurrentAge=i; assert(func_8019353C(1,0)==(i>=8)); }
-    g_FieldFxCurrentAge=INT_MIN; assert(func_8019353C(1,0)==0);
-    g_FieldFxCurrentAge=INT_MAX; assert(func_8019353C(1,0)==1);
-    assert(func_8019353C(0,0)==0 && func_8019353C(3,0)==0);
-    assert(func_8019353C(INT_MIN,0)==0 && func_8019353C(INT_MAX,0)==0 && calls==0);
+    for(i=-2;i<=9;++i) { g_FieldFxCurrentAge=i; assert(RoomM273_GrabPlacementScaledFanCallback(1,0)==(i>=8)); }
+    g_FieldFxCurrentAge=INT_MIN; assert(RoomM273_GrabPlacementScaledFanCallback(1,0)==0);
+    g_FieldFxCurrentAge=INT_MAX; assert(RoomM273_GrabPlacementScaledFanCallback(1,0)==1);
+    assert(RoomM273_GrabPlacementScaledFanCallback(0,0)==0 && RoomM273_GrabPlacementScaledFanCallback(3,0)==0);
+    assert(RoomM273_GrabPlacementScaledFanCallback(INT_MIN,0)==0 && RoomM273_GrabPlacementScaledFanCallback(INT_MAX,0)==0 && calls==0);
     return 0;
 }
 '''

@@ -14,7 +14,7 @@ from csource import host_unit  # noqa: E402
 class Room350EffectConfiguredPulseTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_configuration_and_pre_post_clut_samples(self):
-        source = host_unit("func_80196C64", under=ROOM)
+        source = host_unit("RoomM350_AreaPlayerPulseCallback", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
 int g_FieldFxCurrentAge;
 /* The retail halfword names are fields of the sprite parameter block; the
@@ -91,7 +91,7 @@ int main(void) {
     memset(object, 0x5A, sizeof(object)); memset(untouched, 0x5A, sizeof(untouched));
     for (i = 0; i < 12; ++i) {
         before = frames[i]; reset();
-        assert(func_80196C64(1, object) == (before >= 8));
+        assert(RoomM350_AreaPlayerPulseCallback(1, object) == (before >= 8));
         assert(cluts == 0 && draws == 0 && UNIT == -999 && D_800F336A == -998);
     }
     for (i = 0; i < 12; ++i) for (j = 0; j < 12; ++j)
@@ -100,13 +100,13 @@ int main(void) {
         before = frames[i]; after = frames[j]; sample = samples[k]; shade = samples[l];
         scale = scales[m]; paletteIndex = palettes[n]; clutY = palettes[(n + 1) % 5];
         handle = palettes[(n + 2) % 5]; reset();
-        assert(func_80196C64(2, object) == 0 && cluts == 1 && draws == 1);
+        assert(RoomM350_AreaPlayerPulseCallback(2, object) == 0 && cluts == 1 && draws == 1);
         assert(memcmp(object, untouched, sizeof(object)) == 0);
     }
     for (event = -3; event <= 4; ++event) {
         if (event == 1 || event == 2) continue;
         reset();
-        assert(func_80196C64(event, object) == 0 && cluts == 0 && draws == 0);
+        assert(RoomM350_AreaPlayerPulseCallback(event, object) == 0 && cluts == 0 && draws == 0);
         assert(UNIT == -999 && D_800F336A == -998);
         assert(D_800F3370 == 65534 && D_800F3376 == -994 && D_800F3378 == -993);
     }

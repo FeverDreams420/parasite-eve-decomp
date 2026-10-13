@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-EMITTER = 'func_80198400'
+EMITTER = 'RoomM350_RushFlareEmitter'
 # Keep pe1/gte.h's asm out of the host build; the screen-space clip test is
 # a recorded COP2 boundary.
 HOST_GTE = r'''
@@ -74,9 +74,9 @@ FieldFxObjectPrefix *g_FieldFxOwner;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 FieldActor *g_PlayerEntity;
 int g_FieldFxCurrentAge;
-unsigned char D_8019A8C0;
+unsigned char g_RoomM350RushPlayerHit;
 GteShortVector D_8019A8A8,D_8019A8B0;
-short D_8019A890[3];
+short g_RoomM350RushCenter[3];
 RenderEffectParameters g_FieldFxSpriteParams;
 u16 g_FieldFxTpageSlot3,g_FieldFxTpageTable[65536];
 static RoomM350EffectActor actors[2];
@@ -91,10 +91,10 @@ static int initCalls,packed[3],expectedPoint;
 static int word(uint32_t u) { int x; memcpy(&x,&u,4); return x; }
 static int half(unsigned u) { return (u&65535)<32768 ? (int)(u&65535):(int)(u&65535)-65536; }
 static int xz(int x,int z) { return word(((uint32_t)z<<16)|(uint16_t)x); }
-int func_801981D0(int event,RoomM350FlareParticle *p) { (void)event;(void)p; assert(0); return 0; }
+int RoomM350_RushFlareCallback(int event,RoomM350FlareParticle *p) { (void)event;(void)p; assert(0); return 0; }
 int FieldFx_InitCallbackList(char *pool,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(++initCalls==1 && pool==(char *)&particle && stride==8 && count==4);
-    assert(callback==(FieldFxCallbackListCallback)func_801981D0);
+    assert(callback==(FieldFxCallbackListCallback)RoomM350_RushFlareCallback);
     return -17;
 }
 void *FieldFx_AcquireCallbackSlot(char *pool) {
@@ -157,43 +157,43 @@ static void reset(void) {
     oldRight=(Vector){100,222,300,1}; oldLeft=(Vector){-100,333,-300,444};
     memcpy(rightRecord,&oldRight,8); memcpy(leftRecord,&oldLeft,8);
     memset(&D_8019A8A8,0x55,8); memset(&D_8019A8B0,0x66,8);
-    g_FieldFxCurrentAge=0; D_8019A8C0=0; particle=(Particle){-7,-8,999};
+    g_FieldFxCurrentAge=0; g_RoomM350RushPlayerHit=0; particle=(Particle){-7,-8,999};
     initCalls=allocations=randoms=matrices=clips=screens=failAlloc=mutate=0; outsideAt=-1; randomValue=-1;
 }
 int main(void) {
     int i,j,k;
-    reset(); assert(func_80198400(0)==-17 && initCalls==1 && !allocations && !matrices);
-    reset(); assert(func_80198400(-1)==0 && !allocations && !matrices);
+    reset(); assert(RoomM350_RushFlareEmitter(0)==-17 && initCalls==1 && !allocations && !matrices);
+    reset(); assert(RoomM350_RushFlareEmitter(-1)==0 && !allocations && !matrices);
     for(i=31;i<65536;i++) {
         reset(); instances[0].anim.parts.integer=i;
-        assert(func_80198400(1)==2 && !allocations && !matrices && !clips);
+        assert(RoomM350_RushFlareEmitter(1)==2 && !allocations && !matrices && !clips);
     }
     for(i=0;i<256;i++) {
-        reset(); randomValue=word(0xFEDC0000u+(unsigned)i); D_8019A8C0=1;
-        assert(func_80198400(1)==0 && allocations==1 && randoms==1 && !matrices);
+        reset(); randomValue=word(0xFEDC0000u+(unsigned)i); g_RoomM350RushPlayerHit=1;
+        assert(RoomM350_RushFlareEmitter(1)==0 && allocations==1 && randoms==1 && !matrices);
         assert(particle.y==i && particle.z==64+i/4 && particle.shade==999);
     }
     for(i=-1;i<4;i++) for(j=0;j<2;j++) for(k=0;k<2;k++) {
         reset(); outsideAt=i; mutate=j; if(k) instances[0].state=0;
-        assert(func_80198400(1)==0 && allocations==1 && randoms==1 && matrices==1);
+        assert(RoomM350_RushFlareEmitter(1)==0 && allocations==1 && randoms==1 && matrices==1);
         assert(clips==(i<0 ? 4:i+1));
         assert(!memcmp(rightRecord,&quad[0],8));
         assert(!memcmp(leftRecord,&quad[1],8));
-        assert(D_8019A8C0==(i<0));
+        assert(g_RoomM350RushPlayerHit==(i<0));
         assert(owners[j+1].flags==(i<0 ? 0x4000u:0));
         assert(owners[0].core_flags==(i<0 && !k ? 0x80000000u:0));
     }
     reset(); failAlloc=1;
-    assert(func_80198400(1)==0 && allocations==1 && !randoms && matrices==1 && clips==4);
+    assert(RoomM350_RushFlareEmitter(1)==0 && allocations==1 && !randoms && matrices==1 && clips==4);
     reset(); g_FieldFxCurrentAge=-1; instances[0].mode=8;
-    assert(func_80198400(1)==0 && !allocations && !matrices);
+    assert(RoomM350_RushFlareEmitter(1)==0 && !allocations && !matrices);
     reset(); oldRight.pad=0; memcpy(rightRecord,&oldRight,8);
-    assert(func_80198400(1)==0 && matrices==1 && !clips && !D_8019A8C0 && D_8019A89E==1);
+    assert(RoomM350_RushFlareEmitter(1)==0 && matrices==1 && !clips && !g_RoomM350RushPlayerHit && D_8019A89E==1);
     reset(); g_FieldFxTpageSlot3=65535; g_FieldFxTpageTable[65535]=0xFEDC;
     memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
     for(i=0;i<3;i++) { transforms[11].translation[i]=-3-i; transforms[15].translation[i]=i; }
-    assert(func_80198400(2)==0 && !allocations && !matrices);
-    for(i=0;i<3;i++) assert(D_8019A890[i]==-2);
+    assert(RoomM350_RushFlareEmitter(2)==0 && !allocations && !matrices);
+    for(i=0;i<3;i++) assert(g_RoomM350RushCenter[i]==-2);
     assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2);
     assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
     assert(g_FieldFxSpriteParams.palette==3 && !g_FieldFxSpriteParams.parameter06 && !g_FieldFxSpriteParams.parameter0A);

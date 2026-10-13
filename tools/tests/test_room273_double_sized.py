@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_80194470'
+FUNCTION = 'RoomM273_GrabPlayerTrailCallback'
 
 
 class DoubleSizedSprite(unittest.TestCase):
@@ -54,7 +54,7 @@ int main(void) {
     int i,j,kind,variant,frame,sizeIndex;
     for(i=0;i<6;++i) {
         g_FieldFxCurrentAge=times[i];
-        assert(func_80194470(1,&position)==(times[i]>=9));
+        assert(RoomM273_GrabPlayerTrailCallback(1,&position)==(times[i]>=9));
     }
     assert(!cluts && !draws);
     for(kind=0;kind<8;++kind) for(variant=0;variant<2;++variant)
@@ -68,11 +68,11 @@ int main(void) {
             g_FieldFxPaletteTable[kind]=65535;
             expectedPalette=65535+(kind==4 && variant ? 9:5);
             cluts=draws=0;
-            assert(func_80194470(2,&position)==0 && cluts==1 && draws==1);
+            assert(RoomM273_GrabPlayerTrailCallback(2,&position)==0 && cluts==1 && draws==1);
         }
-    assert(func_80194470(0,&position)==0);
-    assert(func_80194470(-1,&position)==0);
-    assert(func_80194470(INT_MAX,&position)==0);
+    assert(RoomM273_GrabPlayerTrailCallback(0,&position)==0);
+    assert(RoomM273_GrabPlayerTrailCallback(-1,&position)==0);
+    assert(RoomM273_GrabPlayerTrailCallback(INT_MAX,&position)==0);
     assert(cluts==1 && draws==1);
     assert(position.x==12 && position.y==34 && position.z==56 && position.pad==78);
     return 0;

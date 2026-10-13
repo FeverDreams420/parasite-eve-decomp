@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_801993F0'
+FUNCTION = 'RoomM273_SwayGroundRingEmitter'
 
 
 class PairedEmitter(unittest.TestCase):
@@ -46,10 +46,10 @@ void FieldFx_ModelScrollUv(union FieldTexturedModel *handle,u8 a,u8 b) {
     assert(stage++==1 && (void *)handle==&asset && D_8019AF6C==&asset && !a && !b);
     context.pool=&pool;
 }
-int func_80198E94(int mode,GteShortVector *p) { assert(0); return 0; }
+int RoomM273_SwayGroundRingCallback(int mode,GteShortVector *p) { assert(0); return 0; }
 int FieldFx_InitCallbackList(char *p,int size,int count,FieldFxCallbackListCallback callback) {
     assert(stage++==2 && p==(char *)&pool && size==8 && count==4);
-    assert(callback==(FieldFxCallbackListCallback)func_80198E94);
+    assert(callback==(FieldFxCallbackListCallback)RoomM273_SwayGroundRingCallback);
     return initResult;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
@@ -64,7 +64,7 @@ int main(void) {
     g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
     for(initResult=-1;initResult<=1;++initResult) {
         stage=0; context.pool=0;
-        assert(func_801993F0(0)==initResult && stage==3);
+        assert(RoomM273_SwayGroundRingEmitter(0)==initResult && stage==3);
     }
     for(mask=0;mask<4;++mask) for(fail=-1;fail<2;++fail) {
         memset(&D_8019AF84,0xA6,sizeof(D_8019AF84));
@@ -77,7 +77,7 @@ int main(void) {
             D_8019AF84.entries[i].emitter.flags=0xA5A0 | ((mask>>i)&1);
         }
         allocs=0; failAt=fail;
-        assert(func_801993F0(1)==0);
+        assert(RoomM273_SwayGroundRingEmitter(1)==0);
         next=successful=expectedCalls=stopped=0;
         for(i=0;i<2;++i) {
             int active=(mask>>i)&1;
@@ -99,11 +99,11 @@ int main(void) {
         for(i=successful;i<2;++i) assert(outputs[i].emitter.flags==0x5555);
         for(i=0;i<14;++i) assert(D_8019AF84.unknown[i]==0xA6);
         D_8019AF84.stopped=255;
-        assert(func_801993F0(1)==2 && allocs==expectedCalls);
+        assert(RoomM273_SwayGroundRingEmitter(1)==2 && allocs==expectedCalls);
     }
     g_FieldFxSpriteParams.parameter0A=-1; g_FieldFxSpriteParams.depth=123;
-    assert(func_801993F0(2)==0 && !g_FieldFxSpriteParams.parameter0A && !g_FieldFxSpriteParams.depth);
-    assert(func_801993F0(-1)==0 && func_801993F0(3)==0);
+    assert(RoomM273_SwayGroundRingEmitter(2)==0 && !g_FieldFxSpriteParams.parameter0A && !g_FieldFxSpriteParams.depth);
+    assert(RoomM273_SwayGroundRingEmitter(-1)==0 && RoomM273_SwayGroundRingEmitter(3)==0);
     assert(stage==3);
     return 0;
 }

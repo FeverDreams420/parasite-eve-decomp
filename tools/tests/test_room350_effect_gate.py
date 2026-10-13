@@ -14,7 +14,7 @@ from csource import host_unit  # noqa: E402
 class Room350EffectGateTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_gate_position_and_signed_table_value(self):
-        source = host_unit("func_8019A134", under=ROOM)
+        source = host_unit("RoomM350_DropFlareCallback", under=ROOM)
         harness = '#include <assert.h>\n' + source + r'''
 int g_FieldFxCurrentAge, D_8019A614[2];
 short D_800966EE[8192];
@@ -42,7 +42,7 @@ int main(void) {
         for (event = -2; event < 5; ++event) {
             if (event == 2) continue;
             calls = 0;
-            assert(func_8019A134(event, 0) == (event == 1 && counter >= 4));
+            assert(RoomM350_DropFlareCallback(event, 0) == (event == 1 && counter >= 4));
             assert(calls == 0);
         }
     }
@@ -54,7 +54,7 @@ int main(void) {
         D_800966EE[((counter - 1) << 9) & 0x1E00] = expectedShade;
         for (i = 0; i < 3; ++i) coordinates[i] = points[p][i];
         calls = 0;
-        assert(func_8019A134(2, &position) == 0);
+        assert(RoomM350_DropFlareCallback(2, &position) == 0);
         assert(calls == 1);
     }
     return 0;

@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-CONTROLLER = 'func_80195064'
+CONTROLLER = 'RoomM350_OrbImpactEmitter'
 
 
 class PointerQueueTests(unittest.TestCase):
@@ -35,7 +35,7 @@ typedef char d[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
         source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM))
         source = source.replace("extern short D_8019A7FE, D_8019A802;", "extern short D_8019A802;")
         # Bind the interior count symbol to real storage, preserving aliasing.
-        head = 'int func_80195064(int event) {'
+        head = 'int RoomM350_OrbImpactEmitter(int event) {'
         assert head in source
         source = source.replace(head, 'static Queue pending;\n#define D_8019A7FE pending.count\n' + head)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
@@ -49,10 +49,10 @@ static RoomM350Emitter emitters[2];
 static int pools[2], calls, setups, setupResult, failAt, nextCount;
 static Particle particles[4], expected[4];
 static Vector positions[8];
-int func_80194F04(int e, Particle *p) { return 0; }
+int RoomM350_OrbImpactCallback(int e, Particle *p) { return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==8 && count==16);
-    assert(cb==(FieldFxCallbackListCallback)func_80194F04);
+    assert(cb==(FieldFxCallbackListCallback)RoomM350_OrbImpactCallback);
     setups++; return setupResult;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
@@ -81,7 +81,7 @@ static void run(int count,int stop,int active,int replacement,int failure) {
             successes++;
         } while(successes<replacement);
     }
-    assert(func_80195064(1)==(stopped ? 2:0));
+    assert(RoomM350_OrbImpactEmitter(1)==(stopped ? 2:0));
     assert(calls==expectedCalls && setups==0);
     assert(pending.count==(stopped ? count:0));
     for(i=0;i<successes;i++) {
@@ -101,13 +101,13 @@ int main(void) {
     for(active=-32768;active<=32767;active++) run(1,255,active,0,0);
     for(setupResult=-2;setupResult<=2;setupResult++) {
         reset(); pending.count=3;
-        assert(func_80195064(0)==setupResult && setups==1 && calls==0 && pending.count==3);
+        assert(RoomM350_OrbImpactEmitter(0)==setupResult && setups==1 && calls==0 && pending.count==3);
     }
     for(i=0;i<65536;i++) {
         /* Texture slot 11 of g_FieldFxTpageSlots is the halfword at 0x800E11FA. */
         reset(); pending.count=3; g_FieldFxTpageSlots[11]=i; g_FieldFxTpageTable[i]=65535-i;
         memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
-        assert(func_80195064(2)==0 && calls==0 && setups==0 && pending.count==3);
+        assert(RoomM350_OrbImpactEmitter(2)==0 && calls==0 && setups==0 && pending.count==3);
         assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2);
         assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
         assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0);
@@ -116,7 +116,7 @@ int main(void) {
     }
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
         reset(); pending.count=3;
-        assert(func_80195064(i)==0 && calls==0 && setups==0 && pending.count==3);
+        assert(RoomM350_OrbImpactEmitter(i)==0 && calls==0 && setups==0 && pending.count==3);
     }
     return 0;
 }

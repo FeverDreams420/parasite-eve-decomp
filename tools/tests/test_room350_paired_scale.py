@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-CONTROLLER = "func_80193BCC"
+CONTROLLER = "RoomM350_HandFlashEmitter"
 
 
 class PairedScaleTests(unittest.TestCase):
@@ -39,7 +39,7 @@ typedef char g[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
-GteShortVector D_8019A778[2];
+GteShortVector g_RoomM350HandPoints[2];
 RenderEffectParameters g_FieldFxSpriteParams;
 u16 g_FieldFxTpageSlots[16];
 u16 g_FieldFxTpageTable[65536];
@@ -48,10 +48,10 @@ static Instance instance;
 static RoomM350Emitter emitters[2];
 static int pools[2], calls, setups, failAt, setupResult;
 static Particle particles[2], expected[2];
-int func_80193A80(int e, void **p) { return 0; }
+int RoomM350_HandFlashCallback(int e, void **p) { return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==4 && count==2);
-    assert(cb==(FieldFxCallbackListCallback)func_80193A80);
+    assert(cb==(FieldFxCallbackListCallback)RoomM350_HandFlashCallback);
     setups++;
     return setupResult;
 }
@@ -76,9 +76,9 @@ static void run(int animation,int frame,int previous,int failure) {
     int i, successes=active ? (failure<2 ? failure:2):0;
     reset(); failAt=failure;
     instance.animation=animation; instance.frame=frame; instance.previousFrame=previous;
-    assert(func_80193BCC(1)==result);
+    assert(RoomM350_HandFlashEmitter(1)==result);
     assert(calls==(active ? (failure==0 ? 1:2):0) && setups==0);
-    for(i=0;i<successes;i++) expected[i].position=&D_8019A778[i];
+    for(i=0;i<successes;i++) expected[i].position=&g_RoomM350HandPoints[i];
     assert(memcmp(expected,particles,sizeof(particles))==0);
 }
 int main(void) {
@@ -94,13 +94,13 @@ int main(void) {
     }
     for(i=0;i<256;i++) for(j=0;j<8;j++) for(k=0;k<3;k++) run(i,edges[j],0,k);
     for(setupResult=-2;setupResult<=2;setupResult++) {
-        reset(); assert(func_80193BCC(0)==setupResult && setups==1 && calls==0);
+        reset(); assert(RoomM350_HandFlashEmitter(0)==setupResult && setups==1 && calls==0);
     }
     for(i=0;i<65536;i++) {
         /* The tpage slot is entry 11 of the texture slot table (0x800E11FA). */
         reset(); g_FieldFxTpageSlots[11]=i; g_FieldFxTpageTable[i]=65535-i;
         memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
-        assert(func_80193BCC(2)==0 && calls==0 && setups==0);
+        assert(RoomM350_HandFlashEmitter(2)==0 && calls==0 && setups==0);
         assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2);
         assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
         assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0);
@@ -108,7 +108,7 @@ int main(void) {
         assert(g_FieldFxSpriteParams.tpage==65535-i);
     }
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
-        reset(); assert(func_80193BCC(i)==0 && calls==0 && setups==0);
+        reset(); assert(RoomM350_HandFlashEmitter(i)==0 && calls==0 && setups==0);
     }
     return 0;
 }

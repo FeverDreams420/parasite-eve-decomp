@@ -12,7 +12,7 @@ from csource import host_unit  # noqa: E402
 
 
 def callback_source():
-    return host_unit("func_80194F04", under=ROOM) + 'typedef Vector Position; typedef Particle Effect;\n'
+    return host_unit("RoomM350_OrbImpactCallback", under=ROOM) + 'typedef Vector Position; typedef Particle Effect;\n'
 
 
 class Room350EffectOffsetTests(unittest.TestCase):
@@ -62,7 +62,7 @@ int main(void) {
         if (event == 2) continue;
         g_FieldFxCurrentAge = counter; lookups = draws = 0;
         object.position = &original; object.offset = offset;
-        assert(func_80194F04(event, &object) == (event == 1 && counter >= 16));
+        assert(RoomM350_OrbImpactCallback(event, &object) == (event == 1 && counter >= 16));
         assert(object.position == &original);
         assert(object.offset == (short)(offset - (event == 1 && counter < 16 ? 16 : 0)));
         assert(lookups == 0 && draws == 0);
@@ -81,7 +81,7 @@ int main(void) {
         expectedPosition.y = (short)(values[y] + values[s]);
         object.position = &original; object.offset = values[s];
         lookups = draws = 0;
-        assert(func_80194F04(2, &object) == 0);
+        assert(RoomM350_OrbImpactCallback(2, &object) == 0);
         assert(lookups == 1 && draws == 1);
     }
     return 0;

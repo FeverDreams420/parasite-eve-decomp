@@ -14,7 +14,7 @@ from csource import host_unit  # noqa: E402
 class Room350EffectTableScaleTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_threshold_and_post_lookup_fields(self):
-        source = host_unit("func_80195564", under=ROOM)
+        source = host_unit("RoomM350_OrbTableFlashCallback", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 RenderEffectParameters g_FieldFxSpriteParams;
 GteSineWord rcossin_tbl[4096];
@@ -57,7 +57,7 @@ int main(void) {
     for (event = -1; event <= 3; ++event) {
         if (event == 2) continue;
         g_FieldFxCurrentAge = counter; lookups = draws = 0;
-        assert(func_80195564(event, (Particle *)0) == (event == 1 && counter >= 8));
+        assert(RoomM350_OrbTableFlashCallback(event, (Particle *)0) == (event == 1 && counter >= 8));
         assert(lookups == 0 && draws == 0);
     }
     for (counter = 0; counter < 32; ++counter)
@@ -73,7 +73,7 @@ int main(void) {
         position[0] = 11; position[1] = -22; position[2] = 33; position[3] = 999;
         memcpy(before, position, sizeof(position)); before[3] = expectedSize;
         lookups = draws = 0;
-        assert(func_80195564(2, (Particle *)position) == 0);
+        assert(RoomM350_OrbTableFlashCallback(2, (Particle *)position) == 0);
         assert(lookups == 1 && draws == 1);
         assert(memcmp(position, before, sizeof(position)) == 0);
     }

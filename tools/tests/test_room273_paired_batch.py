@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_80195BD0'
+FUNCTION = 'RoomM273_HandTrailLandingEmitter'
 
 
 class PairedBatch(unittest.TestCase):
@@ -49,21 +49,21 @@ typedef RoomM273PulseEmitterView Effect;
 static RoomM273PoolContext context;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
 static unsigned char primary[128],otherPrimary[128],secondary[128],otherSecondary[128];
-void *D_8019AE7C=secondary;
+void *g_RoomM273HandTrailLandingFanPool=secondary;
 unsigned short g_FieldFxTpageSlot3,g_FieldFxTpageTable[8];
 RenderEffectParameters g_FieldFxSpriteParams;
 static Effect records[8],*links[8];
 static int init,attempts,aux,updates,renders,failAt,mutateCount;
-int func_80195984(int mode, RoomM273PulseInput *input) { assert(0); return 0; }
-int func_8019A290(void) { assert(0); return 0; }
+int RoomM273_HandTrailLandingPulseCallback(int mode, RoomM273PulseInput *input) { assert(0); return 0; }
+int RoomM273_HandTrailLandingFanCallback(void) { assert(0); return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)primary && stride==12 && count==10 &&
-           callback==(FieldFxCallbackListCallback)func_80195984);
+           callback==(FieldFxCallbackListCallback)RoomM273_HandTrailLandingPulseCallback);
     return 120;
 }
 int FieldFx_AllocCallbackList(void *p,int offset,int stride,int count,void *callback) {
-    assert(init++==1 && p==&D_8019AE7C && offset==120 && stride==4 && count==10 &&
-           callback==(void *)func_8019A290);
+    assert(init++==1 && p==&g_RoomM273HandTrailLandingFanPool && offset==120 && stride==4 && count==10 &&
+           callback==(void *)RoomM273_HandTrailLandingFanCallback);
     *(void **)p=secondary; return 40;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
@@ -74,7 +74,7 @@ void *FieldFx_AcquireCallbackSlot(char *p) {
         assert(records[n].x==0xA5A5 && records[n].phase==0xA5A5 && links[n]==0);
         storage.x[n]=65535-n; storage.y[n]=n; storage.z[n]=32768+n;
         if(mutateCount && n==0) storage.count=3;
-        D_8019AE7C=otherSecondary;
+        g_RoomM273HandTrailLandingFanPool=otherSecondary;
         return &links[n];
     }
     n=attempts++;
@@ -83,12 +83,12 @@ void *FieldFx_AcquireCallbackSlot(char *p) {
     return n==failAt ? 0:&records[n];
 }
 int FieldFx_UpdateCallbackList(void *p) {
-    assert(p==D_8019AE7C && updates++==0);
+    assert(p==g_RoomM273HandTrailLandingFanPool && updates++==0);
     if(!storage.stopped) assert(storage.count==0);
     return 0;
 }
 int FieldFx_DrawCallbackList(char *p) {
-    assert(p==D_8019AE7C && renders++==0);
+    assert(p==g_RoomM273HandTrailLandingFanPool && renders++==0);
     g_FieldFxTpageSlot3=3; g_FieldFxTpageTable[3]=0xFEDC;
     return 0;
 }
@@ -97,15 +97,15 @@ int main(void) {
     int stops[]={0,1,255};
     int s,c,f,n,successes,active;
     context.pool=primary;
-    assert(func_80195BD0(0)==160 && init==2 && D_8019AE7C==secondary);
+    assert(RoomM273_HandTrailLandingEmitter(0)==160 && init==2 && g_RoomM273HandTrailLandingFanPool==secondary);
     for(s=0;s<3;++s) for(c=0;c<6;++c) for(f=0;f<=8;++f) {
         storage.stopped=stops[s]; storage.count=counts[c];
-        context.pool=primary; D_8019AE7C=secondary;
+        context.pool=primary; g_RoomM273HandTrailLandingFanPool=secondary;
         attempts=aux=updates=renders=0; failAt=f;
         memset(records,0xA5,sizeof(records)); memset(links,0,sizeof(links));
         active=!stops[s] && counts[c]>0;
         successes=active ? (f<counts[c] ? f:counts[c]):0;
-        assert(func_80195BD0(1)==(stops[s] ? 2:0));
+        assert(RoomM273_HandTrailLandingEmitter(1)==(stops[s] ? 2:0));
         assert(attempts==successes+(active && f<counts[c]));
         assert(aux==successes && updates==1 && renders==0);
         assert(storage.count==(stops[s] ? counts[c]:0));
@@ -120,20 +120,20 @@ int main(void) {
         }
     }
     storage.stopped=0; storage.count=1; mutateCount=1; failAt=8;
-    context.pool=primary; D_8019AE7C=secondary;
+    context.pool=primary; g_RoomM273HandTrailLandingFanPool=secondary;
     attempts=aux=updates=0;
     memset(records,0xA5,sizeof(records)); memset(links,0,sizeof(links));
-    assert(func_80195BD0(1)==0 && attempts==3 && aux==3 && storage.count==0);
+    assert(RoomM273_HandTrailLandingEmitter(1)==0 && attempts==3 && aux==3 && storage.count==0);
     for(s=0;s<3;++s) {
         storage.stopped=stops[s]; renders=0;
         g_FieldFxTpageSlot3=0; g_FieldFxTpageTable[0]=0;
-        assert(func_80195BD0(2)==0 && renders==1);
+        assert(RoomM273_HandTrailLandingEmitter(2)==0 && renders==1);
         assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2 && g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
         assert(g_FieldFxSpriteParams.palette==3 && g_FieldFxSpriteParams.parameter06==0 && g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0 && g_FieldFxSpriteParams.tpage==0xFEDC);
     }
     attempts=updates=renders=0;
-    assert(func_80195BD0(-1)==0 && func_80195BD0(3)==0);
-    assert(func_80195BD0(INT_MIN)==0 && func_80195BD0(INT_MAX)==0);
+    assert(RoomM273_HandTrailLandingEmitter(-1)==0 && RoomM273_HandTrailLandingEmitter(3)==0);
+    assert(RoomM273_HandTrailLandingEmitter(INT_MIN)==0 && RoomM273_HandTrailLandingEmitter(INT_MAX)==0);
     assert(!attempts && !updates && !renders && init==2);
     return 0;
 }

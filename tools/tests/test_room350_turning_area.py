@@ -10,7 +10,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools/tests"))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
-CONTROLLER = 'func_801960C4'
+CONTROLLER = 'RoomM350_AreaZoneEmitter'
 # Other overlays define a function at the same address; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 # Keep pe1/gte.h's asm out of the host build; the GTE is a recorded boundary.
@@ -66,17 +66,17 @@ typedef char f[OFF(Instance,render_object.matrices)==0x238 && OFF(Actor,instance
 #include <stdint.h>
 #include <string.h>
 #include <limits.h>
-#define D_8019A80A D_8019A808.rotation[0][1]
-#define D_8019A80C D_8019A808.rotation[0][2]
-#define D_8019A80E D_8019A808.rotation[1][0]
-#define D_8019A810 D_8019A808.rotation[1][1]
-#define D_8019A812 D_8019A808.rotation[1][2]
-#define D_8019A814 D_8019A808.rotation[2][0]
-#define D_8019A816 D_8019A808.rotation[2][1]
-#define D_8019A818 D_8019A808.rotation[2][2]
-#define D_8019A81C D_8019A808.position[0]
-#define D_8019A820 D_8019A808.position[1]
-#define D_8019A824 D_8019A808.position[2]
+#define D_8019A80A g_RoomM350AreaMatrix.rotation[0][1]
+#define D_8019A80C g_RoomM350AreaMatrix.rotation[0][2]
+#define D_8019A80E g_RoomM350AreaMatrix.rotation[1][0]
+#define D_8019A810 g_RoomM350AreaMatrix.rotation[1][1]
+#define D_8019A812 g_RoomM350AreaMatrix.rotation[1][2]
+#define D_8019A814 g_RoomM350AreaMatrix.rotation[2][0]
+#define D_8019A816 g_RoomM350AreaMatrix.rotation[2][1]
+#define D_8019A818 g_RoomM350AreaMatrix.rotation[2][2]
+#define D_8019A81C g_RoomM350AreaMatrix.position[0]
+#define D_8019A820 g_RoomM350AreaMatrix.position[1]
+#define D_8019A824 g_RoomM350AreaMatrix.position[2]
 #define TABLE ((short *)rcossin_tbl)
 #define D_800966EE (TABLE+1)
 '''
@@ -84,12 +84,12 @@ typedef char f[OFF(Instance,render_object.matrices)==0x238 && OFF(Actor,instance
 FieldFxObjectPrefix *g_FieldFxOwner;
 FieldActor *g_PlayerEntity;
 struct SceneAssetBlob *D_800B0E64[1];
-short D_8019A82A[1];
+short g_RoomM350AreaConfigYaw[1];
 GteSineWord rcossin_tbl[4097];
-unsigned char D_8019A831,D_8019A82F,D_8019A830;
+unsigned char g_RoomM350AreaTrackPlayer,g_RoomM350AreaPlayerInside,g_RoomM350AreaEntered;
 int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag;
-Matrix D_8019A808;
-Vector D_8019A574[4];
+Matrix g_RoomM350AreaMatrix;
+Vector g_RoomM350AreaCorners[4];
 char D_8019A594[8];
 RenderColor D_8019A3C8;
 RenderEffectParameters g_FieldFxSpriteParams;
@@ -126,7 +126,7 @@ static void reset(void) {
     players[1].render_object.model_matrix.translation[0]=-32768;
     players[1].render_object.model_matrix.translation[2]=32767;
     owners[0].core_flags=0x1234; owners[1].flags=0x5678; owners[2].flags=0x9876;
-    D_8019A82F=0; D_8019A830=73; D_8019A831=0;
+    g_RoomM350AreaPlayerInside=0; g_RoomM350AreaEntered=73; g_RoomM350AreaTrackPlayer=0;
     calls=distances=angles=cosines=sines=matrixLoads=vertices=irIndex=screens=clips=0;
     clears=scaled=models=sprites=drawStage=0; mutate=0; outsideAt=-1;
 }
@@ -136,7 +136,7 @@ void *Asset_FindTable08ByU32Key(void *base,int id) {
 }
 void FieldFx_ModelScrollUv(union FieldTexturedModel *asset,u8 a,u8 b) {
     assert(mode==0 && calls++==1 && (void *)asset==&assets[0] && !a && !b);
-    D_8019A82A[0]=-32768; state.size=123; state.initialized=255;
+    g_RoomM350AreaConfigYaw[0]=-32768; state.size=123; state.initialized=255;
 }
 s32 FieldFx_GetDistanceXZ(Vec3Fixed *a,Vec3Fixed *b) {
     assert(mode==1 && distances++==0);
@@ -159,14 +159,14 @@ static void check_matrix(void) {
     int r,c;
     for(r=0;r<3;r++) for(c=0;c<3;c++) {
         int v=r==c ? (r==1 ? 4096:-32768):r==0&&c==2 ? 32767:r==2&&c==0 ? -32767:0;
-        assert(D_8019A808.rotation[r][c]==v);
+        assert(g_RoomM350AreaMatrix.rotation[r][c]==v);
     }
-    for(r=0;r<3;r++) assert(D_8019A808.position[r]==instances[0].render_object.model_matrix.translation[r]);
+    for(r=0;r<3;r++) assert(g_RoomM350AreaMatrix.position[r]==instances[0].render_object.model_matrix.translation[r]);
 }
 static void load_matrix(void *p,int which) {
-    assert(p==&D_8019A808 && matrixLoads++==which && state.brightness>=64); check_matrix();
+    assert(p==&g_RoomM350AreaMatrix && matrixLoads++==which && state.brightness>=64); check_matrix();
 }
-static void load_vertex(void *p) { assert(matrixLoads==2 && vertices<4 && p==&D_8019A574[vertices] && irIndex==0); }
+static void load_vertex(void *p) { assert(matrixLoads==2 && vertices<4 && p==&g_RoomM350AreaCorners[vertices] && irIndex==0); }
 static void transform(void) { assert(vertices<4 && irIndex==0); irIndex=1; }
 static void store_vertex(void *p) {
     Vector *out=p;
@@ -203,7 +203,7 @@ static void update(int timer,int sample,int initialized,int enabled,int distance
     int raw,expectedSize,turn,heading=yaw,index,ret;
     reset(); mode=1; mutate=mutation; outsideAt=outside;
     state.yaw=yaw; state.turn=-77; state.initialized=initialized;
-    g_FieldFxCurrentAge=timer; D_8019A831=enabled; D_8019A82F=inside;
+    g_FieldFxCurrentAge=timer; g_RoomM350AreaTrackPlayer=enabled; g_RoomM350AreaPlayerInside=inside;
     if(nullOwner) instances[0].state=0;
     turnDistance=distance; turnAngle=angle;
     if(timer<16) {
@@ -223,7 +223,7 @@ static void update(int timer,int sample,int initialized,int enabled,int distance
     } else if(!initialized) turn=0;
     expectedYaw=word((uint32_t)heading+(uint32_t)turn);
     before=state;
-    ret=func_801960C4(1,&state);
+    ret=RoomM350_AreaZoneEmitter(1,&state);
     assert(state.size==expectedSize);
     if(expectedSize<=0) {
         before.size=expectedSize; assert(ret==1 && memcmp(&state,&before,sizeof(state))==0);
@@ -233,10 +233,10 @@ static void update(int timer,int sample,int initialized,int enabled,int distance
     assert(state.initialized==(initialized ? initialized:1));
     assert(distances==(!initialized && enabled) && angles==distances && cosines==1 && sines==1);
     check_matrix();
-    if(expectedBright<64) { assert(!matrixLoads && D_8019A82F==inside && D_8019A830==73); return; }
+    if(expectedBright<64) { assert(!matrixLoads && g_RoomM350AreaPlayerInside==inside && g_RoomM350AreaEntered==73); return; }
     assert(vertices==4 && clips==(outside<0 ? 4:outside+1));
-    assert(D_8019A82F==(outside<0 ? (inside ? inside:1):0));
-    assert(D_8019A830==((outside<0 && !inside) ? 1:73));
+    assert(g_RoomM350AreaPlayerInside==(outside<0 ? (inside ? inside:1):0));
+    assert(g_RoomM350AreaEntered==((outside<0 && !inside) ? 1:73));
     assert(owners[0].core_flags==((outside<0 && !inside && !nullOwner) ? 0x80001234u:0x1234u));
     assert(g_PlayerEntity->state->flags==((mutate && distances ? 0x9876u:0x5678u)|((outside<0 && !inside) ? 0x4000u:0)));
 }
@@ -272,7 +272,7 @@ GteMatrix *ScaleMatrix(GteMatrix *matrix,const GteVector *vector) {
 void FieldFx_ModelDraw(union FieldTexturedModel *p,GteMatrix *m) {
     assert(clears==models+1 && scaled==clears && (void *)p==&assets[clears+2]);
     assert(m->t[0]==12345+models); models++;
-    memset(&D_8019A808,0,sizeof(D_8019A808)); memset(transforms,0,sizeof(transforms));
+    memset(&g_RoomM350AreaMatrix,0,sizeof(g_RoomM350AreaMatrix)); memset(transforms,0,sizeof(transforms));
 }
 void FieldFx_ModelRestoreColors(char *p) {
     assert(models==3 && (void *)p==&assets[5]);
@@ -296,10 +296,10 @@ static void draw(int size,int yaw,int k,int s) {
     int i;
     reset(); mode=2; kind=k; special=s; tailSize=size; tailYaw=yaw;
     state.size=size; g_FieldFxSpriteParams.palette=k; g_FieldFxAltPaletteFlag=s; g_FieldFxTpageTable[65535]=0x8055; g_FieldFxPaletteTable[k]=65535;
-    for(i=0;i<9;i++) ((short *)D_8019A808.rotation)[i]=i*19-71;
+    for(i=0;i<9;i++) ((short *)g_RoomM350AreaMatrix.rotation)[i]=i*19-71;
     transforms[33].position[0]=INT_MIN; transforms[33].position[1]=INT_MAX; transforms[33].position[2]=-333;
-    expectedMatrix=D_8019A808; memcpy(expectedMatrix.position,transforms[33].position,sizeof(expectedMatrix.position));
-    assert(func_801960C4(2,&state)==0 && sprites==3 && models==3);
+    expectedMatrix=g_RoomM350AreaMatrix; memcpy(expectedMatrix.position,transforms[33].position,sizeof(expectedMatrix.position));
+    assert(RoomM350_AreaZoneEmitter(2,&state)==0 && sprites==3 && models==3);
 }
 int main(void) {
     int i,j; State before;
@@ -307,11 +307,11 @@ int main(void) {
     static const int angles0[]={0,511,512,2048,3584,3585,4095,0x12348000,-1};
     static const int yaws[]={INT_MIN,INT_MAX,0,-256,0x12345678};
     reset(); mode=0; D_800B0E64[0]=(struct SceneAssetBlob *)&assets[7]; before=state;
-    assert(func_801960C4(0,&state)==0 && calls==2);
+    assert(RoomM350_AreaZoneEmitter(0,&state)==0 && calls==2);
     before.asset=&assets[0]; before.size=0; before.initialized=0; before.yaw=-8388608;
     assert(memcmp(&state,&before,sizeof(state))==0);
     for(i=-3;i<=4;i++) if(i<0 || i>2) {
-        reset(); before=state; assert(func_801960C4(i,&state)==0 && !calls && memcmp(&before,&state,sizeof(state))==0);
+        reset(); before=state; assert(RoomM350_AreaZoneEmitter(i,&state)==0 && !calls && memcmp(&before,&state,sizeof(state))==0);
     }
     for(i=0;i<8192;i++) D_800966EE[i]=half(i*97);
     for(i=-32768;i<=32767;i++) {

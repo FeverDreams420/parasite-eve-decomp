@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_801936F0'
+FUNCTION = 'RoomM273_GrabPlacementScaledFanEmitter'
 
 
 class ScaledLayerEmitter(unittest.TestCase):
@@ -49,10 +49,10 @@ int g_FieldFxCurrentAge;
 short D_800966EE[8192];
 GteSineWord rcossin_tbl[4096];
 static int init,allocations,fail,newCounter;
-int func_8019353C(int mode, Effect *input) { assert(0); return 0; }
+int RoomM273_GrabPlacementScaledFanCallback(int mode, Effect *input) { assert(0); return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)pool && stride==12 && count==9 &&
-           callback==(FieldFxCallbackListCallback)func_8019353C);
+           callback==(FieldFxCallbackListCallback)RoomM273_GrabPlacementScaledFanCallback);
     return 140;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
@@ -66,7 +66,7 @@ int main(void) {
     int i,j,k,f;
     context.pool=pool; replacement.state.scaled_layer=&owner; owner.transform=&transform;
     transform.x=65535; transform.y=-65537; transform.z=32768;
-    assert(func_801936F0(0)==140 && init==1);
+    assert(RoomM273_GrabPlacementScaledFanEmitter(0)==140 && init==1);
     for(i=0;i<8;++i) for(j=0;j<11;++j) for(k=0;k<11;++k) for(f=0;f<2;++f) {
         int sampleIndex=(int)(((long long)counters[i]*1024/12)&0xFFF)*2;
         Effect before;
@@ -75,7 +75,7 @@ int main(void) {
         memset(D_800966EE,0xAA,sizeof(D_800966EE));
         ((short *)rcossin_tbl)[sampleIndex]=samples[j]; D_800966EE[sampleIndex]=samples[k];
         memset(&output,0xA5,sizeof(output)); before=output; fail=f; allocations=0;
-        assert(func_801936F0(1)==0 && allocations==1);
+        assert(RoomM273_GrabPlacementScaledFanEmitter(1)==0 && allocations==1);
         if(f) assert(memcmp(&output,&before,sizeof(output))==0);
         else {
             assert(output.position.x==-1 && output.position.y==-1 && output.position.z==-32768);
@@ -87,12 +87,12 @@ int main(void) {
     fail=1;
     for(i=-2;i<=13;++i) {
         allocations=0; g_FieldFxCurrentAge=i;
-        assert(func_801936F0(1)==(i>=12 ? 2:0) && allocations==(i<12));
+        assert(RoomM273_GrabPlacementScaledFanEmitter(1)==(i>=12 ? 2:0) && allocations==(i<12));
     }
     allocations=0; g_FieldFxCurrentAge=INT_MAX;
-    assert(func_801936F0(1)==2 && allocations==0);
-    assert(func_801936F0(2)==0 && func_801936F0(3)==0);
-    assert(func_801936F0(INT_MIN)==0 && func_801936F0(INT_MAX)==0 && allocations==0);
+    assert(RoomM273_GrabPlacementScaledFanEmitter(1)==2 && allocations==0);
+    assert(RoomM273_GrabPlacementScaledFanEmitter(2)==0 && RoomM273_GrabPlacementScaledFanEmitter(3)==0);
+    assert(RoomM273_GrabPlacementScaledFanEmitter(INT_MIN)==0 && RoomM273_GrabPlacementScaledFanEmitter(INT_MAX)==0 && allocations==0);
     assert(init==1);
     return 0;
 }

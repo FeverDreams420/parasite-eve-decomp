@@ -14,7 +14,7 @@ from csource import host_unit  # noqa: E402
 class Room350EffectBallisticTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_motion_and_palette_rendering(self):
-        source = host_unit("func_801968D8", under=ROOM)
+        source = host_unit("RoomM350_AreaDropletCallback", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag, D_8019A598[4];
 GteSineWord rcossin_tbl[4096];
@@ -59,7 +59,7 @@ int main(void) {
             expected[3] = (short)(position[3] - position[4]);
         }
         g_FieldFxCurrentAge = counter; lookups = draws = 0;
-        assert(func_801968D8(event, position) == result);
+        assert(RoomM350_AreaDropletCallback(event, position) == result);
         assert(lookups == 0 && draws == 0);
         assert(memcmp(position, expected, sizeof(position)) == 0);
     }
@@ -73,7 +73,7 @@ int main(void) {
         handleValue = h ? -1 : 0x12345;
         memcpy(expected, position, sizeof(position));
         lookups = draws = 0;
-        assert(func_801968D8(2, position) == 0);
+        assert(RoomM350_AreaDropletCallback(2, position) == 0);
         assert(lookups == 1 && draws == 1);
         assert(memcmp(position, expected, sizeof(position)) == 0);
     }

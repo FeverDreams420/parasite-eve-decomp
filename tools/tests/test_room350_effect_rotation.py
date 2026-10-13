@@ -14,7 +14,7 @@ from csource import host_unit  # noqa: E402
 class Room350EffectRotationTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_threshold_rotation_and_signed_fields(self):
-        source = host_unit("func_8019A21C", under=ROOM)
+        source = host_unit("RoomM350_DropSplashCallback", under=ROOM)
         harness = '#include <assert.h>\n' + source + r'''
 int g_FieldFxCurrentAge, D_8019A628[2];
 RenderColor D_8019A3C8;
@@ -43,7 +43,7 @@ int main(void) {
         for (event = -2; event < 5; ++event) {
             if (event == 2) continue;
             calls = 0;
-            assert(func_8019A21C(event, 0) == (event == 1 && counter >= 16));
+            assert(RoomM350_DropSplashCallback(event, 0) == (event == 1 && counter >= 16));
             assert(calls == 0);
         }
     }
@@ -56,7 +56,7 @@ int main(void) {
         SINE[index] = expectedScale;
         SINE[index + 1] = expectedShade;
         calls = 0;
-        assert(func_8019A21C(2, &contextData) == 0);
+        assert(RoomM350_DropSplashCallback(2, &contextData) == 0);
         assert(calls == 1);
     }
     return 0;

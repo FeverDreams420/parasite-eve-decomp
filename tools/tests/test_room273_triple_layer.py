@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_801977F8'
+FUNCTION = 'RoomM273_SweepFlashCallback'
 
 
 class TripleLayer(unittest.TestCase):
@@ -35,7 +35,7 @@ GteSineWord rcossin_tbl[4096];
 unsigned short g_FieldFxPaletteTable[8];
 RoomFloorY g_RoomFloorY[1];
 RenderEffectParameters g_FieldFxSpriteParams;
-unsigned char D_8019AB70[4],D_8019AD74[4],D_8019AD78[4];
+unsigned char g_RoomM273BlackColor[4],D_8019AD74[4],D_8019AD78[4];
 static int stage,frame,sample1,sample2,expectedPalette,sampleIndex;
 static Vector input,original,*positionPtr,*rotationPtr;
 static int shade(int sample) { return sample>>21; }
@@ -66,7 +66,7 @@ void FieldFx_DrawStarFan(struct GteShortVector *p,int w,int h,int count,struct G
     assert(p==positionPtr && r==rotationPtr && flag==1 && color==shade(sample2));
     if(stage++==2) {
         assert(w==512 && h==512 && count==16 && sx==(short)sample2+1024 && sy==sx);
-        assert((void *)a==D_8019AB70 && (void *)b==D_8019AD74);
+        assert((void *)a==g_RoomM273BlackColor && (void *)b==D_8019AD74);
         assert(r->x==11 && r->y==12 && r->z==-129 && r->pad==13);
         assert(p->x==21 && p->y==22 && p->z==23 && p->pad==24);
         r->x=101; r->y=102; r->z=103; r->pad=104;
@@ -76,7 +76,7 @@ void FieldFx_DrawStarFan(struct GteShortVector *p,int w,int h,int count,struct G
         g_FieldFxCurrentAge=39;
     } else {
         assert(stage==4 && w==768 && h==768 && count==8 && sx==4096 && sy==4096);
-        assert((void *)a==D_8019AD78 && (void *)b==D_8019AB70);
+        assert((void *)a==D_8019AD78 && (void *)b==g_RoomM273BlackColor);
         assert(r->x==1024 && r->y==0 && r->z==(short)((unsigned int)frame<<8) && r->pad==1);
         assert(p->x==31 && p->y==(short)0x8123 && p->z==33 && p->pad==34);
     }
@@ -95,14 +95,14 @@ int main(void) {
             g_FieldFxPaletteTable[kind]=65534; expectedPalette=65534+(kind==4 && variant ? 4:0);
             input.x=-32768; input.y=32767; input.z=-1; input.pad=0x1234; original=input;
             stage=0;
-            assert(func_801977F8(2,&input)==0 && stage==4);
+            assert(RoomM273_SweepFlashCallback(2,&input)==0 && stage==4);
         }
     stage=0;
-    for(i=-2;i<=17;++i) { g_FieldFxCurrentAge=i; assert(func_801977F8(1,0)==(i>=16)); }
-    g_FieldFxCurrentAge=INT_MIN; assert(func_801977F8(1,0)==0);
-    g_FieldFxCurrentAge=INT_MAX; assert(func_801977F8(1,0)==1);
-    assert(func_801977F8(0,0)==0 && func_801977F8(3,0)==0);
-    assert(func_801977F8(INT_MIN,0)==0 && func_801977F8(INT_MAX,0)==0 && stage==0);
+    for(i=-2;i<=17;++i) { g_FieldFxCurrentAge=i; assert(RoomM273_SweepFlashCallback(1,0)==(i>=16)); }
+    g_FieldFxCurrentAge=INT_MIN; assert(RoomM273_SweepFlashCallback(1,0)==0);
+    g_FieldFxCurrentAge=INT_MAX; assert(RoomM273_SweepFlashCallback(1,0)==1);
+    assert(RoomM273_SweepFlashCallback(0,0)==0 && RoomM273_SweepFlashCallback(3,0)==0);
+    assert(RoomM273_SweepFlashCallback(INT_MIN,0)==0 && RoomM273_SweepFlashCallback(INT_MAX,0)==0 && stage==0);
     return 0;
 }
 '''

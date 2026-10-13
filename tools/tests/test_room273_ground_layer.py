@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_80198B1C'
+FUNCTION = 'RoomM273_SwayGroundCallback'
 
 
 class GroundLayerSprite(unittest.TestCase):
@@ -33,8 +33,8 @@ short D_800966EE[8192];
 unsigned short g_FieldFxPaletteTable[8];
 RoomFloorY g_RoomFloorY[1];
 RenderEffectParameters g_FieldFxSpriteParams;
-GteRotation D_8019AB68;
-unsigned char D_8019AE18[8],D_8019AB70[8];
+GteRotation g_RoomM273FloorRotation;
+unsigned char D_8019AE18[8],g_RoomM273BlackColor[8];
 static Vector input={12,-34,56,78};
 static Vector *local;
 static int stage,expectedPalette,expectedSize,expectedShade,sizeIndex,shadeIndex;
@@ -59,8 +59,8 @@ void FieldFx_DrawStarFan(struct GteShortVector *p,int w,int h,int mode,
                   struct RenderColor *a,struct RenderColor *b,int shade,int flag) {
     assert(stage++==2 && p==local && w==384 && h==384 && mode==8);
     assert(p->x==-111 && p->y==(short)0xFEDC && p->z==-333 && p->pad==444);
-    assert(rotation==&D_8019AB68 && sx==4096 && sy==4096);
-    assert((void *)a==D_8019AE18 && (void *)b==D_8019AB70 && shade==expectedShade && flag==1);
+    assert(rotation==&g_RoomM273FloorRotation && sx==4096 && sy==4096);
+    assert((void *)a==D_8019AE18 && (void *)b==g_RoomM273BlackColor && shade==expectedShade && flag==1);
 }
 int main(void) {
     int times[]={INT_MIN,-1,0,31,32,INT_MAX};
@@ -70,7 +70,7 @@ int main(void) {
     unsigned int phase;
     for(i=0;i<6;++i) {
         g_FieldFxCurrentAge=times[i];
-        assert(func_80198B1C(1,&input)==(times[i]>=32));
+        assert(RoomM273_SwayGroundCallback(1,&input)==(times[i]>=32));
     }
     assert(stage==0);
     for(kind=0;kind<8;++kind) for(variant=0;variant<2;++variant)
@@ -83,10 +83,10 @@ int main(void) {
             g_FieldFxSpriteParams.palette=kind; g_FieldFxAltPaletteFlag=variant; g_FieldFxPaletteTable[kind]=65535;
             expectedPalette=65535+(kind==4 && variant ?8:4);
             stage=0; g_RoomFloorY->raw=123;
-            assert(func_80198B1C(2,&input)==0 && stage==3);
+            assert(RoomM273_SwayGroundCallback(2,&input)==0 && stage==3);
             assert(input.x==12 && input.y==-34 && input.z==56 && input.pad==78);
         }
-    assert(func_80198B1C(0,&input)==0 && func_80198B1C(-1,&input)==0);
+    assert(RoomM273_SwayGroundCallback(0,&input)==0 && RoomM273_SwayGroundCallback(-1,&input)==0);
     assert(stage==3);
     return 0;
 }

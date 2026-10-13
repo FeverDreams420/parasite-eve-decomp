@@ -14,7 +14,7 @@ from csource import host_unit  # noqa: E402
 class Room350EffectPulseTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_pre_lookup_scale_and_post_lookup_shade(self):
-        source = host_unit("func_801927A4", under=ROOM)
+        source = host_unit("RoomM350_HandPulseCallback", under=ROOM)
         # The two sine-table views alias: D_800966EE is the halfword at +2.
         source = source.replace('extern short D_800966EE[];',
             '#define D_800966EE ((short *)rcossin_tbl + 1)')
@@ -56,7 +56,7 @@ int main(void) {
     for (event = -1; event <= 3; ++event) {
         if (event == 2) continue;
         g_FieldFxCurrentAge = counter; lookups = draws = 0;
-        assert(func_801927A4(event, 0) == (event == 1 && counter >= 16));
+        assert(RoomM350_HandPulseCallback(event, 0) == (event == 1 && counter >= 16));
         assert(lookups == 0 && draws == 0);
     }
     for (counter = 0; counter < 32; ++counter)
@@ -75,7 +75,7 @@ int main(void) {
         memcpy(&before, &effect, sizeof(effect));
         before.position = (Vector *)&nextPosition;
         lookups = draws = 0;
-        assert(func_801927A4(2, &effect) == 0);
+        assert(RoomM350_HandPulseCallback(2, &effect) == 0);
         assert(lookups == 1 && draws == 1);
         assert(memcmp(&effect, &before, sizeof(effect)) == 0);
     }

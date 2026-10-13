@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_8019A4CC'
+FUNCTION = 'RoomM273_HandRingBandCallback'
 
 
 class PhasedPointerSprite(unittest.TestCase):
@@ -60,7 +60,7 @@ int main(void) {
     memset(object.unknown,0xA5,sizeof(object.unknown));
     for(i=0;i<6;++i) {
         g_FieldFxCurrentAge=times[i];
-        assert(func_8019A4CC(1,&effect)==(times[i]>=16));
+        assert(RoomM273_HandRingBandCallback(1,&effect)==(times[i]>=16));
     }
     assert(draws==0);
     for(f=0;f<12;++f) for(j=0;j<5;++j) for(k=0;k<5;++k) {
@@ -74,12 +74,12 @@ int main(void) {
         wantShade=(short)rcossin_tbl[bo/4].word>>5;
         wantPhase=(unsigned int)frames[f]<<8;
         object.value=values[k]; draws=0;
-        assert(func_8019A4CC(2,&effect)==0 && draws==1);
+        assert(RoomM273_HandRingBandCallback(2,&effect)==0 && draws==1);
         assert(effect.position==&position && object.value==values[k]);
         for(i=0;i<58;++i) assert(object.unknown[i]==0xA5);
     }
-    assert(func_8019A4CC(0,&effect)==0 && func_8019A4CC(-1,&effect)==0);
-    assert(func_8019A4CC(INT_MAX,&effect)==0 && draws==1);
+    assert(RoomM273_HandRingBandCallback(0,&effect)==0 && RoomM273_HandRingBandCallback(-1,&effect)==0);
+    assert(RoomM273_HandRingBandCallback(INT_MAX,&effect)==0 && draws==1);
     return 0;
 }
 '''

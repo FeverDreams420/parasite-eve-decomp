@@ -12,7 +12,7 @@ from csource import host_unit  # noqa: E402
 
 
 def callback_source():
-    return host_unit("func_801944F0", under=ROOM)
+    return host_unit("RoomM350_OrbBurstCallback", under=ROOM)
 
 
 class Room350EffectLayersTests(unittest.TestCase):
@@ -63,7 +63,7 @@ int main(void) {
     for (event = -1; event <= 3; ++event) {
         if (event == 2) continue;
         g_FieldFxCurrentAge = counter; calls = 0;
-        assert(func_801944F0(event, 0) == (event == 1 && counter >= 8));
+        assert(RoomM350_OrbBurstCallback(event, 0) == (event == 1 && counter >= 8));
         assert(calls == 0);
     }
     for (counter = -16; counter <= 80; ++counter)
@@ -75,7 +75,7 @@ int main(void) {
         rcossin_tbl[index].word = (int)(((unsigned int)(unsigned short)firstShade << 16) |
                                   (unsigned short)sizeValue);
         g_FieldFxCurrentAge = counter; object = &firstPoint; calls = 0;
-        assert(func_801944F0(2, &object) == 0);
+        assert(RoomM350_OrbBurstCallback(2, &object) == 0);
         assert(calls == 2);
     }
     return 0;

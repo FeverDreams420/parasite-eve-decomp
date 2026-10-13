@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m318_chrysler'
-FUNCTION = 'func_80192DA0'
+FUNCTION = 'RoomM318_SpiralDropSparkCallback'
 
 
 class FallingSprite(unittest.TestCase):
@@ -68,7 +68,7 @@ int main(void) {
         for (j=0; j<sizeof(speeds)/sizeof(speeds[0]); ++j) {
             particle.x=12; particle.y=3; particle.z=34; particle.speed=speeds[j];
             g_FieldFxCurrentAge=frames[i];
-            assert(func_80192DA0(1, (RoomSpiralDropSparkRecord *)&particle) == (frames[i]>=24));
+            assert(RoomM318_SpiralDropSparkCallback(1, (RoomSpiralDropSparkRecord *)&particle) == (frames[i]>=24));
             assert(particle.y == (unsigned short)(3-speeds[j]));
             assert(particle.speed == (unsigned short)(speeds[j]-1));
             assert(particle.x==12 && particle.z==34);
@@ -79,12 +79,12 @@ int main(void) {
         g_FieldFxSpriteParams.palette=kind; g_FieldFxAltPaletteFlag=variant;
         g_FieldFxPaletteTable[kind]=65535;
         expectedPalette=65535+(kind==4 && variant ? 10:6);
-        assert(func_80192DA0(2, (RoomSpiralDropSparkRecord *)&particle)==0);
+        assert(RoomM318_SpiralDropSparkCallback(2, (RoomSpiralDropSparkRecord *)&particle)==0);
         assert(generated==1 && cluts==1 && draws==1);
     }
-    assert(func_80192DA0(0, (RoomSpiralDropSparkRecord *)&particle)==0);
-    assert(func_80192DA0(-1, (RoomSpiralDropSparkRecord *)&particle)==0);
-    assert(func_80192DA0(INT_MAX, (RoomSpiralDropSparkRecord *)&particle)==0);
+    assert(RoomM318_SpiralDropSparkCallback(0, (RoomSpiralDropSparkRecord *)&particle)==0);
+    assert(RoomM318_SpiralDropSparkCallback(-1, (RoomSpiralDropSparkRecord *)&particle)==0);
+    assert(RoomM318_SpiralDropSparkCallback(INT_MAX, (RoomSpiralDropSparkRecord *)&particle)==0);
     assert(generated==1 && cluts==1 && draws==1);
     return 0;
 }

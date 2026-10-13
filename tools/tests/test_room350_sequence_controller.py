@@ -11,7 +11,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-CONTROLLER = 'func_801958DC'
+CONTROLLER = 'RoomM350_OrbController'
 # Keep pe1/gte.h's asm out of the host build; the stubs assert the COP2
 # interface only and do not claim to emulate the GTE.
 HOST_GTE = r'''
@@ -54,9 +54,9 @@ typedef char h[sizeof(Vector)==8 ? 1:-1];
 '''
         harness = prefix + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;
-FieldActor *D_8019A7F8,*g_PlayerEntity;
-GteShortVector D_8019A7A0;
-short D_8019A7FC;
+FieldActor *g_RoomM350OrbActor,*g_PlayerEntity;
+GteShortVector g_RoomM350OrbSpawnPoint;
+short g_RoomM350OrbState;
 short D_8019A7FE,D_8019A800,D_8019A802;
 unsigned char D_8019A804,D_8019A805,D_8019A806;
 GteSineWord rcossin_tbl[4096];
@@ -77,7 +77,7 @@ static void command(void) {
 }
 static void store_ir(void *p) {
     Vector *v=p;
-    assert(phase==4 && v==&D_8019A7A0); phase+=3;
+    assert(phase==4 && v==&g_RoomM350OrbSpawnPoint); phase+=3;
     v->x=-32768; v->y=32767; v->z=-123;
 }
 int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
@@ -99,47 +99,47 @@ static void reset(void) {
     owner.action_state=action; owner.core_flags=0x13579;
     /* mode is the animation id; action holds the clip length. */
     instance.state=&owner; instance.mode=13; instance.action=30; instance.rot_y=123;
-    other.render_object.matrices=matrices; D_8019A7F8=&other; g_PlayerEntity=&player;
+    other.render_object.matrices=matrices; g_RoomM350OrbActor=&other; g_PlayerEntity=&player;
     D_8019A804=D_8019A805=D_8019A806=0;
     D_8019A7FE=3; D_8019A800=4; D_8019A802=5;
-    D_8019A7A0.pad=987; phase=angles=turns=0; action[0]=1;
+    g_RoomM350OrbSpawnPoint.pad=987; phase=angles=turns=0; action[0]=1;
 }
 int main(void) {
     int frame,repeat,word,index,result,doTurn,event,state,animation;
-    reset(); assert(func_801958DC(0)==0 && phase==0);
-    assert(owner.core_flags==(0x13579|0x40000000) && D_8019A7FC==2);
+    reset(); assert(RoomM350_OrbController(0)==0 && phase==0);
+    assert(owner.core_flags==(0x13579|0x40000000) && g_RoomM350OrbState==2);
     assert(!D_8019A804 && !D_8019A805 && !D_8019A806 && !D_8019A7FE && !D_8019A800 && !D_8019A802);
     for(frame=-32768;frame<=32767;frame++) for(repeat=-1;repeat<=2;repeat++) {
-        reset(); D_8019A7FC=repeat; instance.anim.fixed=((uint32_t)(uint16_t)frame<<16)|123;
+        reset(); g_RoomM350OrbState=repeat; instance.anim.fixed=((uint32_t)(uint16_t)frame<<16)|123;
         index=((frame-19)*341)&4095; word=(int16_t)(frame*17);
         rcossin_tbl[index].word=(uint16_t)word; expectedSpeed=word<0 ? -((-word)/32):word/32;
         doTurn=repeat>0 && frame>=19;
         result=repeat<=0 && frame>=29;
-        assert(func_801958DC(1)==result && phase==7);
+        assert(RoomM350_OrbController(1)==result && phase==7);
         assert(angles==doTurn && turns==doTurn);
-        assert(D_8019A7FC==repeat-(repeat>0 && frame>=25));
+        assert(g_RoomM350OrbState==repeat-(repeat>0 && frame>=25));
         assert((uint32_t)instance.anim.fixed==(repeat>0 && frame>=25 ? 0x60000 : ((uint32_t)(uint16_t)frame<<16)|123));
         assert(instance.rot_y==(doTurn ? -1234:123));
         assert(action[0]==(result ? 4:2) && D_8019A804==result);
-        assert(D_8019A7A0.x==-32768 && D_8019A7A0.y==32767 && D_8019A7A0.z==-123 && D_8019A7A0.pad==987);
+        assert(g_RoomM350OrbSpawnPoint.x==-32768 && g_RoomM350OrbSpawnPoint.y==32767 && g_RoomM350OrbSpawnPoint.z==-123 && g_RoomM350OrbSpawnPoint.pad==987);
     }
     for(event=-3;event<=5;event++) if(event<0 || event>1) {
-        reset(); D_8019A7FC=-9;
-        assert(func_801958DC(event)==0 && phase==0 && angles==0 && turns==0);
-        assert(action[0]==1 && D_8019A7FC==-9 && D_8019A7FE==3 && D_8019A800==4 && D_8019A802==5);
+        reset(); g_RoomM350OrbState=-9;
+        assert(RoomM350_OrbController(event)==0 && phase==0 && angles==0 && turns==0);
+        assert(action[0]==1 && g_RoomM350OrbState==-9 && D_8019A7FE==3 && D_8019A800==4 && D_8019A802==5);
     }
     for(animation=0;animation<256;animation++) for(state=0;state<256;state++) {
         reset(); instance.mode=animation; action[0]=state;
-        instance.anim.fixed=30u<<16; D_8019A7FC=0;
+        instance.anim.fixed=30u<<16; g_RoomM350OrbState=0;
         result=animation==13;
-        assert(func_801958DC(1)==result && phase==7 && angles==0 && turns==0);
+        assert(RoomM350_OrbController(1)==result && phase==7 && angles==0 && turns==0);
         assert(action[0]==(result ? 4 : state==1 ? 2:state));
         assert(D_8019A804==result);
     }
     for(frame=-1;frame<=31;frame++) {
-        reset(); instance.state=0; instance.anim.fixed=(uint32_t)(uint16_t)frame<<16; D_8019A7FC=0;
+        reset(); instance.state=0; instance.anim.fixed=(uint32_t)(uint16_t)frame<<16; g_RoomM350OrbState=0;
         result=frame>=29;
-        assert(func_801958DC(1)==result && phase==7 && action[0]==1);
+        assert(RoomM350_OrbController(1)==result && phase==7 && action[0]==1);
         assert(D_8019A804==result && angles==0 && turns==0);
     }
     return 0;

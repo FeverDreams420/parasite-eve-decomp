@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-EMITTER = 'func_80192C34'
+EMITTER = 'RoomM350_HandGlowEmitter'
 
 
 class RampedPairTests(unittest.TestCase):
@@ -40,7 +40,7 @@ typedef char g[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 FieldFxObjectPrefix *g_FieldFxOwner;
 int g_FieldFxCurrentAge;
-GteShortVector D_8019A778[2];
+GteShortVector g_RoomM350HandPoints[2];
 RenderEffectParameters g_FieldFxSpriteParams;
 u16 g_FieldFxTpageSlot2;
 u16 g_FieldFxTpageTable[65536];
@@ -51,10 +51,10 @@ static State state,reference;
 static Particle particles[2],expected[2];
 static int pools[2],calls,setups,setupResult,failAt,mutate;
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
-int func_80192ADC(int e,Particle *p) { return 0; }
+int RoomM350_HandGlowCallback(int e,Particle *p) { return 0; }
 int FieldFx_InitCallbackList(char *pool,int size,int count,FieldFxCallbackListCallback cb) {
     assert(pool==(char *)&pools[0] && size==8 && count==6);
-    assert(cb==(FieldFxCallbackListCallback)func_80192ADC);
+    assert(cb==(FieldFxCallbackListCallback)RoomM350_HandGlowCallback);
     assert(state.target==16384 && state.current==0); setups++; return setupResult;
 }
 void *FieldFx_AcquireCallbackSlot(char *pool) {
@@ -67,7 +67,7 @@ void *FieldFx_AcquireCallbackSlot(char *pool) {
         g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1]; g_FieldFxCurrentAge=7; instance.frame=65535;
     }
     if(i==failAt) return 0;
-    expected[i].position=&D_8019A778[i]; expected[i].scale=state.current;
+    expected[i].position=&g_RoomM350HandPoints[i]; expected[i].scale=state.current;
     return &particles[i];
 }
 static void reset(int target,int current) {
@@ -89,7 +89,7 @@ static void run(int target,int current,unsigned frame,int timer,int failure,int 
     }
     /* A zero target must not dereference the actor, even while fading. */
     if(!target) g_FieldFxOwner=0;
-    assert(func_80192C34(1,&state)==result && setups==0);
+    assert(RoomM350_HandGlowEmitter(1,&state)==result && setups==0);
     assert(calls==(emitting ? (failure<2 ? failure+1:2):0));
     assert(memcmp(&state,&reference,sizeof(state))==0);
     assert(memcmp(particles,expected,sizeof(particles))==0);
@@ -110,12 +110,12 @@ int main(void) {
         run(16384,32767,40,INT_MIN+phase,2,0);
     }
     for(setupResult=-2;setupResult<=2;setupResult++) {
-        reset(-123,456); assert(func_80192C34(0,&state)==setupResult && setups==1 && calls==0);
+        reset(-123,456); assert(RoomM350_HandGlowEmitter(0,&state)==setupResult && setups==1 && calls==0);
     }
     for(i=0;i<65536;i++) {
         reset(-123,456); g_FieldFxTpageSlot2=i; g_FieldFxTpageTable[i]=65535-i;
         memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
-        assert(func_80192C34(2,&state)==0 && !calls && !setups);
+        assert(RoomM350_HandGlowEmitter(2,&state)==0 && !calls && !setups);
         assert(g_FieldFxSpriteParams.palette==2 && g_FieldFxSpriteParams.parameter06==0);
         assert(g_FieldFxSpriteParams.parameter00==16 && g_FieldFxSpriteParams.parameter02==1);
         assert(g_FieldFxSpriteParams.extent_x==16 && g_FieldFxSpriteParams.extent_y==16);
@@ -123,7 +123,7 @@ int main(void) {
         assert(state.target==-123 && state.current==456);
     }
     for(event=-3;event<=5;event++) if(event<0 || event>2) {
-        reset(-123,456); assert(func_80192C34(event,&state)==0 && !calls && !setups);
+        reset(-123,456); assert(RoomM350_HandGlowEmitter(event,&state)==0 && !calls && !setups);
         assert(state.target==-123 && state.current==456);
     }
     return 0;

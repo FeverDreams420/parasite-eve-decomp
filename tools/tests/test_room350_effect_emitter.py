@@ -13,7 +13,7 @@ from csource import host_unit  # noqa: E402
 
 def controller_source():
     # The burst callback is reduced to a prototype; the test stubs it.
-    return host_unit("func_80194654", under=ROOM)
+    return host_unit("RoomM350_OrbBurstEmitter", under=ROOM)
 
 
 class Room350EffectEmitterTests(unittest.TestCase):
@@ -23,8 +23,8 @@ class Room350EffectEmitterTests(unittest.TestCase):
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
-GteShortVector D_8019A7A0;
-#define VEC (&D_8019A7A0.x)
+GteShortVector g_RoomM350OrbSpawnPoint;
+#define VEC (&g_RoomM350OrbSpawnPoint.x)
 static Actor actor, replacementActor;
 static Animation animation, replacementAnimation;
 static Owner owner, replacementOwner;
@@ -33,11 +33,11 @@ static State state;
 static short *effect;
 static int poolToken, soundToken, replacementSound, setupCalls, allocations, sounds;
 static int failAllocation, setupResult, mutate, expectedRemaining, expectedDelay;
-int func_801944F0(int event, void **object) { return 0; }
+int RoomM350_OrbBurstCallback(int event, void **object) { return 0; }
 int FieldFx_InitCallbackList(char *pool, int capacity, int size,
                   FieldFxCallbackListCallback callback) {
     assert(setupCalls++ == 0 && pool == &poolToken && capacity == 4 && size == 4);
-    assert((void *)callback == (void *)func_801944F0 && state.remaining == 0 && state.delay == expectedDelay);
+    assert((void *)callback == (void *)RoomM350_OrbBurstCallback && state.remaining == 0 && state.delay == expectedDelay);
     return setupResult;
 }
 void *FieldFx_AcquireCallbackSlot(char *pool) {
@@ -72,12 +72,12 @@ int main(void) {
     for (ret = -2; ret <= 2; ++ret) {
         state.remaining = 123; state.delay = -7; expectedDelay = -7;
         setupCalls = allocations = sounds = 0; setupResult = ret;
-        assert(func_80194654(0, &state) == ret && setupCalls == 1);
+        assert(RoomM350_OrbBurstEmitter(0, &state) == ret && setupCalls == 1);
         assert(allocations == 0 && sounds == 0);
     }
     for (event = -2; event <= 3; ++event) {
         if (event == 0 || event == 1) continue;
-        assert(func_80194654(event, 0) == 0);
+        assert(RoomM350_OrbBurstEmitter(event, 0) == 0);
     }
     for (id = 12; id <= 14; ++id)
     for (f = 0; f < 7; ++f) for (p = 0; p < 7; ++p)
@@ -102,7 +102,7 @@ int main(void) {
         expectedDelay = delay; expectedRemaining = remaining;
         failAllocation = fail; mutate = change; effect = 0;
         setupCalls = allocations = sounds = 0;
-        assert(func_80194654(1, &state) == result);
+        assert(RoomM350_OrbBurstEmitter(1, &state) == result);
         assert(state.remaining == remaining && state.delay == (play ? 1 : delay));
         assert(allocations == allocate && sounds == play && setupCalls == 0);
         assert(effect == (play ? VEC : 0));

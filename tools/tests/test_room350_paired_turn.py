@@ -11,7 +11,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-CONTROLLER = 'func_80193D6C'
+CONTROLLER = 'RoomM350_HandSweepController'
 # Keep pe1/gte.h's asm out of the host build; the COP2 transfers are a
 # recorded boundary, not emulated.
 HOST_GTE = r'''
@@ -56,21 +56,21 @@ typedef char h[sizeof(Vector)==8 ? 1:-1];
     def test_cpu_and_cop2_boundary(self):
         source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM), prefix=HOST_GTE)
         source = source.replace('(unsigned int)base', '(uintptr_t)base')
-        source = source.replace('extern short D_8019A77E[], D_8019A798;',
-                                'extern short D_8019A798;')
+        source = source.replace('extern short D_8019A77E[], g_RoomM350HandSweepRepeats;',
+                                'extern short g_RoomM350HandSweepRepeats;')
         prefix = r'''
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
-#define D_8019A77E ((short *)&D_8019A778[0].pad)
+#define D_8019A77E ((short *)&g_RoomM350HandPoints[0].pad)
 '''
         harness = prefix + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;
-FieldActor *D_8019A774,*g_PlayerEntity;
-GteShortVector D_8019A778[2];
-short D_8019A798;
+FieldActor *g_RoomM350HandActor,*g_PlayerEntity;
+GteShortVector g_RoomM350HandPoints[2];
+short g_RoomM350HandSweepRepeats;
 GteSineWord rcossin_tbl[4096];
-unsigned char D_8019A79A,D_8019A79C;
+unsigned char g_RoomM350HandSweepDone,g_RoomM350HandSweepHit;
 static Actor actor,otherActor;
 static Instance instance,model,otherModel,player,other;
 static Owner owner;
@@ -88,7 +88,7 @@ static void load_vector(void *p) {
 }
 static void command(void) {
     assert(phase++==9);
-    D_8019A774=&otherModel;
+    g_RoomM350HandActor=&otherModel;
     g_FieldFxOwner=(FieldFxObjectPrefix *)&otherActor;
 }
 static int read_ir(int index) {
@@ -118,10 +118,10 @@ static void reset(void) {
     /* mode is the animation id; action holds the clip length. */
     instance.mode=11; instance.action=42; instance.rot_y=123;
     model.render_object.matrices=matrices; otherModel.render_object.matrices=otherMatrices;
-    D_8019A774=&model; g_PlayerEntity=&player;
-    D_8019A79A=0; D_8019A79C=93; action[0]=1;
+    g_RoomM350HandActor=&model; g_PlayerEntity=&player;
+    g_RoomM350HandSweepDone=0; g_RoomM350HandSweepHit=93; action[0]=1;
     phase=iteration=angles=turns=0;
-    memset(D_8019A778,0x55,sizeof(D_8019A778));
+    memset(g_RoomM350HandPoints,0x55,sizeof(g_RoomM350HandPoints));
 }
 int main(void) {
     int frame,repeat,index,sample,doTurn,result,i,animation,state;
@@ -129,11 +129,11 @@ int main(void) {
         ((int *)&matrices[11])[i]=100+i;
         ((int *)&otherMatrices[15])[i]=200+i;
     }
-    reset(); assert(func_80193D6C(0)==0 && iteration==0);
-    assert(owner.core_flags==(0x13579|0x40000000) && D_8019A798==3);
-    assert(D_8019A79A==0 && D_8019A79C==0);
+    reset(); assert(RoomM350_HandSweepController(0)==0 && iteration==0);
+    assert(owner.core_flags==(0x13579|0x40000000) && g_RoomM350HandSweepRepeats==3);
+    assert(g_RoomM350HandSweepDone==0 && g_RoomM350HandSweepHit==0);
     for(frame=-32768;frame<=32767;frame++) for(repeat=-1;repeat<=3;repeat++) {
-        reset(); D_8019A798=repeat;
+        reset(); g_RoomM350HandSweepRepeats=repeat;
         instance.anim.fixed=((uint32_t)(uint16_t)frame<<16)|123;
         index=((frame-28)*170)&0xFFE;
         sample=(int16_t)(frame*17); rcossin_tbl[index].part.sin=sample;
@@ -141,27 +141,27 @@ int main(void) {
         expectedBias=((repeat-(frame>=40))&1) ? 128:-128;
         doTurn=repeat>0 && frame>=28;
         result=repeat<=0 && frame>=41;
-        assert(func_80193D6C(1)==result && iteration==2 && phase==0);
+        assert(RoomM350_HandSweepController(1)==result && iteration==2 && phase==0);
         assert(angles==doTurn && turns==doTurn);
-        assert(D_8019A798==repeat-(repeat>0 && frame>=40));
+        assert(g_RoomM350HandSweepRepeats==repeat-(repeat>0 && frame>=40));
         assert((uint32_t)instance.anim.fixed==(repeat>0 && frame>=40 ? 0x30000 : ((uint32_t)(uint16_t)frame<<16)|123));
         assert(instance.rot_y==(doTurn ? -1234:123));
-        assert(action[0]==(result ? 4:2) && D_8019A79A==result && D_8019A79C==93);
-        for(i=0;i<2;i++) assert(D_8019A778[i].x==-32768 && D_8019A778[i].y==32767 && D_8019A778[i].z==-123 && D_8019A778[i].pad==i);
+        assert(action[0]==(result ? 4:2) && g_RoomM350HandSweepDone==result && g_RoomM350HandSweepHit==93);
+        for(i=0;i<2;i++) assert(g_RoomM350HandPoints[i].x==-32768 && g_RoomM350HandPoints[i].y==32767 && g_RoomM350HandPoints[i].z==-123 && g_RoomM350HandPoints[i].pad==i);
     }
     for(animation=0;animation<256;animation++) for(state=0;state<256;state++) {
         reset(); instance.mode=animation; action[0]=state;
-        instance.anim.fixed=41u<<16; D_8019A798=0; result=animation==11;
-        assert(func_80193D6C(1)==result && iteration==2 && angles==0);
+        instance.anim.fixed=41u<<16; g_RoomM350HandSweepRepeats=0; result=animation==11;
+        assert(RoomM350_HandSweepController(1)==result && iteration==2 && angles==0);
         assert(action[0]==(result ? 4:state==1 ? 2:state));
     }
     for(frame=-2;frame<=44;frame++) {
-        reset(); instance.state=0; instance.anim.fixed=(uint32_t)(uint16_t)frame<<16; D_8019A798=0;
-        assert(func_80193D6C(1)==(frame>=41) && iteration==2 && action[0]==1);
+        reset(); instance.state=0; instance.anim.fixed=(uint32_t)(uint16_t)frame<<16; g_RoomM350HandSweepRepeats=0;
+        assert(RoomM350_HandSweepController(1)==(frame>=41) && iteration==2 && action[0]==1);
     }
     for(i=-3;i<=4;i++) if(i!=0 && i!=1) {
-        reset(); D_8019A798=123;
-        assert(func_80193D6C(i)==0 && iteration==0 && D_8019A798==123 && action[0]==1);
+        reset(); g_RoomM350HandSweepRepeats=123;
+        assert(RoomM350_HandSweepController(i)==0 && iteration==0 && g_RoomM350HandSweepRepeats==123 && action[0]==1);
     }
     return 0;
 }

@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_80199950'
+FUNCTION = 'RoomM273_SwayPointerCallback'
 
 
 class DualSampleSprite(unittest.TestCase):
@@ -57,7 +57,7 @@ int main(void) {
     int i,j,k,kind,variant,frame;
     for(i=0;i<6;++i) {
         g_FieldFxCurrentAge=times[i];
-        assert(func_80199950(1,&effect)==(times[i]>=16));
+        assert(RoomM273_SwayPointerCallback(1,&effect)==(times[i]>=16));
     }
     assert(!cluts && !draws);
     for(kind=0;kind<8;++kind) for(variant=0;variant<2;++variant)
@@ -73,11 +73,11 @@ int main(void) {
             g_FieldFxPaletteTable[kind]=65535;
             expectedPalette=65535+(kind==4 && variant ? 7:3);
             effect.position=(Position *)&before; cluts=draws=0;
-            assert(func_80199950(2,&effect)==0 && cluts==1 && draws==1);
+            assert(RoomM273_SwayPointerCallback(2,&effect)==0 && cluts==1 && draws==1);
         }
-    assert(func_80199950(0,&effect)==0);
-    assert(func_80199950(-1,&effect)==0);
-    assert(func_80199950(INT_MAX,&effect)==0);
+    assert(RoomM273_SwayPointerCallback(0,&effect)==0);
+    assert(RoomM273_SwayPointerCallback(-1,&effect)==0);
+    assert(RoomM273_SwayPointerCallback(INT_MAX,&effect)==0);
     assert(cluts==1 && draws==1);
     return 0;
 }

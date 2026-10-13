@@ -9,7 +9,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
-FUNCTION = 'func_80198F54'
+FUNCTION = 'SceneE22_PlayerGate'
 
 
 class SceneWaitActor(unittest.TestCase):
@@ -41,24 +41,24 @@ int main(void) {
     unsigned int i;
     owner.flags = 0xFFFFFFFFu;
     state.complete = 7; state.signaled = 8;
-    assert(func_80198F54(0) == 0);
+    assert(SceneE22_PlayerGate(0) == 0);
     assert(!state.complete && !state.signaled);
     assert(owner.flags == 0xEFFFFFFFu);
     for (i = 0; i < sizeof(modes)/sizeof(modes[0]); ++i) {
         state.complete = 7; state.signaled = 8;
-        assert(func_80198F54(modes[i]) == 0);
+        assert(SceneE22_PlayerGate(modes[i]) == 0);
         assert(state.complete == 7 && state.signaled == 8);
         assert(owner.flags == 0xEFFFFFFFu);
     }
     for (i = 0; i < sizeof(timers)/sizeof(timers[0]); ++i) {
         g_FieldFxCurrentAge = timers[i]; owner.flags = 0x123;
         state.complete = 7; state.signaled = 8;
-        assert(func_80198F54(1) == (timers[i] >= 100));
+        assert(SceneE22_PlayerGate(1) == (timers[i] >= 100));
         assert(state.complete == (timers[i] >= 100 ? 1 : 7));
         assert(state.signaled == (timers[i] >= 100 ? 0 : 8));
         assert(owner.flags == 0x123);
         owner.flags |= 0x10000000u;
-        assert(func_80198F54(1) == 1);
+        assert(SceneE22_PlayerGate(1) == 1);
         assert(state.complete == 1 && state.signaled == 1);
         assert(owner.flags == 0x10000123u);
     }

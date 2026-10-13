@@ -14,7 +14,7 @@ from csource import host_unit  # noqa: E402
 class Room350EffectTripleTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_signed_samples_palette_and_reload_order(self):
-        source = host_unit("func_80193A80", under=ROOM)
+        source = host_unit("RoomM350_HandFlashCallback", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 RenderEffectParameters g_FieldFxSpriteParams;
 GteSineWord rcossin_tbl[4096];
@@ -53,7 +53,7 @@ int main(void) {
     for (event = -1; event <= 3; ++event) {
         if (event == 2) continue;
         g_FieldFxCurrentAge = counter; lookups = draws = 0;
-        assert(func_80193A80(event, 0) == (event == 1 && counter >= 16));
+        assert(RoomM350_HandFlashCallback(event, 0) == (event == 1 && counter >= 16));
         assert(lookups == 0 && draws == 0);
     }
     for (counter = -16; counter <= 80; ++counter)
@@ -69,7 +69,7 @@ int main(void) {
         expectedScale = values[s]; expectedShade = values[5-s];
         handleValue = h ? -1 : 0x12345;
         object = &point; lookups = draws = 0;
-        assert(func_80193A80(2, &object) == 0);
+        assert(RoomM350_HandFlashCallback(2, &object) == 0);
         assert(lookups == 1 && draws == 1);
     }
     return 0;

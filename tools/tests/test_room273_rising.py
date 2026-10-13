@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_80196F2C'
+FUNCTION = 'RoomM273_SweepSplashCallback'
 
 
 class RisingSprite(unittest.TestCase):
@@ -53,7 +53,7 @@ int main(void) {
     for (i=0;i<5;++i) {
         g_FieldFxCurrentAge=timers[i]; position.x=12; position.y=-32768;
         position.z=34; position.pad=56;
-        assert(func_80196F2C(1,&position)==(timers[i]>=16));
+        assert(RoomM273_SweepSplashCallback(1,&position)==(timers[i]>=16));
         assert(position.y==(timers[i]>=16 ? -32768:32762));
         assert(position.x==12 && position.z==34 && position.pad==56);
     }
@@ -71,11 +71,11 @@ int main(void) {
             rcossin_tbl[index].word=variant ? 0x1234FFE0:0x56780040;
             expectedShade=variant ? -1:2;
             cluts=draws=0;
-            assert(func_80196F2C(2,&position)==0 && cluts==1 && draws==1);
+            assert(RoomM273_SweepSplashCallback(2,&position)==0 && cluts==1 && draws==1);
         }
-    assert(func_80196F2C(0,&position)==0);
-    assert(func_80196F2C(-1,&position)==0);
-    assert(func_80196F2C(INT_MAX,&position)==0);
+    assert(RoomM273_SweepSplashCallback(0,&position)==0);
+    assert(RoomM273_SweepSplashCallback(-1,&position)==0);
+    assert(RoomM273_SweepSplashCallback(INT_MAX,&position)==0);
     assert(cluts==1 && draws==1);
     return 0;
 }

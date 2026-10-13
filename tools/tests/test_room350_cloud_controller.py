@@ -9,7 +9,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 ROOM = 'src/overlays/room_m350_cruiser'
 sys.path.insert(0, str(ROOT / "tools/tests"))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
-FUNCTION = 'func_80198CF8'
+FUNCTION = 'RoomM350_RushController'
 
 
 class CloudControllerTests(unittest.TestCase):
@@ -37,12 +37,12 @@ typedef char j[sizeof(Vector)==8 ? 1:-1];
     def test_state_machine_and_helper_boundaries(self):
         source = host_unit(FUNCTION, under=ROOM)
         # Alias the separately named target globals to their offsets in the
-        # D_8019A870 matrix.
+        # g_RoomM350RushMatrix matrix.
         matrix_globals = ''
         for i in range(1, 9):
-            matrix_globals += f'#define D_{0x8019A870+i*2:08X} D_8019A870.m[{i//3}][{i%3}]\n'
+            matrix_globals += f'#define D_{0x8019A870+i*2:08X} g_RoomM350RushMatrix.m[{i//3}][{i%3}]\n'
         for i in range(3):
-            matrix_globals += f'#define D_{0x8019A884+i*4:08X} D_8019A870.t[{i}]\n'
+            matrix_globals += f'#define D_{0x8019A884+i*4:08X} g_RoomM350RushMatrix.t[{i}]\n'
         declarations = ('extern short D_8019A872,D_8019A874,D_8019A876,D_8019A878,'
                         'D_8019A87A,D_8019A87C,D_8019A87E,D_8019A880;')
         self.assertIn(declarations, source)
@@ -54,15 +54,15 @@ typedef char j[sizeof(Vector)==8 ? 1:-1];
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;
 Instance *g_PlayerEntity;
-unsigned char D_8019A8BE,D_8019A8C0;
+unsigned char D_8019A8BE,g_RoomM350RushPlayerHit;
 volatile short D_8019A89E;
-short D_8019A8B8,D_8019A8BA,D_8019A8BC;
+short g_RoomM350RushState,D_8019A8BA,D_8019A8BC;
 RoomFloorY g_RoomFloorY[1];
 #define D_800942EC g_RoomFloorY[0].y
 GteSineWord rcossin_tbl[4096];
 #define TABLE ((short *)rcossin_tbl)
-GteMatrix D_8019A870;
-#define testMatrix D_8019A870
+GteMatrix g_RoomM350RushMatrix;
+#define testMatrix g_RoomM350RushMatrix
 /* Actor coordinates are the pos_x/pos_y/pos_z triple. */
 #define POS(actor) (&(actor).pos_x)
 static Actor actor,otherActor;
@@ -79,7 +79,7 @@ int Asset_Find08w(int id,int asset,int x,int y,int z) {
     assert(id==0x5CB && asset==owner.progress);
     assert(x==(short)transforms.translation[0] && y==(short)transforms.translation[1] && z==(short)transforms.translation[2]);
     assert(state.speed==0 && state.targetSpeed==0 && state.heightPhase==0 && state.mode==0);
-    assert(D_8019A8BE==0 && D_8019A8C0==0 && D_8019A89E==0);
+    assert(D_8019A8BE==0 && g_RoomM350RushPlayerHit==0 && D_8019A89E==0);
     return -9876;
 }
 void Akao_Cmd_21(int handle,int zero) {
@@ -88,7 +88,7 @@ void Akao_Cmd_21(int handle,int zero) {
 }
 s32 FieldFx_GetDistanceXZ(Vec3Fixed *a,Vec3Fixed *b) {
     assert(stage++==0 && a==POS(players[0]) && b==POS(instance));
-    assert(instance.anim.fixed==(uint32_t)expectedFrame && D_8019A8B8==expectedRepeat);
+    assert(instance.anim.fixed==(uint32_t)expectedFrame && g_RoomM350RushState==expectedRepeat);
     if(mutate) { g_PlayerEntity=&players[1]; g_FieldFxOwner=(FieldFxObjectPrefix *)&otherActor; instance.anim.fixed=0; }
     return -123456;
 }
@@ -138,14 +138,14 @@ static void reset(void) {
     state.asset=1234; state.heightPhase=16;
     instance.mode=9; instance.action=40; instance.anim.fixed=31u<<16; instance.rot_y=321;
     POS(instance)[0]=INT_MAX; POS(instance)[1]=123456789; POS(instance)[2]=INT_MIN;
-    D_8019A8B8=1; D_8019A8BE=77; D_8019A8C0=88; D_8019A89E=99;
+    g_RoomM350RushState=1; D_8019A8BE=77; g_RoomM350RushPlayerHit=88; D_8019A89E=99;
     D_800942EC=123; angleResult=321; turnResult=-321; mutate=0;
 }
 static void run(void) {
     int frame=(short)(instance.anim.fixed>>16),phase,mode,delta,result=0,k,expectedTurns=0;
     memcpy(&expected,&state,sizeof(state)); expectedYaw=instance.rot_y;
-    expectedFrame=instance.anim.fixed; expectedRepeat=D_8019A8B8; expectedAction=action;
-    expectedStop=D_8019A8BE; expectedAux=D_8019A8C0;
+    expectedFrame=instance.anim.fixed; expectedRepeat=g_RoomM350RushState; expectedAction=action;
+    expectedStop=D_8019A8BE; expectedAux=g_RoomM350RushPlayerHit;
     for(k=0;k<3;k++) expectedPosition[k]=POS(instance)[k];
     if(instance.mode!=9) goto verify;
     if(instance.state && action==1) expectedAction=2;
@@ -187,10 +187,10 @@ static void run(void) {
         expectedPosition[1]=floor<expectedPosition[1] ? word((uint32_t)expectedPosition[1]-0x100000):floor;
     }
 verify:
-    assert(func_80198CF8(1,&state)==result);
+    assert(RoomM350_RushController(1,&state)==result);
     assert(memcmp(&state,&expected,sizeof(state))==0);
-    assert(action==expectedAction && D_8019A8BE==expectedStop && D_8019A8C0==expectedAux);
-    assert(D_8019A8B8==expectedRepeat && stopped==result && turns==expectedTurns);
+    assert(action==expectedAction && D_8019A8BE==expectedStop && g_RoomM350RushPlayerHit==expectedAux);
+    assert(g_RoomM350RushState==expectedRepeat && stopped==result && turns==expectedTurns);
     assert(stage==(result || instance.mode!=9 ? 0:5));
     for(k=0;k<3;k++) assert(POS(instance)[k]==expectedPosition[k]);
 }
@@ -199,13 +199,13 @@ int main(void) {
     static const int targets[]={-32768,-1536,-1,0,512,1280,1536,32767};
     for(n=0;n<8192;n++) TABLE[n]=half((uint32_t)n*12345+0x8000);
     reset(); transforms.translation[0]=INT_MIN; transforms.translation[1]=INT_MAX; transforms.translation[2]=-65537;
-    assert(func_80198CF8(0,&state)==0 && state.asset==-9876);
+    assert(RoomM350_RushController(0,&state)==0 && state.asset==-9876);
     for(n=0;n<65536;n++) for(m=0;m<3;m++) for(j=0;j<8;j++) {
         reset(); state.speed=half(n); state.targetSpeed=targets[j]; state.mode=m;
         angleResult=n; turnResult=n^0x8765; run();
     }
     for(n=0;n<65536;n++) for(m=-1;m<=1;m++) {
-        reset(); instance.anim.fixed=(uint32_t)n<<16; instance.action=n&255; D_8019A8B8=m;
+        reset(); instance.anim.fixed=(uint32_t)n<<16; instance.action=n&255; g_RoomM350RushState=m;
         state.mode=2; instance.state=n&1 ? &owner:0; run();
     }
     for(n=0;n<65536;n++) for(m=0;m<2;m++) {
@@ -213,7 +213,7 @@ int main(void) {
         POS(instance)[1]=word((uint32_t)n*65537); D_800942EC=half(n); run();
     }
     for(n=0;n<256;n++) { reset(); instance.mode=n; run(); }
-    reset(); assert(func_80198CF8(-1,&state)==0 && func_80198CF8(2,&state)==0 && stage==0);
+    reset(); assert(RoomM350_RushController(-1,&state)==0 && RoomM350_RushController(2,&state)==0 && stage==0);
     return 0;
 }
 '''

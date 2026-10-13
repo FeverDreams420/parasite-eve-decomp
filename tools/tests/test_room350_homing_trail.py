@@ -11,7 +11,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-CONTROLLER = 'func_801947BC'
+CONTROLLER = 'RoomM350_OrbCallback'
 # Keep pe1/gte.h's asm out of the host build; the GTE is a boundary here.
 HOST_GTE = r'''
 #include "pe1/gte_types.h"
@@ -114,13 +114,13 @@ int main(void) {
     int n,frame,hit,expected;
     for(n=0;n<65536;n++) {
         reset(); g_FieldFxCurrentAge=48; D_8019A802=n;
-        assert(func_801947BC(1,&particle)==1);
+        assert(RoomM350_OrbCallback(1,&particle)==1);
         assert((unsigned short)D_8019A802==(unsigned short)(n-1) && gteCalls==0 && D_8019A800==0);
     }
     for(frame=-32768;frame<=32767;frame++) {
         reset(); particle.tail.value.active.frame=frame; particle.tail.value.active.hit=1;
         particle.position.pad=321;
-        assert(func_801947BC(1,&particle)==0 && gteCalls==0);
+        assert(RoomM350_OrbCallback(1,&particle)==0 && gteCalls==0);
         assert(particle.tail.value.active.frame==(frame<48 ? (short)(frame+1):frame));
         assert(D_8019A800==(frame<48));
         expected=frame>=36 && frame<48 && !(frame&3);
@@ -131,7 +131,7 @@ int main(void) {
         reset(); particle.tail.value.active.frame=0; particle.motion.value.rotation.x=64;
         particle.tail.value.active.speed=100;
         D_8019A7FE=n; sqrtResult=hit ? 127:128;
-        assert(func_801947BC(1,&particle)==0 && gteCalls==1);
+        assert(RoomM350_OrbCallback(1,&particle)==0 && gteCalls==1);
         assert(particle.tail.value.active.hit==hit);
         assert(particle.tail.value.active.frame==(hit ? 41:1));
         assert(particle.tail.value.active.speed==(hit ? 0:100));
@@ -148,17 +148,17 @@ int main(void) {
         particle.tail.value.active.speed=n; rcossin_tbl[0].word=(unsigned short)n;
         rcossin_tbl[2055].word=(unsigned short)second;
         expectedStep=n/4; expectedYaw=456+80-(second*160)/4096;
-        assert(func_801947BC(1,&particle)==0 && gteCalls==1 && turnCalls==1);
+        assert(RoomM350_OrbCallback(1,&particle)==0 && gteCalls==1 && turnCalls==1);
         assert(g_FieldFxCurrentAge==7 && particle.tail.value.active.frame==1);
         assert(particle.tail.value.active.hit==0);
     }
     reset(); particle.tail.value.active.brightness=77; g_FieldFxSpriteParams.palette=4; g_FieldFxAltPaletteFlag=1;
     g_FieldFxPaletteTable[4]=100; g_RoomFloorY[0].raw=(unsigned short)-123;
-    assert(func_801947BC(2,&particle)==0 && draws==2);
+    assert(RoomM350_OrbCallback(2,&particle)==0 && draws==2);
     reset(); particle.tail.value.active.frame=48;
-    assert(func_801947BC(2,&particle)==0 && draws==0);
+    assert(RoomM350_OrbCallback(2,&particle)==0 && draws==0);
     for(n=-3;n<=4;n++) if(n!=1 && n!=2) {
-        reset(); assert(func_801947BC(n,&particle)==0 && gteCalls==0 && draws==0 && D_8019A802==9);
+        reset(); assert(RoomM350_OrbCallback(n,&particle)==0 && gteCalls==0 && draws==0 && D_8019A802==9);
     }
     return 0;
 }

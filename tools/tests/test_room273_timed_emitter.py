@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_80197648'
+FUNCTION = 'RoomM273_SweepRisingEmitter'
 
 
 class TimedRisingEmitter(unittest.TestCase):
@@ -33,7 +33,7 @@ typedef char layout[sizeof(Particle)==8 && __alignof__(Particle)==2 &&
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 unsigned char D_8019AF6A,D_8019AF69;
 short D_8019AE84;
-RoomM273SweepPoint D_8019AEFC;
+RoomM273SweepPoint g_RoomM273SweepPoint;
 volatile unsigned short D_8019AEFE,D_8019AF00;
 unsigned short g_FieldFxTpageSlot2,g_FieldFxTpageTable[65536];
 RenderEffectParameters g_FieldFxSpriteParams;
@@ -42,10 +42,10 @@ static Particle output;
 static int pool,initCalls,initResult,allocs,fail;
 static short expectedCounter;
 static unsigned short newY;
-int func_801974DC(int mode,Particle *p) { assert(0); return 0; }
+int RoomM273_SweepRisingCallback(int mode,Particle *p) { assert(0); return 0; }
 int FieldFx_InitCallbackList(char *p,int size,int count,FieldFxCallbackListCallback callback) {
     assert(p==(char *)&pool && size==8 && count==12 &&
-           callback==(FieldFxCallbackListCallback)func_801974DC);
+           callback==(FieldFxCallbackListCallback)RoomM273_SweepRisingCallback);
     assert(D_8019AE84==0);
     ++initCalls;
     return initResult;
@@ -53,7 +53,7 @@ int FieldFx_InitCallbackList(char *p,int size,int count,FieldFxCallbackListCallb
 void *FieldFx_AcquireCallbackSlot(char *p) {
     assert(p==(char *)&pool && allocs++==0 && D_8019AE84==expectedCounter);
     if(fail) return 0;
-    D_8019AEFC.x=65535; D_8019AEFE=newY; D_8019AF00=32768;
+    g_RoomM273SweepPoint.x=65535; D_8019AEFE=newY; D_8019AF00=32768;
     return &output;
 }
 int main(void) {
@@ -65,16 +65,16 @@ int main(void) {
     g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context; context.pool=&pool;
     for(initResult=-1;initResult<=1;++initResult) {
         D_8019AE84=99;
-        assert(func_80197648(0)==initResult);
+        assert(RoomM273_SweepRisingEmitter(0)==initResult);
     }
     for(stop=0;stop<3;++stop) for(emit=0;emit<3;++emit)
         for(c=0;c<6;++c) for(j=0;j<5;++j) for(fail=0;fail<2;++fail) {
             output.x=11; output.y=22; output.z=33; output.speed=44;
-            D_8019AEFC.x=1; D_8019AEFE=2; D_8019AF00=3; newY=values[j];
+            g_RoomM273SweepPoint.x=1; D_8019AEFE=2; D_8019AF00=3; newY=values[j];
             D_8019AE84=counters[c];
             expectedCounter=(short)(counters[c]-1);
             D_8019AF6A=flags[emit]; D_8019AF69=flags[stop]; allocs=0;
-            assert(func_80197648(1)==(stop ?2:0));
+            assert(RoomM273_SweepRisingEmitter(1)==(stop ?2:0));
             calls=!stop && emit && counters[c]<=0;
             success=calls && !fail;
             assert(allocs==calls);
@@ -90,13 +90,13 @@ int main(void) {
         g_FieldFxSpriteParams.parameter00=g_FieldFxSpriteParams.parameter02=g_FieldFxSpriteParams.palette=g_FieldFxSpriteParams.parameter06=0xAAAA;
         g_FieldFxSpriteParams.tpage=g_FieldFxSpriteParams.parameter0A=g_FieldFxSpriteParams.depth=0xAAAA;
         g_FieldFxSpriteParams.extent_x=g_FieldFxSpriteParams.extent_y=0xAAAA;
-        assert(func_80197648(2)==0 && allocs==calls && D_8019AE84==91);
+        assert(RoomM273_SweepRisingEmitter(2)==0 && allocs==calls && D_8019AE84==91);
         assert(g_FieldFxSpriteParams.parameter00==16 && g_FieldFxSpriteParams.parameter02==1 && g_FieldFxSpriteParams.palette==2);
         assert(g_FieldFxSpriteParams.parameter06==0 && g_FieldFxSpriteParams.tpage==65535-i && g_FieldFxSpriteParams.parameter0A==0);
         assert(g_FieldFxSpriteParams.depth==0 && g_FieldFxSpriteParams.extent_x==16 && g_FieldFxSpriteParams.extent_y==16);
     }
-    assert(func_80197648(-1)==0 && func_80197648(3)==0);
-    assert(func_80197648(INT_MIN)==0 && func_80197648(INT_MAX)==0);
+    assert(RoomM273_SweepRisingEmitter(-1)==0 && RoomM273_SweepRisingEmitter(3)==0);
+    assert(RoomM273_SweepRisingEmitter(INT_MIN)==0 && RoomM273_SweepRisingEmitter(INT_MAX)==0);
     assert(initCalls==3 && allocs==calls && D_8019AE84==91);
     return 0;
 }

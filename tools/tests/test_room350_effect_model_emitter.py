@@ -9,7 +9,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 ROOM = 'src/overlays/room_m350_cruiser'
 sys.path.insert(0, str(ROOT / "tools/tests"))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
-FUNCTION = "func_8019988C"
+FUNCTION = "RoomM350_BodyRingEmitter"
 
 
 class Room350EffectModelEmitterTests(unittest.TestCase):
@@ -46,7 +46,7 @@ typedef RoomM350SineParticle Particle;
 typedef RenderMatrix Transform;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 FieldFxObjectPrefix *g_FieldFxOwner;
-unsigned char D_8019A8C4;
+unsigned char g_RoomM350BodyDone;
 unsigned short g_FieldFxTpageSlots[12], g_FieldFxTpageTable[65536];
 #define g_FieldFxTpageSlot11 g_FieldFxTpageSlots[11]
 /* The retail halfword names are fields of the sprite parameter block; the
@@ -83,11 +83,11 @@ static int selectedIndex(void) {
     int quotient = product >= 0 ? product / 256 : -((-product) / 256);
     return quotient + 1;
 }
-int func_801996BC(int event, Particle *particle) { return 0; }
+int RoomM350_BodyRingCallback(int event, Particle *particle) { return 0; }
 int FieldFx_InitCallbackList(char *p, int stride, int count,
                   FieldFxCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && p == &pool);
-    assert(stride == 24 && count == 8 && (void *)callback == (void *)func_801996BC);
+    assert(stride == 24 && count == 8 && (void *)callback == (void *)RoomM350_BodyRingCallback);
     assert(state.count == 0 && state.delay == 0);
     return setupResult;
 }
@@ -112,13 +112,13 @@ int rand(void) {
     assert(effect.brightness == 128 && effect.amplitude == signedHalf((countAfterRandom + 1) * 2048));
     assert(state.count == signedHalf((uint32_t)countAfterRandom + 1));
     assert(state.delay == (tableRandom & 7) + 12);
-    state.count = -123; state.delay = -456; D_8019A8C4 = 165;
+    state.count = -123; state.delay = -456; g_RoomM350BodyDone = 165;
     return controlRandom;
 }
 static void reset(void) {
     setups = allocations = tableRandoms = controlRandoms = 0;
     g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitter;
-    g_FieldFxOwner = (FieldFxObjectPrefix *)&actors[0]; D_8019A8C4 = 90;
+    g_FieldFxOwner = (FieldFxObjectPrefix *)&actors[0]; g_RoomM350BodyDone = 90;
     state.count = 0; state.delay = 0;
     memset(&effect, 0x5A, sizeof(effect));
 }
@@ -136,7 +136,7 @@ static void verifySpawn(void) {
     expected.controls[2] = 0; expected.controls[3] = 0;
     assert(memcmp(&effect, &expected, sizeof(effect)) == 0);
     assert(allocations == 1 && tableRandoms == 1 && controlRandoms == 1);
-    assert(state.count == -123 && state.delay == -456 && D_8019A8C4 == 165);
+    assert(state.count == -123 && state.delay == -456 && g_RoomM350BodyDone == 165);
 }
 int main(void) {
     const int counts[] = {-32768, -1, 0, 1, 23, 24, 32767};
@@ -154,27 +154,27 @@ int main(void) {
     }
     for (setupResult = -2; setupResult <= 2; ++setupResult) {
         reset(); state.count = 123; state.delay = -123;
-        assert(func_8019988C(0, &state) == setupResult && setups == 1 && allocations == 0);
+        assert(RoomM350_BodyRingEmitter(0, &state) == setupResult && setups == 1 && allocations == 0);
     }
     /* Every delay bit pattern: a failed emission leaves -1, not a new delay. */
     for (value = -32768; value <= 32767; ++value) {
         reset(); state.delay = value; failAllocation = 1; expected = effect;
-        assert(func_8019988C(1, &state) == 0);
+        assert(RoomM350_BodyRingEmitter(1, &state) == 0);
         assert(state.delay == signedHalf((uint32_t)value - 1) && state.count == 0);
         assert(allocations == (value == 0) && tableRandoms == 0 && controlRandoms == 0);
-        assert(memcmp(&effect, &expected, sizeof(effect)) == 0 && D_8019A8C4 == 90);
+        assert(memcmp(&effect, &expected, sizeof(effect)) == 0 && g_RoomM350BodyDone == 90);
     }
     for (i = 0; i < 7; ++i) for (j = 0; j < 5; ++j) for (failure = 0; failure < 2; ++failure) {
         int active = counts[i] < 24 && delays[j] == 0;
         reset(); state.count = counts[i]; state.delay = delays[j]; failAllocation = failure;
         countAfterRandom = counts[i]; tableRandom = 255; controlRandom = -1; expected = effect;
-        assert(func_8019988C(1, &state) == (counts[i] >= 24 ? 2 : 0));
+        assert(RoomM350_BodyRingEmitter(1, &state) == (counts[i] >= 24 ? 2 : 0));
         assert(allocations == active);
         if (active && !failure) verifySpawn();
         else {
             assert(state.count == counts[i]);
             assert(state.delay == (counts[i] >= 24 ? delays[j] : signedHalf((uint32_t)delays[j] - 1)));
-            assert(D_8019A8C4 == (counts[i] >= 24 ? 1 : 90));
+            assert(g_RoomM350BodyDone == (counts[i] >= 24 ? 1 : 90));
             assert(memcmp(&effect, &expected, sizeof(effect)) == 0);
         }
     }
@@ -183,13 +183,13 @@ int main(void) {
         reset(); failAllocation = 0; models[1].part_count = i;
         tableRandom = j | (k & 1 ? 0x7FFFFF00 : 0);
         controlRandom = controls[k]; countAfterRandom = counts[k % 7];
-        assert(func_8019988C(1, &state) == 0); verifySpawn();
+        assert(RoomM350_BodyRingEmitter(1, &state) == 0); verifySpawn();
     }
     for (m = 0; m < 5; ++m) {
         reset(); state.count = -7; state.delay = 123;
         g_FieldFxTpageSlot11 = indices[m]; g_FieldFxTpageTable[indices[m]] = 65535 - m;
-        assert(func_8019988C(2, &state) == 0 && allocations == 0 && setups == 0);
-        assert(state.count == -7 && state.delay == 123 && D_8019A8C4 == 90);
+        assert(RoomM350_BodyRingEmitter(2, &state) == 0 && allocations == 0 && setups == 0);
+        assert(state.count == -7 && state.delay == 123 && g_RoomM350BodyDone == 90);
         assert(UNIT == 64 && D_800F336A == 4 && D_800F3376 == 64 && D_800F3378 == 64);
         assert(D_800F336C == 3 && D_800F336E == 1 && D_800F3372 == 5 && D_800F3374 == 0);
         assert(D_800F3370 == 65535 - m);
@@ -197,8 +197,8 @@ int main(void) {
     for (event = -3; event <= 4; ++event) {
         if (event >= 0 && event <= 2) continue;
         reset(); state.count = -7; state.delay = 123;
-        assert(func_8019988C(event, &state) == 0 && allocations == 0 && setups == 0);
-        assert(state.count == -7 && state.delay == 123 && D_8019A8C4 == 90);
+        assert(RoomM350_BodyRingEmitter(event, &state) == 0 && allocations == 0 && setups == 0);
+        assert(state.count == -7 && state.delay == 123 && g_RoomM350BodyDone == 90);
     }
     return 0;
 }

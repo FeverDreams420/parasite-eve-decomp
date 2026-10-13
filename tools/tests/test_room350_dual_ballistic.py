@@ -9,7 +9,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 ROOM = 'src/overlays/room_m350_cruiser'
 sys.path.insert(0, str(ROOT / "tools/tests"))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
-FUNCTION = 'func_80196A14'
+FUNCTION = 'RoomM350_AreaDropletEmitter'
 
 
 def controller_source():
@@ -44,7 +44,7 @@ FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 /* The player is read through the same transform-owner view as the actor. */
 FieldActor *g_PlayerEntity;
 #define PLAYER ((Instance *)g_PlayerEntity)
-unsigned char D_8019A82F;
+unsigned char g_RoomM350AreaPlayerInside;
 int g_FieldFxCurrentAge;
 /* The retail halfword names are fields of the sprite parameter block. */
 RenderEffectParameters g_FieldFxSpriteParams;
@@ -68,9 +68,9 @@ static int pools[2],allocs,randoms,setups,setupResult,failure,mutation,actorAtte
 static uint32_t seed;
 static int word(uint32_t x) { int result; memcpy(&result,&x,4); return result; }
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
-int func_801968D8(int e,short *p) { return 0; }
+int RoomM350_AreaDropletCallback(int e,short *p) { return 0; }
 int FieldFx_InitCallbackList(char *p,int size,int count,FieldFxCallbackListCallback cb) {
-    assert(p==(char *)&pools[0] && size==12 && count==16 && (void *)cb==(void *)func_801968D8);
+    assert(p==(char *)&pools[0] && size==12 && count==16 && (void *)cb==(void *)RoomM350_AreaDropletCallback);
     setups++; return setupResult;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
@@ -81,7 +81,7 @@ void *FieldFx_AcquireCallbackSlot(char *p) {
     actorInstance.transforms=actorMatrices[1];
     if(isActor) {
         g_PlayerEntity=(FieldActor *)&players[1];
-        if(mutation) D_8019A82F=mutation==1 ? 0:255;
+        if(mutation) g_RoomM350AreaPlayerInside=mutation==1 ? 0:255;
     } else PLAYER->transforms=&playerMatrices[2];
     g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1];
     if(failure&(1<<i)) return 0;
@@ -114,16 +114,16 @@ static void reset(void) {
 }
 static void run(int timer,int flag,int mask,int mode) {
     int playerAttempt,calls,successes,i;
-    reset(); failure=mask; mutation=mode; g_FieldFxCurrentAge=timer; D_8019A82F=flag;
+    reset(); failure=mask; mutation=mode; g_FieldFxCurrentAge=timer; g_RoomM350AreaPlayerInside=flag;
     actorAttempt=timer<107 && (timer&1);
     playerAttempt=timer<107 && (actorAttempt && mode ? mode==2 : flag!=0);
     calls=actorAttempt+playerAttempt; successes=0;
     for(i=0;i<calls;i++) successes+=!(mask&(1<<i));
     if(!actorAttempt) g_FieldFxOwner=0;
-    assert(func_80196A14(1)==(timer>=107 ? 2:0));
+    assert(RoomM350_AreaDropletEmitter(1)==(timer>=107 ? 2:0));
     assert(allocs==calls && randoms==successes*2 && setups==0);
     assert(memcmp(particles,expected,sizeof(particles))==0);
-    assert(D_8019A82F==(actorAttempt && mode ? (mode==2 ? 255:0):flag));
+    assert(g_RoomM350AreaPlayerInside==(actorAttempt && mode ? (mode==2 ? 255:0):flag));
 }
 int main(void) {
     int i,f,m,k,event,flags[]={0,1,255},timers[]={INT_MIN,-1,0,105,106,107,INT_MAX};
@@ -134,16 +134,16 @@ int main(void) {
     for(i=0;i<7;i++) for(f=0;f<4;f++) { seed=(uint32_t)timers[i]; run(timers[i],1,f,0); }
     for(i=0;i<256;i++) { seed=i; run(3,i,0,0); run(2,i,0,0); }
     for(setupResult=-2;setupResult<=2;setupResult++) {
-        reset(); assert(func_80196A14(0)==setupResult && setups==1 && !allocs);
+        reset(); assert(RoomM350_AreaDropletEmitter(0)==setupResult && setups==1 && !allocs);
     }
     for(i=0;i<65536;i++) {
         reset(); g_FieldFxTpageSlot2=i; g_FieldFxTpageTable[i]=65535-i;
-        assert(func_80196A14(2)==0 && !allocs && !setups);
+        assert(RoomM350_AreaDropletEmitter(2)==0 && !allocs && !setups);
         assert(UNIT==16 && D_800F336A==1 && D_800F3376==16 && D_800F3378==16);
         assert(D_800F336C==2 && D_800F336E==0 && D_800F3372==0 && D_800F3374==0 && D_800F3370==65535-i);
     }
     for(event=-3;event<=5;event++) if(event<0 || event>2) {
-        reset(); assert(func_80196A14(event)==0 && !allocs && !setups && !randoms);
+        reset(); assert(RoomM350_AreaDropletEmitter(event)==0 && !allocs && !setups && !randoms);
     }
     return 0;
 }

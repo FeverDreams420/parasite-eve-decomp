@@ -14,13 +14,13 @@ from csource import host_unit  # noqa: E402
 class Room350EffectAimedImpactTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_spawn_angles_layout_and_helper_capture_order(self):
-        source = host_unit("func_80197364", under=ROOM)
+        source = host_unit("RoomM350_DropEmitter", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 FieldFxObjectPrefix *g_FieldFxOwner;
 Player *g_PlayerEntity;
-unsigned char D_8019A86E, D_8019A855;
-short D_8019A86A;
+unsigned char g_RoomM350DropDone, D_8019A855;
+short g_RoomM350DropLungeTimer;
 static RoomM350Emitter emitter;
 static Actor actors[3];
 static Instance instances[3];
@@ -53,11 +53,11 @@ static short signedHalf(uint32_t x) {
     x &= 65535;
     return x < 32768 ? (short)x : (short)((int)x - 65536);
 }
-int func_80196F2C(int event, Particle *effect) { return 0; }
+int RoomM350_DropCallback(int event, Particle *effect) { return 0; }
 int FieldFx_InitCallbackList(char *p, int size, int count,
                   FieldFxCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && p == &pool);
-    assert(size == 16 && count == 4 && (void *)callback == (void *)func_80196F2C);
+    assert(size == 16 && count == 4 && (void *)callback == (void *)RoomM350_DropCallback);
     return setupResult;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
@@ -66,7 +66,7 @@ void *FieldFx_AcquireCallbackSlot(char *p) {
     g_FieldFxOwner = (FieldFxObjectPrefix *)&actors[1];
     g_PlayerEntity = &players[1];
     D_8019A855 = 165;
-    D_8019A86E = 255;
+    g_RoomM350DropDone = 255;
     return failAllocation ? 0 : &particle;
 }
 int Math_IntSqrt(int value) {
@@ -120,16 +120,16 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m, const GteShortVector *v,
 int Asset_Find08w(int id, int mode, int x, int y, int z) {
     assert(sounds++ == 0 && applications == 1 && id == 0x60A);
     assert(mode == owners[2].progress && x == -32768 && y == 32767 && z == -123);
-    assert(D_8019A855 == 0 && D_8019A86A == -333);
+    assert(D_8019A855 == 0 && g_RoomM350DropLungeTimer == -333);
     D_8019A855 = 77;
-    D_8019A86A = -1;
+    g_RoomM350DropLungeTimer = -1;
     return -123;
 }
 static void reset(void) {
     setups = allocations = roots = angles = randoms = rotations = applications = sounds = 0;
     g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitter;
     g_FieldFxOwner = (FieldFxObjectPrefix *)&actors[0]; g_PlayerEntity = &players[0];
-    D_8019A86E = 0; D_8019A855 = 1; D_8019A86A = -333;
+    g_RoomM350DropDone = 0; D_8019A855 = 1; g_RoomM350DropLungeTimer = -333;
     instances[1].rot_y = 17;
     memset(&particle, 0x5A, sizeof(particle));
 }
@@ -147,17 +147,17 @@ int main(void) {
         instances[i].rot_y = 555;
     }
     for (setupResult = -2; setupResult <= 2; ++setupResult) {
-        reset(); assert(func_80197364(0) == setupResult && setups == 1 && allocations == 0);
+        reset(); assert(RoomM350_DropEmitter(0) == setupResult && setups == 1 && allocations == 0);
     }
     for (stop = 0; stop < 4; ++stop) for (request = 0; request < 4; ++request)
     for (failure = 0; failure < 2; ++failure) {
         int active = !flags[stop] && flags[request];
         int spawned = active && !failure;
-        reset(); D_8019A86E = flags[stop]; D_8019A855 = flags[request]; failAllocation = failure;
-        assert(func_80197364(1) == (flags[stop] ? 2 : 0));
+        reset(); g_RoomM350DropDone = flags[stop]; D_8019A855 = flags[request]; failAllocation = failure;
+        assert(RoomM350_DropEmitter(1) == (flags[stop] ? 2 : 0));
         assert(allocations == active && sounds == spawned && roots == spawned);
         assert(D_8019A855 == (spawned ? 77 : active ? 165 : flags[request]));
-        assert(D_8019A86A == (spawned ? 8 : -333));
+        assert(g_RoomM350DropLungeTimer == (spawned ? 8 : -333));
         if (!spawned) {
             unsigned char untouched[16]; memset(untouched, 0x5A, sizeof(untouched));
             assert(memcmp(&particle, untouched, sizeof(particle)) == 0);
@@ -172,17 +172,17 @@ int main(void) {
             ORIGIN(1)[axis] = coordinates[(k + axis) % 8];
             PLAYER_POSITION(1)[axis] = coordinates[(k + axis + 3) % 8];
         }
-        assert(func_80197364(1) == 0);
+        assert(RoomM350_DropEmitter(1) == 0);
         assert(allocations == 1 && randoms == 2 && roots == 1 && angles == 1);
         assert(rotations == 1 && applications == 1 && sounds == 1);
-        assert(D_8019A855 == 77 && D_8019A86A == 8 && particle.stopped == 0);
+        assert(D_8019A855 == 77 && g_RoomM350DropLungeTimer == 8 && particle.stopped == 0);
         assert(particle.velocity.x == -3 && particle.velocity.y == 4 && particle.velocity.z == 5);
         assert(particle.velocity.pad == 0x5A5A && particle.pad == 0x5A);
     }
     for (event = -3; event <= 4; ++event) {
         if (event == 0 || event == 1) continue;
-        reset(); assert(func_80197364(event) == 0 && setups == 0 && allocations == 0);
-        assert(D_8019A855 == 1 && D_8019A86A == -333);
+        reset(); assert(RoomM350_DropEmitter(event) == 0 && setups == 0 && allocations == 0);
+        assert(D_8019A855 == 1 && g_RoomM350DropLungeTimer == -333);
     }
     return 0;
 }

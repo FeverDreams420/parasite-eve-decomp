@@ -14,11 +14,11 @@ from csource import host_unit  # noqa: E402
 class Room350EffectFallTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_motion_texture_and_post_lookup_state(self):
-        self.check_variant("func_801937B4", "D_8019A464", 8192, 1)
+        self.check_variant("RoomM350_HandSweepHitCallback", "D_8019A464", 8192, 1)
 
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_accelerated_motion_texture_and_post_lookup_state(self):
-        self.check_variant("func_80197594", "D_8019A62C", 6144, 2)
+        self.check_variant("RoomM350_DropHitCallback", "D_8019A62C", 6144, 2)
 
     def check_variant(self, callback, colors, size, increment):
         source = host_unit(callback, under=ROOM)

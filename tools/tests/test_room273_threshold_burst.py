@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_801945A8'
+FUNCTION = 'RoomM273_GrabPlayerTrailEmitter'
 
 
 class ThresholdBurst(unittest.TestCase):
@@ -52,10 +52,10 @@ short D_8019AE60,D_8019AE64;
 unsigned short g_FieldFxTpageSlot11,g_FieldFxTpageTable[8];
 RenderEffectParameters g_FieldFxSpriteParams;
 static int init,allocations,fail;
-int func_80194470(int mode, Vector *input) { assert(0); return 0; }
+int RoomM273_GrabPlayerTrailCallback(int mode, Vector *input) { assert(0); return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)pool && stride==8 && count==4 &&
-           callback==(FieldFxCallbackListCallback)func_80194470);
+           callback==(FieldFxCallbackListCallback)RoomM273_GrabPlayerTrailCallback);
     assert(D_8019AE60==0 && D_8019AE64==0); return 60;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
@@ -71,7 +71,7 @@ int main(void) {
     replacement.render_object.matrices=(RenderMatrix *)&transform;
     transform.position.x=65535; transform.position.y=-65537; transform.position.z=32768;
     D_8019AE60=9; D_8019AE64=7;
-    assert(func_801945A8(0)==60 && init==1);
+    assert(RoomM273_GrabPlayerTrailEmitter(0)==60 && init==1);
     for(stop=0;stop<2;++stop) for(kind=8;kind<=9;++kind)
         for(i=0;i<6;++i) for(j=0;j<6;++j) for(c=0;c<4;++c)
         for(d=0;d<6;++d) for(f=0;f<2;++f) {
@@ -90,7 +90,7 @@ int main(void) {
             }
             allocations=0; fail=f; g_PlayerEntity=&owner;
             memset(&output,0xA5,sizeof(output));
-            assert(func_801945A8(1)==(stop ? 2:0));
+            assert(RoomM273_GrabPlayerTrailEmitter(1)==(stop ? 2:0));
             assert(allocations==wanted && D_8019AE60==count && D_8019AE64==delay);
             assert(memcmp(&state,&before,sizeof(state))==0 && output.pad==(short)0xA5A5);
             if(wanted && !f) assert(output.x==-1 && output.y==-1 && output.z==-32768);
@@ -98,14 +98,14 @@ int main(void) {
         }
     for(i=0;i<8;++i) {
         g_FieldFxTpageSlot11=i; g_FieldFxTpageTable[i]=65535-i;
-        assert(func_801945A8(2)==0);
+        assert(RoomM273_GrabPlayerTrailEmitter(2)==0);
         assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2 && g_FieldFxSpriteParams.palette==3 && g_FieldFxSpriteParams.parameter06==1);
         assert(g_FieldFxSpriteParams.tpage==65535-i && g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==32);
         assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
     }
     allocations=0;
-    assert(func_801945A8(-1)==0 && func_801945A8(3)==0);
-    assert(func_801945A8(INT_MIN)==0 && func_801945A8(INT_MAX)==0);
+    assert(RoomM273_GrabPlayerTrailEmitter(-1)==0 && RoomM273_GrabPlayerTrailEmitter(3)==0);
+    assert(RoomM273_GrabPlayerTrailEmitter(INT_MIN)==0 && RoomM273_GrabPlayerTrailEmitter(INT_MAX)==0);
     assert(!allocations && init==1);
     return 0;
 }

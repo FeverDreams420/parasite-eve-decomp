@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-CONTROLLER = 'func_80195CE0'
+CONTROLLER = 'RoomM350_AreaSparkEmitter'
 
 
 class FadingPairTests(unittest.TestCase):
@@ -49,7 +49,7 @@ typedef GteMatrix Matrix;
 typedef GteShortVector Vector;
 FieldFxObjectPrefix *g_FieldFxOwner;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
-unsigned char D_8019A82E;
+unsigned char g_RoomM350AreaDone;
 int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag;
 GteSineWord rcossin_tbl[4096];
 u16 g_FieldFxTpageTable[65536],g_FieldFxPaletteTable[65536];
@@ -72,7 +72,7 @@ static int word(uint32_t x) { int r; memcpy(&r,&x,4); return r; }
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 static int shift5(int x) { return x>=0 ? x/32:-((-x+31)/32); }
 static int rng(int i) { return word(seed+(uint32_t)i*0x87654321u); }
-int func_80195B64(int e,Particle *p) { return 0; }
+int RoomM350_AreaSparkCallback(int e,Particle *p) { return 0; }
 int Asset_Find08w(int id,int asset,int x,int y,int z) {
     /* The unit narrows the owner asset pointer to the int argument. */
     assert(sounds++==0 && id==0x5C9 && asset==(int)(intptr_t)owners[0].asset);
@@ -87,7 +87,7 @@ int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCal
     wanted.count=0; wanted.fade=0;
     assert(memcmp(&state,&wanted,sizeof(state))==0);
     assert(sounds==1 && p==(char *)&pools[1] && stride==8 && count==18);
-    assert(cb==(FieldFxCallbackListCallback)func_80195B64);
+    assert(cb==(FieldFxCallbackListCallback)RoomM350_AreaSparkCallback);
     return -17;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
@@ -158,13 +158,13 @@ static void reset(void) {
 static void update(int count,int fade,int timer,int stop,int sample,int failure,int mutation) {
     int phase,expired,emits,index;
     reset(); state.count=count; state.fade=fade; expected=state;
-    g_FieldFxCurrentAge=timer; D_8019A82E=stop; failAt=failure; mutate=mutation;
+    g_FieldFxCurrentAge=timer; g_RoomM350AreaDone=stop; failAt=failure; mutate=mutation;
     phase=stop ? fade*64+1024:timer<32 ? word((uint32_t)timer<<5):1024;
     expired=stop && phase>=2048; emits=!expired && count<16;
     if(stop) expected.fade=half((uint16_t)fade+1);
     index=(uint32_t)phase&4095; rcossin_tbl[index].word=sample;
     if(!expired) { expected.brightness=shift5(half(sample)); expected.size=half((uint32_t)sample<<2); }
-    assert(func_80195CE0(1,&state)==(expired ? 2:0));
+    assert(RoomM350_AreaSparkEmitter(1,&state)==(expired ? 2:0));
     if(emits) expected.count=half((uint16_t)expected.count+1);
     assert(memcmp(&state,&expected,sizeof(state))==0);
     assert(allocs==(emits ? (failure==0 ? 1:2):0));
@@ -180,7 +180,7 @@ int main(void) {
         actors[n].instance=&instances[n]; instances[n].owner=&owners[n];
         instances[n].transforms=transforms[n]; owners[n].asset=&assets[n]; emitters[n].pool=&pools[n];
     }
-    reset(); assert(func_80195CE0(0,&state)==-17);
+    reset(); assert(RoomM350_AreaSparkEmitter(0,&state)==-17);
     for(n=0;n<65536;n++) {
         seed=(uint32_t)n*65537;
         update(16,half(n),0,1,word(seed),-1,0);
@@ -194,7 +194,7 @@ int main(void) {
         initialTimer=word((uint32_t)n*65537); g_FieldFxCurrentAge=initialTimer;
         expectedRotation=half((uint32_t)initialTimer<<8);
         nextKind=kinds[n%5]; special=n&1; g_FieldFxAltPaletteFlag=special;
-        assert(func_80195CE0(2,&state)==0 && draws==2 && cluts==2);
+        assert(RoomM350_AreaSparkEmitter(2,&state)==0 && draws==2 && cluts==2);
         assert(state.rotation.z==expectedRotation && state.rotation.x==0x5A5A && state.rotation.y==0x5A5A);
         assert(g_FieldFxSpriteParams.tpage==(unsigned short)(n^0xA537));
         assert(g_FieldFxSpriteParams.parameter00==16 && g_FieldFxSpriteParams.extent_x==16 && g_FieldFxSpriteParams.extent_y==16);
@@ -202,8 +202,8 @@ int main(void) {
         assert(allocs==0 && sounds==0);
     }
     reset(); expected=state;
-    assert(func_80195CE0(-1,&state)==0 && func_80195CE0(3,&state)==0);
-    assert(func_80195CE0(INT_MIN,0)==0 && func_80195CE0(INT_MAX,0)==0);
+    assert(RoomM350_AreaSparkEmitter(-1,&state)==0 && RoomM350_AreaSparkEmitter(3,&state)==0);
+    assert(RoomM350_AreaSparkEmitter(INT_MIN,0)==0 && RoomM350_AreaSparkEmitter(INT_MAX,0)==0);
     assert(memcmp(&state,&expected,sizeof(state))==0 && sounds==0 && allocs==0 && draws==0);
     return 0;
 }

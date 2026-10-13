@@ -10,7 +10,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 ROOM = 'src/overlays/room_m350_cruiser'
 sys.path.insert(0, str(ROOT / "tools/tests"))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
-FUNCTION = 'func_80197DA8'
+FUNCTION = 'RoomM350_DropController'
 
 
 class AnimationEventTests(unittest.TestCase):
@@ -37,10 +37,10 @@ typedef char g[sizeof(Vector)==8 && sizeof(RenderMatrix)==32 ? 1:-1];
         # The globals below alias one record and one table on the target;
         # drop their separate declarations and map them onto shared storage.
         for declaration in (r'extern unsigned char D_8019A854;',
-                            r'extern unsigned char D_8019A859;',
-                            r'extern unsigned char D_8019A86E;',
+                            r'extern unsigned char g_RoomM350DropBurstCount;',
+                            r'extern unsigned char g_RoomM350DropDone;',
                             r'extern int D_8019A858;',
-                            r'extern short D_8019A85C,D_8019A85E,D_8019A86A,D_8019A86C;',
+                            r'extern short D_8019A85C,g_RoomM350DropRepeats,g_RoomM350DropLungeTimer,g_RoomM350DropHitCooldown;',
                             r'extern GteSineWord rcossin_tbl\[\];',
                             r'extern short D_800966EE\[\];'):
             source, count = re.subn(declaration, '', source)
@@ -54,19 +54,19 @@ static union { int words[8]; short halves[16]; unsigned char bytes[32]; } global
 static union { int words[4097]; short halves[8194]; } trig;
 #define D_8019A854 (globals.bytes[0])
 #define D_8019A858 (globals.words[1])
-#define D_8019A859 (globals.bytes[5])
+#define g_RoomM350DropBurstCount (globals.bytes[5])
 #define D_8019A85C (globals.halves[4])
-#define D_8019A85E (globals.halves[5])
-#define D_8019A86A (globals.halves[11])
-#define D_8019A86C (globals.halves[12])
-#define D_8019A86E (globals.bytes[26])
+#define g_RoomM350DropRepeats (globals.halves[5])
+#define g_RoomM350DropLungeTimer (globals.halves[11])
+#define g_RoomM350DropHitCooldown (globals.halves[12])
+#define g_RoomM350DropDone (globals.bytes[26])
 #define rcossin_tbl ((GteSineWord *)trig.words)
 #define D_800966EE (trig.halves+1)
 '''
         harness = prefix + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;
 Instance *g_PlayerEntity;
-Events D_8018F1CC;
+Events g_RoomM350DropEvents;
 static Actor actors[2];
 static Instance instances[2],player;
 static FieldActorState owner;
@@ -85,7 +85,7 @@ int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
     if (mutate) {
         g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1];
         instances[0].rot_y=-777;
-        memset(&D_8018F1CC,255,sizeof(D_8018F1CC));
+        memset(&g_RoomM350DropEvents,255,sizeof(g_RoomM350DropEvents));
     }
     return 0x12348001;
 }
@@ -104,7 +104,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *in,GteSho
         g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1];
         POS(instances[0])[0]=INT_MIN;
         POS(instances[0])[2]=INT_MAX;
-        D_8019A86A=-32768;
+        g_RoomM350DropLungeTimer=-32768;
     }
     return b;
 }
@@ -122,10 +122,10 @@ static void reset(void) {
     POS(instances[0])[1]=42;
     POS(instances[0])[2]=INT_MIN+12;
     for (i=0;i<8;i++) {
-        D_8018F1CC.entries[i].frame=i==7 ? 255:7+i*4;
-        D_8018F1CC.entries[i].slot=i;
-        D_8018F1CC.entries[i].value=100+i;
-        D_8018F1CC.entries[i].pad=0xA5;
+        g_RoomM350DropEvents.entries[i].frame=i==7 ? 255:7+i*4;
+        g_RoomM350DropEvents.entries[i].slot=i;
+        g_RoomM350DropEvents.entries[i].value=100+i;
+        g_RoomM350DropEvents.entries[i].pad=0xA5;
     }
     cursor=0; angles=turns=moves=mutate=0;
 }
@@ -140,7 +140,7 @@ static void run(int frame,int previous,int start,int animation,int repeat,int re
     instances[0].anim_prev=(int)((uint32_t)previous<<16);
     instances[0].mode=animation;
     if (!hasOwner) instances[0].state=0;
-    D_8019A85E=repeat; D_8019A86A=recoil; D_8019A86C=cooldown;
+    g_RoomM350DropRepeats=repeat; g_RoomM350DropLungeTimer=recoil; g_RoomM350DropHitCooldown=cooldown;
     if (animation==6) {
         if (half(frame)>=6 && half(previous)<6) flags[5]=5;
         done=1;
@@ -156,7 +156,7 @@ static void run(int frame,int previous,int start,int animation,int repeat,int re
         doTurn=phase!=0;
         expectedSpeed=floor64(half((unsigned)trig.words[phase*256]));
         for (i=0;i<8;i++) {
-            Event *e=&D_8018F1CC.entries[expectedCursor];
+            Event *e=&g_RoomM350DropEvents.entries[expectedCursor];
             if (half(frame)<e->frame || half(previous)>=e->frame) break;
             flags[e->slot]=e->value;
             if (++expectedCursor==8) expectedCursor=2;
@@ -168,11 +168,11 @@ static void run(int frame,int previous,int start,int animation,int repeat,int re
             expectedMotion=mutation ? 32767:recoil-1;
         }
     }
-    result=func_80197DA8(1,&cursor);
+    result=RoomM350_DropController(1,&cursor);
     assert(result==expectedResult && cursor==expectedCursor);
-    assert(status==expectedStatus && D_8019A85E==expectedRepeat);
-    assert(D_8019A86C==expectedCooldown && D_8019A86A==expectedMotion);
-    assert(D_8019A86E==ended && memcmp(flags,globals.bytes,8)==0);
+    assert(status==expectedStatus && g_RoomM350DropRepeats==expectedRepeat);
+    assert(g_RoomM350DropHitCooldown==expectedCooldown && g_RoomM350DropLungeTimer==expectedMotion);
+    assert(g_RoomM350DropDone==ended && memcmp(flags,globals.bytes,8)==0);
     assert(instances[0].anim.fixed==expectedTime);
     assert(angles==doTurn && turns==doTurn && moves==doMove);
     assert(instances[0].rot_y==(doTurn ? half(0xABCD):123));
@@ -188,21 +188,21 @@ int main(void) {
     int f,p,c,i;
     for (i=0;i<4097;i++) trig.words[i]=word(0xFEDC0000u+(unsigned)(i*211));
     reset(); memset(&globals,0x55,sizeof(globals)); cursor=4;
-    assert(func_80197DA8(0,&cursor)==0 && cursor==0);
+    assert(RoomM350_DropController(0,&cursor)==0 && cursor==0);
     for(i=0;i<8;i++) assert(globals.bytes[i]==0);
-    assert(D_8019A85C==0 && D_8019A86A==0 && D_8019A86C==0 && D_8019A86E==0);
-    assert(D_8019A85E==0x5555 && globals.bytes[27]==0x55 && status==1);
-    reset(); cursor=3; D_8019A86C=7;
-    assert(func_80197DA8(-1,&cursor)==0 && cursor==3 && D_8019A86C==7);
-    assert(func_80197DA8(2,&cursor)==0 && status==1);
+    assert(D_8019A85C==0 && g_RoomM350DropLungeTimer==0 && g_RoomM350DropHitCooldown==0 && g_RoomM350DropDone==0);
+    assert(g_RoomM350DropRepeats==0x5555 && globals.bytes[27]==0x55 && status==1);
+    reset(); cursor=3; g_RoomM350DropHitCooldown=7;
+    assert(RoomM350_DropController(-1,&cursor)==0 && cursor==3 && g_RoomM350DropHitCooldown==7);
+    assert(RoomM350_DropController(2,&cursor)==0 && status==1);
     reset(); cursor=7;
     instances[0].anim.parts.integer=10; instances[0].anim_prev=8<<16;
-    D_8018F1CC.entries[7].frame=9;
+    g_RoomM350DropEvents.entries[7].frame=9;
     expectedSpeed=floor64(half((unsigned)trig.words[5*256]));
-    assert(func_80197DA8(1,&cursor)==0 && cursor==2 && globals.bytes[7]==107);
+    assert(RoomM350_DropController(1,&cursor)==0 && cursor==2 && globals.bytes[7]==107);
     for (i=0;i<256;i++) {
         reset(); status=i; instances[0].mode=6;
-        assert(func_80197DA8(1,&cursor)==0 && status==(i==1 ? 2:i));
+        assert(RoomM350_DropController(1,&cursor)==0 && status==(i==1 ? 2:i));
     }
     for (f=0;f<=40;f++) for(p=0;p<=40;p++) for(c=0;c<8;c++)
         run(f,p,c,0,1,8,3,1,0);

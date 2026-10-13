@@ -9,7 +9,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 ROOM = 'src/overlays/room_m350_cruiser'
 sys.path.insert(0, str(ROOT / "tools/tests"))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
-FUNCTION = 'func_80198ABC'
+FUNCTION = 'RoomM350_RushCloudEmitter'
 
 
 class AttachedCloudTests(unittest.TestCase):
@@ -67,9 +67,9 @@ static uint32_t seed;
 static int word(uint32_t x) { int result; memcpy(&result,&x,4); return result; }
 static int half(uint32_t x) { x &= 65535; return x<32768 ? (int)x:(int)x-65536; }
 static uint32_t rng(int n) { return seed+(uint32_t)n*0x87654321u; }
-int func_80198860(int e,Particle *p) { return 0; }
+int RoomM350_RushCloudCallback(int e,Particle *p) { return 0; }
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
-    assert(p==(char *)&pools[0] && stride==20 && count==16 && (void *)cb==(void *)func_80198860);
+    assert(p==(char *)&pools[0] && stride==20 && count==16 && (void *)cb==(void *)RoomM350_RushCloudCallback);
     return -123;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
@@ -115,14 +115,14 @@ int main(void) {
         actors[i].instance=&instances[i]; instances[i].transforms=transforms[i];
         emitters[i].pool=&pools[i];
     }
-    reset(); assert(func_80198ABC(0)==-123);
+    reset(); assert(RoomM350_RushCloudEmitter(0)==-123);
     for(n=1;n<256;n++) {
         reset(); D_8019A8BE=n;
-        assert(func_80198ABC(1)==2 && allocs==0 && D_8019A8BE==n);
+        assert(RoomM350_RushCloudEmitter(1)==2 && allocs==0 && D_8019A8BE==n);
     }
     for(n=0;n<65536;n++) for(f=-1;f<2;f++) {
         reset(); seed=(uint32_t)n*65537u; failAt=f;
-        assert(func_80198ABC(1)==0);
+        assert(RoomM350_RushCloudEmitter(1)==0);
         success=f<0 ? 2:f;
         assert(allocs==(f<0 ? 2:f+1) && randoms==success*5);
         assert(rotations==success && applications==success && D_8019A8BE==255);
@@ -142,11 +142,11 @@ int main(void) {
     }
     for(n=0;n<65536;n++) {
         g_FieldFxTpageSlot2=n; g_FieldFxTpageTable[n]=n^0xA35C;
-        assert(func_80198ABC(2)==0 && D_800F3370==(unsigned short)(n^0xA35C));
+        assert(RoomM350_RushCloudEmitter(2)==0 && D_800F3370==(unsigned short)(n^0xA35C));
         assert(UNIT==16 && D_800F336A==1 && D_800F3376==16 && D_800F3378==16);
         assert(D_800F336C==2 && D_800F336E==0 && D_800F3372==0 && D_800F3374==16);
     }
-    reset(); assert(func_80198ABC(-1)==0 && func_80198ABC(3)==0 && allocs==0);
+    reset(); assert(RoomM350_RushCloudEmitter(-1)==0 && RoomM350_RushCloudEmitter(3)==0 && allocs==0);
     return 0;
 }
 '''

@@ -9,7 +9,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 ROOM = 'src/overlays/room_m350_cruiser'
 sys.path.insert(0, str(ROOT / "tools/tests"))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
-FUNCTION = 'func_80198860'
+FUNCTION = 'RoomM350_RushCloudCallback'
 
 
 class AttachedCloudCallbackTests(unittest.TestCase):
@@ -84,7 +84,7 @@ static void update(int timer,int size) {
     memset(&particle,0x5A,sizeof(particle)); particle.size=size;
     memcpy(&before,&particle,sizeof(particle));
     g_FieldFxCurrentAge=timer;
-    assert(func_80198860(1,&particle)==(timer>=8 ? 1:0));
+    assert(RoomM350_RushCloudCallback(1,&particle)==(timer>=8 ? 1:0));
     if(timer<8) {
         shade=TABLE[1+((((uint32_t)timer*3)<<8)&0x3F00)/2];
         product=TABLE[(((uint32_t)timer<<9)&0x3E00)/2]*size;
@@ -113,9 +113,9 @@ int main(void) {
         }
         D_800F336C=n; g_FieldFxPaletteTable[n]=n^0xA357; g_FieldFxAltPaletteFlag=n&1;
         D_800F336A=half(n); first=particle.state.value.active.firstShade>0; draws=cluts=0;
-        assert(func_80198860(2,&particle)==0 && draws==1+first && cluts==draws);
+        assert(RoomM350_RushCloudCallback(2,&particle)==0 && draws==1+first && cluts==draws);
     }
-    assert(func_80198860(0,0)==0 && func_80198860(-1,0)==0 && func_80198860(3,0)==0);
+    assert(RoomM350_RushCloudCallback(0,0)==0 && RoomM350_RushCloudCallback(-1,0)==0 && RoomM350_RushCloudCallback(3,0)==0);
     return 0;
 }
 '''

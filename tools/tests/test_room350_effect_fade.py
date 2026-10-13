@@ -14,7 +14,7 @@ from csource import host_unit  # noqa: E402
 class Room350EffectFadeTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_motion_fade_threshold_and_palette(self):
-        source = host_unit("func_80199148", under=ROOM)
+        source = host_unit("RoomM350_BodyDebrisCallback", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <string.h>\n' + source + r'''
 RenderEffectParameters g_FieldFxSpriteParams;
 #define D_800F336A g_FieldFxSpriteParams.parameter02
@@ -66,14 +66,14 @@ int main(void) {
             expected.velocity = (short)(values[v] + values[a]);
         }
         lookups = draws = 0;
-        assert(func_80199148(1, &object) == (phase >= 8));
+        assert(RoomM350_BodyDebrisCallback(1, &object) == (phase >= 8));
         assert(memcmp(&object, &expected, sizeof(object)) == 0);
         assert(lookups == 0 && draws == 0);
     }
     for (event = -2; event <= 4; ++event) {
         if (event == 1 || event == 2) continue;
         lookups = draws = 0;
-        assert(func_80199148(event, 0) == 0 && lookups == 0 && draws == 0);
+        assert(RoomM350_BodyDebrisCallback(event, 0) == 0 && lookups == 0 && draws == 0);
     }
     for (kind = 0; kind < 8; ++kind) for (special = 0; special < 2; ++special)
     for (h = 0; h < 2; ++h) for (s = 0; s < 8; ++s) for (m = 0; m < 8; ++m) {
@@ -84,7 +84,7 @@ int main(void) {
         handleValue = h ? -1 : 0x12345;
         memset(&object, 0, sizeof(object)); D_800F336A = 999;
         lookups = draws = 0;
-        assert(func_80199148(2, &object) == 0);
+        assert(RoomM350_BodyDebrisCallback(2, &object) == 0);
         assert(lookups == 1 && draws == 1);
     }
     return 0;

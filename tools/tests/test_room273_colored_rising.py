@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_80195E10'
+FUNCTION = 'RoomM273_HandTrailHitCallback'
 
 
 class ColoredRisingSprite(unittest.TestCase):
@@ -30,7 +30,7 @@ typedef char layout[sizeof(Particle)==8 && sizeof(Color)==4 &&
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n#include <string.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
-Color D_8018F1E4;
+Color g_RoomM273HandTrailHitColor;
 int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
 GteSineWord rcossin_tbl[4096];
 unsigned short g_FieldFxPaletteTable[8];
@@ -44,7 +44,7 @@ u_short GetClut(int x, int y) {
     g_FieldFxCurrentAge=999;
     memset(rcossin_tbl,0,sizeof(rcossin_tbl));
     rcossin_tbl[shadeOffset/4].word=0x12348001;
-    memset(&D_8018F1E4,0,sizeof(D_8018F1E4));
+    memset(&g_RoomM273HandTrailHitColor,0,sizeof(g_RoomM273HandTrailHitColor));
     return 0xF123;
 }
 void FieldFx_DrawShapeQuads(struct GteShortVector *point, struct GteRotation *rotation,
@@ -54,7 +54,7 @@ void FieldFx_DrawShapeQuads(struct GteShortVector *point, struct GteRotation *ro
     assert(cluts==1 && draws++==0 && (void *)point==&particle && rotation==0);
     assert(w==wantSize && h==wantSize && tile==102);
     assert(clut==0xF123 && flag==1 && shade==wantShade);
-    assert(color!=&D_8018F1E4 && memcmp(color,&wantColor,4)==0);
+    assert(color!=&g_RoomM273HandTrailHitColor && memcmp(color,&wantColor,4)==0);
     color->unknown=0;
 }
 int main(void) {
@@ -65,7 +65,7 @@ int main(void) {
     for(i=0;i<7;++i) for(j=0;j<5;++j) for(k=0;k<5;++k) {
         g_FieldFxCurrentAge=times[i]; particle.x=12; particle.z=-34;
         particle.y=values[j]; particle.speed=values[k];
-        assert(func_80195E10(1,&particle)==(times[i]>=16));
+        assert(RoomM273_HandTrailHitCallback(1,&particle)==(times[i]>=16));
         assert(particle.x==12 && particle.z==-34);
         assert(particle.y==(unsigned short)(times[i]<16 ? values[j]-values[k]:values[j]));
         assert(particle.speed==(unsigned short)(times[i]<16 ? values[k]+1:values[k]));
@@ -84,17 +84,17 @@ int main(void) {
             g_FieldFxSpriteParams.palette=kind; g_FieldFxAltPaletteFlag=variant;
             g_FieldFxPaletteTable[kind]=65535;
             wantPalette=65535+(kind==4 && variant ? 9:5);
-            D_8018F1E4.r=1; D_8018F1E4.g=128;
-            D_8018F1E4.b=255; D_8018F1E4.unknown=37;
-            wantColor=D_8018F1E4;
+            g_RoomM273HandTrailHitColor.r=1; g_RoomM273HandTrailHitColor.g=128;
+            g_RoomM273HandTrailHitColor.b=255; g_RoomM273HandTrailHitColor.unknown=37;
+            wantColor=g_RoomM273HandTrailHitColor;
             particle.x=12; particle.y=65530; particle.z=-34; particle.speed=8;
             cluts=draws=0;
-            assert(func_80195E10(2,&particle)==0 && cluts==1 && draws==1);
+            assert(RoomM273_HandTrailHitCallback(2,&particle)==0 && cluts==1 && draws==1);
             assert(particle.x==12 && particle.y==65530 && particle.z==-34 && particle.speed==8);
         }
-    assert(func_80195E10(0,&particle)==0);
-    assert(func_80195E10(-1,&particle)==0);
-    assert(func_80195E10(INT_MAX,&particle)==0);
+    assert(RoomM273_HandTrailHitCallback(0,&particle)==0);
+    assert(RoomM273_HandTrailHitCallback(-1,&particle)==0);
+    assert(RoomM273_HandTrailHitCallback(INT_MAX,&particle)==0);
     assert(draws==1 && cluts==1);
     return 0;
 }

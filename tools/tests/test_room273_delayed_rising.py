@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 ROOM = 'src/overlays/room_m273_liberty'
-FUNCTION = 'func_80199568'
+FUNCTION = 'RoomM273_SwayBurstCallback'
 
 
 class DelayedRisingSprite(unittest.TestCase):
@@ -62,7 +62,7 @@ int main(void) {
     for(i=0;i<9;++i) for(j=0;j<5;++j) for(k=0;k<5;++k) {
         g_FieldFxCurrentAge=times[i]; particle.x=12; particle.z=-34;
         particle.y=values[j]; particle.speed=values[k];
-        assert(func_80199568(1,&particle)==(times[i]>=36));
+        assert(RoomM273_SwayBurstCallback(1,&particle)==(times[i]>=36));
         assert(particle.x==12 && particle.z==-34);
         assert(particle.y==(unsigned short)(times[i]>=4 && times[i]<36
             ? values[j]-values[k]:values[j]));
@@ -71,7 +71,7 @@ int main(void) {
     }
     for(i=-3;i<5;++i) {
         g_FieldFxCurrentAge=i;
-        assert(func_80199568(2,&particle)==0);
+        assert(RoomM273_SwayBurstCallback(2,&particle)==0);
     }
     assert(!cluts && !draws);
     for(kind=0;kind<8;++kind) for(variant=0;variant<2;++variant)
@@ -87,13 +87,13 @@ int main(void) {
             expectedPalette=65535+(kind==4 && variant ? 4:0);
             particle.x=12; particle.y=65530; particle.z=-34; particle.speed=8;
             cluts=draws=0;
-            assert(func_80199568(2,&particle)==0 && cluts==1 && draws==1);
+            assert(RoomM273_SwayBurstCallback(2,&particle)==0 && cluts==1 && draws==1);
             assert(particle.x==12 && particle.y==65530 &&
                    particle.z==-34 && particle.speed==8);
         }
-    assert(func_80199568(0,&particle)==0);
-    assert(func_80199568(-1,&particle)==0);
-    assert(func_80199568(INT_MAX,&particle)==0);
+    assert(RoomM273_SwayBurstCallback(0,&particle)==0);
+    assert(RoomM273_SwayBurstCallback(-1,&particle)==0);
+    assert(RoomM273_SwayBurstCallback(INT_MAX,&particle)==0);
     assert(cluts==1 && draws==1);
     return 0;
 }

@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 # Overlay function addresses repeat across rooms; search this room only.
 ROOM = 'src/overlays/room_m350_cruiser'
 
-CALLBACK = 'func_8019404C'
+CALLBACK = 'RoomM350_OrbHandSparkCallback'
 
 
 class SizedLayersTests(unittest.TestCase):
@@ -86,12 +86,12 @@ int main(void) {
         wantSize=(int)((int64_t)half(i)*sizes[j]/4096);
         nextTimer=g_FieldFxCurrentAge+3; lastTimer=g_FieldFxCurrentAge+11;
         nextScale=half(i); clut=i;
-        assert(func_8019404C(2,&particle)==0 && calls==3);
+        assert(RoomM350_OrbHandSparkCallback(2,&particle)==0 && calls==3);
         assert(memcmp(&particle,&afterClut,sizeof(particle))==0);
     }
     for(trigger=0;trigger<9;trigger++) for(event=-3;event<=5;event++) if(event!=2) {
         calls=0; g_FieldFxCurrentAge=timers[trigger]; afterClut=particle;
-        assert(func_8019404C(event,&particle)==(event==1 && g_FieldFxCurrentAge>=8));
+        assert(RoomM350_OrbHandSparkCallback(event,&particle)==(event==1 && g_FieldFxCurrentAge>=8));
         assert(calls==0 && memcmp(&particle,&afterClut,sizeof(particle))==0);
     }
     return 0;
