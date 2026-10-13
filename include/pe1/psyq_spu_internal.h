@@ -123,6 +123,7 @@ u32 _spu_Fw(void *address, u32 size);
 /* SPU.OBJ initialization state and its ten-halfword request buffer. */
 extern int _spu_transMode, _spu_addrMode, _spu_inTransfer;
 extern u16 D_800B6900[10], _spu_dummy[];
+extern u16 _spu_RQ[10], D_8009B43C[];
 extern char g_SpuTimeoutFormat[], g_SpuWaitResetText[];
 int _spu_init(int hot);
 void _spu_Fw1ts(void);

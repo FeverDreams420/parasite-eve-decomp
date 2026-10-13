@@ -10,7 +10,7 @@ extern char g_PadVsyncIntQueueNode[];
 extern MemCardInterruptRegisters *D_8009B784;
 extern MemCardSioRegisters *D_8009B788;
 /* Per-port idle counters that PadEnableCom and the VSync timer age. */
-extern int D_800A5AC0[2];
+extern int g_PadPortIdleFrames[2];
 extern int (*g_MemCardCommandStepHandlers[])(void);
 extern int (*g_PadDmaCompleteFn)(int);
 extern u32 g_TimerTimeoutLimit, g_TimerTimeoutStart;

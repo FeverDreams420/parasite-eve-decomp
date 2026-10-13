@@ -51,7 +51,7 @@ typedef struct ScriptCmdArgs {
 #define ARG_WORD(ptr) (*(int *)(ptr))
 #define ARG_BYTE(ptr) (*(u8 *)(ptr))
 
-void func_800E00CC(Pe1Vec3s *position, int mode, int arg2, int arg3,
+void FieldFx_SpawnScriptSprite(Pe1Vec3s *position, int mode, int arg2, int arg3,
                    int arg4, int arg5, int arg6);
 
 int Script_DispatchScriptCmd(ScriptCmdArgs *args)
@@ -88,7 +88,7 @@ int Script_DispatchScriptCmd(ScriptCmdArgs *args)
         position.x = args->arg1->high;
         position.y = args->arg2->high;
         position.z = args->arg3->high;
-        func_800E00CC(&position, 0, args->arg4->low,
+        FieldFx_SpawnScriptSprite(&position, 0, args->arg4->low,
                       ARG_BYTE(args->arg5), 0, 0, 0);
         return 1;
     case 2401:
@@ -100,7 +100,7 @@ int Script_DispatchScriptCmd(ScriptCmdArgs *args)
         position2.x = args->arg1->high;
         position2.y = args->arg2->high;
         position2.z = args->arg3->high;
-        func_800E00CC(&position2, 1, args->arg4->low,
+        FieldFx_SpawnScriptSprite(&position2, 1, args->arg4->low,
                       ARG_BYTE(args->arg5), g_ScriptCameraBytes[0],
                       g_ScriptCameraBytes[1], g_ScriptCameraBytes[2]);
         return 1;

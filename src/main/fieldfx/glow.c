@@ -379,7 +379,7 @@ void GlowEffect_UpdateCoreGlow(char *arg0, char *arg1, short *arg2) {
         arg1[1] = 2;
     }
 }
-void func_800C8CBC(char *arg0, char *arg1, short *arg2) {
+void GlowEffect_UpdateGroundGlow(char *arg0, char *arg1, short *arg2) {
     arg2[2] -= 8;
     arg2[3] += 0x78;
     if (arg2[2] < 0x14) {
@@ -1459,7 +1459,7 @@ int FourLayerGlow_UpdateFlareLayers(void *arg0, FieldFxSlot *state, FieldFxGlowP
     }
 }
 
-int func_800CBBF0(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
+int FourLayerGlow_UpdateTwinGlow(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     anim->brightness = anim->brightness - 8;
     anim->scale = (u16)anim->scale + 0x3C;
     if ((s16)anim->brightness < 0x14) {

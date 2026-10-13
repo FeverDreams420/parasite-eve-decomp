@@ -209,7 +209,7 @@ void Inv_InitWayneStorage(void) {
     D_8009D08C = 0;
     D_8009D088 = 0;
     g_InvSavedSelectionRecord0 = *LookupTrackedItem(Inv_RestoreSelection(0));
-    D_800A206C = *LookupTrackedItem(Inv_RestoreSelection(1));
+    g_InvSavedSelectionRecord1 = *LookupTrackedItem(Inv_RestoreSelection(1));
 }
 
 void Inv_RememberSelection(unsigned int index, int value) {
@@ -259,6 +259,7 @@ void Inv_BuildStorageDisplay(void) {
     *LookupTrackedItem(D_8009D090) = g_InvSavedSelectionRecord0;
     RestoreList(g_InvSavedSelectionFromStorage1);
     *LookupTrackedItem(g_InvSavedSelectionIndex1) = D_800A206C;
+    *LookupTrackedItem(D_8009D094) = g_InvSavedSelectionRecord1;
 }
 
 static inline ItemDataRecord *LookupActiveItem(int index) {

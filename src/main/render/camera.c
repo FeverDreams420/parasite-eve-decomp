@@ -754,7 +754,7 @@ int Render_InitRoomPrimState(void *objectArg)
     g = g_RoomLightTint.g;
     b = g_RoomLightTint.b;
     intensity = ClampLight(intensity) << 4;
-    D_800BEA60.matrix.m[0][0] = intensity * r / 256;
+    g_RenderLightColorMatrix.matrix.m[0][0] = intensity * r / 256;
     D_800BEA66 = intensity * g / 256;
     D_800BEA6C = intensity * b / 256;
 
@@ -772,7 +772,7 @@ int Render_InitRoomPrimState(void *objectArg)
     D_800BEA64 = 0;
     D_800BEA6A = 0;
     D_800BEA70 = 0;
-    gte_SetColorMatrix(D_800BEA60.words);
+    gte_SetColorMatrix(g_RenderLightColorMatrix.words);
     return 0;
 }
 

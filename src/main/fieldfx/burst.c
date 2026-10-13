@@ -404,7 +404,7 @@ void PointSprite_UpdateRadialParticles(void *arg0, FieldFxSlot *state, FieldFxRa
     }
 }
 
-int func_800CCA40(void *arg0, FieldFxSlot *state, FieldFxPointSprite *anim) {
+int PointSprite_UpdateGroundRing(void *arg0, FieldFxSlot *state, FieldFxPointSprite *anim) {
     anim->scale -= 2;
     anim->extent = (u16)anim->extent + 0x28;
     if ((s8)anim->scale < 0x1E) {
@@ -571,7 +571,7 @@ int BurstEffect_InitTarget(void) {
     FieldFx_EnsureEffectTexturePage(0);
 }
 
-int func_800CD07C(void *arg0, void *arg1, FieldFxBurstData *anim) {
+int BurstEffect_InitGroundGlow(void *arg0, void *arg1, FieldFxBurstData *anim) {
     u16 x = g_BurstEffectTargetPosition.x;
     BattleEntity *entity = D_8009D254;
     int y;

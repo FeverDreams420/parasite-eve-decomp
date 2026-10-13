@@ -51,7 +51,7 @@ CASES = [('libmath/divdf3',
   2332,
   '7c4ca8096a8921313e5b9a5f036f2b9341d656633afed2132b62af8d40aa8c74',
   'D_800B89F4 = 0x800B89F4;\n'
-  'D_800A801C = 0x800A801C;\n'
+  'g_StRgb24Mode = 0x800A801C;\n'
   'g_CdStIntrMdecDmaChcrPtr = 0x8009B34C;\n'
   'g_CdStreamMemorySource = 0x800C0DB8;\n'
   'g_CdStreamReady = 0x800B0CD0;\n'

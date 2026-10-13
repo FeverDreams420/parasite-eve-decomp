@@ -43,7 +43,7 @@ int Scene_LoadEntityTexture(void);
 void Entity_RelocateSceneData(void);
 void Render_SetupFogLayer(void *source);
 void Script_DrawSyncAndFlush(void);
-void func_800E0060(void);
+void FieldFx_ClearScriptSprites(void);
 void SetDispMask(int arg0);
 
 void Draw_InitPipeline(void) {
@@ -136,7 +136,7 @@ void Draw_InitPipeline(void) {
     }
     Render_SetupFogLayer(fogSource);
     Script_DrawSyncAndFlush();
-    func_800E0060();
+    FieldFx_ClearScriptSprites();
     g_GlobalFrameCounter[0] = 0;
     g_RoomFloorY->y = 0;
     DrawSync(0);

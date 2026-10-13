@@ -10,7 +10,7 @@ typedef union RenderLightingMatrix {
     u32 words[8];
 } RenderLightingMatrix;
 
-extern RenderLightingMatrix g_RenderLightingState, D_800BEA60;
+extern RenderLightingMatrix g_RenderLightingState, g_RenderLightColorMatrix;
 
 /* Lighting block at g_RenderLightingState: the light-direction matrix, the light
  * color matrix (one column per light) and the per-light 8-bit colors. */

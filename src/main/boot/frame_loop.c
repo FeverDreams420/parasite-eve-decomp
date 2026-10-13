@@ -42,7 +42,7 @@ int func_80122040(void);
 void func_80121A00(void);
 void Draw_ClearOnFlag(void);
 void Render_Update(void);
-void func_800E01BC(void);
+void FieldFx_UpdateScriptSprites(void);
 void Boot_FinishFrame(void);
 void Akao_Cmd_F1(void);
 void Render_Noop(int mode);
@@ -132,7 +132,7 @@ void Boot_RunFrame(void)
                     Render_Update();
                     Menu_DrawTextboxEntries();
                     Render_SetGteScreenOffset();
-                    func_800E01BC();
+                    FieldFx_UpdateScriptSprites();
                     Render_ResetGteScreenOffset();
                     Render_SetCDDCSlot();
                 }

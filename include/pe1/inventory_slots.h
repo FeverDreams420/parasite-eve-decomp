@@ -80,7 +80,7 @@ extern u32 g_InvStorageSelectionBits[];
 extern u8 D_800A1FE8[];
 extern u8 *D_8009D084;
 extern s32 D_8009D088, D_8009D08C;
-extern ItemDataRecord g_InvSavedSelectionRecord0, D_800A206C;
+extern ItemDataRecord g_InvSavedSelectionRecord0, g_InvSavedSelectionRecord1;
 /* Global fallback ammunition record, then the records of item values
  * 0x200..0x208 (the first three are the category ammunition pools);
  * storage tool IDs. */

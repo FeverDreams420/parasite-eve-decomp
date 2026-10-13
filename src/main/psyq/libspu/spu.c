@@ -40,7 +40,7 @@ int _spu_init(int hot) {
     _spu_RXX->key_off[1] = 0xFFFF;
     _spu_RXX->reverb_enable[0] = 0;
     _spu_RXX->reverb_enable[1] = 0;
-    clear = D_800B6900;
+    clear = _spu_RQ;
     /* Preserve the ascending halfword writes to the shared request buffer. */
     for (; channel < 10; channel++) {
         *clear++ = 0;

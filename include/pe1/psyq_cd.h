@@ -411,7 +411,7 @@ extern u32 g_CdStreamStartFrame;
 /* CD streaming state shared by StSetStream, StSetRing and StCdInterrupt. */
 extern s32 g_StCurrentFrameNumber;
 extern s16 g_StFrameSectorIndex;
-extern s32 D_800A801C;
+extern s32 g_StRgb24Mode;
 /* Contiguous end-of-stream controls. StCdInterrupt retains its two interior
  * scalar aliases because field-based addressing changes its retail schedule. */
 typedef struct CdStreamEndState {

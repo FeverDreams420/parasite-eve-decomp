@@ -106,7 +106,7 @@ extern GteShortVector g_RoomM318FanSweepAnchor;
 extern int RoomM318_FanSweepSpark(int mode, RoomFanSweepSpark *spark);
 /* Main executable copy of the fan sweep spark (FieldFx_FanSweepSpark). */
 extern void *g_FanSweepSparkTrailPool;
-extern RenderColor D_800C22D4;
+extern RenderColor g_FieldFxFanSweepSparkTint;
 extern GteShortVector g_FanSweepSparkAnchor;
 extern int FieldFx_FanSweepSpark(int mode, RoomFanSweepSpark *spark);
 extern int FieldFx_EmberSpark(int mode, s16 *position);
