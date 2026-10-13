@@ -70,7 +70,7 @@ int Inv_CheckFreeSlotCapacity(int requested_slots) {
 int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
     /* Match the retail 0x60-byte stack frame; remove with a cleaner TU model. */
     unsigned char stack_pad[32];
-    int mod_index = modifier_index;
+    int mod_index;
     int selected_a;
     int selected_b;
     ItemDataRecord *item_a;
@@ -78,7 +78,7 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
     int item_id;
     int count;
     int i;
-    register int result asm("$19");
+    int result;
     int mask;
     int modifier;
     int existing;
@@ -105,6 +105,7 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
         item_a = resolved;
     }
 
+    mod_index = modifier_index;
     selected_b = Inv_RestoreSelection(list_index < 1);
     item_b = 0;
     if (selected_b >= 0 && selected_b < g_InvSlotLimit) {
