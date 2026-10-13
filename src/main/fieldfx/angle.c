@@ -46,8 +46,9 @@ int FieldFx_TurnToward(int current, int target, int step) {
 
 
 s32 FieldFx_AngleDistance(s32 lhs, s32 rhs) {
-    register s32 delta asm("$4");
+    s32 delta;
     s32 abs_delta;
+    int wrapThreshold = 0x801;
 
     delta = lhs - rhs;
     abs_delta = delta;
@@ -56,9 +57,10 @@ s32 FieldFx_AngleDistance(s32 lhs, s32 rhs) {
         abs_delta = delta;
     }
 
-    if ((short)abs_delta >= 0x801) {
+    if ((short)abs_delta >= wrapThreshold) {
         abs_delta = 0x1000 - abs_delta;
     }
 
-    return (short)abs_delta;
+    delta = (short)abs_delta;
+    return delta;
 }
