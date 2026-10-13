@@ -92,7 +92,7 @@ s32 MENUCARD_OPEN_VIDEO_NAME(s32 number) {
     char name[32];
     u8 result[8];
     VideoEntry *entry;
-    u32 found;
+    DslFILE *found;
 
     if ((u16)number >= 47) {
         return 0;
@@ -117,7 +117,8 @@ search:
     if (DsSystemStatus() == 1 && DsQueueLen() == 0) {
         found = DsSearchFile(&MENUCARD_VIDEO_FILE, name);
     }
-    if (found == 0 || found == -1) goto search;
+    /* DsSearchFile: the file record, 0 when absent, all ones on a read error. */
+    if (found == 0 || found == (DslFILE *)-1) goto search;
     MENUCARD_VIDEO_RESTART = MENUCARD_VIDEO_FILE.pos;
     entry = MENUCARD_VIDEO_ENTRY;
     size.x = entry->x;

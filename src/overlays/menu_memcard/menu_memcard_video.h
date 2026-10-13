@@ -9,6 +9,7 @@
 #include "pe1/game_state.h"
 #include "pe1/gpu_image.h"
 #include "pe1/psyq_cd.h"
+#include "pe1/psyq_ds.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_press.h"
 
@@ -84,17 +85,15 @@ void MenuCard_SetVideoDisplay(s8 index, s8 wide);
 void func_80121004(s8 index, s8 wide);
 
 /* Video open: file lookup, stream start and first decoded frame. */
-typedef struct VideoFile { CdlLOC pos; u32 size; char name[16]; } VideoFile;
 extern u8 D_800B0DBF;
 extern VideoEntry D_80122438[];
-extern VideoFile D_801223FC, D_801D0DC4;
+extern DslFILE D_801223FC, D_801D0DC4;
 extern CdlLOC D_80122414, D_801D0DDC;
 extern VideoDisplay D_801228CC, D_801D1464;
 extern char D_80120FF4[], D_80120FFC[], D_8018F2E4[], D_8018F2EC[];
 extern void strcat(char *, char *), StSetRing(void *, s32);
 extern void func_8010C89C(void *, void *, void *), func_801214D4(void);
-/* DsSearchFile: the file record, 0 when absent, or all ones on a read error. */
-extern u32 DsSearchFile(VideoFile *, char *); extern s32 DsRead2(CdlLOC *, s32);
+extern s32 DsRead2(CdlLOC *, s32);
 s32 func_80121C04(s32 number);
 s32 MenuCard_OpenVideo(s32 number);
 
