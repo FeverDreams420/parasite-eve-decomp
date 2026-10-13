@@ -596,7 +596,8 @@ void Battle_DrawTargetHighlight(void)
 
 void Battle_DrawSpellName(void) {
     s32 c;
-    register s32 r130 asm("$4");
+    register s32 packetOffset asm("$3");
+    register s32 workValue asm("$4");
     s32 c1;
     s16 ys;
     s16 xs;
@@ -615,8 +616,8 @@ void Battle_DrawSpellName(void) {
     }
     if ((g_ActiveActor->action->attackWord & 0x300000) == 0x200000) {
         u8 *q508;
-        r130 = 0x130;
-        __asm__ __volatile__("" :: "r"(r130));
+        workValue = 0x130;
+        __asm__ __volatile__("" :: "r"(workValue));
         q508 = D_8009E508;
         {
             RenderSpritePacket *pa;
@@ -646,7 +647,7 @@ void Battle_DrawSpellName(void) {
             t3.address = t3.address + base.address;
             t3.sprite->y = ys;
             t3.sprite->x = tE + 0x3C;
-            clut = GetClut(r130, rFD);
+            clut = GetClut(workValue, rFD);
         }
         {
             s32 cD;
@@ -682,19 +683,18 @@ void Battle_DrawSpellName(void) {
             s32 s0;
             RenderSpritePacket *pl;
             {
-                register s32 t118 asm("$3");
                 {
                     s32 cE;
                     cE = g_ActiveDrawSlotRecord.slot;
-                    t118 = cE * 0x118;
+                    packetOffset = cE * 0x118;
                     s0 = i * 0x1C;
                 }
-                t118 += s0;
+                packetOffset += s0;
                 {
                     BattleStatusPrimAddress at;
 
                     at.bytes = e508;
-                    at.address = t118 + at.address;
+                    at.address = packetOffset + at.address;
                     pl = at.sprite;
                 }
             }
@@ -706,7 +706,7 @@ void Battle_DrawSpellName(void) {
                 d68 = dval->action;
             }
             if ((d68->attackWord & 0x300000) == 0x300000) {
-                r130 = 0x130;
+                workValue = 0x130;
                                 pl->u = 0xD8;
                 c1 = g_ActiveDrawSlotRecord.slot;
                 {
@@ -716,9 +716,9 @@ void Battle_DrawSpellName(void) {
                     at.address = c1 * 0x118 + s0 + at.address;
                     at.sprite->v = e0;
                 }
-                clut = GetClut(r130, 0x1FB);
+                clut = GetClut(workValue, 0x1FB);
             } else if ((d68->turnWord & 0xC0) == 0x80) {
-                r130 = 0x130;
+                workValue = 0x130;
                                 pl->u = 0xDC;
                 c1 = g_ActiveDrawSlotRecord.slot;
                 {
@@ -728,10 +728,10 @@ void Battle_DrawSpellName(void) {
                     at.address = c1 * 0x118 + s0 + at.address;
                     at.sprite->v = e0;
                 }
-                clut = GetClut(r130, 0x1FC);
+                clut = GetClut(workValue, 0x1FC);
             } else {
                 u8 dv = 0xD4;
-                r130 = 0x130;
+                workValue = 0x130;
                                 pl->u = dv;
                 c1 = g_ActiveDrawSlotRecord.slot;
                 {
@@ -741,14 +741,13 @@ void Battle_DrawSpellName(void) {
                     at.address = c1 * 0x118 + s0 + at.address;
                     at.sprite->v = e0;
                 }
-                clut = GetClut(r130, 0x1FA);
+                clut = GetClut(workValue, 0x1FA);
             }
             {
-                register s32 ti asm("$3");
-                r130 = g_ActiveDrawSlotRecord.slot;
-                ti = r130 * 0x118;
-                ti = s0 + ti;
-                                *(s16 *)(D_8009E516 + ti) = clut;
+                workValue = g_ActiveDrawSlotRecord.slot;
+                packetOffset = workValue * 0x118;
+                packetOffset = s0 + packetOffset;
+                                *(s16 *)(D_8009E516 + packetOffset) = clut;
                 __asm__ __volatile__("");
             }
             {
@@ -757,9 +756,9 @@ void Battle_DrawSpellName(void) {
                 register s32 cJ asm("$6");
                 register s32 a2v asm("$5");
                 {
-                    r130 = i;
-                    __asm__("" : "=r"(r130) : "0"(r130));
-                    j7 = r130 * 7;
+                    workValue = i;
+                    __asm__("" : "=r"(workValue) : "0"(workValue));
+                    j7 = workValue * 7;
                 }
                 j7 <<= 2;
                 cJ = g_ActiveDrawSlotRecord.slot;
