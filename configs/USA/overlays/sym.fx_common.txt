@@ -12,6 +12,12 @@ FxCommon_DrawModelTinted = 0x8019A318; // type:func
 FxCommon_DrawModelFlat = 0x8019B1D0; // type:func
 FxCommon_SetMotionEndpoints = 0x80195BC8; // type:func
 
+// Matrices in the image header: the identity the camera matrices start
+// from and the Y-flip that FxCommon_DrawTransformNodeCulled and
+// FxCommon_DrawLodNode compose with mirrored nodes.
+g_FxCommonIdentityMatrix = 0x8018EFF4;
+g_FxCommonMirrorYMatrix = 0x8018F014;
+
 // Runtime buffers past the end of the overlay image (no overlay object
 // defines them yet).
 g_FxCommonMotionRemaining1 = 0x8019C050;

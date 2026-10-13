@@ -156,7 +156,7 @@ void FxCommon_InitScene(void)
                          g_FieldBgTextureSlots[textureIndexOrHasPoints].clut_y);
         textureIndexOrHasPoints++;
     } while (textureIndexOrHasPoints < 2);
-    if ((D_8019C008 != 0) || (Render_SetupFogLayer(Draw_GetTimTableEntry(&g_FxCommonTimTable, 0)), (D_8019C008 != 0))) {
+    if ((g_FxCommonAltFogLayer != 0) || (Render_SetupFogLayer(Draw_GetTimTableEntry(&g_FxCommonTimTable, 0)), (g_FxCommonAltFogLayer != 0))) {
         Render_SetupFogLayer(Draw_GetTimTableEntry(&g_FxCommonTimTable, 1));
     }
     resourceTableData = &g_FxCommonTimTable;
@@ -535,9 +535,9 @@ void FxCommon_InitScene(void)
     variantOrMotionOffset = 0;
     for (; motionIndex < 10; ++motionIndex) {
         FxCommon_SamplePath(motionIndex << 8, motionBase + 0x40, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion);
-        *((s32 *)((u8 *)D_8019CAA8 + variantOrMotionOffset)) = motion.vector.x << 0x10;
-        *((s32 *)((u8 *)D_8019CAAC + variantOrMotionOffset)) = motion.vector.y << 0x10;
-        *((s32 *)((u8 *)D_8019CAB0 + variantOrMotionOffset)) = motion.vector.z << 0x10;
+        *((s32 *)((u8 *)g_FxCommonMotionPositions + variantOrMotionOffset)) = motion.vector.x << 0x10;
+        *((s32 *)((u8 *)g_FxCommonMotionPositionY + variantOrMotionOffset)) = motion.vector.y << 0x10;
+        *((s32 *)((u8 *)g_FxCommonMotionPositionZ + variantOrMotionOffset)) = motion.vector.z << 0x10;
         variantOrMotionOffset += 0x10;
     }
     if (g_FxCommonAutoPlay == 1) {
@@ -561,7 +561,7 @@ void FxCommon_InitScene(void)
         D_8019C00D = 1;
     }
     if (g_FxCommonStartPreset == 7) {
-        selectedMotion = D_8019C017;
+        selectedMotion = g_FxCommonStartCameraPath;
         g_FxCommonRoomVariant = 9;
         g_FxCommonPlayFrame = 0;
         g_FxCommonMarkerFade = 0;

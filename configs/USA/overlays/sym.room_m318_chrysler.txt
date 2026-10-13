@@ -1,10 +1,10 @@
 RoomM318_SetScriptArg2 = 0x8019937C; // type:func
 g_RoomM318ScriptArg2 = 0x80199938;
-D_801998F4 = 0x801998F4;
-D_80199910 = 0x80199910;
-D_80199918 = 0x80199918;
-D_8019991C = 0x8019991C;
-D_80199920 = 0x80199920;
+g_RoomM318ActorTypeId = 0x801998F4;
+g_RoomM318EmberBurstTypeId = 0x80199910;
+g_RoomM318RisingColumnDuration = 0x80199918;
+g_RoomM318RisingColumnHeight = 0x8019991C;
+g_RoomM318RisingColumnOffset = 0x80199920;
 RoomLib_HandlerDNop0 = 0x8018F244; // type:func
 RoomLib_InitHandlerD = 0x8018F24C; // type:func
 RoomLib_ConfigureHandlerD = 0x8018F2EC; // type:func

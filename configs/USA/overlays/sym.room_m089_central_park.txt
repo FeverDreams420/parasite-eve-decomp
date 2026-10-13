@@ -1,5 +1,5 @@
-D_80194162 = 0x80194162;
-g_RoomM089_D_80194164 = 0x80194164;
+g_RoomM089AnchorY = 0x80194162;
+g_RoomM089AnchorZ = 0x80194164;
 RoomLib_HandlerDNop0 = 0x8018F1DC; // type:func
 RoomLib_InitHandlerD = 0x8018F1E4; // type:func
 RoomLib_ConfigureHandlerD = 0x8018F284; // type:func
@@ -64,7 +64,7 @@ g_RoomM089Effects = 0x80194128;
 g_RoomM089Anchor = 0x80194160;
 g_RoomM089PulseModel = 0x8019416C;
 g_RoomM089PulseColorTrack = 0x801940F8;
-g_RoomM089_D_8018EFE8 = 0x8018EFE8;
+g_RoomM089SectionHeader = 0x8018EFE8;
 g_RoomM089TrailHeadColor = 0x8018F1CC;
 g_RoomM089TrailTailColor = 0x8018F1D0;
 g_RoomM089SpinGlowColor = 0x8018F1D4;

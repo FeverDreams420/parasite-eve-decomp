@@ -55,7 +55,7 @@ segments:
       - [0x6ECC, data, D_80195EB4]
       - [0x6F04, data, D_80195EEC]
       - [0x6F08, data, D_80195EF0]
-      - [0x6F0C, data, D_80195EF4]
+      - [0x6F0C, data, g_RoomM256TrailConfig]
       - [0x6F10, data, D_80195EF8]
       - [0x6F14, data, D_80195EFC]
       - [0x6F34, data, D_80195F1C]

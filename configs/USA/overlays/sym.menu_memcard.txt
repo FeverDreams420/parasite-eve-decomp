@@ -7,6 +7,20 @@ MenuCard_StopVideo = 0x8012B19C; // type:func
 // provide: g_MemcardFirstDrawScreen = 0x801D11BC;
 // provide: g_MemcardSecondScreen = 0x801D11C0;
 
+// The fade unit's functions as the screen unit addresses them: the screen
+// code stores them in image-node callbacks 0x4C above the fade unit's link
+// addresses (the fade code links 0x4C below the screen's base, see
+// menu_memcard.yaml). Each entry is one fade.c function, in order; the
+// spacing equals the function sizes.
+// provide: g_MenuCardInitFadeForNodeEntry = 0x80192F98;
+// provide: g_MenuCardUpdateFadeCounterEntry = 0x80192FE8;
+// provide: g_MenuCardAdvanceFadeEntry = 0x80193084;
+// provide: g_MenuCardUpdateFadeDisplayEntry = 0x801930D8;
+// provide: g_MenuCardDecreaseFadeEntry = 0x8019316C;
+// provide: g_MenuCardCreateFadeImageNodeEntry = 0x8019319C;
+// provide: g_MenuCardAttachFadePayloadEntry = 0x801931BC;
+// provide: g_MenuCardStepFadeToImagesEntry = 0x80193200;
+
 // The first video player's file table (video.c, 47 VideoEntry records of
 // 0x14 bytes) and the file names its records point at ("\FMV000.STR;1"
 // down to "\FMV035.STR;1", 0x10 bytes apart). With the names labelled and

@@ -1063,7 +1063,7 @@ s32 Battle_StepAyaAction(void)
       Entity_SetActionMode(D_8009D254, 7);
       D_8009D254->renderObject.variant_visible = 1;
       Anim_SetInterpRate(&D_8009D254->renderObject, 0x1E);
-      D_801F1F38 = 1;
+      g_BattleCrossFlashStop = 1;
       g_AyaActionTimer = 0xF;
       g_AyaActionStep += 1;
       D_8009D254->renderObject.flags_9C |= 4;

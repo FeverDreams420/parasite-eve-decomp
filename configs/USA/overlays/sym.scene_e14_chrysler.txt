@@ -32,5 +32,5 @@ RoomLib_UpdatePairedGlowSprite = 0x8018FB00; // type:func
 RoomLib_InitPairedEmitter = 0x8018FB64; // type:func
 RoomLib_TransformPairedEmitter__scene_e14_chrysler = 0x8018FCE4; // type:func
 RoomLib_TickPairedGlowB = 0x8018FFB0; // type:func
-g_SceneE14_D_8018EFE8 = 0x8018EFE8;
-g_SceneE14_D_80190E84 = 0x80190E84;
+g_SceneE14SectionHeader = 0x8018EFE8;
+g_SceneE14ScriptArgB = 0x80190E84;

@@ -165,7 +165,10 @@ extern BattleSavedRotation g_AyaSavedRotation;
  * the store. Matching debt (see docs/CODE_ORGANIZATION.md). */
 extern struct { u16 value; char pad[14]; } D_800B0D88_read __asm__("D_800B0D88");
 extern struct { u16 value; char pad[14]; } D_800B0D88_write __asm__("D_800B0D88");
-extern u16 D_801F1F38;
+/* Set when Aya's action reaches its recovery pose (Battle_StepAyaAction case
+ * 12); the cross-flash effect in the task program area clears it when it
+ * starts and stops spawning its ember particles once it is set. */
+extern u16 g_BattleCrossFlashStop;
 int Scene_InitEntityPlayer(int mode);
 void Pm_StopLowerHalf(void);
 s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);

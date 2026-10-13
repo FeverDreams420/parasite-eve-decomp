@@ -8,5 +8,5 @@ extern short g_RcossinTblCos[];
 int RoomM256_SwingRelease(RoomM256Swing *obj);
 extern char g_RoomM256ScatterConfig[];
 extern int g_RoomM256TrailTurnScale;
-extern char D_80195EF4[];
+extern char g_RoomM256TrailConfig[];
 #endif /* PE1_EXT_M256 */

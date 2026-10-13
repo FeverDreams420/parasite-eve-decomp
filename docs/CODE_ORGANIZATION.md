@@ -1116,7 +1116,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
 - A unit in a shared overlay directory (room_lib) now counts towards the
   rooms whose splat config links it, so `room_lib/capture_frame_sample.c`
   (m156/m291/m380) and `room_lib/effect_sequence.c` (other rooms) no longer
-  collide at `D_80192C34`/`D_80192C38`/`D_80192C3C`.
+  collide at 0x80192C34/0x80192C38/0x80192C3C.
 
 Still open:
 

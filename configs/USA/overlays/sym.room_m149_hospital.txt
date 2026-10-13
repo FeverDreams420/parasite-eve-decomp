@@ -3,6 +3,6 @@ RoomLib_PairA = 0x8018FD38;
 RoomLib_PairB__room_m149_hospital = 0x8018FD3C;
 RoomEffect_DroppedFlareEmitter = 0x8018F9F8; // type:func
 RoomEffect_DroppedFlareParticle = 0x8018F038;
-g_RoomM149_D_8018EFE8 = 0x8018EFE8;
+g_RoomM149SectionHeader = 0x8018EFE8;
 g_RoomM149_D_801A81F4 = 0x801A81F4;
 g_RoomM149DroppedFlareEffects = 0x8018FD00;

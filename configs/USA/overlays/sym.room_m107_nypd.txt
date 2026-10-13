@@ -1,5 +1,5 @@
-D_80193724 = 0x80193724;
-D_80193728 = 0x80193728;
+g_RoomM107PairedGlowSpriteCell = 0x80193724;
+g_RoomM107PairedGlowSpriteOffset = 0x80193728;
 RoomLib_HandlerDNop0 = 0x8019026C; // type:func
 RoomLib_InitHandlerD = 0x80190274; // type:func
 RoomLib_ConfigureHandlerD = 0x80190314; // type:func
@@ -81,7 +81,7 @@ RoomLib_InitPairedEmitter = 0x8018FD2C; // type:func
 RoomLib_TransformPairedEmitter__room_m107_nypd = 0x8018FEAC; // type:func
 RoomLib_TickPairedGlowB = 0x80190178; // type:func
 g_RoomPairedGlowSprite = 0x80193720;
-g_RoomM107_D_8018EFE8 = 0x8018EFE8;
+g_RoomM107SectionHeader = 0x8018EFE8;
 g_RoomPairedGlowPacket__room_m107_nypd = 0x8019372C;
 g_RoomPairedGlowColorTable__room_m107_nypd = 0x80193660;
 g_RoomClassTable__room_m107_nypd = 0x80193678; // size:0xA8 allow_addend:true

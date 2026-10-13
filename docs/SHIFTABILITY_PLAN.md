@@ -636,7 +636,7 @@ file. One table names the windows:
   labels of the `main/overlay_windows` blob (`g_MdecOverlayArea`, `g_CdLoadArea`,
   `g_StrFileDirArea`, `g_PmTaskProgramArea`, `D_8010BD00`, `g_SceneLoadScratchArea`,
   the menu_memcard and boot entry points, the process slots
-  `g_FieldFxTaskProgramCmd108`..`D_801F1F38`), so they move with the block.
+  `g_FieldFxTaskProgramCmd108`..`g_BattleCrossFlashStop`), so they move with the block.
 - Overlays: `make overlay-split` rewrites each overlay's linker script so
   every section VMA is `(OVERLAY_WINDOW_x + offset)`
   (`tools/scripts/overlay_windows.py rebase-ld`); `overlay_link_symbols.py`

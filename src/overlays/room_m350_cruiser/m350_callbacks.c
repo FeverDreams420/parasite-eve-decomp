@@ -469,7 +469,7 @@ int RoomM350_DropController(int event,short *cursor) {
     short phase;
     if (event==0) {
         *(int *)&g_RoomM350DropEventSlots=0;
-        D_8019A858=0;
+        g_RoomM350DropBurstState=0;
         g_RoomM350DropDone=0;
         g_RoomM350DropTrailCount=0;
         g_RoomM350DropLungeTimer=0;

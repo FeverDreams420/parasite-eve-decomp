@@ -31,8 +31,8 @@ void FxCommon_UpdateCameraMatrices(void)
     GteShortVector eye;
     GteVector up;
 
-    view = D_8018EFF4;
-    rotation = D_8018EFF4;
+    view = g_FxCommonIdentityMatrix;
+    rotation = g_FxCommonIdentityMatrix;
     offset.x = g_FxCommonCameraTarget.x - g_FxCommonCameraPosition.x;
     offset.y = g_FxCommonCameraTarget.y - g_FxCommonCameraPosition.y;
     offset.z = g_FxCommonCameraTarget.z - g_FxCommonCameraPosition.z;
@@ -630,7 +630,7 @@ void FxCommon_DrawTransformNodeCulled(FxCommonTransformNode *node, FxCommonBuffe
     GteMatrix mirror;
     int state;
 
-    mirror = D_8018F014;
+    mirror = g_FxCommonMirrorYMatrix;
     position.x = node->matrix.t[0];
     position.y = node->matrix.t[1];
     position.z = node->matrix.t[2];
@@ -668,7 +668,7 @@ void FxCommon_DrawLodNode(FxCommonLodNode *node, FxCommonBuffer *context, u8 for
     s16 margin;
     int depth;
 
-    mirror = D_8018F014;
+    mirror = g_FxCommonMirrorYMatrix;
     position.x = node->matrix.t[0];
     position.y = node->matrix.t[1];
     position.z = node->matrix.t[2];
@@ -820,14 +820,14 @@ void FxCommon_SelectRoomVariant(void)
 
     FxCommon_InitDisplay();
     if (Save_GetMetadataWindowIndex() == 0)
-        D_8019C008 = 0;
+        g_FxCommonAltFogLayer = 0;
     else
-        D_8019C008 = 0xFF;
+        g_FxCommonAltFogLayer = 0xFF;
     if (g_GameStateFlagsWord & 0x40000000) {
-        D_8019C008 = 0xFF;
+        g_FxCommonAltFogLayer = 0xFF;
         Menu_SetEquipSlotIndex(1);
     } else {
-        D_8019C008 = 0;
+        g_FxCommonAltFogLayer = 0;
         Menu_SetEquipSlotIndex(0);
     }
 

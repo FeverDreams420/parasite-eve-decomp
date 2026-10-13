@@ -1,8 +1,8 @@
 RoomEffect_OrbitFlareDrift = 0x8018F004; // type:func
 RoomEffect_OrbitFlareController = 0x8018F20C; // type:func
 g_FxField_D_8018FC78 = 0x8018FC78;
-g_FxField_D_8018FCF0 = 0x8018FCF0;
-g_FxField_D_8018FCF4 = 0x8018FCF4;
-g_FxField_D_8018EFE8 = 0x8018EFE8;
+g_FxFieldScriptArgB = 0x8018FCF0;
+g_FxFieldScriptArgC = 0x8018FCF4;
+g_FxFieldSectionHeader = 0x8018EFE8;
 RoomLib_SetArgs3__fx_field = 0x8018FC54; // type:func
 g_RoomScriptArgs__fx_field = 0x8018FCEC;

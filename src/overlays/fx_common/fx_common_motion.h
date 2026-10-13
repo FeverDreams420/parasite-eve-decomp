@@ -42,7 +42,7 @@ extern s16 g_FxCommonExitCountdown;
 extern s16 g_FxCommonPageId;
 extern s16 g_FxCommonScreenFade;
 extern u16 g_FxCommonDemoFrame;
-extern s16 D_8019C032;
+extern s16 g_FxCommonDrawTintedCopies;
 extern s32 g_FxCommonTailPathPosition;
 extern s32 g_FxCommonFlyerPathPosition;
 extern s32 g_FxCommonCameraPathPosition;
@@ -52,8 +52,8 @@ extern s16 g_FxCommonDemoResource;
 extern s32 g_FxCommonDemoResourceTicks;
 extern u8 g_FxCommonDemoShade;
 extern u8 g_FxCommonDemoFadePhase;
-extern s16 D_8019C13C;
-extern s16 D_8019C13E;
+extern s16 g_FxCommonInputLock;
+extern s16 g_FxCommonTailViewEntered;
 extern s32 g_FxCommonExitVariant;
 
 /* Double-buffered frame: packet buffer and ordering table, then the
@@ -71,8 +71,8 @@ extern s32 g_FxCommonHsyncCount;
 /* Plain views of the camera position and its look-at target. */
 extern FxCommonVec3 g_FxCommonCameraPosition;
 extern FxCommonVec3 g_FxCommonCameraTarget;
-extern RoomSpriteMatrix D_8018EFF4;
-/* Transform nodes animated along the camera paths (D_801EA578..D_801EA58C). */
+extern RoomSpriteMatrix g_FxCommonIdentityMatrix;
+/* Transform nodes animated along the camera paths (0x801EA578..0x801EA58C). */
 extern FxCommonTransformNode *g_FxCommonPathNodes[6];
 /* Camera rotation angles. An incomplete array, so the -G8 camera unit keeps
  * the absolute address in a register as retail does. */

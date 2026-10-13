@@ -87,5 +87,5 @@ g_RoomInitList__room_m392_chrysler = 0x80194484;
 g_RoomSpawnLayout__room_m392_chrysler = 0x801944CC;
 RoomLib_SlotSet__room_m392_chrysler = 0x80194440; // type:func
 RoomLib_ClassNop0 = 0x8018F218; // type:func
-g_RoomM392_D_8018EFE8 = 0x8018EFE8;
+g_RoomM392SectionHeader = 0x8018EFE8;
 g_RoomClassTable__room_m392_chrysler = 0x80194540; // size:0xA8 allow_addend:true

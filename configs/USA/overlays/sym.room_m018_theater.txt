@@ -10,5 +10,5 @@ RoomEffect_ModelUpdate = 0x8018F1F8; // type:func
 RoomEffect_ModelDraw = 0x8018F580; // type:func
 g_RoomFxMirrorHandlers = 0x8018FB44;
 g_RoomFxMirrorAxes = 0x8018FB60;
-g_RoomM018_D_8018EFE8 = 0x8018EFE8;
+g_RoomM018SectionHeader = 0x8018EFE8;
 g_RoomM018_D_8018FB80 = 0x8018FB80;

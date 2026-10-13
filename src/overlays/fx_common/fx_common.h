@@ -217,12 +217,12 @@ typedef struct FxCommonResourceState {
 
 extern s16 g_FxCommonMotionBlendFrames;
 extern u8 g_FxCommonPathWrapped;
-extern GteMatrix D_8018F014;
-extern FxCommonMotionRecord D_8019CAA8[10];
-extern FxCommonMotionLane D_8019CAB0[10];
-extern FxCommonMotionByte D_801EA268[1];
-extern FxCommonMotionByte D_801EA26C[1];
-extern FxCommonMotionByte D_801EA270[1];
+extern GteMatrix g_FxCommonMirrorYMatrix;
+extern FxCommonMotionRecord g_FxCommonMotionPositions[10];
+extern FxCommonMotionLane g_FxCommonMotionPositionZ[10];
+extern FxCommonMotionByte g_FxCommonMotionDeltaX[1];
+extern FxCommonMotionByte g_FxCommonMotionDeltaY[1];
+extern FxCommonMotionByte g_FxCommonMotionDeltaZ[1];
 extern FxCommonMotionRecord g_FxCommonMotionDeltas[10];
 extern FxCommonResourceState g_FxCommonResourceState;
 

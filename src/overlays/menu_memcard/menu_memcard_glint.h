@@ -60,7 +60,7 @@ extern u8 g_MenuCardRisingEmberColorTrack[];
 extern u8 g_MenuCardSpinRingColorTrack[];
 extern GteShortVector g_MemcardGlintOrigin;
 extern s16 g_MenuCardCrossFlashRaised;
-extern s16 D_801F1F38;
+extern s16 g_BattleCrossFlashStop;
 
 /* Cross flash: two beams between the actor's hands, each drawn as two
  * mirrored trails. */

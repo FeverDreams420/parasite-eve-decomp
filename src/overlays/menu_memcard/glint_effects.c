@@ -380,7 +380,7 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         flash->attachB = 19;
         flash->reserved04 = 0;
         flash->timer = 0;
-        D_801F1F38 = 0;
+        g_BattleCrossFlashStop = 0;
         tipA.x *= -1;
         tipB.x *= -1;
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &hand, &from);
@@ -400,7 +400,7 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
     case 1:
         flash->timer++;
         g_MenuCardCrossFlashRaised = 1;
-        if (D_801F1F38 == 0) {
+        if (g_BattleCrossFlashStop == 0) {
             int phase = (s16)flash->timer % 3;
             if (phase == 0) {
                 FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachA, &center, &from);

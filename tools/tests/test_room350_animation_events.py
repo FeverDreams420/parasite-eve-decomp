@@ -39,7 +39,7 @@ typedef char g[sizeof(Vector)==8 && sizeof(RenderMatrix)==32 ? 1:-1];
         for declaration in (r'extern unsigned char g_RoomM350DropEventSlots;',
                             r'extern unsigned char g_RoomM350DropBurstCount;',
                             r'extern unsigned char g_RoomM350DropDone;',
-                            r'extern int D_8019A858;',
+                            r'extern int g_RoomM350DropBurstState;',
                             r'extern short g_RoomM350DropTrailCount,g_RoomM350DropRepeats,g_RoomM350DropLungeTimer,g_RoomM350DropHitCooldown;',
                             r'extern GteSineWord rcossin_tbl\[\];',
                             r'extern short g_RcossinTblCos\[\];'):
@@ -53,7 +53,7 @@ typedef char g[sizeof(Vector)==8 && sizeof(RenderMatrix)==32 ? 1:-1];
 static union { int words[8]; short halves[16]; unsigned char bytes[32]; } globals;
 static union { int words[4097]; short halves[8194]; } trig;
 #define g_RoomM350DropEventSlots (globals.bytes[0])
-#define D_8019A858 (globals.words[1])
+#define g_RoomM350DropBurstState (globals.words[1])
 #define g_RoomM350DropBurstCount (globals.bytes[5])
 #define g_RoomM350DropTrailCount (globals.halves[4])
 #define g_RoomM350DropRepeats (globals.halves[5])

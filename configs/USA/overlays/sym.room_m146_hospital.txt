@@ -69,5 +69,5 @@ g_RoomEruptionScript = 0x801924C8;
 g_RoomEruptionDrawList = 0x80192464;
 g_RoomEruptionUpdateList = 0x80192480;
 g_RoomEruptionInitList = 0x80192448;
-g_RoomM146_D_8018EFE8 = 0x8018EFE8;
+g_RoomM146SectionHeader = 0x8018EFE8;
 g_RoomEruptionSpawnLayout__room_m146_hospital = 0x8019249C;

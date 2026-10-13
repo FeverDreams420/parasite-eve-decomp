@@ -1168,6 +1168,7 @@ g_BattleActionOffenseScale = 0x800106D4;
 g_BattleActionEffectIds = 0x8001074C;
 g_BattleCmdStackTop = 0x8009D014;
 g_BattleCmdStack = 0x800A1AA0;
+g_BattleCrossFlashStop = 0x801F1F38;
 g_SavedBattleStateTail = 0x800B0CB0;
 g_AyaBattleState = 0x800B8A20; // size:0x70
 Inv_SetActiveList = 0x800512AC; // type:func

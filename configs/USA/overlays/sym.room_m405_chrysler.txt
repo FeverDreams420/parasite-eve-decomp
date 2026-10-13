@@ -51,6 +51,6 @@ RoomLib_HandlerA = 0x80192230; // type:func
 RoomLib_HandlerF = 0x80192344; // type:func
 RoomLib_ReleaseHandlerA = 0x801924C4; // type:func
 RoomLib_HandlerANop6 = 0x801924E0; // type:func
-g_RoomM405_D_8018EFE8 = 0x8018EFE8;
+g_RoomM405SectionHeader = 0x8018EFE8;
 g_RoomM405_D_80192590 = 0x80192590;
 g_RoomClassTable__room_m405_chrysler = 0x801924E8; // size:0xA8 allow_addend:true

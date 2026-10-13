@@ -1322,5 +1322,5 @@ void *RoomM256_SetTrailTurnScale(void *arg0, int value) {
     }
 
     g_RoomM256TrailTurnScale = value;
-    return D_80195EF4;
+    return g_RoomM256TrailConfig;
 }

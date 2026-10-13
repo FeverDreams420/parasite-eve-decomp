@@ -117,7 +117,7 @@ segments:
       - [0xB848, data, D_8019A830]
       - [0xB84C, data, g_RoomEffectTrailPositions]
       - [0xB86C, data, D_8019A854]
-      - [0xB870, data, D_8019A858]
+      - [0xB870, data, g_RoomM350DropBurstState]
       - [0xB874, data, D_8019A85C]
       - [0xB878, data, D_8019A860]
       - [0xB87C, data, D_8019A864]

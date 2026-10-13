@@ -24,9 +24,9 @@ extern void *g_RoomBeamSparkAsset;
 
 /* The capture block the same rooms fill through
  * RoomLib_CaptureFrameSample (src/overlays/room_lib/capture_frame_sample.c). */
-extern s16 D_80192C34;
-extern s16 D_80192C36;
-extern s16 D_80192C38;
+extern s16 g_RoomCaptureX;
+extern s16 g_RoomCaptureY;
+extern s16 g_RoomCaptureZ;
 extern s32 g_RoomCaptureFrameWord;
 
 #endif

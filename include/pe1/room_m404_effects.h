@@ -16,9 +16,6 @@ typedef struct RoomM404JointTemplate {
     s32 word[2];
 } __attribute__((packed)) RoomM404JointTemplate;
 
-extern const RoomM404JointTemplate g_RoomM404_D_8018F21C;
-extern const GteRotation g_RoomM404_D_8018F210;
-extern const RenderColor g_RoomM404_D_8018F218;
 extern const RoomM404JointTemplate g_RoomM404DebrisBurstAnchor;
 extern const GteRotation g_RoomM404DebrisSparkRotation;
 extern const RenderColor g_RoomM404DebrisSparkColor;

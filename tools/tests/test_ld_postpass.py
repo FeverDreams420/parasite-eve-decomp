@@ -249,7 +249,7 @@ class BuiltLayoutTests(unittest.TestCase):
         for name in ("field_engine_VRAM", "FieldFx_TurnToward", "g_FieldFxSlotTable", "g_BootWorkArea",
                      "overlay_windows_VRAM", "OVERLAY_WINDOW_MDEC_DIAG", "OVERLAY_WINDOW_ROOM",
                      "OVERLAY_WINDOW_TASK_PROGRAM", "g_StrFileDirArea", "g_PmTaskProgramArea",
-                     "D_801F1F38", "overlay_windows_VRAM_END"):
+                     "g_BattleCrossFlashStop", "overlay_windows_VRAM_END"):
             self.assertEqual(grown[name] - base[name], growth, name)
             self.assertEqual(shorter[name] - base[name], -0x100 if name not in (
                 "field_engine_VRAM", "FieldFx_TurnToward", "g_FieldFxSlotTable", "g_BootWorkArea") else 0,

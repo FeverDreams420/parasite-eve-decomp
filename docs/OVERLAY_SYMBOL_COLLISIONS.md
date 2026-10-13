@@ -16,6 +16,8 @@ and `conflicting` otherwise. Rules for resolving the conflicting names are in
 | Defined in more than one overlay, conflicting | 0 |
 | - of which already non-auto names | 0 |
 |   - room interface (a shared source names it) | 0 |
+| Global names defined by any overlay | 4304 |
+| Defined in more than one overlay, identical | 886 |
 |   - also a main symbol | 0 |
 |   - private to one overlay's own code (must be renamed) | 0 |
 | - of which auto names (`func_`/`D_`/`jtbl_`/`__D_..._databin`) | 0 |

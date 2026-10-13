@@ -1011,35 +1011,35 @@ void SceneE08_InitSlotsContext(RoomEnt *ent, void *unused, SceneE08InitState *st
     mode = 8;
     offset = -400;
 
-    D_80199688 = offset;
+    g_SceneE08GlowModelUnusedSpriteOffset = offset;
     g_SceneE08CentreGlowSpriteOffset = offset;
     /* Empty compiler barriers retain the retail register lifetimes. */
     player = g_PlayerEntity;
     asm volatile ("" : : "r"(player));
     half = 0x80;
     asm volatile ("" : : "r"(half));
-    D_80199685 = mode;
+    g_SceneE08GlowModelUnusedSpriteClut = mode;
     g_SceneE08CentreGlowSpriteCell = 0x44;
     g_SceneE08CentreGlowSpriteClut = 2;
-    D_801996B0.cell = 0x60;
-    D_801996B0.clut = 0x40;
-    D_80199684 = intensity;
-    D_8019968A = half;
-    D_80199680 = intensity;
-    D_80199681 = intensity;
-    D_80199682 = intensity;
-    D_80199686 = 0;
+    g_SceneE08GlowModelHaloSprite.cell = 0x60;
+    g_SceneE08GlowModelHaloSprite.clut = 0x40;
+    g_SceneE08GlowModelUnusedSpriteCell = intensity;
+    g_SceneE08GlowModelUnusedSpriteDepth = half;
+    g_SceneE08GlowModelUnusedSpriteR = intensity;
+    g_SceneE08GlowModelUnusedSpriteG = intensity;
+    g_SceneE08GlowModelUnusedSpriteB = intensity;
+    g_SceneE08GlowModelUnusedSpriteFlip = 0;
     g_SceneE08CentreGlowSpriteDepth = half;
     g_SceneE08CentreGlowSprite[0] = intensity;
     g_SceneE08CentreGlowSpriteG = intensity;
     g_SceneE08CentreGlowSpriteB = intensity;
     g_SceneE08CentreGlowSpriteFlip = 0;
-    D_801996B0.offset = -500;
-    D_801996B0.depth = half;
-    D_801996B0.r = intensity;
-    D_801996B0.g = intensity;
-    D_801996B0.b = intensity;
-    D_801996B0.flip = 0;
+    g_SceneE08GlowModelHaloSprite.offset = -500;
+    g_SceneE08GlowModelHaloSprite.depth = half;
+    g_SceneE08GlowModelHaloSprite.r = intensity;
+    g_SceneE08GlowModelHaloSprite.g = intensity;
+    g_SceneE08GlowModelHaloSprite.b = intensity;
+    g_SceneE08GlowModelHaloSprite.flip = 0;
 
     handle = *sound;
     /* Keep the handle load ahead of the two player-coordinate loads. */
@@ -1794,7 +1794,7 @@ void SceneE08_DrawGlowModel(void *object, SceneGlowModelTimer *timer, SceneGlowM
         matrix.t[0] = g_SceneE08CentreX;
         matrix.t[1] = 0;
         matrix.t[2] = g_SceneE08CentreZ;
-        FieldFx_DrawGlowSprite(&D_801996B0, &matrix, 1);
+        FieldFx_DrawGlowSprite(&g_SceneE08GlowModelHaloSprite, &matrix, 1);
     }
 }
 
@@ -1827,7 +1827,7 @@ void SceneE08_InitLimbBeams(void *unused0, void *unused1, Ovl178RandomizedEffect
 
     for (i = 0; i < 10; i++) {
         g_SceneE08LimbBeamAngles[i] = rand() % 4096;
-        D_80199590[i] = rand() % 4096;
+        g_SceneE08LimbBeamUnusedAngles[i] = rand() % 4096;
         effect->tail.flags[i] = 0;
         effect->offsets[i] = 0;
     }
@@ -1981,23 +1981,23 @@ void SceneE08_InitLayeredSpriteContext(SceneGrabHead *actor, void *unused, Scene
      * the global stores below. */
     *(s16 *)((char *)state + 0x2A) = 0;
     *(s16 *)((char *)state + 0x2C) = 0;
-    D_80199558 = scratch;
+    g_SceneE08TrailGlowSpriteOffset = scratch;
     g_SceneE08TrailGlowFloorSprite.offset = -100;
     g_SceneE08TrailGlowFloorSprite.g = 16;
     g_SceneE08TrailGlowFloorSprite.b = 5;
     g_SceneE08LayeredSpriteCell = 70;
     g_SceneE08LayeredSpriteClut = 3;
     g_SceneE08LayeredSpriteOffset = 1;
-    D_80199540.cell = 96;
-    D_80199555 = one;
+    g_SceneE08LayeredUnusedSprite.cell = 96;
+    g_SceneE08TrailGlowSpriteClut = one;
     g_SceneE08TrailGlowFloorSprite.clut = one;
     soundAddress = (RoomSoundSlot *)g_LoadedSceneAssetBlock;
-    D_80199554 = sixtyFour;
-    D_8019955A = half128;
-    D_80199550 = byte128;
-    D_80199551 = sixtyFour;
-    D_80199552 = thirtyTwo;
-    D_80199556 = two;
+    g_SceneE08TrailGlowSpriteCell = sixtyFour;
+    g_SceneE08TrailGlowSpriteDepth = half128;
+    g_SceneE08TrailGlowSpriteR = byte128;
+    g_SceneE08TrailGlowSpriteG = sixtyFour;
+    g_SceneE08TrailGlowSpriteB = thirtyTwo;
+    g_SceneE08TrailGlowSpriteFlip = two;
     g_SceneE08TrailGlowFloorSprite.cell = sixtyFour;
     g_SceneE08TrailGlowFloorSprite.depth = half128;
     g_SceneE08TrailGlowFloorSprite.r = thirtyTwo;
@@ -2007,13 +2007,13 @@ void SceneE08_InitLayeredSpriteContext(SceneGrabHead *actor, void *unused, Scene
     g_SceneE08LayeredSpriteG = byte128;
     g_SceneE08LayeredSpriteB = byte128;
     g_SceneE08LayeredSpriteFlip = 0;
-    D_80199540.clut = 7;
-    D_80199540.offset = 0;
-    D_80199540.depth = half128;
-    D_80199540.r = byte128;
-    D_80199540.g = byte128;
-    D_80199540.b = byte128;
-    D_80199540.flip = 0;
+    g_SceneE08LayeredUnusedSprite.clut = 7;
+    g_SceneE08LayeredUnusedSprite.offset = 0;
+    g_SceneE08LayeredUnusedSprite.depth = half128;
+    g_SceneE08LayeredUnusedSprite.r = byte128;
+    g_SceneE08LayeredUnusedSprite.g = byte128;
+    g_SceneE08LayeredUnusedSprite.b = byte128;
+    g_SceneE08LayeredUnusedSprite.flip = 0;
     g_SceneE08SpinningGlowSprite.cell = 0;
     g_SceneE08SpinningGlowSprite.clut = 0;
     minus300 = -300;
@@ -2032,20 +2032,20 @@ void SceneE08_InitLayeredSpriteContext(SceneGrabHead *actor, void *unused, Scene
     g_SceneE08ArmGlowSprite.g = sixtyFour;
     g_SceneE08ArmGlowSprite.b = thirtyTwo;
     g_SceneE08ArmGlowSprite.flip = 0;
-    D_801994A0 = minus300;
-    D_801994A2 = half128;
-    D_80199490 = 0;
-    D_80199491 = 0;
-    D_80199492 = 0;
-    D_80199494 = 0;
-    D_80199495 = 0;
-    D_80199496 = 0;
-    D_80199498 = byte128;
-    D_80199499 = sixtyFour;
-    D_8019949A = thirtyTwo;
-    D_8019949C = byte128;
-    D_8019949D = sixtyFour;
-    D_8019949E = thirtyTwo;
+    g_SceneE08LayeredUnusedOffset = minus300;
+    g_SceneE08LayeredUnusedDepth = half128;
+    g_SceneE08LayeredUnusedColor0R = 0;
+    g_SceneE08LayeredUnusedColor0G = 0;
+    g_SceneE08LayeredUnusedColor0B = 0;
+    g_SceneE08LayeredUnusedColor1R = 0;
+    g_SceneE08LayeredUnusedColor1G = 0;
+    g_SceneE08LayeredUnusedColor1B = 0;
+    g_SceneE08LayeredUnusedColor2R = byte128;
+    g_SceneE08LayeredUnusedColor2G = sixtyFour;
+    g_SceneE08LayeredUnusedColor2B = thirtyTwo;
+    g_SceneE08LayeredUnusedColor3R = byte128;
+    g_SceneE08LayeredUnusedColor3G = sixtyFour;
+    g_SceneE08LayeredUnusedColor3B = thirtyTwo;
     if (sound) {
         scratch = 0x7F;
         Akao_SendTableCommand(soundAddress->channel, 0x604, 0, 0x80, scratch);
@@ -2093,7 +2093,7 @@ void SceneE08_DrawTrailGlow(void *arg0, void *arg1, char *effects) {
     unsigned angleOffset;
     owner = FieldFx_GetScriptContext();
     i = 0;
-    alpha = &D_8019955A;
+    alpha = &g_SceneE08TrailGlowSpriteDepth;
     /* This single-pass block preserves the original setup scheduling. */
     { asm volatile("" : : : "memory"); 
         state = (SceneE08PositionSample *)base;
