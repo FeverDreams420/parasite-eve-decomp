@@ -62,7 +62,7 @@ int FieldFx_Register(FieldFxObject *obj, FieldFxHandler *handlers)
   {
     FieldFxSlotAddress entry;
     entry.slot = g_FieldFxSlotTable;
-    entry.word = (s16)i * sizeof(FieldFxSlot) + entry.word;
+    entry.word = i * sizeof(FieldFxSlot) + entry.word;
     if (entry.slot->flag == 1)
     {
       FieldFxHandler handler = handlers_s2[entry.slot->handler_id];
@@ -102,7 +102,7 @@ int FieldFx_UpdateSlots(FieldFxObject *obj, FieldFxHandler *handlers) {
         if (obj->prefix.asset_type != 0x24) {
             u8 *state = obj->prefix.actor->state->action_state;
 
-            if ((u8)state[0] == 1) {
+            if (state[0] == 1) {
                 state[0] = 2;
             }
         }
@@ -209,7 +209,7 @@ int FieldFx_RunScript(FieldFxObject *obj, FieldFxHandler *handlers, u16 *sizes) 
                 if ((unsigned int)(op - 0x2000) < 0x1000) {
                     s8 jump = op;
 
-                    if (SCRIPT->regs[(op & 0xF00) >> 8] != (s16)operand) {
+                    if (SCRIPT->regs[(op & 0xF00) >> 8] != operand) {
                         SCRIPT->pc += jump;
                     }
                 }
@@ -309,7 +309,7 @@ void FieldFx_ActivateSlot(u16 slot, u8 id, u16 size) {
     g_FieldFxSlotTable[slot].counter = 0;
     state = g_FieldFxScriptState;
     offset = state->data_next;
-    if ((unsigned int)(offset + (u16)size) >= 0x80C) {
+    if ((unsigned int)(offset + size) >= 0x80C) {
         offset = 0;
     }
     g_FieldFxSlotTable[slot].data_offset = offset;
