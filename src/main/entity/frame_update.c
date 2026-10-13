@@ -188,7 +188,7 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
         actor->render_object.lightPositiveY = 0x18;
         Render_InitRoomPrimState(&actor->render_object);
         Render_DrawWithAnim(&actor->render_object, actor->action_data,
-                            (s16)actor->anim.parts.integer, &g_RenderLightingState, D_800B89F8);
+                            (s16)actor->anim.parts.integer, &g_RenderLightingState, g_EntityRenderScratch);
         actor->render_object.header->shadow_radius = actor->render_object.hit_cylinder.radius * 2;
     }
     } else {
@@ -301,7 +301,7 @@ void Entity_FrameUpdate(void) {
             }
             if (entity->flags & 0x40) {
                 if (entity->flags & 0x2000) {
-                    Render_TransformSkinnedVertices(&entity->render_object, D_800B89F8);
+                    Render_TransformSkinnedVertices(&entity->render_object, g_EntityRenderScratch);
                     entity->pos_x = (s16)entity->render_object.rotation_overrides[0].x << 16;
                     entity->pos_y = (s16)entity->render_object.rotation_overrides[0].y << 16;
                     entity->pos_z = (s16)entity->render_object.rotation_overrides[0].z << 16;
@@ -317,10 +317,10 @@ void Entity_FrameUpdate(void) {
                     Anim_BuildRotationMatrices(object, entity->action_data, (s16)entity->anim.parts.integer, 1);
                 }
                 Render_TransformVertices(object);
-                Render_TransformSkinnedVertices(object, D_800B89F8);
+                Render_TransformSkinnedVertices(object, g_EntityRenderScratch);
                 if (!(entity->flags & 0x20000000)) {
-                    Render_TransformMorphVertices(object, D_800B89F8);
-                    Render_DrawEntity(object, D_800B89F8);
+                    Render_TransformMorphVertices(object, g_EntityRenderScratch);
+                    Render_DrawEntity(object, g_EntityRenderScratch);
                     if (entity->flags & 0x8800) {
                         entity->render_object.flags_9C |= 1;
                     }

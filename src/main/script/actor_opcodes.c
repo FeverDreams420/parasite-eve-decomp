@@ -711,7 +711,7 @@ int Script_CopyEntityRenderObject(int **args) {
     Render_InitObjectFromTable(&g_CurrentEntity->render_object,
                                &source->render_object, (s16)*args[2]);
     Render_TransformSkinnedVertices(&g_CurrentEntity->render_object,
-                                    D_800B89F8);
+                                    g_EntityRenderScratch);
 
     g_CurrentEntity->parent = source;
     g_CurrentEntity->pos_x =
@@ -794,7 +794,7 @@ int Script_SetGteMatrix(int **args) {
     Anim_BuildRotationMatrices(&render_actor->render_object,
                                render_actor->action_data, 0, 1);
     Render_TransformVertices(&g_CurrentEntity->render_object);
-    Render_TransformSkinnedVertices(&g_CurrentEntity->render_object, D_800B89F8);
+    Render_TransformSkinnedVertices(&g_CurrentEntity->render_object, g_EntityRenderScratch);
     Render_DrawObject(&g_CurrentEntity->render_object, g_RenderLightingState.words);
     Render_UpdateClutTable(&g_CurrentEntity->render_object, 1,
                            (s16)g_ActiveDrawSlot);

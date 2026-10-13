@@ -7,7 +7,7 @@ extern GteMatrix g_CameraBasisMatrix;
 int Render_DrawSprite(void);
 
 /* Camera initialization scratch: matrix words followed by projection distance. */
-extern unsigned int D_800B89F8[];
+extern u32 g_EntityRenderScratch[];
 int Render_InitViewState(void *matrix, void *screen);
 int Render_DrawMeshList(void *buffer, void **end);
 int Render_ResetAllEntries(void);

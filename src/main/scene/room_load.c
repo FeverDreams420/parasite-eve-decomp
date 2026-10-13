@@ -1203,10 +1203,10 @@ int Scene_UpdateBgDraw(void) {
 
     Render_SetGteScreenOffset();
     Render_TransformVertices(&state->scene_object);
-    Render_TransformMorphVertices(&state->scene_object, D_800B89F8);
+    Render_TransformMorphVertices(&state->scene_object, g_EntityRenderScratch);
 
     if ((g_GameStateFlags & 2) || g_PlayerEntity->render_object.variant_visible != 0) {
-        Render_DrawEntity(&state->scene_object, D_800B89F8);
+        Render_DrawEntity(&state->scene_object, g_EntityRenderScratch);
     }
 
     Render_ResetGteScreenOffset();

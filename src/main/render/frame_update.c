@@ -171,7 +171,7 @@ int Render_PrepareFrame(void) {
         void *result;
         union { int word; short xy[2]; } projected;
     } local;
-    unsigned int *state = D_800B89F8;
+    unsigned int *state = g_EntityRenderScratch;
     Render_InitViewState(state, state + 8);
     if (Render_DrawMeshList((void *)g_GameState.texture_load_scratch, &local.result)) return -2;
     SetGeomScreen(state[8]);

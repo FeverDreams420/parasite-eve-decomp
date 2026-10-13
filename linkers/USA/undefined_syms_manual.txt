@@ -62,7 +62,6 @@ g_SeqElapsedRecord = g_SeqElapsed;
 g_DiscLoadState = g_PeImageBaseLba;
 D_800B0E38 = g_OtBufferTable;
 D_800B0E6C = g_SceneLoadScratchBuffer;
-D_800B89F8 = g_EntityRenderScratch;
 g_AkaoSequencerTracks = g_AkaoVoiceStateTable;
 D_800BCF88 = g_RenderStateFlags;
 g_AyaSaveState = g_AyaSaveTotalExp;
