@@ -11,7 +11,7 @@
  * func_800C6C18 and FieldFx_IsLastSlotHalted. */
 #define ROOM_REARM_TIMER_TICK(name, reload) \
     void name(int arg0, char *arg1, char *arg2) { \
-        short *state = (short *)arg2; \
+        short *state = arg2; \
         \
         if (state[(reload) / 2 + 1] != 0) { \
             state[(reload) / 2 + 1]--; \
