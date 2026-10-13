@@ -2,7 +2,6 @@
 #define PE1_BATTLE_STATUS_H
 
 #include "pe1/battle.h"
-#include "pe1/battle_hud_colors.h"
 #include "pe1/render_prim.h"
 
 typedef struct BattleStatusLinePrim {

@@ -2,7 +2,6 @@
 #define PE1_BATTLE_PALETTE_H
 
 #include "common.h"
-#include "pe1/battle_hud_colors.h"
 #include "pe1/game_state.h"
 
 extern struct BattleEntity *D_8009D254;

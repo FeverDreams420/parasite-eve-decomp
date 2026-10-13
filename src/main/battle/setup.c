@@ -6,10 +6,10 @@
 #include "pe1/battle.h"
 #include "pe1/battle_cmd.h"
 #include "pe1/battle_entity_anim.h"
-#include "pe1/battle_hud_colors.h"
 #include "pe1/battle_reset_stats.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_setup.h"
+#include "pe1/battle_status.h"
 #include "pe1/game_state.h"
 #include "pe1/gte_types.h"
 #include "pe1/inventory.h"
@@ -115,30 +115,30 @@ void Battle_InitEntityColors(void) {
     g_BattleHaltTimer = 0;
     *stateFlags = flags & ~0x2000;
     g_BattleHitActionPending = 0;
-    D_800B0158[0] = 0xFF;
-    D_800B0159[0] = 0x3D;
-    D_800B015A[0] = 0x81;
-    D_800B0160[0] = 0x83;
-    D_800B0161[0] = 0x13;
-    D_800B0162[0] = 1;
-    D_800B0168[0] = 0xFF;
-    D_800B0169[0] = 0x3D;
-    D_800B016A[0] = 0x81;
-    D_800B0170[0] = 0x83;
-    D_800B0171[0] = 0x13;
-    D_800B0172[0] = 1;
-    D_800B01A0[0] = 0xFF;
-    D_800B01A1[0] = 0x3D;
-    D_800B01A2[0] = 0x81;
-    D_800B01A8[0] = 0x83;
-    D_800B01A9[0] = 0x13;
-    D_800B01AA[0] = 1;
-    D_800B01B0[0] = 0xFF;
-    D_800B01B1[0] = 0x3D;
-    D_800B01B2[0] = 0x81;
-    D_800B01B8[0] = 0x83;
-    D_800B01B9[0] = 0x13;
-    D_800B01BA[0] = 1;
+    g_BattlePeGauges[0][1].r0 = 0xFF;
+    g_BattlePeGauges[0][1].g0 = 0x3D;
+    g_BattlePeGauges[0][1].b0 = 0x81;
+    g_BattlePeGauges[0][1].r1 = 0x83;
+    g_BattlePeGauges[0][1].g1 = 0x13;
+    g_BattlePeGauges[0][1].b1 = 1;
+    g_BattlePeGauges[0][1].r2 = 0xFF;
+    g_BattlePeGauges[0][1].g2 = 0x3D;
+    g_BattlePeGauges[0][1].b2 = 0x81;
+    g_BattlePeGauges[0][1].r3 = 0x83;
+    g_BattlePeGauges[0][1].g3 = 0x13;
+    g_BattlePeGauges[0][1].b3 = 1;
+    g_BattlePeGauges[1][1].r0 = 0xFF;
+    g_BattlePeGauges[1][1].g0 = 0x3D;
+    g_BattlePeGauges[1][1].b0 = 0x81;
+    g_BattlePeGauges[1][1].r1 = 0x83;
+    g_BattlePeGauges[1][1].g1 = 0x13;
+    g_BattlePeGauges[1][1].b1 = 1;
+    g_BattlePeGauges[1][1].r2 = 0xFF;
+    g_BattlePeGauges[1][1].g2 = 0x3D;
+    g_BattlePeGauges[1][1].b2 = 0x81;
+    g_BattlePeGauges[1][1].r3 = 0x83;
+    g_BattlePeGauges[1][1].g3 = 0x13;
+    g_BattlePeGauges[1][1].b3 = 1;
 }
 
 unsigned char g_BattleActionQueueCount;

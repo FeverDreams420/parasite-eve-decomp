@@ -2088,8 +2088,8 @@ Script_DisableEntityGravity = 0x8001A350; // type:func
 Script_SetMeshFadeLevel = 0x8001A374; // type:func
 
 // Battle HUD packets and state (src/main/battle).
-g_BattleAtbGauges = 0x800B00E8;
-g_BattlePeGauges = 0x800B0130;
+g_BattleAtbGauges = 0x800B00E8; // size:0x48
+g_BattlePeGauges = 0x800B0130; // size:0x90
 g_BattleAtbMarkers = 0x800B6920;
 g_BattleEndPanels = 0x800BE9F0;
 g_BattlePanelDigits = 0x800B01C0;

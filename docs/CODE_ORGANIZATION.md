@@ -1904,8 +1904,8 @@ evidence:
   reads `$a2`; retail's `$a2` is the last slot-colour byte the function
   stored. Dropping the argument shortens `var_a2`'s life and local-alloc
   swaps `var_a1`/`var_a2` over the whole colour block (lev 112). The block
-  writes the four `rgb` triples of a 0x48-byte slot record at
-  `D_800B0158 + g_ActiveDrawSlot * 0x48` through `register` locals; it has
+  writes the four `rgb` triples of `g_BattlePeGauges[g_ActiveDrawSlot][1]`
+  through `register` locals; it has
   to be rewritten as typed colour stores before the call can be plain.
 - **`Combatant.curHP` (`pe1/battle.h`, `u16`)**: `Battle_ApplyEnemyAttack`
   reads it with `lh` through three `s16` views and once as
