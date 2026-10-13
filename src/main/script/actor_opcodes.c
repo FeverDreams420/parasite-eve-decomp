@@ -921,7 +921,7 @@ int Scene_SelectMapById(int **args) {
     u32 state_flags;
 
     if ((u8)Menu_IsEquipSlotActive() != 0) {
-        raw_selection = ((int (*)(int))Render_GetOrLoadFontGlyph)(*(u8 *)args[0]);
+        raw_selection = Render_GetOrLoadFontGlyph(*(u8 *)args[0]);
     } else {
         raw_selection = Render_LoadFontGlyphAlt();
     }

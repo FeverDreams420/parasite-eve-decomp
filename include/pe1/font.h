@@ -75,7 +75,7 @@ extern u16 D_80093176[2];
  * A null table selects the current one (g_FontSelectionState.table). */
 unsigned char Render_DrawTextDigit(FontGlyphTable *table, unsigned char mode);
 
-unsigned char Render_GetOrLoadFontGlyph(unsigned char action);
+int Render_GetOrLoadFontGlyph(unsigned char action);
 unsigned char Render_FindFontGlyphSlot(void);
 unsigned char Render_StepFontLoad(void);
 

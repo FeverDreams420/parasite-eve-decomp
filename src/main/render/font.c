@@ -367,7 +367,7 @@ unsigned char Render_SetFontGlyphByCode(unsigned char code)
     }
 }
 
-unsigned char Render_GetOrLoadFontGlyph(unsigned char action)
+int Render_GetOrLoadFontGlyph(unsigned char action)
 {
     unsigned char code, group;
     int i;
