@@ -13,7 +13,7 @@ void MENUCARD_UPLOAD_VIDEO_SLICE_NAME(void) {
     VideoRect rectangle;
     s8 old;
 
-    if (D_800B0DBB && g_CdStreamReadyHalfword) {
+    if (g_MovieWide && g_CdStreamReadyHalfword) {
         StCdInterrupt();
         g_CdStreamReadyHalfword = 0;
     }
@@ -32,7 +32,7 @@ void MENUCARD_UPLOAD_VIDEO_SLICE_NAME(void) {
         MENUCARD_VIDEO_DISPLAY.rect.x = MENUCARD_VIDEO_DISPLAY.regions[MENUCARD_VIDEO_DISPLAY.region].x;
         MENUCARD_VIDEO_DISPLAY.rect.y = MENUCARD_VIDEO_DISPLAY.regions[MENUCARD_VIDEO_DISPLAY.region].y;
         if (MENUCARD_VIDEO_FLIP == 1) {
-            s8 *wide = &D_800B0DBB;
+            s8 *wide = &g_MovieWide;
 
             *wide ^= 1;
             if (*wide) {
@@ -40,7 +40,7 @@ void MENUCARD_UPLOAD_VIDEO_SLICE_NAME(void) {
             } else {
                 MENUCARD_VIDEO_DISPLAY.rect.w = 16;
             }
-            MENUCARD_VIDEO_SET_DISPLAY(g_ActiveDrawSlot ^ 1, D_800B0DBB);
+            MENUCARD_VIDEO_SET_DISPLAY(g_ActiveDrawSlot ^ 1, g_MovieWide);
             MENUCARD_VIDEO_FLIP = 2;
         }
     }

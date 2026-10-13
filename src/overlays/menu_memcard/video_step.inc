@@ -21,7 +21,7 @@ static inline s16 MenuCard_NextVideoFrame(VideoDisplay *dec) {
             return -1;
         }
     }
-    D_800B0DBC.value++;
+    g_SeqElapsedRecord.value++;
     dec->decodeIndex ^= 1;
     DecDCTvlc2(frame, dec->decode[dec->decodeIndex], MENUCARD_VIDEO_PTR4);
     StFreeRing(frame);
@@ -64,11 +64,11 @@ s32 MENUCARD_STEP_VIDEO_NAME(void) {
     s8 finished;
     u8 *flip;
 
-    if (D_800B0DBA >= 2) {
+    if (g_DrawEnabled.bits >= 2) {
         flip = &MENUCARD_VIDEO_FLIP;
         finished = 0;
         if (*flip == 2) {
-            MENUCARD_VIDEO_SET_DISPLAY(g_ActiveDrawSlot ^ 1, D_800B0DBB);
+            MENUCARD_VIDEO_SET_DISPLAY(g_ActiveDrawSlot ^ 1, g_MovieWide);
             *flip = 0;
         }
         MENUCARD_VIDEO_RESTART = MENUCARD_VIDEO_FILE.pos;
@@ -86,7 +86,7 @@ s32 MENUCARD_STEP_VIDEO_NAME(void) {
             return 1;
         }
         {
-            u8 *active = &D_800B0DBA;
+            u8 *active = &g_DrawEnabled.bits;
 
             (*active)--;
         }

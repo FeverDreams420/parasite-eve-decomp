@@ -25,7 +25,7 @@ s32 MENUCARD_INIT_VIDEO_BUFFERS_NAME(s8 count, u8 **buffers) {
             return 0;
         }
     }
-    if (D_800B0DBA) {
+    if (g_DrawEnabled.bits) {
         return 0;
     }
     switch (count) {
@@ -59,9 +59,9 @@ s32 MENUCARD_INIT_VIDEO_BUFFERS_NAME(s8 count, u8 **buffers) {
             MENUCARD_VIDEO_PTR3 = base + offset;
             break;
     }
-    D_800B0DBA = 1;
-    D_800B0DBE = 152;
-    D_800B0DBC.value = 0;
+    g_DrawEnabled.bits = 1;
+    g_GameState.scene_audio.tracks.movie_volume = 152;
+    g_SeqElapsedRecord.value = 0;
     MENUCARD_VIDEO_LAST_TIME = -1;
     for (i = 0; i < 2; i++) {
         MENUCARD_VIDEO_SAVED_DISPLAY[i] = g_RenderDispEnvArray[i];

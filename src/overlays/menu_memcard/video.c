@@ -150,7 +150,7 @@ void MenuCardFirst_StopVideo(void) {
     unsigned char *counter;
     int value;
 
-    counter = &D_800B0DBA;
+    counter = &g_DrawEnabled.bits;
     value = *counter - 1;
     *counter = value;
     Spu_SetVoiceVolume(0);

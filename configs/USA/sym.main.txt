@@ -3274,6 +3274,7 @@ g_FieldPadBitsPrevious = 0x8009D2D4;
 g_BattleExpReward = 0x8009D304;
 g_ScenePendingTrackBank = 0x800B0DB9;
 g_MovieIndex = 0x800B0DBF;
+g_MovieWide = 0x800B0DBB;
 g_SceneInitPhase = 0x800B0DC5;
 g_Akao3dVolumeMin = 0x800B0DCE;
 g_Akao3dVolumeMax = 0x800B0DCF;

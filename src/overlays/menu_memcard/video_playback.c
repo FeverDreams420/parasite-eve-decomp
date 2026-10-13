@@ -109,7 +109,7 @@ void MenuCard_StopVideo(void) {
     unsigned char *counter;
     int value;
 
-    counter = &D_800B0DBA;
+    counter = &g_DrawEnabledByte;
     value = *counter - 1;
     *counter = value;
     Spu_SetVoiceVolume(0);
@@ -153,7 +153,7 @@ retry:
     MenuCard_InitVideoBuffers(1,&buffer);
     MenuCard_OpenVideo((s16)entry);
     {
-        u8 *active=&D_800B0DBA;
+        u8 *active=&g_DrawEnabledByte;
         if (*active) {
             s16 *remainingPtr=(s16 *)(active+2);
             do {
@@ -162,19 +162,19 @@ retry:
                 Field_HandleStateTransition();
                 if (!(s8)MenuCard_StepVideo()) {
                     g_MenuCardScreenVideoDecodeBuffer0=0;g_MenuCardScreenVideoDecodeBuffer1=0;g_MenuCardScreenVideoStreamRing=0;g_MenuCardScreenVideoVlcTable=0;g_MenuCardScreenVideoSliceBuffer0=0;g_MenuCardScreenVideoSliceBuffer1=0;
-                    D_800B0DBA=0;
+                    g_DrawEnabledByte=0;
                 }
                 else if (g_FieldPadBits & 0x20000004) {
                     s32 remaining;
-                    D_800B0DBA--;
+                    g_DrawEnabledByte--;
                     Spu_SetVoiceVolume(0);DecDCToutCallback(0);StUnSetRing();DsControlB(9,0,0);
                     remaining=*remainingPtr;
                     g_MenuCardScreenVideoDecodeBuffer0=0;g_MenuCardScreenVideoDecodeBuffer1=0;g_MenuCardScreenVideoStreamRing=0;g_MenuCardScreenVideoVlcTable=0;g_MenuCardScreenVideoSliceBuffer0=0;g_MenuCardScreenVideoSliceBuffer1=0;
-                    D_800B0DBA=0;
+                    g_DrawEnabledByte=0;
                     if(remaining<1400) {VSync(0);SetDispMask(0);result=1;}
                 }
                 Draw_RenderFrame();
-            } while(D_800B0DBA);
+            } while(g_DrawEnabledByte);
         }
     }
     { register s32 returnValue asm("$2") = result;

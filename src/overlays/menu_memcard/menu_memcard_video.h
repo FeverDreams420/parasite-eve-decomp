@@ -6,6 +6,7 @@
 #include "pe1/cdrom_buffers.h"
 #include "pe1/disc_load_state.h"
 #include "pe1/display_env.h"
+#include "pe1/draw_state.h"
 #include "pe1/game_state.h"
 #include "pe1/gpu_image.h"
 #include "pe1/psyq_bios.h"
@@ -40,8 +41,13 @@ typedef struct VideoDisplay {
 extern s32 DsSystemStatus(void),DsShellOpen(void);
 extern void exit(s32),Spu_SetVoiceVolume(s32);
 extern VideoEntry *g_MenuCardScreenVideoEntry;
-extern u8 D_800B0DBE,g_MenuCardScreenVideoFinished;
-extern s8 D_800B0DBB;
+extern u8 g_MenuCardScreenVideoFinished;
+/* Wide-screen flag of the playing movie (Pe1SceneAudioState movie_wide). */
+extern s8 g_MovieWide;
+/* g_SeqElapsed as a one-field record: MENUCARD_OPEN_VIDEO_NAME sets it with
+ * its own address load, next to g_MovieWide and g_MovieIndex. */
+typedef struct VideoFrameCount { s16 value; } VideoFrameCount;
+extern VideoFrameCount g_SeqElapsedRecord;
 extern s16 g_MenuCardScreenVideoLastTime,g_MenuCardScreenVideoSize[2];
 
 void *MenuCard_UpdateVideoFrame(VideoDisplay *display);
@@ -61,9 +67,6 @@ void MenuCard_UploadVideoSlice(void);
 extern DISPENV g_MenuCardScreenSavedDispEnv[2];
 extern DRAWENV g_MenuCardScreenSavedDrawEnv[2];
 extern u8 *g_MenuCardScreenVideoDecodeBuffer0,*g_MenuCardScreenVideoDecodeBuffer1,*g_MenuCardScreenVideoSliceBuffer0,*g_MenuCardScreenVideoSliceBuffer1,*g_MenuCardScreenVideoVlcTable,*g_MenuCardScreenVideoStreamRing;
-extern u8 D_800B0DBA;
-typedef struct VideoFrameCount { s16 value; } VideoFrameCount;
-extern VideoFrameCount D_800B0DBC;
 
 s32 MenuCard_InitVideoBuffers(s8 count, u8 **buffers);
 s32 MenuCardFirst_InitVideoBuffers(s8 count, u8 **buffers);

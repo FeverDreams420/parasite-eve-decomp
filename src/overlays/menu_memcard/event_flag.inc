@@ -6,7 +6,7 @@
 /* Raises the flag when the requested state differs from the current event
  * state; both copies of the video player carry this function. */
 void MENUCARD_EVENT_FLAG_NAME(s8 enabled) {
-    if ((enabled && !D_800B0DBB) || (!enabled && D_800B0DBB)) {
+    if ((enabled && !g_MovieWide) || (!enabled && g_MovieWide)) {
         MENUCARD_EVENT_FLAG = 1;
     }
 }

@@ -33,7 +33,7 @@ void MENUCARD_RESET_DISPLAY_STATE_NAME(void) {
     u8 *active;
     MemcardRect rect;
 
-    active = &D_800B0DBA;
+    active = &g_DrawEnabled.bits;
     if (*active != 0) {
         MENUCARD_DISPLAY_PTR0 = 0;
         MENUCARD_DISPLAY_PTR1 = 0;
