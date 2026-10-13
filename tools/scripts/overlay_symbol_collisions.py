@@ -16,6 +16,12 @@ linker scripts are ignored:
 A symbol that an overlay defines and ``build/USA/main.elf`` also defines is a
 third class (``overlay_vs_main``).
 
+The ratchet (``--check``) keys each conflicting name by where it lives: the
+set of ``overlay:address`` pairs from the linked overlay ELFs. A conflicting
+name that is not in the baseline still passes when its locations are a subset
+of one baseline entry's locations: an auto name given a role name, or a
+conflict split by renaming some of its definitions, is not a new conflict.
+
   overlay_symbol_collisions.py                 print the summary
   overlay_symbol_collisions.py --write         also write docs/OVERLAY_SYMBOL_COLLISIONS.md
   overlay_symbol_collisions.py --check         fail when a new conflicting or
@@ -157,6 +163,23 @@ def main_globals() -> set[str]:
     return names
 
 
+def overlay_addresses(overlay: str, names: set[str]) -> dict[str, int]:
+    """Linked address of each of ``names`` that the overlay's ELF defines."""
+    elf_path = OVERLAYS / overlay / f"{overlay}.elf"
+    found: dict[str, int] = {}
+    if not elf_path.is_file():
+        return found
+    with elf_path.open("rb") as fh:
+        symtab = ELFFile(fh).get_section_by_name(".symtab")
+        if symtab is None:
+            return found
+        for s in symtab.iter_symbols():
+            if s.name in names and s["st_shndx"] not in ("SHN_UNDEF", "SHN_ABS") \
+                    and s["st_info"]["bind"] in ("STB_GLOBAL", "STB_WEAK"):
+                found.setdefault(s.name, s["st_value"])
+    return found
+
+
 def built_state() -> tuple[int, int]:
     configured = len(list(CONFIGS.glob("*.yaml")))
     built = len(list(OVERLAYS.glob("*/*.elf"))) if OVERLAYS.is_dir() else 0
@@ -186,6 +209,15 @@ def collect() -> dict:
                 "sizes": sorted({d[3] for d in lst}),
                 "variants": len(flat)}
         (identical if len(flat) == 1 else conflicting)[name] = info
+    by_overlay: dict[str, set[str]] = defaultdict(set)
+    for n, i in conflicting.items():
+        for ov in i["overlays"]:
+            by_overlay[ov].add(n)
+    for ov, names in by_overlay.items():
+        for n, addr in overlay_addresses(ov, names).items():
+            conflicting[n].setdefault("locations", []).append(f"{ov}:0x{addr:08X}")
+    for i in conflicting.values():
+        i["locations"] = sorted(i.get("locations", []))
     overlay_main = {n: sorted({d[0] for d in defs[n]}) for n in defs if n in main}
     shared = shared_words()
     for n, i in conflicting.items():
@@ -254,11 +286,12 @@ def render(res: dict) -> str:
              "Rename with the overlay prefix (docs/CONVENTIONS.md, Overlays)."),
             ("interface", "## Conflicting, room interface",
              "Each overlay defines the name and a source shared by several overlays "
-             "(`src/overlays/room_lib`, `include/pe1`) refers to it, so the name cannot "
-             "differ per overlay in the source. The single-executable link gives each "
-             "overlay's definition its overlay-specific name (`--rename-map`)."),
+             "(`src/overlays/room_lib`, `include/pe1`) refers to it. Add it to "
+             "`include/pe1/room_interface.h` and suffix its symbol-file entries with "
+             "`__<overlay>` (docs/CONVENTIONS.md, Overlays)."),
             ("main", "## Conflicting, also a main symbol",
-             "`sym.main.txt` places a main symbol inside the overlay window.")):
+             "`sym.main.txt` places a main symbol inside the overlay window; main-only "
+             "names belong in `configs/USA/sym.main_only.txt`.")):
         table(title, sorted((n, i) for n, i in conf.items() if i["class"] == cls), note)
     auto = sorted((n, i) for n, i in conf.items() if is_auto(n))
     table("## Conflicting, auto names", auto,
@@ -288,13 +321,31 @@ def rename_map(res: dict) -> list[str]:
 def baseline_doc(res: dict) -> dict:
     return {"counts": counts(res),
             "conflicting": sorted(res["conflicting"]),
+            "conflicting_locations": {n: i["locations"]
+                                      for n, i in sorted(res["conflicting"].items())},
             "overlay_vs_main": sorted(res["overlay_vs_main"])}
+
+
+def new_conflicts(res: dict, base: dict) -> list[str]:
+    """Conflicting names neither in the baseline nor living only where one
+    baseline conflict lived (a rename of that conflict, or part of it)."""
+    known = set(base["conflicting"])
+    old_locations = [set(v) for v in base.get("conflicting_locations", {}).values()]
+    new = []
+    for n, i in sorted(res["conflicting"].items()):
+        if n in known:
+            continue
+        loc = set(i["locations"])
+        if loc and any(loc <= old for old in old_locations):
+            continue
+        new.append(n)
+    return new
 
 
 def check(res: dict, require: bool) -> int:
     base = json.loads(BASELINE.read_text())
     bad = []
-    new_conf = sorted(set(res["conflicting"]) - set(base["conflicting"]))
+    new_conf = new_conflicts(res, base)
     new_om = sorted(set(res["overlay_vs_main"]) - set(base["overlay_vs_main"]))
     if new_conf:
         bad.append("new conflicting overlay names: " + ", ".join(new_conf[:20]))
