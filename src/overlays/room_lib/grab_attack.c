@@ -518,7 +518,7 @@ int RoomEffect_GroundSweepController(int mode, RoomGroundSweep *sweep,
             if ((s16)sweep->timer == 2) {
                 RoomSoundSlot *sound = (RoomSoundSlot *)D_800B0E64;
                 sweep->soundHandle = sound->channel
-                    ? func_8006DF50_handle(sound->channel, 0x598, func_800D3FD8(), 0x80, 0x7F)
+                    ? Akao_SendTableCommand(sound->channel, 0x598, func_800D3FD8(), 0x80, 0x7F)
                     : 0;
             }
             if ((s16)sweep->timer < 4) break;

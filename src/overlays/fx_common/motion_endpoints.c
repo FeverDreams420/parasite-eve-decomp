@@ -15,19 +15,19 @@ void FxCommon_SetMotionEndpoints(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int
     int firstOriginY;
 
     x = b->x;
-    originX = g_FxCommonMotionPosition0.x;
+    originX = g_FxCommonCameraTarget.x;
     firstOriginX = originX;
-    originComponent = g_FxCommonMotionPosition0.y;
+    originComponent = g_FxCommonCameraTarget.y;
     firstOriginY = originComponent;
     D_8019C08C = x - firstOriginX;
     y = b->y;
-    originComponent = g_FxCommonMotionPosition0.z;
+    originComponent = g_FxCommonCameraTarget.z;
     D_8019C090 = y - firstOriginY;
     z = b->z;
     D_8019C0AC = firstOriginX;
-    originX = g_FxCommonMotionPosition1.x;
+    originX = g_FxCommonCameraPosition.x;
     origin0->y = firstOriginY;
-    ay = g_FxCommonMotionPosition1.y;
+    ay = g_FxCommonCameraPosition.y;
     D_8019C09C = 0;
     D_8019C0A0 = 0;
     D_8019C0A4 = 0;
@@ -44,7 +44,7 @@ void FxCommon_SetMotionEndpoints(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int
     u = a->x;
     D_8019C05C = u - originX;
     v = a->y;
-    az = g_FxCommonMotionPosition1.z;
+    az = g_FxCommonCameraPosition.z;
     D_8019C060 = v - ay;
     one = 1;
     D_8019C054 = one << bi;

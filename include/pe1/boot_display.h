@@ -46,7 +46,7 @@ typedef struct {
     u16 transferX, transferY;
     char *decodeTarget;
 } BootDisplayImageBuffer;
-extern BootDisplayImageBuffer g_BootDisplayImageBuffers[2] __asm__("D_80125B84");
+extern BootDisplayImageBuffer g_BootDisplayImageBuffers[2];
 
 typedef struct {
     void (*init)(void);

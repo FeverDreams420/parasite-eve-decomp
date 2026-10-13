@@ -9,6 +9,4 @@ extern u8 g_ItemDropRngTable[521];
 
 int rand(void);
 
-int Engine_Random(void) __asm__("func_80071A54");
-
 #endif

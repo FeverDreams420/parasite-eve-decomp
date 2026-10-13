@@ -316,28 +316,28 @@ void func_8018F958(int unused0, int unused1, SceneParticleCluster *slots) {
 
     for (i = 0; i < 30; ++i) {
         {
-            int randomValue = Engine_Random();
+            int randomValue = rand();
             slots->position[i].y = 0;
             slots->position[i].x = randomValue % 800 - 200;
         }
-        slots->position[i].z = Engine_Random() % 600 - 300;
-        slots->angle[i] = Engine_Random() % 4096;
+        slots->position[i].z = rand() % 600 - 300;
+        slots->angle[i] = rand() % 4096;
         slots->counter[i] = 0;
         slots->field1FE[i] = 0;
         slots->active[i] = 0;
-        slots->timer[i] = Engine_Random() % 50 + 2;
+        slots->timer[i] = rand() % 50 + 2;
 
         if (i >= 4) {
-            if ((Engine_Random() & 1) == 0) {
+            if ((rand() & 1) == 0) {
                 slots->brightness[i] = 0xFF;
                 slots->texture[i] = 0x4C;
                 slots->mode[i] = 5;
-                slots->scale[i] = Engine_Random() % 256 + 0x200;
+                slots->scale[i] = rand() % 256 + 0x200;
             } else {
                 slots->brightness[i] = 0xFF;
                 slots->texture[i] = 0x58;
                 slots->mode[i] = 6;
-                slots->scale[i] = Engine_Random() % 512 + 0x300;
+                slots->scale[i] = rand() % 512 + 0x300;
             }
         } else {
             slots->brightness[i] = 0x80;
@@ -564,18 +564,18 @@ void func_801902CC(int unused0, int unused1, SceneEmitterSlots *slots) {
     for (i = 0; i < 4; ++i) {
         slots->field3C[i] = 0;
         {
-            int randomValue = Engine_Random();
+            int randomValue = rand();
             int center = origin->x - 100;
             slots->position[i].x = center + randomValue % 200;
         }
         slots->position[i].y = origin->y;
         {
-            int randomValue = Engine_Random();
+            int randomValue = rand();
             int center = origin->z - 100;
             slots->position[i].z = center + randomValue % 200;
         }
-        slots->field40[i] = Engine_Random() % 5 + 1;
-        slots->field20[i] = Engine_Random() % 256 + 0x400;
+        slots->field40[i] = rand() % 5 + 1;
+        slots->field20[i] = rand() % 256 + 0x400;
         slots->field30[i] = 0x48;
         slots->field34[i] = 4;
         slots->field28[i] = 0x40;
@@ -1199,19 +1199,19 @@ void func_80191B14(int unused, SceneMovingState *state, SceneMovingSlots *slots)
     unsigned int i;
 
     for (i = 0; i < 16; ++i) {
-        if (slots->active[i] == 0 && Engine_Random() % 3 == 0) {
-            slots->angle[i] = Engine_Random() % 4096;
+        if (slots->active[i] == 0 && rand() % 3 == 0) {
+            slots->angle[i] = rand() % 4096;
             slots->initialSize[i] = 0x80;
             slots->active[i] = 1;
             slots->timer[i] = 90;
             slots->life[i] = 0;
             {
-                int randomValue = Engine_Random();
+                int randomValue = rand();
                 slots->radius[i] = 0;
                 slots->range[i] = randomValue % 200 + 100;
             }
             {
-                int randomValue = Engine_Random();
+                int randomValue = rand();
                 int x = D_8019956C;
                 int z = D_8019957C;
                 slots->radius[i] = randomValue % 1500 + 300;
@@ -1250,7 +1250,7 @@ void SceneE08_InitParticleSlots(int unused0, int unused1, SceneParticleSlots *sl
         slots->offset[i].x = 0;
         slots->offset[i].y = 0;
         slots->offset[i].z = 0;
-        slots->timer[i] = Engine_Random() % 10 + 10;
+        slots->timer[i] = rand() % 10 + 10;
     }
 }
 
@@ -1339,11 +1339,11 @@ void func_801921C8(int unused, u8 *state, SceneParticleSlots *slots)
             slots->verticalOffset[i] += 8;
         }
         if (slots->phase[i] < 0) {
-            slots->cycle[i] = Engine_Random() % 10;
+            slots->cycle[i] = rand() % 10;
             slots->phase[i] = 0x2000;
             slots->verticalOffset[i] = 0;
-            slots->offset[i].z = Engine_Random() % 4096;
-            slots->timer[i] = Engine_Random() % 10 + 20;
+            slots->offset[i].z = rand() % 4096;
+            slots->timer[i] = rand() % 10 + 20;
         }
     }
     if (slots->elapsedFrames >= 181) {
@@ -1538,12 +1538,12 @@ void func_80192904(int unused, SceneMovingState *state, SceneMovingSlots *slots)
 
     for (i = 0; i < 16; ++i) {
         if (slots->active[i] == 0) {
-            if (Engine_Random() % 15 == 0 && state->elapsedFrames < 120) {
-                slots->angle[i] = Engine_Random() % 4096;
+            if (rand() % 15 == 0 && state->elapsedFrames < 120) {
+                slots->angle[i] = rand() % 4096;
                 slots->initialSize[i] = 0x80;
                 slots->active[i] = 1;
                 {
-                    int randomValue = Engine_Random();
+                    int randomValue = rand();
                     slots->radius[i] = 2000;
                     slots->extraRadius[i] = 2400;
                     slots->range[i] = randomValue % 600 + 100;
@@ -1838,13 +1838,13 @@ void func_80193480(void *unused0, void *unused1, Ovl178RandomizedEffect *effect)
     s32 threshold;
 
     for (i = 0; i < 10; i++) {
-        D_80199658[i] = Engine_Random() % 4096;
-        D_80199590[i] = Engine_Random() % 4096;
+        D_80199658[i] = rand() % 4096;
+        D_80199590[i] = rand() % 4096;
         effect->tail.flags[i] = 0;
         effect->offsets[i] = 0;
     }
     threshold = *FieldFx_VarPtr(2);
-    if (Engine_Random() % 256 < threshold) {
+    if (rand() % 256 < threshold) {
         *FieldFx_VarPtr(1) = 1;
     } else {
         *FieldFx_VarPtr(1) = 0;
@@ -2655,10 +2655,10 @@ void func_80195210(void *unused, Ovl178EffectController *state,
     }
 
     for (i = 0; i < 12; i++) {
-        effect->offsets[i] = Engine_Random() % 400 - 200;
+        effect->offsets[i] = rand() % 400 - 200;
     }
     for (i = 0; i < 3; i++) {
-        effect->tail.variation[i] = Engine_Random() % 300 - 150;
+        effect->tail.variation[i] = rand() % 300 - 150;
     }
     if (state->timer >= 36) {
         state->mode = 2;

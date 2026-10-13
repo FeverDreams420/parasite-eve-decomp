@@ -2,6 +2,7 @@
 #define PE1_ROOM_GRAB_ATTACK_H
 
 #include "common.h"
+#include "pe1/akao_send.h"
 #include "pe1/gte.h"
 #include "pe1/room_fx.h"
 #include "pe1/room_motion_trigger.h"
@@ -71,8 +72,6 @@ void func_8003E0FC(void *object, int count, void *out);
 void func_80020C74(void);
 void func_80020CE4(void);
 s32 func_8003010C(void *actor, s32 arg1);
-extern int func_8006DF50_handle(void *channel, int id, int value, int volume,
-                                int pan) __asm__("Akao_SendTableCommand");
 void func_800866A4(int handle, int arg);
 void func_800D2B58(void *, void *, void *, void *, int, int, int);
 

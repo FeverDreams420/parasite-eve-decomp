@@ -11,3 +11,34 @@ FxCommon_DrawModel = 0x801995BC; // type:func
 FxCommon_DrawModelTinted = 0x8019A318; // type:func
 FxCommon_DrawModelFlat = 0x8019B1D0; // type:func
 FxCommon_SetMotionEndpoints = 0x80195BC8; // type:func
+
+// Runtime buffers past the end of the overlay image (no overlay object
+// defines them yet).
+g_FxCommonMotionRemaining1 = 0x8019C050;
+g_FxCommonMotionRemaining0 = 0x8019C054;
+g_FxCommonMotionAccum1 = 0x8019C06C;
+g_FxCommonMotionOrigin1 = 0x8019C07C;
+g_FxCommonMotionTarget1 = 0x8019C084;
+g_FxCommonMotionAccum0 = 0x8019C09C;
+g_FxCommonMotionOrigin0 = 0x8019C0AC;
+g_FxCommonMotionTarget0 = 0x8019C0B4;
+g_FxCommonResourceState = 0x8019C140;
+g_FxCommonEchoNodes = 0x8019C148;
+g_FxCommonType26Nodes = 0x8019C15C;
+g_FxCommonFrames = 0x8019C1F8;
+g_FxCommonCameraPosition = 0x8019C330;
+g_FxCommonCameraTarget = 0x8019C810;
+g_FxCommonPairedNodes = 0x8019C9C8;
+g_FxCommonFloorFadeQuads = 0x8019C9D8;
+g_FxCommonTopFadeQuads = 0x8019CA20;
+g_FxCommonDrawModes0 = 0x8019CA70;
+g_FxCommonDrawModes1 = 0x8019CA80;
+g_FxCommonDrawModes2 = 0x8019CA98;
+g_FxCommonMotionWhole = 0x8019CAA8;
+g_FxCommonSkyQuads = 0x8019CB60;
+g_FxCommonRuntime = 0x801E4A80;
+g_FxCommonMotionDeltas = 0x801EA268;
+g_FxCommonEffectSetup = 0x801EA370;
+g_FxCommonPathNodes = 0x801EA578;
+g_FxCommonPathTailNodes = 0x801EA588;
+g_FxCommonShadeQuads = 0x801EA598;

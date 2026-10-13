@@ -95,13 +95,13 @@ void func_80195F6C(void);
 
 /* Double-buffered full-screen gradient overlays and their draw-mode
  * packets, built once by func_80195F6C. */
-extern FxCommonGradientQuad g_FxCommonSkyQuads[2] __asm__("D_8019CB60");
-extern FxCommonGradientQuad g_FxCommonShadeQuads[2] __asm__("D_801EA598");
-extern FxCommonGradientQuad g_FxCommonFloorFadeQuads[2] __asm__("D_8019C9D8");
-extern FxCommonGradientQuad g_FxCommonTopFadeQuads[2] __asm__("D_8019CA20");
-extern FxCommonDrawModePacket g_FxCommonDrawModes0[2] __asm__("D_8019CA70");
-extern FxCommonDrawModePacket g_FxCommonDrawModes1[2] __asm__("D_8019CA80");
-extern FxCommonDrawModePacket g_FxCommonDrawModes2[2] __asm__("D_8019CA98");
+extern FxCommonGradientQuad g_FxCommonSkyQuads[2];
+extern FxCommonGradientQuad g_FxCommonShadeQuads[2];
+extern FxCommonGradientQuad g_FxCommonFloorFadeQuads[2];
+extern FxCommonGradientQuad g_FxCommonTopFadeQuads[2];
+extern FxCommonDrawModePacket g_FxCommonDrawModes0[2];
+extern FxCommonDrawModePacket g_FxCommonDrawModes1[2];
+extern FxCommonDrawModePacket g_FxCommonDrawModes2[2];
 
 /* Effect markers drawn by func_80193B5C: a line from the effect position
  * to its label and two textured label halves. */
@@ -146,13 +146,13 @@ typedef struct FxCommonFixedVec {
     FxCommonFixedPart x, y, z, pad;
 } FxCommonFixedVec;
 
-extern FxCommonFixedVec g_FxCommonMotionWhole[10] __asm__("D_8019CAA8");
+extern FxCommonFixedVec g_FxCommonMotionWhole[10];
 void func_80077BE4(FxCommonMarkerQuad *packet);
 int RotTransPers3(GteShortVector *v0, GteShortVector *v1, GteShortVector *v2,
                   s32 *sxy0, s32 *sxy1, s32 *sxy2, s32 *p, s32 *flag);
 
-extern FxCommonNode *g_FxCommonType26Nodes[4] __asm__("D_8019C15C");
-extern FxCommonNode *g_FxCommonPairedNodes[2] __asm__("D_8019C9C8");
+extern FxCommonNode *g_FxCommonType26Nodes[4];
+extern FxCommonNode *g_FxCommonPairedNodes[2];
 typedef struct FxCommonRuntime {
     FxCommonNode *node25;
     u32 unknown04;
@@ -166,7 +166,7 @@ typedef char FxRuntime_linksCheck[(((u32)&((FxCommonRuntime *)0)->links) == 0x8)
 typedef char FxRuntime_pairedNodesCheck[(((u32)&((FxCommonRuntime *)0)->pairedNodes) == 0x330) ? 1 : -1];
 typedef char FxRuntime_poolCheck[(((u32)&((FxCommonRuntime *)0)->pool) == 0x380) ? 1 : -1];
 typedef char FxRuntime_node0Check[(((u32)&((FxCommonRuntime *)0)->node0) == 0x57e0) ? 1 : -1];
-extern FxCommonRuntime g_FxCommonRuntime __asm__("D_801E4A80");
+extern FxCommonRuntime g_FxCommonRuntime;
 
 typedef struct FxCommonEffectSetupRecord {
     s16 position[3];
@@ -186,7 +186,7 @@ typedef struct FxCommonEffectSetupRecord {
     s32 value28, value2c;
     s16 value30, reserved32;
 } FxCommonEffectSetupRecord;
-extern FxCommonEffectSetupRecord g_FxCommonEffectSetup[10] __asm__("D_801EA370");
+extern FxCommonEffectSetupRecord g_FxCommonEffectSetup[10];
 
 typedef struct FxCommonPoint8 { s16 x,y,z,pad; } FxCommonPoint8;
 typedef struct FxCommonPointList { u8 header[6]; s16 count; FxCommonPoint8 points[1]; } FxCommonPointList;

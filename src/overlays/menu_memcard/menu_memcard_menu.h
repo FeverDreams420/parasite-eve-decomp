@@ -10,9 +10,9 @@
 
 /* Matching views of the existing two pointer slots, not extra storage.
  * Separate names retain retail's reloads instead of caching their addresses. */
-extern struct { MemcardScreenBuffer *value; } secondScreen asm("D_801D11C0");
+extern struct { MemcardScreenBuffer *value; } g_MemcardSecondScreen;
 extern MemcardScreenBuffer *D_801D11C0;
-extern MemcardScreenBuffer *firstDrawScreen asm("D_801D11BC");
+extern MemcardScreenBuffer *g_MemcardFirstDrawScreen;
 
 extern DISPENV D_800BCE94, D_801D1550, D_801D1564;
 extern DRAWENV D_800BCE24, D_801D1498, D_801D14F4;

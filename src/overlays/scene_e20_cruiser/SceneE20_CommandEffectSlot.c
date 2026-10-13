@@ -10,7 +10,7 @@ SceneEffectSlot *SceneE20_CommandEffectSlot(unsigned int command, int index, int
     switch (command) {
     case 1:
         slot->target.x = value;
-        random = Engine_Random();
+        random = rand();
         slot->target.y = g_RoomFloorY->y - 600;
         slot->target.y -= random & 0x1FF;
         slot->target.z = z;
@@ -24,7 +24,7 @@ SceneEffectSlot *SceneE20_CommandEffectSlot(unsigned int command, int index, int
         break;
     case 3:
         slot->target.x = value;
-        random = Engine_Random();
+        random = rand();
         slot->target.y = g_RoomFloorY->y - 600;
         slot->target.y -= random & 0x1FF;
         slot->target.z = z;

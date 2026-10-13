@@ -11,3 +11,8 @@ DsQueueLen = 0x8007F778;
 MenuCard_FlipScreenPages = 0x80127848; // type:func
 MenuCard_ResetDisplayState = 0x8012A848; // type:func
 MenuCard_StopVideo = 0x8012B19C; // type:func
+
+// Second names of the two screen buffer pointers (D_801D11BC[0], [1]):
+// list_screen.c reads them through separate symbols to keep retail reloads.
+// provide: g_MemcardFirstDrawScreen = 0x801D11BC;
+// provide: g_MemcardSecondScreen = 0x801D11C0;

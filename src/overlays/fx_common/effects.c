@@ -172,7 +172,7 @@ void func_8019234C(void)
             continue;
 
         func_8018F05C();
-        func_8018F92C((void *)&g_FxCommonMotionPosition1);
+        func_8018F92C((void *)&g_FxCommonCameraPosition);
         if (D_8019C02A != 0)
             D_8019C02A = func_80194108(D_8019C02A);
         func_80192740();
@@ -925,9 +925,9 @@ void func_801942FC(void)
                         copyX = mode1Sample.vector.x;
                         copyY = mode1Sample.vector.y;
                         copyZ = mode1Sample.vector.z;
-                        currentX = g_FxCommonMotionPosition0.x;
-                        currentY = g_FxCommonMotionPosition0.y;
-                        currentZ = g_FxCommonMotionPosition0.z;
+                        currentX = g_FxCommonCameraTarget.x;
+                        currentY = g_FxCommonCameraTarget.y;
+                        currentZ = g_FxCommonCameraTarget.z;
                         shortA.x = (s16)copyX;
                         shortA.y = copyY - 0x64;
                         shortA.z = (s16)copyZ;
@@ -1089,30 +1089,30 @@ void func_801942FC(void)
         }
     }
     if ((D_8019C034 == 1) && (g_FxCommonMotionRemaining0 == 0) && (g_FxCommonMotionRemaining1 == 0)) {
-        ((FxCommonVec3 *)&g_FxCommonMotionPosition1)->x = D_801EA58C->state[0];
-        g_FxCommonMotionPosition1.y = D_801EA58C->state[1] - 0x12C;
-        g_FxCommonMotionPosition1.z = D_801EA58C->state[2];
-        ((FxCommonVec3 *)&g_FxCommonMotionPosition0)->x = D_801EA578->state[0];
-        g_FxCommonMotionPosition0.y = D_801EA578->state[1];
-        g_FxCommonMotionPosition0.z = D_801EA578->state[2];
+        ((FxCommonVec3 *)&g_FxCommonCameraPosition)->x = D_801EA58C->state[0];
+        g_FxCommonCameraPosition.y = D_801EA58C->state[1] - 0x12C;
+        g_FxCommonCameraPosition.z = D_801EA58C->state[2];
+        ((FxCommonVec3 *)&g_FxCommonCameraTarget)->x = D_801EA578->state[0];
+        g_FxCommonCameraTarget.y = D_801EA578->state[1];
+        g_FxCommonCameraTarget.z = D_801EA578->state[2];
     }
     if ((D_8019C034 == 2) && (g_FxCommonMotionRemaining0 == 0) && (g_FxCommonMotionRemaining1 == 0)) {
-        ((FxCommonVec3 *)&g_FxCommonMotionPosition1)->x = D_801EA580->state[0];
-        g_FxCommonMotionPosition1.y = D_801EA580->state[1];
-        g_FxCommonMotionPosition1.z = D_801EA580->state[2];
-        ((FxCommonVec3 *)&g_FxCommonMotionPosition0)->x = D_801EA578->state[0];
-        g_FxCommonMotionPosition0.y = D_801EA578->state[1];
-        g_FxCommonMotionPosition0.z = D_801EA578->state[2];
+        ((FxCommonVec3 *)&g_FxCommonCameraPosition)->x = D_801EA580->state[0];
+        g_FxCommonCameraPosition.y = D_801EA580->state[1];
+        g_FxCommonCameraPosition.z = D_801EA580->state[2];
+        ((FxCommonVec3 *)&g_FxCommonCameraTarget)->x = D_801EA578->state[0];
+        g_FxCommonCameraTarget.y = D_801EA578->state[1];
+        g_FxCommonCameraTarget.z = D_801EA578->state[2];
     }
     if (D_8019C046 == 1) {
-        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[3], Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition1, &sampleExtra);
-        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[2], Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition0, &sampleExtra);
+        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[3], Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraPosition, &sampleExtra);
+        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[2], Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraTarget, &sampleExtra);
         D_8019C04C += 0x80;
     }
     if (D_8019C034 == 0xA) {
         D_8019C030 += 1;
-        func_8018F55C(D_8019C04C, 0x4E, Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition1, &sampleExtra);
-        func_8018F55C(D_8019C04C, 0x4F, Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition0, &sampleExtra);
+        func_8018F55C(D_8019C04C, 0x4E, Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraPosition, &sampleExtra);
+        func_8018F55C(D_8019C04C, 0x4F, Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraTarget, &sampleExtra);
         D_8019C04C += 0x10;
         if ((s16) D_8019C030 == 0x4B) {
             D_8019C0C4 = func_801958D4(0xB, 0U);
@@ -1198,13 +1198,13 @@ void func_801942FC(void)
         accumZ0 = g_FxCommonMotionAccum0.z + D_8019C094;
         g_FxCommonMotionAccum0.y = accumY0;
         g_FxCommonMotionAccum0.z = accumZ0;
-        g_FxCommonMotionPosition0.x = g_FxCommonMotionOrigin0.x + (accumX0 >> D_8019C056);
-        g_FxCommonMotionPosition0.y = g_FxCommonMotionOrigin0.y + (accumY0 >> D_8019C056);
-        g_FxCommonMotionPosition0.z = g_FxCommonMotionOrigin0.z + (accumZ0 >> D_8019C056);
+        g_FxCommonCameraTarget.x = g_FxCommonMotionOrigin0.x + (accumX0 >> D_8019C056);
+        g_FxCommonCameraTarget.y = g_FxCommonMotionOrigin0.y + (accumY0 >> D_8019C056);
+        g_FxCommonCameraTarget.z = g_FxCommonMotionOrigin0.z + (accumZ0 >> D_8019C056);
         if ((remaining0 << 0x10) == 0) {
-            g_FxCommonMotionPosition0.x = g_FxCommonMotionTarget0.x;
-            g_FxCommonMotionPosition0.y = g_FxCommonMotionTarget0.y;
-            g_FxCommonMotionPosition0.z = g_FxCommonMotionTarget0.z;
+            g_FxCommonCameraTarget.x = g_FxCommonMotionTarget0.x;
+            g_FxCommonCameraTarget.y = g_FxCommonMotionTarget0.y;
+            g_FxCommonCameraTarget.z = g_FxCommonMotionTarget0.z;
         }
     }
     if (g_FxCommonMotionRemaining1 != 0) {
@@ -1216,13 +1216,13 @@ void func_801942FC(void)
         accumZ1 = g_FxCommonMotionAccum1.z + D_8019C064;
         g_FxCommonMotionAccum1.y = accumY1;
         g_FxCommonMotionAccum1.z = accumZ1;
-        g_FxCommonMotionPosition1.x = g_FxCommonMotionOrigin1.x + (accumX1 >> D_8019C052);
-        g_FxCommonMotionPosition1.y = g_FxCommonMotionOrigin1.y + (accumY1 >> D_8019C052);
-        g_FxCommonMotionPosition1.z = g_FxCommonMotionOrigin1.z + (accumZ1 >> D_8019C052);
+        g_FxCommonCameraPosition.x = g_FxCommonMotionOrigin1.x + (accumX1 >> D_8019C052);
+        g_FxCommonCameraPosition.y = g_FxCommonMotionOrigin1.y + (accumY1 >> D_8019C052);
+        g_FxCommonCameraPosition.z = g_FxCommonMotionOrigin1.z + (accumZ1 >> D_8019C052);
         if ((remaining1 << 0x10) == 0) {
-            g_FxCommonMotionPosition1.x = g_FxCommonMotionTarget1.x;
-            g_FxCommonMotionPosition1.y = g_FxCommonMotionTarget1.y;
-            g_FxCommonMotionPosition1.z = g_FxCommonMotionTarget1.z;
+            g_FxCommonCameraPosition.x = g_FxCommonMotionTarget1.x;
+            g_FxCommonCameraPosition.y = g_FxCommonMotionTarget1.y;
+            g_FxCommonCameraPosition.z = g_FxCommonMotionTarget1.z;
         }
     }
 }
@@ -1302,12 +1302,12 @@ void func_80195994(s32 index, s32 first, s32 second, u32 source) {
     lookupTable = table;
     firstValue &= 0xff;
     px = point.vector.x;
-    bx = g_FxCommonMotionPosition0.x;
+    bx = g_FxCommonCameraTarget.x;
     asm volatile("" : : "r"(bx));
     py = point.vector.y;
-    by = g_FxCommonMotionPosition0.y;
+    by = g_FxCommonCameraTarget.y;
     pz = point.vector.z;
-    bz = g_FxCommonMotionPosition0.z;
+    bz = g_FxCommonCameraTarget.z;
     D_8019C056 = firstValue;
     firstMask = 1 << firstValue;
     D_8019C09C = 0;
@@ -1330,14 +1330,14 @@ void func_80195994(s32 index, s32 first, s32 second, u32 source) {
     asm volatile("" : : "r"(secondValue));
     secondValue &= 0xff;
     qx = point.vector.x;
-    ax = g_FxCommonMotionPosition1.x;
+    ax = g_FxCommonCameraPosition.x;
     qy = point.vector.y;
     asm volatile("" : : "r"(qy));
-    ay = g_FxCommonMotionPosition1.y;
+    ay = g_FxCommonCameraPosition.y;
     asm volatile("" : : "r"(ay));
     qz = point.vector.z;
     asm volatile("" : : "r"(qz));
-    az = g_FxCommonMotionPosition1.z;
+    az = g_FxCommonCameraPosition.z;
     asm volatile("" : : "r"(az));
     secondMask = 1 << secondValue;
     D_8019C06C = 0;

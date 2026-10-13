@@ -7,17 +7,15 @@
 #include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
 
-extern FxCommonVec3 g_FxCommonMotionPosition1 __asm__("D_8019C330");
-extern FxCommonVec3 g_FxCommonMotionPosition0 __asm__("D_8019C810");
-extern FxCommonVec3 g_FxCommonMotionAccum1 __asm__("D_8019C06C");
-extern FxCommonVec3 g_FxCommonMotionAccum0 __asm__("D_8019C09C");
-extern FxCommonShortVec3 g_FxCommonMotionOrigin1 __asm__("D_8019C07C");
-extern FxCommonShortVec3 g_FxCommonMotionTarget1 __asm__("D_8019C084");
-extern FxCommonShortVec3 g_FxCommonMotionOrigin0 __asm__("D_8019C0AC");
-extern FxCommonShortVec3 g_FxCommonMotionTarget0 __asm__("D_8019C0B4");
+extern FxCommonVec3 g_FxCommonMotionAccum1;
+extern FxCommonVec3 g_FxCommonMotionAccum0;
+extern FxCommonShortVec3 g_FxCommonMotionOrigin1;
+extern FxCommonShortVec3 g_FxCommonMotionTarget1;
+extern FxCommonShortVec3 g_FxCommonMotionOrigin0;
+extern FxCommonShortVec3 g_FxCommonMotionTarget0;
 /* Ordinary counter views; legacy callers use volatile scheduling declarations. */
-extern s16 g_FxCommonMotionRemaining0 __asm__("D_8019C054");
-extern s16 g_FxCommonMotionRemaining1 __asm__("D_8019C050");
+extern s16 g_FxCommonMotionRemaining0;
+extern s16 g_FxCommonMotionRemaining1;
 extern u32 D_8009D1F4;
 extern u32 D_8009D26C;
 extern s8 D_800B0DB5;
@@ -51,17 +49,17 @@ typedef struct FxCommonFrame {
     u8 dispEnv[0x14];   /* 0x64 */
 } FxCommonFrame;
 typedef PsxSignedRect FxCommonRect;
-extern FxCommonFrame g_FxCommonFrames[2] __asm__("D_8019C1F8");
+extern FxCommonFrame g_FxCommonFrames[2];
 extern s32 D_8009CDDC;
 extern u8 D_8019C00E;
 extern s32 D_8019CC14;
 extern u32 D_8009D280;
 /* Plain views of the camera position and its look-at target. */
-extern FxCommonVec3 g_FxCommonCameraPosition __asm__("D_8019C330");
-extern FxCommonVec3 g_FxCommonCameraTarget __asm__("D_8019C810");
+extern FxCommonVec3 g_FxCommonCameraPosition;
+extern FxCommonVec3 g_FxCommonCameraTarget;
 extern RoomSpriteMatrix D_8018EFF4;
 /* Transform nodes animated along the camera paths (D_801EA578..D_801EA58C). */
-extern FxCommonTransformNode *g_FxCommonPathNodes[6] __asm__("D_801EA578");
+extern FxCommonTransformNode *g_FxCommonPathNodes[6];
 /* Camera rotation angles. An incomplete array, so the -G8 camera unit keeps
  * the absolute address in a register as retail does. */
 extern GteShortVector D_8019BFC4[];
@@ -98,11 +96,11 @@ void func_80192800(void);
 /* Per-frame scene draw (func_80192800): depth bias for the next node,
  * echo copies of the camera path nodes and the flicker colour. */
 extern s32 D_801EA5E4;
-extern FxCommonTransformNode *g_FxCommonPathTailNodes[2] __asm__("D_801EA588");
+extern FxCommonTransformNode *g_FxCommonPathTailNodes[2];
 extern s16 D_8019C0D0[2];
 extern u8 D_801EA264[3];
 extern void *D_801EA260;
-extern FxCommonTransformNode *g_FxCommonEchoNodes[4] __asm__("D_8019C148");
+extern FxCommonTransformNode *g_FxCommonEchoNodes[4];
 void func_80190E04(FxCommonTransformNode *node, FxCommonBuffer *context, u8 pass,
                    u8 force, u8 mirrored);
 void func_80191114(FxCommonLodNode *node, FxCommonBuffer *context, u8 force, u8 mode);
