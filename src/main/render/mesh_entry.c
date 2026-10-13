@@ -100,7 +100,7 @@ int Render_TransformPoint(GeomEntry *entry, int x, int y, int depth) {
     GeomEntry *current;
     int screenX;
     register int screenY asm("$4");
-    register int minimum asm("$5");
+    int minimum;
     int truncated;
     register int sum asm("$3");
     int bound;
@@ -149,7 +149,9 @@ int Render_TransformPoint(GeomEntry *entry, int x, int y, int depth) {
     current->scr_y = screenY;
     mask = 0xFFF000FF;
     packed = current->head.packed & mask;
-    packed |= (depth & 0xFFF) << 8;
+    /* Clamping is complete; reuse the scratch for the packed depth. */
+    bound = depth;
+    packed |= (bound & 0xFFF) << 8;
     current->head.packed = packed;
     return 0;
 }
