@@ -86,7 +86,7 @@ int RoomEffect_SparkRingParticle(int mode, RoomSparkRingParticle *state) {
         func_800CEE20((GteShortVector *)state, (GteRotation *)&seed,
                       scale, scale,
                       (s16)D_800F3368.parameter02 * (state->timer / 3) + 0x20,
-                      (unsigned short)GetClut(0x10, texture),
+                      GetClut(0x10, texture),
                       1, 0xA0, (RenderColor *)&out);
         return 0;
     default:
@@ -152,7 +152,7 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
         switch (state->state) {
         case 0:
             state->timer++;
-            if ((s16)state->timer < 20) break;
+            if (state->timer < 20) break;
             state->state = 1;
             state->timer = 0;
             break;
