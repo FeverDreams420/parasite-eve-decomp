@@ -393,6 +393,6 @@ DRAWENV *GetDrawEnv(DRAWENV *arg0) {
     void *(*fn)(void *, const void *, unsigned int);
 
     fn = memcpy;
-    fn(arg0, &D_8009575C, sizeof(D_8009575C));
+    fn(arg0, &((GpuSystemState *)&g_GpuSystemState)->drawCache, sizeof(DRAWENV));
     return arg0;
 }

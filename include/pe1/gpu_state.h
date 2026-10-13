@@ -51,8 +51,8 @@ extern GpuDebugState g_GpuSystemState;
 extern unsigned char g_GraphDebug[];
 extern char g_SetGraphQueFormat[];
 
-/* SYS.OBJ caches: DRAWENV follows the 16-byte debug state, then DISPENV. */
-extern DRAWENV D_8009575C;
+/* SYS.OBJ display cache (GpuSystemState.displayCache) as its own symbol;
+ * GetDrawEnv reads the draw cache through the whole GpuSystemState. */
 extern DISPENV g_GpuActiveDispEnv;
 
 #endif /* PE1_GPU_STATE_H */
