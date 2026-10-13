@@ -7,7 +7,7 @@
 static inline MemcardImageNode *MenuCard_FindImageNode(s32 kind) {
     MemcardImageNode *node;
 
-    for (node = ((MemcardImageNode *)D_801D1370); node != 0; node = node->next) {
+    for (node = (D_801D1370); node != 0; node = node->next) {
         if (node->kind == kind) {
             break;
         }
@@ -327,11 +327,11 @@ s32 func_801909B4(void) {
             DrawSync(0);
             if (D_801D11C4->overlay.w > 0) {
                 overlay = D_801D11C4->overlay;
-                overlay.x = (s16) ((s32) (overlay.x * 3) >> 1);
+                overlay.x = (s16) ((overlay.x * 3) >> 1);
                 if (D_801D11C8 == 0) {
                     overlay.y += 0xF0;
                 }
-                overlay.w = (s16) ((s32) (overlay.w * 3) >> 1);
+                overlay.w = (s16) ((overlay.w * 3) >> 1);
                 LoadImage(&overlay, D_801D11C4->overlayImage);
             }
             VSync(0);
@@ -369,7 +369,7 @@ s32 func_801909B4(void) {
                 Field_HandleStateTransition();
                 func_80190064();
                 MenuCard_RedrawImageNodes();
-                node = ((MemcardImageNode *)D_801D1370);
+                node = (D_801D1370);
                 previous = 0;
                 if (node != 0) {
                     do {
@@ -388,7 +388,7 @@ s32 func_801909B4(void) {
                             if (previous != 0) {
                                 node = previous->next;
                             } else {
-                                node = ((MemcardImageNode *)D_801D1370);
+                                node = (D_801D1370);
                             }
                         } else {
                             previous = node;
@@ -417,11 +417,11 @@ s32 func_801909B4(void) {
                 DrawSync(0);
                 if (D_801D11C4->overlay.w > 0) {
                     overlay = D_801D11C4->overlay;
-                    overlay.x = (s16) ((s32) (overlay.x * 3) >> 1);
+                    overlay.x = (s16) ((overlay.x * 3) >> 1);
                     if (D_801D11C8 == 0) {
                         overlay.y += 0xF0;
                     }
-                    overlay.w = (s16) ((s32) (overlay.w * 3) >> 1);
+                    overlay.w = (s16) ((overlay.w * 3) >> 1);
                     LoadImage(&overlay, D_801D11C4->overlayImage);
                 }
                 VSync(2);
@@ -452,7 +452,7 @@ s32 func_801909B4(void) {
         Draw_PresentFrame(2);
         if (D_801D1380 >= 0x3E9) {
             wantedKind = 7;
-            selection = ((MemcardImageNode *)D_801D1370);
+            selection = (D_801D1370);
             while (selection != 0) {
                 searchKind = selection->kind;
                 if (searchKind == wantedKind) {
