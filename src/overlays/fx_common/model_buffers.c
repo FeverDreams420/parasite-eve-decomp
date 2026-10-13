@@ -324,9 +324,8 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
             u32 *triangleScreen2Address;
             u32 *triangleScreen1Address;
             u32 *triangleMidpointScreen4Address;
-            register s32 primitiveIndex4 asm("$20");
             trianglePacketCursor = (FxCommonFt3Packet *)var_t0;
-            primitiveIndex4 = 0;
+            var_s4 = 0;
             primitiveCount = var_t8->counts[4];
             if (primitiveCount > 0) {
                 register u32 *triangleGteScreen0 asm("$4");
@@ -652,14 +651,14 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     }
                     }
                 nextTexturedTriangle:
-                    primitiveIndex4 += 1;
+                    var_s4 += 1;
 
                     var_a3 += 0x40;
                     var_t6 += 0x40;
                     var_t5 += 0x40;
                     var_t4 += 8;
                     ++var_t3;
-                } while (primitiveIndex4 < var_t8->counts[4]);
+                } while (var_s4 < var_t8->counts[4]);
             }
             var_t1_2 = (FxCommonFt4Packet *)trianglePacketCursor;
         }
