@@ -2,11 +2,11 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-/* Before akao.h. The bound in cdrom_bgm.h keeps each table read absolute. */
-#include "pe1/cdrom_bgm.h"
 #include "common.h"
-#include "pe1/akao.h"
+#include "pe1/akao/bgm.h"
 #include "pe1/akao/commands.h"
+#include "pe1/akao/stream.h"
+#include "pe1/akao_send.h"
 #include "pe1/boot.h"
 #include "pe1/cdrom.h"
 #include "pe1/game_state.h"
