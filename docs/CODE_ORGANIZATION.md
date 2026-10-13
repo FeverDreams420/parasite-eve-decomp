@@ -2204,6 +2204,14 @@ built main, and the link fails only when the image reaches the initial stack
 pointer (0x1FF0 bytes of room). `tools/scripts/shift_full_test.py` (`make
 shift-full-test`) relinks main and all 190 overlays with main shifted and
 shows that every differing word is an address field moved by the shift.
+It also lists overlay data words that hold one of the overlay's function
+addresses without a relocation; none are left. The rooms' class tables
+(seven methods per class) are C (`g_RoomClassTable`,
+`room_lib/actor_class_table.c` and two window variants), and the room
+script's pointer records and the other pointer-holding records are data
+subsegments that name their target instead of databin bytes; each table
+and record run is a row of [overlay_data_pointers.csv](overlay_data_pointers.csv)
+(SHIFTABILITY_PLAN.md, emulator test, blocker 3).
 The plan for main's data (phase 3: pins, BSS ownership, COMMON, ABI list and
 the work list) is [SHIFTABILITY_PLAN.md](SHIFTABILITY_PLAN.md).
 

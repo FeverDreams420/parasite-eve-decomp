@@ -917,13 +917,27 @@ What blocks, precisely:
    the largest pad tested that plays the script. The real growth room is
    therefore below the 0x1FF0 the link check reports, and the check should
    count the run-time extent of the block's last buffers and the stack.
-3. Not on this path: overlay data words that hold their own function
-   addresses as numbers (handler and class tables, mostly in `databin`
-   blobs): 947 words in 36 overlays, listed by `shift_full_test.py`. A
-   shifted build would call retail addresses in those rooms (Central Park,
-   the museum, the Chrysler building, room_m022, scenes e09/e10). Room data
-   blobs may hold other address words that are not function starts; those
-   are not counted.
+3. Not on this path, and fixed since: overlay data words that held their
+   own function addresses as numbers (947 words in 36 overlays, listed by
+   `shift_full_test.py`; Central Park, the museum, the Chrysler building,
+   room_m022, scenes e09/e10). 945 were the rooms' class tables, seven
+   methods per class; every room that links the room library's actor or
+   window classes (120 overlays; scene_e22 keeps its table as asm code
+   data) now links it from C as `g_RoomClassTable`
+   (`room_lib/actor_class_table.c` and its two window variants, element
+   type `RoomModuleHandler[7]`). The other two were the timed spawn record
+   of room_m145 and m332. The room script also points at its own data with
+   12-byte records (offset, `op << 24 | 8`, pointer; opcode 0x46 registers
+   row 0 of the class table, 0x4B row 2, 0x49 row 4, 0x4A the window row):
+   330 such pointers, and 7 sprite-record pointers in room_m065, sat in
+   databins and are now data subsegments that name their target.
+   `shift_full_test.py` reports no unrelocated function-address word left,
+   and 1293 more overlay words move with the pad. Every row is in
+   [overlay_data_pointers.csv](overlay_data_pointers.csv). Still numbers:
+   17 room_m065 sprite-record pointers past the image end (run-time memory
+   of the room, outside every symbol), and words that only look like
+   addresses (122 halfword pairs such as 0x801C01E0 next to 0x00401010 in
+   room image data, and 37 words 0x80010000).
 
 Not verified: XA audio and sound in general (the runner has no audio
 output; only the CD command stream was compared for the movies), whether
