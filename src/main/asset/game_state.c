@@ -304,7 +304,7 @@ void Boot_Shutdown(void) {
 
     old = g_SceneDispatchToken;
     g_SceneDispatchToken = 0xA9400048;
-    D_800A77F4 = old;
+    D_800A77F4.room = old;
     g_GameState.flags |= 0x100;
 }
 

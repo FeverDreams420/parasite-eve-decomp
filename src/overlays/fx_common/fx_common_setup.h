@@ -1,6 +1,7 @@
 #ifndef FX_COMMON_SETUP_H
 #define FX_COMMON_SETUP_H
 
+#include "pe1/boot_services.h"
 #include "pe1/field_bg_load.h"
 #include "pe1/psyq_gpu.h"
 
@@ -8,15 +9,6 @@
 
 extern u32 D_800A77FC;
 
-/* Room and area identifiers in the main executable's scene state. */
-typedef struct FxCommonSceneIds {
-    s32 room;          /* 0x000 */
-    s32 pad04;
-    u32 flags;         /* 0x008 */
-    u8 pad0C[0x118];
-    s32 area;          /* 0x124 */
-} FxCommonSceneIds;
-extern FxCommonSceneIds D_800A77F4;
 extern u32 D_800B0CD8;
 extern s32 D_8019C000;
 extern s32 D_8019C004;
