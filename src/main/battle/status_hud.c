@@ -744,10 +744,9 @@ void Battle_DrawSpellName(void) {
                 clut = GetClut(r130, 0x1FA);
             }
             {
-                register s32 cI asm("$4");
                 register s32 ti asm("$3");
-                cI = g_ActiveDrawSlotRecord.slot;
-                ti = cI * 0x118;
+                r130 = g_ActiveDrawSlotRecord.slot;
+                ti = r130 * 0x118;
                 ti = s0 + ti;
                                 *(s16 *)(D_8009E516 + ti) = clut;
                 __asm__ __volatile__("");
