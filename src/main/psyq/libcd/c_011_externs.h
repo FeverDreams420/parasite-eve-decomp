@@ -13,7 +13,6 @@ extern volatile u32 *D_8009B35C;
 extern s32 D_8009B374;
 extern StHEADER *D_800A34A0;
 extern s32 g_CdStreamDataReadyFlag, D_800BCD7C, g_CdStreamRingReadSlot;
-extern s32 D_800C0DC0;
 extern StSectorPayload *D_800C0DC4;
 
 #endif /* PSYQ_LIBCD_STCDINTERRUPT_EXTERNS_H */

@@ -329,7 +329,7 @@ void Script_RunQueue(void)
                     args[i] = (u32 *)((argument_entity = D_8009D2F0[0]) + 0xAC + values[i] * 4);
                     break;
                 case 2: args[i] = &D_800A77F0[values[i]]; break;
-                case 4: args[i] = &D_800B6A80[values[i]]; break;
+                case 4: args[i] = &g_ScriptNodeActiveFlags[values[i]]; break;
                 }
                 modes >>= 3;
                 if (i == 4) modes = tail;

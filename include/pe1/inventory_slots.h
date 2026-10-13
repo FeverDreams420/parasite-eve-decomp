@@ -34,7 +34,6 @@ extern s32 g_InvTransferItemCount;
 extern s16 g_InvTransferItemList[];
 extern s16 *g_InvActiveItemList;
 extern s32 D_8009D080;
-extern s16 D_800C1F80[];
 extern s16 g_InvPackedList[];
 /* Saved by inventory commands as a word; the frame loop reads its low byte. */
 typedef union SavedMenuMode {

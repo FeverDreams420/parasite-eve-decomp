@@ -281,8 +281,8 @@ typedef union RenderTagAddress {
 
 int Render_SetCDDCSlot(void) {
     GeomScrollState *state = &g_GeomScroll.state;
-    int mode = D_800BCFEE & 3;
-    int stop = D_800BCFEE & 4;
+    int mode = g_ScreenTransitionState[0] & 3;
+    int stop = g_ScreenTransitionState[0] & 4;
     int divisor, frame;
     int slot;
     int modeSlot;

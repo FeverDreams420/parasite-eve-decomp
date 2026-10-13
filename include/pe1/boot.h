@@ -42,7 +42,6 @@ extern char g_AnalogStickState[];
  * button mask per game bit, frames each bit has been held, the actuator
  * buffers and the cheat sequence masks. */
 extern s32 g_FieldRenderFlagTable[];
-extern u32 D_800A76F0[];
 extern u32 D_800A7770[];
 extern u8 D_8009D1C0[];
 extern u8 D_800921F8[];

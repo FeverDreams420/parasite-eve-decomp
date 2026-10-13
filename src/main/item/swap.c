@@ -291,7 +291,7 @@ void Inv_ClearDisplaySlots(void) {
 int Inv_StepScrollDisplay2(int special) {
     if (special) {
         int i, found;
-        g_InvActiveItemList = D_800C1F80;
+        g_InvActiveItemList = g_InvItemArray;
         for (i = 0; i < 82; i++)
             if (g_InvActiveItemList[i] == 516)
                 break;

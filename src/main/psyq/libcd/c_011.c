@@ -95,7 +95,7 @@ void StCdInterrupt(void) {
                 *port = control;
             }
             *D_8009B340 = 0x1325;
-            if ((D_800C0DC0 == 1) && (D_800B6918 != 0)) {
+            if ((g_CdStreamMask == 1) && (D_800B6918 != 0)) {
                 if (D_800B6918 != ST_FRAME_INDEX(D_800A34A0)) {
                     D_800A34A0->id = 0;
                     asm volatile("" ::: "memory");
@@ -104,7 +104,7 @@ void StCdInterrupt(void) {
                     }
                     return;
                 } else {
-                    D_800C0DC0 = 0;
+                    g_CdStreamMask = 0;
                 }
             }
                 if ((D_800A34A0->id != 0x160) ||
@@ -146,7 +146,7 @@ void StCdInterrupt(void) {
                         D_800BE998 = g_CdStreamRingReadSlot;
                         D_800A34A0->id = 0;
                         asm volatile("" ::: "memory");
-                        D_800C0DC0 = 1;
+                        g_CdStreamMask = 1;
                         if (D_800B0CCC != 0) {
                             D_800B0CCC();
                         }
@@ -161,7 +161,7 @@ void StCdInterrupt(void) {
                         if (g_CdStreamEndState.endSector == 0) {
                             D_800A34A0->id = 1;
                             asm volatile("" ::: "memory");
-                            D_800C0DC0 = 1;
+                            g_CdStreamMask = 1;
                             if (D_800B0CCC != 0) {
                                 D_800B0CCC();
                             }

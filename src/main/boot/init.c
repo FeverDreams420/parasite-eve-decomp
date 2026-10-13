@@ -217,7 +217,7 @@ void Boot_StoreTableEntry(u32 mask, int value) {
         gte_stlzcr(&mask);
         index -= mask;
     }
-    D_800A76F0[index] = value;
+    g_FieldRenderFlagTable[index] = value;
 }
 
 u32 D_8009D1F4;
@@ -298,7 +298,7 @@ void Field_HandleStateTransition(void) {
 
     g_FieldPadBits = 0;
     for (i = 0; i < 0x20; i++) {
-        if (((u16)pad_bits & D_800A76F0[i]) != 0) {
+        if (((u16)pad_bits & g_FieldRenderFlagTable[i]) != 0) {
             g_FieldPadBits |= 1u << i;
             D_800A7770[i]++;
         } else {

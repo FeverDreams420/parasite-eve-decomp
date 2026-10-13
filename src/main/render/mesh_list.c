@@ -614,7 +614,7 @@ int Render_ScrollEntries(void)
             } while (++i < count);
         }
         if (g_GeomScroll.state.flags & 0x80) {
-            unsigned short x = D_800BCF8C.x, y = D_800BCF8E;
+            unsigned short x = D_800BCF8C.x, y = g_CameraClampedY[0];
             g_GeomScroll.state.flags &= ~0x80;
             D_800BCF90 = x;
             D_800BCF92 = y;

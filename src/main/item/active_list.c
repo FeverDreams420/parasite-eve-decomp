@@ -471,7 +471,7 @@ void Inv_RebuildSelectionBitset(void) {
     }
 
     start = 0;
-    list = D_800C1F80;
+    list = g_InvItemArray;
     while (start < 0x52) {
         item_id = *list - 0x100;
         if ((unsigned int)item_id < 0x80) {

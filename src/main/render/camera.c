@@ -495,17 +495,17 @@ int Render_SetViewport(s16 *position) {
         axisValue = view->minY;
         chosen_bound = axisValue;
         if (signed_y < axisValue) {
-            D_800BCF8E = chosen_bound;
+            g_CameraClampedY[0] = chosen_bound;
             return 0;
         }
         axisValue = view->maxY;
         upper_y = axisValue;
         asm("" : "=r"(upper_y) : "0"(upper_y));
         if (axisValue < signed_y) {
-            D_800BCF8E = upper_y;
+            g_CameraClampedY[0] = upper_y;
             return 0;
         }
-        D_800BCF8E = target_y;
+        g_CameraClampedY[0] = target_y;
     }
     return 0;
 }
@@ -570,13 +570,13 @@ int Render_StepCameraTransition(void)
             int movedX = (short)dx * (short)time / (short)duration;
             int movedY = (short)dy * (short)time / (short)duration;
             D_800BCF8C.x = x + movedX;
-            D_800BCF8E = y + movedY;
+            g_CameraClampedY[0] = y + movedY;
         } else {
             int weight = rcos((short)time * 2048 / (short)duration + 2048) + 4096;
             int movedX = (short)dx * weight / 8192;
             int movedY = (short)dy * weight / 8192;
             D_800BCF8C.x = D_800BCF98 + movedX;
-            D_800BCF8E = D_800BCF9A + movedY;
+            g_CameraClampedY[0] = D_800BCF9A + movedY;
         }
     }
     {
@@ -589,7 +589,7 @@ int Render_StepCameraTransition(void)
             D_800BCF94 = offset;
         }
         {
-            unsigned int offset = 112 - ((short)D_800BCF8E - (short)view->height / 2);
+            unsigned int offset = 112 - ((short)g_CameraClampedY[0] - (short)view->height / 2);
             D_800BCF96 = offset;
         }
     }
@@ -625,7 +625,7 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
     if (!(camera->flags & 64))
         return -21;
     D_800BCF98 = D_800BCF8C.x;
-    D_800BCF9A = D_800BCF8E;
+    D_800BCF9A = g_CameraClampedY[0];
     vector.x = position[0] >> 16;
     vector.y = (position[1] >> 16) - (u16)D_800BCFFE[0];
     vector.z = position[2] >> 16;

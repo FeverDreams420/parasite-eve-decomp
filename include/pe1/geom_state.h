@@ -348,7 +348,7 @@ extern char D_800BCFFC;
 extern u8 g_RenderFadeFrameCount;
 extern u8 g_RenderFadeFrameCounter;
 extern GeomScrollCoordinates D_800BCF8C;
-extern u16 D_800BCF8E, D_800BCF90, D_800BCF92;
+extern u16 D_800BCF90, D_800BCF92;
 
 int Render_TransformPoint(GeomEntry *entry, int x, int y, int depth);
 int Render_ClipPoint(int x, int y, int z);

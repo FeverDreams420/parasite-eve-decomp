@@ -60,7 +60,6 @@ typedef union RenderTintTargetView {
 /* Existing absolute symbols also expose the parameter halfwords/bytes. */
 extern s16 D_800BCFE8, D_800BCFEA, D_800BCFEC;
 extern s16 D_800BCFF0, D_800BCFF2, D_800BCFF4;
-extern u8 D_800BCFEE;
 extern u16 D_800BCFF8;
 int Render_SetCDDCSlot(void);
 
