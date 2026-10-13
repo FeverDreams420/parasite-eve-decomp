@@ -12,7 +12,7 @@
 
 #include "m086_externs.h"
 
-int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params) {
+int RoomM086_SeekerCallback(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params) {
     GteShortVector rotation;
     GteShortVector position;
     GteMatrix matrix;
@@ -103,10 +103,10 @@ int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params
             scale.y = size;
             scale.z = size;
             ScaleMatrix(&matrix, &scale);
-            FieldFx_ModelSaveColors(D_80190B84);
-            FieldFx_ModelScaleColors(D_80190B84, 0x80);
-            FieldFx_ModelDraw((union FieldTexturedModel *)D_80190B84, &matrix);
-            FieldFx_ModelRestoreColors(D_80190B84);
+            FieldFx_ModelSaveColors(g_RoomM086SeekerModelB);
+            FieldFx_ModelScaleColors(g_RoomM086SeekerModelB, 0x80);
+            FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM086SeekerModelB, &matrix);
+            FieldFx_ModelRestoreColors(g_RoomM086SeekerModelB);
             g_FieldFxSpriteParams.parameter00 = 0x10;
             g_FieldFxSpriteParams.parameter02 = 1;
             g_FieldFxSpriteParams.extent_x = 0x10;
@@ -177,7 +177,7 @@ int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params
 /* Seeker controller: anchored on joint 7 of the actor, it drifts and falls
  * (shedding sparks on the first frame), then bursts into a spark ring and a
  * fan of seekers once it reaches the floor band. */
-int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerParams *params) {
+int RoomM086_SeekerController(int mode, RoomM086SeekerController *state, RoomM086ControllerParams *params) {
     GteShortVector rotation;
     GteShortVector position;
     RoomM086Offset anchor = D_8018EFF4;
@@ -212,13 +212,13 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
                 if (*flag == 1) *flag = 2;
             }
         }
-        D_80190B88 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5465704);
-        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80190B88, 0, 0);
-        D_80190B84 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5865704);
-        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80190B84, 0, 0);
+        g_RoomM086SeekerModelA = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5465704);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)g_RoomM086SeekerModelA, 0, 0);
+        g_RoomM086SeekerModelB = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5865704);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)g_RoomM086SeekerModelB, 0, 0);
         FieldFx_PlaySoundAtOwner(0x577, FieldFx_GetOwnerProgress());
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM086SpawnChannel)->pool, 0x14, 0xE,
-                             (FieldFxCallbackListCallback)func_8018F004);
+                             (FieldFxCallbackListCallback)RoomM086_SeekerCallback);
     case 1:
         switch (state->state) {
         case 0:
@@ -323,10 +323,10 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
             scale.y = size;
             scale.z = size;
             ScaleMatrix(&matrix, &scale);
-            FieldFx_ModelSaveColors(D_80190B88);
-            FieldFx_ModelScaleColors(D_80190B88, 0x80);
-            FieldFx_ModelDraw((union FieldTexturedModel *)D_80190B88, &matrix);
-            FieldFx_ModelRestoreColors(D_80190B88);
+            FieldFx_ModelSaveColors(g_RoomM086SeekerModelA);
+            FieldFx_ModelScaleColors(g_RoomM086SeekerModelA, 0x80);
+            FieldFx_ModelDraw((union FieldTexturedModel *)g_RoomM086SeekerModelA, &matrix);
+            FieldFx_ModelRestoreColors(g_RoomM086SeekerModelA);
             g_FieldFxSpriteParams.parameter00 = 0x10;
             g_FieldFxSpriteParams.parameter02 = 1;
             g_FieldFxSpriteParams.extent_x = 0x10;
@@ -384,7 +384,7 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
  * the shared return label, which lets each phase 0 draw cross-jump only the
  * call. */
 
-int func_801900CC(int mode, RoomBounceGlint *glint, int *size) {
+int RoomM086_BounceGlintCallback(int mode, RoomBounceGlint *glint, int *size) {
     GteRotation rotation;
     int extent = *size;
     int intensity;
@@ -498,7 +498,7 @@ s32 rand(void);
     (dst)->y = (src)->y;   \
     (dst)->z = (src)->z
 
-s32 func_80190574(s32 mode, RoomBounceGlint *ent) {
+s32 RoomM086_BounceGlint(s32 mode, RoomBounceGlint *ent) {
     RoomM086Offset blob;
     RoomBounceGlint *actor;
     s32 phase;
@@ -527,7 +527,7 @@ s32 func_80190574(s32 mode, RoomBounceGlint *ent) {
         value = FieldFx_GetOwnerProgress();
         FieldFx_PlaySoundAtOwner(0x579, value);
         FieldFx_InitCallbackList(((void **)ANIM_POOL_AS(void))[2], 0x14, 0x18,
-                      (FieldFxCallbackListCallback)func_801900CC);
+                      (FieldFxCallbackListCallback)RoomM086_BounceGlintCallback);
         goto done;
 
     }
@@ -654,25 +654,25 @@ done:;
 
 #undef COPY_POS
 
-int *func_80190A44(int arg0, int arg1, int arg2, int arg3) {
+int *RoomM086_SetControllerParams(int arg0, int arg1, int arg2, int arg3) {
     if (arg0 == 1) {
-        D_80190B74 = arg1;
+        g_RoomM086ControllerParams = arg1;
         D_80190B78 = arg2;
         D_80190B7C = arg3;
     } else if (arg0 == 2) {
         D_80190B80 = arg1;
     }
-    return &D_80190B74;
+    return &g_RoomM086ControllerParams;
 }
 
-int *func_80190A90(int arg0, int arg1, int arg2, int arg3) {
+int *RoomM086_SetBounceGlintParams(int arg0, int arg1, int arg2, int arg3) {
     if (arg0 == 1) {
-        int *base = &D_80190B8C;
+        int *base = &g_RoomM086BounceGlintParams;
 
         base[0] = arg1;
         D_80190B90 = arg2;
         D_80190B94 = arg3;
         base[0] = 0x1000;
     }
-    return &D_80190B8C;
+    return &g_RoomM086BounceGlintParams;
 }

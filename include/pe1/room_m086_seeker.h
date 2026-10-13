@@ -19,7 +19,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/scene_archive.h"
 
-/* room_m086 falling seeker (func_8018F004): a turning model that flies
+/* room_m086 falling seeker (RoomM086_SeekerCallback): a turning model that flies
  * along its heading until it lands, bursts on the player (flagging the
  * battle actor), then rises and fades or bounces as a flaring spark. */
 typedef struct RoomM086Seeker {
@@ -66,9 +66,9 @@ typedef struct RoomM086EventState {
 } RoomM086EventState;
 
 extern struct BattleEntity *D_8009D254;
-extern u8 *D_80190B84;
+extern u8 *g_RoomM086SeekerModelB;
 
-/* room_m086 seeker controller (func_8018F734): follows joint 7 of the
+/* room_m086 seeker controller (RoomM086_SeekerController): follows joint 7 of the
  * actor, drifts and falls, then bursts into three seeker rings. */
 typedef struct RoomM086SeekerController {
     /* 0x00 */ GteShortVector position;
@@ -96,10 +96,10 @@ typedef struct RoomM086SpawnChannel {
 
 extern RoomM086Offset D_8018EFF4;
 extern RoomM086Offset D_8018EFFC;
-extern u8 *D_80190B88;
+extern u8 *g_RoomM086SeekerModelA;
 extern u16 g_FieldFxPaletteEntry2;
 
-int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params);
+int RoomM086_SeekerCallback(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params);
 int rand(void);
 
 #endif
