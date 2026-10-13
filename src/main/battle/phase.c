@@ -49,8 +49,9 @@ void Battle_AdvancePhase(void) {
     int targetFound;
     s16 temp_v0;
     s32 var_a2_2;
-    s32 var_a3_2;
-    s32 var_v0_5;
+    s32 soundX;
+    s32 soundY;
+    s32 soundZ;
     s32 temp_a0_3;
     s32 temp_a0_4;
     BattleEntity *facingTarget;
@@ -288,16 +289,16 @@ block_39:
         if ((action - 7U < 2U) || (action == 0xA)) {
             soundActor = temp_s2->actor;
             var_a0_3 = sp30.soundId[action];
-            var_a2_2 = soundActor->renderObject.target_x;
-            var_a3_2 = soundActor->renderObject.target_y;
-            var_v0_5 = soundActor->renderObject.target_z;
+            soundX = soundActor->renderObject.target_x;
+            soundY = soundActor->renderObject.target_y;
+            soundZ = soundActor->renderObject.target_z;
         } else {
             var_a0_3 = sp30.soundId[action];
-            var_a2_2 = D_8009D254->posX.parts.integer;
-            var_a3_2 = D_8009D254->posY.parts.integer;
-            var_v0_5 = D_8009D254->posZ.parts.integer;
+            soundX = D_8009D254->posX.parts.integer;
+            soundY = D_8009D254->posY.parts.integer;
+            soundZ = D_8009D254->posZ.parts.integer;
         }
-        ((int (*)(int, int, int, int, int))Akao_SendPositionalCmdStereo)(var_a0_3, 0, var_a2_2, var_a3_2, var_v0_5);
+        Akao_SendPositionalCmdStereo(var_a0_3, 0, soundX, soundY, soundZ);
         var_a1 = 0xFFDFFFFF;
         var_a0_4 = g_ActiveActor;
         actor_flags = ((Combatant *)var_a0_4)->stateFlags;
