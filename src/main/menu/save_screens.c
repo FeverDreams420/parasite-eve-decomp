@@ -642,8 +642,9 @@ s32 Menu_StepSaveSelect(MenuWidgetNode *arg0, s32 arg1) {
     s32 temp_s0;
     MenuWidgetNode *temp_s2;
     s32 temp_v0;
-    /* Match debt: retail holds the dialog mode in a1 and passes it on to
-     * Save_SetTitleStyleFlag; unpinned, slot and mode swap a0/a1 (lev 9). */
+    /* Match debt: retail holds the dialog mode in a1 (still there at the
+     * one-argument Save_SetTitleStyleFlag call); unpinned, slot and mode
+     * swap a0/a1 (lev 7). */
     register s32 temp_cf50 asm("$5");
     s32 temp_height;
     s32 var_v1;
@@ -671,7 +672,7 @@ s32 Menu_StepSaveSelect(MenuWidgetNode *arg0, s32 arg1) {
                     temp_v0 = temp_v0_2->state;
                     D_8009CF4C = temp_v0;
                     if (temp_cf50 != 0) {
-                        ((void (*)(int, int))Save_SetTitleStyleFlag)(g_MenuMemCardConfirmPending, temp_cf50);
+                        Save_SetTitleStyleFlag(g_MenuMemCardConfirmPending);
                         if (D_8009CF4C != MEMCARD_SLOT_EMPTY) {
                             temp_v0_3 = MenuWidget_CreateSimpleNode(0x29, temp_s2, 0, 1);
                             temp_s2_2 = MenuWidget_CreateNode(0x29, temp_v0_3, temp_v0_3);
