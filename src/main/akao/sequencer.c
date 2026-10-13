@@ -2167,8 +2167,8 @@ void SeqOp_SetDurationAlt(AkaoTrack *track) {
 void SeqOp_StopAndClearTrack(AkaoTrack *track, int arg) {
     track->flags &= ~AKAO_TRACK_FLAG_STOP_CLEAR_MASK;
     ((void (*)())SeqOp_ClearTrack34Mask)(track);
-    ((void (*)())SeqOp_ClearTrack3CMask)(track, arg);
-    ((void (*)())SeqOp_ClearMask)(track, arg);
+    SeqOp_ClearTrack3CMask(track, arg);
+    SeqOp_ClearMask(track, arg);
     track->tremolo_phase &= 0xFFFA;
 }
 
