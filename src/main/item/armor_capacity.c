@@ -20,9 +20,9 @@ s16 *g_InvItemPtr;
 s32 g_InvSlotLimit;
 u32 *g_InvSelectionBits;
 s32 g_InvSelectionBitWords;
-u8 *D_8009D084;
-s32 D_8009D088;
-s32 D_8009D08C;
+u8 *g_InvScratchBufferPtrWriteOnly;
+s32 g_InvScratchWordAWriteOnly;
+s32 g_InvScratchWordBWriteOnly;
 s32 g_InvSavedSelectionIndex0;
 s32 g_InvSavedSelectionIndex1;
 s32 g_InvSavedSelectionFromStorage0;
@@ -205,9 +205,9 @@ int Inv_GetActiveSlotCount(int *out) {
 /* Historical names retained: snapshot, then restore the two selected records.
  * Both selected records must resolve, as in the retail copy sequences. */
 void Inv_InitWayneStorage(void) {
-    D_8009D084 = D_800A1FE8;
-    D_8009D08C = 0;
-    D_8009D088 = 0;
+    g_InvScratchBufferPtrWriteOnly = g_InvScratchBufferUnused;
+    g_InvScratchWordBWriteOnly = 0;
+    g_InvScratchWordAWriteOnly = 0;
     g_InvSavedSelectionRecord0 = *LookupTrackedItem(Inv_RestoreSelection(0));
     g_InvSavedSelectionRecord1 = *LookupTrackedItem(Inv_RestoreSelection(1));
 }

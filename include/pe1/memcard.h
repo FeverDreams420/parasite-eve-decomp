@@ -195,7 +195,7 @@ extern int g_MemCardSavePollTimeout;
 extern int g_MemCardReadContext;
 extern void (*g_MemCardDelayedCallback)(void);
 extern int g_MemCardDelayedCallbackTimer;
-extern int D_800A5D50;
+extern int g_MemCardSaveFileSizeWriteOnly;
 
 /* BIOS events MemCard_InitManager opens: hardware card class 0xF4000001
  * then software card class 0xF0000011, each for the IO end (0x0004),

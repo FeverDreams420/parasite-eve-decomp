@@ -30,7 +30,6 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 int g_SaveSelectedSlotState;
-int D_8009CFA4;
 int g_InvItemUsableFlag;
 int g_InvSelectedItemIndex;
 ItemDataRecord *g_MenuActionItemData;
@@ -837,7 +836,7 @@ void Menu_StepItemGrid2(void) {
         {
             u8 *text_buf;
             Text_AppendFFTerminatedBytes(&g_MenuItemLabelBuffer[0x40], Text_LookupTable4(0x49));
-            D_8009CFA4 = suffix_id;
+            g_MenuItemPrimListHandles[1] = suffix_id;
             /* Recompute the buffer address at each measurement. */
             asm volatile("" : "=r"(text_buf) : "0"(&g_MenuItemLabelBuffer[0x40]));
             width = Draw_MeasureTextWidth(text_buf);

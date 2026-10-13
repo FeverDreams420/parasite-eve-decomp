@@ -110,7 +110,6 @@ extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
 /* Field object status: 0 no model, 1 model without data, 2 inactive,
  * 3 active, 4 disabled object, 5 the player. */
 extern int FieldFx_GetStatus(void *object);
-extern int func_80192BFC();
 
 typedef struct RoomRenderNode {
     int flags;                    /* 0x00: 0x3F000000 owner bits, 0xC0FFFFFF mask dance */
@@ -512,36 +511,8 @@ extern void RoomLib_ArmWindowA_8019294C(RoomEnt *obj);
 extern void RoomLib_ArmWindowA_80192E54(RoomEnt *obj);
 extern void RoomLib_ArmWindowA_80192E5C(RoomEnt *obj);
 extern void RoomLib_ArmWindowA_80195490(RoomEnt *obj);
-extern void func_80191100(RoomEnt *obj);
-extern void func_80191108(RoomEnt *obj);
-extern void func_8019110C(RoomEnt *obj);
-extern void func_80191114(RoomEnt *obj);
-extern void func_80191118(RoomEnt *obj);
-extern void func_8019111C(RoomEnt *obj);
-extern void func_80191120(RoomEnt *obj);
-extern void func_80191124(RoomEnt *obj);
-extern void func_80191134(RoomEnt *obj);
-extern void func_80191154(RoomEnt *obj);
-extern void func_80191158(RoomEnt *obj);
-extern void func_80191160(RoomEnt *obj);
-extern void func_80191178(RoomEnt *obj);
-extern void func_80191194(RoomEnt *obj);
-extern void func_80191D9C(RoomEnt *obj);
-extern void func_80192104(void);
-extern void func_8019210C(RoomEnt *obj);
-extern void func_80192118(RoomEnt *obj);
-extern void func_801921A0(RoomEnt *obj);
-extern void func_80192268(RoomEnt *obj);
-extern void func_8019261C(RoomEnt *obj);
-extern void func_80192B38(RoomEnt *obj);
-extern void func_80193258(RoomEnt *obj);
-extern void func_80193260(RoomEnt *obj);
-extern void func_80195894(RoomEnt *obj);
 extern void RoomLib_ArmWindowB_80191814(RoomEnt *obj);
 extern void RoomLib_ArmWindowB_80191860(RoomEnt *obj);
-extern void func_801902C8(RoomEnt *obj);
-extern void func_80191814(RoomEnt *obj);
-extern void func_80191820(RoomEnt *obj);
 extern void RoomLib_ArmWindowB_8019181C(RoomEnt *obj);
 extern void RoomLib_ArmWindowB_80191820(RoomEnt *obj);
 extern void RoomLib_ArmWindowB_80191828(RoomEnt *obj);
@@ -567,33 +538,6 @@ extern void RoomLib_ArmWindowB_80193464(RoomEnt *obj);
 extern void RoomLib_ArmWindowB_8019396C(RoomEnt *obj);
 extern void RoomLib_ArmWindowB_80193974(RoomEnt *obj);
 extern void RoomLib_ArmWindowB_80195FA8(RoomEnt *obj);
-extern void func_80191D08();
-extern void func_80191D10(void);
-extern void func_80191D54(void);
-extern void func_8019114C(RoomEnt *obj);
-extern void func_80191D14(void);
-extern void func_80191D1C(void);
-extern void func_80191D20(void);
-extern void func_80191D24(void);
-extern void func_80191D28(void);
-extern void func_80191D2C(void);
-extern void func_80191D3C(void);
-extern void func_80191D5C(RoomEnt *obj);
-extern void func_80191D60(void);
-extern void func_80191D68(RoomEnt *obj);
-extern void func_80191D80(void);
-extern void func_801929A4(RoomEnt *obj);
-extern void func_80192D0C(void);
-extern void func_80192D14(void);
-extern void func_80192D20(void);
-extern void func_80192DA8(void);
-extern void func_80192E70(void);
-extern void func_80193224(void);
-extern void func_80193740(void);
-extern void func_80193958(void);
-extern void func_80193E60(void);
-extern void func_80193E68(void);
-extern void func_8019649C(struct RoomEnt *obj);
 extern int RoomLib_Set4ClearSignal_801924D4(RoomEnt *o);
 
 /* A view matrix copied as eight words. */

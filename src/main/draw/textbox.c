@@ -912,10 +912,11 @@ void Menu_DrawTextboxEntries(void) {
                    "$24");
 }
 
-unsigned char D_8009CEB4;
-short D_8009CEB8;
-short D_8009CEBC;
-short D_8009CEC0;
+/* Stored only by Draw_SetLightingParams, which nothing calls; no reader. */
+unsigned char g_DrawLightingParamsSetWriteOnly;
+short g_DrawLightingParam0WriteOnly;
+short g_DrawLightingParam1WriteOnly;
+short g_DrawLightingParam2WriteOnly;
 unsigned char g_TextboxHighlightColorR;
 unsigned char g_TextboxHighlightColorG;
 unsigned char g_TextboxHighlightColorB;
@@ -925,10 +926,10 @@ unsigned char g_TextboxHighlightColorG;
 unsigned char g_TextboxHighlightColorB;
 
 void Draw_SetLightingParams(short arg0, short arg1, short arg2, unsigned char arg3, unsigned char arg4, unsigned char arg5) {
-    D_8009CEB8 = arg0;
-    D_8009CEB4 = 1;
-    D_8009CEBC = arg1;
-    D_8009CEC0 = arg2;
+    g_DrawLightingParam0WriteOnly = arg0;
+    g_DrawLightingParamsSetWriteOnly = 1;
+    g_DrawLightingParam1WriteOnly = arg1;
+    g_DrawLightingParam2WriteOnly = arg2;
     g_TextboxHighlightColorR = arg3;
     g_TextboxHighlightColorG = arg4;
     g_TextboxHighlightColorB = arg5;

@@ -107,7 +107,7 @@ void FxCommon_DrawSceneNodes(void);
  * echo copies of the camera path nodes and the flicker colour. */
 extern s32 g_FxCommonDepthBias;
 extern FxCommonTransformNode *g_FxCommonPathTailNodes[2];
-extern s16 D_8019C0D0[2];
+extern s16 g_FxCommonNightRandomAccumWriteOnly[2];
 extern u8 g_FxCommonFlatColor[3];
 extern FxCommonTransformNode *g_FxCommonEchoNodes[4];
 void FxCommon_DrawTransformNodeCulled(FxCommonTransformNode *node, FxCommonBuffer *context, u8 pass,

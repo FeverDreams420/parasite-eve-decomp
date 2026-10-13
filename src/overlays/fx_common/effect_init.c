@@ -555,10 +555,10 @@ void FxCommon_InitScene(void)
         g_FxCommonPlayTicks = 0;
         g_FxCommonPlaying = 0;
         g_FxCommonMarkerFade = 0;
-        D_8019C02E = 0;
+        g_FxCommonStartPreset0ClearedWriteOnly = 0;
         g_FxCommonViewMode = 0xA;
         FxCommon_StartCameraMove(7, 0, 0, 0);
-        D_8019C00D = 1;
+        g_FxCommonStartPreset0LatchWriteOnly = 1;
     }
     if (g_FxCommonStartPreset == 7) {
         selectedMotion = g_FxCommonStartCameraPath;

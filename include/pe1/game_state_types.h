@@ -114,7 +114,7 @@ typedef struct Pe1GameState {
     } shared_buffers;
     union SceneAssetView *texture_load_scratch; /* 0x168: second room read */
     struct SceneAssetBlob *object_texture_blob; /* 0x16C */
-    u8 *unk_170;                      /* 0x170: work buffer set by the boot memory layout */
+    u8 *object_texture_blob_mid;     /* 0x170: object_texture_blob + 0x2400, set by the boot memory layout; never read */
     struct TimFile *bg_tim;                    /* 0x174 */
     unsigned short *save_background_source;      /* 0x178 */
     unsigned short *save_background_destination; /* 0x17C */

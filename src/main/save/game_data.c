@@ -41,7 +41,7 @@ u8 *g_SaveMetadataCursor;
 ItemDataRecord *g_SaveMetadataSourceRecord;
 int g_SaveMetadataWindowIndex;
 int g_SaveMetadataWindowLength;
-int D_8009CDAC;
+int g_MenuScrollDirectionValueUnwritten;
 int g_MemCardDialogState;
 int g_MenuScrollStep;
 
@@ -1031,7 +1031,7 @@ int Save_GetCurrentMapNumber(void) {
 }
 
 void Menu_InitScrollDirection(void) {
-    g_MenuScrollStep = D_8009CDAC < 0x12C ? 4 : -4;
+    g_MenuScrollStep = g_MenuScrollDirectionValueUnwritten < 0x12C ? 4 : -4;
 }
 
 void Battle_SyncEquipSlots(void);

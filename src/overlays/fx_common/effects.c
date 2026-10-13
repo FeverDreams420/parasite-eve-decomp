@@ -359,8 +359,8 @@ void FxCommon_DrawSceneNodes(void)
     DRAW(g_FxCommonType21Nodes[1], 0, 1, 1);
 
     if (g_FxCommonNight == 1) {
-        D_8019C0D0[0] += (s16)(rand() % 40 + 20);
-        D_8019C0D0[1] += (s16)(rand() % 52 + 26);
+        g_FxCommonNightRandomAccumWriteOnly[0] += (s16)(rand() % 40 + 20);
+        g_FxCommonNightRandomAccumWriteOnly[1] += (s16)(rand() % 52 + 26);
         g_FxCommonEchoNodes[0]->matrix = g_FxCommonPathNodes[0]->matrix;
         g_FxCommonEchoNodes[0]->seed = g_FxCommonPathNodes[0]->seed;
         g_FxCommonEchoNodes[0]->kind = 0x53;

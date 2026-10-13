@@ -106,7 +106,7 @@ PE1_STATIC_ASSERT(sizeof(SceneRoomShortRecord) == 8, scene_room_short_record_siz
 PE1_STATIC_ASSERT(sizeof(SceneRoomStreamRecord) == 8, scene_room_stream_record_size);
 PE1_STATIC_ASSERT(sizeof(SceneRoomSectorRange) == 8, scene_room_sector_range_size);
 
-extern u8 D_8009CDC8; /* room name prefix letter */
+extern u8 g_SceneRoomNameEmptyString; /* the "" initialiser of Scene_LoadRoom's name buffer */
 extern SceneRoomSectorRange g_RoomSectorTable[];
 extern unsigned int g_PeImageBaseLba;
 

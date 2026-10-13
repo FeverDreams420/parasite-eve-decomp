@@ -7,7 +7,7 @@
 /* The sound helper channel pointer g_LoadedSceneAssetBlock read as a one-field record.
  * A store to an outgoing stack argument invalidates remembered in-struct
  * memory but never a scalar read through a known-constant address, so
- * reading `D_800B0E64_slot.channel` re-loads the pointer after a call's
+ * reading `channel` through `(RoomSoundSlot *)g_LoadedSceneAssetBlock` re-loads the pointer after a call's
  * argument stores the way retail does. */
 typedef struct RoomSoundSlot {
     void *channel;

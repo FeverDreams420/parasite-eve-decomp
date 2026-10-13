@@ -82,7 +82,7 @@ void RoomLib_UpdateTwelveElementTimer(int arg0, char *arg1, char *arg2) {
         state->hit = 0;
         if (timer == 0) {
             state->cooldown = state->reload;
-            func_800C6C18(arg0);
+            FieldFx_RegisterOwnerContact(arg0);
         }
     }
 

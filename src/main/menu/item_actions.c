@@ -102,7 +102,7 @@ void Menu_ConfigureScreen(void) {
 int Menu_EquipStatsInputHandler(MenuWidgetNode *node, int flags);
 int Menu_DetailViewInput(MenuWidgetNode *arg0, unsigned int arg1);
 int g_MenuSelectedItemIndex;
-int D_8009CFBC;
+int g_MenuArmorCapacityModBlocked;
 void Menu_CreateItemActionSubmenu(void);
 void Menu_CreateItemList(void);
 int g_MenuActionTextBase;
@@ -184,7 +184,7 @@ int Menu_InventoryItemHandler(MenuWidgetNode *arg0, int arg1) {
         temp = MenuWidget_GetCellIndex(MenuWidget_GetChild(arg0, 0));
         g_MenuSelectedItemIndex = temp;
         if (temp >= 0) {
-            if ((temp & 1) || (D_8009CFBC == 0)) {
+            if ((temp & 1) || (g_MenuArmorCapacityModBlocked == 0)) {
                 Menu_CreateItemActionSubmenu();
             } else {
                 Menu_CreateItemList();
@@ -560,7 +560,7 @@ void Menu_OpenItemList(void)
     g_MenuSelectedItemList = list;
     g_MenuSelectedItemSlot = slot;
     status = Inv_CheckItemEquippable(list, slot);
-    D_8009CFBC = status == 5;
+    g_MenuArmorCapacityModBlocked = status == 5;
     if (status == 1 || status == 2 || status == 5) {
         kind = Inv_GetActiveListItemType(Inv_RestoreSelection(list));
         g_InvItemUsableFlag = kind != 9;
@@ -793,7 +793,7 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
         g_BonusPointBarAnimProgress = 0;
         g_BonusPointDisplayValue = g_AyaSaveState.bonus_points;
         for (slot = 6; slot >= 0; slot--)
-            D_800A1898[slot] = 0;
+            g_BonusPointStatClearedWordsWriteOnly[slot] = 0;
         Menu_InitStateTables();
     }
     MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 1));

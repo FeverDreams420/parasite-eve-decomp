@@ -387,7 +387,7 @@ int FieldFx_IsPlayerWithinRadius(s16 *pos, int extraRadius) {
 }
 
 
-int func_800C6C18(char *obj) {
+int FieldFx_RegisterOwnerContact(char *obj) {
     int enabled;
 
     if (FieldFx_GetStatus(obj) == 3) {

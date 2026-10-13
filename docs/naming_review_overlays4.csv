@@ -1,0 +1,5 @@
+overlay,old,new,evidence
+fx_common,D_8019C00D,g_FxCommonStartPreset0LatchWriteOnly,"s8 that FxCommon start preset 0 (effect_init.c) sets to 1 after FxCommon_StartCameraMove(7, ...); no code in fx_common or any other overlay reads it."
+fx_common,D_8019C02E,g_FxCommonStartPreset0ClearedWriteOnly,"s16 after g_FxCommonMarkerFade that start preset 0 clears with the other play state; no reader."
+fx_common,D_8019C0D0,g_FxCommonNightRandomAccumWriteOnly,"s16[2]: FxCommon_DrawSceneNodes adds rand() % 40 + 20 and rand() % 52 + 26 each night-mode frame (g_FxCommonNight == 1); the read-modify-write is the only access, nothing consumes the sums."
+room_lib,func_80191100 (and 55 more),(declaration removed),"56 `extern ... func_8019xxxx` declarations in room_lib.h that no source, header, .inc or config names; window addresses that are different functions in each room, so there is no single name; the dead declarations were dropped instead."

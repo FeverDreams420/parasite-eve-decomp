@@ -168,7 +168,7 @@ void RoomEffect_DropFieldTick(int arg0, char* arg1, char* arg2) {
         state->hit = 0;
         if (timer == 0) {
             state->holdTimer = state->holdFrames;
-            func_800C6C18(arg0);
+            FieldFx_RegisterOwnerContact(arg0);
         }
     }
 

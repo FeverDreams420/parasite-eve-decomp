@@ -80,7 +80,7 @@ int Draw_InitDisplay(int mode) {
     ptr += 0x4800;
     g_RenderScratchBufferBase[0] = ptr;
     ptr += const_48000;
-    D_800B0E48 = ptr2;
+    g_ObjectTextureBlobMidWriteOnly = ptr2;
     ptr2 = ptr + 0x4000;
     g_RenderFrontBufferBase[0] = ptr;
     ptr += const_8000;

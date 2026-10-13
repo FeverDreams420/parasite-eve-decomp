@@ -30,7 +30,7 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-u8 D_8009CDC8;
+u8 g_SceneRoomNameEmptyString;
 
 typedef struct { char b[16]; } __attribute__((aligned(1), packed)) Copy16u;
 typedef struct { u32 w[4]; } Copy16a;
@@ -393,7 +393,7 @@ void Akao_LoadVoiceBankAlt(void)
  * tables into g_GameState and queues the stream/sample bank reads.
  *
  * maspsx -G1: retail reads the 4-byte g_PmCmdHandlerTable pointer
- * absolutely while the 1-byte room letter D_8009CDC8 is gp-relative.
+ * absolutely while the 1-byte empty string g_SceneRoomNameEmptyString is gp-relative.
  */
 
 int Scene_LoadRoom(unsigned int roomId)
@@ -413,7 +413,9 @@ int Scene_LoadRoom(unsigned int roomId)
     SceneRoomShortRecord *shortRecord;
     Pe1GameState *state;
 
-    name[0] = D_8009CDC8;
+    /* GCC's expansion of `char name[7] = ""`: one byte from the small-data
+     * literal, then the six-byte clear. */
+    name[0] = g_SceneRoomNameEmptyString;
     memset(name + 1, 0, 6);
     flags = 0;
     state = &g_GameState;

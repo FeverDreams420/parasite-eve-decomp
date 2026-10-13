@@ -167,3 +167,39 @@ after the object it really is (`g_DrawBlendColorPair`, `g_BattleScanPanel`,
 - `D_8010BD00` and `D_80120D08`, buffers in the mdec_diag and menu_memcard
   overlay windows: a main name would also label those overlays' own data
   there (`make overlay-collision-check`).
+
+## Fourth pass, write-only and unwritten words
+
+`docs/naming_review_main5.csv` (main) and `docs/naming_review_overlays4.csv`
+(fx_common) name the words the third pass left as "no reader or no writer"
+and the two whose role was not established then (`func_800C6C18`,
+`D_8009CFBC`, now `FieldFx_RegisterOwnerContact` and
+`g_MenuArmorCapacityModBlocked`). A word that only a writer touches says
+what is stored there and ends in `WriteOnly`; a word no code writes ends in
+`Unwritten`; a block whose bytes nothing touches ends in `Unused`.
+`D_8009CFA4` was element 1 of `g_MenuItemPrimListHandles` and is now
+written as that member; `D_8009CDC8` is the small-data `""` literal of
+`char name[7] = ""` in `Scene_LoadRoom`. The 56 `func_8019xxxx`
+declarations in `src/overlays/room_lib/room_lib.h` that nothing used were
+removed.
+
+Left with address names in `src/` and `include/` (41):
+
+- PsyQ words and code labels (`D_80095674`, `D_8009B46C`, `D_8009B750`,
+  `D_8009B754`, `D_8009B760`, `D_8009B784`, `D_8009B788`, `D_800B6914`,
+  `func_8007E344`, `func_8007E3C8`);
+- words used in `fieldfx/geometry.c`, `render/object.c` or
+  `field/actor_collision.c`, or the views listed in the third pass
+  (`D_8009D254`, `D_8009D2C8`, `D_8009D2E8`, `D_8009D2F0`, `D_800A636C`,
+  `D_800B0D88`, `D_800B0E38`, `D_800B0E98`, `D_800B1640`, `D_800B1644`,
+  `D_800BCF88`, `D_800BCFA4`, `D_800C2258`, `D_800E21A8`, `D_800F32D8`,
+  `D_800F336C`, `D_800F3374`, `D_800F3418`);
+- overlay window addresses that are a different object per overlay
+  (`D_8010BD00`, `D_80120D08`, `func_801216C4`, `func_80121A00`,
+  `func_80121C04`, `func_80122040`, `func_801223A8`, `func_801235DC`,
+  `func_801909B4`, `func_8019234C`, and `func_8018F2F4`, which
+  menu_memcard calls in the room window);
+- boot_display's `func_8012462C` (the address of
+  `BootDisplay_InitSprite16`, called through a prototype with unsigned
+  coordinates that the definition does not share) and `func_8012562C`
+  (boot_display window + 0x2688).

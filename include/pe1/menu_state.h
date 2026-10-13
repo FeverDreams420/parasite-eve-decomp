@@ -45,8 +45,8 @@ extern int g_MenuSelectionLocked;
 extern int g_MenuSelectedSpell;
 /* Row of the action submenu last picked (Menu_SetActionSubmenuSelection). */
 extern unsigned int g_MenuActionSubmenuSel;
-/* Scroll step chosen from D_8009CDAC: +4 below 300, -4 from 300 on. */
-extern int D_8009CDAC;
+/* Scroll step chosen from g_MenuScrollDirectionValueUnwritten: +4 below 300, -4 from 300 on. */
+extern int g_MenuScrollDirectionValueUnwritten;
 extern int g_MenuScrollStep;
 /* List target handed to Menu_RunFrameWithArg. */
 extern u8 *g_MenuActiveListTarget;

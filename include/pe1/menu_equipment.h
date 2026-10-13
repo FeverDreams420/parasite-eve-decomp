@@ -36,7 +36,9 @@ extern int g_MenuSourceItemSlot, g_MenuStatItemStatIndex, g_MenuStatItemAmount;
 /* Ammo counts of the four ammo categories (999 when a category is
  * unlimited); a nonzero sum enables the ammo transfer actions. */
 extern int g_StatBaseTable[4];
-extern int g_MenuSelectedItemList, g_MenuSelectedItemSlot, D_8009CFBC, g_MenuSelectedItemIndex;
+/* g_MenuArmorCapacityModBlocked: Inv_CheckItemEquippable returned 5 (Aya's
+ * equipped armor holds an item-capacity mod the free slots cannot spare). */
+extern int g_MenuSelectedItemList, g_MenuSelectedItemSlot, g_MenuArmorCapacityModBlocked, g_MenuSelectedItemIndex;
 /* Item put back into Aya's inventory after a storage swap (0: none). */
 extern int g_AyaFullInvHold;
 

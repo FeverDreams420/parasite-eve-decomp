@@ -76,10 +76,12 @@ extern s32 g_InvSavedSelectionFromStorage0, g_InvSavedSelectionFromStorage1; /* 
 extern s16 *g_InvActiveListOverride;
 extern s32 g_InvOverrideSlotLimit;
 extern u32 g_InvStorageSelectionBits[];
-/* Scratch state and full record snapshots used by the item-detail operation. */
-extern u8 D_800A1FE8[];
-extern u8 *D_8009D084;
-extern s32 D_8009D088, D_8009D08C;
+/* Inv_InitWayneStorage points g_InvScratchBufferPtrWriteOnly at the
+ * 0x64-byte buffer and clears the two words; nothing reads any of them.
+ * Then the full record snapshots used by the item-detail operation. */
+extern u8 g_InvScratchBufferUnused[];
+extern u8 *g_InvScratchBufferPtrWriteOnly;
+extern s32 g_InvScratchWordAWriteOnly, g_InvScratchWordBWriteOnly;
 extern ItemDataRecord g_InvSavedSelectionRecord0, g_InvSavedSelectionRecord1;
 /* Global fallback ammunition record, then the records of item values
  * 0x200..0x208 (the first three are the category ammunition pools);

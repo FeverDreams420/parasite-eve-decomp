@@ -513,7 +513,7 @@ int Save_BuildCardFile(char *path) {
 resolved = Text_GetSaveIconData();
     file = &g_MemCardIconHeader;
 
-    D_800A5D50 = 0x2000;
+    g_MemCardSaveFileSizeWriteOnly = 0x2000;
     bzero(file, sizeof(*file));
 
     file->productCode = g_MemCardSaveSupportData.cardProductCode;

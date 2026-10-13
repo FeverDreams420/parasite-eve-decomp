@@ -26,8 +26,9 @@ void Menu_AlignEquipPanels(void);
 
 /* Whether the active list override was selected when the root opened. */
 extern int g_MenuSourceItemList;
-/* Per-stat preview tables: value, level, sublevel and pending bonus. */
-extern int D_800A1898[7];
+/* Seven per-stat words the bonus-point screen clears next to
+ * g_BonusPointStatDeltas and g_BonusPointStatMultipliers; nothing reads them. */
+extern int g_BonusPointStatClearedWordsWriteOnly[7];
 extern int g_AyaBonusPoints[];
 
 #endif

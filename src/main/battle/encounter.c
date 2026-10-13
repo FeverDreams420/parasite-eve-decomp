@@ -59,7 +59,7 @@ void Save_InitSystem(void)
  * stay absolute. The story-day flags byte is set through its g_GameState
  * record field: the record is not small data, so its address stays in a
  * register for the read-modify-write, as retail has it. */
-u8 g_BattleStepIndex, D_8009CE78, g_BattleSuspendedModeState;
+u8 g_BattleStepIndex, g_BattleStartClearedByteWriteOnly, g_BattleSuspendedModeState;
 void *g_BattlePendingEnemySpawn;
 int g_BattleFrameCounter;
 u16 g_BattlePeBonusReward;
@@ -170,7 +170,7 @@ void Battle_StartEncounter(int mode) {
     g_BattleAttackAnimFrame = 0;
     g_BattleModeState = 0;
     g_BattleSuspendedModeState = 0;
-    D_8009CE78 = 0;
+    g_BattleStartClearedByteWriteOnly = 0;
     g_BattleGaugeCapLatch = 0;
     g_BattleStepIndex = 0;
     mode_reg = mode;

@@ -15,6 +15,6 @@ int FieldFx_FindAssetAtShortPosition(void *obj, int message, void *pos);
  * position on the XZ plane. */
 int FieldFx_IsPlayerWithinRadius(void *position, int radius);
 /* Status check on the object (FieldFx_GetStatus() == 3). */
-int func_800C6C18(void *obj);
+int FieldFx_RegisterOwnerContact(void *obj);
 
 #endif
