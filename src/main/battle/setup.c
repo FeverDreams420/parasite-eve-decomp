@@ -452,9 +452,9 @@ void Battle_SortTargets(BattleTargetWords *records, signed char first, signed ch
         Battle_SwapRecords(records, first, (signed char)((first + last) / 2));
         pivot = first;
         for (scan = pivot; scan <= last; scan++) {
-            if (g_BattleTargetList[(signed char)scan].dist < g_BattleTargetList[first].dist) {
+            if (g_BattleTargetList[scan].dist < g_BattleTargetList[first].dist) {
                 pivot++;
-                Battle_SwapRecords(records, (signed char)pivot, (signed char)scan);
+                Battle_SwapRecords(records, pivot, scan);
             }
         }
         Battle_SwapRecords(records, first, pivot);
