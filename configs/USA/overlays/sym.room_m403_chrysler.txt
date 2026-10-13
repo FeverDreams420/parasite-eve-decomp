@@ -57,3 +57,6 @@ g_RoomFlashColorRamp = 0x80193234;
 RoomLib_SetArgs3 = 0x80193118; // type:func
 g_RoomScriptArgs = 0x8019328C;
 g_RoomClassTable = 0x8019313C; // size:0xA8 allow_addend:true
+g_RoomM403_D_8018EFE8 = 0x8018EFE8;
+g_RoomM403_D_80193290 = 0x80193290;
+g_RoomM403_D_80193294 = 0x80193294;

@@ -78,3 +78,5 @@ g_RoomThreeParticleUpdateList = 0x8019434C;
 g_RoomThreeParticleInitList = 0x80194334;
 g_RoomThreeParticleSpawnLayout = 0x80194358;
 g_RoomClassTable = 0x801943C4; // size:0xA8 allow_addend:true
+g_RoomM391_D_8018EFE8 = 0x8018EFE8;
+g_RoomM391_D_80194560 = 0x80194560;

@@ -56,3 +56,5 @@ RoomEffect_OrbitFlareController = 0x80192700; // type:func
 RoomLib_SetArgs3 = 0x80193148; // type:func
 g_RoomScriptArgs = 0x80193288;
 g_RoomClassTable = 0x8019316C; // size:0xA8 allow_addend:true
+g_RoomM110_D_8018EFE8 = 0x8018EFE8;
+g_RoomM110_D_80193290 = 0x80193290;

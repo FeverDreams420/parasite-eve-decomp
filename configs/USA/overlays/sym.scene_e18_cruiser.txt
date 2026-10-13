@@ -82,3 +82,4 @@ g_SceneE18ShellModel = 0x801941C0;
 g_SceneE18FlankModel = 0x801941C4;
 g_SceneE18FlankRemaining = 0x801941C8;
 g_SceneE18RisingStop = 0x801941D0;
+g_SceneE18_D_80193EDC = 0x80193EDC;

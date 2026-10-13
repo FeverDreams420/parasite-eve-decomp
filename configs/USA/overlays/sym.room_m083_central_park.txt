@@ -9,3 +9,5 @@ RoomLib_WindowArrived = 0x8018FD14; // type:func
 RoomLib_ReleaseWindowClass = 0x8018FD5C; // type:func
 RoomLib_WindowClassNop6 = 0x8018FDD4; // type:func
 g_RoomClassTable = 0x8018FDDC; // size:0x1C allow_addend:true
+g_RoomM083_D_8018EFE8 = 0x8018EFE8;
+g_RoomM083_D_8018FDF8 = 0x8018FDF8;

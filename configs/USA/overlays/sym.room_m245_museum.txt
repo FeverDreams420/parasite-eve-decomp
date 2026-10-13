@@ -72,3 +72,7 @@ g_RoomScatterBurstAnchor = 0x80195B68;
 g_RoomScatterBurstAsset = 0x80195B70;
 g_RoomScatterBurstLayer = 0x80195B74;
 g_RoomClassTable = 0x80195604; // size:0xA8 allow_addend:true
+g_RoomM245_D_8018EFE8 = 0x8018EFE8;
+g_RoomM245_D_801981F8 = 0x801981F8;
+g_RoomM245_D_801D01E0 = 0x801D01E0;
+g_RoomM245_D_80195720 = 0x80195720;

@@ -24,3 +24,5 @@ g_RoomGrabSlot = 0x80192330;
 g_RoomGrabOrbitCentre = 0x80192334;
 RoomLib_PairA = 0x8019233C;
 RoomLib_PairB = 0x80192340;
+g_SceneE01_D_801921C8 = 0x801921C8;
+g_SceneE01_D_801922E0 = 0x801922E0;

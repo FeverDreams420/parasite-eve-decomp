@@ -5,7 +5,7 @@
 
 /* Ember family (scene_e19_2): the scene_e22 ember controller layout with
  * this overlay's spin templates, colour seeds and colour track. */
-extern GteRotation D_8018F1CC;
+extern GteRotation g_SceneE19_D_8018F1CC;
 extern GteRotation D_8018F1D4;
 extern RenderColor D_8018F234;
 extern RenderColor D_8018F238;

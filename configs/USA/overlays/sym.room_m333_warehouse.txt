@@ -60,3 +60,5 @@ RoomLib_SetArgs3 = 0x8019315C; // type:func
 g_RoomScriptArgs = 0x80194128;
 RoomLib_SlotSet = 0x80193F70; // type:func
 g_RoomClassTable = 0x80193FB4; // size:0xA8 allow_addend:true
+g_RoomM333_D_8018EFE8 = 0x8018EFE8;
+g_RoomM333_D_801940F0 = 0x801940F0;

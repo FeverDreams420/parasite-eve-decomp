@@ -104,8 +104,8 @@ int RoomM256_SwingNop6(void) {
  * flashes the scene on contact with the player and expires once it leaves
  * the walkable area; the splash children slow down and bounce. */
 int RoomM256_ScatterDropCallback(int mode, RoomM256Drop *drop) {
-    GteRotation rotation = D_8018F1CC;
-    RoomM256DropColor color = D_8018F1D4;
+    GteRotation rotation = g_RoomM256_D_8018F1CC;
+    RoomM256DropColor color = g_RoomM256_D_8018F1D4;
     RoomM256Drop *child;
     RenderMatrixSlot *slot;
     int width;
@@ -305,14 +305,14 @@ int RoomM256_ScatterDropCallback(int mode, RoomM256Drop *drop) {
 
 /* The stack templates the effects below copy: read-only data of this unit,
  * which GCC emits before the unit's jump tables, as retail has them. */
-const RoomOrbitPairTemplate8 D_8018F208 = {{0, 0xFFE2}};
-const RoomM256Template D_8018F210 = {{0, 0xFFBA}};
-const RenderColor D_8018F218 = {0xC8, 0xBE, 0x18, 0};
-const RenderColor D_8018F21C = {0x0A, 0x80, 0xF0, 0};
-const GteRotation D_8018F220 = {0, 0, -10, 0};
+const RoomOrbitPairTemplate8 g_RoomM256_D_8018F208 = {{0, 0xFFE2}};
+const RoomM256Template g_RoomM256_D_8018F210 = {{0, 0xFFBA}};
+const RenderColor g_RoomM256_D_8018F218 = {0xC8, 0xBE, 0x18, 0};
+const RenderColor g_RoomM256_D_8018F21C = {0x0A, 0x80, 0xF0, 0};
+const GteRotation g_RoomM256_D_8018F220 = {0, 0, -10, 0};
 
 int RoomM256_ScatterDropEmitter(int mode, u16 *counter) {
-    RoomOrbitPairTemplate8 template = D_8018F208;
+    RoomOrbitPairTemplate8 template = g_RoomM256_D_8018F208;
     s16 position[4];
     s16 target[4];
     s16 angles[4];
@@ -479,7 +479,7 @@ int RoomM256_SwirlSparkCallback(int mode, RoomM256SwirlSpark *spark) {
  * aimed through one of three (then one of two) headings picked by a
  * rotating counter; mode 2 sets the sprite parameters. */
 int RoomM256_SwirlSparkEmitter(int mode, s16 *counter) {
-    RoomM256Template template = D_8018F210;
+    RoomM256Template template = g_RoomM256_D_8018F210;
     GteShortVector position;
     GteShortVector base;
     GteShortVector angles;
@@ -589,10 +589,10 @@ int RoomM256_SwirlSparkEmitter(int mode, s16 *counter) {
 
 s32 RoomM256_TrailCallback(int mode, void *effect) {
     RoomM256TrailEffect *state = effect;
-    RenderColor color = D_8018F218;
-    RenderColor darkColor = D_8018F21C;
-    GteRotation initialRotation = D_8018F220;
-    GteRotation spriteRotation = D_8018F1CC;
+    RenderColor color = g_RoomM256_D_8018F218;
+    RenderColor darkColor = g_RoomM256_D_8018F21C;
+    GteRotation initialRotation = g_RoomM256_D_8018F220;
+    GteRotation spriteRotation = g_RoomM256_D_8018F1CC;
     RoomM256TrailEffect *particle;
     GteShortVector delta;
     GteShortVector angles;

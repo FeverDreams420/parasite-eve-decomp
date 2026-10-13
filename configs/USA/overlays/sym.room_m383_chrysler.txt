@@ -145,3 +145,5 @@ g_RoomDropFieldUpdateList = 0x80196DDC;
 RoomLib_RegisterDrawListActive = 0x8018F32C; // type:func
 RoomLib_RegisterPairedTablesActive = 0x8018F374; // type:func
 g_RoomClassTable = 0x80196F20; // size:0xA8 allow_addend:true
+g_RoomM383_D_8018EFE8 = 0x8018EFE8;
+g_RoomM383_D_801974FC = 0x801974FC;

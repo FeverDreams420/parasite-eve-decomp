@@ -71,3 +71,6 @@ g_RoomCometSparkColors = 0x80195F00;
 g_RoomLiftedSparkColors = 0x80195F78;
 g_RoomCometSparkTrail = 0x80195FD8;
 g_RoomClassTable = 0x80195D98; // size:0xA8 allow_addend:true
+g_RoomM188_D_8018EFE8 = 0x8018EFE8;
+g_RoomM188_D_801981F8 = 0x801981F8;
+g_RoomM188_D_80195FF0 = 0x80195FF0;

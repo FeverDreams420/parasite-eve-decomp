@@ -11,6 +11,6 @@
 
 extern short g_RoomM089Anchor;
 extern short D_80194162;
-extern short D_80194164;
+extern short g_RoomM089_D_80194164;
 
 #endif

@@ -65,7 +65,7 @@ typedef struct RoomM023Template {
     s32 word[2];
 } __attribute__((packed)) RoomM023Template;
 
-extern RoomM023Template D_8018EFF4;
+extern RoomM023Template g_RoomM023_D_8018EFF4;
 /* Anchor vector room_m023 keeps in its scene script record. */
 #define RoomM023_ScriptAnchor (*(GteShortVector *)&g_RoomScriptRecord)
 
@@ -81,8 +81,8 @@ typedef struct RoomM023JointGlow {
     s16 state;
 } RoomM023JointGlow;
 
-extern RenderColor D_8018EFFC;
-extern RenderColor D_8018F000;
+extern RenderColor g_RoomM023_D_8018EFFC;
+extern RenderColor g_RoomM023_D_8018F000;
 int RoomM023_JointGlow(int mode, RoomM023JointGlow *glow);
 
 #endif

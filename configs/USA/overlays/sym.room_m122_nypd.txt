@@ -39,3 +39,4 @@ g_RoomPairedGlowSprite = 0x801910A8;
 g_RoomPairedGlowPacket = 0x801910B4;
 g_RoomPairedGlowColorTable = 0x80190FB4;
 RoomLib_SlotSet = 0x80190E98; // type:func
+g_RoomM122_D_8018EFE8 = 0x8018EFE8;

@@ -109,7 +109,7 @@ ret0:
 #undef RoomM005_ScriptDialog
 
 int RoomM005_Orbiter(int mode, RoomM005OrbiterState *state) {
-    RoomM005Seed8 seed = D_8018EFF4;
+    RoomM005Seed8 seed = g_RoomM005_D_8018EFF4;
     s16 target[4];
     char *pool;
     RoomM005OrbiterChild *child;
@@ -193,7 +193,7 @@ int RoomM005_Orbiter(int mode, RoomM005OrbiterState *state) {
 int RoomM005_CrossFlare(int mode) {
     GteShortVector position;
     GteRotation rotation;
-    RoomM005Seed8 outer = D_8018EFFC;
+    RoomM005Seed8 outer = g_RoomM005_D_8018EFFC;
     RoomM005Seed8 inner = D_8018F004;
     RenderColor color;
     RoomSoundSlot *soundSlot;

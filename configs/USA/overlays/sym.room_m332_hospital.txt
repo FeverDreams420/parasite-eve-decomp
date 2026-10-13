@@ -64,3 +64,4 @@ RoomLib_UpdateTimedRender = 0x80192CE0; // type:func
 RoomLib_ControlTimedSpawn = 0x80192E78; // type:func
 RoomLib_TimedRenderTable = 0x801932A0;
 g_RoomClassTable = 0x801931BC; // size:0xA8 allow_addend:true
+g_RoomM332_D_8018EFE8 = 0x8018EFE8;

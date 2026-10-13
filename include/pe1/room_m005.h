@@ -43,7 +43,7 @@ typedef struct RoomM005Seed8 {
     u8 bytes[8];
 } RoomM005Seed8;
 
-extern RoomM005Seed8 D_8018EFF4;
+extern RoomM005Seed8 g_RoomM005_D_8018EFF4;
 extern u8 D_80190B84[];
 extern u8 D_80190B8C[];
 extern int rand(void);
@@ -54,7 +54,7 @@ extern GteShortVector g_RoomM005BeaconOffset; /* drift offset, written by the jo
 extern GteShortVector g_RoomM005BeaconCenter;
 
 /* Cross flare (RoomM005_CrossFlare): two joint templates and the flash track. */
-extern RoomM005Seed8 D_8018EFFC;
+extern RoomM005Seed8 g_RoomM005_D_8018EFFC;
 extern RoomM005Seed8 D_8018F004;
 extern u8 g_RoomM005CrossFlareColorTrack[];
 

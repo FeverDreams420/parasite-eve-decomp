@@ -6,3 +6,5 @@ RoomEffect_LineBurstController = 0x80190028; // type:func
 RoomLib_SetArgs3 = 0x8018FC68; // type:func
 g_RoomScriptArgs = 0x80190B8C;
 RoomLib_SlotSet = 0x80190A7C; // type:func
+g_RoomM113_D_8018EFE8 = 0x8018EFE8;
+g_RoomM113_D_80190B94 = 0x80190B94;

@@ -2,3 +2,5 @@ RoomLib_SlotTable = 0x8018FE94;
 RoomEffect_LineBurstParticle = 0x8018F008; // type:func
 RoomEffect_LineBurstController = 0x8018F3A4; // type:func
 RoomLib_SlotSet = 0x8018FDF8; // type:func
+g_RoomM115_D_8018EFE8 = 0x8018EFE8;
+g_RoomM115_D_801C01E4 = 0x801C01E4;

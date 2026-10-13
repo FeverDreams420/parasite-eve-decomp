@@ -35,3 +35,4 @@ RoomLib_TickPairedGlowB = 0x8018FFA0; // type:func
 g_RoomPairedGlowSprite = 0x80190188;
 g_RoomPairedGlowPacket = 0x80190194;
 g_RoomPairedGlowColorTable = 0x8019016C;
+g_RoomM111_D_8018EFE8 = 0x8018EFE8;

@@ -26,6 +26,6 @@ extern void *g_RoomBeamSparkAsset;
 extern s16 D_80192C34;
 extern s16 D_80192C36;
 extern s16 D_80192C38;
-extern s32 D_80192C3C;
+extern s32 g_RoomCaptureFrameWord;
 
 #endif

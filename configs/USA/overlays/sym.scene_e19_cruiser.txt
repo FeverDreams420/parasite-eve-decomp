@@ -109,3 +109,5 @@ g_SceneE19SpinRayBurstColorTrack = 0x8019B404;
 g_SceneE19EmberFlareColorTrack = 0x8019B484;
 g_SceneE19OrbitTrailColorTrack = 0x8019B4FC;
 g_SceneE19GlintRibbonJoints = 0x8019B55C;
+g_SceneE19_D_8018F1CC = 0x8018F1CC;
+g_SceneE19_D_8018F210 = 0x8018F210;

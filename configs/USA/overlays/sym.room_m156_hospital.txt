@@ -13,3 +13,7 @@ RoomLib_SlotSet = 0x801929F8; // type:func
 RoomLib_SetArg1 = 0x801929E8; // type:func
 g_RoomScriptArg = 0x80192BF8;
 RoomLib_CaptureFrameSample = 0x80192A3C; // type:func
+g_RoomM156_D_8018EFE8 = 0x8018EFE8;
+g_RoomCaptureFrameWord = 0x80192C3C;
+g_RoomM156_D_801D01E0 = 0x801D01E0;
+g_RoomM156_D_80192B9C = 0x80192B9C;

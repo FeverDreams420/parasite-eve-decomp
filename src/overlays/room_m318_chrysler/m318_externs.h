@@ -7,7 +7,7 @@
 #include "pe1/field_color.h"
 
 extern struct BattleEntity *D_8009D254;
-extern char D_8018F1CC[];
+extern char g_RoomM318_D_8018F1CC[];
 extern char D_80199464[];
 extern s32 rand(void);
 extern char D_8019948C[];
@@ -15,7 +15,7 @@ extern int g_RoomM318StarFlarePhase;
 extern char D_801995BC[], D_801995DC[];
 extern char D_801995FC[];
 extern int rand(void);
-extern RenderColor D_8018F1FC;
+extern RenderColor g_RoomM318_D_8018F1FC;
 extern u8 D_80199674[];
 extern int g_RoomM318ActorParams;
 extern int D_801998F4;

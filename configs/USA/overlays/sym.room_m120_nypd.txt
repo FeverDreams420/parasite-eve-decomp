@@ -56,3 +56,5 @@ RoomEffect_LineBurstParticle = 0x801924FC; // type:func
 RoomEffect_LineBurstController = 0x80192898; // type:func
 RoomLib_SlotSet = 0x801932EC; // type:func
 g_RoomClassTable = 0x80193330; // size:0xA8 allow_addend:true
+g_RoomM120_D_8018EFE8 = 0x8018EFE8;
+g_RoomM120_D_801933D8 = 0x801933D8;

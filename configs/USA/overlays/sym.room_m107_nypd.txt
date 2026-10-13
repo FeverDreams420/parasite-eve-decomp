@@ -84,3 +84,4 @@ g_RoomPairedGlowSprite = 0x80193720;
 g_RoomPairedGlowPacket = 0x8019372C;
 g_RoomPairedGlowColorTable = 0x80193660;
 g_RoomClassTable = 0x80193678; // size:0xA8 allow_addend:true
+g_RoomM107_D_8018EFE8 = 0x8018EFE8;

@@ -48,8 +48,8 @@ typedef struct RoomM123Burst {
 
 int RoomM123_JointTriangleCallback(int mode, RoomM123JointTriangle *triangle) {
     GteShortVector corners[4];
-    GteShortVector offset = D_8018F1CC;
-    GteShortVector tip = D_8018F1D4;
+    GteShortVector offset = g_RoomM123_D_8018F1CC;
+    GteShortVector tip = g_RoomM123_D_8018F1D4;
     RenderColor color = D_8018F1DC;
     int weight;
     int width;
@@ -226,7 +226,7 @@ int RoomM123_GlowBurstParticleCallback(int mode, RoomM123PulsingParticle *partic
  * stores, and the palette read-back follows the block's stores. */
 
 int RoomM123_GlowBurst(int mode, RoomM123GlowBurst *burst) {
-    GteShortVector template = D_8018F1E0;
+    GteShortVector template = g_RoomM123_D_8018F1E0;
     GteShortVector position;
     GteRotation rotation;
     RenderColor color;
@@ -362,7 +362,7 @@ int RoomM123_JointBeacon(int mode, RoomM123Beacon *state) {
     GteVector scale;
     GteShortVector position;
     GteShortVector rotation;
-    RoomM123BeaconOffset offset = D_8018F1E8;
+    RoomM123BeaconOffset offset = g_RoomM123_D_8018F1E8;
     GteMatrix matrix;
     GteMatrix spin;
     RoomM123BeaconColor color;
@@ -681,7 +681,7 @@ int RoomM123_JointSwirlParticleCallback(int mode, RoomM123Particle *particle) {
 
 int RoomM123_JointSwirl(int mode)
 {
-    GteShortVector seed = D_8018F1E0;
+    GteShortVector seed = g_RoomM123_D_8018F1E0;
     GteShortVector output;
     RoomM123Particle *particle;
     int i;
@@ -758,7 +758,7 @@ ret0:
 int RoomM123_PulseRingCallback(int mode, RoomPulseParticle *particle, int *reference)
 {
     int color[2];
-    GteShortVector position = D_8018F1F0;
+    GteShortVector position = g_RoomM123_D_8018F1F0;
     GteShortVector *positionPtr;
     GteMatrix **matrixSlot;
     int wave;
@@ -890,7 +890,7 @@ int RoomM123_WaveCallback(int mode, RoomM123Wave *wave) {
 }
 
 int RoomM123_WaveBurst(int mode, RoomM123Burst *burst, int *choice) {
-    GteShortVector position = D_8018F1CC;
+    GteShortVector position = g_RoomM123_D_8018F1CC;
     RoomM123Wave *child;
     int value;
 

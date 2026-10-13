@@ -62,3 +62,6 @@ RoomEffect_DropFieldNop6 = 0x8018F238; // type:func
 g_RoomDropFieldScript = 0x80192928;
 g_RoomDropFieldDrawList = 0x80192880;
 g_RoomDropFieldUpdateList = 0x801928B8;
+g_RoomM348_D_8018EFE8 = 0x8018EFE8;
+g_RoomM348_D_801A81F8 = 0x801A81F8;
+g_RoomM348_D_801B81E4 = 0x801B81E4;

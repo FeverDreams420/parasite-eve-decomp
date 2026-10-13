@@ -86,3 +86,5 @@ g_RoomUpdateList = 0x80193F50;
 g_RoomInitList = 0x80193F20;
 g_RoomSpawnLayout = 0x80193F68;
 g_RoomClassTable = 0x80194010; // size:0xA8 allow_addend:true
+g_RoomM075_D_8018EFE8 = 0x8018EFE8;
+g_RoomM075_D_80194650 = 0x80194650;

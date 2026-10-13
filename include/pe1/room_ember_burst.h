@@ -33,9 +33,9 @@ typedef struct RoomEmberBurstParams {
 
 typedef RoomOrbitTrailPoolChannel RoomEmberBurstChannel;
 
-extern char D_8018F1CC[];
+extern char g_RoomM318_D_8018F1CC[];
 extern RenderColor D_8018F200;
-extern RenderColor D_8018F204;
+extern RenderColor g_RoomM318_D_8018F204;
 
 extern int rand(void);
 extern int RoomM318_EmberBurstParticleCallback(int mode, RoomOrbitTrailParticle *p);
@@ -98,7 +98,7 @@ PE1_STATIC_ASSERT(sizeof(RoomFanSweepSpark) == 0x10,
                   room_fan_sweep_spark_size);
 
 extern void *D_80199900;
-extern RenderColor D_8018F1F0;
+extern RenderColor g_RoomM318_D_8018F1F0;
 extern GteShortVector D_801998F8;
 extern int RoomM318_FanSweepSpark(int mode, RoomFanSweepSpark *spark);
 /* Main executable copy of the fan sweep spark (FieldFx_FanSweepSpark). */
@@ -178,7 +178,7 @@ static inline void RoomEffect_AttachToActor(int subId, int typeId, void *anchor)
             return;
         }
     }
-    printf(D_8018F1CC, subId, typeId);
+    printf(g_RoomM318_D_8018F1CC, subId, typeId);
 }
 
 #endif

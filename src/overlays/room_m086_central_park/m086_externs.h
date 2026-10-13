@@ -6,5 +6,5 @@ extern int D_80190B7C;
 extern int D_80190B80;
 extern int g_RoomM086BounceGlintParams;
 extern int D_80190B90;
-extern int D_80190B94;
+extern int g_RoomM086_D_80190B94;
 #endif /* PE1_EXT_M086 */

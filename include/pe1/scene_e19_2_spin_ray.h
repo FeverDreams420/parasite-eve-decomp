@@ -41,7 +41,7 @@ typedef struct SceneSpinRayChannel {
 extern RenderColor D_8018F224;
 extern RenderColor D_8018F228;
 extern RenderColor D_8018F22C;
-extern GteRotation D_8018F210;
+extern GteRotation g_SceneE19_D_8018F210;
 extern RenderColor D_8018F230;
 extern u8 g_SceneE19SpinRayColorTrack[];
 extern u8 g_SceneE19SpinRayBurstColorTrack[];

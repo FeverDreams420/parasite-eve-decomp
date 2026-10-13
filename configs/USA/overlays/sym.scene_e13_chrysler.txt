@@ -37,3 +37,5 @@ RoomEffect_DroppedFlareEmitter = 0x8019171C; // type:func
 RoomEffect_DroppedFlareSetArgs = 0x801919E4; // type:func
 RoomLib_PairA = 0x80191BD0;
 RoomLib_PairB = 0x80191BD4;
+g_SceneE13_D_8018EFE8 = 0x8018EFE8;
+g_SceneE13_D_80191BC8 = 0x80191BC8;

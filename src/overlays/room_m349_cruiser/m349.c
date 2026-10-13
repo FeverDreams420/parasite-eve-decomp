@@ -6,8 +6,8 @@
  * (state 2) by a small random amount each frame and bounces off the floor
  * height; draws as a spinning flare, the last state with a glow ring. */
 int RoomM349_FlareSparkCallback(int mode, RoomM349FlareSpark *spark) {
-    GteRotation rotation = D_8018EFF4;
-    RenderColor color = D_8018EFFC;
+    GteRotation rotation = g_RoomM349_D_8018EFF4;
+    RenderColor color = g_RoomM349_D_8018EFFC;
     int angle;
     int size;
     int fade;
@@ -149,9 +149,9 @@ int RoomM349_FlareRing(int mode, RoomM349FlareTarget *target,
                   RoomM349FlareParams *params) {
     GteShortVector joint;
     GteShortVector anchor;
-    GteRotation rotation = D_8018F000;
+    GteRotation rotation = g_RoomM349_D_8018F000;
     GteRotation rotation2 = D_8018F008;
-    RenderColor color = D_8018EFFC;
+    RenderColor color = g_RoomM349_D_8018EFFC;
     RoomM349FlareSpark *child;
     int radius;
     int period;

@@ -1,5 +1,5 @@
 /*
- * Fills the room's capture block (D_80192C34..D_80192C3C) from the field
+ * Fills the room's capture block (D_80192C34 up to g_RoomCaptureFrameWord) from the field
  * engine's current object: its halfwords at +0x268 and +0x26C, the floor
  * height and a fixed 0x76C. room_m156, room_m291 and room_m380 (the +2
  * variants) link it after RoomLib_SlotSet; this unit is that function,
@@ -27,7 +27,7 @@ void RoomLib_CaptureFrameSample(RoomCaptureContext *modeOrContext, int x, int y,
         D_80192C36 = y;
         D_80192C38 = z;
     } else {
-        D_80192C3C = x;
+        g_RoomCaptureFrameWord = x;
     }
 
     modeOrContext = ANIM_OWNER_AS(RoomCaptureContext);
@@ -43,6 +43,6 @@ void RoomLib_CaptureFrameSample(RoomCaptureContext *modeOrContext, int x, int y,
     x = (u16)((FieldActor *)sample)->render_object.target_z;
     sample = 0x76c;
     D_80192C36 = (unsigned int)modeOrContext;
-    D_80192C3C = sample;
+    g_RoomCaptureFrameWord = sample;
     D_80192C38 = x;
 }

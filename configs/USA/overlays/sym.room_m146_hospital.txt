@@ -70,3 +70,4 @@ g_RoomEruptionDrawList = 0x80192464;
 g_RoomEruptionUpdateList = 0x80192480;
 g_RoomEruptionInitList = 0x80192448;
 g_RoomEruptionSpawnLayout = 0x8019249C;
+g_RoomM146_D_8018EFE8 = 0x8018EFE8;

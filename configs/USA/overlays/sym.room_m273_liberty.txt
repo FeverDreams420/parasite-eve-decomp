@@ -159,3 +159,5 @@ g_RoomM273SwayEffects = 0x8019AE24;
 g_RoomM273BlackColor = 0x8019AB70;
 g_RoomM273FloorRotation = 0x8019AB68;
 g_RoomM273HandTrailHitColor = 0x8018F1E4;
+g_RoomM273_D_8018EFE8 = 0x8018EFE8;
+g_RoomM273_D_801D01E8 = 0x801D01E8;
