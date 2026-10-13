@@ -364,7 +364,7 @@ int func_80192F5C(RoomOscillationEffect *effect) {
         sine = D_800966EC[phase].part.cos;
         half = (sine + 4096) / 2;
         sine = (half * effect->params.amplitude) / 4096 + 8;
-        target = ((RoomOscillationEffect *)effect)->actor;
+        target = (effect)->actor;
         {
             int height;
 
@@ -461,10 +461,10 @@ int func_8019320C(int mode, RoomM273SampledLayerEffect *effect) {
         i = 0;
         do {
             func_800D004C(&position, 128, 128, 12, (GteRotation *)&rotation,
-                          (short)size, (short)size, (RenderColor *)D_8019AB70,
-                          (RenderColor *)effect->parameter, (short)shade, 1);
-            shade = (short)shade >> 1;
-            size = (short)size * 3 / 2;
+                          size, size, (RenderColor *)D_8019AB70,
+                          (RenderColor *)effect->parameter, shade, 1);
+            shade = shade >> 1;
+            size = size * 3 / 2;
             i++;
             position.y = g_RoomFloorY->raw;
         } while (i < 2);
@@ -590,8 +590,8 @@ int func_80193870(int mode, RoomM273SpritePoolEffect *state) {
         sprite.x = x;
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
-        func_800CEE20((GteShortVector *)&sprite, &D_8019AB68, (short)size, (short)size, 102,
-                        GetClut(0, (kind == 4 && D_800F3428) ? palette + 9 : palette + 5), 1, (short)shade, 0);
+        func_800CEE20((GteShortVector *)&sprite, &D_8019AB68, size, size, 102,
+                        GetClut(0, (kind == 4 && D_800F3428) ? palette + 9 : palette + 5), 1, shade, 0);
     }
     return 0;
 }
@@ -675,7 +675,7 @@ int func_80193B5C(int mode, ThresholdPairBand **arg1) {
                       (RenderColor *)((((int)i * 4) + (int)z)), (RenderColor *)((((int)i * 4) + (int)z_next)),
                       (*objp)->intensity, 1);
         i++;
-    } while ((short)i < 2);
+    } while (i < 2);
 
 ret0:
     return 0;
@@ -877,7 +877,7 @@ int func_80194470(int mode, Vector *input) {
 
         palette = D_800E1204[kind];
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 9 : palette + 5);
-        func_800CEE20(position, 0, (short)size, (short)size, 102, clut, 1,
+        func_800CEE20(position, 0, size, size, 102, clut, 1,
             (short)D_800966EC[((unsigned int)frame << 8) & 0xF00].word >> 6, 0);
     }
     return 0;
@@ -1087,7 +1087,7 @@ mode_one:
         }
     } else if ((short)frame >= 0x21) {
         D_8019AE9A = 1;
-    } else if ((short)frame > 0 && ((int)(timer << 16) <= 0)) {
+    } else if ((short)frame > 0 && ((timer << 16) <= 0)) {
         data = obj->render_object.matrices;
         Asset_Find08w(0x5CF, obj->state->progress,
                       (short)data[44].translation[0], (short)data[44].translation[1],
@@ -1667,7 +1667,7 @@ int func_80196348(int mode) {
         } else {
             /* The heading is turned half way round in 16.16 form. */
             value = FieldFx_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation, (Vec3Fixed *)instance->position);
-            instance->yaw = FieldFx_TurnToward((short)instance->yaw, (short)((value << 16) + 0x8000000 >> 16), 0x20);
+            instance->yaw = FieldFx_TurnToward(instance->yaw, (short)((value << 16) + 0x8000000 >> 16), 0x20);
         }
         if (D_8019AE9C.tick < 0x77) {
             value = (D_8019AE9C.tick << 13) / 118;
@@ -1768,7 +1768,7 @@ int func_801969D8(int mode) {
         spread=angle-256;
         if(D_8019AF68) {
             short i=0;
-            int width=(short)spread;
+            int width=spread;
             /* Retail address window: heading 0x8019AF60, origin 0x8019AEFC. */
             register unsigned short *heading asm("$19")=(unsigned short *)(stopped-9);
             register Matrix *transform asm("$16")=&matrix;
@@ -1796,7 +1796,7 @@ int func_801969D8(int mode) {
                 i++;
             } while(i<6);
             /* Failure in the six-particle ring does not skip this ring. */
-            i=0; width=(short)spread/2; heading=&D_8019AF60;
+            i=0; width=spread/2; heading=&D_8019AF60;
             do {
                 RoomM273Drop *particle=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                 short *wave;
@@ -2564,7 +2564,7 @@ int func_80198E94(int mode, GteShortVector *position) {
         if (kind == 4 && D_800F3428 != 0) palette += 4;
         size = D_800966EC[(frame << 7) & 0xF80].bits.sin + 0x1800;
         func_800CEE20(position, 0, size, size, (s16)D_800F3368.parameter02 * frame + 0x80,
-                      (u16)GetClut(0x10, palette), 1, 0x80, 0);
+                      GetClut(0x10, palette), 1, 0x80, 0);
     }
     rotation.x = 0x400;
     rotation.y = -frame << 9;
@@ -2627,7 +2627,7 @@ int func_80199568(int mode, RoomM273RisingParticle *particle) {
         if (frame >= 4) {
             unsigned short y = ((volatile RoomM273RisingParticle *)particle)->y;
             s16 speed = ((volatile RoomM273RisingParticle *)particle)->speed;
-            int delta = ((RoomM273RisingParticle *)particle)->speed;
+            int delta = (particle)->speed;
             speed += 1;
             particle->y = y - delta;
             particle->speed = speed;
@@ -2741,8 +2741,8 @@ int func_80199950(int mode, RoomM273PointerPoolEffect *effect) {
 
         palette = D_800E1204[kind];
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3);
-        func_800CEE20(effect->position, 0, (short)size, (short)size,
-            64, clut, 1, (short)shade, 0);
+        func_800CEE20(effect->position, 0, size, size,
+            64, clut, 1, shade, 0);
     }
     return 0;
 }
