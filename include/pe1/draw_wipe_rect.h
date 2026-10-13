@@ -75,7 +75,7 @@ PE1_STATIC_ASSERT(sizeof(DrawWipeVertex) == 4, draw_wipe_vertex_size);
     {                                                \
         int x = (xValue);                            \
         int y = (yValue);                            \
-        DrawWipeVertex *out = (DrawWipeVertex *)g_DrawVertexWritePtr;             \
+        DrawWipeVertex *out = g_DrawVertexWritePtr;             \
                                                      \
         if (out < (DrawWipeVertex *)(limit)) {                         \
             out->x = x;                              \
@@ -94,7 +94,7 @@ PE1_STATIC_ASSERT(sizeof(DrawWipeVertex) == 4, draw_wipe_vertex_size);
                                                                          \
         (packet).word = 0;                                               \
         if (next < (u32)D_8009D104 + 0x4000) {                                \
-            D_8009D100 = (u8 *)next;                                           \
+            D_8009D100 = next;                                           \
             (packet).word = old;                                         \
         } else {                                                         \
             Inv_BoundsCheckAssertStub(1);                                   \
@@ -105,7 +105,7 @@ PE1_STATIC_ASSERT(sizeof(DrawWipeVertex) == 4, draw_wipe_vertex_size);
 #define DRAW_LINK_PACKET(packet)                                         \
     {                                                                    \
         u32 mask24 = 0xFFFFFF, maskTop = 0xFF000000;                     \
-        DrawPacketAddress *ot = (DrawPacketAddress *)D_8009D11C;                              \
+        DrawPacketAddress *ot = D_8009D11C;                              \
         u32 tag = *(packet).tag;                                         \
         tag &= maskTop;                                                  \
         tag |= ot->word & mask24;                                        \
