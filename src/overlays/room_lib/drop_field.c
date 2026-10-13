@@ -587,7 +587,7 @@ void RoomEffect_DrawStagedMotion(void *unused,
     owner = (RoomStagedMotionRenderOwner *)FieldFx_GetScriptContext();
     seedA = *(RoomStagedMotionSeed *)&s_DropFieldNoTilt;
     seedB = *(RoomStagedMotionSeed *)&s_DropFieldTiltX;
-    func_800C2EAC((u8)owner->owner);
+    func_800C2EAC(owner->owner);
     i = 0;
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
@@ -685,8 +685,8 @@ void RoomEffect_DrawStagedMotion(void *unused,
                 ScaleMatrix((GteMatrix *)&matrix, (GteVector *)&scale2);
                 FieldFx_ModelScrollUv(g_RoomDropFieldModel, 0, 0);
                 FieldFx_ModelSetDepthBias(-0x64);
-                handle = (u16)GetTPage(1, 1, 0x340, 0x100);
-                FieldFx_ModelSetTexture(handle, (u16)GetClut(0, 0x1DB));
+                handle = GetTPage(1, 1, 0x340, 0x100);
+                FieldFx_ModelSetTexture(handle, GetClut(0, 0x1DB));
                 FieldFx_ModelSetSemiTrans(1);
                 FieldFx_ModelSaveColors(g_RoomDropFieldModel);
                 FieldFx_ModelScaleColors(g_RoomDropFieldModel,
@@ -1159,7 +1159,7 @@ void RoomEffect_InitQuadSprites(void *unused0, void *unused1, void *output_arg) 
     mid = 64;
 
     for (; (unsigned int)index < 4; index++) {
-        speed = (int)rand() % 40 + 10;
+        speed = rand() % 40 + 10;
         rand();
 
         value = -200;
