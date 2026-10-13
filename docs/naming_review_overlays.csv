@@ -101,3 +101,8 @@ address,overlay,old_name,name,evidence
 0x801227E4,menu_memcard,D_801227E4,g_MenuCardVideoEntry,"VideoEntry of the first video player copy (video.c MENUCARD_VIDEO_ENTRY), same role as g_MenuCardScreenVideoEntry."
 0x801227E8,menu_memcard,D_801227E8,g_MenuCardVideoLastTime,Last frame time of the first video copy (video.c MENUCARD_VIDEO_LAST_TIME).
 0x801227EC,menu_memcard,D_801227EC,g_MenuCardVideoSavedDispEnv,DISPENV[2] saved by the first video copy (video.c MENUCARD_VIDEO_SAVED_DISPLAY).
+0x80192C08,room_m049_nypd;room_m050_nypd;room_m090_soho;room_m344_museum;room_m374_central_park,D_80192C08,g_EffectSequenceGlowSprite,"effect_sequence.c: glow sprite preset whose depth follows fade_alpha and cell follows phase*2, drawn by FieldFx_DrawGlowSprite with the colour ramp"
+0x80192C18,room_m049_nypd;room_m050_nypd;room_m090_soho;room_m344_museum;room_m374_central_park,D_80192C18,g_EffectSequenceGlowSpriteSecondary,"effect_sequence.c: second glow preset used by the other draw variant with the same fade_alpha/phase pattern"
+0x80192C28,room_m049_nypd;room_m050_nypd;room_m090_soho;room_m344_museum;room_m374_central_park,D_80192C28,g_EffectSequenceFinalGlowSprite,"effect_sequence.c: grey 0x90 preset whose depth follows final_alpha, drawn last"
+0x80192C34,room_m049_nypd;room_m050_nypd;room_m090_soho;room_m344_museum;room_m374_central_park,D_80192C34,g_EffectSequenceModel,"effect_sequence.c: loaded via Asset_FindTable08ByU32Key and passed to FieldFx_Model* draw calls"
+0x80192C38,room_m049_nypd;room_m050_nypd;room_m090_soho;room_m344_museum;room_m374_central_park,D_80192C38,g_EffectSequenceSparkleSprite,"effect_sequence.c: preset whose depth follows sparkle_alpha, drawn in the sparkle function"

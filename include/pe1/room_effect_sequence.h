@@ -14,7 +14,7 @@
  * that link it) and the main code it calls. */
 
 /* The 0xC used bytes of each 0x10-byte sprite preset. The third
- * preset's trailing word is a separate model resource (D_80192C34). */
+ * preset's trailing word is a separate model resource (g_EffectSequenceModel). */
 typedef struct RoomEffectSequenceSprite {
     u8 r, g, b, reserved03;
     u8 cell, clut, flip, reserved07;
@@ -23,8 +23,8 @@ typedef struct RoomEffectSequenceSprite {
 } RoomEffectSequenceSprite;
 PE1_STATIC_ASSERT(sizeof(RoomEffectSequenceSprite) == 0xC, effect_sequence_sprite_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEffectSequenceSprite, depth) == 0xA, effect_sequence_sprite_depth);
-extern RoomEffectSequenceSprite D_80192C08, D_80192C18, D_80192C28, D_80192C38;
-extern void *D_80192C34;
+extern RoomEffectSequenceSprite g_EffectSequenceGlowSprite, g_EffectSequenceGlowSpriteSecondary, g_EffectSequenceFinalGlowSprite, g_EffectSequenceSparkleSprite;
+extern void *g_EffectSequenceModel;
 
 extern int *FieldFx_VarPtr(int index);
 extern int *FieldFx_RegPtr(int index);
