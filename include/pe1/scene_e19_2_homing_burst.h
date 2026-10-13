@@ -50,8 +50,10 @@ typedef struct SceneHomingBurstEvent {
 
 extern GteRotation g_SceneE19_D_8018F210;
 extern GteRotation g_SceneE19_D_8018F1CC;
-extern RenderColor D_8018F21C;
-extern RenderColor D_8018F220;
+extern GteRotation g_SceneE19RollTilt;
+extern GteRotation g_SceneE19ZeroSpin;
+extern RenderColor g_SceneE19HomingBurstFlashColor;
+extern RenderColor g_SceneE19HomingBurstRingColor;
 
 
 #endif
