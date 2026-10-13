@@ -159,18 +159,18 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
             {
                 int third_count;
                 int third_modifier;
-                register int third_loop_count asm("$4");
                 third_count = item_b->tailCount;
                 if (third_count > 0) {
                     i = 0;
                     third_modifier = modifier;
-                    third_loop_count = third_count;
+                    /* The modifier kind is saved; reuse its scratch for the bound. */
+                    modifier = third_count;
                     while (1) {
                         if ((item_b->tailData[i] & 0xE0) == third_modifier) {
                             break;
                         }
                         ++i;
-                        if (i >= third_loop_count) {
+                        if (i >= modifier) {
                             break;
                         }
                     }
