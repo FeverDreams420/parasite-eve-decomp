@@ -109,7 +109,6 @@ MathU64 *_mul_mant_d(MathU64 *out, unsigned int left, unsigned int right) {
     asm("" : "=r"(low), "=r"(right) : "0"(low), "1"(right));
     product = right & 0xFFFF;
     firstProduct = low * product;
-    asm("" : "=r"(firstProduct) : "0"(firstProduct), "r"(low));
     left >>= 16;
     product = left * product;
     resultPtr = (MathU64 *)&result;
