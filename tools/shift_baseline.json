@@ -4,8 +4,8 @@
   "exe:unrelocated:data_word": 3,
   "exe:unrelocated:lui": 7,
   "overlays:abi_loader_contract": 454,
-  "overlays:distinct_main_addresses": 317,
-  "overlays:main_references": 7277,
+  "overlays:distinct_main_addresses": 316,
+  "overlays:main_references": 7276,
   "overlays:own_overlay_pinned": 178,
   "shift_test:gprel_to_pinned": 0,
   "shift_test:literal_data_word": 3,
@@ -25,7 +25,7 @@
   "undefined_addr_aliases.main.txt:kernel": 1,
   "undefined_syms_manual.txt:hardware": 10,
   "undefined_syms_manual.txt:kernel": 2,
-  "undefined_syms_manual.txt:symbolic_alias": 66,
+  "undefined_syms_manual.txt:symbolic_alias": 40,
   "undefined_syms_manual.txt:unowned": 0
  }
 }
