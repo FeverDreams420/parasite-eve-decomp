@@ -811,22 +811,12 @@ int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int buttons)
             Menu_StepInventoryRoot(0x33e, -1, -1);
             g_MenuBattleStatusOverlayActive = 0;
             break;
-        case 8: {
-            int command;
-            register int first asm("$4");
-            register int second asm("$5");
-            register int third asm("$6");
+        case 8:
             CLOSE_SELECT_VIEWS();
-            first = 0x37e;
-            second = -1;
-            third = -1;
-            command = 1;
-            asm volatile("" : "=r"(command) : "0"(command), "r"(first), "r"(second), "r"(third));
-            g_MenuItemUseMode = command;
-            Menu_StepInventoryRoot(first, second, third);
+            g_MenuItemUseMode = 1;
+            Menu_StepInventoryRoot(0x37e, -1, -1);
             g_MenuBattleStatusOverlayActive = 0;
             break;
-        }
         default:
             goto return_one;
         }
