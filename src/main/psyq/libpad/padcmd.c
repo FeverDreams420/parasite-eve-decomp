@@ -303,9 +303,6 @@ complete:
     return 1;
 }
 
-/* Late include: its prototype rejects _padLoadActInfo's argument-less call. */
-#include "padcmd_externs_1.h"
-
 void CardObj_EmitCommand4D(CardObj *arg0);
 s32 Render_CheckParticleBounds(CardObj *arg0);
 

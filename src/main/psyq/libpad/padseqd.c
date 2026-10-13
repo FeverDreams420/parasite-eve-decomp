@@ -4,8 +4,6 @@
 #include "pe1/card_obj.h"
 #include "pe1/psyq_pad_main.h"
 
-#include "padseqd_externs.h"
-
 int func_80084B78(CardObj *obj);
 int CardObj_IsTransferActive(CardObj *obj);
 void LIBPAD_PADSEQD_text_108(CardObj *port);

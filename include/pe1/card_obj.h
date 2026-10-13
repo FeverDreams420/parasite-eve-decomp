@@ -118,5 +118,8 @@ extern CardObj *(*g_MemCardObjLookupFn)(int channel);
  * _padSetMainMode passes the port object, _padLoadActInfo calls it
  * without setting a0. */
 extern int (*g_MemCardIsTransferActiveFn)();
+/* Response hook that _padInitDirSeq installs; the interrupt handler calls
+ * it with the port object. */
+extern void (*g_MemCardResponseHandler)(CardObj *obj);
 
 #endif /* PE1_CARD_OBJ_H */
