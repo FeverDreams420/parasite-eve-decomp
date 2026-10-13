@@ -1169,7 +1169,7 @@ void Akao_SetVoiceKeyOff(AkaoTrack *voice, u32 voice_mask, int index) {
     }
 
     if ((flags & AKAO_TRACK_FLAG_20) != 0) {
-        base_volume = (((int)(voice[-1].pitch << 17) >> 16) * (voice->volume_base >> 8)) >> 7;
+        base_volume = (((voice[-1].pitch << 17) >> 16) * (voice->volume_base >> 8)) >> 7;
         voice->update_flags |= AKAO_VOICE_PARAM_VOLUME;
     }
 
@@ -1330,7 +1330,7 @@ void Akao_SetVoiceKeyOn(AkaoTrack *voice, u32 voice_mask) {
     }
 
     if ((flags & AKAO_TRACK_FLAG_20) != 0) {
-        base_volume = (((int)(voice[-1].pitch << 17) >> 16) * (voice->volume_base >> 8)) >> 7;
+        base_volume = (((voice[-1].pitch << 17) >> 16) * (voice->volume_base >> 8)) >> 7;
         voice->update_flags |= AKAO_VOICE_PARAM_VOLUME;
     }
 
@@ -1405,15 +1405,15 @@ void Spu_CopyVoiceToStereoSlot(AkaoTrack *track, int stereo_voice_index) {
     left = track->volume_left;
     inverse_pan = 0x7F;
     pan = (unsigned short)track->pan_target;
-    pan = ((int)(pan << 16)) >> 24;
+    pan = ((pan << 16)) >> 24;
     inverse_pan -= pan;
     track->volume_left = ((unsigned int)(left * inverse_pan)) >> 8;
     stereo = &g_AkaoVoiceStateTable[stereo_voice_index];
     new_var = inverse_pan;
-    stereo->volume_left = (left * ((short)track->pan_target)) >> 16;
+    stereo->volume_left = (left * (track->pan_target)) >> 16;
     right = (left = track->volume_right);
     track->volume_right = ((unsigned int)(right * new_var)) >> 8;
-    stereo->volume_right = (right * ((short)track->pan_target)) >> 16;
+    stereo->volume_right = (right * (track->pan_target)) >> 16;
     stereo->pitch = track->pitch;
     stereo->update_flags |= (*track).update_flags;
     Akao_WriteVoiceParam(track->assigned_voice_index, (AkaoVoiceParams *)(&track->assigned_voice_index), track->flags);
