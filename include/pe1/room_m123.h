@@ -23,6 +23,8 @@ void FieldFx_DrawGlowLine(void *, void *, void *, void *, int, int, int);
  * fourth joint, then a spark that runs around the triangle edges. */
 extern GteShortVector g_RoomM123_D_8018F1CC; /* joint offsets */
 extern GteShortVector g_RoomM123_D_8018F1D4;
-extern RenderColor D_8018F1DC;
+extern GteShortVector g_RoomM123JointOffset; /* joint offsets */
+extern GteShortVector g_RoomM123JointOrigin;
+extern RenderColor g_RoomM123TriangleColor;
 
 #endif

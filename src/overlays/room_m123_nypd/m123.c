@@ -50,7 +50,9 @@ int RoomM123_JointTriangleCallback(int mode, RoomM123JointTriangle *triangle) {
     GteShortVector corners[4];
     GteShortVector offset = g_RoomM123_D_8018F1CC;
     GteShortVector tip = g_RoomM123_D_8018F1D4;
-    RenderColor color = D_8018F1DC;
+    GteShortVector offset = g_RoomM123JointOffset;
+    GteShortVector tip = g_RoomM123JointOrigin;
+    RenderColor color = g_RoomM123TriangleColor;
     int weight;
     int width;
     int position;
@@ -227,6 +229,7 @@ int RoomM123_GlowBurstParticleCallback(int mode, RoomM123PulsingParticle *partic
 
 int RoomM123_GlowBurst(int mode, RoomM123GlowBurst *burst) {
     GteShortVector template = g_RoomM123_D_8018F1E0;
+    GteShortVector template = g_RoomM123JointAnchor;
     GteShortVector position;
     GteRotation rotation;
     RenderColor color;
@@ -363,6 +366,7 @@ int RoomM123_JointBeacon(int mode, RoomM123Beacon *state) {
     GteShortVector position;
     GteShortVector rotation;
     RoomM123BeaconOffset offset = g_RoomM123_D_8018F1E8;
+    RoomM123BeaconOffset offset = g_RoomM123BeaconAnchor;
     GteMatrix matrix;
     GteMatrix spin;
     RoomM123BeaconColor color;
@@ -385,8 +389,8 @@ int RoomM123_JointBeacon(int mode, RoomM123Beacon *state) {
             }
         }
         state->armed = 1;
-        g_RoomM123BeaconModel0 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5483704);
-        g_RoomM123BeaconModel1 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5883704);
+        g_RoomM123BeaconModel0 = Asset_FindTable08ByU32Key(g_LoadedSceneAssetBlock[0], 0xC5483704);
+        g_RoomM123BeaconModel1 = Asset_FindTable08ByU32Key(g_LoadedSceneAssetBlock[0], 0xC5883704);
         FieldFx_ModelScrollUv((union FieldTexturedModel *)g_RoomM123BeaconModel0, 0, 0);
         FieldFx_ModelScrollUv((union FieldTexturedModel *)g_RoomM123BeaconModel1, 0, 0xF0);
         return 0;
@@ -665,7 +669,7 @@ int RoomM123_JointSwirlParticleCallback(int mode, RoomM123Particle *particle) {
 
         scale = g_RoomM123SwirlSpeed * particle->scale;
         sampleFrame = (s16)particle->frame;
-        FieldFx_OffsetPointByAngles(&D_801956B0, &position, sampleFrame << 6, g_RoomM123SwirlAngles,
+        FieldFx_OffsetPointByAngles(g_RoomM123SwirlOrigin, &position, sampleFrame << 6, g_RoomM123SwirlAngles,
                       scale / 4096, (s16)particle->offset);
         kind = g_FieldFxSpriteParams.palette;
         palette = g_FieldFxPaletteTable[kind];
@@ -682,6 +686,7 @@ int RoomM123_JointSwirlParticleCallback(int mode, RoomM123Particle *particle) {
 int RoomM123_JointSwirl(int mode)
 {
     GteShortVector seed = g_RoomM123_D_8018F1E0;
+    GteShortVector seed = g_RoomM123JointAnchor;
     GteShortVector output;
     RoomM123Particle *particle;
     int i;
@@ -732,9 +737,9 @@ int RoomM123_JointSwirl(int mode)
         /* Keep the context load ahead of the texture address. */
         asm volatile("" : : "r"(context));
         texture = g_RoomM123SwirlAngles;
-        D_801956B0 = outX;
-        D_801956B2 = outY;
-        D_801956B4 = outZ;
+        g_RoomM123SwirlOrigin[0] = outX;
+        g_RoomM123SwirlOrigin[1] = outY;
+        g_RoomM123SwirlOrigin[2] = outZ;
         /* Finish the position writes before reducing the signed scale. */
         asm volatile("" : : : "memory");
         g_RoomM123SwirlBrightness = scale >> 5;
@@ -759,6 +764,7 @@ int RoomM123_PulseRingCallback(int mode, RoomPulseParticle *particle, int *refer
 {
     int color[2];
     GteShortVector position = g_RoomM123_D_8018F1F0;
+    GteShortVector position = g_RoomM123PulseRingTilt;
     GteShortVector *positionPtr;
     GteMatrix **matrixSlot;
     int wave;
@@ -810,7 +816,7 @@ int RoomM123_PulseRing(int mode, RoomPulseParticle *particle)
                     *object->status = 2;
             }
         }
-        soundSlot = (RoomSoundSlot *)D_800B0E64;
+        soundSlot = (RoomSoundSlot *)g_LoadedSceneAssetBlock;
         if (soundSlot->channel != 0) {
             volume = 0x7F;
             time = FieldFx_GetOwnerProgress();
@@ -862,7 +868,7 @@ ret0:
 
 int RoomM123_WaveCallback(int mode, RoomM123Wave *wave) {
     int color[2];
-    GteShortVector position = D_8018F1F8;
+    GteShortVector position = g_RoomM123WaveSpinBase;
     int result, scale, kind, palette;
     u16 clut;
     switch (mode) {
@@ -891,6 +897,7 @@ int RoomM123_WaveCallback(int mode, RoomM123Wave *wave) {
 
 int RoomM123_WaveBurst(int mode, RoomM123Burst *burst, int *choice) {
     GteShortVector position = g_RoomM123_D_8018F1CC;
+    GteShortVector position = g_RoomM123JointOffset;
     RoomM123Wave *child;
     int value;
 
