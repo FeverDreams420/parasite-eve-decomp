@@ -767,6 +767,7 @@ s32 Battle_StepAyaAction(void)
   s32 targetDistance;
   s32 slot;
   s32 flags;
+  register u32 scratch asm("$3");
   s32 finished;
   s8 attackStep;
   u32 effectId;
@@ -1021,7 +1022,6 @@ s32 Battle_StepAyaAction(void)
     {
       BattleEntity *player = D_8009D254;
       s32 *saved;
-      register u16 rotationZ asm("$3");
       s32 x;
       s32 y;
       register int effect asm("$4");
@@ -1048,8 +1048,8 @@ s32 Battle_StepAyaAction(void)
         transfer = g_AyaSavedRotation.facing;
         player->facingAngle = transfer;
         asm volatile("" : : "r"(transfer));
-        rotationZ = g_AyaSavedRotation.z;
-        player->rotationZ = rotationZ;
+        scratch = (u16)g_AyaSavedRotation.z;
+        player->rotationZ = scratch;
         transfer = player->posZ.parts.integer;
         Asset_Find08Alt(effect, 0, x, y, transfer);
         g_AyaActionTimer = 0x1E;
@@ -1109,21 +1109,20 @@ s32 Battle_StepAyaAction(void)
       {
         Entity_SetActionMode(D_8009D254, g_ActiveActor->actionMode12);
         {
-          register int mask asm("$3");
           register int rate asm("$5") = 30;
           BattleEntity *player;
           register RenderObjectEntity *render asm("$4");
           unsigned flags;
-          mask = ~0x100;
-          asm("" : "=r"(mask) : "0"(mask), "r"(rate));
+          scratch = ~0x100;
+          asm("" : "=r"(scratch) : "0"(scratch), "r"(rate));
           player = D_8009D254;
           D_8009D2E8 |= 4;
           player->renderObject.variant_visible = 1;
           render = &D_8009D254->renderObject;
           flags = player->entityFlags;
-          flags &= mask;
-          mask = ~0x80;
-          flags &= mask;
+          flags &= scratch;
+          scratch = ~0x80;
+          flags &= scratch;
           player->entityFlags = flags;
           Anim_SetInterpRate(render, rate);
         }
