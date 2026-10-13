@@ -196,9 +196,35 @@ ASM_ALIAS = re.compile(r"\s*(?:__asm__|asm)\s*\(\s*\"[^\"]*\"\s*\)")
 ATTR = re.compile(r"__attribute__\s*\(\(.*?\)\)")
 
 
+MACRO_CALL = re.compile(r"\s*[A-Z][A-Z0-9_]*\s*\(")
+
+
+def strip_macro_calls(s: str) -> str:
+    """Drop file-scope macro invocations that end without a semicolon.
+
+    A body macro (`ROOMLIB_CLOSE_TARGET(name)`) expands to a function
+    definition, so nothing ends its statement and the scanner would glue it
+    to the next declaration.
+    """
+    while True:
+        m = MACRO_CALL.match(s)
+        if not m:
+            return s
+        depth, i = 0, m.end() - 1
+        while i < len(s):
+            if s[i] == "(":
+                depth += 1
+            elif s[i] == ")":
+                depth -= 1
+                if depth == 0:
+                    break
+            i += 1
+        s = s[i + 1:]
+
+
 def parse_decls(stmt: str):
     """Yield (name, type) for a file-scope declaration statement."""
-    s = stmt.strip()
+    s = strip_macro_calls(stmt).strip()
     if not s or DECL_SKIP.match(s) or "{" in s or "=" in s.split("(")[0]:
         return
     if re.match(r"^(struct|union|enum)\s+\w+\s*$", s):

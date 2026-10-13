@@ -1029,7 +1029,11 @@ What is left (best crutch-free lev against retail):
 than once with different types (629 at the start of the header unification,
 232 after it, 99 after the battle pass, 65 after the small-data pass, 12
 after the actor and overlay view pass, 1 after the scalar view pass, 0 after
-`GetClut` took its header declaration).
+`GetClut` took its header declaration; 29 again after the cast removal
+rounds exposed the types the casts hid, 0 after the pass that gave each
+symbol its retail type in one shared header). The scanner drops file-scope
+body macros such as `ROOMLIB_CLOSE_TARGET(name)`, which end without a
+semicolon and would otherwise be glued to the next declaration.
 
 How the earlier groups were closed, for the next symbols of the same kind:
 
