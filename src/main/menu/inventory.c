@@ -47,7 +47,7 @@ void Menu_OpenEquipScreen(int mode)
     if (!container) {
         parent = MenuWidget_CreateSimpleNode(50, 0, 0, 0);
         container = MenuWidget_CreateNode(50, parent, parent);
-        parent->update = (void (*)())Menu_StepInventoryCategory;
+        parent->update = Menu_StepInventoryCategory;
         container->draw = Menu_DrawEquipListContainer;
         if (!mode)
             Draw_SetPrimCallback(container, 3);
@@ -56,7 +56,7 @@ void Menu_OpenEquipScreen(int mode)
 
     parent = MenuWidget_CreateSimpleNode(51, container, 0, 0);
     container = MenuWidget_CreateNode(51, parent, parent);
-    parent->update = (void (*)())Menu_InventoryInputHandler;
+    parent->update = Menu_InventoryInputHandler;
     parent->disabled = 1;
     container->draw = Menu_DrawWeaponList;
     container->itemAction = Inv_RebuildWithSlotLimit;
@@ -75,7 +75,7 @@ void Menu_OpenEquipScreen(int mode)
     offset = container->popup_node == 0;
     parent = MenuWidget_CreateSimpleNode(52, container, 0, 0);
     list = MenuWidget_CreateNode(52, parent, parent);
-    parent->update = (void (*)())Menu_InventoryInputHandler;
+    parent->update = Menu_InventoryInputHandler;
     if (offset)
         MenuWidget_OffsetPosition(parent, -6, 0);
     list->draw = Menu_DrawArmorList;
@@ -131,8 +131,8 @@ void Menu_OpenInventoryScreen(void) {
         if (MenuWidget_FindByModeAndSelectedBase(1, 0) == 0) {
             root0 = MenuWidget_CreateSimpleNode(0, 0, 0, 0);
             node = MenuWidget_CreateNode(0, root0, root0);
-            root0->update = (void (*)())Menu_StepItemSelectScreen;
-            node->draw = (void (*)())Menu_DrawItemList;
+            root0->update = Menu_StepItemSelectScreen;
+            node->draw = Menu_DrawItemList;
             MenuWidget_SetCurrentNode(node);
 
             if (Menu_GetBattleEquipMode() != 0) {
@@ -163,11 +163,11 @@ void Menu_OpenInventoryScreen(void) {
         MenuWidget_NavScrollTo(0x12);
 
         current = MenuWidget_GetCurrentNode();
-        MenuWidget_CreateSimpleNode(0x1B, 0, 0, 0)->draw = (void (*)())Menu_DrawAmmoTypeHeader;
+        MenuWidget_CreateSimpleNode(0x1B, 0, 0, 0)->draw = Menu_DrawAmmoTypeHeader;
         root1 = MenuWidget_CreateSimpleNode(1, current, 0, 0);
         node = MenuWidget_CreateNode(1, root1, root1);
-        root1->update = (void (*)())Menu_InventoryInputHandler;
-        node->draw = (void (*)())Menu_DrawSelectableEquipSlotList;
+        root1->update = Menu_InventoryInputHandler;
+        node->draw = Menu_DrawSelectableEquipSlotList;
         MenuWidget_SetCurrentNode(node);
         node->itemAction = (MenuWidgetItemAction)Inv_SwapSlots;
         node->refreshItems = Menu_RebuildSelectableMask;
@@ -245,7 +245,7 @@ int Menu_StepInventoryCategory(MenuWidgetNode *node, unsigned int flags)
         case 1:
             parent = MenuWidget_CreateSimpleNode(59, node, 0, 0);
             child = MenuWidget_CreateNode(59, parent, parent);
-            parent->update = (void (*)())Menu_EquipOptionsInputHandler;
+            parent->update = Menu_EquipOptionsInputHandler;
             child->draw = Menu_DrawEquipOptionsList;
             MenuWidget_SetCurrentNode(child);
             MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 51));
@@ -339,7 +339,7 @@ int Menu_InventoryPageNavHandler(MenuWidgetNode *root, unsigned int flags) {
             MenuWidget_SetCurrentNode(node);
             if (present) {
                 root = MenuWidget_CreateSimpleNode(0x35, 0, 0, 0);
-                MenuWidget_CreateNode(0x35, root, root)->draw = (void (*)())Menu_SetupSkillSubmenu;
+                MenuWidget_CreateNode(0x35, root, root)->draw = Menu_SetupSkillSubmenu;
             }
             Menu_PlayConfirmSound();
         } else {
@@ -387,7 +387,7 @@ void Menu_OpenSkillSelectionView(void) {
 
     temp_v0 = MenuWidget_CreateSimpleNode(0x40, MenuWidget_GetCurrentNode(), 0, 0);
     temp_a0 = MenuWidget_CreateNode(0x40, temp_v0, temp_v0);
-    temp_v0->update = (void (*)())Menu_HandleAyaInventorySelectionInput;
+    temp_v0->update = Menu_HandleAyaInventorySelectionInput;
     temp_a0->draw = Menu_DrawSkillSelectionList;
     MenuWidget_SetCurrentNode(temp_a0);
     MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0));
@@ -479,12 +479,12 @@ void Menu_CreateItemUsePanel(int itemId) {
     if (temp_v0->kind < 0xAU) {
         node = MenuWidget_CreateSimpleNode(5, 0, 0, 0);
         created = MenuWidget_CreateNode(5, node, node);
-        node->draw = (void (*)())&Menu_DrawEquipStatsPanel;
-        node->update = (void (*)())&Menu_HandleItemInput;
+        node->draw = &Menu_DrawEquipStatsPanel;
+        node->update = &Menu_HandleItemInput;
         width = 0x80;
         node->grid_width = width;
         MenuWidget_OffsetPosition(node, 0x44, 0x14);
-        created->draw = (void (*)())&Menu_DrawSoundEffectList;
+        created->draw = &Menu_DrawSoundEffectList;
         MenuWidget_ClearColumnLayout(created);
         created->aux_index = -1;
         MenuWidget_SetCurrentNode(node);
@@ -492,7 +492,7 @@ void Menu_CreateItemUsePanel(int itemId) {
         node->grid_width = width;
         MenuWidget_OffsetPosition(node, 0x44, 0x14);
         created = MenuWidget_CreateNode(6, node, node);
-        created->draw = (void (*)())&Menu_DrawEquipItemDetailPanel;
+        created->draw = &Menu_DrawEquipItemDetailPanel;
         MenuWidget_ClearColumnLayout(created);
         data = g_MenuSelectedItemData;
         created->draw_state = 0x3E;
@@ -500,11 +500,11 @@ void Menu_CreateItemUsePanel(int itemId) {
         g_InvItemUsableFlag = g_MenuSelectedItemData->kind != 9;
     } else {
         node = MenuWidget_CreateSimpleNode(0x37, 0, 0, 0);
-        node->draw = (void (*)())&Menu_DrawEquipItemIcon;
-        node->update = (void (*)())&Menu_HandleItemInput;
+        node->draw = &Menu_DrawEquipItemIcon;
+        node->update = &Menu_HandleItemInput;
         MenuWidget_SetCurrentNode(node);
     }
-    MenuWidget_CreateSimpleNode(0x13, 0, 0, 0)->draw = (void (*)())&Menu_DrawEquipItemName;
+    MenuWidget_CreateSimpleNode(0x13, 0, 0, 0)->draw = &Menu_DrawEquipItemName;
     MenuInput_InitQueue();
 }
 
