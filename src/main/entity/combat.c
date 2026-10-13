@@ -38,10 +38,10 @@ void Entity_ResolveDropTable(void *arg0) {
     flags = state->stateFlags;
 
     if (flags & 0x1000) {
-        scale = (u16)(((u16)scale * 3) / 10);
+        scale = (u16)((scale * 3) / 10);
     }
     if (flags & 0x100) {
-        scale = (u16)(((u16)scale * 3) / 10);
+        scale = (u16)((scale * 3) / 10);
     }
 
     word = entry->coreFlags;
@@ -60,7 +60,7 @@ void Entity_ResolveDropTable(void *arg0) {
         masked = secondaryParameter;
     }
 
-    value = entry->effect->power - (u16)scale - masked;
+    value = entry->effect->power - scale - masked;
     roll = rand();
 
     {
