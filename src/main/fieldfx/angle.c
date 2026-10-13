@@ -4,14 +4,15 @@
 #include "pe1/field_vector_math.h"
 
 int FieldFx_TurnToward(int current, int target, int step) {
-    register int target_copy asm("$8");
+    int target_copy;
     register int diff asm("$5");
     int abs_diff;
     int step_s16;
     register int delta asm("$3");
     int result;
     current &= 0xFFF;
-    diff = target & 0xFFF;
+    result = target & 0xFFF;
+    diff = result;
     target_copy = diff;
     diff = (s16)(diff - current);
 
