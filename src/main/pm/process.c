@@ -240,7 +240,7 @@ static inline void ClearSlot(int slot)
 
 int Pm_Exec(int slot) {
     PmSlotHeader *entry;
-    int state;
+    s16 state;
     int cmd;
     PmCommand *handler;
     int ret;
@@ -250,12 +250,9 @@ int Pm_Exec(int slot) {
     }
     entry = SlotHeader(slot);
     state = entry->state;
-    if (state - 1U >= 2U && state - 4U >= 2U) {
+    if (state - 1U >= 2U && entry->state - 4U >= 2U) {
         return 0;
     }
-    /* Matching debt: retail re-reads the state here; without the barrier
-     * delayed-branch scheduling drops the second load. */
-    asm volatile("" ::: "memory");
     if (entry->state == 4) {
         entry->state = 5;
         return 0;
