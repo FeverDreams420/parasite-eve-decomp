@@ -614,7 +614,7 @@ void Menu_CreateBonusPointAllocationView(void) {
     temp_v0 = temp_v1_reg = MenuWidget_CreateSimpleNode(0x12, 0, 0, 0);
     temp_v1_reg->draw = Menu_DrawStatusPanel;
     temp_v1_reg->appearance.gradientPoints = g_MenuStatusPanelPoints;
-    ((MenuWidgetNode *)MenuWidget_CreateSimpleNode(0x18, 0, 0, 0))->draw =
+    (MenuWidget_CreateSimpleNode(0x18, 0, 0, 0))->draw =
         Menu_DrawBonusPointSlotValue;
     temp_v0_2 = temp_v1_reg = MenuWidget_CreateSimpleNode(0x2D, 0, 0, 0);
     var_s4 = &D_800C0E00.stats.levels[0];
@@ -649,7 +649,7 @@ void Menu_DrawStatusPanel(void) {
     Draw_OffsetCursor(-0x78, 0x1A);
     Draw_AllocSprite(0x98);
     Draw_OffsetCursor(0x42, 0);
-    if ((u8) D_800C0E00.level < 0x62U) {
+    if (D_800C0E00.level < 0x62U) {
         var_a0 = ((s32 *)Aya_GetLevelExpTable())[D_800C0E00.level + 1] - D_800C0E00.total_exp;
     } else {
         var_a0 = 0;
