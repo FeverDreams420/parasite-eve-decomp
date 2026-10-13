@@ -57,7 +57,7 @@ typedef char f[OFF(Instance,render_object.matrices)==0x238 && OFF(Actor,instance
         # The matrix halfwords/words and the second trig half are separate
         # symbols in the unit; bind them to the records they live in.
         for line in ('extern short D_8019A80A,D_8019A80C,D_8019A80E,D_8019A810,D_8019A812,D_8019A814,D_8019A816,D_8019A818;',
-                     'extern int D_8019A81C,D_8019A820,D_8019A824;',
+                     'extern int g_RoomM350AreaMatrixTxView,D_8019A820,D_8019A824;',
                      'extern short D_800966EE[];'):
             self.assertEqual(source.count(line), 1, line)
             source = source.replace(line, '')
@@ -74,7 +74,7 @@ typedef char f[OFF(Instance,render_object.matrices)==0x238 && OFF(Actor,instance
 #define D_8019A814 g_RoomM350AreaMatrix.rotation[2][0]
 #define D_8019A816 g_RoomM350AreaMatrix.rotation[2][1]
 #define D_8019A818 g_RoomM350AreaMatrix.rotation[2][2]
-#define D_8019A81C g_RoomM350AreaMatrix.position[0]
+#define g_RoomM350AreaMatrixTxView g_RoomM350AreaMatrix.position[0]
 #define D_8019A820 g_RoomM350AreaMatrix.position[1]
 #define D_8019A824 g_RoomM350AreaMatrix.position[2]
 #define TABLE ((short *)rcossin_tbl)
@@ -90,8 +90,8 @@ unsigned char g_RoomM350AreaTrackPlayer,g_RoomM350AreaPlayerInside,g_RoomM350Are
 int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag;
 Matrix g_RoomM350AreaMatrix;
 Vector g_RoomM350AreaCorners[4];
-char D_8019A594[8];
-RenderColor D_8019A3C8;
+char g_RoomM350AreaZoneTriangleColor[8];
+RenderColor g_RoomM350BlackColor;
 RenderEffectParameters g_FieldFxSpriteParams;
 u16 g_FieldFxTpageSlot11,g_FieldFxTpageTable[65536],g_FieldFxPaletteTable[65536];
 static Actor actors[2];
@@ -286,7 +286,7 @@ void FieldFx_DrawRotatedTriangle(struct GteShortVector *p,struct GteRotation *ro
     Vector *r=(Vector *)rotation;
     assert(models==3 && sprites<3 && p->x==-32768 && p->y==32767 && p->z==half(-98765));
     assert(r->x==0 && r->z==0 && r->y==expectedSpriteYaw);
-    assert(sx==tailSize*6 && sy==512 && (void *)v==D_8019A594 && c==&D_8019A3C8 && c2==c && flag==1);
+    assert(sx==tailSize*6 && sy==512 && (void *)v==g_RoomM350AreaZoneTriangleColor && c==&g_RoomM350BlackColor && c2==c && flag==1);
     assert(bright==(sprites ? 1234+sprites:-123));
     r->y=sprites==0 ? 32767:-32768; expectedSpriteYaw=half((uint16_t)r->y+24);
     state.size=123; state.brightness=1235+sprites;

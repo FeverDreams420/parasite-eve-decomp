@@ -21,7 +21,7 @@ GteSineWord rcossin_tbl[4096];
 #define D_800F336A g_FieldFxSpriteParams.parameter02
 #define D_800F336C g_FieldFxSpriteParams.palette
 FieldFxObjectPrefix *g_FieldFxOwner;
-int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag, D_8019A56C[4];
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag, g_RoomM350AreaSparkColor[4];
 unsigned short g_FieldFxPaletteTable[8];
 static RoomM350EffectActor actor;
 static RoomM350EffectInstance instance;
@@ -51,7 +51,7 @@ void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *zero, 
     assert(memcmp(p, expectedPosition, sizeof(expectedPosition)) == 0);
     assert(a == sizeValue && b == sizeValue && scale == renderScale + 216);
     assert(handle == (unsigned short)handleValue && flag == 1);
-    assert(shade == expectedShade && colors == D_8019A56C);
+    assert(shade == expectedShade && colors == g_RoomM350AreaSparkColor);
 }
 int main(void) {
     const short values[] = {-32768, -4097, -33, -1, 0, 32, 4097, 32767};

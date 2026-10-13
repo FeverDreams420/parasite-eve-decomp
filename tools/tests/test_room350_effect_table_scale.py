@@ -18,12 +18,12 @@ class Room350EffectTableScaleTests(unittest.TestCase):
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 RenderEffectParameters g_FieldFxSpriteParams;
 GteSineWord rcossin_tbl[4096];
-RenderColor D_8019A3D0;
+RenderColor g_RoomM350GlowSpriteColor;
 #define D_800F336A g_FieldFxSpriteParams.parameter02
 #define D_800F336C g_FieldFxSpriteParams.palette
 int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
 unsigned short g_FieldFxPaletteTable[8];
-unsigned char D_8019A4EC[32];
+unsigned char g_RoomM350OrbTableFlashSizes[32];
 static short position[4];
 static int lookups, draws, nextCounter, expectedSize, expectedScale, expectedShade;
 static unsigned int multiplier;
@@ -34,7 +34,7 @@ u_short GetClut(int x, int y) {
     assert(y == g_FieldFxPaletteTable[D_800F336C] +
            (D_800F336C == 4 && g_FieldFxAltPaletteFlag ? 8 : 4));
     g_FieldFxCurrentAge = nextCounter; D_800F336A = expectedScale;
-    D_8019A4EC[(nextCounter - 1) / 2] = multiplier;
+    g_RoomM350OrbTableFlashSizes[(nextCounter - 1) / 2] = multiplier;
     rcossin_tbl[index].word = (int)(0x76540000U | (unsigned short)expectedShade);
     position[3] = expectedSize;
     return handleValue;
@@ -46,7 +46,7 @@ void FieldFx_DrawShapeQuads(struct GteShortVector *point, struct GteRotation *ze
     assert(a == expectedSize && b == expectedSize);
     assert(scale == expectedScale * (int)multiplier + 128);
     assert(handle == (unsigned short)handleValue && flag == 1);
-    assert(shade == expectedShade >> 5 && colors == &D_8019A3D0);
+    assert(shade == expectedShade >> 5 && colors == &g_RoomM350GlowSpriteColor);
 }
 int main(void) {
     const short values[] = {-32768, -33, -1, 0, 32, 32767};
@@ -64,7 +64,7 @@ int main(void) {
     for (kind = 0; kind < 8; ++kind) for (special = 0; special < 2; ++special)
     for (h = 0; h < 2; ++h) for (s = 0; s < 6; ++s) for (w = 0; w < 5; ++w) {
         for (i = 0; i < 8; ++i) g_FieldFxPaletteTable[i] = h ? 65535 : i * 100;
-        memset(D_8019A4EC, 37, sizeof(D_8019A4EC));
+        memset(g_RoomM350OrbTableFlashSizes, 37, sizeof(g_RoomM350OrbTableFlashSizes));
         g_FieldFxCurrentAge = counter; nextCounter = counter + 1;
         D_800F336C = kind; g_FieldFxAltPaletteFlag = special; D_800F336A = 999;
         expectedScale = values[s]; expectedShade = values[5-s];

@@ -34,7 +34,7 @@ typedef char layout[sizeof(Effect)==4 && sizeof(GteRotation)==8 &&
 int g_FieldFxCurrentAge;
 GteSineWord rcossin_tbl[4096];
 FieldFxObjectPrefix *g_FieldFxOwner;
-unsigned char D_8019ACDC[4],D_8019ACE0[4];
+unsigned char g_RoomM273HandRingBandColorA[4],g_RoomM273HandRingBandColorB[4];
 static Object object;
 static RoomM273EffectStateContext context;
 static Effect effect;
@@ -48,7 +48,7 @@ void FieldFx_DrawRingBand(struct GteShortVector *p,int a,int b,int c,
     assert(params->x==0 && (unsigned short)params->y==object.value);
     assert((unsigned short)params->z==wantPhase && params->flags==1);
     assert(w==wantSize && h==wantSize && shade==wantShade && flag==1);
-    assert((void *)color==D_8019ACDC && (void *)other==D_8019ACE0);
+    assert((void *)color==g_RoomM273HandRingBandColorA && (void *)other==g_RoomM273HandRingBandColorB);
 }
 int main(void) {
     int frames[]={-257,-1,0,1,15,31,32,63,64,255,256,65536};

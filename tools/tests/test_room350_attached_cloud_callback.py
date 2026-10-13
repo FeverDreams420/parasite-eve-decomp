@@ -45,7 +45,7 @@ RenderEffectParameters g_FieldFxSpriteParams;
 #define D_800F336A (*(short *)&g_FieldFxSpriteParams.parameter02)
 #define D_800F336C g_FieldFxSpriteParams.palette
 unsigned short g_FieldFxPaletteTable[65536];
-RenderColor D_8019A3D0;
+RenderColor g_RoomM350GlowSpriteColor;
 static Particle particle;
 static int anchor[3],draws,cluts,first,mutate;
 static short expectedPosition[3];
@@ -67,7 +67,7 @@ u_short GetClut(int x,int y) {
 void FieldFx_DrawShapeQuads(struct GteShortVector *v,struct GteRotation *r,int width,int height,
                    int texture,int clut,int one,int shade,struct RenderColor *color) {
     int firstDraw=first && draws==0;
-    assert(cluts==draws+1 && r==0 && one==1 && color==&D_8019A3D0);
+    assert(cluts==draws+1 && r==0 && one==1 && color==&g_RoomM350GlowSpriteColor);
     assert(v->x==expectedPosition[0] && v->y==expectedPosition[1] && v->z==expectedPosition[2]);
     assert(width==(firstDraw ? particle.size:particle.state.value.active.animatedSize) && height==width);
     assert(shade==(firstDraw ? particle.state.value.active.firstShade:particle.state.value.active.secondShade));

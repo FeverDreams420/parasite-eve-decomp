@@ -55,7 +55,7 @@ typedef char j[sizeof(Vector)==8 ? 1:-1];
 FieldFxObjectPrefix *g_FieldFxOwner;
 Instance *g_PlayerEntity;
 unsigned char D_8019A8BE,g_RoomM350RushPlayerHit;
-volatile short D_8019A89E;
+volatile short g_RoomM350RushEndpointValid;
 short g_RoomM350RushState,D_8019A8BA,D_8019A8BC;
 RoomFloorY g_RoomFloorY[1];
 #define D_800942EC g_RoomFloorY[0].y
@@ -79,7 +79,7 @@ int Asset_Find08w(int id,int asset,int x,int y,int z) {
     assert(id==0x5CB && asset==owner.progress);
     assert(x==(short)transforms.translation[0] && y==(short)transforms.translation[1] && z==(short)transforms.translation[2]);
     assert(state.speed==0 && state.targetSpeed==0 && state.heightPhase==0 && state.mode==0);
-    assert(D_8019A8BE==0 && g_RoomM350RushPlayerHit==0 && D_8019A89E==0);
+    assert(D_8019A8BE==0 && g_RoomM350RushPlayerHit==0 && g_RoomM350RushEndpointValid==0);
     return -9876;
 }
 void Akao_Cmd_21(int handle,int zero) {
@@ -138,7 +138,7 @@ static void reset(void) {
     state.asset=1234; state.heightPhase=16;
     instance.mode=9; instance.action=40; instance.anim.fixed=31u<<16; instance.rot_y=321;
     POS(instance)[0]=INT_MAX; POS(instance)[1]=123456789; POS(instance)[2]=INT_MIN;
-    g_RoomM350RushState=1; D_8019A8BE=77; g_RoomM350RushPlayerHit=88; D_8019A89E=99;
+    g_RoomM350RushState=1; D_8019A8BE=77; g_RoomM350RushPlayerHit=88; g_RoomM350RushEndpointValid=99;
     D_800942EC=123; angleResult=321; turnResult=-321; mutate=0;
 }
 static void run(void) {

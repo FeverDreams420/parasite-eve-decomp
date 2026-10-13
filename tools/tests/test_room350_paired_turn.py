@@ -56,13 +56,13 @@ typedef char h[sizeof(Vector)==8 ? 1:-1];
     def test_cpu_and_cop2_boundary(self):
         source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM), prefix=HOST_GTE)
         source = source.replace('(unsigned int)base', '(uintptr_t)base')
-        source = source.replace('extern short D_8019A77E[], g_RoomM350HandSweepRepeats;',
+        source = source.replace('extern short g_RoomM350HandPointPadView[], g_RoomM350HandSweepRepeats;',
                                 'extern short g_RoomM350HandSweepRepeats;')
         prefix = r'''
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
-#define D_8019A77E ((short *)&g_RoomM350HandPoints[0].pad)
+#define g_RoomM350HandPointPadView ((short *)&g_RoomM350HandPoints[0].pad)
 '''
         harness = prefix + source + r'''
 FieldFxObjectPrefix *g_FieldFxOwner;

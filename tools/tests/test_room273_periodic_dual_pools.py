@@ -33,10 +33,6 @@ typedef char layout[sizeof(Vector)==8 &&
     def test_behavior(self):
         # The two addresses are aliases within the same PSX allocation.
         source = host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM))
-        source = re.sub(r'extern (?:u8|unsigned char) D_8019AEF8;', '', source)
-        self.assertIn('extern RoomM273BossState g_RoomM273HandTrailState;', source)
-        source = source.replace('extern RoomM273BossState g_RoomM273HandTrailState;',
-            'extern RoomM273BossState g_RoomM273HandTrailState;\n#define D_8019AEF8 g_RoomM273HandTrailState.done\n', 1)
         source = '#include <assert.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
 RoomM273BossState g_RoomM273HandTrailState;
 static RoomM273PoolContext context;

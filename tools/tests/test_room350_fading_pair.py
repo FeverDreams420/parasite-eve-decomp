@@ -55,7 +55,7 @@ GteSineWord rcossin_tbl[4096];
 u16 g_FieldFxTpageTable[65536],g_FieldFxPaletteTable[65536];
 u16 g_FieldFxTpageSlot2;
 RenderEffectParameters g_FieldFxSpriteParams;
-char D_8019A570[8];
+char g_RoomM350AreaSparkEmitterColor[8];
 static RoomM350EffectActor actors[2];
 static RoomM350EffectInstance instances[2];
 static RoomM350EffectOwner owners[2];
@@ -136,7 +136,7 @@ u_short GetClut(int x,int y) {
 void FieldFx_DrawShapeQuads(struct GteShortVector *pos,struct GteRotation *rotation,int sx,int sy,int scale,int clut,int flag,int brightness,struct RenderColor *colors) {
     Vector *v=pos;
     int i=draws++;
-    assert(i<2 && cluts==i+1 && (void *)rotation==&state && flag==1 && (void *)colors==D_8019A570);
+    assert(i<2 && cluts==i+1 && (void *)rotation==&state && flag==1 && (void *)colors==g_RoomM350AreaSparkEmitterColor);
     assert(v->x==half(0xABCDEF01u) && v->y==half(0x76543210u) && v->z==-32768);
     assert(sx==(i ? 32767:-32768) && sy==sx && brightness==(i ? -1:1023));
     assert(scale==(i ? -32768:32767)+216 && clut==(i ? 0:65535));

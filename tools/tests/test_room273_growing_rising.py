@@ -33,7 +33,7 @@ int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
 GteSineWord rcossin_tbl[4096];
 unsigned short g_FieldFxPaletteTable[8];
 RenderEffectParameters g_FieldFxSpriteParams;
-unsigned char D_8019AD70[4];
+unsigned char g_RoomM273SweepRisingColor[4];
 static Particle particle;
 static int draws,cluts,wantPalette,wantSize,wantShade,wantTile;
 u_short GetClut(int x, int y) {
@@ -48,7 +48,7 @@ void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *rotati
                   struct RenderColor *color) {
     assert(cluts==1 && draws++==0 && p==&particle && rotation==0);
     assert(w==wantSize && h==wantSize && tile==wantTile);
-    assert(clut==0xF123 && flag==1 && shade==wantShade && color==D_8019AD70);
+    assert(clut==0xF123 && flag==1 && shade==wantShade && color==g_RoomM273SweepRisingColor);
 }
 int main(void) {
     int times[]={INT_MIN,-1,0,1,31,32,INT_MAX};

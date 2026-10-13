@@ -22,7 +22,7 @@ class Room350EffectOffsetTests(unittest.TestCase):
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 RenderEffectParameters g_FieldFxSpriteParams;
 GteSineWord rcossin_tbl[4096];
-RenderColor D_8019A4E8;
+RenderColor g_RoomM350OrbImpactColor;
 #define D_800F336A g_FieldFxSpriteParams.parameter02
 #define D_800F336C g_FieldFxSpriteParams.palette
 int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
@@ -51,7 +51,7 @@ void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *zero, 
     assert(zero == 0 && a == 8192 && b == 8192);
     assert(scale == scaleValue * (savedFrame >> 1));
     assert(handle == (unsigned short)handleValue && flag == 1);
-    assert(shade == shadeValue >> 5 && colors == &D_8019A4E8);
+    assert(shade == shadeValue >> 5 && colors == &g_RoomM350OrbImpactColor);
 }
 int main(void) {
     const short values[] = {-32768, -33, -1, 0, 32, 32767};

@@ -18,10 +18,10 @@ class Room350EffectRequestTests(unittest.TestCase):
         source = host_unit("RoomM350_DropHitEmitter", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
-unsigned char g_RoomM350DropDone, D_8019A857;
-short D_8019A864[3];
-#define D_8019A866 D_8019A864[1]
-#define D_8019A868 D_8019A864[2]
+unsigned char g_RoomM350DropDone, g_RoomM350DropHitTrigger;
+short g_RoomM350DropHitPosition[3];
+#define D_8019A866 g_RoomM350DropHitPosition[1]
+#define D_8019A868 g_RoomM350DropHitPosition[2]
 unsigned short g_FieldFxTpageSlots[12], g_FieldFxTpageTable[65536];
 #define g_FieldFxTpageSlot11 g_FieldFxTpageSlots[11]
 /* The retail halfword names are fields of the sprite parameter block; the
@@ -49,9 +49,9 @@ int FieldFx_InitCallbackList(char *pool, int a, int b,
 }
 void *FieldFx_AcquireCallbackSlot(char *pool) {
     assert(allocations++ == 0 && setups == 0 && pool == &poolToken);
-    assert(D_8019A857 != 0 && g_RoomM350DropDone == 0);
+    assert(g_RoomM350DropHitTrigger != 0 && g_RoomM350DropDone == 0);
     /* Stub mutations verify that coordinates are fetched after allocation. */
-    D_8019A864[0] = xValue; D_8019A866 = yValue; D_8019A868 = zValue;
+    g_RoomM350DropHitPosition[0] = xValue; D_8019A866 = yValue; D_8019A868 = zValue;
     return failAllocation ? 0 : effect;
 }
 int main(void) {
@@ -63,23 +63,23 @@ int main(void) {
     emitter.pool = &poolToken; g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitter;
     for (ret = -2; ret <= 2; ++ret) {
         setups = allocations = 0; setupResult = ret;
-        D_8019A857 = 128; g_RoomM350DropDone = 255;
+        g_RoomM350DropHitTrigger = 128; g_RoomM350DropDone = 255;
         assert(RoomM350_DropHitEmitter(0) == ret && setups == 1 && allocations == 0);
-        assert(D_8019A857 == 128 && g_RoomM350DropDone == 255);
+        assert(g_RoomM350DropHitTrigger == 128 && g_RoomM350DropDone == 255);
     }
     for (stop = 0; stop < 4; ++stop) for (request = 0; request < 4; ++request)
     for (fail = 0; fail < 2; ++fail)
     for (x = 0; x < 6; ++x) for (y = 0; y < 6; ++y) for (z = 0; z < 6; ++z) {
         int allocate = flags[stop] == 0 && flags[request] != 0;
         int emitted = allocate && !fail;
-        g_RoomM350DropDone = flags[stop]; D_8019A857 = flags[request];
-        D_8019A864[0] = 123; D_8019A866 = 456; D_8019A868 = 789;
+        g_RoomM350DropDone = flags[stop]; g_RoomM350DropHitTrigger = flags[request];
+        g_RoomM350DropHitPosition[0] = 123; D_8019A866 = 456; D_8019A868 = 789;
         xValue = values[x]; yValue = values[y]; zValue = values[z];
         memset(effect, 0x5A, sizeof(effect)); memcpy(before, effect, sizeof(effect));
         setups = allocations = 0; failAllocation = fail;
         assert(RoomM350_DropHitEmitter(1) == (flags[stop] ? 2 : 0));
         assert(allocations == allocate && setups == 0 && g_RoomM350DropDone == flags[stop]);
-        assert(D_8019A857 == (emitted ? 0 : flags[request]));
+        assert(g_RoomM350DropHitTrigger == (emitted ? 0 : flags[request]));
         if (emitted) {
             assert(effect[0] == xValue && effect[1] == yValue && effect[2] == zValue && effect[3] == 0);
         } else assert(memcmp(effect, before, sizeof(effect)) == 0);
@@ -87,14 +87,14 @@ int main(void) {
     for (i = 0; i < 65536; ++i) g_FieldFxTpageTable[i] = (unsigned short)(i * 13 + 17);
     for (i = 0; i < 5; ++i) {
         g_FieldFxTpageSlot11 = indices[i]; setups = allocations = 0;
-        D_8019A857 = 128; g_RoomM350DropDone = 255;
+        g_RoomM350DropHitTrigger = 128; g_RoomM350DropDone = 255;
         UNIT = D_800F336A = D_800F336E = D_800F3372 = D_800F3374 = -7;
         D_800F336C = D_800F3370 = 65535; D_800F3376 = D_800F3378 = -7;
         assert(RoomM350_DropHitEmitter(2) == 0 && setups == 0 && allocations == 0);
         assert(UNIT == 32 && D_800F336A == 2 && D_800F336C == 3 && D_800F336E == 1);
         assert(D_800F3376 == 32 && D_800F3378 == 32 && D_800F3372 == 0 && D_800F3374 == 0);
         assert(D_800F3370 == g_FieldFxTpageTable[indices[i]]);
-        assert(D_8019A857 == 128 && g_RoomM350DropDone == 255);
+        assert(g_RoomM350DropHitTrigger == 128 && g_RoomM350DropDone == 255);
     }
     for (event = -2; event <= 4; ++event) {
         if (event >= 0 && event <= 2) continue;

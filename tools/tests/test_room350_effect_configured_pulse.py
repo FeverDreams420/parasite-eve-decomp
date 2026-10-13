@@ -34,7 +34,7 @@ unsigned short g_FieldFxTpageSlot2, g_FieldFxPaletteEntry2, g_FieldFxTpageTable[
 /* Size samples are the low halfword, shades the high halfword of a word. */
 GteSineWord rcossin_tbl[4096];
 #define HALVES ((short *)rcossin_tbl)
-int D_8019A59C[4];
+int g_RoomM350AreaPlayerPulseColor[4];
 static unsigned char object[16];
 static int cluts, draws, before, after, sample, shade, scale;
 static unsigned short handle, paletteIndex, clutY;
@@ -68,7 +68,7 @@ void FieldFx_DrawShapeQuads(struct GteShortVector *position, struct GteRotation 
     assert(draws++ == 0 && cluts == 1 && (void *)position == object && unused == 0);
     assert(width == signedHalf(sample * 2 + 4096) && height == width);
     assert(tile == scale * (int)phase + 192 && clut == handle && flag == 1);
-    assert(brightness == expectedShade && (int *)colors == D_8019A59C);
+    assert(brightness == expectedShade && (int *)colors == g_RoomM350AreaPlayerPulseColor);
 }
 static void reset(void) {
     cluts = draws = 0;

@@ -16,8 +16,8 @@ class Room350EffectRotationTests(unittest.TestCase):
     def test_threshold_rotation_and_signed_fields(self):
         source = host_unit("RoomM350_DropSplashCallback", under=ROOM)
         harness = '#include <assert.h>\n' + source + r'''
-int g_FieldFxCurrentAge, D_8019A628[2];
-RenderColor D_8019A3C8;
+int g_FieldFxCurrentAge, g_RoomM350DropSplashColor[2];
+RenderColor g_RoomM350BlackColor;
 GteSineWord rcossin_tbl[4096];
 #define SINE ((short *)rcossin_tbl)
 static int calls, expectedScale, expectedShade, contextData;
@@ -31,7 +31,7 @@ void FieldFx_DrawStarFan(struct GteShortVector *context, int a, int b, int c,
     assert(rotation[0] == 1024 && rotation[1] == 0 && rotation[3] == 1);
     assert(rotation[2] == (short)((g_FieldFxCurrentAge * 4096) / 20));
     assert(scale0 == expectedScale && scale1 == expectedScale);
-    assert(first == &D_8019A3C8 && (int *)second == D_8019A628);
+    assert(first == &g_RoomM350BlackColor && (int *)second == g_RoomM350DropSplashColor);
     assert(shade == expectedShade >> 5);
 }
 int main(void) {

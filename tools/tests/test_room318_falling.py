@@ -33,12 +33,12 @@ typedef RoomSpiralDropSparkCallbackView Particle;
 int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
 unsigned short g_FieldFxPaletteTable[8];
 RenderEffectParameters g_FieldFxSpriteParams;
-char D_8019948C[1];
+char g_RoomM318SpiralDropSparkColorTrack[1];
 static Particle particle;
 static int generated, cluts, draws, expectedPalette, mutate;
 void FieldFx_SampleColorTrack(void *table, void *out, int frame) {
     int *color = out;
-    assert(table == D_8019948C && frame == g_FieldFxCurrentAge);
+    assert(table == g_RoomM318SpiralDropSparkColorTrack && frame == g_FieldFxCurrentAge);
     assert(generated++ == 0 && cluts == 0 && draws == 0);
     color[0] = 123; color[1] = 456;
     if (mutate) { particle.x = 65535; particle.y = 32768; particle.z = 32767; }

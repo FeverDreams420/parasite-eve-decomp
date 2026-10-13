@@ -16,7 +16,7 @@ class Room350EffectGateTests(unittest.TestCase):
     def test_gate_position_and_signed_table_value(self):
         source = host_unit("RoomM350_DropFlareCallback", under=ROOM)
         harness = '#include <assert.h>\n' + source + r'''
-int g_FieldFxCurrentAge, D_8019A614[2];
+int g_FieldFxCurrentAge, g_RoomM350DropFlareColors[2];
 short D_800966EE[8192];
 static int calls, expectedShade, coordinates[3];
 void FieldFx_DrawStarFan(struct GteShortVector *position, int a, int b, int c,
@@ -28,7 +28,7 @@ void FieldFx_DrawStarFan(struct GteShortVector *position, int a, int b, int c,
     for (i = 0; i < 3; ++i) assert(point[i] == (short)coordinates[i]);
     assert(a == 512 && b == 512 && c == 16 && d == 0);
     assert(e == expectedShade && f == expectedShade);
-    assert((int *)first == D_8019A614 && (int *)second == D_8019A614 + 1);
+    assert((int *)first == g_RoomM350DropFlareColors && (int *)second == g_RoomM350DropFlareColors + 1);
     assert(shade == expectedShade >> 5 && flag == 1);
 }
 int main(void) {

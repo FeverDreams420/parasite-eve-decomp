@@ -23,7 +23,7 @@ int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
 RenderEffectParameters g_FieldFxSpriteParams;
 #define D_800F336C g_FieldFxSpriteParams.palette
 unsigned short g_FieldFxPaletteTable[65536];
-RenderColor D_8019A738, D_8019A734;
+RenderColor g_RoomM350BodyRingColor0, g_RoomM350BodyRingColor1;
 static RoomM350EffectActor actors[2];
 static RoomM350EffectInstance instances[2];
 /* The second pass draws at the owner's world height (transform.t[1]). */
@@ -89,7 +89,7 @@ void FieldFx_DrawStarFan(struct GteShortVector *position, int w, int h, int mode
     assert(w == 384 && h == 384 && mode == 10 && sx == -1234 && sy == -1234);
     assert(texture->x == 1024 && texture->y == signedHalf((uint32_t)afterRenderFrame * 192));
     assert(texture->z == 0 && texture->flags == 1);
-    assert(colorsA == &D_8019A738 && colorsB == &D_8019A734 && brightness == -99 && flag == 1);
+    assert(colorsA == &g_RoomM350BodyRingColor0 && colorsB == &g_RoomM350BodyRingColor1 && brightness == -99 && flag == 1);
 }
 static void reset(void) {
     waves = cluts = firstDraws = secondDraws = 0;

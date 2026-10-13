@@ -53,8 +53,8 @@ short D_8019A802;
 RenderEffectParameters g_FieldFxSpriteParams;
 u16 g_FieldFxPaletteTable[65536];
 RoomFloorY g_RoomFloorY[1];
-GteRotation D_8019A3C0;
-RenderColor D_8019A4E4,D_8019A3C8;
+GteRotation g_RoomM350StarFanTilt;
+RenderColor g_RoomM350OrbGroundFanColor,g_RoomM350BlackColor;
 static RoomM350EffectActor actor;
 static RoomM350EffectInstance instance;
 static FieldActor player;
@@ -97,8 +97,8 @@ void FieldFx_DrawShapeQuads(struct GteShortVector *p,struct GteRotation *a,int b
 }
 void FieldFx_DrawStarFan(struct GteShortVector *v,int a,int b,int c,struct GteRotation *d,int e,int f,struct RenderColor *g,struct RenderColor *h,int i,int j) {
     assert(draws++==1 && v->x==-5 && v->y==-123 && v->z==9);
-    assert(a==192 && b==192 && c==8 && d==&D_8019A3C0 && e==4096 && f==4096);
-    assert(g==&D_8019A4E4 && h==&D_8019A3C8 && i==88 && j==1);
+    assert(a==192 && b==192 && c==8 && d==&g_RoomM350StarFanTilt && e==4096 && f==4096);
+    assert(g==&g_RoomM350OrbGroundFanColor && h==&g_RoomM350BlackColor && i==88 && j==1);
 }
 static void reset(void) {
     memset(&particle,0,sizeof(particle)); memset(&owner,0,sizeof(owner));

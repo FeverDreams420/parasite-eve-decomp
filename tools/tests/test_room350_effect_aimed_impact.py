@@ -19,7 +19,7 @@ class Room350EffectAimedImpactTests(unittest.TestCase):
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 FieldFxObjectPrefix *g_FieldFxOwner;
 Player *g_PlayerEntity;
-unsigned char g_RoomM350DropDone, D_8019A855;
+unsigned char g_RoomM350DropDone, g_RoomM350DropEmitterTrigger;
 short g_RoomM350DropLungeTimer;
 static RoomM350Emitter emitter;
 static Actor actors[3];
@@ -65,7 +65,7 @@ void *FieldFx_AcquireCallbackSlot(char *p) {
     /* Mutations probe captured versus reloaded values, not real helper side effects. */
     g_FieldFxOwner = (FieldFxObjectPrefix *)&actors[1];
     g_PlayerEntity = &players[1];
-    D_8019A855 = 165;
+    g_RoomM350DropEmitterTrigger = 165;
     g_RoomM350DropDone = 255;
     return failAllocation ? 0 : &particle;
 }
@@ -111,7 +111,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m, const GteShortVector *v,
     assert(applications++ == 0 && rotations == 1 && (const void *)m == rotationMatrix && v == rotationInput);
     assert(memcmp(m, expected, sizeof(expected)) == 0);
     assert(v->x == 0 && v->y == 0 && v->z == 128 && v->pad == 1234);
-    assert(out == &particle.velocity && D_8019A855 == 165);
+    assert(out == &particle.velocity && g_RoomM350DropEmitterTrigger == 165);
     out->x = -3; out->y = 4; out->z = 5;
     particle.x = -32768; particle.y = 32767; particle.z = -123;
     g_FieldFxOwner = (FieldFxObjectPrefix *)&actors[2];
@@ -120,8 +120,8 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m, const GteShortVector *v,
 int Asset_Find08w(int id, int mode, int x, int y, int z) {
     assert(sounds++ == 0 && applications == 1 && id == 0x60A);
     assert(mode == owners[2].progress && x == -32768 && y == 32767 && z == -123);
-    assert(D_8019A855 == 0 && g_RoomM350DropLungeTimer == -333);
-    D_8019A855 = 77;
+    assert(g_RoomM350DropEmitterTrigger == 0 && g_RoomM350DropLungeTimer == -333);
+    g_RoomM350DropEmitterTrigger = 77;
     g_RoomM350DropLungeTimer = -1;
     return -123;
 }
@@ -129,7 +129,7 @@ static void reset(void) {
     setups = allocations = roots = angles = randoms = rotations = applications = sounds = 0;
     g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitter;
     g_FieldFxOwner = (FieldFxObjectPrefix *)&actors[0]; g_PlayerEntity = &players[0];
-    g_RoomM350DropDone = 0; D_8019A855 = 1; g_RoomM350DropLungeTimer = -333;
+    g_RoomM350DropDone = 0; g_RoomM350DropEmitterTrigger = 1; g_RoomM350DropLungeTimer = -333;
     instances[1].rot_y = 17;
     memset(&particle, 0x5A, sizeof(particle));
 }
@@ -153,10 +153,10 @@ int main(void) {
     for (failure = 0; failure < 2; ++failure) {
         int active = !flags[stop] && flags[request];
         int spawned = active && !failure;
-        reset(); g_RoomM350DropDone = flags[stop]; D_8019A855 = flags[request]; failAllocation = failure;
+        reset(); g_RoomM350DropDone = flags[stop]; g_RoomM350DropEmitterTrigger = flags[request]; failAllocation = failure;
         assert(RoomM350_DropEmitter(1) == (flags[stop] ? 2 : 0));
         assert(allocations == active && sounds == spawned && roots == spawned);
-        assert(D_8019A855 == (spawned ? 77 : active ? 165 : flags[request]));
+        assert(g_RoomM350DropEmitterTrigger == (spawned ? 77 : active ? 165 : flags[request]));
         assert(g_RoomM350DropLungeTimer == (spawned ? 8 : -333));
         if (!spawned) {
             unsigned char untouched[16]; memset(untouched, 0x5A, sizeof(untouched));
@@ -175,14 +175,14 @@ int main(void) {
         assert(RoomM350_DropEmitter(1) == 0);
         assert(allocations == 1 && randoms == 2 && roots == 1 && angles == 1);
         assert(rotations == 1 && applications == 1 && sounds == 1);
-        assert(D_8019A855 == 77 && g_RoomM350DropLungeTimer == 8 && particle.stopped == 0);
+        assert(g_RoomM350DropEmitterTrigger == 77 && g_RoomM350DropLungeTimer == 8 && particle.stopped == 0);
         assert(particle.velocity.x == -3 && particle.velocity.y == 4 && particle.velocity.z == 5);
         assert(particle.velocity.pad == 0x5A5A && particle.pad == 0x5A);
     }
     for (event = -3; event <= 4; ++event) {
         if (event == 0 || event == 1) continue;
         reset(); assert(RoomM350_DropEmitter(event) == 0 && setups == 0 && allocations == 0);
-        assert(D_8019A855 == 1 && g_RoomM350DropLungeTimer == -333);
+        assert(g_RoomM350DropEmitterTrigger == 1 && g_RoomM350DropLungeTimer == -333);
     }
     return 0;
 }

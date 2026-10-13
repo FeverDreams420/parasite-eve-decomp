@@ -47,7 +47,7 @@ FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
 FieldFxObjectPrefix *g_FieldFxOwner=(FieldFxObjectPrefix *)&stateContext;
 FieldActor *g_PlayerEntity=&scene;
 void *g_RoomM273GrabSparkPool;
-unsigned char D_8019AE9A;
+unsigned char g_RoomM273GrabEffectStopped;
 static int calls,allocations,updates,renders,failAllocation,firstSize,secondSize;
 int RoomM273_GrabStarBurstCallback(int mode, RoomM273PaletteInput *input) { assert(0); return 0; }
 int RoomM273_GrabSparkTriangleCallback(int mode, RoomM273PulseState *state) { assert(0); return 0; }
@@ -94,7 +94,7 @@ int main(void) {
             memset(&state,0xA5,sizeof(state));
             state.kind=kind; state.value22=values[i]; state.value26=values[j];
             before=state; effect.position=&object;
-            D_8019AE9A=stop==2 ? 255:stop;
+            g_RoomM273GrabEffectStopped=stop==2 ? 255:stop;
             g_RoomM273GrabSparkPool=pool+36; g_PlayerEntity=&scene;
             failAllocation=fail; allocations=updates=renders=0;
             assert(RoomM273_GrabStarBurstEmitter(1)==(stop ? 2:0));
@@ -103,7 +103,7 @@ int main(void) {
             assert(memcmp(&state,&before,sizeof(state))==0);
         }
     allocations=updates=renders=0;
-    D_8019AE9A=255;
+    g_RoomM273GrabEffectStopped=255;
     assert(RoomM273_GrabStarBurstEmitter(2)==0 && renders==1);
     assert(RoomM273_GrabStarBurstEmitter(-1)==0 && RoomM273_GrabStarBurstEmitter(3)==0);
     assert(RoomM273_GrabStarBurstEmitter(INT_MIN)==0 && RoomM273_GrabStarBurstEmitter(INT_MAX)==0);

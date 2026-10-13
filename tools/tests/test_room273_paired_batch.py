@@ -37,13 +37,8 @@ typedef char layout[sizeof(Effect)==12 &&
     def test_behavior(self):
         # These linker symbols alias members of a single PSX allocation.
         source = host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM))
-        for old, new in (('extern unsigned char D_8019AEF8;',
-                          'static RoomM273PairedPulseBatch storage;\n'
-                          '#define D_8019AEF8 storage.stopped'),
-                         ('extern short D_8019AEE8;',
-                          '#define D_8019AEE8 storage.count')):
-            self.assertIn(old, source)
-            source = source.replace(old, new)
+        source += ('\nRoomM273BossState g_RoomM273HandTrailState;\n'
+                   '#define storage (*(RoomM273PairedPulseBatch *)g_RoomM273HandTrailState.landing_x)\n')
         source = '#include <assert.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
 typedef RoomM273PulseEmitterView Effect;
 static RoomM273PoolContext context;

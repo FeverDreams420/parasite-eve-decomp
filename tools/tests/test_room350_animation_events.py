@@ -36,11 +36,11 @@ typedef char g[sizeof(Vector)==8 && sizeof(RenderMatrix)==32 ? 1:-1];
         source = host_unit(FUNCTION, under=ROOM)
         # The globals below alias one record and one table on the target;
         # drop their separate declarations and map them onto shared storage.
-        for declaration in (r'extern unsigned char D_8019A854;',
+        for declaration in (r'extern unsigned char g_RoomM350DropEventSlots;',
                             r'extern unsigned char g_RoomM350DropBurstCount;',
                             r'extern unsigned char g_RoomM350DropDone;',
                             r'extern int D_8019A858;',
-                            r'extern short D_8019A85C,g_RoomM350DropRepeats,g_RoomM350DropLungeTimer,g_RoomM350DropHitCooldown;',
+                            r'extern short g_RoomM350DropTrailCount,g_RoomM350DropRepeats,g_RoomM350DropLungeTimer,g_RoomM350DropHitCooldown;',
                             r'extern GteSineWord rcossin_tbl\[\];',
                             r'extern short D_800966EE\[\];'):
             source, count = re.subn(declaration, '', source)
@@ -52,10 +52,10 @@ typedef char g[sizeof(Vector)==8 && sizeof(RenderMatrix)==32 ? 1:-1];
 #include <limits.h>
 static union { int words[8]; short halves[16]; unsigned char bytes[32]; } globals;
 static union { int words[4097]; short halves[8194]; } trig;
-#define D_8019A854 (globals.bytes[0])
+#define g_RoomM350DropEventSlots (globals.bytes[0])
 #define D_8019A858 (globals.words[1])
 #define g_RoomM350DropBurstCount (globals.bytes[5])
-#define D_8019A85C (globals.halves[4])
+#define g_RoomM350DropTrailCount (globals.halves[4])
 #define g_RoomM350DropRepeats (globals.halves[5])
 #define g_RoomM350DropLungeTimer (globals.halves[11])
 #define g_RoomM350DropHitCooldown (globals.halves[12])
@@ -190,7 +190,7 @@ int main(void) {
     reset(); memset(&globals,0x55,sizeof(globals)); cursor=4;
     assert(RoomM350_DropController(0,&cursor)==0 && cursor==0);
     for(i=0;i<8;i++) assert(globals.bytes[i]==0);
-    assert(D_8019A85C==0 && g_RoomM350DropLungeTimer==0 && g_RoomM350DropHitCooldown==0 && g_RoomM350DropDone==0);
+    assert(g_RoomM350DropTrailCount==0 && g_RoomM350DropLungeTimer==0 && g_RoomM350DropHitCooldown==0 && g_RoomM350DropDone==0);
     assert(g_RoomM350DropRepeats==0x5555 && globals.bytes[27]==0x55 && status==1);
     reset(); cursor=3; g_RoomM350DropHitCooldown=7;
     assert(RoomM350_DropController(-1,&cursor)==0 && cursor==3 && g_RoomM350DropHitCooldown==7);

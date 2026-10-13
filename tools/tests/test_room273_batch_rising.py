@@ -36,7 +36,7 @@ typedef char layout[sizeof(GteShortVector)==8 &&
         source = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 typedef RoomM273RisingBatchBuffer Batch;
 typedef GteShortVector Vector;
-RoomM273RisingBatchBuffer D_8019AF0C;
+RoomM273RisingBatchBuffer g_RoomM273SweepSplashBatch;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 unsigned short g_FieldFxTpageSlot3,g_FieldFxTpageTable[65536];
 RenderEffectParameters g_FieldFxSpriteParams;
@@ -53,10 +53,10 @@ void *FieldFx_AcquireCallbackSlot(char *p) {
     int i=allocs++;
     assert(p==(char *)&pool && i<12);
     if(i==failAt) return 0;
-    D_8019AF0C.x[i]=65535-i;
-    D_8019AF0C.y[i]=i;
-    D_8019AF0C.z[i]=32768+i;
-    if(mutate) D_8019AF0C.count=1;
+    g_RoomM273SweepSplashBatch.x[i]=65535-i;
+    g_RoomM273SweepSplashBatch.y[i]=i;
+    g_RoomM273SweepSplashBatch.z[i]=32768+i;
+    if(mutate) g_RoomM273SweepSplashBatch.count=1;
     return &outputs[i];
 }
 int main(void) {
@@ -68,27 +68,27 @@ int main(void) {
         assert(RoomM273_SweepSplashEmitter(0)==initResult);
     for(stop=0;stop<2;++stop) for(c=0;c<6;++c)
         for(failAt=-1;failAt<12;++failAt) {
-            memset(&D_8019AF0C,0xA5,sizeof(D_8019AF0C));
+            memset(&g_RoomM273SweepSplashBatch,0xA5,sizeof(g_RoomM273SweepSplashBatch));
             memset(outputs,0x55,sizeof(outputs));
-            D_8019AF0C.count=counts[c]; D_8019AF0C.stopped=stop ?255:0;
+            g_RoomM273SweepSplashBatch.count=counts[c]; g_RoomM273SweepSplashBatch.stopped=stop ?255:0;
             allocs=0; mutate=0;
             assert(RoomM273_SweepSplashEmitter(1)==(stop ?2:0));
             eligible=!stop && counts[c]>0;
             success=eligible ? (failAt>=0 && failAt<counts[c] ?failAt:counts[c]):0;
             calls=success+(eligible && failAt==success && failAt<counts[c]);
-            assert(allocs==calls && D_8019AF0C.count==(stop ?counts[c]:0));
+            assert(allocs==calls && g_RoomM273SweepSplashBatch.count==(stop ?counts[c]:0));
             for(i=0;i<12;++i) {
                 if(i<success) {
                     assert((unsigned short)outputs[i].x==65535-i && (unsigned short)outputs[i].y==(unsigned short)(i-128));
                     assert((unsigned short)outputs[i].z==32768+i && outputs[i].pad==0);
                 } else assert((unsigned short)outputs[i].x==0x5555 && (unsigned short)outputs[i].pad==0x5555);
             }
-            assert(D_8019AF0C.stopped==(stop ?255:0));
-            for(i=0;i<19;++i) assert(D_8019AF0C.reserved_4A[i]==0xA5);
+            assert(g_RoomM273SweepSplashBatch.stopped==(stop ?255:0));
+            for(i=0;i<19;++i) assert(g_RoomM273SweepSplashBatch.reserved_4A[i]==0xA5);
         }
-    D_8019AF0C.stopped=0; D_8019AF0C.count=12;
+    g_RoomM273SweepSplashBatch.stopped=0; g_RoomM273SweepSplashBatch.count=12;
     allocs=0; failAt=-1; mutate=1;
-    assert(RoomM273_SweepSplashEmitter(1)==0 && allocs==1 && D_8019AF0C.count==0);
+    assert(RoomM273_SweepSplashEmitter(1)==0 && allocs==1 && g_RoomM273SweepSplashBatch.count==0);
     for(i=0;i<4;++i) {
         g_FieldFxTpageSlot3=indices[i]; g_FieldFxTpageTable[indices[i]]=65535-i;
         g_FieldFxSpriteParams.parameter06=g_FieldFxSpriteParams.parameter0A=g_FieldFxSpriteParams.depth=123;

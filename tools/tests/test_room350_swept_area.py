@@ -49,8 +49,8 @@ typedef char g[OFF(RoomM350FlareParticle,y)==0 && OFF(RoomM350FlareParticle,z)==
         source = host_unit(EMITTER, path=find_definition(EMITTER, under=ROOM), prefix=HOST_GTE)
         # The side endpoint records are two GteShortVector-sized words; map
         # their halfword symbols onto host arrays.
-        for line in ('extern volatile short D_8019A898,D_8019A8A0;',
-                     'extern volatile short D_8019A89C,D_8019A89E,D_8019A8A4;',
+        for line in ('extern volatile short g_RoomM350RushEndpointX,g_RoomM350RushOppositeX;',
+                     'extern volatile short g_RoomM350RushEndpointZ,g_RoomM350RushEndpointValid,g_RoomM350RushOppositeZ;',
                      'extern short D_8019A8AE;'):
             self.assertIn(line, source)
             source = source.replace(line, '')
@@ -60,12 +60,12 @@ typedef char g[OFF(RoomM350FlareParticle,y)==0 && OFF(RoomM350FlareParticle,z)==
 #include <string.h>
 #include <limits.h>
 static short rightRecord[4],leftRecord[4];
-#define D_8019A898 (*(volatile short *)&rightRecord[0])
-#define D_8019A8A0 (*(volatile short *)&leftRecord[0])
-#define D_8019A89C (*(volatile short *)&rightRecord[2])
-#define D_8019A89E (*(volatile short *)&rightRecord[3])
-#define D_8019A8A4 (*(volatile short *)&leftRecord[2])
-#define D_8019A8AE D_8019A8A8.pad
+#define g_RoomM350RushEndpointX (*(volatile short *)&rightRecord[0])
+#define g_RoomM350RushOppositeX (*(volatile short *)&leftRecord[0])
+#define g_RoomM350RushEndpointZ (*(volatile short *)&rightRecord[2])
+#define g_RoomM350RushEndpointValid (*(volatile short *)&rightRecord[3])
+#define g_RoomM350RushOppositeZ (*(volatile short *)&leftRecord[2])
+#define D_8019A8AE g_RoomM350RushPreviousEndpoint.pad
 '''
         body = r'''
 typedef GteShortVector Vector;
@@ -75,7 +75,7 @@ FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 FieldActor *g_PlayerEntity;
 int g_FieldFxCurrentAge;
 unsigned char g_RoomM350RushPlayerHit;
-GteShortVector D_8019A8A8,D_8019A8B0;
+GteShortVector g_RoomM350RushPreviousEndpoint,g_RoomM350RushPreviousOpposite;
 short g_RoomM350RushCenter[3];
 RenderEffectParameters g_FieldFxSpriteParams;
 u16 g_FieldFxTpageSlot3,g_FieldFxTpageTable[65536];
@@ -107,7 +107,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *in,GteSho
     RenderMatrix *model=&instances[0].render_object.model_matrix;
     assert(++matrices==1 && (const void *)m==model && in==out);
     assert(in->x==256 && in->y==0 && in->z==0);
-    assert(!memcmp(&D_8019A8A8,&oldRight,8) && !memcmp(&D_8019A8B0,&oldLeft,8));
+    assert(!memcmp(&g_RoomM350RushPreviousEndpoint,&oldRight,8) && !memcmp(&g_RoomM350RushPreviousOpposite,&oldLeft,8));
     out->x=-32768; out->y=123; out->z=-1;
     if(mutate) {
         g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1];
@@ -156,7 +156,7 @@ static void reset(void) {
     g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[0]; g_PlayerEntity=&players[0];
     oldRight=(Vector){100,222,300,1}; oldLeft=(Vector){-100,333,-300,444};
     memcpy(rightRecord,&oldRight,8); memcpy(leftRecord,&oldLeft,8);
-    memset(&D_8019A8A8,0x55,8); memset(&D_8019A8B0,0x66,8);
+    memset(&g_RoomM350RushPreviousEndpoint,0x55,8); memset(&g_RoomM350RushPreviousOpposite,0x66,8);
     g_FieldFxCurrentAge=0; g_RoomM350RushPlayerHit=0; particle=(Particle){-7,-8,999};
     initCalls=allocations=randoms=matrices=clips=screens=failAlloc=mutate=0; outsideAt=-1; randomValue=-1;
 }
@@ -188,7 +188,7 @@ int main(void) {
     reset(); g_FieldFxCurrentAge=-1; instances[0].mode=8;
     assert(RoomM350_RushFlareEmitter(1)==0 && !allocations && !matrices);
     reset(); oldRight.pad=0; memcpy(rightRecord,&oldRight,8);
-    assert(RoomM350_RushFlareEmitter(1)==0 && matrices==1 && !clips && !g_RoomM350RushPlayerHit && D_8019A89E==1);
+    assert(RoomM350_RushFlareEmitter(1)==0 && matrices==1 && !clips && !g_RoomM350RushPlayerHit && g_RoomM350RushEndpointValid==1);
     reset(); g_FieldFxTpageSlot3=65535; g_FieldFxTpageTable[65535]=0xFEDC;
     memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
     for(i=0;i<3;i++) { transforms[11].translation[i]=-3-i; transforms[15].translation[i]=i; }

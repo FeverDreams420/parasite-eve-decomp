@@ -60,7 +60,7 @@ typedef RoomM350FlareParticle Particle;
 FieldFxObjectPrefix *g_FieldFxOwner;
 GteMatrix g_RoomM350RushMatrix;
 short g_RoomM350RushCenter[3];
-int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag,D_8019A690[4];
+int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag,g_RoomM350RushFlareColors[4];
 GteSineWord rcossin_tbl[4096];
 RenderEffectParameters g_FieldFxSpriteParams;
 u16 g_FieldFxPaletteTable[65536];
@@ -97,7 +97,7 @@ void FieldFx_DrawShapeQuads(struct GteShortVector *p,struct GteRotation *rotatio
     assert(p->z==half((uint32_t)ir[2]+g_RoomM350RushCenter[2]) && p->pad==0x2468);
     assert(r->x==half((uint32_t)timerBefore*384) && r->y==other.rot_y && r->z==0 && r->pad==1);
     assert(texture==nextScale*(nextTimer&7)+64 && palette==clut && one==1 && shade==nextShade);
-    assert((void *)colors==&D_8019A690[nextTimer&3]);
+    assert((void *)colors==&g_RoomM350RushFlareColors[nextTimer&3]);
 }
 int main(void) {
     int i,phase,event,result,edge,timers[]={INT_MIN,-32769,-1,0,7,8,INT_MAX};

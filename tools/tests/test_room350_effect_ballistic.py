@@ -16,7 +16,7 @@ class Room350EffectBallisticTests(unittest.TestCase):
     def test_motion_and_palette_rendering(self):
         source = host_unit("RoomM350_AreaDropletCallback", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag, D_8019A598[4];
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag, g_RoomM350AreaDropletColor[4];
 GteSineWord rcossin_tbl[4096];
 RenderEffectParameters g_FieldFxSpriteParams;
 unsigned short g_FieldFxPaletteTable[8];
@@ -40,7 +40,7 @@ void FieldFx_DrawShapeQuads(struct GteShortVector *point, struct GteRotation *ze
     assert(a == 12288 && b == 12288);
     assert(scale == expectedScale * (((nextCounter - 1) >> 1) & 7) + 200);
     assert(handle == (unsigned short)handleValue && flag == 1);
-    assert(shade == expectedShade >> 5 && colors == D_8019A598);
+    assert(shade == expectedShade >> 5 && colors == g_RoomM350AreaDropletColor);
 }
 int main(void) {
     const short values[] = {-32768, -33, -1, 0, 32, 32767};

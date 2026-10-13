@@ -18,7 +18,7 @@ class Room350EffectTrailTests(unittest.TestCase):
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <string.h>\n' + source + r'''
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 unsigned char g_RoomM350DropDone;
-short D_8019A85C;
+short g_RoomM350DropTrailCount;
 RoomM350TrailQueue g_RoomEffectTrailPositions;
 unsigned short g_FieldFxTpageSlot2, g_FieldFxTpageTable[65536];
 /* The retail halfword names are fields of the sprite parameter block; the
@@ -53,7 +53,7 @@ void *FieldFx_AcquireCallbackSlot(char *pool) {
     /* Stub changes probe reloads; they do not describe actual allocator behavior. */
     g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitters[1];
     g_RoomM350DropDone = 255;
-    if (replacementCount >= 0) D_8019A85C = replacementCount;
+    if (replacementCount >= 0) g_RoomM350DropTrailCount = replacementCount;
     if (allocations == failAt) return 0;
     g_RoomEffectTrailPositions.points[slot].x = coordinates[slot][0];
     g_RoomEffectTrailPositions.points[slot].y = coordinates[slot][1];
@@ -91,12 +91,12 @@ int main(void) {
             }
         }
         reset(); failAt = failure; replacementCount = replacement;
-        D_8019A85C = count; g_RoomM350DropDone = flags[stop];
+        g_RoomM350DropTrailCount = count; g_RoomM350DropDone = flags[stop];
         for (i = 0; i < 4; ++i) for (j = 0; j < 3; ++j)
             coordinates[i][j] = values[(seed + i + j) % 7];
         assert(RoomM350_DropTrailEmitter(1) == (flags[stop] ? 2 : 0));
         assert(allocations == expectedAllocations && successes == expectedSuccesses);
-        assert(D_8019A85C == (flags[stop] ? count : 0));
+        assert(g_RoomM350DropTrailCount == (flags[stop] ? count : 0));
         for (i = 0; i < 4; ++i) for (j = 0; j < 8; ++j)
             assert(effects[i][j] == (i < successes && j < 3 ? coordinates[i][j] : 0x6B6B));
     }
@@ -110,8 +110,8 @@ int main(void) {
     }
     for (event = -3; event <= 4; ++event) {
         if (event >= 0 && event <= 2) continue;
-        reset(); D_8019A85C = -2;
-        assert(RoomM350_DropTrailEmitter(event) == 0 && D_8019A85C == -2);
+        reset(); g_RoomM350DropTrailCount = -2;
+        assert(RoomM350_DropTrailEmitter(event) == 0 && g_RoomM350DropTrailCount == -2);
         assert(allocations == 0 && setups == 0);
     }
     return 0;

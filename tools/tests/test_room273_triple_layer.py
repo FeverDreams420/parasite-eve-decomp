@@ -35,7 +35,7 @@ GteSineWord rcossin_tbl[4096];
 unsigned short g_FieldFxPaletteTable[8];
 RoomFloorY g_RoomFloorY[1];
 RenderEffectParameters g_FieldFxSpriteParams;
-unsigned char g_RoomM273BlackColor[4],D_8019AD74[4],D_8019AD78[4];
+unsigned char g_RoomM273BlackColor[4],g_RoomM273SweepFlashColorA[4],g_RoomM273SweepFlashColorB[4];
 static int stage,frame,sample1,sample2,expectedPalette,sampleIndex;
 static Vector input,original,*positionPtr,*rotationPtr;
 static int shade(int sample) { return sample>>21; }
@@ -66,7 +66,7 @@ void FieldFx_DrawStarFan(struct GteShortVector *p,int w,int h,int count,struct G
     assert(p==positionPtr && r==rotationPtr && flag==1 && color==shade(sample2));
     if(stage++==2) {
         assert(w==512 && h==512 && count==16 && sx==(short)sample2+1024 && sy==sx);
-        assert((void *)a==g_RoomM273BlackColor && (void *)b==D_8019AD74);
+        assert((void *)a==g_RoomM273BlackColor && (void *)b==g_RoomM273SweepFlashColorA);
         assert(r->x==11 && r->y==12 && r->z==-129 && r->pad==13);
         assert(p->x==21 && p->y==22 && p->z==23 && p->pad==24);
         r->x=101; r->y=102; r->z=103; r->pad=104;
@@ -76,7 +76,7 @@ void FieldFx_DrawStarFan(struct GteShortVector *p,int w,int h,int count,struct G
         g_FieldFxCurrentAge=39;
     } else {
         assert(stage==4 && w==768 && h==768 && count==8 && sx==4096 && sy==4096);
-        assert((void *)a==D_8019AD78 && (void *)b==g_RoomM273BlackColor);
+        assert((void *)a==g_RoomM273SweepFlashColorB && (void *)b==g_RoomM273BlackColor);
         assert(r->x==1024 && r->y==0 && r->z==(short)((unsigned int)frame<<8) && r->pad==1);
         assert(p->x==31 && p->y==(short)0x8123 && p->z==33 && p->pad==34);
     }

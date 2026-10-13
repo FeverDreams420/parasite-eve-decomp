@@ -42,8 +42,8 @@ static Seed output[2];
 static unsigned char pool[32],secondPool[32];
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
 FieldFxObjectPrefix *g_FieldFxOwner=(FieldFxObjectPrefix *)&stateContext;
-unsigned char D_8019AE9A;
-Seed D_8019AC20[2];
+unsigned char g_RoomM273GrabEffectStopped;
+Seed g_RoomM273PlayerStreakSeeds[2];
 unsigned short g_FieldFxTpageSlot11,g_FieldFxTpageTable[8];
 RenderEffectParameters g_FieldFxSpriteParams;
 static int init,allocations,randomCalls,failAt,randomValue;
@@ -71,9 +71,9 @@ int main(void) {
             int wanted=!stop && kind==9 && values[i]>0 && values[j]<=0;
             memset(&state,0xA5,sizeof(state));
             state.kind=kind; state.value22=values[i]; state.value26=values[j];
-            before=state; D_8019AE9A=stop ? 255:0; context.pool=pool;
-            memset(D_8019AC20,0x39,sizeof(D_8019AC20));
-            D_8019AC20[0].angle=65530; D_8019AC20[1].angle=32768;
+            before=state; g_RoomM273GrabEffectStopped=stop ? 255:0; context.pool=pool;
+            memset(g_RoomM273PlayerStreakSeeds,0x39,sizeof(g_RoomM273PlayerStreakSeeds));
+            g_RoomM273PlayerStreakSeeds[0].angle=65530; g_RoomM273PlayerStreakSeeds[1].angle=32768;
             memset(output,0xA5,sizeof(output));
             allocations=randomCalls=0; failAt=f; randomValue=r ? 255:0;
             assert(RoomM273_GrabPlayerStreakEmitter(1)==(stop ? 2:0));
@@ -82,7 +82,7 @@ int main(void) {
             for(n=0;n<2;++n) {
                 Seed expected;
                 if(wanted && n<f) {
-                    expected=D_8019AC20[n]; expected.angle+=randomValue*16;
+                    expected=g_RoomM273PlayerStreakSeeds[n]; expected.angle+=randomValue*16;
                 } else memset(&expected,0xA5,sizeof(expected));
                 assert(memcmp(&output[n],&expected,sizeof(expected))==0);
             }

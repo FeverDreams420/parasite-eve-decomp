@@ -37,8 +37,8 @@ int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag;
 GteSineWord rcossin_tbl[4096];
 RenderEffectParameters g_FieldFxSpriteParams;
 u16 g_FieldFxPaletteTable[65536];
-int D_8019A3CC[1];
-RenderColor D_8019A3C8;
+int g_RoomM350OrbHandSparkColor[1];
+RenderColor g_RoomM350BlackColor;
 static Particle particle,afterClut;
 static int calls,wantSize,wantPalette,nextTimer,lastTimer,nextScale;
 static unsigned short clut;
@@ -63,7 +63,7 @@ void FieldFx_DrawShapeQuads(struct GteShortVector *p,struct GteRotation *rotatio
 void FieldFx_DrawStarFan(struct GteShortVector *p,int w,int h,int mode,struct GteRotation *vector,int sx,int sy,struct RenderColor *a,struct RenderColor *b,int shade,int one) {
     unsigned index=(((unsigned)lastTimer-1)<<8)&0xF00;
     assert(calls++==2 && (void *)p==&particle.x && w==96 && h==96 && mode==8 && !vector);
-    assert(sx==wantSize && sy==wantSize && (void *)a==D_8019A3CC && b==&D_8019A3C8 && one==1);
+    assert(sx==wantSize && sy==wantSize && (void *)a==g_RoomM350OrbHandSparkColor && b==&g_RoomM350BlackColor && one==1);
     assert(shade==asr5(half(rcossin_tbl[index].word)));
 }
 int main(void) {

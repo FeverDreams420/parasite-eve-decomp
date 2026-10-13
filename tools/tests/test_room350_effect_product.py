@@ -16,7 +16,7 @@ class Room350EffectProductTests(unittest.TestCase):
     def test_signed_product_palette_and_reload_order(self):
         source = host_unit("RoomM350_HandGlowCallback", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-RenderColor D_8019A3D0;
+RenderColor g_RoomM350GlowSpriteColor;
 RenderEffectParameters g_FieldFxSpriteParams;
 GteSineWord rcossin_tbl[4096];
 #define D_800F336A g_FieldFxSpriteParams.parameter02
@@ -45,7 +45,7 @@ void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *zero, 
     assert(a == expectedSize && b == expectedSize);
     assert(scale == expectedScale + 216);
     assert(handle == (unsigned short)handleValue && flag == 1);
-    assert(shade == expectedShade >> 5 && colors == &D_8019A3D0);
+    assert(shade == expectedShade >> 5 && colors == &g_RoomM350GlowSpriteColor);
 }
 int main(void) {
     const short values[] = {-32768, -4097, -33, -1, 0, 32, 4097, 32767};

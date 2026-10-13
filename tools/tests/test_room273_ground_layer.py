@@ -34,7 +34,7 @@ unsigned short g_FieldFxPaletteTable[8];
 RoomFloorY g_RoomFloorY[1];
 RenderEffectParameters g_FieldFxSpriteParams;
 GteRotation g_RoomM273FloorRotation;
-unsigned char D_8019AE18[8],g_RoomM273BlackColor[8];
+unsigned char g_RoomM273SwayGroundColor[8],g_RoomM273BlackColor[8];
 static Vector input={12,-34,56,78};
 static Vector *local;
 static int stage,expectedPalette,expectedSize,expectedShade,sizeIndex,shadeIndex;
@@ -60,7 +60,7 @@ void FieldFx_DrawStarFan(struct GteShortVector *p,int w,int h,int mode,
     assert(stage++==2 && p==local && w==384 && h==384 && mode==8);
     assert(p->x==-111 && p->y==(short)0xFEDC && p->z==-333 && p->pad==444);
     assert(rotation==&g_RoomM273FloorRotation && sx==4096 && sy==4096);
-    assert((void *)a==D_8019AE18 && (void *)b==g_RoomM273BlackColor && shade==expectedShade && flag==1);
+    assert((void *)a==g_RoomM273SwayGroundColor && (void *)b==g_RoomM273BlackColor && shade==expectedShade && flag==1);
 }
 int main(void) {
     int times[]={INT_MIN,-1,0,31,32,INT_MAX};

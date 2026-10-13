@@ -31,7 +31,7 @@ typedef GteShortVector Vector;
 int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
 unsigned short g_FieldFxPaletteTable[8];
 RenderEffectParameters g_FieldFxSpriteParams;
-short D_8019AD68[8];
+short g_RoomM273SweepSplashScale[8];
 GteSineWord rcossin_tbl[4096];
 static Vector position;
 static int cluts, draws, expectedPalette, expectedTile, expectedShade, mutate;
@@ -58,7 +58,7 @@ int main(void) {
         assert(position.x==12 && position.z==34 && position.pad==56);
     }
     assert(!cluts && !draws);
-    for (i=0;i<8;++i) D_8019AD68[i]=i+3;
+    for (i=0;i<8;++i) g_RoomM273SweepSplashScale[i]=i+3;
     for (kind=0;kind<8;++kind) for (variant=0;variant<2;++variant)
         for (i=0;i<=16;++i) {
             g_FieldFxCurrentAge=i; frame=i-1;
@@ -66,7 +66,7 @@ int main(void) {
             g_FieldFxPaletteTable[kind]=65535;
             expectedPalette=65535+(kind==4 && variant ? 4:0);
             g_FieldFxSpriteParams.parameter02=2; mutate=variant;
-            expectedTile=44+(variant ? -2:2)*D_8019AD68[frame/4];
+            expectedTile=44+(variant ? -2:2)*g_RoomM273SweepSplashScale[frame/4];
             index=(((unsigned int)frame<<9)&0x3E00)/4;
             rcossin_tbl[index].word=variant ? 0x1234FFE0:0x56780040;
             expectedShade=variant ? -1:2;

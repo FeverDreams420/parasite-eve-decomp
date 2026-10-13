@@ -21,8 +21,8 @@ class Room350EffectLayersTests(unittest.TestCase):
         source = callback_source()
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 GteSineWord rcossin_tbl[4096];
-RenderColor D_8019A3C8;
-int g_FieldFxCurrentAge, D_8019A4DC[4], D_8019A4E0[4];
+RenderColor g_RoomM350BlackColor;
+int g_FieldFxCurrentAge, g_RoomM350OrbBurstRingColorA[4], g_RoomM350OrbBurstRingColorB[4];
 static int firstPoint, secondPoint, calls, initialCounter, nextCounter;
 static int sizeValue, firstShade, secondShade;
 static void *object;
@@ -35,7 +35,7 @@ void FieldFx_DrawStarFan(struct GteShortVector *p, int a, int b, int mode,
     unsigned int index = ((unsigned int)(nextCounter - 1) << 8) & 0xF00;
     assert(calls++ == 0 && p == &firstPoint && a == 320 && b == 320 && mode == 16);
     assert(x == sizeValue && y == sizeValue && shade == firstShade >> 5 && flag == 1);
-    assert(colorA == D_8019A4DC && colorB == &D_8019A3C8);
+    assert(colorA == g_RoomM350OrbBurstRingColorA && colorB == &g_RoomM350BlackColor);
     assert(vector[0] == 0 && vector[1] == 0 && vector[2] == (short)(initialCounter * 128));
     assert(vector[3] == 0);
     /* Deliberate mutations test inter-call dataflow, not actual helper effects. */
@@ -50,7 +50,7 @@ void FieldFx_DrawRingBand(struct GteShortVector *p, int a, int b, int mode,
     short *vector = (short *)rotation;
     assert(calls++ == 1 && p == &secondPoint && a == 256 && b == 512 && mode == 16);
     assert(x == nextCounter * 512 + 2048 && y == x && shade == secondShade >> 5 && flag == 1);
-    assert(colorA == &D_8019A3C8 && colorB == D_8019A4E0);
+    assert(colorA == &g_RoomM350BlackColor && colorB == g_RoomM350OrbBurstRingColorB);
     assert(vector == savedVector);
     assert(vector[0] == -11 && vector[1] == 22 && vector[2] == -33 && vector[3] == 44);
 }

@@ -32,9 +32,9 @@ typedef char layout[sizeof(Entry)==8 &&
 RenderEffectParameters g_FieldFxSpriteParams;
 #define memset __builtin_memset
 struct SceneAssetBlob *g_LoadedSceneAssetBlock[1];
-void *D_8019AF6C;
+RoomM273DropQueue g_RoomM273SweepState;
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
-EmitterState D_8019AF84;
+EmitterState g_RoomM273SwayHitView;
 static RoomM273PoolContext context;
 static int asset,pool,stage,initResult,allocs,failAt;
 static Entry outputs[2];
@@ -43,7 +43,7 @@ void *Asset_FindTable08ByU32Key(void *owner,int id) {
     return &asset;
 }
 void FieldFx_ModelScrollUv(union FieldTexturedModel *handle,u8 a,u8 b) {
-    assert(stage++==1 && (void *)handle==&asset && D_8019AF6C==&asset && !a && !b);
+    assert(stage++==1 && (void *)handle==&asset && (void *)g_RoomM273SweepState.model==&asset && !a && !b);
     context.pool=&pool;
 }
 int RoomM273_SwayGroundRingCallback(int mode,GteShortVector *p) { assert(0); return 0; }
@@ -67,14 +67,14 @@ int main(void) {
         assert(RoomM273_SwayGroundRingEmitter(0)==initResult && stage==3);
     }
     for(mask=0;mask<4;++mask) for(fail=-1;fail<2;++fail) {
-        memset(&D_8019AF84,0xA6,sizeof(D_8019AF84));
+        memset(&g_RoomM273SwayHitView,0xA6,sizeof(g_RoomM273SwayHitView));
         memset(outputs,0x55,sizeof(outputs));
-        D_8019AF84.stopped=0;
+        g_RoomM273SwayHitView.stopped=0;
         for(i=0;i<2;++i) {
-            D_8019AF84.entries[i].emitter.x=65535-i;
-            D_8019AF84.entries[i].emitter.y=32768+i;
-            D_8019AF84.entries[i].emitter.z=123+i;
-            D_8019AF84.entries[i].emitter.flags=0xA5A0 | ((mask>>i)&1);
+            g_RoomM273SwayHitView.entries[i].emitter.x=65535-i;
+            g_RoomM273SwayHitView.entries[i].emitter.y=32768+i;
+            g_RoomM273SwayHitView.entries[i].emitter.z=123+i;
+            g_RoomM273SwayHitView.entries[i].emitter.flags=0xA5A0 | ((mask>>i)&1);
         }
         allocs=0; failAt=fail;
         assert(RoomM273_SwayGroundRingEmitter(1)==0);
@@ -92,13 +92,13 @@ int main(void) {
                 }
                 ++next;
             }
-            assert(D_8019AF84.entries[i].emitter.flags==
+            assert(g_RoomM273SwayHitView.entries[i].emitter.flags==
                    (unsigned short)(0xA5A0 | (active && stopped)));
         }
         assert(allocs==expectedCalls);
         for(i=successful;i<2;++i) assert(outputs[i].emitter.flags==0x5555);
-        for(i=0;i<14;++i) assert(D_8019AF84.unknown[i]==0xA6);
-        D_8019AF84.stopped=255;
+        for(i=0;i<14;++i) assert(g_RoomM273SwayHitView.unknown[i]==0xA6);
+        g_RoomM273SwayHitView.stopped=255;
         assert(RoomM273_SwayGroundRingEmitter(1)==2 && allocs==expectedCalls);
     }
     g_FieldFxSpriteParams.parameter0A=-1; g_FieldFxSpriteParams.depth=123;

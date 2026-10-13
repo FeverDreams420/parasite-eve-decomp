@@ -7,7 +7,7 @@
 
 #include "room_m273_arc.h"
 #include "room_m273_effects.h"
-#include "room_m273_boss.h"
+#include "room_m273_sway.h"
 #include "room_m273_sweep.h"
 #include "RoomEffect_PhasedArcSpriteFlow_externs.h"
 #include "RoomEffect_PhasedArcSpriteFlow_externs_1.h"

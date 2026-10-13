@@ -40,7 +40,7 @@ static unsigned char pool[32];
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
 FieldActor *g_PlayerEntity=&owner;
 int g_FieldFxCurrentAge;
-unsigned char D_8019AE5C;
+unsigned char g_RoomM273PlayerPulseSpawned;
 unsigned short g_FieldFxTpageSlot11,g_FieldFxTpageTable[8];
 RenderEffectParameters g_FieldFxSpriteParams;
 static int init,allocations,fail;
@@ -48,10 +48,10 @@ int RoomM273_GrabPlayerPulseCallback(int mode, RoomM273SpritePoolEffect *state) 
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)pool && stride==4 && count==1 &&
            callback==(FieldFxCallbackListCallback)RoomM273_GrabPlayerPulseCallback);
-    assert(D_8019AE5C==0); return 36;
+    assert(g_RoomM273PlayerPulseSpawned==0); return 36;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
-    assert(p==(char *)pool && allocations++==0 && D_8019AE5C==0);
+    assert(p==(char *)pool && allocations++==0 && g_RoomM273PlayerPulseSpawned==0);
     g_PlayerEntity=&replacement;
     return fail ? 0 : &output;
 }
@@ -60,21 +60,21 @@ int main(void) {
     int latches[]={0,1,255};
     int i,l,k,f;
     context.pool=pool; replacement.render_object.matrices=(RenderMatrix *)&transform;
-    D_8019AE5C=255;
+    g_RoomM273PlayerPulseSpawned=255;
     assert(RoomM273_GrabPlayerPulseEmitter(0)==36 && init==1);
     for(i=0;i<6;++i) for(l=0;l<3;++l) for(k=0;k<256;++k) for(f=0;f<2;++f) {
         int stopped=counters[i]>=20 || latches[l]!=0;
         int wanted=!stopped && k<4;
-        g_FieldFxCurrentAge=counters[i]; D_8019AE5C=latches[l]; owner.mode=k;
+        g_FieldFxCurrentAge=counters[i]; g_RoomM273PlayerPulseSpawned=latches[l]; owner.mode=k;
         g_PlayerEntity=&owner; owner.render_object.matrices=0; allocations=0; fail=f;
         output.position=&sentinel;
         assert(RoomM273_GrabPlayerPulseEmitter(1)==(stopped ? 2:0) && allocations==wanted);
-        assert(D_8019AE5C==(wanted && !f ? 1:latches[l]));
+        assert(g_RoomM273PlayerPulseSpawned==(wanted && !f ? 1:latches[l]));
         assert(output.position==(wanted && !f ? &transform.position:&sentinel));
     }
     for(l=0;l<3;++l) for(i=0;i<8;++i) {
         int enabled=latches[l]!=0;
-        D_8019AE5C=latches[l]; g_FieldFxTpageSlot11=i; g_FieldFxTpageTable[i]=65535-i;
+        g_RoomM273PlayerPulseSpawned=latches[l]; g_FieldFxTpageSlot11=i; g_FieldFxTpageTable[i]=65535-i;
         g_FieldFxSpriteParams.parameter00=g_FieldFxSpriteParams.parameter02=g_FieldFxSpriteParams.palette=g_FieldFxSpriteParams.parameter06=99;
         g_FieldFxSpriteParams.tpage=g_FieldFxSpriteParams.parameter0A=g_FieldFxSpriteParams.depth=g_FieldFxSpriteParams.extent_x=g_FieldFxSpriteParams.extent_y=99;
         assert(RoomM273_GrabPlayerPulseEmitter(2)==0);
@@ -83,7 +83,7 @@ int main(void) {
         assert(g_FieldFxSpriteParams.tpage==(enabled?65535-i:99));
         assert(g_FieldFxSpriteParams.parameter0A==(enabled?0:99) && g_FieldFxSpriteParams.depth==(enabled?0:99));
         assert(g_FieldFxSpriteParams.extent_x==(enabled?32:99) && g_FieldFxSpriteParams.extent_y==(enabled?32:99));
-        assert(D_8019AE5C==latches[l]);
+        assert(g_RoomM273PlayerPulseSpawned==latches[l]);
     }
     allocations=0;
     assert(RoomM273_GrabPlayerPulseEmitter(-1)==0 && RoomM273_GrabPlayerPulseEmitter(3)==0);

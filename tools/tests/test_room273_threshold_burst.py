@@ -47,8 +47,8 @@ static unsigned char pool[64];
 FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
 FieldFxObjectPrefix *g_FieldFxOwner=(FieldFxObjectPrefix *)&stateContext;
 FieldActor *g_PlayerEntity=&owner;
-unsigned char D_8019AE9A;
-short D_8019AE60,D_8019AE64;
+unsigned char g_RoomM273GrabEffectStopped;
+short g_RoomM273PlayerTrailBurstsLeft,g_RoomM273PlayerTrailDelay;
 unsigned short g_FieldFxTpageSlot11,g_FieldFxTpageTable[8];
 RenderEffectParameters g_FieldFxSpriteParams;
 static int init,allocations,fail;
@@ -56,7 +56,7 @@ int RoomM273_GrabPlayerTrailCallback(int mode, Vector *input) { assert(0); retur
 int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)pool && stride==8 && count==4 &&
            callback==(FieldFxCallbackListCallback)RoomM273_GrabPlayerTrailCallback);
-    assert(D_8019AE60==0 && D_8019AE64==0); return 60;
+    assert(g_RoomM273PlayerTrailBurstsLeft==0 && g_RoomM273PlayerTrailDelay==0); return 60;
 }
 void *FieldFx_AcquireCallbackSlot(char *p) {
     assert(p==(char *)pool && allocations++==0);
@@ -70,7 +70,7 @@ int main(void) {
     context.pool=pool; stateContext.state.mode=&state;
     replacement.render_object.matrices=(RenderMatrix *)&transform;
     transform.position.x=65535; transform.position.y=-65537; transform.position.z=32768;
-    D_8019AE60=9; D_8019AE64=7;
+    g_RoomM273PlayerTrailBurstsLeft=9; g_RoomM273PlayerTrailDelay=7;
     assert(RoomM273_GrabPlayerTrailEmitter(0)==60 && init==1);
     for(stop=0;stop<2;++stop) for(kind=8;kind<=9;++kind)
         for(i=0;i<6;++i) for(j=0;j<6;++j) for(c=0;c<4;++c)
@@ -80,7 +80,7 @@ int main(void) {
             int wanted=0;
             memset(&state,0xA5,sizeof(state));
             state.kind=kind; state.value22=values[i]; state.value26=values[j]; before=state;
-            D_8019AE9A=stop; D_8019AE60=count; D_8019AE64=delay;
+            g_RoomM273GrabEffectStopped=stop; g_RoomM273PlayerTrailBurstsLeft=count; g_RoomM273PlayerTrailDelay=delay;
             if(!stop) {
                 if(kind==9 && values[i]>=2 && values[j]<2) { count=4; delay=0; }
                 if(count) {
@@ -91,7 +91,7 @@ int main(void) {
             allocations=0; fail=f; g_PlayerEntity=&owner;
             memset(&output,0xA5,sizeof(output));
             assert(RoomM273_GrabPlayerTrailEmitter(1)==(stop ? 2:0));
-            assert(allocations==wanted && D_8019AE60==count && D_8019AE64==delay);
+            assert(allocations==wanted && g_RoomM273PlayerTrailBurstsLeft==count && g_RoomM273PlayerTrailDelay==delay);
             assert(memcmp(&state,&before,sizeof(state))==0 && output.pad==(short)0xA5A5);
             if(wanted && !f) assert(output.x==-1 && output.y==-1 && output.z==-32768);
             else assert(output.x==(short)0xA5A5 && output.y==(short)0xA5A5 && output.z==(short)0xA5A5);
