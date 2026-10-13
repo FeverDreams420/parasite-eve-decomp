@@ -17,6 +17,16 @@ static inline unsigned short *OpaqueHalfPointer(unsigned short *p) {
     return p;
 }
 
+static inline void Gpu_SendDisplayRange(unsigned start, unsigned end,
+                                       unsigned mask, unsigned shift, unsigned command) {
+    register unsigned y asm("$3") = (end & mask) << shift;
+    unsigned x = start & mask;
+    register unsigned opcode = command;
+    GpuCallbacks *ops = g_GpuCallbacks;
+    x |= opcode;
+    ops->callback10(y | x);
+}
+
 DISPENV *PutDispEnv(DISPENV *env) {
     register DISPENV *e = env;
     register unsigned char *state;
@@ -152,22 +162,8 @@ DISPENV *PutDispEnv(DISPENV *env) {
                 clamp = vend > 258 ? 258 : vend;
         }
         vend = clamp;
-        {
-            register unsigned y asm("$3") = ((unsigned)hend & 0xfff) << 12;
-            unsigned x = ((unsigned)hstart & 0xfff);
-            register unsigned opcode = 0x06000000;
-            GpuCallbacks *ops = g_GpuCallbacks;
-            x |= opcode;
-            ops->callback10(y | x);
-        }
-        {
-            register unsigned y asm("$3") = ((unsigned)vend & 0x3ff) << 10;
-            unsigned x = ((unsigned)vstart & 0x3ff);
-            register unsigned opcode = 0x07000000;
-            GpuCallbacks *ops = g_GpuCallbacks;
-            x |= opcode;
-            ops->callback10(y | x);
-        }
+        Gpu_SendDisplayRange(hstart, hend, 0xfff, 12, 0x06000000);
+        Gpu_SendDisplayRange(vstart, vend, 0x3ff, 10, 0x07000000);
     }
     /* An unprototyped call keeps the SDK memcpy call instead of builtin expansion.
      * Pointers and the word-sized count keep the same argument ABI. */
