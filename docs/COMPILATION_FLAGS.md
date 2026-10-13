@@ -183,9 +183,9 @@ then merged with them:
   under K8, and `main/rodata_0019A4` was the 8-alignment pad before the
   weapon-list constants).
 - `fx_common` camera (2026-10-13): under K8 `func_8018F05C` scored lev 16
-  because cc1 `-G8` treats the 8-byte angle vector `D_8019BFC4` as small
+  because cc1 `-G8` treats the 8-byte angle vector `g_FxCommonCameraAngles` as small
   data and stops keeping its address in a register. Declared as an
-  incomplete array (`extern GteShortVector D_8019BFC4[];`, the
+  incomplete array (`extern GteShortVector g_FxCommonCameraAngles[];`, the
   `RoomFloorY` recipe) it keeps the register under both settings, so
   `camera_nodes.c` and the two `-G8` render ops are one unit,
   `fx_common/camera.c`.

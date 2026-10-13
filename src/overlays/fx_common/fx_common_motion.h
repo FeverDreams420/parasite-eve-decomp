@@ -65,8 +65,8 @@ extern RoomSpriteMatrix D_8018EFF4;
 extern FxCommonTransformNode *g_FxCommonPathNodes[6];
 /* Camera rotation angles. An incomplete array, so the -G8 camera unit keeps
  * the absolute address in a register as retail does. */
-extern GteShortVector D_8019BFC4[];
-extern RoomSpriteMatrix D_8019CDF0;
+extern GteShortVector g_FxCommonCameraAngles[];
+extern RoomSpriteMatrix g_FxCommonCameraMatrix;
 extern s8 D_800B0DB2;
 extern s8 g_SceneAudioSlot0Key;
 
@@ -84,11 +84,11 @@ void FxCommon_UpdateFrustumPlanes(FxCommonVec3 *eye);
 /* View frustum side planes rebuilt by FxCommon_UpdateFrustumPlanes: the four rotated
  * frustum corners, each plane normal, its distance, the opposite corner
  * distance and the normal length. */
-extern GteShortVector D_8019BFD0, D_8019BFD8, D_8019BFE0, D_8019BFE8;
-extern GteVector D_8019CBB0, D_8019CBD0, D_8019CBF0, D_8019CB50;
-extern s32 D_8019CB48, D_8019CB4C, D_8019CBA8, D_8019CA90;
-extern s32 D_8019CC04, D_8019CC0C, D_8019CC10, D_8019CBC4;
-extern s32 D_8019CBC8, D_8019CC00, D_8019CC08, D_8019CBAC;
+extern GteShortVector g_FxCommonFrustumCorner0, g_FxCommonFrustumCorner1, g_FxCommonFrustumCorner2, g_FxCommonFrustumCorner3;
+extern GteVector g_FxCommonFrustumNormal0, g_FxCommonFrustumNormal1, g_FxCommonFrustumNormal2, g_FxCommonFrustumNormal3;
+extern s32 g_FxCommonFrustumDistance0, g_FxCommonFrustumDistance1, g_FxCommonFrustumDistance2, g_FxCommonFrustumDistance3;
+extern s32 g_FxCommonFrustumSide0, g_FxCommonFrustumSide1, g_FxCommonFrustumSide2, g_FxCommonFrustumSide3;
+extern s32 g_FxCommonFrustumLength0, g_FxCommonFrustumLength1, g_FxCommonFrustumLength2, g_FxCommonFrustumLength3;
 void OuterProduct0(GteVector *a, GteVector *b, GteVector *out);
 s16 FxCommon_StepFadeIntensity(s16 value);
 void func_80192740(void);
@@ -96,7 +96,7 @@ void FxCommon_DrawSceneNodes(void);
 
 /* Per-frame scene draw (FxCommon_DrawSceneNodes): depth bias for the next node,
  * echo copies of the camera path nodes and the flicker colour. */
-extern s32 D_801EA5E4;
+extern s32 g_FxCommonDepthBias;
 extern FxCommonTransformNode *g_FxCommonPathTailNodes[2];
 extern s16 D_8019C0D0[2];
 extern u8 D_801EA264[3];

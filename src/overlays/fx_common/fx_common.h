@@ -215,7 +215,7 @@ typedef struct FxCommonResourceState {
     } current;
 } FxCommonResourceState;
 
-extern s16 D_8019C058;
+extern s16 g_FxCommonMotionBlendFrames;
 extern u8 D_8019BFCC;
 extern GteMatrix D_8018F014;
 extern s32 D_8019C810, D_8019C814, D_8019C818;
@@ -237,14 +237,14 @@ extern FxCommonMotionByte D_801EA270[1];
 extern FxCommonMotionRecord g_FxCommonMotionDeltas[10];
 extern FxCommonResourceState g_FxCommonResourceState;
 
-extern s16 D_8019CC50;
-extern FxCommonBucket D_8019CCBC[];
+extern s16 g_FxCommonRecordCursor;
+extern FxCommonBucket g_FxCommonNodeBuckets[];
 extern FxCommonSelection D_801E4A8A[];
-extern FxCommonRecord D_801E4E00[];
-extern s16 D_8019C830[];
-extern s16 D_8019C9D0;
-extern u16 D_8019CBC0;
-extern FxCommonIndexLink D_801E4A88[];
+extern FxCommonRecord g_FxCommonRecords[];
+extern s16 g_FxCommonIndexFreeNext[];
+extern s16 g_FxCommonIndexLast;
+extern u16 g_FxCommonIndexFreeHead;
+extern FxCommonIndexLink g_FxCommonIndexLinks[];
 
 extern u8 g_Akao3dVolumeMin;
 extern u8 g_Akao3dVolumeMax;
@@ -253,13 +253,13 @@ extern s16 D_800B0DD2;
 extern FxCommonBufferRegion *D_800B0E4C;
 extern u8 D_8019C1F8;
 extern u8 D_8019C1F0;
-extern s16 D_8019C02C;
+extern s16 g_FxCommonMarkerFade;
 extern u32 D_801EA598[];
-extern FxCommonBuffer *D_8019C9C0;
-extern FxCommonNode D_8019C340;
-extern RoomSpriteMatrix D_8019CC30;
-extern RoomSpriteMatrix *D_8019BFF0;
-extern TimRelativeTable D_801D0260;
+extern FxCommonBuffer *g_FxCommonActiveBuffer;
+extern FxCommonNode g_FxCommonDefaultNode;
+extern RoomSpriteMatrix g_FxCommonViewMatrix;
+extern RoomSpriteMatrix *g_FxCommonWorkMatrix;
+extern TimRelativeTable g_FxCommonTimTable;
 
 void Akao_Cmd_A9(int mode, int arg1);
 void SetSemiTrans(void *packet, int enabled);

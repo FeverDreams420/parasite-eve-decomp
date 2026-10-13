@@ -47,7 +47,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
     var_s4 = 0;
     resourceOffset = var_t8->offsets[0];
     resource_offset2 = var_t8->offsets[2];
-    buffer = D_8019C9C0;
+    buffer = g_FxCommonActiveBuffer;
     var_s3 = ((u8 *)var_t8) + resourceOffset;
     var_t0 = ((u8 *)var_t8) + resource_offset2;
     resourceOffset = var_t8->offsets[1];
@@ -106,7 +106,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                                 triangle->color;
                             var_s1 += 0x14;
                             temp_a0_2 = ((FxCommonPacketTag *)var_s2)->packed;
-                            orderBuffer = D_8019C9C0;
+                            orderBuffer = g_FxCommonActiveBuffer;
                             temp_a0_2 &= lengthMask0;
                             temp_v0 =
                                 ((orderBuffer->allocation[scratchpad->orderingDepth].packed) &
@@ -171,7 +171,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                                     quad->color;
                                 var_s1 += 0x18;
                                 temp_a0_4 = ((FxCommonPacketTag *)var_s2)->packed;
-                                orderBuffer = D_8019C9C0;
+                                orderBuffer = g_FxCommonActiveBuffer;
                                 temp_a0_4 &= lengthMask1;
                                 temp_v0 = ((orderBuffer->allocation[scratchpad->orderingDepth]
                                                      .packed) &
@@ -234,7 +234,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                                 (*((u32 *)&((FxCommonColoredTriangle *)(var_s3 - 8))->colors[2]));
                             var_s1 += 0x1C;
                             temp_a0_6 = ((FxCommonPacketTag *)var_s2)->packed;
-                            orderBuffer = D_8019C9C0;
+                            orderBuffer = g_FxCommonActiveBuffer;
                             temp_a0_6 &= lengthMask2;
                             temp_v0 =
                                 ((orderBuffer->allocation[scratchpad->orderingDepth].packed) &
@@ -298,7 +298,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                                 ((FxCommonColoredQuad *)(var_s3 - 12))->colors[3];
                             var_s1 += 0x24;
                             temp_a0_8 = ((FxCommonPacketTag *)var_s2)->packed;
-                            orderBuffer = D_8019C9C0;
+                            orderBuffer = g_FxCommonActiveBuffer;
                             temp_a0_8 &= lengthMask3;
                             temp_v0 =
                                 ((orderBuffer->allocation[scratchpad->orderingDepth].packed) &
@@ -481,7 +481,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         {
                             u32 firstFt3Tag = trianglePacketCursor->tag.packed;
                             triangleUv2Cursor += 16;
-                            orderBuffer = D_8019C9C0;
+                            orderBuffer = g_FxCommonActiveBuffer;
                             firstFt3Tag &= triangleLengthMask;
                             firstFt3Tag |=
                                 orderBuffer->allocation[scratchpad->orderingDepth].packed &
@@ -517,9 +517,9 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         asm("" : "=r"(triangleUv2Cursor) : "0"(triangleUv2Cursor));
                         triangleUv2Cursor += 16;
                         temp_a0 = trianglePacketCursor->tag.packed;
-                        orderBuffer = D_8019C9C0;
+                        orderBuffer = g_FxCommonActiveBuffer;
                         temp_a0 &= triangleLengthMask;
-                        temp_a0 |= ((D_8019C9C0->allocation[scratchpad->orderingDepth].packed) &
+                        temp_a0 |= ((g_FxCommonActiveBuffer->allocation[scratchpad->orderingDepth].packed) &
                                     triangleAddressMask);
                         trianglePacketCursor->tag.packed = temp_a0;
                         trianglePacketAddress24 = (s32)trianglePacketCursor;
@@ -550,7 +550,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         triangleUv2Cursor += 16;
                         {
                             u32 thirdTriangleTag = trianglePacketCursor->tag.packed;
-                            orderBuffer = D_8019C9C0;
+                            orderBuffer = g_FxCommonActiveBuffer;
                             thirdTriangleTag &= triangleLengthMask;
                             thirdTriangleTag |=
                                 (orderBuffer->allocation[scratchpad->orderingDepth].packed &
@@ -633,7 +633,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     triangleUv2Cursor += 16;
                     {
                         u32 finalFt3Tag = trianglePacketCursor->tag.packed;
-                        orderBuffer = D_8019C9C0;
+                        orderBuffer = g_FxCommonActiveBuffer;
                         finalFt3Tag &= triangleLengthMask;
                         temp_v0 =
                             ((orderBuffer->allocation[scratchpad->orderingDepth].packed) &
@@ -970,7 +970,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         quadUv3Cursor += 20;
                         {
                             u32 earlyQuadTag0 = var_t1_2->tag.packed;
-                            orderBuffer = D_8019C9C0;
+                            orderBuffer = g_FxCommonActiveBuffer;
                             earlyQuadTag0 &= quadLengthMask;
                             earlyQuadTag0 |=
                                 ((orderBuffer->allocation[scratchpad->orderingDepth].packed) &
@@ -1014,7 +1014,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         ++var_t1_2;
                         {
                             u32 earlyQuadTag1 = var_t1_2->tag.packed;
-                            orderBuffer = D_8019C9C0;
+                            orderBuffer = g_FxCommonActiveBuffer;
                             orderingTableBase = (u8 *)orderBuffer->allocation;
                             earlyQuadTag1 &= quadLengthMask;
                             earlyQuadTag1 |=
@@ -1052,7 +1052,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         quadPacketLengthBits = var_t1_2->tag.packed;
                         quadPacketLengthBits &= quadLengthMask;
 
-                        orderBuffer = D_8019C9C0;
+                        orderBuffer = g_FxCommonActiveBuffer;
                         var_t1_2->tag.packed =
                             (quadPacketLengthBits |
                                   ((orderBuffer->allocation[scratchpad->orderingDepth].packed) &
@@ -1099,7 +1099,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     u32 lastQuadNext;
                     u32 lastQuadAddress;
                     lastQuadTag = var_t1_2->tag.packed;
-                    orderBuffer = D_8019C9C0;
+                    orderBuffer = g_FxCommonActiveBuffer;
                     lastQuadTag &= quadLengthMask;
                     lastQuadNext =
                         ((orderBuffer->allocation[scratchpad->orderingDepth].packed) &
@@ -1176,7 +1176,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                             *((u32 *)&((FxCommonColoredTexturedTriangle *)(var_s2 - 8))->colors[2]);
                         var_s1 += 0x28;
                         gt3Tag = ((FxCommonPacketTag *)var_s3)->packed;
-                        orderBuffer = D_8019C9C0;
+                        orderBuffer = g_FxCommonActiveBuffer;
                         gt3Tag &= lengthMask6;
                         gt3PreviousLink =
                             ((orderBuffer->allocation[scratchpad->orderingDepth].packed) &
@@ -1263,7 +1263,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                             *((u16 *)&((FxCommonColoredTexturedQuad *)(var_s2 - 26))->texture.uv3);
                         var_s1 += 0x34;
                         gt4Tag = ((FxCommonPacketTag *)var_s3)->packed;
-                        orderBuffer = D_8019C9C0;
+                        orderBuffer = g_FxCommonActiveBuffer;
                         gt4Tag &= gt4LengthMask;
                         gt4PreviousLink =
                             ((orderBuffer->allocation[scratchpad->orderingDepth].packed) &
@@ -1289,7 +1289,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                 } while (primitiveIndex7 < primitiveCount);
             }
         }
-        D_8019C9C0->data = var_s3;
+        g_FxCommonActiveBuffer->data = var_s3;
     }
 }
 
@@ -1310,7 +1310,7 @@ int FxCommon_GetOffsetTableValue(FxCommonOffsetTable *table, int index)
     {                                                                                    \
         FxCommonBuffer *buffer;                                                          \
         FxCommonAddress address;                                                         \
-        buffer = D_8019C9C0;                                                             \
+        buffer = g_FxCommonActiveBuffer;                                                             \
         (packet)->tag.bits.address = buffer->allocation[sp->orderingDepth].bits.address; \
         address.pointer = (packet);                                                      \
         buffer->allocation[sp->orderingDepth].bits.address = address.word;               \
@@ -1344,7 +1344,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
 
     entry = model->bankOffsets + index;
     model = (FxCommonPolyModel *)&model->bytes[*entry];
-    f3Packet = (FxCommonModelF3Packet *)D_8019C9C0->data;
+    f3Packet = (FxCommonModelF3Packet *)g_FxCommonActiveBuffer->data;
     f3 = (FxCommonModelF3 *)&model->bytes[model->header.offsets[0]];
     f4 = (FxCommonModelF4 *)&model->bytes[model->header.offsets[1]];
     g3 = (FxCommonModelG3 *)&model->bytes[model->header.offsets[2]];
@@ -1360,7 +1360,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
                                &sp->screenCoordinates[0], &sp->screenCoordinates[1],
                                &sp->screenCoordinates[2], &sp->perspective, &sp->orderingDepth,
                                &sp->transformFlags);
-        sp->orderingDepth += D_801EA5E4;
+        sp->orderingDepth += g_FxCommonDepthBias;
         if (result > 0 && sp->orderingDepth - 1U < 0xFFF) {
             sp->orderingDepth >>= 2;
             f3Packet->tag.bytes.length = 4;
@@ -1380,7 +1380,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
                                &sp->screenCoordinates[1], &sp->screenCoordinates[2],
                                &sp->screenCoordinates[3], &sp->perspective, &sp->orderingDepth,
                                &sp->transformFlags);
-        sp->orderingDepth += D_801EA5E4;
+        sp->orderingDepth += g_FxCommonDepthBias;
         if (result > 0 && sp->orderingDepth - 1U < 0xFFF) {
             sp->orderingDepth >>= 2;
             f4Packet->tag.bytes.length = 5;
@@ -1400,7 +1400,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
                                &sp->screenCoordinates[0], &sp->screenCoordinates[1],
                                &sp->screenCoordinates[2], &sp->perspective, &sp->orderingDepth,
                                &sp->transformFlags);
-        sp->orderingDepth = (sp->orderingDepth + D_801EA5E4) >> 2;
+        sp->orderingDepth = (sp->orderingDepth + g_FxCommonDepthBias) >> 2;
         if (result > 0 && sp->orderingDepth - 1U < 0xFFF) {
             g3Packet->tag.bytes.length = 6;
             g3Packet->xy0 = sp->screenCoordinates[0];
@@ -1423,7 +1423,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
         if (sp->normalClip > 0) {
             gte_avsz3_padded();
             gte_stotz(&sp->orderingDepth);
-            sp->orderingDepth += D_801EA5E4;
+            sp->orderingDepth += g_FxCommonDepthBias;
             if (sp->orderingDepth > 0) {
                 sp->orderingDepth >>= 2;
                 gte_stsxy3(&g4Packet->xy0, &g4Packet->xy1, &g4Packet->xy2);
@@ -1440,7 +1440,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
             }
         }
     }
-    D_8019C9C0->data = (u8 *)g4Packet;
+    g_FxCommonActiveBuffer->data = (u8 *)g4Packet;
 
     ft3Packet = (FxCommonModelFt3Packet *)g4Packet;
     for (i = 0; i < model->header.counts[4]; i++, ft3++) {
@@ -1451,7 +1451,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
         if (sp->normalClip > 0) {
             gte_avsz3_padded();
             gte_stotz(&sp->orderingDepth);
-            sp->orderingDepth += D_801EA5E4;
+            sp->orderingDepth += g_FxCommonDepthBias;
             if (sp->orderingDepth > 0) {
                 sp->orderingDepth >>= 2;
                 gte_stsxy3(&ft3Packet->xy0, &ft3Packet->xy1, &ft3Packet->xy2);
@@ -1475,7 +1475,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
         if (sp->normalClip > 0) {
             gte_avsz3_padded();
             gte_stotz(&sp->orderingDepth);
-            sp->orderingDepth += D_801EA5E4;
+            sp->orderingDepth += g_FxCommonDepthBias;
             if (sp->orderingDepth > 0) {
                 sp->orderingDepth >>= 2;
                 gte_stsxy3(&ft4Packet->xy0, &ft4Packet->xy1, &ft4Packet->xy2);
@@ -1503,7 +1503,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
         if (sp->normalClip > 0) {
             gte_avsz3_padded();
             gte_stotz(&sp->orderingDepth);
-            sp->orderingDepth += D_801EA5E4;
+            sp->orderingDepth += g_FxCommonDepthBias;
             if (sp->orderingDepth > 0) {
                 sp->orderingDepth >>= 2;
                 gte_stsxy3(&gt3Packet->xy0, &gt3Packet->xy1, &gt3Packet->xy2);
@@ -1529,7 +1529,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
         if (sp->normalClip > 0) {
             gte_avsz3_padded();
             gte_stotz(&sp->orderingDepth);
-            sp->orderingDepth += D_801EA5E4;
+            sp->orderingDepth += g_FxCommonDepthBias;
             if (sp->orderingDepth > 0) {
                 sp->orderingDepth >>= 2;
                 gte_stsxy3(&gt4Packet->xy0, &gt4Packet->xy1, &gt4Packet->xy2);
@@ -1550,7 +1550,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
             }
         }
     }
-    D_8019C9C0->data = (u8 *)gt4Packet;
+    g_FxCommonActiveBuffer->data = (u8 *)gt4Packet;
 }
 
 #undef FX_COMMON_LINK_PACKET
@@ -1561,7 +1561,7 @@ void FxCommon_DrawModel(void *context, FxCommonPolyModel *model, int index)
     {                                                                                    \
         FxCommonBuffer *buffer;                                                          \
         FxCommonAddress address;                                                         \
-        buffer = D_8019C9C0;                                                             \
+        buffer = g_FxCommonActiveBuffer;                                                             \
         (packet)->tag.bits.address = buffer->allocation[sp->orderingDepth].bits.address; \
         address.pointer = (packet);                                                      \
         buffer->allocation[sp->orderingDepth].bits.address = address.word;               \
@@ -1595,7 +1595,7 @@ void FxCommon_DrawModelTinted(void *context, FxCommonPolyModel *model, int index
 
     entry = model->bankOffsets + index;
     model = (FxCommonPolyModel *)&model->bytes[*entry];
-    f3Packet = (FxCommonModelF3Packet *)D_8019C9C0->data;
+    f3Packet = (FxCommonModelF3Packet *)g_FxCommonActiveBuffer->data;
     f3 = (FxCommonModelF3 *)&model->bytes[model->header.offsets[0]];
     f4 = (FxCommonModelF4 *)&model->bytes[model->header.offsets[1]];
     g3 = (FxCommonModelG3 *)&model->bytes[model->header.offsets[2]];
@@ -1611,7 +1611,7 @@ void FxCommon_DrawModelTinted(void *context, FxCommonPolyModel *model, int index
                                &sp->screenCoordinates[0], &sp->screenCoordinates[1],
                                &sp->screenCoordinates[2], &sp->perspective, &sp->orderingDepth,
                                &sp->transformFlags);
-        sp->orderingDepth = (sp->orderingDepth + D_801EA5E4) >> 2;
+        sp->orderingDepth = (sp->orderingDepth + g_FxCommonDepthBias) >> 2;
         if (result > 0 && sp->orderingDepth - 1U < 0xFFF) {
             f3Packet->tag.bytes.length = 4;
             f3Packet->xy0 = sp->screenCoordinates[0];
@@ -1630,7 +1630,7 @@ void FxCommon_DrawModelTinted(void *context, FxCommonPolyModel *model, int index
                                &sp->screenCoordinates[1], &sp->screenCoordinates[2],
                                &sp->screenCoordinates[3], &sp->perspective, &sp->orderingDepth,
                                &sp->transformFlags);
-        sp->orderingDepth = (sp->orderingDepth + D_801EA5E4) >> 2;
+        sp->orderingDepth = (sp->orderingDepth + g_FxCommonDepthBias) >> 2;
         if (result > 0 && sp->orderingDepth - 1U < 0xFFF) {
             f4Packet->tag.bytes.length = 5;
             f4Packet->xy0 = sp->screenCoordinates[0];
@@ -1649,7 +1649,7 @@ void FxCommon_DrawModelTinted(void *context, FxCommonPolyModel *model, int index
                                &sp->screenCoordinates[0], &sp->screenCoordinates[1],
                                &sp->screenCoordinates[2], &sp->perspective, &sp->orderingDepth,
                                &sp->transformFlags);
-        sp->orderingDepth = (sp->orderingDepth + D_801EA5E4) >> 2;
+        sp->orderingDepth = (sp->orderingDepth + g_FxCommonDepthBias) >> 2;
         if (result > 0 && sp->orderingDepth - 1U < 0xFFF) {
             g3Packet->tag.bytes.length = 6;
             g3Packet->xy0 = sp->screenCoordinates[0];
@@ -1677,7 +1677,7 @@ void FxCommon_DrawModelTinted(void *context, FxCommonPolyModel *model, int index
                                &sp->screenCoordinates[1], &sp->screenCoordinates[2],
                                &sp->screenCoordinates[3], &sp->perspective, &sp->orderingDepth,
                                &sp->transformFlags);
-        sp->orderingDepth += D_801EA5E4;
+        sp->orderingDepth += g_FxCommonDepthBias;
         if (result > 0 && sp->orderingDepth - 1U < 0xFFF) {
             sp->orderingDepth >>= 2;
             g4Packet->tag.bytes.length = 8;
@@ -1712,7 +1712,7 @@ void FxCommon_DrawModelTinted(void *context, FxCommonPolyModel *model, int index
         if (sp->normalClip > 0) {
             gte_avsz3_padded();
             gte_stotz(&sp->orderingDepth);
-            sp->orderingDepth = (sp->orderingDepth + D_801EA5E4) >> 2;
+            sp->orderingDepth = (sp->orderingDepth + g_FxCommonDepthBias) >> 2;
             if (sp->orderingDepth > 0) {
                 gte_stsxy3(&ft3Packet->xy0, &ft3Packet->xy1, &ft3Packet->xy2);
                 ft3Packet->tag.bytes.length = 7;
@@ -1738,7 +1738,7 @@ void FxCommon_DrawModelTinted(void *context, FxCommonPolyModel *model, int index
         if (sp->normalClip > 0) {
             gte_avsz3_padded();
             gte_stotz(&sp->orderingDepth);
-            sp->orderingDepth = (sp->orderingDepth + D_801EA5E4) >> 2;
+            sp->orderingDepth = (sp->orderingDepth + g_FxCommonDepthBias) >> 2;
             if (sp->orderingDepth > 0) {
                 gte_stsxy3(&ft4Packet->xy0, &ft4Packet->xy1, &ft4Packet->xy2);
                 gte_ldv0(&ft4->vertices[3]);
@@ -1768,7 +1768,7 @@ void FxCommon_DrawModelTinted(void *context, FxCommonPolyModel *model, int index
         if (sp->normalClip > 0) {
             gte_avsz3_padded();
             gte_stotz(&sp->orderingDepth);
-            sp->orderingDepth = (sp->orderingDepth + D_801EA5E4) >> 2;
+            sp->orderingDepth = (sp->orderingDepth + g_FxCommonDepthBias) >> 2;
             if (sp->orderingDepth > 0) {
                 gte_stsxy3(&gt3Packet->xy0, &gt3Packet->xy1, &gt3Packet->xy2);
                 gt3Packet->tag.bytes.length = 9;
@@ -1795,7 +1795,7 @@ void FxCommon_DrawModelTinted(void *context, FxCommonPolyModel *model, int index
         if (sp->normalClip > 0) {
             gte_avsz3_padded();
             gte_stotz(&sp->orderingDepth);
-            sp->orderingDepth = (sp->orderingDepth + D_801EA5E4) >> 2;
+            sp->orderingDepth = (sp->orderingDepth + g_FxCommonDepthBias) >> 2;
             if (sp->orderingDepth > 0) {
                 gte_stsxy3(&gt4Packet->xy0, &gt4Packet->xy1, &gt4Packet->xy2);
                 gte_ldv0(&gt4->vertices[3]);
@@ -1817,7 +1817,7 @@ void FxCommon_DrawModelTinted(void *context, FxCommonPolyModel *model, int index
             }
         }
     }
-    D_8019C9C0->data = (u8 *)gt4Packet;
+    g_FxCommonActiveBuffer->data = (u8 *)gt4Packet;
 }
 
 #undef FX_COMMON_LINK_PACKET
@@ -1828,13 +1828,13 @@ void FxCommon_DrawModelTinted(void *context, FxCommonPolyModel *model, int index
     {                                                                                    \
         FxCommonBuffer *buffer;                                                          \
         FxCommonAddress address;                                                         \
-        buffer = D_8019C9C0;                                                             \
+        buffer = g_FxCommonActiveBuffer;                                                             \
         (packet)->tag.bits.address = buffer->allocation[sp->orderingDepth].bits.address; \
         address.pointer = (packet);                                                      \
         buffer->allocation[sp->orderingDepth].bits.address = address.word;               \
     }
 
-/* Draws one model of a bank at the fixed ordering depth D_801EA5E4: no
+/* Draws one model of a bank at the fixed ordering depth g_FxCommonDepthBias: no
  * per-primitive depth sort, only the projection (or back-face) test decides
  * whether a primitive is drawn. */
 void FxCommon_DrawModelFlat(void *context, FxCommonPolyModel *model, int index)
@@ -1870,8 +1870,8 @@ void FxCommon_DrawModelFlat(void *context, FxCommonPolyModel *model, int index)
     ft4 = (FxCommonModelFt4 *)&model->bytes[model->header.offsets[5]];
     gt3 = (FxCommonModelGt3 *)&model->bytes[model->header.offsets[6]];
     gt4 = (FxCommonModelGt4 *)&model->bytes[model->header.offsets[7]];
-    FX_COMMON_SCRATCHPAD->orderingDepth = D_801EA5E4;
-    f3Packet = (FxCommonModelF3Packet *)D_8019C9C0->data;
+    FX_COMMON_SCRATCHPAD->orderingDepth = g_FxCommonDepthBias;
+    f3Packet = (FxCommonModelF3Packet *)g_FxCommonActiveBuffer->data;
     sp = FX_COMMON_SCRATCHPAD;
 
     for (i = 0; i < model->header.counts[0]; i++, f3++) {
@@ -2031,7 +2031,7 @@ void FxCommon_DrawModelFlat(void *context, FxCommonPolyModel *model, int index)
             gt4Packet++;
         }
     }
-    D_8019C9C0->data = (u8 *)gt4Packet;
+    g_FxCommonActiveBuffer->data = (u8 *)gt4Packet;
 }
 
 #undef FX_COMMON_LINK_PACKET
@@ -2090,13 +2090,13 @@ void FxCommon_InitDisplay(void) {
 
     DrawSync(0);
     SetDispMask(1);
-    D_8019C9C0 = (FxCommonBuffer *)base;
+    g_FxCommonActiveBuffer = (FxCommonBuffer *)base;
 }
 
 void FxCommon_ClearActiveOrdering(void)
 {
-    ClearOTagR(D_8019C9C0->allocation, 0x1000);
-    FxCommon_SelectBufferAllocation((void **)D_8019C9C0);
+    ClearOTagR(g_FxCommonActiveBuffer->allocation, 0x1000);
+    FxCommon_SelectBufferAllocation((void **)g_FxCommonActiveBuffer);
 }
 
 void FxCommon_SelectBufferAllocation(void **buffer)

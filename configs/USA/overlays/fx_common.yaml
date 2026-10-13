@@ -47,7 +47,7 @@ segments:
       - [0x6D4C, c, camera_path]
       - [0x6F7C, c, effect_init]
       - [0x8BB0, c, model_buffers]
-      - [0xCFD4, data, D_8019BFC4]
+      - [0xCFD4, data, g_FxCommonCameraAngles]
   - [0xD000]
 # source slice: scanner
 # extract locally with: dd if=disc/extracted/PE.IMG of=original/USA/overlays/fx_common.bin bs=2048 skip=1792 count=26

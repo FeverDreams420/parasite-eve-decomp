@@ -147,3 +147,41 @@ address,overlay,old_name,name,evidence
 0x8019BD78,fx_common,func_8019BD78,FxCommon_InitDisplay,"model_buffers.c: SetGeomOffset/Screen, DefDraw/DispEnv, ClearOTagR and ClearImage for both buffers, sets D_8019C9C0 to the first"
 0x8019BF50,fx_common,func_8019BF50,FxCommon_ClearActiveOrdering,model_buffers.c: ClearOTagR on the active buffer's allocation then func_8019BF8C resets its allocation pointer
 0x8019BF8C,fx_common,func_8019BF8C,FxCommon_SelectBufferAllocation,model_buffers.c: stores D_800B0E4C[0] or [1] depending on whether the buffer is the first frame buffer
+0x8019CC30,fx_common,D_8019CC30,g_FxCommonViewMatrix,camera.c FxCommon_UpdateCameraMatrices builds it with CompMatrix; the draw functions compose node matrices with it and load it to the GTE
+0x8019CDF0,fx_common,D_8019CDF0,g_FxCommonCameraMatrix,camera.c FxCommon_UpdateCameraMatrices fills it with RotMatrixZYX plus camera position; FxCommon_UpdateFrustumPlanes loads it to rotate the corners
+0x8019BFC4,fx_common,D_8019BFC4,g_FxCommonCameraAngles,"camera.c FxCommon_UpdateCameraMatrices writes pitch, yaw and zero via ratan2 and feeds RotMatrix and RotMatrixZYX"
+0x8019BFD0,fx_common,D_8019BFD0,g_FxCommonFrustumCorner0,camera.c FxCommon_UpdateFrustumPlanes RotTrans input
+0x8019BFD8,fx_common,D_8019BFD8,g_FxCommonFrustumCorner1,camera.c FxCommon_UpdateFrustumPlanes RotTrans input
+0x8019BFE0,fx_common,D_8019BFE0,g_FxCommonFrustumCorner2,camera.c FxCommon_UpdateFrustumPlanes RotTrans input
+0x8019BFE8,fx_common,D_8019BFE8,g_FxCommonFrustumCorner3,camera.c FxCommon_UpdateFrustumPlanes RotTrans input
+0x8019CBB0,fx_common,D_8019CBB0,g_FxCommonFrustumNormal0,camera.c FxCommon_UpdateFrustumPlanes OuterProduct0 output (corner2 x corner0); read by FxCommon_IsPointInView
+0x8019CBD0,fx_common,D_8019CBD0,g_FxCommonFrustumNormal1,camera.c FxCommon_UpdateFrustumPlanes OuterProduct0 output (corner3 x corner1); read by FxCommon_IsPointInView
+0x8019CBF0,fx_common,D_8019CBF0,g_FxCommonFrustumNormal2,camera.c FxCommon_UpdateFrustumPlanes OuterProduct0 output (corner3 x corner2); read by FxCommon_CheckFourBoundsWithMargin
+0x8019CB50,fx_common,D_8019CB50,g_FxCommonFrustumNormal3,camera.c FxCommon_UpdateFrustumPlanes OuterProduct0 output (corner1 x corner0); read by FxCommon_CheckFourBoundsWithMargin
+0x8019CB48,fx_common,D_8019CB48,g_FxCommonFrustumDistance0,camera.c FxCommon_UpdateFrustumPlanes writes -(n0 . corner2); FxCommon_IsPointInView adds it as the plane constant
+0x8019CB4C,fx_common,D_8019CB4C,g_FxCommonFrustumDistance1,camera.c FxCommon_UpdateFrustumPlanes writes -(n1 . corner3); FxCommon_IsPointInView adds it as the plane constant
+0x8019CBA8,fx_common,D_8019CBA8,g_FxCommonFrustumDistance2,camera.c FxCommon_UpdateFrustumPlanes writes -(n2 . corner2); FxCommon_CheckFourBoundsWithMargin adds it as the plane constant
+0x8019CA90,fx_common,D_8019CA90,g_FxCommonFrustumDistance3,camera.c FxCommon_UpdateFrustumPlanes writes -(n3 . corner1); FxCommon_CheckFourBoundsWithMargin adds it as the plane constant
+0x8019CC04,fx_common,D_8019CC04,g_FxCommonFrustumSide0,camera.c FxCommon_UpdateFrustumPlanes writes the signed distance of corner1 from plane 0; its sign selects the inside test in FxCommon_IsPointInView
+0x8019CC0C,fx_common,D_8019CC0C,g_FxCommonFrustumSide1,camera.c FxCommon_UpdateFrustumPlanes writes the signed distance of corner0 from plane 1; its sign selects the inside test in FxCommon_IsPointInView
+0x8019CC10,fx_common,D_8019CC10,g_FxCommonFrustumSide2,camera.c FxCommon_UpdateFrustumPlanes writes the signed distance of corner1 from plane 2; its sign selects the test in FxCommon_CheckFourBoundsWithMargin
+0x8019CBC4,fx_common,D_8019CBC4,g_FxCommonFrustumSide3,camera.c FxCommon_UpdateFrustumPlanes writes the signed distance of corner2 from plane 3; its sign selects the test in FxCommon_CheckFourBoundsWithMargin
+0x8019CBC8,fx_common,D_8019CBC8,g_FxCommonFrustumLength0,camera.c FxCommon_UpdateFrustumPlanes writes SquareRoot0 of |n0|^2; divisor of the margin distance in FxCommon_CheckBoundsWithMargin
+0x8019CC00,fx_common,D_8019CC00,g_FxCommonFrustumLength1,camera.c FxCommon_UpdateFrustumPlanes writes SquareRoot0 of |n1|^2; divisor of the margin distance in FxCommon_CheckBoundsWithMargin
+0x8019CC08,fx_common,D_8019CC08,g_FxCommonFrustumLength2,camera.c FxCommon_UpdateFrustumPlanes writes SquareRoot0 of |n2|^2; divisor in FxCommon_CheckFourBoundsWithMargin
+0x8019CBAC,fx_common,D_8019CBAC,g_FxCommonFrustumLength3,camera.c FxCommon_UpdateFrustumPlanes writes SquareRoot0 of |n3|^2; divisor in FxCommon_CheckFourBoundsWithMargin
+0x8019CC52,fx_common,D_8019CC52,g_FxCommonRoomVariant,camera.c FxCommon_SelectRoomVariant assigns -1 then 0..9 per room id (default 7); effect_init.c reads it as the motion base passed to func_80195994
+0x8019C9C0,fx_common,D_8019C9C0,g_FxCommonActiveBuffer,model_buffers.c FxCommon_InitDisplay sets it to the first frame buffer g_FxCommonFrames; every draw function reads allocation and data through it
+0x8019C340,fx_common,D_8019C340,g_FxCommonDefaultNode,camera.c FxCommon_ResetTransformNode points each node's record at it and FxCommon_InitNodePools resets it as a node
+0x801E4A88,fx_common,D_801E4A88,g_FxCommonIndexLinks,camera.c FxCommon_AllocIndexLink and FxCommon_FreeIndexLink maintain previous/next indices in it
+0x8019C830,fx_common,D_8019C830,g_FxCommonIndexFreeNext,camera.c FxCommon_InitNodePools fills D[i] = i + 1; FxCommon_AllocIndexLink and FxCommon_FreeIndexLink pop and push the free list through it
+0x8019CBC0,fx_common,D_8019CBC0,g_FxCommonIndexFreeHead,camera.c FxCommon_InitNodePools zeroes it; FxCommon_AllocIndexLink pops and FxCommon_FreeIndexLink pushes it
+0x8019C9D0,fx_common,D_8019C9D0,g_FxCommonIndexLast,camera.c FxCommon_InitNodePools sets 200; FxCommon_AllocIndexLink inserts after it and FxCommon_FreeIndexLink moves it back
+0x8019CC50,fx_common,D_8019CC50,g_FxCommonRecordCursor,camera.c FxCommon_BeginRecordIteration resets it to 200; FxCommon_NextRecord advances it along the links
+0x801E4E00,fx_common,D_801E4E00,g_FxCommonRecords,camera.c FxCommon_NextRecord returns &D_801E4E00[record]
+0x8019CCBC,fx_common,D_8019CCBC,g_FxCommonNodeBuckets,camera.c FxCommon_LinkNodeToParent inserts the node at the head of D_8019CCBC[bucket]
+0x801D0260,fx_common,D_801D0260,g_FxCommonTimTable,camera.c FxCommon_LoadEffectSectors reads sectors into it; camera_path.c and effects.c pass it to Draw_GetTimTableEntry
+0x8019C058,fx_common,D_8019C058,g_FxCommonMotionBlendFrames,effects.c FxCommon_BeginMotionBlend sets 0x20 and FxCommon_StepMotionBlend decrements it while adding deltas
+0x8019C02C,fx_common,D_8019C02C,g_FxCommonMarkerFade,effects.c func_80192740 assigns D_8019C02C = FxCommon_DrawEffectMarkers(D_8019C02C); camera_path.c FxCommon_InitCameraPath clears it
+0x801EA5E4,fx_common,D_801EA5E4,g_FxCommonDepthBias,effects.c FxCommon_DrawSceneNodes sets a per-node ordering depth before each DRAW; model_buffers.c FxCommon_DrawModelFlat uses it as the fixed ordering depth
+0x8019BFF0,fx_common,D_8019BFF0,g_FxCommonWorkMatrix,"camera.c draw functions copy the node matrix into it, CompMatrix with the view matrix, then SetRotMatrix and SetTransMatrix"

@@ -155,10 +155,10 @@ void func_80196498(void)
                          g_FieldBgTextureSlots[textureIndexOrHasPoints].clut_y);
         textureIndexOrHasPoints++;
     } while (textureIndexOrHasPoints < 2);
-    if ((D_8019C008 != 0) || (Render_SetupFogLayer(Draw_GetTimTableEntry(&D_801D0260, 0)), (D_8019C008 != 0))) {
-        Render_SetupFogLayer(Draw_GetTimTableEntry(&D_801D0260, 1));
+    if ((D_8019C008 != 0) || (Render_SetupFogLayer(Draw_GetTimTableEntry(&g_FxCommonTimTable, 0)), (D_8019C008 != 0))) {
+        Render_SetupFogLayer(Draw_GetTimTableEntry(&g_FxCommonTimTable, 1));
     }
-    resourceTableData = &D_801D0260;
+    resourceTableData = &g_FxCommonTimTable;
     resourceTable = Draw_GetTimTableEntry(resourceTableData, 2);
     pointIndex = 0;
     initialSlots = g_FxCommonRuntime.pairedNodes;
@@ -371,7 +371,7 @@ void func_80196498(void)
         *yCursor = (s16) (u16)pointList->y;
         pointZ = (u16)pointList->z;
         *zCursor = (s16) pointZ;
-        firstInitialNode = func_80190C1C(&D_8019C340, *subtypeCursor, *variantCursor, *typeCursor, (void *) g_FxCommonEffectSetup[pointIndex].parameter38, (void *) g_FxCommonEffectSetup[pointIndex].parameter3c, Draw_GetTimTableEntry(&D_8019CE10, 0));
+        firstInitialNode = func_80190C1C(&g_FxCommonDefaultNode, *subtypeCursor, *variantCursor, *typeCursor, (void *) g_FxCommonEffectSetup[pointIndex].parameter38, (void *) g_FxCommonEffectSetup[pointIndex].parameter3c, Draw_GetTimTableEntry(&D_8019CE10, 0));
         initialSlots[pointIndex] = firstInitialNode;
         firstInitialNode->state[1] = setupCursor->position[0];
         (initialSlots[pointIndex])->state[2] = (s32) *yCursor;
@@ -382,7 +382,7 @@ void func_80196498(void)
         initialNodeType = *typeCursor;
         initialNodeVariant = *variantCursor;
         initialNodeSubtype = *subtypeCursor;
-        secondInitialNode = func_80190C1C(&D_8019C340, initialNodeSubtype, initialNodeVariant, initialNodeType, (void *)0x3E8, (void *)0x1F4, initialResource);
+        secondInitialNode = func_80190C1C(&g_FxCommonDefaultNode, initialNodeSubtype, initialNodeVariant, initialNodeType, (void *)0x3E8, (void *)0x1F4, initialResource);
         *secondInitialSlot = secondInitialNode;
         secondInitialNode->state[1] = setupCursor->position[0];
         (*secondInitialSlot)->state[2] = (s32) *yCursor;
@@ -401,41 +401,41 @@ void func_80196498(void)
         setupCursor++;
     }
     nodeResource = Draw_GetTimTableEntry(&D_8019CE10, 0);
-    g_FxCommonRuntime.node0 = func_80190AEC(&D_8019C340, Draw_GetTimTableEntry(&D_8019CE10, 1));
-    D_8019C180 = func_80190B78(&D_8019C340, 0x51, nodeResource);
-    D_8019CDA0 = func_80190B78(&D_8019C340, 0x28, nodeResource);
-    D_8019CDA4 = func_80190B78(&D_8019C340, 0x29, nodeResource);
-    D_8019CDA8 = func_80190B78(&D_8019C340, 0x2A, nodeResource);
-    D_8019CDAC = func_80190B78(&D_8019C340, 0x2B, nodeResource);
-    D_8019CDB0 = func_80190B78(&D_8019C340, 0x2C, nodeResource);
-    D_8019CDB4 = func_80190B78(&D_8019C340, 0x2D, nodeResource);
-    D_8019CDB8 = func_80190B78(&D_8019C340, 0x2E, nodeResource);
-    D_8019CDBC = func_80190B78(&D_8019C340, 0x2F, nodeResource);
-    D_8019CDC0 = func_80190B78(&D_8019C340, 0x30, nodeResource);
-    D_8019CDC4 = func_80190B78(&D_8019C340, 0x31, nodeResource);
-    D_8019CDC8 = func_80190B78(&D_8019C340, 0x32, nodeResource);
-    g_FxCommonRuntime.node25 = func_80190B78(&D_8019C340, 0x25, nodeResource);
-    D_8019CC28 = func_80190B78(&D_8019C340, 0x54, nodeResource);
-    D_801EA588 = func_80190B78(&D_8019C340, 0x23, nodeResource);
-    D_801EA58C = func_80190B78(&D_8019C340, 0x23, nodeResource);
-    D_801EA578 = func_80190B78(&D_8019C340, 0x52, nodeResource);
-    D_801EA580 = func_80190B78(&D_8019C340, 0x52, nodeResource);
-    D_801EA57C = func_80190B78(&D_8019C340, 0x52, nodeResource);
-    D_801EA584 = func_80190B78(&D_8019C340, 0x52, nodeResource);
-    D_8019C148 = func_80190B78(&D_8019C340, 0x53, nodeResource);
-    D_8019C150 = func_80190B78(&D_8019C340, 0x53, nodeResource);
-    D_8019C14C = func_80190B78(&D_8019C340, 0x53, nodeResource);
-    D_8019C154 = func_80190B78(&D_8019C340, 0x53, nodeResource);
-    D_8019CC20 = func_80190B78(&D_8019C340, 0x21, nodeResource);
-    D_8019CC24 = func_80190B78(&D_8019C340, 0x21, nodeResource);
-    g_FxCommonType26Nodes[0] = func_80190B78(&D_8019C340, 0x26, nodeResource);
-    g_FxCommonType26Nodes[1] = func_80190B78(&D_8019C340, 0x26, nodeResource);
-    g_FxCommonType26Nodes[2] = func_80190B78(&D_8019C340, 0x26, nodeResource);
-    g_FxCommonType26Nodes[3] = func_80190B78(&D_8019C340, 0x26, nodeResource);
-    D_8019C820 = func_80190C1C(&D_8019C340, 0x22, 0x20, 0x20, (void *)0x2710, (void *)0x1F40, nodeResource);
-    D_8019C824 = func_80190C1C(&D_8019C340, 0x22, 0x20, 0x20, (void *)0x14, (void *)0xA, nodeResource);
-    g_FxCommonPairedNodes[0] = func_80190C1C(&D_8019C340, 0x22, 0x20, 0x20, (void *)0x2710, (void *)0x1F40, nodeResource);
-    g_FxCommonPairedNodes[1] = func_80190C1C(&D_8019C340, 0x22, 0x20, 0x20, (void *)0x14, (void *)0xA, nodeResource);
+    g_FxCommonRuntime.node0 = func_80190AEC(&g_FxCommonDefaultNode, Draw_GetTimTableEntry(&D_8019CE10, 1));
+    D_8019C180 = func_80190B78(&g_FxCommonDefaultNode, 0x51, nodeResource);
+    D_8019CDA0 = func_80190B78(&g_FxCommonDefaultNode, 0x28, nodeResource);
+    D_8019CDA4 = func_80190B78(&g_FxCommonDefaultNode, 0x29, nodeResource);
+    D_8019CDA8 = func_80190B78(&g_FxCommonDefaultNode, 0x2A, nodeResource);
+    D_8019CDAC = func_80190B78(&g_FxCommonDefaultNode, 0x2B, nodeResource);
+    D_8019CDB0 = func_80190B78(&g_FxCommonDefaultNode, 0x2C, nodeResource);
+    D_8019CDB4 = func_80190B78(&g_FxCommonDefaultNode, 0x2D, nodeResource);
+    D_8019CDB8 = func_80190B78(&g_FxCommonDefaultNode, 0x2E, nodeResource);
+    D_8019CDBC = func_80190B78(&g_FxCommonDefaultNode, 0x2F, nodeResource);
+    D_8019CDC0 = func_80190B78(&g_FxCommonDefaultNode, 0x30, nodeResource);
+    D_8019CDC4 = func_80190B78(&g_FxCommonDefaultNode, 0x31, nodeResource);
+    D_8019CDC8 = func_80190B78(&g_FxCommonDefaultNode, 0x32, nodeResource);
+    g_FxCommonRuntime.node25 = func_80190B78(&g_FxCommonDefaultNode, 0x25, nodeResource);
+    D_8019CC28 = func_80190B78(&g_FxCommonDefaultNode, 0x54, nodeResource);
+    D_801EA588 = func_80190B78(&g_FxCommonDefaultNode, 0x23, nodeResource);
+    D_801EA58C = func_80190B78(&g_FxCommonDefaultNode, 0x23, nodeResource);
+    D_801EA578 = func_80190B78(&g_FxCommonDefaultNode, 0x52, nodeResource);
+    D_801EA580 = func_80190B78(&g_FxCommonDefaultNode, 0x52, nodeResource);
+    D_801EA57C = func_80190B78(&g_FxCommonDefaultNode, 0x52, nodeResource);
+    D_801EA584 = func_80190B78(&g_FxCommonDefaultNode, 0x52, nodeResource);
+    D_8019C148 = func_80190B78(&g_FxCommonDefaultNode, 0x53, nodeResource);
+    D_8019C150 = func_80190B78(&g_FxCommonDefaultNode, 0x53, nodeResource);
+    D_8019C14C = func_80190B78(&g_FxCommonDefaultNode, 0x53, nodeResource);
+    D_8019C154 = func_80190B78(&g_FxCommonDefaultNode, 0x53, nodeResource);
+    D_8019CC20 = func_80190B78(&g_FxCommonDefaultNode, 0x21, nodeResource);
+    D_8019CC24 = func_80190B78(&g_FxCommonDefaultNode, 0x21, nodeResource);
+    g_FxCommonType26Nodes[0] = func_80190B78(&g_FxCommonDefaultNode, 0x26, nodeResource);
+    g_FxCommonType26Nodes[1] = func_80190B78(&g_FxCommonDefaultNode, 0x26, nodeResource);
+    g_FxCommonType26Nodes[2] = func_80190B78(&g_FxCommonDefaultNode, 0x26, nodeResource);
+    g_FxCommonType26Nodes[3] = func_80190B78(&g_FxCommonDefaultNode, 0x26, nodeResource);
+    D_8019C820 = func_80190C1C(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x2710, (void *)0x1F40, nodeResource);
+    D_8019C824 = func_80190C1C(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x14, (void *)0xA, nodeResource);
+    g_FxCommonPairedNodes[0] = func_80190C1C(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x2710, (void *)0x1F40, nodeResource);
+    g_FxCommonPairedNodes[1] = func_80190C1C(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x14, (void *)0xA, nodeResource);
     (g_FxCommonPairedNodes[0])->value2E = 0xC8;
     (g_FxCommonPairedNodes[1])->value2E = 0xC8;
     g_FxCommonPairedNodes[0]->state[1] = 0x334;
@@ -491,7 +491,7 @@ void func_80196498(void)
             nodeSubtype = subtypeFixed >> 0x10;
             nodeType = typeFixed >> 0x10;
             do {
-                effectRoot = &D_8019C340;
+                effectRoot = &g_FxCommonDefaultNode;
                 variantOrMotionOffset = variantBase + 0x34;
                 firstNode = func_80190C1C(effectRoot, (s16) nodeSubtype, variantOrMotionOffset, (s16) nodeType, (void *) (u16) *(short *)((u8 *)D_8019C0D4 + tableIndex), (void *) (u16) *(short *)((u8 *)D_8019C0E8 + tableIndex), nodeResource);
                 firstSlot = &D_8019C3B0[D_8019C020];
@@ -525,10 +525,10 @@ void func_80196498(void)
     g_FxCommonRuntime.node25->state[0] = 0;
     g_FxCommonRuntime.node25->state[1] = 0x758;
     g_FxCommonRuntime.node25->state[2] = 0;
-    func_80195994(D_8019CC52, 1, 1, 0);
+    func_80195994(g_FxCommonRoomVariant, 1, 1, 0);
     motionIndex = 0;
-    D_8019C058 = 0;
-    motionBase = (s16) (u16) D_8019CC52;
+    g_FxCommonMotionBlendFrames = 0;
+    motionBase = (s16) (u16) g_FxCommonRoomVariant;
     /* The earlier variant is dead; the motion byte offset is assigned below. */
     asm("" : : "r"((u16)motionBase) : "$16");
     variantOrMotionOffset = 0;
@@ -540,20 +540,20 @@ void func_80196498(void)
         variantOrMotionOffset += 0x10;
     }
     if (D_8019BFF8 == 1) {
-        D_8019C02C = 0;
+        g_FxCommonMarkerFade = 0;
         D_8019C045 = 1;
         D_8019C044 = 1;
         D_8019C048 = 1;
-        D_8019CC52 = (s16) D_8019BFFC;
+        g_FxCommonRoomVariant = (s16) D_8019BFFC;
     }
     if (D_8019BFF4 == 0) {
-        D_8019CC52 = 7;
+        g_FxCommonRoomVariant = 7;
         D_8019CC1C = 0;
         D_8019C045 = 0;
         D_8019C046 = 0;
         D_8019C048 = 0;
         D_8019C044 = 0;
-        D_8019C02C = 0;
+        g_FxCommonMarkerFade = 0;
         D_8019C02E = 0;
         D_8019C034 = 0xA;
         func_80195994(7, 0, 0, 0);
@@ -561,9 +561,9 @@ void func_80196498(void)
     }
     if (D_8019BFF4 == 7) {
         selectedMotion = D_8019C017;
-        D_8019CC52 = 9;
+        g_FxCommonRoomVariant = 9;
         D_8019CC1C = 0;
-        D_8019C02C = 0;
+        g_FxCommonMarkerFade = 0;
         D_8019C045 = 0;
         D_8019C044 = 1;
         D_8019C048 = 1;
@@ -579,7 +579,7 @@ void func_80196498(void)
         D_8019C040 = motionCount;
         D_8019C041 = 0;
         D_8019C042 = selectedMotion;
-        D_8019C02C = 0;
+        g_FxCommonMarkerFade = 0;
         D_8019C330 = motion.vector.x;
         D_8019C334 = motion.vector.y;
         D_8019C338 = motion.vector.z;

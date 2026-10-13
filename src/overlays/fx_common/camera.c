@@ -40,11 +40,11 @@ void FxCommon_UpdateCameraMatrices(void)
     view.t[0] = -g_FxCommonCameraPosition.x;
     view.t[1] = -g_FxCommonCameraPosition.y;
     view.t[2] = -g_FxCommonCameraPosition.z;
-    D_8019BFC4->x = ratan2(unit.y, SquareRoot0(unit.x * unit.x + unit.z * unit.z));
-    D_8019BFC4->y = ratan2(unit.z, unit.x) - 0x400;
-    D_8019BFC4->z = 0;
-    RotMatrix((RoomFxSeed8 *)D_8019BFC4, &rotation);
-    CompMatrix(&rotation, &view, &D_8019CC30);
+    g_FxCommonCameraAngles->x = ratan2(unit.y, SquareRoot0(unit.x * unit.x + unit.z * unit.z));
+    g_FxCommonCameraAngles->y = ratan2(unit.z, unit.x) - 0x400;
+    g_FxCommonCameraAngles->z = 0;
+    RotMatrix((RoomFxSeed8 *)g_FxCommonCameraAngles, &rotation);
+    CompMatrix(&rotation, &view, &g_FxCommonViewMatrix);
 
     up.x = 0;
     up.y = -20000;
@@ -55,18 +55,18 @@ void FxCommon_UpdateCameraMatrices(void)
     eye.x = g_FxCommonCameraPosition.x;
     eye.y = g_FxCommonCameraPosition.y;
     eye.z = g_FxCommonCameraPosition.z;
-    FxCommon_BuildLookAtMatrix((GteMatrix *)&D_8019CC30, &eye, &target, &up);
+    FxCommon_BuildLookAtMatrix((GteMatrix *)&g_FxCommonViewMatrix, &eye, &target, &up);
 
-    D_8019BFC4->x = -ratan2(SquareRoot0(offset.x * offset.x + offset.z * offset.z),
+    g_FxCommonCameraAngles->x = -ratan2(SquareRoot0(offset.x * offset.x + offset.z * offset.z),
                               -offset.y) + 0x400;
-    D_8019BFC4->y = -ratan2(offset.z, offset.x) + 0x400;
-    D_8019BFC4->z = 0;
-    RotMatrixZYX(D_8019BFC4, &D_8019CDF0);
-    D_8019CDF0.t[0] = g_FxCommonCameraPosition.x;
-    D_8019CDF0.t[1] = g_FxCommonCameraPosition.y;
-    D_8019CDF0.t[2] = g_FxCommonCameraPosition.z;
-    SetTransMatrix(&D_8019CC30);
-    SetRotMatrix(&D_8019CC30);
+    g_FxCommonCameraAngles->y = -ratan2(offset.z, offset.x) + 0x400;
+    g_FxCommonCameraAngles->z = 0;
+    RotMatrixZYX(g_FxCommonCameraAngles, &g_FxCommonCameraMatrix);
+    g_FxCommonCameraMatrix.t[0] = g_FxCommonCameraPosition.x;
+    g_FxCommonCameraMatrix.t[1] = g_FxCommonCameraPosition.y;
+    g_FxCommonCameraMatrix.t[2] = g_FxCommonCameraPosition.z;
+    SetTransMatrix(&g_FxCommonViewMatrix);
+    SetRotMatrix(&g_FxCommonViewMatrix);
 }
 
 /* Build a camera matrix looking from eye toward target with the given up
@@ -236,12 +236,12 @@ void FxCommon_UpdateFrustumPlanes(FxCommonVec3 *eye)
     s32 flag;
 
     PushMatrix();
-    SetTransMatrix(&D_8019CDF0);
-    SetRotMatrix(&D_8019CDF0);
-    RotTrans(&D_8019BFD0, &corner0, &flag);
-    RotTrans(&D_8019BFD8, &corner1, &flag);
-    RotTrans(&D_8019BFE0, &corner2, &flag);
-    RotTrans(&D_8019BFE8, &corner3, &flag);
+    SetTransMatrix(&g_FxCommonCameraMatrix);
+    SetRotMatrix(&g_FxCommonCameraMatrix);
+    RotTrans(&g_FxCommonFrustumCorner0, &corner0, &flag);
+    RotTrans(&g_FxCommonFrustumCorner1, &corner1, &flag);
+    RotTrans(&g_FxCommonFrustumCorner2, &corner2, &flag);
+    RotTrans(&g_FxCommonFrustumCorner3, &corner3, &flag);
 
     a.x = corner2.x - eye->x;
     a.y = corner2.y - eye->y;
@@ -249,7 +249,7 @@ void FxCommon_UpdateFrustumPlanes(FxCommonVec3 *eye)
     b.x = corner0.x - eye->x;
     b.y = corner0.y - eye->y;
     b.z = corner0.z - eye->z;
-    OuterProduct0(&a, &b, &D_8019CBB0);
+    OuterProduct0(&a, &b, &g_FxCommonFrustumNormal0);
 
     a.x = corner3.x - eye->x;
     a.y = corner3.y - eye->y;
@@ -257,7 +257,7 @@ void FxCommon_UpdateFrustumPlanes(FxCommonVec3 *eye)
     b.x = corner1.x - eye->x;
     b.y = corner1.y - eye->y;
     b.z = corner1.z - eye->z;
-    OuterProduct0(&a, &b, &D_8019CBD0);
+    OuterProduct0(&a, &b, &g_FxCommonFrustumNormal1);
 
     a.x = corner3.x - eye->x;
     a.y = corner3.y - eye->y;
@@ -265,7 +265,7 @@ void FxCommon_UpdateFrustumPlanes(FxCommonVec3 *eye)
     b.x = corner2.x - eye->x;
     b.y = corner2.y - eye->y;
     b.z = corner2.z - eye->z;
-    OuterProduct0(&a, &b, &D_8019CBF0);
+    OuterProduct0(&a, &b, &g_FxCommonFrustumNormal2);
 
     a.x = corner1.x - eye->x;
     a.y = corner1.y - eye->y;
@@ -273,37 +273,37 @@ void FxCommon_UpdateFrustumPlanes(FxCommonVec3 *eye)
     b.x = corner0.x - eye->x;
     b.y = corner0.y - eye->y;
     b.z = corner0.z - eye->z;
-    OuterProduct0(&a, &b, &D_8019CB50);
+    OuterProduct0(&a, &b, &g_FxCommonFrustumNormal3);
 
-    D_8019CB48 = -(D_8019CBB0.x * corner2.x) - D_8019CBB0.y * corner2.y
-               - D_8019CBB0.z * corner2.z;
-    D_8019CB4C = -(D_8019CBD0.x * corner3.x) - D_8019CBD0.y * corner3.y
-               - D_8019CBD0.z * corner3.z;
-    D_8019CBA8 = -(D_8019CBF0.x * corner2.x) - D_8019CBF0.y * corner2.y
-               - D_8019CBF0.z * corner2.z;
-    D_8019CA90 = -(D_8019CB50.x * corner1.x) - D_8019CB50.y * corner1.y
-               - D_8019CB50.z * corner1.z;
-    D_8019CC04 = D_8019CBB0.x * corner1.x + D_8019CBB0.y * corner1.y
-               + D_8019CBB0.z * corner1.z + D_8019CB48;
-    D_8019CC0C = D_8019CBD0.x * corner0.x + D_8019CBD0.y * corner0.y
-               + D_8019CBD0.z * corner0.z + D_8019CB4C;
-    D_8019CC10 = D_8019CBF0.x * corner1.x + D_8019CBF0.y * corner1.y
-               + D_8019CBF0.z * corner1.z + D_8019CBA8;
-    D_8019CBC4 = D_8019CB50.x * corner2.x + D_8019CB50.y * corner2.y
-               + D_8019CB50.z * corner2.z + D_8019CA90;
+    g_FxCommonFrustumDistance0 = -(g_FxCommonFrustumNormal0.x * corner2.x) - g_FxCommonFrustumNormal0.y * corner2.y
+               - g_FxCommonFrustumNormal0.z * corner2.z;
+    g_FxCommonFrustumDistance1 = -(g_FxCommonFrustumNormal1.x * corner3.x) - g_FxCommonFrustumNormal1.y * corner3.y
+               - g_FxCommonFrustumNormal1.z * corner3.z;
+    g_FxCommonFrustumDistance2 = -(g_FxCommonFrustumNormal2.x * corner2.x) - g_FxCommonFrustumNormal2.y * corner2.y
+               - g_FxCommonFrustumNormal2.z * corner2.z;
+    g_FxCommonFrustumDistance3 = -(g_FxCommonFrustumNormal3.x * corner1.x) - g_FxCommonFrustumNormal3.y * corner1.y
+               - g_FxCommonFrustumNormal3.z * corner1.z;
+    g_FxCommonFrustumSide0 = g_FxCommonFrustumNormal0.x * corner1.x + g_FxCommonFrustumNormal0.y * corner1.y
+               + g_FxCommonFrustumNormal0.z * corner1.z + g_FxCommonFrustumDistance0;
+    g_FxCommonFrustumSide1 = g_FxCommonFrustumNormal1.x * corner0.x + g_FxCommonFrustumNormal1.y * corner0.y
+               + g_FxCommonFrustumNormal1.z * corner0.z + g_FxCommonFrustumDistance1;
+    g_FxCommonFrustumSide2 = g_FxCommonFrustumNormal2.x * corner1.x + g_FxCommonFrustumNormal2.y * corner1.y
+               + g_FxCommonFrustumNormal2.z * corner1.z + g_FxCommonFrustumDistance2;
+    g_FxCommonFrustumSide3 = g_FxCommonFrustumNormal3.x * corner2.x + g_FxCommonFrustumNormal3.y * corner2.y
+               + g_FxCommonFrustumNormal3.z * corner2.z + g_FxCommonFrustumDistance3;
 
-    D_8019CBC8 = SquareRoot0(D_8019CBB0.x * D_8019CBB0.x
-                               + D_8019CBB0.y * D_8019CBB0.y
-                               + D_8019CBB0.z * D_8019CBB0.z);
-    D_8019CC00 = SquareRoot0(D_8019CBD0.x * D_8019CBD0.x
-                               + D_8019CBD0.y * D_8019CBD0.y
-                               + D_8019CBD0.z * D_8019CBD0.z);
-    D_8019CC08 = SquareRoot0(D_8019CBF0.x * D_8019CBF0.x
-                               + D_8019CBF0.y * D_8019CBF0.y
-                               + D_8019CBF0.z * D_8019CBF0.z);
-    D_8019CBAC = SquareRoot0(D_8019CB50.x * D_8019CB50.x
-                               + D_8019CB50.y * D_8019CB50.y
-                               + D_8019CB50.z * D_8019CB50.z);
+    g_FxCommonFrustumLength0 = SquareRoot0(g_FxCommonFrustumNormal0.x * g_FxCommonFrustumNormal0.x
+                               + g_FxCommonFrustumNormal0.y * g_FxCommonFrustumNormal0.y
+                               + g_FxCommonFrustumNormal0.z * g_FxCommonFrustumNormal0.z);
+    g_FxCommonFrustumLength1 = SquareRoot0(g_FxCommonFrustumNormal1.x * g_FxCommonFrustumNormal1.x
+                               + g_FxCommonFrustumNormal1.y * g_FxCommonFrustumNormal1.y
+                               + g_FxCommonFrustumNormal1.z * g_FxCommonFrustumNormal1.z);
+    g_FxCommonFrustumLength2 = SquareRoot0(g_FxCommonFrustumNormal2.x * g_FxCommonFrustumNormal2.x
+                               + g_FxCommonFrustumNormal2.y * g_FxCommonFrustumNormal2.y
+                               + g_FxCommonFrustumNormal2.z * g_FxCommonFrustumNormal2.z);
+    g_FxCommonFrustumLength3 = SquareRoot0(g_FxCommonFrustumNormal3.x * g_FxCommonFrustumNormal3.x
+                               + g_FxCommonFrustumNormal3.y * g_FxCommonFrustumNormal3.y
+                               + g_FxCommonFrustumNormal3.z * g_FxCommonFrustumNormal3.z);
     PopMatrix();
 }
 
@@ -313,19 +313,19 @@ int FxCommon_IsPointInView(int *point)
     int secondVisible;
     int firstVisible = 0;
 
-    first = D_8019CBB0.x * point[0] + D_8019CBB4 * point[1]
-          + D_8019CBB8 * point[2] + D_8019CB48;
-    second = D_8019CBD0.x * point[0] + D_8019CBD4 * point[1]
-           + D_8019CBD8 * point[2] + D_8019CB4C;
+    first = g_FxCommonFrustumNormal0.x * point[0] + D_8019CBB4 * point[1]
+          + D_8019CBB8 * point[2] + g_FxCommonFrustumDistance0;
+    second = g_FxCommonFrustumNormal1.x * point[0] + D_8019CBD4 * point[1]
+           + D_8019CBD8 * point[2] + g_FxCommonFrustumDistance1;
 
     secondVisible = 0;
-    if (first > 0 && D_8019CC04 > 0)
+    if (first > 0 && g_FxCommonFrustumSide0 > 0)
         firstVisible = 1;
-    if (first < 0 && D_8019CC04 < 0)
+    if (first < 0 && g_FxCommonFrustumSide0 < 0)
         firstVisible = 1;
-    if (second > 0 && D_8019CC0C > 0)
+    if (second > 0 && g_FxCommonFrustumSide1 > 0)
         secondVisible = 1;
-    if (second < 0 && D_8019CC0C < 0)
+    if (second < 0 && g_FxCommonFrustumSide1 < 0)
         secondVisible = 1;
 
     return firstVisible & secondVisible;
@@ -337,19 +337,19 @@ int FxCommon_IsShortPointInView(short *point)
     int secondVisible;
     int firstVisible = 0;
 
-    first = D_8019CBB0.x * point[0] + D_8019CBB4 * point[1]
-          + D_8019CBB8 * point[2] + D_8019CB48;
-    second = D_8019CBD0.x * point[0] + D_8019CBD4 * point[1]
-           + D_8019CBD8 * point[2] + D_8019CB4C;
+    first = g_FxCommonFrustumNormal0.x * point[0] + D_8019CBB4 * point[1]
+          + D_8019CBB8 * point[2] + g_FxCommonFrustumDistance0;
+    second = g_FxCommonFrustumNormal1.x * point[0] + D_8019CBD4 * point[1]
+           + D_8019CBD8 * point[2] + g_FxCommonFrustumDistance1;
 
     secondVisible = 0;
-    if (first > 0 && D_8019CC04 > 0)
+    if (first > 0 && g_FxCommonFrustumSide0 > 0)
         firstVisible = 1;
-    if (first < 0 && D_8019CC04 < 0)
+    if (first < 0 && g_FxCommonFrustumSide0 < 0)
         firstVisible = 1;
-    if (second > 0 && D_8019CC0C > 0)
+    if (second > 0 && g_FxCommonFrustumSide1 > 0)
         secondVisible = 1;
-    if (second < 0 && D_8019CC0C < 0)
+    if (second < 0 && g_FxCommonFrustumSide1 < 0)
         secondVisible = 1;
 
     return firstVisible & secondVisible;
@@ -364,23 +364,23 @@ int FxCommon_CheckBoundsWithMargin(int *point, int margin)
     int secondVisible = 0;
     int firstVisible = 0;
     int threshold = margin;
-    first = D_8019CBB0.x * point[0] + D_8019CBB4 * point[1]
-          + D_8019CBB8 * point[2] + D_8019CB48;
-    second = D_8019CBD0.x * point[0] + D_8019CBD4 * point[1]
-           + D_8019CBD8 * point[2] + D_8019CB4C;
-    if (D_8019CC04 > 0 && first >= 0)
+    first = g_FxCommonFrustumNormal0.x * point[0] + D_8019CBB4 * point[1]
+          + D_8019CBB8 * point[2] + g_FxCommonFrustumDistance0;
+    second = g_FxCommonFrustumNormal1.x * point[0] + D_8019CBD4 * point[1]
+           + D_8019CBD8 * point[2] + g_FxCommonFrustumDistance1;
+    if (g_FxCommonFrustumSide0 > 0 && first >= 0)
     {
       firstVisible = 1;
     }
-    if (D_8019CC04 < 0 && first <= 0)
+    if (g_FxCommonFrustumSide0 < 0 && first <= 0)
     {
       firstVisible = 1;
     }
-    if (D_8019CC0C > 0 && second >= 0)
+    if (g_FxCommonFrustumSide1 > 0 && second >= 0)
     {
       secondVisible = 1;
     }
-    if (D_8019CC0C < 0 && second <= 0)
+    if (g_FxCommonFrustumSide1 < 0 && second <= 0)
     {
       secondVisible = 1;
     }
@@ -390,11 +390,11 @@ int FxCommon_CheckBoundsWithMargin(int *point, int margin)
     {
       if (first >= 0)
       {
-        distance = first / D_8019CBC8;
+        distance = first / g_FxCommonFrustumLength0;
       }
       else
       {
-        distance = (-first) / D_8019CBC8;
+        distance = (-first) / g_FxCommonFrustumLength0;
       }
       limit = (short)threshold;
       if (distance < limit)
@@ -406,11 +406,11 @@ int FxCommon_CheckBoundsWithMargin(int *point, int margin)
     {
       if (second >= 0)
       {
-        distance = second / D_8019CC00;
+        distance = second / g_FxCommonFrustumLength1;
       }
       else
       {
-        distance = (-second) / D_8019CC00;
+        distance = (-second) / g_FxCommonFrustumLength1;
       }
       limit = (short)threshold;
       if (distance < limit)
@@ -426,64 +426,64 @@ int FxCommon_CheckFourBoundsWithMargin(int *point, int margin) {
     int limit;
     int fourthVisible = 0, thirdVisible = 0, secondVisible = 0, firstVisible = 0;
     int threshold = margin;
-    first = D_8019CBB0.x * point[0] + D_8019CBB4 * point[1]
-          + D_8019CBB8 * point[2] + D_8019CB48;
-    second = D_8019CBD0.x * point[0] + D_8019CBD4 * point[1]
-          + D_8019CBD8 * point[2] + D_8019CB4C;
-    third = D_8019CBF0.x * point[0] + D_8019CBF4 * point[1]
-          + D_8019CBF8 * point[2] + D_8019CBA8;
-    fourth = D_8019CB50.x * point[0] + D_8019CB54 * point[1]
-          + D_8019CB58 * point[2] + D_8019CA90;
-    if (D_8019CC04 > 0 && first >= 0)
+    first = g_FxCommonFrustumNormal0.x * point[0] + D_8019CBB4 * point[1]
+          + D_8019CBB8 * point[2] + g_FxCommonFrustumDistance0;
+    second = g_FxCommonFrustumNormal1.x * point[0] + D_8019CBD4 * point[1]
+          + D_8019CBD8 * point[2] + g_FxCommonFrustumDistance1;
+    third = g_FxCommonFrustumNormal2.x * point[0] + D_8019CBF4 * point[1]
+          + D_8019CBF8 * point[2] + g_FxCommonFrustumDistance2;
+    fourth = g_FxCommonFrustumNormal3.x * point[0] + D_8019CB54 * point[1]
+          + D_8019CB58 * point[2] + g_FxCommonFrustumDistance3;
+    if (g_FxCommonFrustumSide0 > 0 && first >= 0)
         firstVisible = 1;
-    if (D_8019CC04 < 0 && first <= 0)
+    if (g_FxCommonFrustumSide0 < 0 && first <= 0)
         firstVisible = 1;
-    if (D_8019CC0C > 0 && second >= 0)
+    if (g_FxCommonFrustumSide1 > 0 && second >= 0)
         secondVisible = 1;
-    if (D_8019CC0C < 0 && second <= 0)
+    if (g_FxCommonFrustumSide1 < 0 && second <= 0)
         secondVisible = 1;
-    if (D_8019CC10 > 0 && third >= 0)
+    if (g_FxCommonFrustumSide2 > 0 && third >= 0)
         thirdVisible = 1;
-    if (D_8019CC10 < 0 && third <= 0)
+    if (g_FxCommonFrustumSide2 < 0 && third <= 0)
         thirdVisible = 1;
-    if (D_8019CBC4 > 0 && fourth >= 0)
+    if (g_FxCommonFrustumSide3 > 0 && fourth >= 0)
         fourthVisible = 1;
-    if (D_8019CBC4 < 0 && fourth <= 0)
+    if (g_FxCommonFrustumSide3 < 0 && fourth <= 0)
         fourthVisible = 1;
     limit = threshold * 8;
     threshold = limit + 30;
     if (!firstVisible) {
         if (first >= 0)
-            distance = first / D_8019CBC8;
+            distance = first / g_FxCommonFrustumLength0;
         else
-            distance = -first / D_8019CBC8;
+            distance = -first / g_FxCommonFrustumLength0;
         limit = (short)threshold;
         if (distance < limit)
             firstVisible = 1;
     }
     if (!secondVisible) {
         if (second >= 0)
-            distance = second / D_8019CC00;
+            distance = second / g_FxCommonFrustumLength1;
         else
-            distance = -second / D_8019CC00;
+            distance = -second / g_FxCommonFrustumLength1;
         limit = (short)threshold;
         if (distance < limit)
             secondVisible = 1;
     }
     if (!thirdVisible) {
         if (third >= 0)
-            distance = third / D_8019CC08;
+            distance = third / g_FxCommonFrustumLength2;
         else
-            distance = -third / D_8019CC08;
+            distance = -third / g_FxCommonFrustumLength2;
         limit = (short)threshold;
         if (distance < limit)
             thirdVisible = 1;
     }
     if (!fourthVisible) {
         if (fourth >= 0)
-            distance = fourth / D_8019CBAC;
+            distance = fourth / g_FxCommonFrustumLength3;
         else
-            distance = -fourth / D_8019CBAC;
+            distance = -fourth / g_FxCommonFrustumLength3;
         limit = (short)threshold;
         if (distance < limit)
             fourthVisible = 1;
@@ -504,11 +504,11 @@ void FxCommon_InitNodePools(void)
     for (; i < 200; i++, slot += 108)
         FxCommon_ResetTransformNode(slot);
 
-    FxCommon_ResetTransformNode(&D_8019C340);
+    FxCommon_ResetTransformNode(&g_FxCommonDefaultNode);
     D_8019C39C = 0;
-    D_8019CBC0 = 0;
+    g_FxCommonIndexFreeHead = 0;
     for (i = 0; i < 200; i++)
-        D_8019C830[i] = i + 1;
+        g_FxCommonIndexFreeNext[i] = i + 1;
 
     i = 0;
     {
@@ -531,12 +531,12 @@ void FxCommon_InitNodePools(void)
 
         offset = 0;
         for (; offset < 800; offset += 4) {
-            *(short *)((char *)D_801E4A88 + offset) = empty;
-            *(short *)((char *)D_801E4A88 + offset + 2) = empty;
+            *(short *)((char *)g_FxCommonIndexLinks + offset) = empty;
+            *(short *)((char *)g_FxCommonIndexLinks + offset + 2) = empty;
         }
     }
 
-    D_8019C9D0 = 200;
+    g_FxCommonIndexLast = 200;
     D_801E4DA8 = -1;
     D_801E4DAA = 201;
     D_801E4DAC = 200;
@@ -549,7 +549,7 @@ void FxCommon_LinkNodeToParent(FxCommonNode *node, FxCommonNode *parent);
 FxCommonNode *func_80190AEC(FxCommonNode *parent, void *payload)
 {
     int index = FxCommon_AllocIndexLink();
-    FxCommonNode *node = (FxCommonNode *)&D_801E4E00[(s16)index];
+    FxCommonNode *node = (FxCommonNode *)&g_FxCommonRecords[(s16)index];
 
     node->type = 0;
     node->args.payload = payload;
@@ -566,7 +566,7 @@ int FxCommon_GetOffsetTableValue(void *payload, int type);
 FxCommonNode *func_80190B78(FxCommonNode *parent, s16 type, void *payload)
 {
     int index = FxCommon_AllocIndexLink();
-    FxCommonNode *node = (FxCommonNode *)&D_801E4E00[(s16)index];
+    FxCommonNode *node = (FxCommonNode *)&g_FxCommonRecords[(s16)index];
 
     node->type = type;
     node->args.payload = payload;
@@ -586,7 +586,7 @@ FxCommonNode *func_80190C1C(FxCommonNode *parent, s16 subtype, s16 variant,
                             void *payload)
 {
     int index = FxCommon_AllocIndexLink();
-    FxCommonNode *node = (FxCommonNode *)&D_801E4E00[(s16)index];
+    FxCommonNode *node = (FxCommonNode *)&g_FxCommonRecords[(s16)index];
 
     node->args.configured.subtype = subtype;
     node->args.configured.variant = variant;
@@ -612,10 +612,10 @@ void FxCommon_ReleaseNode(FxCommonNode *node)
 void FxCommon_DrawTransformNode(FxCommonTransformNode *node, void *context)
 {
     RotMatrix(&node->seed.room, &node->matrix);
-    *D_8019BFF0 = node->matrix;
-    CompMatrix(&D_8019CC30, D_8019BFF0, D_8019BFF0);
-    SetTransMatrix(D_8019BFF0);
-    SetRotMatrix(D_8019BFF0);
+    *g_FxCommonWorkMatrix = node->matrix;
+    CompMatrix(&g_FxCommonViewMatrix, g_FxCommonWorkMatrix, g_FxCommonWorkMatrix);
+    SetTransMatrix(g_FxCommonWorkMatrix);
+    SetRotMatrix(g_FxCommonWorkMatrix);
     FxCommon_DrawPolyResource(context, node->resource);
 }
 
@@ -640,10 +640,10 @@ void FxCommon_DrawTransformNodeCulled(FxCommonTransformNode *node, FxCommonBuffe
         if (mirrored == 1) {
             gte_CompMatrix(&mirror, &node->matrix, &node->matrix);
         }
-        *D_8019BFF0 = node->matrix;
-        CompMatrix(&D_8019CC30, D_8019BFF0, D_8019BFF0);
-        SetTransMatrix(D_8019BFF0);
-        SetRotMatrix(D_8019BFF0);
+        *g_FxCommonWorkMatrix = node->matrix;
+        CompMatrix(&g_FxCommonViewMatrix, g_FxCommonWorkMatrix, g_FxCommonWorkMatrix);
+        SetTransMatrix(g_FxCommonWorkMatrix);
+        SetRotMatrix(g_FxCommonWorkMatrix);
         state = pass;
         if (state == 0) {
             if (mirrored == 0)
@@ -684,12 +684,12 @@ void FxCommon_DrawLodNode(FxCommonLodNode *node, FxCommonBuffer *context, u8 for
     } else {
         RotMatrix(&node->seed, &node->matrix);
     }
-    *D_8019BFF0 = node->matrix;
-    CompMatrix(&D_8019CC30, D_8019BFF0, D_8019BFF0);
-    SetTransMatrix(D_8019BFF0);
-    SetRotMatrix(D_8019BFF0);
+    *g_FxCommonWorkMatrix = node->matrix;
+    CompMatrix(&g_FxCommonViewMatrix, g_FxCommonWorkMatrix, g_FxCommonWorkMatrix);
+    SetTransMatrix(g_FxCommonWorkMatrix);
+    SetRotMatrix(g_FxCommonWorkMatrix);
     if (FxCommon_CheckBoundsWithMargin(&position.x, margin) | force) {
-        depth = D_8019BFF0->t[2];
+        depth = g_FxCommonWorkMatrix->t[2];
         if (depth < node->nearDepth) {
             if (depth > 0x180) {
                 if (mode == 0)
@@ -732,28 +732,28 @@ void FxCommon_ResetTransformNode(FxCommonTransformNode *node)
     node->seed.component[0] = 0;
     node->seed.component[1] = 0;
     node->seed.component[2] = 0;
-    node->record = &D_8019C340;
+    node->record = &g_FxCommonDefaultNode;
     node->previous = 0;
     node->next = 0;
 }
 
 int FxCommon_AllocIndexLink(void)
 {
-    s16 index = D_8019CBC0;
-    s16 current = D_8019C9D0;
+    s16 index = g_FxCommonIndexFreeHead;
+    s16 current = g_FxCommonIndexLast;
     u16 freeNext;
     u16 next;
     int nextIndex;
 
-    freeNext = D_8019C830[index];
-    D_801E4A88[index].previous = current;
-    next = D_801E4A88[current].next;
-    D_801E4A88[index].next = next;
-    D_801E4A88[current].next = index;
-    nextIndex = D_801E4A88[index].next;
-    D_8019C9D0 = index;
-    D_8019CBC0 = freeNext;
-    D_801E4A88[nextIndex].previous = index;
+    freeNext = g_FxCommonIndexFreeNext[index];
+    g_FxCommonIndexLinks[index].previous = current;
+    next = g_FxCommonIndexLinks[current].next;
+    g_FxCommonIndexLinks[index].next = next;
+    g_FxCommonIndexLinks[current].next = index;
+    nextIndex = g_FxCommonIndexLinks[index].next;
+    g_FxCommonIndexLast = index;
+    g_FxCommonIndexFreeHead = freeNext;
+    g_FxCommonIndexLinks[nextIndex].previous = index;
     return index;
 }
 
@@ -761,37 +761,37 @@ void FxCommon_FreeIndexLink(s16 index)
 {
     int freeHead;
 
-    D_801E4A88[D_801E4A88[index].previous].next =
-        D_801E4A88[index].next;
-    D_801E4A88[D_801E4A88[index].next].previous =
-        D_801E4A88[index].previous;
-    if (index == D_8019C9D0) {
-        D_8019C9D0 = D_801E4A88[index].previous;
+    g_FxCommonIndexLinks[g_FxCommonIndexLinks[index].previous].next =
+        g_FxCommonIndexLinks[index].next;
+    g_FxCommonIndexLinks[g_FxCommonIndexLinks[index].next].previous =
+        g_FxCommonIndexLinks[index].previous;
+    if (index == g_FxCommonIndexLast) {
+        g_FxCommonIndexLast = g_FxCommonIndexLinks[index].previous;
     }
-    freeHead = D_8019CBC0;
-    D_801E4A88[index].previous = -1;
-    D_801E4A88[index].next = -1;
-    D_8019CBC0 = index;
-    D_8019C830[index] = freeHead;
+    freeHead = g_FxCommonIndexFreeHead;
+    g_FxCommonIndexLinks[index].previous = -1;
+    g_FxCommonIndexLinks[index].next = -1;
+    g_FxCommonIndexFreeHead = index;
+    g_FxCommonIndexFreeNext[index] = freeHead;
 }
 
 void FxCommon_BeginRecordIteration(void)
 {
-    D_8019CC50 = 200;
+    g_FxCommonRecordCursor = 200;
 }
 
 FxCommonRecord *FxCommon_NextRecord(void)
 {
-    int record = D_801E4A8A[D_8019CC50].record;
+    int record = D_801E4A8A[g_FxCommonRecordCursor].record;
 
-    D_8019CC50 = record;
+    g_FxCommonRecordCursor = record;
     if (record == 201) {
         record = -1;
     }
     if (record == -1) {
         return 0;
     }
-    return &D_801E4E00[record];
+    return &g_FxCommonRecords[record];
 }
 
 void FxCommon_LinkNodeToParent(FxCommonNode *node, FxCommonNode *parent)
@@ -801,10 +801,10 @@ void FxCommon_LinkNodeToParent(FxCommonNode *node, FxCommonNode *parent)
     node->parent = parent;
     node->bucket = parent->bucket + 1;
     bucket = node->bucket;
-    node->previous = D_8019CCBC[bucket].head;
+    node->previous = g_FxCommonNodeBuckets[bucket].head;
     node->next = node->previous->next;
-    D_8019CCBC[bucket].head->next = node;
-    D_8019CCBC[bucket].head = node;
+    g_FxCommonNodeBuckets[bucket].head->next = node;
+    g_FxCommonNodeBuckets[bucket].head = node;
 }
 
 void FxCommon_UnlinkNode(FxCommonNode *node)
@@ -831,41 +831,34 @@ void FxCommon_SelectRoomVariant(void)
         Menu_SetEquipSlotIndex(0);
     }
 
-    D_8019CC52 = -1;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x179)
-        D_8019CC52 = 6;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x18)
-        D_8019CC52 = 6;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x2E)
-        D_8019CC52 = 7;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x75)
-        D_8019CC52 = 7;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x67)
-        D_8019CC52 = 7;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xBF)
-        D_8019CC52 = 9;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xC0)
-        D_8019CC52 = 9;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x5D)
-        D_8019CC52 = 2;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x60)
-        D_8019CC52 = 2;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x3A)
-        D_8019CC52 = 8;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x176)
-        D_8019CC52 = 8;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x7D)
-        D_8019CC52 = 4;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x104)
-        D_8019CC52 = 3;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xA1)
-        D_8019CC52 = 1;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xB7)
-        D_8019CC52 = 0;
     if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x122)
-        D_8019CC52 = 5;
-    if (D_8019CC52 == -1)
-        D_8019CC52 = 7;
+    g_FxCommonRoomVariant = -1;
+        g_FxCommonRoomVariant = 6;
+        g_FxCommonRoomVariant = 7;
+        g_FxCommonRoomVariant = 9;
+        g_FxCommonRoomVariant = 2;
+        g_FxCommonRoomVariant = 8;
+        g_FxCommonRoomVariant = 4;
+        g_FxCommonRoomVariant = 3;
+        g_FxCommonRoomVariant = 1;
+        g_FxCommonRoomVariant = 0;
+        g_FxCommonRoomVariant = 5;
+    if (g_FxCommonRoomVariant == -1)
 
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x80)
         D_8019BFF4 = 0;
@@ -935,7 +928,7 @@ first:
     range = D_80093170;
     do {
         result = CdRom_ReadSectorsFromLba(resource->data + range[0],
-                               &D_801D0260, range[1] - range[0]);
+                               &g_FxCommonTimTable, range[1] - range[0]);
     } while (result == -1);
     for (;;) {
         result = CdRom_PollReady();
@@ -993,15 +986,15 @@ int FxCommon_SendTableCommand3d(int id, s32 *state)
     s32 *savedOutput;
     int result;
 
-    resource = Draw_GetTimTableEntry(&D_801D0260, 3);
+    resource = Draw_GetTimTableEntry(&g_FxCommonTimTable, 3);
     PushMatrix();
-    SetTransMatrix(&D_8019CC30);
-    SetRotMatrix(&D_8019CC30);
     matrixSlot = &g_ViewMatrixSlot.value;
+    SetTransMatrix(&g_FxCommonViewMatrix);
+    SetRotMatrix(&g_FxCommonViewMatrix);
     savedMatrix = *matrixSlot;
-    *matrixSlot = &D_8019CC30;
     savedOutput = g_ProjectionSlot.distance;
     g_ProjectionSlot.distance = &size;
+    *matrixSlot = &g_FxCommonViewMatrix;
     result = Akao_SendTableCommand(resource, id, 0, 0x80, 1);
     *matrixSlot = savedMatrix;
     g_ProjectionSlot.distance = savedOutput;
@@ -1025,13 +1018,13 @@ void FxCommon_Apply3dPan(int handle, volatile s32 *state)
 
     scratch.size = 0x300;
     PushMatrix();
-    SetTransMatrix(&D_8019CC30);
-    SetRotMatrix(&D_8019CC30);
     matrixSlot = &g_ViewMatrixSlot.value;
+    SetTransMatrix(&g_FxCommonViewMatrix);
+    SetRotMatrix(&g_FxCommonViewMatrix);
     savedMatrix = *matrixSlot;
-    *matrixSlot = &D_8019CC30;
     savedOutput = g_ProjectionSlot.distance;
     g_ProjectionSlot.distance = &scratch.size;
+    *matrixSlot = &g_FxCommonViewMatrix;
     scratch.vector.x = state[0];
     scratch.vector.y = state[1];
     scratch.vector.z = state[2];

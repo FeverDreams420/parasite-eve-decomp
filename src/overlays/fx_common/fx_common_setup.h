@@ -49,7 +49,7 @@ extern s32 D_8019CC1C;
 extern FxCommonNode *D_8019CC20;
 extern FxCommonNode *D_8019CC24;
 extern FxCommonNode *D_8019CC28;
-extern s16 D_8019CC52;
+extern s16 g_FxCommonRoomVariant;
 extern FxCommonNode *D_8019CDA0;
 extern FxCommonNode *D_8019CDA4;
 extern FxCommonNode *D_8019CDA8;

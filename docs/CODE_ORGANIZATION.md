@@ -224,7 +224,7 @@ after what their functions do (`fx_common/camera.c`,
   status register into `$a1`).
 - `fx_common` (2026-10-13): `camera_nodes.c` and `render_op.c` are one
   K8 unit, `camera.c`. Under cc1 `-G8` the camera aim function scored lev 16
-  because the 8-byte angle vector `D_8019BFC4` became small data and lost
+  because the 8-byte angle vector `g_FxCommonCameraAngles` became small data and lost
   its address register; declared as an incomplete array it keeps the
   register and every function of both units is lev 0. Merging also exposed
   that the render ops' definitions disagreed with their prototypes in
