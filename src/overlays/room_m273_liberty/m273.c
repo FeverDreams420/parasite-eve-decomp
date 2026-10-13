@@ -367,10 +367,9 @@ int func_80192F5C(RoomOscillationEffect *effect) {
         target = ((RoomOscillationEffect *)effect)->actor;
         {
             int height;
-            register int scaled asm("$4");
 
-            scaled = sine << 12;
-            height = effect->params.baseHeight - scaled;
+            half = sine << 12;
+            height = effect->params.baseHeight - half;
             target->pos_y = height;
         }
     }
