@@ -214,7 +214,7 @@ void Entity_ResetStateGlobals(void) {
 
     for (i = 0; i < 8; i += 4) {
         *(short *)&((char *)&g_FloorBlockedEdgePointA)[i] = 0;
-        *(short *)&D_8009CE0E[i] = 0;
+        *(short *)&g_FloorBlockedEdgeZHalves[i] = 0;
     }
 
     count = 0;

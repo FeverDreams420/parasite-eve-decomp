@@ -193,7 +193,8 @@ typedef struct CdRomCommandState {
     u_int reserved34;
 } CdRomCommandState;
 
-/* View beginning at D_8009B558, four bytes into the system-state window. */
+/* View beginning at g_CdRomEventCommandState (0x8009B558), four bytes into
+ * the system-state window. */
 typedef struct CdRomEventCommandState {
     u_char pendingCommand;
     u_char pendingParamBytes[4];

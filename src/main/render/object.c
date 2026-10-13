@@ -16,7 +16,7 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-s16 D_8009CD9A;
+s16 g_SkinAnchorY;
 
 /* Per-frame model transforms: bone matrices from the matrix command list,
  * the skinned hit volumes and the projected vertex buffers. */
@@ -131,7 +131,7 @@ void Render_TransformSkinnedVertices(RenderObjectEntity *actor, u32 *view) {
     }
     gte_ldrotmatrix(&actor->matrices[header->anchor_matrix_index]);
     gte_ldtransmatrix(&actor->matrices[header->anchor_matrix_index]);
-    D_8009CD9A = header->anchor_y;
+    g_SkinAnchorY = header->anchor_y;
     gte_ldv0(g_SkinAnchorVector);
     gte_rt();
     gte_stsv(&actor->hit_cylinder.value0);

@@ -687,7 +687,7 @@ extern u32 D_800B1640[];
 extern u32 D_800B1644[];
 extern s32 D_800A636C[];
 extern u8 g_SkinAnchorVector[];
-extern s16 D_8009CD9A;
+extern s16 g_SkinAnchorY;
 void Render_CopyFrameData(RenderObjectEntity *dst, RenderObjectEntity *src, s32 frame);
 void Render_CopyFrameDataDouble(RenderObjectEntity *dst, RenderObjectEntity *src, s32 frame);
 void Render_UpdateClutTable(RenderObjectEntity *object, s16 force, s16 buffer_index);

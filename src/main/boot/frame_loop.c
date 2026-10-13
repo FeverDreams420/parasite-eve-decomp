@@ -31,7 +31,7 @@ u32 g_GlobalFrameCounter[1];
 /* Field frame loop and its scene flush: Boot_FlushSceneFast is the exit tail
  * that Boot_RunFrame repeats after its loop. Contiguous -G8 pair. */
 
-/* Late include: its D_8009CDA4[] would make the COMMON word above large. */
+/* Late include: its g_GlobalFrameCounter[] would make the COMMON word above large. */
 #include "pe1/boot.h"
 
 void Draw_InitPipeline(void);

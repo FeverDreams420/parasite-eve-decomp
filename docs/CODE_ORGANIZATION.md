@@ -1263,7 +1263,7 @@ Still open:
     `CollisionDatabaseAddress` union: an indexed `regions[i]` walk reorders
     the header loads (lev 9 to 19).
   - `Entity_ResetStateGlobals` clears both ramp edge points by byte offset
-    (`g_FloorBlockedEdgePointA`/`D_8009CE0E`); a `FloorEdgePoint` index keeps a separate
+    (`g_FloorBlockedEdgePointA`/`g_FloorBlockedEdgeZHalves`); a `FloorEdgePoint` index keeps a separate
     counter and `addiu` base (lev 11). `Entity_ResetAllPools` clears the
     allocation slots by byte offset under `-fno-strength-reduce`.
 
