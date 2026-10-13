@@ -34,7 +34,7 @@ retryFilter:
     }
     DsReadyCallback(BootDisplay_StepPlaybackTransfer);
     VSyncCallback(BootDisplay_CheckPlaybackTime);
-    func_801258EC(200, 27);
+    BootDisplay_IssuePlaybackRead(200, 27);
     do {
         while (DsSystemStatus() != 1) {}
     } while (DsQueueLen() != 0);
@@ -51,14 +51,14 @@ int BootDisplay_SetCdFilter(int code) {
     return 0;
 }
 
-int func_801258EC(int command, int parameter) {
+int BootDisplay_IssuePlaybackRead(int command, int parameter) {
     int result[2];
     int status;
-    int *request = &D_80172CE8;
+    int *request = &g_BootDisplayPlaybackStartPos;
     DsIntToPos(*request, result);
     status = DsPacket((u8)command, result, (u8)parameter, 0, -1);
-    D_80172CF0 = *request;
-    D_80172CF4++;
+    g_BootDisplayPlaybackCurrentPos = *request;
+    g_BootDisplayPlaybackReadCount++;
     return (u8)status;
 }
 
@@ -68,8 +68,8 @@ s32 BootDisplay_StepPlaybackTransfer(u8 mode) {
     if (DsSystemStatus() == 1 && DsShellOpen() != g_CdDiskType)
         exit(1);
     if (mode == 1) {
-        index = &D_80172CF8;
-        DsGetSector(D_80172D00 + (*index << 11), 512);
+        index = &g_BootDisplayPlaybackRingIndex;
+        DsGetSector(g_BootDisplayPlaybackSectorBuffer + (*index << 11), 512);
         next = (*index + 1) & 7;
         *index = next;
     } else {
@@ -82,23 +82,23 @@ s32 BootDisplay_StepPlaybackTransfer(u8 mode) {
 void BootDisplay_CheckPlaybackTime(void) {
     volatile s32 *time;
     if ((VSync(-1) & 31) == 0) {
-        time = &D_80172CF0;
-        if (*time > D_80172CEC) {
+        time = &g_BootDisplayPlaybackCurrentPos;
+        if (*time > g_BootDisplayPlaybackEndPos) {
             Spu_SetVoiceVolume(0);
-            D_80172CE4 = 1;
-        } else if (*time < D_80172CE8 - 300) {
-            func_801258EC(200, 27);
+            g_BootDisplayPlaybackEnded = 1;
+        } else if (*time < g_BootDisplayPlaybackStartPos - 300) {
+            BootDisplay_IssuePlaybackRead(200, 27);
         } else {
-            DsCommand(17, 0, D_80125AF0, 0);
+            DsCommand(17, 0, (DslCB)BootDisplay_RecordReadPosition, 0);
         }
     }
 }
 
 void BootDisplay_RecordReadPosition(u8 mode, int value) {
     if (mode == 2) {
-        D_80172CFC = DsPosToInt(value + 5);
-        if (D_80172CFC != 0) {
-            D_80172CF0 = D_80172CFC;
+        g_BootDisplayReportedPos = DsPosToInt(value + 5);
+        if (g_BootDisplayReportedPos != 0) {
+            g_BootDisplayPlaybackCurrentPos = g_BootDisplayReportedPos;
         }
     }
 }

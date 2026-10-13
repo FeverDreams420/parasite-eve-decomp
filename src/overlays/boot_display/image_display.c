@@ -49,15 +49,15 @@ void BootDisplay_InitDisplayBuffers(void) {
     offset = 0x43000;
     MdecDiag_ExpandDecoderTable(((*screenY - g_BootDisplayDataLbaTbl) << 11) + offset + g_CdLoadAreaBase);
 
-    resource = D_8012682C;
-    D_80172C98 = Asset_GetTimImagePixels(resource);
-    D_80172C9C = Asset_GetTimClutPixels(resource);
-    D_80172C90 = Asset_GetTimImageRect(resource);
-    D_80172C94 = Asset_GetTimClutRect(resource);
-    g_BootDisplayTPage = GetTPage(0, 0, D_80172C90[0], D_80172C90[1]);
-    g_BootDisplayClut = GetClut(D_80172C94[0], D_80172C94[1]);
-    func_80124F40(0);
-    func_80124F40(1);
+    resource = g_BootDisplayFontTim;
+    g_BootDisplayFontImagePixels = Asset_GetTimImagePixels(resource);
+    g_BootDisplayFontClutPixels = Asset_GetTimClutPixels(resource);
+    g_BootDisplayFontImageRect = Asset_GetTimImageRect(resource);
+    g_BootDisplayFontClutRect = Asset_GetTimClutRect(resource);
+    g_BootDisplayTPage = GetTPage(0, 0, g_BootDisplayFontImageRect[0], g_BootDisplayFontImageRect[1]);
+    g_BootDisplayClut = GetClut(g_BootDisplayFontClutRect[0], g_BootDisplayFontClutRect[1]);
+    BootDisplay_SetImageDisplay(0);
+    BootDisplay_SetImageDisplay(1);
     PutDispEnv(&g_RenderDispEnvArray[g_ActiveDrawSlot]);
     SetDispMask(1);
 }
@@ -97,7 +97,7 @@ void BootDisplay_PresentFrame(void) {
 #define BRIGHTEN_NIBBLE(mask, shift) { \
     u32 index = bits & (mask); \
     if (index) { \
-        u32 brightness = (((u16 *)D_80172C9C)[index >> (shift)] & 31) << 3; \
+        u32 brightness = (((u16 *)g_BootDisplayFontClutPixels)[index >> (shift)] & 31) << 3; \
         register u32 blue asm("$5") = greenPixel[1]; \
         register u32 green asm("$4") = greenPixel[0]; \
         register u32 red asm("$3") = pixel->red; \
@@ -128,7 +128,7 @@ void BootDisplay_BrightenGlyph(s32 x, s32 y, u8 character) {
     savedX = (s16)savedX; y = (s16)y;
     asm("" : : "r"(savedX));
     computedEnd = (s16)y * 15;
-    image = (u8 *)D_80172C98;
+    image = (u8 *)g_BootDisplayFontImagePixels;
     asm("" : "=r"(image) : "0"(image));
     computedEnd = (computedEnd << 6);
     image += imageOffset;
@@ -230,13 +230,13 @@ void BootDisplay_StepImageDisplay(void) {
         s32 endOffset;
         char *base;
 
-        DecDCTvlcSize2(func_8010BF94(D_80125BA4[(u16)g_BootDisplayStateTimer]) >> 4);
+        DecDCTvlcSize2(func_8010BF94(g_BootDisplayCreditImages[(u16)g_BootDisplayStateTimer]) >> 4);
         startOffset = 0x38800;
         endOffset = 0x43000;
         offset = (g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) * 2048;
         base = g_CdLoadAreaBase;
         startOffset += offset;
-        DecDCTvlc2(D_80125BA4[(u16)g_BootDisplayStateTimer], base + startOffset, base + (offset + endOffset));
+        DecDCTvlc2(g_BootDisplayCreditImages[(u16)g_BootDisplayStateTimer], base + startOffset, base + (offset + endOffset));
         g_BootDisplayState = 1;
         break;
     }
@@ -292,7 +292,7 @@ void BootDisplay_CallInitSystem(void) {
 void BootDisplay_BrightenImageRegion(void)
 {
     s16 line;
-    register u8 *image asm("$14") = (u8 *)D_80172C98 + 0x4000;
+    register u8 *image asm("$14") = (u8 *)g_BootDisplayFontImagePixels + 0x4000;
     register u8 *screen asm("$13") = (u8 *)D_80125B88[g_BootDisplayBufferIndex * 4] + 0x19DAC;
 
     for (line = 110; line < 134; line++) {
@@ -308,7 +308,7 @@ void BootDisplay_BrightenImageRegion(void)
                 for (; column < 4; column++) {
                     int index = bits & 15;
                     if (index) {
-                        int brightness = (((u16 *)D_80172C9C)[index] & 31) << 3;
+                        int brightness = (((u16 *)g_BootDisplayFontClutPixels)[index] & 31) << 3;
                         u32 blue = pixel->blue;
                         register u32 green asm("$5") = pixel->green;
                         u32 red = pixel->red;

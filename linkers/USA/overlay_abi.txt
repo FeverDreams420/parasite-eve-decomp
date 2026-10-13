@@ -33,11 +33,11 @@ DecDCTvlc2 = OVERLAY_WINDOW_MDEC_DIAG + 0xBA4; /* boot_display, menu_memcard */
  * reason: its work variables and scratch buffer live in RAM outside
  * its file image (0x8012682C and 0x80172C90..0x80172D00), memory main
  * leaves free while the boot screen runs. Fixed by the boot sequence. */
-D_8012682C = OVERLAY_WINDOW_BOOT_DISPLAY + 0x3888; /* boot_display */
-D_80172C90 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2C90; /* boot_display */
-D_80172C94 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2C94; /* boot_display */
-D_80172C98 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2C98; /* boot_display */
-D_80172C9C = OVERLAY_WINDOW_FX_SECTOR17 + 0x2C9C; /* boot_display */
+g_BootDisplayFontTim = OVERLAY_WINDOW_BOOT_DISPLAY + 0x3888; /* boot_display */
+g_BootDisplayFontImageRect = OVERLAY_WINDOW_FX_SECTOR17 + 0x2C90; /* boot_display */
+g_BootDisplayFontClutRect = OVERLAY_WINDOW_FX_SECTOR17 + 0x2C94; /* boot_display */
+g_BootDisplayFontImagePixels = OVERLAY_WINDOW_FX_SECTOR17 + 0x2C98; /* boot_display */
+g_BootDisplayFontClutPixels = OVERLAY_WINDOW_FX_SECTOR17 + 0x2C9C; /* boot_display */
 g_BootDisplayTPage = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CA0; /* boot_display */
 g_BootDisplayClut = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CA2; /* boot_display */
 g_BootDisplayTextScrollX = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CA4; /* boot_display */
@@ -53,18 +53,18 @@ g_BootDisplayTransferProgress = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CC8; /* boot_dis
 g_BootDisplayState = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CCC; /* boot_display */
 g_BootDisplayCallbacks = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CD0; /* boot_display */
 g_BootDisplayFrameCounter = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CD4; /* boot_display */
-D_80172CD8 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CD8; /* boot_display */
+g_BootDisplayImageBrightness = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CD8; /* boot_display */
 g_BootDisplayTransition = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CDC; /* boot_display */
-D_80172CE0 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CE0; /* boot_display */
-D_80172CE4 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CE4; /* boot_display */
-D_80172CE8 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CE8; /* boot_display */
-D_80172CEC = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CEC; /* boot_display */
-D_80172CF0 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CF0; /* boot_display */
-D_80172CF4 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CF4; /* boot_display */
-D_80172CF8 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CF8; /* boot_display */
+g_BootDisplayDone = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CE0; /* boot_display */
+g_BootDisplayPlaybackEnded = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CE4; /* boot_display */
+g_BootDisplayPlaybackStartPos = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CE8; /* boot_display */
+g_BootDisplayPlaybackEndPos = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CEC; /* boot_display */
+g_BootDisplayPlaybackCurrentPos = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CF0; /* boot_display */
+g_BootDisplayPlaybackReadCount = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CF4; /* boot_display */
+g_BootDisplayPlaybackRingIndex = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CF8; /* boot_display */
 D_80172CFA = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CFA; /* boot_display */
-D_80172CFC = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CFC; /* boot_display */
-D_80172D00 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2D00; /* boot_display */
+g_BootDisplayReportedPos = OVERLAY_WINDOW_FX_SECTOR17 + 0x2CFC; /* boot_display */
+g_BootDisplayPlaybackSectorBuffer = OVERLAY_WINDOW_FX_SECTOR17 + 0x2D00; /* boot_display */
 
 /* owner: asset[71], the credits data (PE.IMG sectors 1111..1276), read
  * to 0x80120D00 together with boot_display, which lies inside it.

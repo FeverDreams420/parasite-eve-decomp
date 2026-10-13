@@ -18,19 +18,19 @@ s32 BootDisplay_InitPlaybackFile(void) {
         if (DsSystemStatus() != ready || DsQueueLen() != 0)
             return VSync(0);
         failure = 0;
-        found = (s32)DsSearchFile(&file, D_80125B48);
+        found = (s32)DsSearchFile(&file, g_BootDisplayPlaybackFilePath);
         if (found == failure) continue;
         failure = -1;
         asm volatile("" : : "r"(ready));
         if (found != failure) break;
     }
-    start = &D_80172CE8;
+    start = &g_BootDisplayPlaybackStartPos;
     *start = DsPosToInt(&file.pos);
-    D_80172CEC = DsPosToInt(&file.pos) + (file.size >> 11);
-    D_80172CF0 = *start;
-    D_80172CF4 = 0;
-    D_80172CF8 = 0;
+    g_BootDisplayPlaybackEndPos = DsPosToInt(&file.pos) + (file.size >> 11);
+    g_BootDisplayPlaybackCurrentPos = *start;
+    g_BootDisplayPlaybackReadCount = 0;
+    g_BootDisplayPlaybackRingIndex = 0;
     D_80172CFA = 0;
-    D_80172D00 = g_CdLoadAreaBase + (((g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) << 11) + 0x34800);
+    g_BootDisplayPlaybackSectorBuffer = g_CdLoadAreaBase + (((g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) << 11) + 0x34800);
     return 0;
 }

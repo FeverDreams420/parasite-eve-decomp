@@ -24,8 +24,8 @@ BootDisplay_RecordReadPosition = 0x80125AF0; // type:func
 
 // asset[71], the credits data read with this overlay (PE.IMG sectors
 // 1111..1276, to 0x80120D00): the XA stream path at its start, the staff
-// lines before the overlay (D_80125C88) and the image chunks after it
-// (D_80125BA4). Absolute so the credit tables are disassembled as symbol
+// lines before the overlay (g_BootDisplayCreditLines) and the image chunks after it
+// (g_BootDisplayCreditImages). Absolute so the credit tables are disassembled as symbol
 // references and follow the window block (linkers/USA/overlay_abi.txt).
 D_80120D04 = 0x80120D04; // absolute:true
 D_80122EC8 = 0x80122EC8; // absolute:true
@@ -80,3 +80,40 @@ DecDCTout = 0x8010C01C; // type:func
 DecDCToutSync = 0x8010C078; // type:func
 DecDCTvlcSize2 = 0x8010C86C; // type:func
 DecDCTvlc2 = 0x8010C89C; // type:func
+BootDisplay_InitDisplayResources = 0x80123E08; // type:func
+BootDisplay_SelectFrameBuffers = 0x80123F8C; // type:func
+BootDisplay_DisplayNoOp = 0x80124034; // type:func
+BootDisplay_StepImageSprite = 0x8012403C; // type:func
+BootDisplay_QueueTintedSprite = 0x80124598; // type:func
+BootDisplay_InitDisplayBuffers = 0x8012489C; // type:func
+BootDisplay_PresentFrame = 0x80124AA4; // type:func
+BootDisplay_BrightenGlyph = 0x80124C04; // type:func
+BootDisplay_SetImageDisplay = 0x80124F40; // type:func
+BootDisplay_StepImageDisplay = 0x80125094; // type:func
+BootDisplay_CallInitSystem = 0x80125444; // type:func
+BootDisplay_BrightenImageRegion = 0x80125464; // type:func
+BootDisplay_WaitForCdAndRestoreCallbacks = 0x801255A4; // type:func
+BootDisplay_StartPlayback = 0x80125744; // type:func
+BootDisplay_QueueFadeSprite = 0x80124704; // type:func
+BootDisplay_PresentSpriteFrame = 0x801247F4; // type:func
+BootDisplay_IssuePlaybackRead = 0x801258EC; // type:func
+g_BootDisplaySpriteCallbacks = 0x80125B4C;
+g_BootDisplayImageCallbacks = 0x80125B68;
+g_BootDisplayPlaybackFilePath = 0x80125B48;
+g_BootDisplayCreditLines = 0x80125C88;
+g_BootDisplayCreditImages = 0x80125BA4;
+g_BootDisplayFontTim = 0x8012682C;
+g_BootDisplayFontImageRect = 0x80172C90;
+g_BootDisplayFontClutRect = 0x80172C94;
+g_BootDisplayFontImagePixels = 0x80172C98;
+g_BootDisplayFontClutPixels = 0x80172C9C;
+g_BootDisplayImageBrightness = 0x80172CD8;
+g_BootDisplayDone = 0x80172CE0;
+g_BootDisplayPlaybackEnded = 0x80172CE4;
+g_BootDisplayPlaybackStartPos = 0x80172CE8;
+g_BootDisplayPlaybackEndPos = 0x80172CEC;
+g_BootDisplayPlaybackCurrentPos = 0x80172CF0;
+g_BootDisplayPlaybackReadCount = 0x80172CF4;
+g_BootDisplayPlaybackRingIndex = 0x80172CF8;
+g_BootDisplayReportedPos = 0x80172CFC;
+g_BootDisplayPlaybackSectorBuffer = 0x80172D00;

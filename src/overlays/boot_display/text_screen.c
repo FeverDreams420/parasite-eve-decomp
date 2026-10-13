@@ -6,25 +6,25 @@ void BootDisplay_RunDisplay(void) {
     u32 state;
     s32 fade;
     if (g_GameStateFlags & 0x10000) {
-        g_BootDisplayCallbacks = &D_80125B68;
+        g_BootDisplayCallbacks = &g_BootDisplayImageCallbacks;
     } else {
-        g_BootDisplayCallbacks = &D_80125B4C;
-        if (!(g_GameStateFlags & 0x20000)) D_80125B4C.text = 0;
+        g_BootDisplayCallbacks = &g_BootDisplaySpriteCallbacks;
+        if (!(g_GameStateFlags & 0x20000)) g_BootDisplaySpriteCallbacks.text = 0;
     }
     g_BootDisplayCallbacks->init();
     if (!(g_GameStateFlags & 0x10000)) {
         func_8012562C();
-        func_80125744();
+        BootDisplay_StartPlayback();
         if (g_GameStateFlags & 0x20000) {
             Spu_SetVoiceVolume(144);
-            func_80125894(1);
+            BootDisplay_SetCdFilter(1);
         } else Spu_SetVoiceVolume(218);
     }
     state = 0;
     fade = 0;
     g_BootDisplayFrameCounter = 420;
-    D_80172CE4 = 0;
-    D_80172CE0 = 0;
+    g_BootDisplayPlaybackEnded = 0;
+    g_BootDisplayDone = 0;
     do {
         if (g_BootDisplayCallbacks->step) g_BootDisplayCallbacks->step();
         if (g_BootDisplayCallbacks->text) g_BootDisplayCallbacks->text();
@@ -42,7 +42,7 @@ void BootDisplay_RunDisplay(void) {
             break;
         case 2:
             g_BootDisplayCallbacks->transition(255);
-            if (D_80172CE4 && (g_FieldPadBits & 0xF0000004)) { state = 3; fade = 255; }
+            if (g_BootDisplayPlaybackEnded && (g_FieldPadBits & 0xF0000004)) { state = 3; fade = 255; }
             break;
         case 3:
             g_BootDisplayCallbacks->transition((u8)fade);
@@ -53,20 +53,20 @@ void BootDisplay_RunDisplay(void) {
             u32 flags = g_GameStateFlags;
             s32 finished;
             if (flags & 0x30000) finished = 1;
-            else finished = D_80172CE4;
-            D_80172CE0 = finished;
+            else finished = g_BootDisplayPlaybackEnded;
+            g_BootDisplayDone = finished;
             break;
         }
         }
         Field_HandleStateTransition();
         if (g_GameStateFlags & 0x10000) {
-            if (D_8009D1F4 & 0x4000000) func_80125894(0);
-            if (D_8009D1F4 & 0x8000000) func_80125894(1);
+            if (D_8009D1F4 & 0x4000000) BootDisplay_SetCdFilter(0);
+            if (D_8009D1F4 & 0x8000000) BootDisplay_SetCdFilter(1);
         }
         g_BootDisplayCallbacks->present();
         ++g_BootDisplayFrameCounter;
-    } while (D_80172CE0 == 0);
-    func_801255A4();
+    } while (g_BootDisplayDone == 0);
+    BootDisplay_WaitForCdAndRestoreCallbacks();
     g_BootDisplayCallbacks->shutdown();
     g_GameStateFlags &= ~0x10000;
 }
@@ -78,7 +78,7 @@ s32 BootDisplay_DrawTextBlock(void) {
     const u8 *scan;
     u32 rows = 0;
     s32 y = g_BootDisplayTextScrollX >> 8;
-    g_BootDisplayTextCursor = D_80125C88;
+    g_BootDisplayTextCursor = g_BootDisplayCreditLines;
     line = *g_BootDisplayTextCursor;
     while (*line != 255) {
         if (y >= -7) {

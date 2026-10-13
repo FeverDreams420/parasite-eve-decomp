@@ -5,8 +5,8 @@
 
 extern s32 g_ActiveDrawSlot;
 extern u16 g_MainAssetLbaTbl[];
-extern void *D_80125BA4[];
-extern s32 D_80172CD8;
+extern void *g_BootDisplayCreditImages[];
+extern s32 g_BootDisplayImageBrightness;
 extern u32 g_BootDisplayFrameCounter;
 extern char *g_BootDisplayTransferCursor;
 extern u32 func_8010BF94(void *);

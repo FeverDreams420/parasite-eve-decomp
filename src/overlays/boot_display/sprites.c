@@ -25,14 +25,14 @@ void BootDisplay_InitDisplayResources(void) {
     ClearImage(rect, 0, 0, 0);
     DrawSync(0);
 
-    resource = D_8012682C;
+    resource = g_BootDisplayFontTim;
     Asset_LoadTimImage(resource);
-    D_80172C98 = Asset_LoadTimImage(resource);
-    D_80172C9C = Asset_GetTimClutPixels(resource);
-    D_80172C90 = Asset_GetTimImageRect(resource);
-    D_80172C94 = Asset_GetTimClutRect(resource);
-    g_BootDisplayTPage = GetTPage(0, 0, D_80172C90[0], D_80172C90[1]);
-    g_BootDisplayClut = GetClut(D_80172C94[0], D_80172C94[1]);
+    g_BootDisplayFontImagePixels = Asset_LoadTimImage(resource);
+    g_BootDisplayFontClutPixels = Asset_GetTimClutPixels(resource);
+    g_BootDisplayFontImageRect = Asset_GetTimImageRect(resource);
+    g_BootDisplayFontClutRect = Asset_GetTimClutRect(resource);
+    g_BootDisplayTPage = GetTPage(0, 0, g_BootDisplayFontImageRect[0], g_BootDisplayFontImageRect[1]);
+    g_BootDisplayClut = GetClut(g_BootDisplayFontClutRect[0], g_BootDisplayFontClutRect[1]);
     DecDCTReset(0);
     offset = 0x43000;
     MdecDiag_ExpandDecoderTable(g_CdLoadAreaBase + (((g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) << 11) + offset));
@@ -87,23 +87,23 @@ void BootDisplay_StepImageSprite(void) {
     }
     packet->sprite.u0 = 0;
     packet->sprite.v0 = 0;
-    packet->sprite.r0 = D_80172CD8;
-    packet->sprite.g0 = D_80172CD8;
-    packet->sprite.b0 = D_80172CD8;
+    packet->sprite.r0 = g_BootDisplayImageBrightness;
+    packet->sprite.g0 = g_BootDisplayImageBrightness;
+    packet->sprite.b0 = g_BootDisplayImageBrightness;
     packet->sprite.w = 160;
     packet->sprite.h = 120;
     if (g_BootDisplayTransition == 0) {
-        s32 brightness = D_80172CD8 + 4;
-        D_80172CD8 = brightness;
+        s32 brightness = g_BootDisplayImageBrightness + 4;
+        g_BootDisplayImageBrightness = brightness;
         if (brightness >= 128) {
-            D_80172CD8 = 128;
+            g_BootDisplayImageBrightness = 128;
             g_BootDisplayTransition = 1;
         }
     } else if (g_BootDisplayTransition == 2) {
-        s32 brightness = D_80172CD8 - 4;
-        D_80172CD8 = brightness;
+        s32 brightness = g_BootDisplayImageBrightness - 4;
+        g_BootDisplayImageBrightness = brightness;
         if (brightness <= 0) {
-            D_80172CD8 = 0;
+            g_BootDisplayImageBrightness = 0;
             g_BootDisplayTransition = 1;
         }
     }
@@ -116,13 +116,13 @@ void BootDisplay_StepImageSprite(void) {
         s32 endOffset;
         char *base;
 
-        DecDCTvlcSize2(func_8010BF94(D_80125BA4[(u16)g_BootDisplayStateTimer]) >> 2);
+        DecDCTvlcSize2(func_8010BF94(g_BootDisplayCreditImages[(u16)g_BootDisplayStateTimer]) >> 2);
         startOffset = 0x38800;
         endOffset = 0x43000;
         offset = (g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) * 2048;
         base = g_CdLoadAreaBase;
         startOffset += offset;
-        DecDCTvlc2(D_80125BA4[(u16)g_BootDisplayStateTimer], base + startOffset, base + (offset + endOffset));
+        DecDCTvlc2(g_BootDisplayCreditImages[(u16)g_BootDisplayStateTimer], base + startOffset, base + (offset + endOffset));
         g_BootDisplayState = 1;
         break;
     }
@@ -232,7 +232,7 @@ void BootDisplay_InitSprite16(BootDisplaySpritePacket *primitive, s16 x, s16 y,
     packet->sprite.clut = g_BootDisplayClut;
 }
 
-void func_80124704(s32 color) {
+void BootDisplay_QueueFadeSprite(s32 color) {
     BootDisplaySpritePacket *primitive = (BootDisplaySpritePacket *)g_BootDisplayPrimitiveCursor;
 
     SetDrawTPage(&primitive->draw_mode, 0, 0, g_BootDisplayTPage);
@@ -255,7 +255,7 @@ void func_80124704(s32 color) {
     g_BootDisplayPrimitiveCursor += 0x1C;
 }
 
-void func_801247F4(void) {
+void BootDisplay_PresentSpriteFrame(void) {
     DrawSync(0);
     VSync(2);
     ResetGraph(1);

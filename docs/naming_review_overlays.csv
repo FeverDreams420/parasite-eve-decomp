@@ -42,3 +42,41 @@ address,overlay,old_name,name,evidence
 0x8011EB8C,mdec_diag,D_8011EB8C,g_MdecVlc2SizeLimit,"Size-limit word of the VLC_C object, the DecDCTvlcSize2/DecDCTvlc2 twin of g_MdecVlcSizeLimit (vlc_c.c:20-36)."
 0x8011EB90,mdec_diag,D_8011EB90,g_MdecVlc2SavedState,"Resume state of DecDCTvlc2, same 9-word layout as g_MdecVlcSavedState (vlc_c.c:42,262)."
 0x8011EBB4,mdec_diag,D_8011EBB4,g_MdecVlc2FrameEnd,"Frame end pointer of DecDCTvlc2, same role as g_MdecVlcFrameEnd (vlc_c.c:82,241)."
+0x80123E08,boot_display,func_80123E08,BootDisplay_InitDisplayResources,Defined under that name in boot_display/sprites.c; the sprite callback table (D_80125B4C slot init) and asm still used the address name.
+0x80123F8C,boot_display,func_80123F8C,BootDisplay_SelectFrameBuffers,Defined under that name in sprites.c; step slot of the sprite callback table.
+0x80124034,boot_display,func_80124034,BootDisplay_DisplayNoOp,Defined under that name in sprites.c (empty body); shutdown slot of the sprite callback table.
+0x8012403C,boot_display,func_8012403C,BootDisplay_StepImageSprite,Defined under that name in sprites.c; text slot of the sprite callback table.
+0x80124598,boot_display,func_80124598,BootDisplay_QueueTintedSprite,"Defined under that name in sprites.c; glyph slot (s16 x, s16 y, u8 character) of the sprite callback table."
+0x8012489C,boot_display,func_8012489C,BootDisplay_InitDisplayBuffers,Defined under that name in boot_display/image_display.c; init slot of the image callback table.
+0x80124AA4,boot_display,func_80124AA4,BootDisplay_PresentFrame,Defined under that name in image_display.c; present slot of the image callback table.
+0x80124C04,boot_display,func_80124C04,BootDisplay_BrightenGlyph,Defined under that name in image_display.c; glyph slot of the image callback table.
+0x80124F40,boot_display,func_80124F40,BootDisplay_SetImageDisplay,Defined under that name in image_display.c; BootDisplay_InitDisplayBuffers calls it for buffer 0 and 1.
+0x80125094,boot_display,func_80125094,BootDisplay_StepImageDisplay,Defined under that name in image_display.c; text slot of the image callback table.
+0x80125444,boot_display,func_80125444,BootDisplay_CallInitSystem,Defined under that name in image_display.c; shutdown slot of the image callback table.
+0x80125464,boot_display,func_80125464,BootDisplay_BrightenImageRegion,Defined under that name in image_display.c; transition slot of the image callback table.
+0x801255A4,boot_display,func_801255A4,BootDisplay_WaitForCdAndRestoreCallbacks,Defined under that name in boot_display/playback_stop.c; BootDisplay_RunDisplay calls it after the loop (text_screen.c:62).
+0x80125744,boot_display,func_80125744,BootDisplay_StartPlayback,Defined under that name in playback.c; BootDisplay_RunDisplay calls it right after the playback file init.
+0x80125894,boot_display,func_80125894,BootDisplay_SetCdFilter,Defined under that name in playback.c and already in the overlay symbol file; text_screen.c still called the address name.
+0x80124704,boot_display,func_80124704,BootDisplay_QueueFadeSprite,Transition slot of the sprite callback table: BootDisplay_RunDisplay calls transition(fade) with a ramp 0..255 and back (text_screen.c cases 1-3); the function queues a semi-transparent sprite whose r/g/b are that argument (sprites.c:253).
+0x801247F4,boot_display,func_801247F4,BootDisplay_PresentSpriteFrame,"Present slot of the sprite callback table: DrawSync, VSync(2), ResetGraph, PutDispEnv, DrawOTagEnv and flip g_ActiveDrawSlot (sprites.c:276); the image table's present slot is BootDisplay_PresentFrame."
+0x801258EC,boot_display,func_801258EC,BootDisplay_IssuePlaybackRead,"Converts g_BootDisplayPlaybackStartPos to a CD position and sends DsPacket(mode 200, com 27 = CdlReadS), sets the current position and counts the request (playback.c:55); called by BootDisplay_StartPlayback and by BootDisplay_CheckPlaybackTime when the position fell 300 sectors behind."
+0x80125B4C,boot_display,D_80125B4C,g_BootDisplaySpriteCallbacks,"BootDisplayCallbacks table whose slots are the sprites.c functions (init InitDisplayResources, step SelectFrameBuffers, text StepImageSprite, glyph QueueTintedSprite, transition, present, shutdown); BootDisplay_RunDisplay selects it when g_GameStateFlags & 0x10000 is clear (text_screen.c:7)."
+0x80125B68,boot_display,D_80125B68,g_BootDisplayImageCallbacks,BootDisplayCallbacks table whose slots are the image_display.c functions; selected when g_GameStateFlags & 0x10000 is set (text_screen.c:5).
+0x80125B48,boot_display,D_80125B48,g_BootDisplayPlaybackFilePath,"Pointer to the XA stream path (D_80120D04, asset[71] start); BootDisplay_InitPlaybackFile passes it to DsSearchFile (playback_file.c:21)."
+0x80125C88,boot_display,D_80125C88,g_BootDisplayCreditLines,Pointer array of credit text lines ended by a line starting 0xFF; BootDisplay_DrawTextBlock walks it (text_screen.c:78) and the overlay symbol file calls it the staff lines.
+0x80125BA4,boot_display,D_80125BA4,g_BootDisplayCreditImages,"30 pointers to the credit image chunks (D_8012E86C..D_8016F150) indexed by g_BootDisplayStateTimer and fed to DecDCTvlc2 (image_display.c:233, sprites.c:119)."
+0x8012682C,boot_display,D_8012682C,g_BootDisplayFontTim,"TIM loaded by Asset_LoadTimImage in BootDisplay_InitDisplayResources; g_BootDisplayTPage, g_BootDisplayClut and the glyph pixels come from it (sprites.c:27-37, image_display.c:51-58)."
+0x80172C90,boot_display,D_80172C90,g_BootDisplayFontImageRect,Asset_GetTimImageRect(g_BootDisplayFontTim); its x/y feed GetTPage (sprites.c:35).
+0x80172C94,boot_display,D_80172C94,g_BootDisplayFontClutRect,Asset_GetTimClutRect(g_BootDisplayFontTim); its x/y feed GetClut (sprites.c:36).
+0x80172C98,boot_display,D_80172C98,g_BootDisplayFontImagePixels,Image pixels of the font TIM; BootDisplay_BrightenGlyph indexes it by glyph (image_display.c:95).
+0x80172C9C,boot_display,D_80172C9C,g_BootDisplayFontClutPixels,CLUT pixels of the font TIM; BRIGHTEN_NIBBLE reads the palette entry to get the brightness (image_display.c:81).
+0x80172CD8,boot_display,D_80172CD8,g_BootDisplayImageBrightness,Becomes r0/g0/b0 of the image sprite and is ramped by 4 within 0..128 according to g_BootDisplayTransition (sprites.c:90-108).
+0x80172CE0,boot_display,D_80172CE0,g_BootDisplayDone,"Loop exit flag of BootDisplay_RunDisplay: cleared before the loop, set in state 4, the do-while ends when it is non-zero (text_screen.c:23,57,72)."
+0x80172CE4,boot_display,D_80172CE4,g_BootDisplayPlaybackEnded,Set to 1 by BootDisplay_CheckPlaybackTime once the stream position passed the end (playback.c:96); RunDisplay waits for it before accepting input (text_screen.c:36).
+0x80172CE8,boot_display,D_80172CE8,g_BootDisplayPlaybackStartPos,Holds DsPosToInt of the XA file position (playback_file.c:29); BootDisplay_IssuePlaybackRead reads it back as the seek target and CheckPlaybackTime compares against it - 300.
+0x80172CEC,boot_display,D_80172CEC,g_BootDisplayPlaybackEndPos,Start position plus size >> 11 (playback_file.c:30); CheckPlaybackTime ends playback when the current position exceeds it.
+0x80172CF0,boot_display,D_80172CF0,g_BootDisplayPlaybackCurrentPos,Starts as the start position and is updated by the read command and by BootDisplay_RecordReadPosition; CheckPlaybackTime compares it with the end and start positions.
+0x80172CF4,boot_display,D_80172CF4,g_BootDisplayPlaybackReadCount,Zeroed in BootDisplay_InitPlaybackFile and incremented once per CdlReadS issued by BootDisplay_IssuePlaybackRead.
+0x80172CF8,boot_display,D_80172CF8,g_BootDisplayPlaybackRingIndex,Sector ring index 0..7 advanced in BootDisplay_StepPlaybackTransfer; selects the 2048-byte slot DsGetSector fills (playback.c:80-83).
+0x80172CFC,boot_display,D_80172CFC,g_BootDisplayReportedPos,"DsPosToInt of the absolute position in the GetlocP report, stored by BootDisplay_RecordReadPosition and copied to the current position when non-zero (playback.c:104-108)."
+0x80172D00,boot_display,D_80172D00,g_BootDisplayPlaybackSectorBuffer,"Base of the 8-slot sector ring (g_CdLoadAreaBase + asset offset + 0x34800, playback_file.c:34); StepPlaybackTransfer passes slot*2048 to DsGetSector."

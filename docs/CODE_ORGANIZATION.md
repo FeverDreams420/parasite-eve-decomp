@@ -166,8 +166,8 @@ after what their functions do (`fx_common/camera.c`,
     the width tables with it. The units without local jumps had been put at
     0x80122EA4; they moved to 0x80122FA4 with the data block, the
     `BootDisplay_SetCdFilter`/`BootDisplay_RecordReadPosition` symbols and
-    three address-named helpers (now `func_80124704`, `func_801247F4`,
-    `func_801258EC`). The units follow the two callback tables:
+    three address-named helpers (now `BootDisplay_QueueFadeSprite`, `BootDisplay_PresentSpriteFrame`,
+    `BootDisplay_IssuePlaybackRead`). The units follow the two callback tables:
     `text_screen.c` (main loop, text block, glyph lookups; one unit, so the
     4-byte font-table pad is the alignment of the glyph jump table),
     `sprites.c` (the sprite-mode callbacks), `image_display.c` (the
