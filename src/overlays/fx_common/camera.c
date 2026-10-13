@@ -831,34 +831,41 @@ void FxCommon_SelectRoomVariant(void)
         Menu_SetEquipSlotIndex(0);
     }
 
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x179)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x18)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x2E)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x75)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x67)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xBF)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xC0)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x5D)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x60)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x3A)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x176)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x7D)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x104)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xA1)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xB7)
-    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x122)
     g_FxCommonRoomVariant = -1;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x179)
         g_FxCommonRoomVariant = 6;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x18)
+        g_FxCommonRoomVariant = 6;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x2E)
         g_FxCommonRoomVariant = 7;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x75)
+        g_FxCommonRoomVariant = 7;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x67)
+        g_FxCommonRoomVariant = 7;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xBF)
         g_FxCommonRoomVariant = 9;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xC0)
+        g_FxCommonRoomVariant = 9;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x5D)
         g_FxCommonRoomVariant = 2;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x60)
+        g_FxCommonRoomVariant = 2;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x3A)
         g_FxCommonRoomVariant = 8;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x176)
+        g_FxCommonRoomVariant = 8;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x7D)
         g_FxCommonRoomVariant = 4;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x104)
         g_FxCommonRoomVariant = 3;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xA1)
         g_FxCommonRoomVariant = 1;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0xB7)
         g_FxCommonRoomVariant = 0;
+    if (g_ScriptVariableBank[SCRIPT_VAR_ROOM] == 0x122)
         g_FxCommonRoomVariant = 5;
     if (g_FxCommonRoomVariant == -1)
+        g_FxCommonRoomVariant = 7;
 
     if (g_ScriptVariableBank[SCRIPT_VAR_AREA] == 0x80)
         D_8019BFF4 = 0;
@@ -988,13 +995,13 @@ int FxCommon_SendTableCommand3d(int id, s32 *state)
 
     resource = Draw_GetTimTableEntry(&g_FxCommonTimTable, 3);
     PushMatrix();
-    matrixSlot = &g_ViewMatrixSlot.value;
     SetTransMatrix(&g_FxCommonViewMatrix);
     SetRotMatrix(&g_FxCommonViewMatrix);
+    matrixSlot = &g_ViewMatrixSlot.value;
     savedMatrix = *matrixSlot;
+    *matrixSlot = &g_FxCommonViewMatrix;
     savedOutput = g_ProjectionSlot.distance;
     g_ProjectionSlot.distance = &size;
-    *matrixSlot = &g_FxCommonViewMatrix;
     result = Akao_SendTableCommand(resource, id, 0, 0x80, 1);
     *matrixSlot = savedMatrix;
     g_ProjectionSlot.distance = savedOutput;
@@ -1018,13 +1025,13 @@ void FxCommon_Apply3dPan(int handle, volatile s32 *state)
 
     scratch.size = 0x300;
     PushMatrix();
-    matrixSlot = &g_ViewMatrixSlot.value;
     SetTransMatrix(&g_FxCommonViewMatrix);
     SetRotMatrix(&g_FxCommonViewMatrix);
+    matrixSlot = &g_ViewMatrixSlot.value;
     savedMatrix = *matrixSlot;
+    *matrixSlot = &g_FxCommonViewMatrix;
     savedOutput = g_ProjectionSlot.distance;
     g_ProjectionSlot.distance = &scratch.size;
-    *matrixSlot = &g_FxCommonViewMatrix;
     scratch.vector.x = state[0];
     scratch.vector.y = state[1];
     scratch.vector.z = state[2];

@@ -1,9 +1,9 @@
 {
  "counts": {
-  "identical": 961,
-  "conflicting": 119,
+  "identical": 965,
+  "conflicting": 117,
   "conflicting_named": 24,
-  "conflicting_auto": 95,
+  "conflicting_auto": 93,
   "conflicting_interface": 23,
   "conflicting_main": 1,
   "conflicting_private": 0,
@@ -49,8 +49,6 @@
   "D_801922E0",
   "D_80192590",
   "D_80192B9C",
-  "D_80192C34",
-  "D_80192C38",
   "D_80192C3C",
   "D_80192C40",
   "D_80192C42",

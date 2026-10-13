@@ -292,10 +292,10 @@ s32 func_801909B4(void) {
                     VSync(0);
                 } while (waitFrames < 0x3C);
             }
-            g_MemcardSecondScreen.value->draw = g_RenderDrawEnvArray[1];
-            g_MemcardSecondScreen.value->disp = g_RenderDispEnvArray[1];
             g_MemcardScreenBuffers[0]->draw = g_RenderDrawEnvArray[0];
+            g_MemcardSecondScreen.value->draw = g_RenderDrawEnvArray[1];
             g_MemcardScreenBuffers[0]->disp = g_RenderDispEnvArray[0];
+            g_MemcardSecondScreen.value->disp = g_RenderDispEnvArray[1];
             g_MemcardScreenBuffers[0]->draw.isbg = 0;
             g_MemcardSecondScreen.value->draw.isbg = 0;
             g_MemcardScreenBuffers[0]->dirty.w = g_MemcardSecondScreen.value->dirty.w = 0;

@@ -11,14 +11,14 @@ and `conflicting` otherwise. Rules for resolving the conflicting names are in
 
 | Class | Names |
 | --- | ---: |
-| Global names defined by any overlay | 2996 |
-| Defined in more than one overlay, identical | 961 |
-| Defined in more than one overlay, conflicting | 119 |
+| Global names defined by any overlay | 2998 |
+| Defined in more than one overlay, identical | 965 |
+| Defined in more than one overlay, conflicting | 117 |
 | - of which already non-auto names | 24 |
 |   - room interface (a shared source names it) | 23 |
 |   - also a main symbol | 1 |
 |   - private to one overlay's own code (must be renamed) | 0 |
-| - of which auto names (`func_`/`D_`/`jtbl_`/`__D_..._databin`) | 95 |
+| - of which auto names (`func_`/`D_`/`jtbl_`/`__D_..._databin`) | 93 |
 | Overlay global that main also defines | 8 |
 | - of which non-auto names | 1 |
 
@@ -110,8 +110,6 @@ Left to the concurrent auto-name renaming; listed here only.
 | `D_801922E0` | room_m269_warehouse, scene_e01_chrysler | .data | 24,80 |
 | `D_80192590` | room_m032_sewer, room_m059_central_park, room_m220_museum, room_m226_museum, room_m232_museum, scene_e26_chrysler | .data | 600,23636,23652,23656,31960 |
 | `D_80192B9C` | room_m156_hospital, room_m291_chrysler, room_m380_hospital | .data | 36,92 |
-| `D_80192C34` | room_m049_nypd, room_m050_nypd, room_m090_soho, room_m156_hospital, room_m291_chrysler, room_m344_museum, ... (8) | .data | 2,4 |
-| `D_80192C38` | room_m049_nypd, room_m050_nypd, room_m090_soho, room_m156_hospital, room_m291_chrysler, room_m344_museum, ... (8) | .data | 1,4 |
 | `D_80192C3C` | room_m049_nypd, room_m050_nypd, room_m090_soho, room_m156_hospital, room_m291_chrysler, room_m344_museum, ... (8) | .data | 1,239180,251300,251320 |
 | `D_80192C40` | room_m049_nypd, room_m050_nypd, room_m090_soho, room_m344_museum, room_m374_central_park | .data | 2,185760,185768,238084 |
 | `D_80192C42` | room_m049_nypd, room_m344_museum | .data | 3586,21922 |
