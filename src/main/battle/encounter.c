@@ -301,10 +301,10 @@ void Battle_Update(void) {
                     BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = bottomRed;
                     BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = bottomGreen;
                     BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = bottomBlue;
-                    BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = bottomRed;
-                    BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = bottomRed;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
                     asm("" : : "i"(0));
-                    BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
                 } else if ((D_8009D250 & 3) == 1) {
                     int red = 0x50;
                     register int green asm("$6") = 0xA3;
@@ -322,10 +322,10 @@ void Battle_Update(void) {
                     BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = red;
                     BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = green;
                     BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = blue;
-                    BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = red;
-                    BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = red;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
                     asm("" : : "i"(1));
-                    BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
                 } else if ((D_8009D250 & 3) == 2) {
                     int topRed = 0x9F;
                     register int topGreen asm("$8") = 0xFF;
@@ -345,10 +345,10 @@ void Battle_Update(void) {
                     BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = 0;
                     BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = bottomGreen;
                     BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = bottomBlue;
-                    BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = 0;
-                    BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = 0;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
                     asm("" : : "i"(2));
-                    BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
                 } else if ((D_8009D250 & 3) == 3) {
                     int red = 0x50;
                     register int green asm("$6") = 0xA3;
@@ -366,9 +366,9 @@ void Battle_Update(void) {
                     BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = red;
                     BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = green;
                     BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = blue;
-                    BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = red;
-                    BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
-                    BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = red;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
+                    g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
                 }
                 if ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) {
                     opened = 0;
@@ -1096,10 +1096,10 @@ void Battle_PhaseInitEnemyTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = bottomRed;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = bottomGreen;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = bottomBlue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = bottomRed;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = bottomRed;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(0));
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
         } else if ((D_8009D250 & 3) == 1) {
             register int red asm("$5") = 0x50;
             register int green asm("$6") = 0xA3;
@@ -1117,10 +1117,10 @@ void Battle_PhaseInitEnemyTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = red;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = green;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = blue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = red;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = red;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
             asm("" : : "i"(1));
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
         } else if ((D_8009D250 & 3) == 2) {
             register int topRed asm("$7") = 0x9F;
             register int topGreen asm("$8") = 0xFF;
@@ -1140,10 +1140,10 @@ void Battle_PhaseInitEnemyTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = 0;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = bottomGreen;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = bottomBlue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = 0;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = 0;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(2));
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
         } else if ((D_8009D250 & 3) == 3) {
             int red = 0x50;
             register int green asm("$6") = 0xA3;
@@ -1161,9 +1161,9 @@ void Battle_PhaseInitEnemyTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = red;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = green;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = blue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = red;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = red;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
         }
     }
     if (g_ActiveActor->stateFlags & 0x2000) {
@@ -1357,10 +1357,10 @@ void Battle_PhaseHitReaction(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = bottomRed;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = bottomGreen;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = bottomBlue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = bottomRed;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = bottomRed;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(0));
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
         } else if ((D_8009D250 & 3) == 1) {
             register int red asm("$5") = 0x50;
             register int green asm("$6") = 0xA3;
@@ -1378,10 +1378,10 @@ void Battle_PhaseHitReaction(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = red;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = green;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = blue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = red;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = red;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
             asm("" : : "i"(1));
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
         } else if ((D_8009D250 & 3) == 2) {
             register int topRed asm("$7") = 0x9F;
             register int topGreen asm("$8") = 0xFF;
@@ -1401,10 +1401,10 @@ void Battle_PhaseHitReaction(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = 0;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = bottomGreen;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = bottomBlue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = 0;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = 0;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(2));
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
         } else if ((D_8009D250 & 3) == 3) {
             int red = 0x50;
             register int green asm("$6") = 0xA3;
@@ -1422,9 +1422,9 @@ void Battle_PhaseHitReaction(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = red;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = green;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = blue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = red;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = red;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
         }
     }
     active = g_ActiveActor;
@@ -1510,10 +1510,10 @@ void Battle_PhaseEndTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = bottomRed;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = bottomGreen;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = bottomBlue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = bottomRed;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = bottomRed;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(0));
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
         } else if ((D_8009D250 & 3) == 1) {
             register int red asm("$5") = 0x50;
             register int green asm("$6") = 0xA3;
@@ -1531,10 +1531,10 @@ void Battle_PhaseEndTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = red;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = green;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = blue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = red;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = red;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
             asm("" : : "i"(1));
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
         } else if ((D_8009D250 & 3) == 2) {
             register int topRed asm("$7") = 0x9F;
             register int topGreen asm("$8") = 0xFF;
@@ -1554,10 +1554,10 @@ void Battle_PhaseEndTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = 0;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = bottomGreen;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = bottomBlue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = 0;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = 0;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(2));
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
         } else if ((D_8009D250 & 3) == 3) {
             int red = 0x50;
             register int green asm("$6") = 0xA3;
@@ -1575,9 +1575,9 @@ void Battle_PhaseEndTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0104, 0x24) = red;
             BATTLE_HUD_SLOT_BYTE(D_800B0105, 0x24) = green;
             BATTLE_HUD_SLOT_BYTE(D_800B0106, 0x24) = blue;
-            BATTLE_HUD_SLOT_BYTE(D_800B692C, 0x1C) = red;
-            BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
-            BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.r = red;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
+            g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
         }
     }
     if (g_ActiveActor->stateFlags & 0x2000) {

@@ -78,11 +78,5 @@ extern u8 D_800B01B2[];
 extern u8 D_800B01B8[];
 extern u8 D_800B01B9[];
 extern u8 D_800B01BA[];
-extern u8 D_800B692C[];
-extern u8 D_800B692D[];
-extern u8 D_800B692E[];
-extern u8 D_800B6948[];
-extern u8 D_800B6949[];
-extern u8 D_800B694A[];
 
 #endif

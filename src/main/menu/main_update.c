@@ -10,6 +10,7 @@
 #include "pe1/battle_reset_stats.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_setup.h"
+#include "pe1/battle_status.h"
 #include "pe1/battle_update.h"
 #include "pe1/draw_slot_record.h"
 #include "pe1/entity_animation.h"
@@ -730,17 +731,17 @@ void Menu_MainUpdate(s32 arg0) {
         var_a2 = 0x36;
         D_800B00F4[0] = var_a0;
         D_800B0104[0] = var_a0;
-        D_800B692C[0] = var_a0;
+        g_BattleAtbMarkers[0].sprite.color.bytes.r = var_a0;
         D_800B0118[0] = var_a0;
         D_800B0128[0] = var_a0;
-        D_800B6948[0] = var_a0;
+        g_BattleAtbMarkers[1].sprite.color.bytes.r = var_a0;
         var_a0 = 0x4A;
         D_800B00F6[0] = var_v1;
         D_800B0106[0] = var_v1;
-        D_800B692E[0] = var_v1;
+        g_BattleAtbMarkers[0].sprite.color.bytes.b = var_v1;
         D_800B011A[0] = var_v1;
         D_800B012A[0] = var_v1;
-        D_800B694A[0] = var_v1;
+        g_BattleAtbMarkers[1].sprite.color.bytes.b = var_v1;
         var_v1 = 0x3B;
         D_800B00EC[0] = 0;
         D_800B00EE[0] = var_a1;
@@ -748,14 +749,14 @@ void Menu_MainUpdate(s32 arg0) {
         D_800B00FC[0] = 0;
         D_800B00FE[0] = var_a1;
         D_800B0105[0] = var_v0.value;
-        D_800B692D[0] = var_v0.value;
+        g_BattleAtbMarkers[0].sprite.color.bytes.g = var_v0.value;
         D_800B0110[0] = 0;
         D_800B0112[0] = var_a1;
         D_800B0119[0] = var_v0.value;
         D_800B0120[0] = 0;
         D_800B0122[0] = var_a1;
         D_800B0129[0] = var_v0.value;
-        D_800B6949[0] = var_v0.value;
+        g_BattleAtbMarkers[1].sprite.color.bytes.g = var_v0.value;
         D_800B0134[0] = 0;
         D_800B0135[0] = var_a1;
         D_800B0136[0] = var_a2;
@@ -800,10 +801,10 @@ void Menu_MainUpdate(s32 arg0) {
         D_800B0121[0] = var_a2;
         D_800B00F4[0] = var_a0;
         D_800B0104[0] = var_a0;
-        D_800B692C[0] = var_a0;
+        g_BattleAtbMarkers[0].sprite.color.bytes.r = var_a0;
         D_800B0118[0] = var_a0;
         D_800B0128[0] = var_a0;
-        D_800B6948[0] = var_a0;
+        g_BattleAtbMarkers[1].sprite.color.bytes.r = var_a0;
         D_800B00EC[0] = 0;
         D_800B00EE[0] = var_a1;
         D_800B00F5[0] = var_v0.value;
@@ -812,8 +813,8 @@ void Menu_MainUpdate(s32 arg0) {
         D_800B00FE[0] = var_a1;
         D_800B0105[0] = var_v0.value;
         D_800B0106[0] = var_v1;
-        D_800B692D[0] = var_v0.value;
-        D_800B692E[0] = var_v1;
+        g_BattleAtbMarkers[0].sprite.color.bytes.g = var_v0.value;
+        g_BattleAtbMarkers[0].sprite.color.bytes.b = var_v1;
         D_800B0110[0] = 0;
         D_800B0112[0] = var_a1;
         D_800B0119[0] = var_v0.value;
@@ -822,8 +823,8 @@ void Menu_MainUpdate(s32 arg0) {
         D_800B0122[0] = var_a1;
         D_800B0129[0] = var_v0.value;
         D_800B012A[0] = var_v1;
-        D_800B6949[0] = var_v0.value;
-        D_800B694A[0] = var_v1;
+        g_BattleAtbMarkers[1].sprite.color.bytes.g = var_v0.value;
+        g_BattleAtbMarkers[1].sprite.color.bytes.b = var_v1;
         {
         var_a2 = 0x36;
         var_a0 = 0x4A;
