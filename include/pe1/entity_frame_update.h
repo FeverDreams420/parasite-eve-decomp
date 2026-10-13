@@ -28,8 +28,7 @@ extern s16 D_800BCFFE[];       /* camera height (integer part) */
 void Battle_Update(void);
 void Inv_OpenAyaItemList(unsigned int mode);
 int Menu_RunFrameWithArg(int arg);
-void func_80069660(void);
-void func_8001A9F8(void);
+void Entity_UpdateList(void);
 void Entity_CopyParentPosition(void);
 int Render_StepCameraTransition(void);
 void Render_SetViewport(int *camera);
@@ -40,9 +39,8 @@ void Render_TransformVertices(RenderObjectEntity *object);
 void Render_TransformSkinnedVertices(RenderObjectEntity *object, u32 *view_matrix);
 void Render_TransformMorphVertices(RenderObjectEntity *object, u32 *view_matrix);
 void Render_DrawEntity(RenderObjectEntity *object, void *viewMatrix);
-void func_80069594(void);
 void Scene_UpdateEntityPositions(void);
-void func_80012774(void);
+void Script_GarbageCollectNodes(void);
 void Entity_CollectGarbage(void);
 
 #endif /* PE1_ENTITY_FRAME_UPDATE_H */

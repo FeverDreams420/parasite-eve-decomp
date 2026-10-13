@@ -40,14 +40,14 @@ u16 D_8009D21C;
 s32 D_8009D28C;
 BattleAttributes g_BattleEquipStateBlock;
 
-void func_8002F658(void);
+void Battle_SaveAyaState(void);
 void Save_ResetGlobalFlags(void);
 
 void Save_InitSystem(void)
 {
     u8 i;
 
-    func_8002F658();
+    Battle_SaveAyaState();
     for (i = 0; i < 7; i++) {
         D_800A5D58[i].active = 0;
     }

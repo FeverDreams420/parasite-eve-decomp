@@ -232,9 +232,9 @@ void Entity_FrameUpdate(void) {
             }
         }
 
-        func_80069660();
+        Pm_RunBatch();
         if (!(g_GameStateBlock.flags & 4)) {
-            func_8001A9F8();
+            Entity_UpdateList();
         }
         Entity_CopyParentPosition();
         Render_StepCameraTransition();
@@ -330,7 +330,7 @@ void Entity_FrameUpdate(void) {
         }
 
         Scene_LoadEntityTextures();
-        func_80069594();
+        Pm_RunPrimary();
         Render_ResetGteScreenOffset();
 
         if (!(g_GameStateBlock.flags & 4)) {
@@ -351,7 +351,7 @@ void Entity_FrameUpdate(void) {
 
     if (!(g_GameStateBlock.flags & 4)) {
         Scene_UpdateEntityPositions();
-        func_80012774();
+        Script_GarbageCollectNodes();
         Entity_CollectGarbage();
         for (entity = g_FieldActorListHead; entity != 0; entity = entity->next) {
             entity->flags &= ~0x10000000;

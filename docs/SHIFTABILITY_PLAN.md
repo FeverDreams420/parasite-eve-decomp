@@ -354,6 +354,8 @@ keep rebases trivial) and every C rename those symbols need.
 | 5 | stage B by unit, object runs first (`.bss`, then `.data`, then `.sbss` once MASPSX allows) | | | per unit | uses the per-module table below |
 | 6 | overlays link against built main, `PE.IMG` repack | | | high | needed before a shifted build can boot |
 
+Wave 1 status: done, byte-identical; 18 function pins, `g_DsReadStatusBlock`, 3 `fieldfx/burst` labels and 4 `FieldFx_*` symbolic aliases gone (pinned words 6253 to 6140); `D_800C20C8` (`_end`) is left to wave 0, `func_800119CC` (rodata) to the data package.
+
 Within a package, work from the least shared symbols to the most shared. A
 symbol referenced by several modules belongs to the package of its group,
 not to a module; the module table below is the order for stage B and for

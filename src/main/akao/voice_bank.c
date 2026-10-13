@@ -76,9 +76,6 @@ void Spu_RebaseStreamAddrs(unsigned char *ptr, int value, int count) {
 }
 
 #define NULL ((void *)0)
-M2C_UNK func_80089960();
-M2C_UNK func_80089B28();
-M2C_UNK func_80089CF0();
 
 void Akao_StepSequencerVoice(void *arg0) {
     void *arg0v;
@@ -217,9 +214,9 @@ void Akao_StepSequencerVoice(void *arg0) {
     __asm__ __volatile__("");
     pend->allocated_voice_mask = all_voices;
     pend->reserved_voice_mask = 0;
-    func_80089960(all_voices);
-    func_80089B28();
-    func_80089CF0();
+    Seq_MarkTrack34MaskDirty();
+    Seq_MarkTrack38MaskDirty();
+    Seq_MarkTrack3CMaskDirty();
 }
 
 void SeqOp_DeactivateVoice(AkaoTrack *ptr, int mask);

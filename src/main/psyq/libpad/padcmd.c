@@ -304,8 +304,8 @@ complete:
 
 #include "padcmd_externs_1.h"
 
-void func_80083C20(void *obj);
-int func_80083C3C(CardObj *obj);
+void CardObj_EmitCommand4D(CardObj *arg0);
+s32 Render_CheckParticleBounds(CardObj *arg0);
 
 int _padSetActAlign(CardObj *obj, u8 *command) {
     int result;
@@ -317,9 +317,9 @@ int _padSetActAlign(CardObj *obj, u8 *command) {
     } else {
         active = 1;
         obj->sequenceStep = active;
-        obj->fn_14 = func_80083C20;
+        obj->fn_14 = (void (*)(void *))CardObj_EmitCommand4D;
         obj->requestedActuatorMap = command;
-        obj->fn_18 = func_80083C3C;
+        obj->fn_18 = Render_CheckParticleBounds;
         result = 1;
     }
     return result;

@@ -152,11 +152,11 @@ int ER_retry(void) {
     g_DsAsyncReadState.nextSector = DsPosToInt(DS_lastpos());
     mode = DS_lastmode() & 0xFF;
     position = DS_lastpos();
-    command = func_8007FC44();
+    command = DS_lastread();
     argumentMode = mode;
     limit = -1;
     return DsPacket(argumentMode, position,
-        (unsigned char)command, (DslCB)func_8008227C, limit);
+        (unsigned char)command, (DslCB)ER_cbsync, limit);
 }
 
 void ER_cbsync(u_char event) {

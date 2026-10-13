@@ -207,7 +207,6 @@ s32 Entity_GetDistanceComponents(s32 *args[]) {
 #include "../../../tools/m2c/m2c_macros.h"
 
 #define NULL ((void *)0)
-M2C_UNK func_80042F20();
 s32 g_SceneDataTable0;
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, memcard_init_phase) == 0xF4,
@@ -234,7 +233,7 @@ s32 Boot_MemCardStepInit(u8 **arg0) {
     case 0x38:
         if (CdRom_StepReadState(1) != 1) {
             if (!(g_GameState.flags & 0x400000)) {
-                func_80042F20();
+                Menu_SaveBgStartFadeOut();
             }
             base->memcard_init_phase = 0x39U;
             goto loop_1;
