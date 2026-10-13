@@ -104,8 +104,7 @@ int Render_DrawSpriteEntry(GeomEntry *input)
     }
     asm volatile("" : : "r"(scroll_y));
     {
-        workValue = *(u32 *)entry;
-        workValue = (u32)workValue >> 8;
+        workValue = *(u32 *)entry >> 8;
         workValue &= 0xFFF;
         screen_src = state->field26;
         texture_base = screen_src + workValue;
