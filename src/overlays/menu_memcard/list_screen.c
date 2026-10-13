@@ -237,7 +237,7 @@ s32 MenuCard_RunListScreen(void) {
     /* Save both display pages before borrowing their backing memory. */
     g_MemcardListSavedDispEnv[0] = g_RenderDispEnvArray[0];
     g_MemcardListSavedDispEnv[1] = g_RenderDispEnvArray[1];
-    titleMode = D_800B0DCD & 1;
+    titleMode = g_PeImageMountFlags & 1;
     g_MemcardListSavedDrawEnv[0] = g_RenderDrawEnvArray[0];
     g_MemcardListSavedDrawEnv[1] = g_RenderDrawEnvArray[1];
     firstMemory = g_CdLoadAreaBase;

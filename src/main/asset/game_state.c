@@ -193,7 +193,7 @@ retryFog:
                 state = 8;
                 break;
             case 0:
-                if ((mode == 1 && (D_800B0DCD & 1)) || (mode == 2 && (D_800B0DCD & 2))) {
+                if ((mode == 1 && (g_PeImageMountFlags & 1)) || (mode == 2 && (g_PeImageMountFlags & 2))) {
                     done = 1;
                 } else {
                     wait = 180;
@@ -257,7 +257,7 @@ retryFog:
     rect.h = 448;
     ClearImage(&rect, 0, 0, 1);
     DrawSync(0);
-    D_800B0DCD = mode == 1 ? 1 : 2;
+    g_PeImageMountFlags = mode == 1 ? 1 : 2;
     /* `wait` is free again here and holds the drive status. */
     while ((wait = DsSystemStatus()) != 1)
         VSync(0);
