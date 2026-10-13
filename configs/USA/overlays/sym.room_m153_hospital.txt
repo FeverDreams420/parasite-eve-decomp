@@ -103,3 +103,4 @@ g_RoomEruptionDrawList = 0x801954D8;
 g_RoomEruptionUpdateList = 0x801954F4;
 g_RoomEruptionInitList = 0x801954BC;
 g_RoomEruptionSpawnLayout = 0x80195510;
+g_RoomClassTable = 0x80195584; // size:0xA8 allow_addend:true

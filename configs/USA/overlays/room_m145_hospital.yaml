@@ -42,11 +42,14 @@ segments:
       - [0x1EC, c, ../room_lib/actor_classes]
       - [0x3508, c, ../room_lib/floor_walker_class]
       - [0x3CF8, c, ../room_lib/timed_spawn]
-      - [0x41D4, data, D_801931BC]
+      - [0x41D4, .data, ../room_lib/actor_class_table]
+      - [0x427C, data, D_80193264]
       - [0x4298, data, D_80193280]
-      - start: 0x42B8
+      - [0x42B8, data, RoomLib_TimedRenderTable]
+      - [0x42D8, data, D_801932C0]
+      - start: 0x4310
         type: databin
-        name: D_801932A0
+        name: D_801932F8
         dir: room_m145_hospital
       - [0x15540, data, D_801A4528]
       - start: 0x19200

@@ -49,12 +49,7 @@ segments:
       # The spawner owns the sixteen ballistic records updated by this callback.
       - [0x7C7C, c, RoomEffect_ConfiguredPulseCallback]
       - [0x7E1C, c, m350_callbacks]
-      # The controller owns the four falling records updated by this callback.
-      # The controller owns sixteen vectors transformed by this callback.
-      # The spawner owns ten twenty-byte records updated by this callback.
-      - [0xB330, data, D_8019A318]
-      - [0xB368, data, D_8019A350]
-      - [0xB3A0, data, D_8019A388]
+      - [0xB330, .data, ../room_lib/actor_class_table]
       - [0xB3D8, data, D_8019A3C0]
       - [0xB3E0, data, D_8019A3C8]
       - [0xB3E4, data, D_8019A3CC]

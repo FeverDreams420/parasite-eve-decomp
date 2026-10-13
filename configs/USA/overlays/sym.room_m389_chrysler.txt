@@ -100,3 +100,4 @@ g_RoomOrbitSetDrawList = 0x801941E0;
 g_RoomOrbitSetUpdateList = 0x801941F4;
 g_RoomOrbitSetInitList = 0x801941CC;
 g_RoomOrbitSetSpawnLayout = 0x80194208;
+g_RoomClassTable = 0x801942A4; // size:0xA8 allow_addend:true

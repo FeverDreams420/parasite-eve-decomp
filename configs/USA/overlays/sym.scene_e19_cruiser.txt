@@ -55,3 +55,4 @@ RoomLib_HandlerA = 0x801922D4; // type:func
 RoomLib_HandlerF = 0x801923E8; // type:func
 RoomLib_ReleaseHandlerA = 0x80192568; // type:func
 RoomLib_HandlerANop6 = 0x80192584; // type:func
+g_RoomClassTable = 0x8019B254; // size:0xA8 allow_addend:true

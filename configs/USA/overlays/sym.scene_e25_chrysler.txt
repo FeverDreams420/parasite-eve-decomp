@@ -73,3 +73,4 @@ RoomEffect_FlashSpriteController = 0x80192A68; // type:func
 g_RoomFlashColorRamp = 0x80193234;
 RoomLib_SetArgs3 = 0x80193118; // type:func
 g_RoomScriptArgs = 0x8019328C;
+g_RoomClassTable = 0x8019313C; // size:0xA8 allow_addend:true

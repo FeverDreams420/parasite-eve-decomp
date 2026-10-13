@@ -42,7 +42,8 @@ segments:
         dir: scene_e26_chrysler
       - [0xC, .rodata, ../room_lib/actor_classes]
       - [0x1E4, c, ../room_lib/actor_classes]
-      - [0x3500, data]
+      - [0x3500, .data, ../room_lib/actor_class_table]
+      - [0x35A8, data]
   - [0x3800]
 # source slice: scanner
 # extract locally with: dd if=disc/extracted/PE.IMG of=original/USA/overlays/scene_e26.bin bs=2048 skip=100264 count=7

@@ -58,7 +58,8 @@ segments:
       - [0x36A0, c, ../room_lib/grab_await_stance]
       # The approach callback arms the grab sequence and both paths share actor/target state.
       - [0x36CC, c, e19]
-      - [0xC26C, data]
+      - [0xC26C, .data, ../room_lib/actor_class_table]
+      - [0xC314, data]
   - [0xC800]
 # source slice: scanner
 # extract locally with: dd if=disc/extracted/PE.IMG of=original/USA/overlays/scene_e19.bin bs=4 skip=50477568 count=12800

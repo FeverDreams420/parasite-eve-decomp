@@ -42,8 +42,7 @@ segments:
       - [0x1F8, c, ../room_lib/actor_classes]
       - [0x3514, c, ../room_lib/line_burst]
       - [0x4304, c, ../room_lib/script_slot]
-      - [0x4348, data, D_80193330]
-      - [0x4380, data, D_80193368]
+      - [0x4348, .data, ../room_lib/actor_class_table]
       - [0x43F0, data, D_801933D8]
       - [0x4410, data, D_801933F8]
       - start: 0x4448

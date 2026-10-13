@@ -90,4 +90,4 @@ g_RoomInitList = 0x80194C08;
 g_RoomSpawnLayout = 0x80194C50;
 RoomLib_ClassNop0 = 0x8018F418; // type:func
 RoomLib_ClassNop6 = 0x8018F410; // type:func
-g_RoomClassTable = 0x80194CF8; // size:0xA8
+g_RoomClassTable = 0x80194CF8; // size:0xA8 allow_addend:true

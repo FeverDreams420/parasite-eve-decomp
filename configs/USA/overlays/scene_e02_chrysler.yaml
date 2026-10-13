@@ -50,6 +50,8 @@ segments:
       - [0x5674, c, ../room_lib/script_args]
       - [0x5698, c, ../room_lib/homing_projectile]
       - [0x6484, data]
+      - [0x654C, .data, ../room_lib/actor_class_table]
+      - [0x65F4, data]
       - [0x6680, .data, ../room_lib/homing_projectile_seeds]
       - [0x66A8, data]
   - [0x6800]

@@ -77,3 +77,4 @@ RoomLib_HandlerF = 0x80192360; // type:func
 RoomLib_ReleaseHandlerA = 0x801924E0; // type:func
 RoomLib_HandlerANop6 = 0x801924FC; // type:func
 RoomM273_PulseSpriteCallback = 0x8019A398; // type:func
+g_RoomClassTable = 0x8019A810; // size:0xA8 allow_addend:true

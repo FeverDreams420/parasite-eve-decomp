@@ -56,3 +56,4 @@ g_RoomScriptArg = 0x801956BC;
 RoomLib_SetTaskVar0 = 0x80195350; // type:func
 g_RoomScriptRecord = 0x80195684;
 RoomM123_SelectSlotPointer = 0x8019537C; // type:func
+g_RoomClassTable = 0x801953E4; // size:0xA8 allow_addend:true

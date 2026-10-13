@@ -60,7 +60,7 @@ segments:
       - [0x7E48, data, D_80196E30]
       - [0x7E64, data, RoomLib_TableB_80190184]
       - [0x7F24, data, D_80196F0C]
-      - [0x7F70, data, D_80196F58]
+      - [0x7F38, .data, ../room_lib/actor_class_table]
       - [0x7FE0, data, D_80196FC8]
       - [0x8000, data, D_80196FE8]
       - [0x8200, data, D_801971E8]

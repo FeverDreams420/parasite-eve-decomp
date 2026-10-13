@@ -58,3 +58,4 @@ RoomEffect_BurstSparkSpawner = 0x80193CDC; // type:func
 RoomEffect_SetSparkSlot = 0x80193FC0; // type:func
 g_RoomSparkRingColorRamp = 0x80194098;
 g_RoomSparkSlot = 0x80194148;
+g_RoomClassTable = 0x80193FD0; // size:0xA8 allow_addend:true

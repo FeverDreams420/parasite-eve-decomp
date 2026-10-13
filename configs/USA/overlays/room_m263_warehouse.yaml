@@ -45,7 +45,7 @@ segments:
       - [0x4174, c, ../room_lib/script_args]
       - [0x4198, c, ../room_lib/line_burst]
       - [0x4F88, c, ../room_lib/script_slot]
-      - [0x4FCC, data, D_80193FB4]
+      - [0x4FCC, .data, ../room_lib/actor_class_table]
       - [0x5074, data, D_8019405C]
       - [0x50E8, data, D_801940D0]
       - [0x5140, data, RoomSlotA_8019315C]

@@ -51,7 +51,7 @@ segments:
       - [0x5378, data, D_80194360]
       - [0x5394, data, D_8019437C]
       - [0x53CC, data, D_801943B4]
-      - [0x5414, data, D_801943FC]
+      - [0x53DC, .data, ../room_lib/actor_class_table]
       - [0x5484, data, D_8019446C]
       - [0x54A4, data, D_8019448C]
       - [0x54E0, data, RoomLib_SlotTable]

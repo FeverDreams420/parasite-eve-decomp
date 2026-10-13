@@ -71,3 +71,4 @@ g_RoomScatterTrailHistory = 0x801959D8;
 g_RoomScatterBurstAnchor = 0x80195B68;
 g_RoomScatterBurstAsset = 0x80195B70;
 g_RoomScatterBurstLayer = 0x80195B74;
+g_RoomClassTable = 0x80195604; // size:0xA8 allow_addend:true

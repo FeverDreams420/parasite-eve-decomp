@@ -62,3 +62,4 @@ g_RoomSparkRingColorRamp = 0x80194844;
 g_RoomSparkSlot = 0x80194900;
 RoomLib_SetArgs3 = 0x80192C68; // type:func
 g_RoomScriptArgs = 0x801948F4;
+g_RoomClassTable = 0x80194720; // size:0xA8 allow_addend:true
