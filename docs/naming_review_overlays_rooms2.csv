@@ -225,3 +225,84 @@ address,overlay,old_name,new_name,evidence
 0x80199604,scene_e08_chrysler,D_80199604,g_SceneE08RingEffectRing0Mode,"g_SceneE08RingEffectRings (0x801995F8) entry 0 mode at +0xC, the interior label SceneE08_InitRingEffect addresses (see rooms.csv row for the Rings object)."
 0x8018F040,scene_e08_chrysler,D_8018F040,g_SceneE08ParticleSlotOffsetInit,Zero 8-byte GteShortVector copied into the offset local of SceneE08_DrawParticleSlots.
 0x8018F048,scene_e08_chrysler,D_8018F048,g_SceneE08ParticleSlotColorInit,"Grey (128,128,128) RenderColor copied into the colour local of SceneE08_DrawParticleSlots before the 0xFF stores."
+0x8019AEE8,room_m273_liberty,D_8019AEE8,g_RoomM273HandTrailState.landing_count,"Field of g_RoomM273HandTrailState (RoomM273BossState at 0x8019AE9C), member access byte-identical: landing_count at +0x4C, read and cleared by RoomM273_HandTrailLandingEmitter"
+0x8019AEEA,room_m273_liberty,D_8019AEEA,g_RoomM273HandTrailState.repeat,"Field of g_RoomM273HandTrailState (RoomM273BossState at 0x8019AE9C), member access byte-identical: repeat +0x4E, set by RoomM273_HandTrailConfigure per mode"
+0x8019AEEE,room_m273_liberty,D_8019AEEE,g_RoomM273HandTrailState.spin_target,"Field of g_RoomM273HandTrailState (RoomM273BossState at 0x8019AE9C), member access byte-identical: spin_target +0x52, set by RoomM273_HandTrailConfigure"
+0x8019AEF2,room_m273_liberty,D_8019AEF2,g_RoomM273HandTrailState.spin_step,"Field of g_RoomM273HandTrailState (RoomM273BossState at 0x8019AE9C), member access byte-identical: spin_step +0x56"
+0x8019AEF6,room_m273_liberty,D_8019AEF6,g_RoomM273HandTrailState.tick_limit,"Field of g_RoomM273HandTrailState (RoomM273BossState at 0x8019AE9C), member access byte-identical: tick_limit +0x5A"
+0x8019AEF8,room_m273_liberty,D_8019AEF8,g_RoomM273HandTrailState.done,"Field of g_RoomM273HandTrailState (RoomM273BossState at 0x8019AE9C), member access byte-identical: done +0x5C, the stop flag polled by the hand trail, landing, hit and glow emitters"
+0x8019AEFA,room_m273_liberty,D_8019AEFA,g_RoomM273HandTrailState.spinning,"Field of g_RoomM273HandTrailState (RoomM273BossState at 0x8019AE9C), member access byte-identical: spinning +0x5E, the mode written by RoomM273_HandTrailConfigure and tested by the trail emitter"
+0x8019AEB2,room_m273_liberty,D_8019AEB2,g_RoomM273HandTrailState.hit_flag,"Field of g_RoomM273HandTrailState (RoomM273BossState at 0x8019AE9C), member access byte-identical: hit_flag +0x16, the pending counter of the hit poll-reset actor"
+0x8019AEAC,room_m273_liberty,D_8019AEAC,g_RoomM273HandTrailHitSeed,"Field of g_RoomM273HandTrailState (RoomM273BossState at 0x8019AE9C), member access byte-identical: hit[3] +0x10 viewed as the RoomFxSeed8 the hit poll-reset actor copies (the view is wider than the s16[3] member)"
+0x8019AF56,room_m273_liberty,D_8019AF56,g_RoomM273SweepState.loops,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: loops +0x52, set by RoomM273_SweepConfigure"
+0x8019AF58,room_m273_liberty,D_8019AF58,g_RoomM273SweepState.reserved_54,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: +0x54, stored with the same value as loops by RoomM273_SweepConfigure"
+0x8019AF5A,room_m273_liberty,D_8019AF5A,g_RoomM273SweepState.side,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: side +0x56"
+0x8019AF5C,room_m273_liberty,D_8019AF5C,g_RoomM273SweepState.divisor,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: divisor +0x58 = (value+1)*6"
+0x8019AF60,room_m273_liberty,D_8019AF60,g_RoomM273SweepState.target,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: target +0x5C, heading pointer in RoomM273_SweepDropEmitter"
+0x8019AF62,room_m273_liberty,D_8019AF62,g_RoomM273SweepState.floor,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: floor +0x5E, compared with the drop y in RoomM273_SweepDropCallback"
+0x8019AF64,room_m273_liberty,D_8019AF64,g_RoomM273SweepState.contact,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: contact +0x60 = 0x52 or 0xE from RoomM273_SweepConfigure"
+0x8019AF68,room_m273_liberty,D_8019AF68,g_RoomM273SweepState.in_contact,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: in_contact +0x64, gate of RoomM273_SweepFlashEmitter"
+0x8019AF69,room_m273_liberty,D_8019AF69,g_RoomM273SweepState.done,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: done +0x65, stop flag of the sweep emitters"
+0x8019AF6A,room_m273_liberty,D_8019AF6A,g_RoomM273SweepState.in_window,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: in_window +0x66, gate of RoomM273_SweepRisingEmitter"
+0x8019AF6B,room_m273_liberty,D_8019AF6B,g_RoomM273SweepState.started,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: started +0x67, gate of RoomM273_SweepArcEmitter"
+0x8019AF6C,room_m273_liberty,D_8019AF6C,g_RoomM273SweepState.model,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: model +0x68, ground ring model fetched by RoomM273_SwayGroundRingEmitter"
+0x8019AF0A,room_m273_liberty,D_8019AF0A,g_RoomM273SweepState.hit.vector.pad,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: hit +0x06, the pending counter of the drop-hit poll-reset actor"
+0x8019AF0C,room_m273_liberty,D_8019AF0C,g_RoomM273SweepSplashBatch,"Field of g_RoomM273SweepState (RoomM273DropQueue at 0x8019AF04), member access byte-identical: x[] at +0x08 viewed as RoomM273RisingBatchBuffer by the splash emitter"
+0x8019AF9A,room_m273_liberty,D_8019AF9A,g_RoomM273SwayState.repeat,"Field of g_RoomM273SwayState (0x8019AF74) at +0x26, written by RoomM273_SwayConfigure"
+0x8019AFA2,room_m273_liberty,D_8019AFA2,g_RoomM273SwayState.done,"Field of g_RoomM273SwayState +0x2E, stop flag of RoomM273_SwayBurstEmitter"
+0x8019AF84,room_m273_liberty,D_8019AF84,g_RoomM273SwayHitView,"hits[0] of g_RoomM273SwayState (+0x10), addressed as EmitterState by RoomM273_SwayGroundRingEmitter (anchor +30 reaches done)"
+0x8019AF8A,room_m273_liberty,D_8019AF8A,g_RoomM273SwayHitFlags,"hits[].pad flag words of g_RoomM273SwayState (+0x16, stride 8) tested and cleared by RoomM273_SwayBurstEmitter"
+0x8019AEFE,room_m273_liberty,D_8019AEFE,g_RoomM273SweepPoint.y,"y of g_RoomM273SweepPoint (0x8019AEFC, GteShortVector), read by the arc, rising and flash sweep emitters"
+0x8019AF00,room_m273_liberty,D_8019AF00,g_RoomM273SweepPoint.z,"z of g_RoomM273SweepPoint, same readers"
+0x8009D254,room_m273_liberty,D_8009D254,g_PlayerEntity,"Main-range address; linkers/USA/undefined_syms_manual.txt aliases g_PlayerEntity = D_8009D254, so m273 uses the alias"
+0x8019AE5C,room_m273_liberty,D_8019AE5C,g_RoomM273PlayerPulseSpawned,"Set when RoomM273_GrabPlayerPulseEmitter acquires its single slot, tested to stop spawning and to gate the draw"
+0x8019AE60,room_m273_liberty,D_8019AE60,g_RoomM273PlayerTrailBurstsLeft,Counter set to 4 by RoomM273_GrabPlayerTrailEmitter and decremented per spawned trail point
+0x8019AE64,room_m273_liberty,D_8019AE64,g_RoomM273PlayerTrailDelay,Frame delay between trail points (set to 2 after each spawn) in the same emitter
+0x8019AE68,room_m273_liberty,D_8019AE68,g_RoomM273HoldFlareSpawned,"One-shot latch of RoomM273_GrabHoldFlareEmitter (cleared in mode 0, set after the spawn)"
+0x8019AE6C,room_m273_liberty,D_8019AE6C,g_RoomM273HandTrailPhase,"Cleared in RoomM273_HandTrailEmitter mode 0, incremented per spawn and used as the pattern phase"
+0x8019AE70,room_m273_liberty,D_8019AE70,g_RoomM273HandTrailCooldown,Per-call countdown (spawn only once it is not positive) in RoomM273_HandTrailEmitter
+0x8019AE74,room_m273_liberty,D_8019AE74,g_RoomM273HandTrailPeriodA,(Inv_ScrambleGrid()&7)+4 initialised in RoomM273_HandTrailEmitter mode 0
+0x8019AE78,room_m273_liberty,D_8019AE78,g_RoomM273HandTrailPeriodB,Second random period of the same init
+0x8019AE84,room_m273_liberty,D_8019AE84,g_RoomM273SweepRisingDelay,"Countdown (spawn when it runs out, reload 2) in RoomM273_SweepRisingEmitter"
+0x8019AE88,room_m273_liberty,D_8019AE88,g_RoomM273SwayPointerSpawned,One-shot latch of RoomM273_SwayPointerEmitter
+0x8019AE90,room_m273_liberty,D_8019AE90,g_RoomM273GrabModelList,Callback list handle passed to FieldFx_AcquireCallbackSlot/Update/DrawCallbackList by RoomM273_GrabModelEmitter
+0x8019AE98,room_m273_liberty,D_8019AE98,g_RoomM273GrabColorIndex,"Index into the grab colour table, set by RoomM273_GrabEffectConfigure"
+0x8019AE9A,room_m273_liberty,D_8019AE9A,g_RoomM273GrabEffectStopped,"Set by RoomM273_GrabEffectController when the boss animation passes the grab window, makes the grab emitters return 2"
+0x8019ABFC,room_m273_liberty,D_8019ABFC,g_RoomM273GrabColors,Indexed by g_RoomM273GrabColorIndex for the star burst and hold flare colours
+0x8019AC30,room_m273_liberty,D_8019AC30,g_RoomM273StarBurstColors,Palette words picked by g_FieldFxCurrentAge&3 in RoomM273_GrabStarBurstCallback
+0x8019AC20,room_m273_liberty,D_8019AC20,g_RoomM273PlayerStreakSeeds,RoomM273PulseSeed[2] copied per streak by RoomM273_GrabPlayerStreakEmitter
+0x8019AC0C,room_m273_liberty,D_8019AC0C,g_RoomM273GrabModelRingZ,z coordinate table of RoomM273_GrabModelRingCallback
+0x8019AC18,room_m273_liberty,D_8019AC18,g_RoomM273GrabModelRingX,x coordinate table of RoomM273_GrabModelRingCallback
+0x8019ACA4,room_m273_liberty,D_8019ACA4,g_RoomM273HandTrailDropOffset,GteShortVector loaded by gte_ldv0 in RoomM273_HandTrailCallback (drop offset comment in the source)
+0x8019ACAC,room_m273_liberty,D_8019ACAC,g_RoomM273HandTrailSampleOffsetA,Trail sample offset loaded by gte_ldv0 in RoomM273_HandTrailCallback
+0x8019ACB4,room_m273_liberty,D_8019ACB4,g_RoomM273HandTrailSampleOffsetB,"Second trail sample offset, same callback"
+0x8019ACBC,room_m273_liberty,D_8019ACBC,g_RoomM273HandTrailColor,RenderColor passed to the sprite draw in RoomM273_HandTrailCallback
+0x8019ACA8,room_m273_liberty,D_8019ACA8,g_RoomM273HandTrailPulse,Pulse value stored by RoomM273_HandTrailEmitter and read by its callback
+0x8019ACC0,room_m273_liberty,D_8019ACC0,g_RoomM273HandTrailLandingPulseScale,Halfword table indexed by frame/4 for the sprite size in RoomM273_HandTrailLandingPulseCallback
+0x8019ACC8,room_m273_liberty,D_8019ACC8,g_RoomM273LandingFanColor,RenderColor of the fan drawn by RoomM273_HandTrailLandingFanCallback
+0x8019ACCC,room_m273_liberty,D_8019ACCC,g_RoomM273LandingFanRotations,Rotation pair selected by frame&1 in the same callback
+0x8019ACDC,room_m273_liberty,D_8019ACDC,g_RoomM273HandRingBandColorA,First colour of FieldFx_DrawRingBand in RoomM273_HandRingBandCallback
+0x8019ACE0,room_m273_liberty,D_8019ACE0,g_RoomM273HandRingBandColorB,Second colour of the same call
+0x8019AD54,room_m273_liberty,D_8019AD54,g_RoomM273SweepDropColorA,RenderColor of RoomM273_SweepDropCallback (used for both ring colours of one draw)
+0x8019AD58,room_m273_liberty,D_8019AD58,g_RoomM273SweepDropColorB,Triangle colour of the same callback
+0x8019AD5C,room_m273_liberty,D_8019AD5C,g_RoomM273SweepDropColorC,Final sprite colour of the same callback
+0x8019AD60,room_m273_liberty,D_8019AD60,g_RoomM273SweepDropVector,Vector loaded by gte_ldv0 in RoomM273_SweepDropEmitter
+0x8019AD68,room_m273_liberty,D_8019AD68,g_RoomM273SweepSplashScale,Halfword table indexed by frame/4 in RoomM273_SweepSplashCallback
+0x8019AD70,room_m273_liberty,D_8019AD70,g_RoomM273SweepRisingColor,RenderColor of RoomM273_SweepRisingCallback
+0x8019AD74,room_m273_liberty,D_8019AD74,g_RoomM273SweepFlashColorA,First star-fan colour of RoomM273_SweepFlashCallback
+0x8019AD78,room_m273_liberty,D_8019AD78,g_RoomM273SweepFlashColorB,Second star-fan colour of RoomM273_SweepFlashCallback
+0x8019AD7C,room_m273_liberty,D_8019AD7C,g_RoomM273SweepArcColor,Ring colour (with g_RoomM273BlackColor) of RoomM273_SweepArcCallback
+0x8019AE00,room_m273_liberty,D_8019AE00,g_RoomM273SwayShardTrailColor,RenderColor of RoomM273_SwayShardTrailCallback
+0x8019AE04,room_m273_liberty,D_8019AE04,g_RoomM273SwayShardRingColor,Ring band colour of RoomM273_SwayShardCallback
+0x8019AE08,room_m273_liberty,D_8019AE08,g_RoomM273SwayShardStarColor,Outer star fan colour of RoomM273_SwayShardCallback
+0x8019AE0C,room_m273_liberty,D_8019AE0C,g_RoomM273SwayShardInnerStarColor,Inner (0xC0) star fan colour of RoomM273_SwayShardCallback
+0x8019AE10,room_m273_liberty,D_8019AE10,g_RoomM273SwayShardVelocity,Vector rotated into the shard velocity by RoomM273_SwayShardEmitter
+0x8019AE18,room_m273_liberty,D_8019AE18,g_RoomM273SwayGroundColor,Colour pair (with g_RoomM273BlackColor) of RoomM273_SwayGroundCallback
+0x8019AE1C,room_m273_liberty,D_8019AE1C,g_RoomM273SwayGroundRingColors,RenderColor[2] of RoomM273_SwayGroundRingCallback
+0x8019A8B8,room_m273_liberty,D_8019A8B8,g_RoomM273GrabInitMatrix,Matrix multiplied by the YXZ rotation into obj->matrix in RoomM273_GrabInit; its translation is read as the next three words
+0x8019A8CC,room_m273_liberty,D_8019A8CC,g_RoomM273GrabInitTranslationX,Word copied to obj+0x30 (matrix translation x) by RoomM273_GrabInit
+0x8019A8D0,room_m273_liberty,D_8019A8D0,g_RoomM273GrabInitTranslationY,Word copied to obj+0x34
+0x8019A8D4,room_m273_liberty,D_8019A8D4,g_RoomM273GrabInitTranslationZ,Word copied to obj+0x38
+0x8019A8D8,room_m273_liberty,D_8019A8D8,g_RoomM273GrabInitAngles,Vector passed to RotMatrixYXZ in RoomM273_GrabInit
+0x8019A8C8,room_m273_liberty,D_8019A8C8,g_RoomM273ActionWeights,u8 weight table indexed [action*84 + band*28 + variant*7] in RoomM273_ChooseWeightedAction
+0x8019A8E0,room_m273_liberty,D_8019A8E0,g_RoomM273GrabSelectionByIndex,"Byte table indexed by the event argument, stored to obj+0x4C by RoomM273_GrabConfigure"

@@ -153,7 +153,6 @@ typedef struct RoomM273DropQueue {
 } RoomM273DropQueue;
 
 extern RoomM273DropQueue g_RoomM273SweepState;
-extern s16 D_8019AF62;
 
 /* Sweep attack frame windows at 0x8019AD80, one per side. */
 typedef struct RoomM273SweepStep {
@@ -168,12 +167,12 @@ typedef struct RoomM273SweepStep {
 extern RoomM273SweepStep g_RoomM273SweepSteps[];
 
 /* Ground ring (RoomM273_SwayGroundRingCallback): model draw helpers and the ring colours. */
-extern RenderColor D_8019AE1C[2];
+extern RenderColor g_RoomM273SwayGroundRingColors[2];
 int Math_IntSqrt(int value);
 extern GteRotation g_RoomM273FloorRotation;
-extern RenderColor D_8019AD54;
-extern RenderColor D_8019AD58;
-extern RenderColor D_8019AD5C;
+extern RenderColor g_RoomM273SweepDropColorA;
+extern RenderColor g_RoomM273SweepDropColorB;
+extern RenderColor g_RoomM273SweepDropColorC;
 /* Shard spawned from the sway points toward the player. */
 typedef struct RoomM273SwayShard {
     GteShortVector position;
@@ -186,10 +185,10 @@ typedef struct RoomM273SwayShard {
 typedef RoomM273PoolContext RoomM273EffectPools;
 
 extern void *g_RoomM273SwayShardTrailPool;
-extern GteShortVector D_8019AE10;
-extern RenderColor D_8019AE04;
-extern RenderColor D_8019AE08;
-extern RenderColor D_8019AE0C;
+extern GteShortVector g_RoomM273SwayShardVelocity;
+extern RenderColor g_RoomM273SwayShardRingColor;
+extern RenderColor g_RoomM273SwayShardStarColor;
+extern RenderColor g_RoomM273SwayShardInnerStarColor;
 extern u8 g_RoomM273BlackColor[];
 
 int FieldFx_UpdateCallbackList(void *list);
@@ -211,9 +210,9 @@ typedef struct RoomM273FallingTrail {
     s16 count;
 } RoomM273FallingTrail;
 
-extern GteShortVector D_8019ACA4; /* drop offset */
-extern GteShortVector D_8019ACAC; /* trail sample offsets */
-extern GteShortVector D_8019ACB4;
-extern RenderColor D_8019ACBC;
+extern GteShortVector g_RoomM273HandTrailDropOffset; /* drop offset */
+extern GteShortVector g_RoomM273HandTrailSampleOffsetA; /* trail sample offsets */
+extern GteShortVector g_RoomM273HandTrailSampleOffsetB;
+extern RenderColor g_RoomM273HandTrailColor;
 
 #endif
