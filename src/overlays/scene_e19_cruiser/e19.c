@@ -301,7 +301,7 @@ s32 func_80192D04(char *obj)
     ((SceneE19Actor *)D_8009D254)->h250 &= 0xFBFF;
     ((SceneE19Actor *)D_8009D254)->reset_word = 0;
     ((SceneE19Actor *)D_8009D254)->reset_halfword = 0;
-    Entity_FindFloor((struct BattleEntity *)D_8009D254);
+    Entity_FindFloor(D_8009D254);
     e = (char *)D_8009D254;
     *((s32 *) (e + 0x68)) = 0;
     *((s32 *) (e + 0x6C)) = 0;
@@ -1534,7 +1534,7 @@ int func_80196748(int mode, SceneSpinRay *ray)
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800D2370(&offset, &ray->spin.rotation, width, 0x8C, 0x80, 0x80, 0x80, 0x10,
-                          (u16)GetClut(0x70, palette), &bladeHead, &bladeTail,
+                          GetClut(0x70, palette), &bladeHead, &bladeTail,
                           (s16)glow, 1);
             break;
         }
@@ -1559,7 +1559,7 @@ int func_80196748(int mode, SceneSpinRay *ray)
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20(&D_8019B670, &ray->spin.rotation, width, width, 0x40,
-                          (u16)GetClut(0, palette), 1, 0x80, &color);
+                          GetClut(0, palette), 1, 0x80, &color);
             break;
         }
         }
