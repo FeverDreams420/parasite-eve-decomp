@@ -23,7 +23,6 @@ GteMatrix *RotMatrixZ(s32 angle, GteMatrix *m) {
     register s32 x1 asm("$11");
     register s32 x2 asm("$12");
     register s32 y0 asm("$13");
-    register s32 y2 asm("$15");
     asm volatile("" : "=r"(a), "=r"(ret) : "0"(a), "1"(ret));
     /* The second factor is -sin(angle), simplifying the row updates. */
     packed = a & 0xfff;
@@ -63,8 +62,8 @@ GteMatrix *RotMatrixZ(s32 angle, GteMatrix *m) {
     asm volatile("" : "=r"(temp) : "0"(temp));
     x2 = m->m[0][2];
     asm volatile("" : : "r"(x2) : "memory");
-    y2 = m->m[1][2];
-    asm volatile("" : : "r"(temp), "r"(x2), "r"(y2));
+    a = m->m[1][2];
+    asm volatile("" : : "r"(temp), "r"(x2), "r"(a));
     product = GTE_MULTU(negative_sine, y0);
     PE1_NOP_DEP("x", product);
     PE1_NOP_DEP("x", product);
@@ -95,7 +94,7 @@ GteMatrix *RotMatrixZ(s32 angle, GteMatrix *m) {
     asm volatile("" : "=l"(low) : "x"(product));
     temp = low;
     asm volatile("" : "=r"(temp) : "0"(temp));
-    product = GTE_MULTU(negative_sine, y2);
+    product = GTE_MULTU(negative_sine, a);
     PE1_NOP_DEP("x", product);
     PE1_NOP_DEP("x", product);
     asm volatile("" : "=l"(low) : "x"(product));
@@ -139,7 +138,7 @@ GteMatrix *RotMatrixZ(s32 angle, GteMatrix *m) {
     PE1_NOP_DEP("x", product);
     asm volatile("" : "=l"(low) : "x"(product));
     temp = low;
-    product = GTE_MULTU(cosine, y2);
+    product = GTE_MULTU(cosine, a);
     PE1_NOP_DEP("x", product);
     PE1_NOP_DEP("x", product);
     asm volatile("" : "=l"(low) : "x"(product));
