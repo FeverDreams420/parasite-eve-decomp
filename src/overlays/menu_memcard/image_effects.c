@@ -26,11 +26,8 @@ s32 MenuCard_PulseImage(s32 mode, MemcardPulseState *state) {
         scale = rsin(angle) + 2048;
         rcos(angle);
         rotation.x = 0; rotation.y = 0; twist = state->timer;
-        __asm__("" : : "r"(twist));
         track = D_801F1D5C;
-        __asm__("" : : "r"(track));
         rotation.flags = 0;
-        __asm__("" : "=r"(twist) : "0"(twist) : "memory");
         rotation.z = twist << 5;
         func_800CF3AC(track, &color, state->timer << 1);
         D_800F3368.parameter00 = 32;
@@ -134,7 +131,6 @@ s32 MenuCard_CosineImage(s32 mode, MemcardPulseState *state) {
         cosine = rcos(angle);
         __asm__("" : : "r"(cosine));
         intensity = cosine / 32;
-        __asm__("" : : "r"(intensity));
         rotation.x = 0; rotation.y = 0;
         twist = state->timer;
         index = D_800F3368.palette;
