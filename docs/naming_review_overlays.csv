@@ -1,47 +1,47 @@
 address,overlay,old_name,name,evidence
-0x8010BE3C,mdec_diag,func_8010BE3C,DecDCTReset,Defined as DecDCTReset in mdec_diag/decdct.c (mode 0 calls ResetCallback then MdecDiag_Reset); boot_display image_display.c:48 and menu_memcard video_open.inc:127 still called it by address.
-0x8010BD4C,mdec_diag,func_8010BD4C,MdecDiag_ExpandDecoderTable,"Defined as MdecDiag_ExpandDecoderTable in mdec_diag/vlc_build.c (expands D_8010CBFC into the DecDCTvlc2 table); callers boot_display image_display.c:50, sprites.c:38 and menu_memcard video_open.inc:133 used the address."
-0x8010BFA0,mdec_diag,func_8010BFA0,DecDCTin,"Sets/clears MDEC command bits 27 and 25 from a mode argument then sends the buffer through MdecDiag_SendInput (decdct.c:69); sits between DecDCTPutEnv and DecDCTout in the LIBPRESS DCT object; debug_source.c:210 calls it with (buffer, mode)."
-0x8010C01C,mdec_diag,func_8010C01C,DecDCTout,"Wrapper over MdecDiag_ReceiveOutput(buffer, size) (decdct.c:85); debug_source.c:215 calls it with a frame buffer and a size."
-0x8010C03C,mdec_diag,func_8010C03C,DecDCTinSync,"mode 0 waits through func_8010C308 (the MDEC_in_sync wait), otherwise returns MDEC status bit 29 (command busy); decdct.c:89."
-0x8010C078,mdec_diag,func_8010C078,DecDCToutSync,"mode 0 waits through func_8010C39C (the MDEC_out_sync wait), otherwise returns bit 24 of the status word; boot_display image_display.c:263 and sprites.c:148 poll it with mode 1."
-0x8010C0B4,mdec_diag,func_8010C0B4,DecDCTinCallback,"DMACallback(0, value): DMA channel 0 is MDEC-in (decdct.c:111); twin of DecDCToutCallback."
+0x8010BE3C,mdec_diag,func_8010BE3C,DecDCTReset,Defined as DecDCTReset in mdec_diag/decdct.c (mode 0 calls ResetCallback then MdecDiag_Reset); boot_display image_display.c and menu_memcard video_open.inc still called it by address.
+0x8010BD4C,mdec_diag,func_8010BD4C,MdecDiag_ExpandDecoderTable,"Defined as MdecDiag_ExpandDecoderTable in mdec_diag/vlc_build.c (expands D_8010CBFC into the DecDCTvlc2 table); callers boot_display image_display.c, sprites.c and menu_memcard video_open.inc used the address."
+0x8010BFA0,mdec_diag,func_8010BFA0,DecDCTin,"Sets/clears MDEC command bits 27 and 25 from a mode argument then sends the buffer through MdecDiag_SendInput (decdct.c); sits between DecDCTPutEnv and DecDCTout in the LIBPRESS DCT object; debug_source.c calls it with (buffer, mode)."
+0x8010C01C,mdec_diag,func_8010C01C,DecDCTout,"Wrapper over MdecDiag_ReceiveOutput(buffer, size) (decdct.c); debug_source.c calls it with a frame buffer and a size."
+0x8010C03C,mdec_diag,func_8010C03C,DecDCTinSync,"mode 0 waits through func_8010C308 (the MDEC_in_sync wait), otherwise returns MDEC status bit 29 (command busy); decdct.c."
+0x8010C078,mdec_diag,func_8010C078,DecDCToutSync,"mode 0 waits through func_8010C39C (the MDEC_out_sync wait), otherwise returns bit 24 of the status word; boot_display image_display.c and sprites.c poll it with mode 1."
+0x8010C0B4,mdec_diag,func_8010C0B4,DecDCTinCallback,"DMACallback(0, value): DMA channel 0 is MDEC-in (decdct.c); twin of DecDCToutCallback."
 0x8010C0D8,mdec_diag,func_8010C0D8,DecDCToutCallback,"DMACallback(1, value): DMA channel 1 is MDEC-out; include/pe1/psyq_press.h already documents it as DecDCToutCallback."
-0x8010C308,mdec_diag,func_8010C308,MdecDiag_WaitInputSync,Busy-waits on the MDEC status register bit 29 and reports the name string D_8010BD18 (MDEC_in_sync) through the timeout handler (mdec_wait.c:8); called by MdecDiag_SendInput and DecDCTinSync.
-0x8010C39C,mdec_diag,func_8010C39C,MdecDiag_WaitOutputSync,Busy-waits on DMA1 CHCR bit 24 and reports D_8010BD28 (MDEC_out_sync) (mdec_wait.c:14); called by MdecDiag_ReceiveOutput and DecDCToutSync.
-0x8010C430,mdec_diag,func_8010C430,MdecDiag_ReadStatus,Returns the word at the MDEC status register pointer (mdec_status.c:4); DecDCTinSync/DecDCToutSync test bits of it.
-0x8010C448,mdec_diag,func_8010C448,MdecDiag_HandleTimeout,"printf(""%s timeout:\n"", name) then the same MDEC/DMA reset sequence as MdecDiag_Reset case 1 (mdec_status.c:9); called from both wait loops on timeout."
+0x8010C308,mdec_diag,func_8010C308,MdecDiag_WaitInputSync,Busy-waits on the MDEC status register bit 29 and reports the name string D_8010BD18 (MDEC_in_sync) through the timeout handler (mdec_wait.c); called by MdecDiag_SendInput and DecDCTinSync.
+0x8010C39C,mdec_diag,func_8010C39C,MdecDiag_WaitOutputSync,Busy-waits on DMA1 CHCR bit 24 and reports D_8010BD28 (MDEC_out_sync) (mdec_wait.c); called by MdecDiag_ReceiveOutput and DecDCToutSync.
+0x8010C430,mdec_diag,func_8010C430,MdecDiag_ReadStatus,Returns the word at the MDEC status register pointer (mdec_status.c); DecDCTinSync/DecDCToutSync test bits of it.
+0x8010C448,mdec_diag,func_8010C448,MdecDiag_HandleTimeout,"printf(""%s timeout:\n"", name) then the same MDEC/DMA reset sequence as MdecDiag_Reset case 1 (mdec_status.c); called from both wait loops on timeout."
 0x8010C4CC,mdec_diag,func_8010C4CC,DecDCTvlcSize,"LIBPRESS VLC object: 12 of 12 words identical to the PSY-Q 3.5 vlc.o DecDCTvlcSize (configs/USA/original_asm_evidence.json, verified 2026-10-05); the vlc.c header comment already named it."
 0x8010C4FC,mdec_diag,func_8010C4FC,DecDCTvlc,LIBPRESS VLC object decoder with the frameless static-state protocol of the 3.5 routine (original_asm_evidence.json); vlc.c header comment.
 0x8010C86C,mdec_diag,func_8010C86C,DecDCTvlcSize2,LIBPRESS VLC_C twin of DecDCTvlcSize with its own limit word D_8011EB8C (original_asm_evidence.json); boot_display calls it with the bitstream size.
-0x8010C89C,mdec_diag,func_8010C89C,DecDCTvlc2,"LIBPRESS VLC_C decoder; debug_source.c:244 calls (frame, buffer, table); callers pass the table built by MdecDiag_ExpandDecoderTable."
-0x8010BCFC,mdec_diag,D_8010BCFC,g_MdecResetBadOptionFormat,"String ""MDEC_reset:bad option(%d)\n"" passed to printf in the default case of MdecDiag_Reset (decdct.c:138)."
-0x8010BD18,mdec_diag,D_8010BD18,g_MdecInSyncName,"String ""MDEC_in_sync"", the message argument of the input wait (mdec_wait.c:8)."
-0x8010BD28,mdec_diag,D_8010BD28,g_MdecOutSyncName,"String ""MDEC_out_sync"", the message argument of the output wait (mdec_wait.c:14)."
-0x8010BD38,mdec_diag,D_8010BD38,g_MdecTimeoutFormat,"String ""%s timeout:\n"" printed by MdecDiag_HandleTimeout (mdec_status.c:10)."
-0x8010CBFC,mdec_diag,D_8010CBFC,g_MdecVlcTableSource,"Compressed token stream read by MdecDiag_ExpandDecoderTable (vlc_build.c:7), which expands it into the VLC decoder table."
-0x8010DA0C,mdec_diag,D_8010DA0C,g_MdecQuantTableCommand,"Holds 0x40000001, the MDEC set-quant-table command word, followed by the two 16-word tables; sent whole by DecDCTPutEnv/MdecDiag_Reset (decdct.c:60,127)."
-0x8010DA10,mdec_diag,D_8010DA10,g_MdecQuantTableLuma,"DecDCTPutEnv copies env->iqY (the first 64 bytes of DecDCTEnv) into it and DecDCTGetEnv copies it back out (decdct.c:40,49)."
-0x8010DA50,mdec_diag,D_8010DA50,g_MdecQuantTableChroma,"DecDCTPutEnv copies env->iqC into it and DecDCTGetEnv reads it back (decdct.c:41,55)."
-0x8010DA90,mdec_diag,D_8010DA90,g_MdecScaleTableCommand,"Holds 0x60000000, the MDEC set-scale-table command word; DecDCTPutEnv sends it with the table behind it (decdct.c:61)."
-0x8010DA94,mdec_diag,D_8010DA94,g_MdecScaleTable,The 64 halfword DCT scale table (0x5A82 rows) following the command word; DecDCTGetEnv copies it to env->dct via D_8010DA90[1] (decdct.c:42).
-0x8010DB1C,mdec_diag,D_8010DB1C,g_MdecDma0MadrPtr,Holds 0x1F801080 (DMA0 MADR); MdecDiag_SendInput stores the buffer address through it (decdct.c:146).
-0x8010DB20,mdec_diag,D_8010DB20,g_MdecDma0BcrPtr,Holds 0x1F801084 (DMA0 BCR); MdecDiag_SendInput stores the block count/size word (decdct.c:147).
-0x8010DB24,mdec_diag,D_8010DB24,g_MdecDma0ChcrPtr,Holds 0x1F801088 (DMA0 CHCR); MdecDiag_SendInput starts the transfer with 0x01000201 (decdct.c:149).
-0x8010DB28,mdec_diag,D_8010DB28,g_MdecDma1MadrPtr,Holds 0x1F801090 (DMA1 MADR); MdecDiag_ReceiveOutput stores the destination (decdct.c:157).
-0x8010DB2C,mdec_diag,D_8010DB2C,g_MdecDma1BcrPtr,Holds 0x1F801094 (DMA1 BCR); MdecDiag_ReceiveOutput stores the size word (decdct.c:158).
-0x8010DB30,mdec_diag,D_8010DB30,g_MdecDma1ChcrPtr,"Holds 0x1F801098 (DMA1 CHCR); MdecDiag_ReceiveOutput starts with 0x01000200 and the output wait polls bit 24 (decdct.c:159, mdec_wait.c:14)."
-0x8010DB4C,mdec_diag,D_8010DB4C,g_MdecCommandRegPtr,Holds 0x1F801820 (MDEC command/parameter register); MdecDiag_SendInput writes the first command word through it (decdct.c:148).
+0x8010C89C,mdec_diag,func_8010C89C,DecDCTvlc2,"LIBPRESS VLC_C decoder; debug_source.c calls (frame, buffer, table); callers pass the table built by MdecDiag_ExpandDecoderTable."
+0x8010BCFC,mdec_diag,D_8010BCFC,g_MdecResetBadOptionFormat,"String ""MDEC_reset:bad option(%d)\n"" passed to printf in the default case of MdecDiag_Reset (decdct.c)."
+0x8010BD18,mdec_diag,D_8010BD18,g_MdecInSyncName,"String ""MDEC_in_sync"", the message argument of the input wait (mdec_wait.c)."
+0x8010BD28,mdec_diag,D_8010BD28,g_MdecOutSyncName,"String ""MDEC_out_sync"", the message argument of the output wait (mdec_wait.c)."
+0x8010BD38,mdec_diag,D_8010BD38,g_MdecTimeoutFormat,"String ""%s timeout:\n"" printed by MdecDiag_HandleTimeout (mdec_status.c)."
+0x8010CBFC,mdec_diag,D_8010CBFC,g_MdecVlcTableSource,"Compressed token stream read by MdecDiag_ExpandDecoderTable (vlc_build.c), which expands it into the VLC decoder table."
+0x8010DA0C,mdec_diag,D_8010DA0C,g_MdecQuantTableCommand,"Holds 0x40000001, the MDEC set-quant-table command word, followed by the two 16-word tables; sent whole by DecDCTPutEnv/MdecDiag_Reset (decdct.c)."
+0x8010DA10,mdec_diag,D_8010DA10,g_MdecQuantTableLuma,"DecDCTPutEnv copies env->iqY (the first 64 bytes of DecDCTEnv) into it and DecDCTGetEnv copies it back out (decdct.c)."
+0x8010DA50,mdec_diag,D_8010DA50,g_MdecQuantTableChroma,"DecDCTPutEnv copies env->iqC into it and DecDCTGetEnv reads it back (decdct.c)."
+0x8010DA90,mdec_diag,D_8010DA90,g_MdecScaleTableCommand,"Holds 0x60000000, the MDEC set-scale-table command word; DecDCTPutEnv sends it with the table behind it (decdct.c)."
+0x8010DA94,mdec_diag,D_8010DA94,g_MdecScaleTable,The 64 halfword DCT scale table (0x5A82 rows) following the command word; DecDCTGetEnv copies it to env->dct via D_8010DA90[1] (decdct.c).
+0x8010DB1C,mdec_diag,D_8010DB1C,g_MdecDma0MadrPtr,Holds 0x1F801080 (DMA0 MADR); MdecDiag_SendInput stores the buffer address through it (decdct.c).
+0x8010DB20,mdec_diag,D_8010DB20,g_MdecDma0BcrPtr,Holds 0x1F801084 (DMA0 BCR); MdecDiag_SendInput stores the block count/size word (decdct.c).
+0x8010DB24,mdec_diag,D_8010DB24,g_MdecDma0ChcrPtr,Holds 0x1F801088 (DMA0 CHCR); MdecDiag_SendInput starts the transfer with 0x01000201 (decdct.c).
+0x8010DB28,mdec_diag,D_8010DB28,g_MdecDma1MadrPtr,Holds 0x1F801090 (DMA1 MADR); MdecDiag_ReceiveOutput stores the destination (decdct.c).
+0x8010DB2C,mdec_diag,D_8010DB2C,g_MdecDma1BcrPtr,Holds 0x1F801094 (DMA1 BCR); MdecDiag_ReceiveOutput stores the size word (decdct.c).
+0x8010DB30,mdec_diag,D_8010DB30,g_MdecDma1ChcrPtr,"Holds 0x1F801098 (DMA1 CHCR); MdecDiag_ReceiveOutput starts with 0x01000200 and the output wait polls bit 24 (decdct.c, mdec_wait.c)."
+0x8010DB4C,mdec_diag,D_8010DB4C,g_MdecCommandRegPtr,Holds 0x1F801820 (MDEC command/parameter register); MdecDiag_SendInput writes the first command word through it (decdct.c).
 0x8010DB50,mdec_diag,D_8010DB50,g_MdecStatusRegPtr,Holds 0x1F801824 (MDEC status/control); written with 0x80000000 (reset) and 0x60000000 (enable DMA) in MdecDiag_Reset and polled by the input wait.
-0x8010DB54,mdec_diag,D_8010DB54,g_MdecDmaControlRegPtr,"Holds 0x1F8010F0 (DPCR); MdecDiag_SendInput/ReceiveOutput OR 0x88 into it to enable DMA0 and DMA1 (decdct.c:145,155)."
+0x8010DB54,mdec_diag,D_8010DB54,g_MdecDmaControlRegPtr,"Holds 0x1F8010F0 (DPCR); MdecDiag_SendInput/ReceiveOutput OR 0x88 into it to enable DMA0 and DMA1 (decdct.c)."
 0x8010E35C,mdec_diag,D_8010E35C,g_MdecVlcPrimaryTable,DecDCTvlc indexes it with the top 13 bits of the bit window in 8-byte entries (vlc.c at .L8010C6E0); falls back to the secondary table when the entry word is 0.
 0x8011E35C,mdec_diag,D_8011E35C,g_MdecVlcSecondaryTable,DecDCTvlc indexes it with the top 9 bits in 4-byte entries when the primary entry is empty (vlc.c at .L8010C720).
-0x8011EB5C,mdec_diag,D_8011EB5C,g_MdecVlcSizeLimit,"Initial 0x00FFFFFF; DecDCTvlcSize stores size*2 (or the default) here and returns the old value, DecDCTvlc doubles it into the output end pointer (vlc.c:20-44)."
-0x8011EB60,mdec_diag,D_8011EB60,g_MdecVlcSavedState,"DecDCTvlc stores a0,a1,v0,v1,t4,t5,t7,t8,t9 (9 words) here when the output limit is reached and reloads them when called with a0 == 0 (vlc.c:41-52, .L8010C82C)."
+0x8011EB5C,mdec_diag,D_8011EB5C,g_MdecVlcSizeLimit,"Initial 0x00FFFFFF; DecDCTvlcSize stores size*2 (or the default) here and returns the old value, DecDCTvlc doubles it into the output end pointer (vlc.c)."
+0x8011EB60,mdec_diag,D_8011EB60,g_MdecVlcSavedState,"DecDCTvlc stores a0,a1,v0,v1,t4,t5,t7,t8,t9 (9 words) here when the output limit is reached and reloads them when called with a0 == 0 (vlc.c, .L8010C82C)."
 0x8011EB84,mdec_diag,D_8011EB84,g_MdecVlcFrameEnd,DecDCTvlc stores the frame end pointer (output base + header length*4 + 4) here and pads the output with 0xFE00 up to it at the end marker (vlc.c at .L8010C7E8).
-0x8011EB8C,mdec_diag,D_8011EB8C,g_MdecVlc2SizeLimit,"Size-limit word of the VLC_C object, the DecDCTvlcSize2/DecDCTvlc2 twin of g_MdecVlcSizeLimit (vlc_c.c:20-36)."
-0x8011EB90,mdec_diag,D_8011EB90,g_MdecVlc2SavedState,"Resume state of DecDCTvlc2, same 9-word layout as g_MdecVlcSavedState (vlc_c.c:42,262)."
-0x8011EBB4,mdec_diag,D_8011EBB4,g_MdecVlc2FrameEnd,"Frame end pointer of DecDCTvlc2, same role as g_MdecVlcFrameEnd (vlc_c.c:82,241)."
+0x8011EB8C,mdec_diag,D_8011EB8C,g_MdecVlc2SizeLimit,"Size-limit word of the VLC_C object, the DecDCTvlcSize2/DecDCTvlc2 twin of g_MdecVlcSizeLimit (vlc_c.c)."
+0x8011EB90,mdec_diag,D_8011EB90,g_MdecVlc2SavedState,"Resume state of DecDCTvlc2, same 9-word layout as g_MdecVlcSavedState (vlc_c.c)."
+0x8011EBB4,mdec_diag,D_8011EBB4,g_MdecVlc2FrameEnd,"Frame end pointer of DecDCTvlc2, same role as g_MdecVlcFrameEnd (vlc_c.c)."
 0x80123E08,boot_display,func_80123E08,BootDisplay_InitDisplayResources,Defined under that name in boot_display/sprites.c; the sprite callback table (D_80125B4C slot init) and asm still used the address name.
 0x80123F8C,boot_display,func_80123F8C,BootDisplay_SelectFrameBuffers,Defined under that name in sprites.c; step slot of the sprite callback table.
 0x80124034,boot_display,func_80124034,BootDisplay_DisplayNoOp,Defined under that name in sprites.c (empty body); shutdown slot of the sprite callback table.
@@ -54,29 +54,50 @@ address,overlay,old_name,name,evidence
 0x80125094,boot_display,func_80125094,BootDisplay_StepImageDisplay,Defined under that name in image_display.c; text slot of the image callback table.
 0x80125444,boot_display,func_80125444,BootDisplay_CallInitSystem,Defined under that name in image_display.c; shutdown slot of the image callback table.
 0x80125464,boot_display,func_80125464,BootDisplay_BrightenImageRegion,Defined under that name in image_display.c; transition slot of the image callback table.
-0x801255A4,boot_display,func_801255A4,BootDisplay_WaitForCdAndRestoreCallbacks,Defined under that name in boot_display/playback_stop.c; BootDisplay_RunDisplay calls it after the loop (text_screen.c:62).
+0x801255A4,boot_display,func_801255A4,BootDisplay_WaitForCdAndRestoreCallbacks,Defined under that name in boot_display/playback_stop.c; BootDisplay_RunDisplay calls it after the loop (text_screen.c).
 0x80125744,boot_display,func_80125744,BootDisplay_StartPlayback,Defined under that name in playback.c; BootDisplay_RunDisplay calls it right after the playback file init.
 0x80125894,boot_display,func_80125894,BootDisplay_SetCdFilter,Defined under that name in playback.c and already in the overlay symbol file; text_screen.c still called the address name.
-0x80124704,boot_display,func_80124704,BootDisplay_QueueFadeSprite,Transition slot of the sprite callback table: BootDisplay_RunDisplay calls transition(fade) with a ramp 0..255 and back (text_screen.c cases 1-3); the function queues a semi-transparent sprite whose r/g/b are that argument (sprites.c:253).
-0x801247F4,boot_display,func_801247F4,BootDisplay_PresentSpriteFrame,"Present slot of the sprite callback table: DrawSync, VSync(2), ResetGraph, PutDispEnv, DrawOTagEnv and flip g_ActiveDrawSlot (sprites.c:276); the image table's present slot is BootDisplay_PresentFrame."
-0x801258EC,boot_display,func_801258EC,BootDisplay_IssuePlaybackRead,"Converts g_BootDisplayPlaybackStartPos to a CD position and sends DsPacket(mode 200, com 27 = CdlReadS), sets the current position and counts the request (playback.c:55); called by BootDisplay_StartPlayback and by BootDisplay_CheckPlaybackTime when the position fell 300 sectors behind."
-0x80125B4C,boot_display,D_80125B4C,g_BootDisplaySpriteCallbacks,"BootDisplayCallbacks table whose slots are the sprites.c functions (init InitDisplayResources, step SelectFrameBuffers, text StepImageSprite, glyph QueueTintedSprite, transition, present, shutdown); BootDisplay_RunDisplay selects it when g_GameStateFlags & 0x10000 is clear (text_screen.c:7)."
-0x80125B68,boot_display,D_80125B68,g_BootDisplayImageCallbacks,BootDisplayCallbacks table whose slots are the image_display.c functions; selected when g_GameStateFlags & 0x10000 is set (text_screen.c:5).
-0x80125B48,boot_display,D_80125B48,g_BootDisplayPlaybackFilePath,"Pointer to the XA stream path (D_80120D04, asset[71] start); BootDisplay_InitPlaybackFile passes it to DsSearchFile (playback_file.c:21)."
-0x80125C88,boot_display,D_80125C88,g_BootDisplayCreditLines,Pointer array of credit text lines ended by a line starting 0xFF; BootDisplay_DrawTextBlock walks it (text_screen.c:78) and the overlay symbol file calls it the staff lines.
-0x80125BA4,boot_display,D_80125BA4,g_BootDisplayCreditImages,"30 pointers to the credit image chunks (D_8012E86C..D_8016F150) indexed by g_BootDisplayStateTimer and fed to DecDCTvlc2 (image_display.c:233, sprites.c:119)."
-0x8012682C,boot_display,D_8012682C,g_BootDisplayFontTim,"TIM loaded by Asset_LoadTimImage in BootDisplay_InitDisplayResources; g_BootDisplayTPage, g_BootDisplayClut and the glyph pixels come from it (sprites.c:27-37, image_display.c:51-58)."
-0x80172C90,boot_display,D_80172C90,g_BootDisplayFontImageRect,Asset_GetTimImageRect(g_BootDisplayFontTim); its x/y feed GetTPage (sprites.c:35).
-0x80172C94,boot_display,D_80172C94,g_BootDisplayFontClutRect,Asset_GetTimClutRect(g_BootDisplayFontTim); its x/y feed GetClut (sprites.c:36).
-0x80172C98,boot_display,D_80172C98,g_BootDisplayFontImagePixels,Image pixels of the font TIM; BootDisplay_BrightenGlyph indexes it by glyph (image_display.c:95).
-0x80172C9C,boot_display,D_80172C9C,g_BootDisplayFontClutPixels,CLUT pixels of the font TIM; BRIGHTEN_NIBBLE reads the palette entry to get the brightness (image_display.c:81).
-0x80172CD8,boot_display,D_80172CD8,g_BootDisplayImageBrightness,Becomes r0/g0/b0 of the image sprite and is ramped by 4 within 0..128 according to g_BootDisplayTransition (sprites.c:90-108).
-0x80172CE0,boot_display,D_80172CE0,g_BootDisplayDone,"Loop exit flag of BootDisplay_RunDisplay: cleared before the loop, set in state 4, the do-while ends when it is non-zero (text_screen.c:23,57,72)."
-0x80172CE4,boot_display,D_80172CE4,g_BootDisplayPlaybackEnded,Set to 1 by BootDisplay_CheckPlaybackTime once the stream position passed the end (playback.c:96); RunDisplay waits for it before accepting input (text_screen.c:36).
-0x80172CE8,boot_display,D_80172CE8,g_BootDisplayPlaybackStartPos,Holds DsPosToInt of the XA file position (playback_file.c:29); BootDisplay_IssuePlaybackRead reads it back as the seek target and CheckPlaybackTime compares against it - 300.
-0x80172CEC,boot_display,D_80172CEC,g_BootDisplayPlaybackEndPos,Start position plus size >> 11 (playback_file.c:30); CheckPlaybackTime ends playback when the current position exceeds it.
+0x80124704,boot_display,func_80124704,BootDisplay_QueueFadeSprite,Transition slot of the sprite callback table: BootDisplay_RunDisplay calls transition(fade) with a ramp 0..255 and back (text_screen.c cases 1-3); the function queues a semi-transparent sprite whose r/g/b are that argument (sprites.c).
+0x801247F4,boot_display,func_801247F4,BootDisplay_PresentSpriteFrame,"Present slot of the sprite callback table: DrawSync, VSync(2), ResetGraph, PutDispEnv, DrawOTagEnv and flip g_ActiveDrawSlot (sprites.c); the image table's present slot is BootDisplay_PresentFrame."
+0x801258EC,boot_display,func_801258EC,BootDisplay_IssuePlaybackRead,"Converts g_BootDisplayPlaybackStartPos to a CD position and sends DsPacket(mode 200, com 27 = CdlReadS), sets the current position and counts the request (playback.c); called by BootDisplay_StartPlayback and by BootDisplay_CheckPlaybackTime when the position fell 300 sectors behind."
+0x80125B4C,boot_display,D_80125B4C,g_BootDisplaySpriteCallbacks,"BootDisplayCallbacks table whose slots are the sprites.c functions (init InitDisplayResources, step SelectFrameBuffers, text StepImageSprite, glyph QueueTintedSprite, transition, present, shutdown); BootDisplay_RunDisplay selects it when g_GameStateFlags & 0x10000 is clear (text_screen.c)."
+0x80125B68,boot_display,D_80125B68,g_BootDisplayImageCallbacks,BootDisplayCallbacks table whose slots are the image_display.c functions; selected when g_GameStateFlags & 0x10000 is set (text_screen.c).
+0x80125B48,boot_display,D_80125B48,g_BootDisplayPlaybackFilePath,"Pointer to the XA stream path (D_80120D04, asset[71] start); BootDisplay_InitPlaybackFile passes it to DsSearchFile (playback_file.c)."
+0x80125C88,boot_display,D_80125C88,g_BootDisplayCreditLines,Pointer array of credit text lines ended by a line starting 0xFF; BootDisplay_DrawTextBlock walks it (text_screen.c) and the overlay symbol file calls it the staff lines.
+0x80125BA4,boot_display,D_80125BA4,g_BootDisplayCreditImages,"30 pointers to the credit image chunks (D_8012E86C..D_8016F150) indexed by g_BootDisplayStateTimer and fed to DecDCTvlc2 (image_display.c, sprites.c)."
+0x8012682C,boot_display,D_8012682C,g_BootDisplayFontTim,"TIM loaded by Asset_LoadTimImage in BootDisplay_InitDisplayResources; g_BootDisplayTPage, g_BootDisplayClut and the glyph pixels come from it (sprites.c, image_display.c)."
+0x80172C90,boot_display,D_80172C90,g_BootDisplayFontImageRect,Asset_GetTimImageRect(g_BootDisplayFontTim); its x/y feed GetTPage (sprites.c).
+0x80172C94,boot_display,D_80172C94,g_BootDisplayFontClutRect,Asset_GetTimClutRect(g_BootDisplayFontTim); its x/y feed GetClut (sprites.c).
+0x80172C98,boot_display,D_80172C98,g_BootDisplayFontImagePixels,Image pixels of the font TIM; BootDisplay_BrightenGlyph indexes it by glyph (image_display.c).
+0x80172C9C,boot_display,D_80172C9C,g_BootDisplayFontClutPixels,CLUT pixels of the font TIM; BRIGHTEN_NIBBLE reads the palette entry to get the brightness (image_display.c).
+0x80172CD8,boot_display,D_80172CD8,g_BootDisplayImageBrightness,Becomes r0/g0/b0 of the image sprite and is ramped by 4 within 0..128 according to g_BootDisplayTransition (sprites.c).
+0x80172CE0,boot_display,D_80172CE0,g_BootDisplayDone,"Loop exit flag of BootDisplay_RunDisplay: cleared before the loop, set in state 4, the do-while ends when it is non-zero (text_screen.c)."
+0x80172CE4,boot_display,D_80172CE4,g_BootDisplayPlaybackEnded,Set to 1 by BootDisplay_CheckPlaybackTime once the stream position passed the end (playback.c); RunDisplay waits for it before accepting input (text_screen.c).
+0x80172CE8,boot_display,D_80172CE8,g_BootDisplayPlaybackStartPos,Holds DsPosToInt of the XA file position (playback_file.c); BootDisplay_IssuePlaybackRead reads it back as the seek target and CheckPlaybackTime compares against it - 300.
+0x80172CEC,boot_display,D_80172CEC,g_BootDisplayPlaybackEndPos,Start position plus size >> 11 (playback_file.c); CheckPlaybackTime ends playback when the current position exceeds it.
 0x80172CF0,boot_display,D_80172CF0,g_BootDisplayPlaybackCurrentPos,Starts as the start position and is updated by the read command and by BootDisplay_RecordReadPosition; CheckPlaybackTime compares it with the end and start positions.
 0x80172CF4,boot_display,D_80172CF4,g_BootDisplayPlaybackReadCount,Zeroed in BootDisplay_InitPlaybackFile and incremented once per CdlReadS issued by BootDisplay_IssuePlaybackRead.
-0x80172CF8,boot_display,D_80172CF8,g_BootDisplayPlaybackRingIndex,Sector ring index 0..7 advanced in BootDisplay_StepPlaybackTransfer; selects the 2048-byte slot DsGetSector fills (playback.c:80-83).
-0x80172CFC,boot_display,D_80172CFC,g_BootDisplayReportedPos,"DsPosToInt of the absolute position in the GetlocP report, stored by BootDisplay_RecordReadPosition and copied to the current position when non-zero (playback.c:104-108)."
-0x80172D00,boot_display,D_80172D00,g_BootDisplayPlaybackSectorBuffer,"Base of the 8-slot sector ring (g_CdLoadAreaBase + asset offset + 0x34800, playback_file.c:34); StepPlaybackTransfer passes slot*2048 to DsGetSector."
+0x80172CF8,boot_display,D_80172CF8,g_BootDisplayPlaybackRingIndex,Sector ring index 0..7 advanced in BootDisplay_StepPlaybackTransfer; selects the 2048-byte slot DsGetSector fills (playback.c).
+0x80172CFC,boot_display,D_80172CFC,g_BootDisplayReportedPos,"DsPosToInt of the absolute position in the GetlocP report, stored by BootDisplay_RecordReadPosition and copied to the current position when non-zero (playback.c)."
+0x80172D00,boot_display,D_80172D00,g_BootDisplayPlaybackSectorBuffer,"Base of the 8-slot sector ring (g_CdLoadAreaBase + asset offset + 0x34800, playback_file.c); StepPlaybackTransfer passes slot*2048 to DsGetSector."
+0x801D11BC,menu_memcard,D_801D11BC,g_MemcardScreenBuffers,MemcardScreenBuffer pointer pair indexed by page: page_flip.c sets the current screen as D_801D11BC[page]; list_screen.c allocates and fills [0] and [1] (draw/disp envs).
+0x801D11C4,menu_memcard,D_801D11C4,g_MemcardCurrentScreen,"Selected entry of the screen pair: MenuCard_FlipScreenPages loads it from g_MemcardScreenBuffers[page] and PutDrawEnv/PutDispEnv take its draw/disp (page_flip.c); image_nodes.c draws into its overlayImage."
+0x801D11C8,menu_memcard,D_801D11C8,g_MemcardScreenPage,Page index toggled by page_flip.c (page = g_MemcardScreenPage == 0) and selecting the screen; initialised from g_ActiveDrawSlot in list_screen.c.
+0x801D11B8,menu_memcard,D_801D11B8,g_MemcardPrevPad,Pad state of the previous frame: list_screen.c edge-detects (pad & mask) && !(prev & mask) for 0x800/0x1000/0x4000 and stores pad at the end of the handler (list_screen.c).
+0x801D11CC,menu_memcard,D_801D11CC,g_MemcardImageNodePool,Array of 8 MemcardImageNode: list_screen.c walks it to link the free list and sets the free-list head g_MemcardFreeImageNodes to it.
+0x801D136C,menu_memcard,D_801D136C,g_MemcardFreeImageNodes,Free list head: MenuCard_CreateImageNode and siblings pop a node from it (image_nodes.c) and list_screen.c returns removed nodes onto it (list_screen.c).
+0x801D1370,menu_memcard,D_801D1370,g_MemcardActiveNodeHead,"Head of the active node list: fade.c, image_nodes.c and list_screen.c iterate node = head; node->next to fade/redraw/hit-test nodes; pending nodes are appended to it (list_screen.c)."
+0x801D1374,menu_memcard,D_801D1374,g_MemcardActiveNodeTail,Tail of the active list: list_screen.c appends the pending chain after it and moves it on; cleared on screen init.
+0x801D1378,menu_memcard,D_801D1378,g_MemcardPendingNodeHead,First node created since the last list update: image_nodes.c sets it when the pending list is empty (image_nodes.c) and list_screen.c splices it into the active list then clears it.
+0x801D137C,menu_memcard,D_801D137C,g_MemcardPendingNodeTail,Tail of the pending chain: each CreateImageNode links tail->next = node and stores node here (image_nodes.c); cleared after the splice in list_screen.c.
+0x801D1380,menu_memcard,D_801D1380,g_MemcardScreenTimer,Accumulates titleMode each loop pass (list_screen.c) and the screen ends once it reaches 0x3E9 (list_screen.c); set to 1001 or 0 by the input handler.
+0x80193258,menu_memcard,D_80193258,g_MemcardImageOffsets,"Offset table into the image blob at 0x80193254, indexed by image kind (image_nodes.c) and element 0 for the background (page_flip.c)."
+0x801F1F28,menu_memcard,D_801F1F28,g_MemcardGlintOrigin,Shared x/y/z origin: the six MenuCard_GetGlintOrigin* getters all return its address (image_effects.c) and the glint burst writes it from burst->x/y/z (glint_effects.c).
+0x801F1F30,menu_memcard,D_801F1F30,g_MemcardCosineColor,"RenderColor passed as the tint to FieldFx_DrawShapeQuads by MenuCard_CosineImage and written from the colour track by MenuCard_TrailEffect (image_effects.c)."
+0x801F1F34,menu_memcard,D_801F1F34,g_MemcardSineColor,"RenderColor passed as the tint by MenuCard_SineRotatingImage and written by MenuCard_SineTrailEffect (image_effects.c)."
+0x801D11AC,menu_memcard,D_801D11AC,g_MenuCardScreenVideoEntry,VideoEntry of the second video player copy (video_playback.c): set to &table[index] in video_open.inc and read for ->end and ->name.
+0x801D11B0,menu_memcard,D_801D11B0,g_MenuCardScreenVideoLastTime,Last frame time of the second video copy: video_frame.inc compares frame->time against it and stores the new time.
+0x801D1384,menu_memcard,D_801D1384,g_MenuCardScreenSavedDispEnv,DISPENV[2] saved by the second video copy (MENUCARD_VIDEO_SAVED_DISPLAY in video_playback.c).
+0x801227E4,menu_memcard,D_801227E4,g_MenuCardVideoEntry,"VideoEntry of the first video player copy (video.c MENUCARD_VIDEO_ENTRY), same role as g_MenuCardScreenVideoEntry."
+0x801227E8,menu_memcard,D_801227E8,g_MenuCardVideoLastTime,Last frame time of the first video copy (video.c MENUCARD_VIDEO_LAST_TIME).
+0x801227EC,menu_memcard,D_801227EC,g_MenuCardVideoSavedDispEnv,DISPENV[2] saved by the first video copy (video.c MENUCARD_VIDEO_SAVED_DISPLAY).

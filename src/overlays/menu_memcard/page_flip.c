@@ -22,31 +22,31 @@ void MenuCard_FlipScreenPages(void) {
     Rect main_rect;
 
     for (i = 0; i < 2; i++) {
-        page = D_801D11C8 == 0;
-        D_801D11C4 = D_801D11BC[page];
-        D_801D11C8 = page;
+        page = g_MemcardScreenPage == 0;
+        g_MemcardCurrentScreen = g_MemcardScreenBuffers[page];
+        g_MemcardScreenPage = page;
         main_rect.x = 0;
         y = 0x14;
         if (page == 0) y = 0x104;
         main_rect.w = 0x1E0;
         main_rect.h = 0xCC;
         main_rect.y = y;
-        LoadImage(&main_rect, &((u8 *)&D_80193268)[D_80193258[0]]);
+        LoadImage(&main_rect, &((u8 *)&D_80193268)[g_MemcardImageOffsets[0]]);
         DrawSync(0);
 
-        screen = D_801D11C4;
+        screen = g_MemcardCurrentScreen;
         if (screen->overlay.w > 0) {
             RECT clipped;
             clipped = screen->overlay;
             clipped.x = (clipped.x * 3) >> 1;
-            if (D_801D11C8 == 0) clipped.y = (u16)clipped.y + 0xF0;
+            if (g_MemcardScreenPage == 0) clipped.y = (u16)clipped.y + 0xF0;
             clipped.w = (clipped.w * 3) >> 1;
-            LoadImage(&clipped, D_801D11C4->overlayImage);
+            LoadImage(&clipped, g_MemcardCurrentScreen->overlayImage);
         }
 
         VSync(0);
         ResetGraph(1);
-        PutDrawEnv(&D_801D11C4->draw);
-        PutDispEnv(&D_801D11C4->disp);
+        PutDrawEnv(&g_MemcardCurrentScreen->draw);
+        PutDispEnv(&g_MemcardCurrentScreen->disp);
     }
 }

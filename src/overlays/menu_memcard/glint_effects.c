@@ -781,9 +781,9 @@ int MenuCard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
             if (p->timer & 1) {
                 fade = fade * 2 / 3;
             }
-            offset.x = D_801F1F28.x;
-            offset.y = D_801F1F28.y;
-            offset.z = D_801F1F28.z;
+            offset.x = g_MemcardGlintOrigin.x;
+            offset.y = g_MemcardGlintOrigin.y;
+            offset.z = g_MemcardGlintOrigin.z;
             width = 1900;
             if ((s16)p->timer < 33) {
                 width = rsin((s16)p->timer << 5) * 1900 / 4096;
@@ -811,9 +811,9 @@ int MenuCard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
             spin = (s16)p->timer << 5;
             width = rsin(spin) / 8 + 100;
             FieldFx_AnglesToVector((GteShortVector *)&p->rotation, (s16)width, &offset);
-            offset.x += D_801F1F28.x;
-            offset.y += D_801F1F28.y;
-            offset.z += D_801F1F28.z;
+            offset.x += g_MemcardGlintOrigin.x;
+            offset.y += g_MemcardGlintOrigin.y;
+            offset.z += g_MemcardGlintOrigin.z;
             size = rsin(spin) * 2 + 0x800;
             fade = rcos(spin) / 32;
             index = &g_FieldFxTpageSlot1;
@@ -949,9 +949,9 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
         RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
-        D_801F1F28.x = burst->x;
-        D_801F1F28.y = burst->y;
-        D_801F1F28.z = burst->z;
+        g_MemcardGlintOrigin.x = burst->x;
+        g_MemcardGlintOrigin.y = burst->y;
+        g_MemcardGlintOrigin.z = burst->z;
         {
             u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot1];
             g_FieldFxSpriteParams.palette = 1;

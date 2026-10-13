@@ -143,7 +143,7 @@ s32 MenuCard_CosineImage(s32 mode, MemcardPulseState *state) {
         if (index == four && g_FieldFxAltPaletteFlag != 0) palette += 7;
         else palette += 3;
         FieldFx_DrawShapeQuads(&state->position, &rotation, scale, scale, 66,
-                     GetClut(0, palette), 1, intensity, &D_801F1F30);
+                     GetClut(0, palette), 1, intensity, &g_MemcardCosineColor);
         break;
     }
     return 0;
@@ -211,9 +211,9 @@ s32 MenuCard_TrailEffect(s32 mode, MemcardTrailState *state) {
             if (index == four && g_FieldFxAltPaletteFlag) palette += 7;
             else palette += 3;
             FieldFx_DrawShapeQuads(&position, 0, scale, scale, 70, GetClut(0,palette), 1, 128, &color);
-            D_801F1F30.r = color.r; D_801F1F30.g = color.g; D_801F1F30.b = color.b;
+            g_MemcardCosineColor.r = color.r; g_MemcardCosineColor.g = color.g; g_MemcardCosineColor.b = color.b;
         } else {
-            *(u32 *)&D_801F1F30 = 0;
+            *(u32 *)&g_MemcardCosineColor = 0;
         }
         g_FieldFxSpriteParams.parameter0A = 0;
         g_FieldFxSpriteParams.depth = 16;
@@ -262,7 +262,7 @@ s32 MenuCard_SineRotatingImage(s32 mode, MemcardPulseState *state) {
         if (index == four && g_FieldFxAltPaletteFlag != 0) palette += 7;
         else palette += 3;
         FieldFx_DrawShapeQuads(&state->position, &rotation, scale, scale, 68,
-                     GetClut(0, palette), 1, intensity, &D_801F1F34);
+                     GetClut(0, palette), 1, intensity, &g_MemcardSineColor);
         break;
     }
     return 0;
@@ -326,11 +326,11 @@ s32 MenuCard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
             FieldFx_DrawShapeQuads(&position, 0, scale, scale, 64,
                           GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 8 : palette + 4),
                           1, 128, &color);
-            D_801F1F34.r = color.r;
-            D_801F1F34.g = color.g;
-            D_801F1F34.b = color.b;
+            g_MemcardSineColor.r = color.r;
+            g_MemcardSineColor.g = color.g;
+            g_MemcardSineColor.b = color.b;
         } else {
-            *(u32 *)&D_801F1F34 = 0;
+            *(u32 *)&g_MemcardSineColor = 0;
         }
         g_FieldFxSpriteParams.parameter0A = 0;
         g_FieldFxSpriteParams.depth = 16;
@@ -342,27 +342,27 @@ s32 MenuCard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
 /* Origin callbacks of the glint effect descriptors; every effect is
  * anchored at the shared glint origin. */
 GteShortVector *MenuCard_GetGlintOriginA(void) {
-    return &D_801F1F28;
+    return &g_MemcardGlintOrigin;
 }
 
 GteShortVector *MenuCard_GetGlintOriginB(void) {
-    return &D_801F1F28;
+    return &g_MemcardGlintOrigin;
 }
 
 GteShortVector *MenuCard_GetGlintOriginC(void) {
-    return &D_801F1F28;
+    return &g_MemcardGlintOrigin;
 }
 
 GteShortVector *MenuCard_GetGlintOriginD(void) {
-    return &D_801F1F28;
+    return &g_MemcardGlintOrigin;
 }
 
 GteShortVector *MenuCard_GetGlintOriginE(void) {
-    return &D_801F1F28;
+    return &g_MemcardGlintOrigin;
 }
 
 GteShortVector *MenuCard_GetGlintOriginF(void) {
-    return &D_801F1F28;
+    return &g_MemcardGlintOrigin;
 }
 
 /* Update hook of the cross flash: keeps it alive while the flash raises the

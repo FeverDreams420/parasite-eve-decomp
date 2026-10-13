@@ -2,7 +2,7 @@ MenuCard_FlipScreenPages = 0x80127848; // type:func
 MenuCard_ResetDisplayState = 0x8012A848; // type:func
 MenuCard_StopVideo = 0x8012B19C; // type:func
 
-// Second names of the two screen buffer pointers (D_801D11BC[0], [1]):
+// Second names of the two screen buffer pointers (g_MemcardScreenBuffers[0], [1]):
 // list_screen.c reads them through separate symbols to keep retail reloads.
 // provide: g_MemcardFirstDrawScreen = 0x801D11BC;
 // provide: g_MemcardSecondScreen = 0x801D11C0;
@@ -78,3 +78,24 @@ DecDCTin = 0x8010BFA0; // type:func
 DecDCTout = 0x8010C01C; // type:func
 DecDCToutCallback = 0x8010C0D8; // type:func
 DecDCTvlc2 = 0x8010C89C; // type:func
+g_MemcardScreenBuffers = 0x801D11BC;
+g_MemcardCurrentScreen = 0x801D11C4;
+g_MemcardScreenPage = 0x801D11C8;
+g_MemcardPrevPad = 0x801D11B8;
+g_MemcardImageNodePool = 0x801D11CC;
+g_MemcardFreeImageNodes = 0x801D136C;
+g_MemcardActiveNodeHead = 0x801D1370;
+g_MemcardActiveNodeTail = 0x801D1374;
+g_MemcardPendingNodeHead = 0x801D1378;
+g_MemcardPendingNodeTail = 0x801D137C;
+g_MemcardScreenTimer = 0x801D1380;
+g_MemcardImageOffsets = 0x80193258;
+g_MemcardGlintOrigin = 0x801F1F28;
+g_MemcardCosineColor = 0x801F1F30;
+g_MemcardSineColor = 0x801F1F34;
+g_MenuCardScreenVideoEntry = 0x801D11AC;
+g_MenuCardScreenVideoLastTime = 0x801D11B0;
+g_MenuCardScreenSavedDispEnv = 0x801D1384;
+g_MenuCardVideoEntry = 0x801227E4;
+g_MenuCardVideoLastTime = 0x801227E8;
+g_MenuCardVideoSavedDispEnv = 0x801227EC;

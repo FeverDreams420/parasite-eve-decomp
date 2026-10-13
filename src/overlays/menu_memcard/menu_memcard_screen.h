@@ -50,9 +50,9 @@ typedef struct MemcardTim {
     MemcardTimBlock clut;
 } MemcardTim;
 
-extern MemcardScreenBuffer *D_801D11BC[2];
-extern MemcardScreenBuffer *D_801D11C4;
-extern s32 D_801D11C8;
+extern MemcardScreenBuffer *g_MemcardScreenBuffers[2];
+extern MemcardScreenBuffer *g_MemcardCurrentScreen;
+extern s32 g_MemcardScreenPage;
 extern u8 D_80193254[];
 extern s32 D_80193278;
 

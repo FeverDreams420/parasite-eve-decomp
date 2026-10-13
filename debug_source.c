@@ -46,11 +46,11 @@ extern void func_800870F0(s32);
 extern void func_80074F44(VideoRect *, s32, s32, s32);
 extern s32 func_8007C484(void **, VideoFrame **);
 extern u16 D_800B0DD4;
-extern VideoEntry *D_801D11AC;
+extern VideoEntry *g_MenuCardScreenVideoEntry;
 extern u8 D_800B0DBE;
 extern u8 D_801D0DBD;
 extern s8 D_800B0DBB;
-extern s16 D_801D11B0;
+extern s16 g_MenuCardScreenVideoLastTime;
 extern s16 D_801D0DE0[2];
 void *MenuCard_UpdateVideoFrame(VideoDisplay *display);
 extern s16 D_801D148C;
@@ -78,7 +78,7 @@ typedef struct VideoDrawTemplate
 {
   u32 words[23];
 } VideoDrawTemplate;
-extern VideoDisplayTemplate D_801D1384[2];
+extern VideoDisplayTemplate g_MenuCardScreenSavedDispEnv[2];
 extern VideoDisplayTemplate D_800BCE80[2];
 extern VideoDrawTemplate D_801D13AC[2];
 extern VideoDrawTemplate D_800BCDC8[2];

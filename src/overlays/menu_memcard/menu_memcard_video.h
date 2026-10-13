@@ -39,17 +39,17 @@ typedef struct VideoDisplay {
 } VideoDisplay;
 extern s32 DsSystemStatus(void),DsShellOpen(void);
 extern void exit(s32),Spu_SetVoiceVolume(s32);
-extern VideoEntry *D_801D11AC;
+extern VideoEntry *g_MenuCardScreenVideoEntry;
 extern u8 D_800B0DBE,D_801D0DBD;
 extern s8 D_800B0DBB;
-extern s16 D_801D11B0,D_801D0DE0[2];
+extern s16 g_MenuCardScreenVideoLastTime,D_801D0DE0[2];
 
 void *MenuCard_UpdateVideoFrame(VideoDisplay *display);
 void *func_80121270(VideoDisplay *display);
 
 /* State of the first video player copy (linked at 0x80120D00). */
-extern VideoEntry *D_801227E4;
-extern s16 D_801227E8, D_80122418[2];
+extern VideoEntry *g_MenuCardVideoEntry;
+extern s16 g_MenuCardVideoLastTime, D_80122418[2];
 extern u8 D_801223F5;
 
 extern u8 D_801D0DC0;
@@ -58,7 +58,7 @@ extern void StCdInterrupt(void),DecDCTout(void *,s32),func_801918F8(s8,s8);
 
 void MenuCard_UploadVideoSlice(void);
 
-extern DISPENV D_801D1384[2];
+extern DISPENV g_MenuCardScreenSavedDispEnv[2];
 extern DRAWENV D_801D13AC[2];
 extern u8 *D_801D0DE8,*D_801D0DEC,*D_801D0DF0,*D_801D0DF4,*D_801D0DF8,*D_801D0DFC;
 extern u8 D_800B0DBA;
@@ -69,7 +69,7 @@ s32 MenuCard_InitVideoBuffers(s8 count, u8 **buffers);
 s32 func_801216C4(s8 count, u8 **buffers);
 /* Buffers and saved environments of the first video player copy. */
 extern u8 *D_80122420, *D_80122424, *D_80122428, *D_8012242C, *D_80122430, *D_80122434;
-extern DISPENV D_801227EC[2];
+extern DISPENV g_MenuCardVideoSavedDispEnv[2];
 extern DRAWENV D_80122814[2];
 
 typedef struct VideoDiscRange { u16 start,end; } VideoDiscRange;

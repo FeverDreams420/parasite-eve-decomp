@@ -7,7 +7,7 @@
 static inline MemcardImageNode *MenuCard_FindImageNode(s32 kind) {
     MemcardImageNode *node;
 
-    for (node = (D_801D1370); node != 0; node = node->next) {
+    for (node = (g_MemcardActiveNodeHead); node != 0; node = node->next) {
         if (node->kind == kind) {
             break;
         }
@@ -22,7 +22,7 @@ void func_80190064(void) {
     MemcardImageNode *node;
 
     pad = Draw_RemapStatusFlags();
-    if ((pad & 0x800) && !(D_801D11B8 & 0x800)) {
+    if ((pad & 0x800) && !(g_MemcardPrevPad & 0x800)) {
         node = MenuCard_FindImageNode(2);
         if (node != 0 && node->intensity > 0x80) {
             node = MenuCard_FindImageNode(1);
@@ -30,7 +30,7 @@ void func_80190064(void) {
                 node->stepY = 1;
                 node->parameter = 8;
                 node->field14 = D_801931BC;
-                D_801D1380 = 0;
+                g_MemcardScreenTimer = 0;
                 Menu_PlayConfirmSound();
             }
         }
@@ -41,7 +41,7 @@ void func_80190064(void) {
             if (node->y < 200) {
                 node->y++;
                 MenuCard_FindImageNode(4)->targetY = 16;
-                D_801D1380 = 0;
+                g_MemcardScreenTimer = 0;
             }
             if (node->y == 200 && MemCard_HasAnyPresentFile() != 0) {
                 node = MenuCard_FindImageNode(6);
@@ -58,7 +58,7 @@ void func_80190064(void) {
                 MenuCard_FindImageNode(7)->y = node->y;
             }
             MenuCard_FindImageNode(4)->targetY = -16;
-            D_801D1380 = 0;
+            g_MemcardScreenTimer = 0;
         }
         if (MemCard_HasAnyPresentFile() == 0) {
             node = MenuCard_FindImageNode(6);
@@ -75,28 +75,28 @@ void func_80190064(void) {
         node = MenuCard_FindImageNode(7);
         if (pad & 0x20) {
             if (node->y == 160 || node->y == 180 || node->y == 200 || node->y == 140) {
-                D_801D1380 = 1001;
+                g_MemcardScreenTimer = 1001;
                 Menu_PlayConfirmSound();
             }
         }
-        if ((pad & 0x1000) && !(D_801D11B8 & 0x1000)) {
+        if ((pad & 0x1000) && !(g_MemcardPrevPad & 0x1000)) {
             y = node->y;
             if (MenuCard_FindImageNode(6)->intensity == 0x100 ? y >= 141 : y >= 161) {
-                D_801D1380 = 0;
+                g_MemcardScreenTimer = 0;
                 node->y -= 20;
                 Menu_PlayMoveSound();
             }
         }
-        if ((pad & 0x4000) && !(D_801D11B8 & 0x4000)) {
+        if ((pad & 0x4000) && !(g_MemcardPrevPad & 0x4000)) {
             y = node->y;
             if (y <= MenuCard_FindImageNode(5)->y - 20) {
-                D_801D1380 = 0;
+                g_MemcardScreenTimer = 0;
                 node->y += 20;
                 Menu_PlayMoveSound();
             }
         }
     }
-    D_801D11B8 = pad;
+    g_MemcardPrevPad = pad;
 }
 
 /* Fade a two-part logo in and out over 480 frames on the flipping screens. */
@@ -144,8 +144,8 @@ void func_80190660(void) {
     }
 
     {
-        MemcardScreenBuffer *first = D_801D11BC[0];
-        MemcardScreenBuffer *second = D_801D11BC[1];
+        MemcardScreenBuffer *first = g_MemcardScreenBuffers[0];
+        MemcardScreenBuffer *second = g_MemcardScreenBuffers[1];
 
         second->disp.isrgb24 = 0;
         first->disp.isrgb24 = 0;
@@ -153,9 +153,9 @@ void func_80190660(void) {
     SetDispMask(1);
 
     for (i = 0; i < 480; i++) {
-        page = D_801D11C8 == 0;
-        D_801D11C8 = page;
-        D_801D11C4 = D_801D11BC[page];
+        page = g_MemcardScreenPage == 0;
+        g_MemcardScreenPage = page;
+        g_MemcardCurrentScreen = g_MemcardScreenBuffers[page];
         sprite = sprites[i & 1];
         tpage = tpages[i & 1];
         if (i < 32) {
@@ -175,25 +175,25 @@ void func_80190660(void) {
         sprite++;
         sprite->r0 = sprite->g0 = sprite->b0 = shade;
         DrawSync(0);
-        if (D_801D11C4->overlay.w > 0) {
-            overlay = D_801D11C4->overlay;
+        if (g_MemcardCurrentScreen->overlay.w > 0) {
+            overlay = g_MemcardCurrentScreen->overlay;
             overlay.x = overlay.x * 3 >> 1;
-            if (D_801D11C8 == 0) {
+            if (g_MemcardScreenPage == 0) {
                 overlay.y += 240;
             }
             overlay.w = overlay.w * 3 >> 1;
-            LoadImage(&overlay, D_801D11C4->overlayImage);
+            LoadImage(&overlay, g_MemcardCurrentScreen->overlayImage);
         }
         VSync(0);
         ResetGraph(1);
-        PutDrawEnv(&D_801D11C4->draw);
-        PutDispEnv(&D_801D11C4->disp);
+        PutDrawEnv(&g_MemcardCurrentScreen->draw);
+        PutDispEnv(&g_MemcardCurrentScreen->disp);
     }
 
     SetDispMask(0);
     {
-        MemcardScreenBuffer *first = D_801D11BC[0];
-        MemcardScreenBuffer *second = D_801D11BC[1];
+        MemcardScreenBuffer *first = g_MemcardScreenBuffers[0];
+        MemcardScreenBuffer *second = g_MemcardScreenBuffers[1];
 
         second->disp.isrgb24 = 1;
         first->disp.isrgb24 = 1;
@@ -243,7 +243,7 @@ s32 func_801909B4(void) {
     firstMemory = g_CdLoadAreaBase;
     secondMemory = firstMemory + 0x1C080;
     D_800B0E50 = firstMemory + 0x4080;
-    D_801D11BC[0] = (MemcardScreenBuffer *) firstMemory;
+    g_MemcardScreenBuffers[0] = (MemcardScreenBuffer *) firstMemory;
     g_MemcardSecondScreen.value = (MemcardScreenBuffer *) secondMemory;
     D_800B0E54 = secondMemory + 0x4080;
     D_800B0E38.ordering[0] = (u32 *)(firstMemory + 0x80);
@@ -264,13 +264,13 @@ s32 func_801909B4(void) {
         VSync(0);
         SetDefDrawEnv(&g_MemcardFirstDrawScreen->draw, 0, 0, 0x140, 0xF0);
         SetDefDrawEnv(&D_801D11C0->draw, 0, 0xF0, 0x140, 0xF0);
-        SetDefDispEnv(&D_801D11BC[0]->disp, 0, 0xF0, 0x140, 0xF0);
+        SetDefDispEnv(&g_MemcardScreenBuffers[0]->disp, 0, 0xF0, 0x140, 0xF0);
         SetDefDispEnv(&g_MemcardSecondScreen.value->disp, 0, 0, 0x140, 0xF0);
-        D_801D11BC[0]->disp.screen.y = g_MemcardSecondScreen.value->disp.screen.y = 0;
-        D_801D11BC[0]->disp.screen.h = g_MemcardSecondScreen.value->disp.screen.h = 0xF0;
-        D_801D11BC[0]->disp.isrgb24 = g_MemcardSecondScreen.value->disp.isrgb24 = 1;
-        D_801D11BC[0]->dirty.w = g_MemcardSecondScreen.value->dirty.w = 0;
-        D_801D11BC[0]->overlay.w = g_MemcardSecondScreen.value->overlay.w = 0;
+        g_MemcardScreenBuffers[0]->disp.screen.y = g_MemcardSecondScreen.value->disp.screen.y = 0;
+        g_MemcardScreenBuffers[0]->disp.screen.h = g_MemcardSecondScreen.value->disp.screen.h = 0xF0;
+        g_MemcardScreenBuffers[0]->disp.isrgb24 = g_MemcardSecondScreen.value->disp.isrgb24 = 1;
+        g_MemcardScreenBuffers[0]->dirty.w = g_MemcardSecondScreen.value->dirty.w = 0;
+        g_MemcardScreenBuffers[0]->overlay.w = g_MemcardSecondScreen.value->overlay.w = 0;
         rect.x = 0;
         rect.y = 0;
         rect.w = 0x1E0;
@@ -292,15 +292,15 @@ s32 func_801909B4(void) {
                     VSync(0);
                 } while (waitFrames < 0x3C);
             }
-            D_801D11BC[0]->draw = g_RenderDrawEnvArray[0];
             g_MemcardSecondScreen.value->draw = g_RenderDrawEnvArray[1];
-            D_801D11BC[0]->disp = g_RenderDispEnvArray[0];
             g_MemcardSecondScreen.value->disp = g_RenderDispEnvArray[1];
-            D_801D11BC[0]->draw.isbg = 0;
+            g_MemcardScreenBuffers[0]->draw = g_RenderDrawEnvArray[0];
+            g_MemcardScreenBuffers[0]->disp = g_RenderDispEnvArray[0];
+            g_MemcardScreenBuffers[0]->draw.isbg = 0;
             g_MemcardSecondScreen.value->draw.isbg = 0;
-            D_801D11BC[0]->dirty.w = g_MemcardSecondScreen.value->dirty.w = 0;
-            D_801D11C8 = g_ActiveDrawSlot;
-            D_801D11BC[0]->overlay.w = g_MemcardSecondScreen.value->overlay.w = 0;
+            g_MemcardScreenBuffers[0]->dirty.w = g_MemcardSecondScreen.value->dirty.w = 0;
+            g_MemcardScreenPage = g_ActiveDrawSlot;
+            g_MemcardScreenBuffers[0]->overlay.w = g_MemcardSecondScreen.value->overlay.w = 0;
             rect.x = 0;
             rect.y = 0;
             rect.w = 0x1E0;
@@ -321,31 +321,31 @@ s32 func_801909B4(void) {
             rect.w = 0x1E0;
             rect.h = 0x10;
             ClearImage(&rect, 0, 0, 0);
-            initialPage = D_801D11C8 == 0;
-            D_801D11C8 = initialPage;
-            D_801D11C4 = D_801D11BC[initialPage];
+            initialPage = g_MemcardScreenPage == 0;
+            g_MemcardScreenPage = initialPage;
+            g_MemcardCurrentScreen = g_MemcardScreenBuffers[initialPage];
             DrawSync(0);
-            if (D_801D11C4->overlay.w > 0) {
-                overlay = D_801D11C4->overlay;
+            if (g_MemcardCurrentScreen->overlay.w > 0) {
+                overlay = g_MemcardCurrentScreen->overlay;
                 overlay.x = (s16) ((overlay.x * 3) >> 1);
-                if (D_801D11C8 == 0) {
+                if (g_MemcardScreenPage == 0) {
                     overlay.y += 0xF0;
                 }
                 overlay.w = (s16) ((overlay.w * 3) >> 1);
-                LoadImage(&overlay, D_801D11C4->overlayImage);
+                LoadImage(&overlay, g_MemcardCurrentScreen->overlayImage);
             }
             VSync(0);
             ResetGraph(1);
-            PutDrawEnv(&D_801D11C4->draw);
-            PutDispEnv(&D_801D11C4->disp);
+            PutDrawEnv(&g_MemcardCurrentScreen->draw);
+            PutDispEnv(&g_MemcardCurrentScreen->disp);
         }
         func_8018F2F4();
         VSync(0);
         SetDispMask(1);
         /* Rebuild the eight-node free list for this menu pass. */
-        freeNode = D_801D11CC;
-        freeEnd = &D_801D11CC[7];
-        if ((u32) D_801D11CC < (u32) freeEnd) {
+        freeNode = g_MemcardImageNodePool;
+        freeEnd = &g_MemcardImageNodePool[7];
+        if ((u32) g_MemcardImageNodePool < (u32) freeEnd) {
             do {
                 nextFree = &freeNode[1];
                 freeNode->next = nextFree;
@@ -353,23 +353,23 @@ s32 func_801909B4(void) {
             } while ((u32) freeNode < (u32) freeEnd);
         }
         freeNode->next = 0;
-        D_801D136C = D_801D11CC;
-        D_801D137C = 0;
-        D_801D1378 = 0;
-        D_801D1374 = 0;
-        D_801D1370 = 0;
+        g_MemcardFreeImageNodes = g_MemcardImageNodePool;
+        g_MemcardPendingNodeTail = 0;
+        g_MemcardPendingNodeHead = 0;
+        g_MemcardActiveNodeTail = 0;
+        g_MemcardActiveNodeHead = 0;
         func_8018FBC0(1)->field14 = D_8019319C;
-        D_801D1380 = titleMode;
+        g_MemcardScreenTimer = titleMode;
         if (titleMode < 0x3E8) {
             do {
-                page = D_801D11C8 == 0;
-                D_801D11C8 = page;
-                D_801D11C4 = D_801D11BC[page];
+                page = g_MemcardScreenPage == 0;
+                g_MemcardScreenPage = page;
+                g_MemcardCurrentScreen = g_MemcardScreenBuffers[page];
                 MemCard_UpdateSavePolling();
                 Field_HandleStateTransition();
                 func_80190064();
                 MenuCard_RedrawImageNodes();
-                node = (D_801D1370);
+                node = (g_MemcardActiveNodeHead);
                 previous = 0;
                 if (node != 0) {
                     do {
@@ -377,18 +377,18 @@ s32 func_801909B4(void) {
                             if (previous != 0) {
                                 previous->next = node->next;
                             } else {
-                                D_801D1370 = node->next;
+                                g_MemcardActiveNodeHead = node->next;
                             }
-                            if (D_801D1374 == node) {
-                                D_801D1374 = previous;
+                            if (g_MemcardActiveNodeTail == node) {
+                                g_MemcardActiveNodeTail = previous;
                             }
-                            oldFreeHead = D_801D136C;
-                            D_801D136C = node;
+                            oldFreeHead = g_MemcardFreeImageNodes;
+                            g_MemcardFreeImageNodes = node;
                             node->next = oldFreeHead;
                             if (previous != 0) {
                                 node = previous->next;
                             } else {
-                                node = (D_801D1370);
+                                node = (g_MemcardActiveNodeHead);
                             }
                         } else {
                             previous = node;
@@ -397,39 +397,39 @@ s32 func_801909B4(void) {
                     } while (node != 0);
                 }
                 {
-                    MemcardImageNode *pending = D_801D1378;
+                    MemcardImageNode *pending = g_MemcardPendingNodeHead;
                     if (pending != 0) {
-                        MemcardImageNode *tail = D_801D1374;
+                        MemcardImageNode *tail = g_MemcardActiveNodeTail;
                         register MemcardImageNode *nextTail asm("$2");
 
                         if (tail != 0) {
-                            nextTail = D_801D137C;
+                            nextTail = g_MemcardPendingNodeTail;
                             tail->next = pending;
                         } else {
-                            nextTail = D_801D137C;
-                            D_801D1370 = pending;
+                            nextTail = g_MemcardPendingNodeTail;
+                            g_MemcardActiveNodeHead = pending;
                         }
-                        D_801D1374 = nextTail;
-                        D_801D137C = 0;
-                        D_801D1378 = 0;
+                        g_MemcardActiveNodeTail = nextTail;
+                        g_MemcardPendingNodeTail = 0;
+                        g_MemcardPendingNodeHead = 0;
                     }
                 }
                 DrawSync(0);
-                if (D_801D11C4->overlay.w > 0) {
-                    overlay = D_801D11C4->overlay;
+                if (g_MemcardCurrentScreen->overlay.w > 0) {
+                    overlay = g_MemcardCurrentScreen->overlay;
                     overlay.x = (s16) ((overlay.x * 3) >> 1);
-                    if (D_801D11C8 == 0) {
+                    if (g_MemcardScreenPage == 0) {
                         overlay.y += 0xF0;
                     }
                     overlay.w = (s16) ((overlay.w * 3) >> 1);
-                    LoadImage(&overlay, D_801D11C4->overlayImage);
+                    LoadImage(&overlay, g_MemcardCurrentScreen->overlayImage);
                 }
                 VSync(2);
                 ResetGraph(1);
-                PutDrawEnv(&D_801D11C4->draw);
-                PutDispEnv(&D_801D11C4->disp);
-                elapsed = D_801D1380 + titleMode;
-                D_801D1380 = elapsed;
+                PutDrawEnv(&g_MemcardCurrentScreen->draw);
+                PutDispEnv(&g_MemcardCurrentScreen->disp);
+                elapsed = g_MemcardScreenTimer + titleMode;
+                g_MemcardScreenTimer = elapsed;
             } while (elapsed < 0x3E8);
         }
         SetDispMask(0);
@@ -450,9 +450,9 @@ s32 func_801909B4(void) {
         Draw_InitBuffers();
         Draw_SelectBuffer();
         Draw_PresentFrame(2);
-        if (D_801D1380 >= 0x3E9) {
+        if (g_MemcardScreenTimer >= 0x3E9) {
             wantedKind = 7;
-            selection = (D_801D1370);
+            selection = (g_MemcardActiveNodeHead);
             while (selection != 0) {
                 searchKind = selection->kind;
                 if (searchKind == wantedKind) {
@@ -469,7 +469,7 @@ s32 func_801909B4(void) {
                 result = 3;
             } else {
                 Draw_SetPresentImage((u8 *)D_801D11C0 + 0x1C080);
-                image = (MemcardImage *)&D_80193254[*D_80193258];
+                image = (MemcardImage *)&D_80193254[*g_MemcardImageOffsets];
                 source = (u32 *)(image + 1);
                 groupsRemaining = (image->width * image->height) / 6;
                 destination = (u32 *)((u8 *)D_801D11C0 + 0x1C080);

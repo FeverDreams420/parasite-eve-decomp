@@ -4,7 +4,7 @@
 #include "menu_memcard_node.h"
 
 void MenuCard_InitFadeForNode(MenuMemcardFadeState *state) {
-    MenuMemcardListNode *node = ((MenuMemcardListNode *)D_801D1370);
+    MenuMemcardListNode *node = ((MenuMemcardListNode *)g_MemcardActiveNodeHead);
     int kind = 7;
 
     state->displayTop = 0xB4;
@@ -122,7 +122,7 @@ void func_8012B710(void) {
     MenuMemcardListNode *node;
     int kind;
 
-    node = ((MenuMemcardListNode *)D_801D1370);
+    node = ((MenuMemcardListNode *)g_MemcardActiveNodeHead);
     kind = 2;
     while (node != 0) {
         if (node->kind == kind) {

@@ -11,8 +11,8 @@ typedef struct MemcardPulseState {
     s16 phase, timer;
 } MemcardPulseState;
 extern u8 D_801F1D5C[];
-extern RenderColor D_801F1F30;
-extern RenderColor D_801F1F34;
+extern RenderColor g_MemcardCosineColor;
+extern RenderColor g_MemcardSineColor;
 
 s32 MenuCard_PulseImage(s32 mode, MemcardPulseState *state);
 s32 MenuCard_CosineImage(s32 mode, MemcardPulseState *state);

@@ -44,7 +44,7 @@ void MenuCard_RedrawImageNodes(void) {
     left = 0x7FFF;
     bottom = 0;
     right = 0;
-    for (node = (D_801D1370); node != 0; node = node->next) {
+    for (node = (g_MemcardActiveNodeHead); node != 0; node = node->next) {
         step = node->draw;
         if (step != 0) {
             step(node);
@@ -63,7 +63,7 @@ void MenuCard_RedrawImageNodes(void) {
         }
     }
 
-    screen = D_801D11C4;
+    screen = g_MemcardCurrentScreen;
     if (screen->dirty.w > 0) {
         x = left;
         if (screen->dirty.x < left) {
@@ -93,9 +93,9 @@ void MenuCard_RedrawImageNodes(void) {
     }
 
     if ((width = area.w) > 0 && (height = area.h) > 0) {
-        background = (MemcardBackground *)&D_80193254[D_80193258[0]];
+        background = (MemcardBackground *)&D_80193254[g_MemcardImageOffsets[0]];
         source = &background->pixels[((area.y - 20) * 320 + area.x) * 3 / 4];
-        destination = (u32 *)D_801D11C4->overlayImage;
+        destination = (u32 *)g_MemcardCurrentScreen->overlayImage;
         words = width * 3 / 4;
         for (row = 0; row < height; row++) {
             for (column = 0; column < words; column++) {
@@ -103,19 +103,19 @@ void MenuCard_RedrawImageNodes(void) {
             }
             source += 240 - words;
         }
-        for (node = (D_801D1370); node != 0; node = node->next) {
+        for (node = (g_MemcardActiveNodeHead); node != 0; node = node->next) {
             draw = node->update;
             if (draw != 0) {
                 offset = area.w * (node->y - area.y) + (node->x - area.x);
                 skip = area.w - node->width;
-                draw(node, (u32 *)D_801D11C4->overlayImage + offset * 3 / 4, skip * 3 / 4,
+                draw(node, (u32 *)g_MemcardCurrentScreen->overlayImage + offset * 3 / 4, skip * 3 / 4,
                      area.w * 3 / 4);
             }
         }
     }
 
     {
-        MemcardScreenBuffer *current = D_801D11C4;
+        MemcardScreenBuffer *current = g_MemcardCurrentScreen;
 
         current->dirty.w = right - left;
         current->dirty.x = left;
@@ -365,20 +365,20 @@ void MenuCard_BlendRotatedImage(MemcardImageNode *node, u8 *destination, s32 pad
 /* Matching debt: the workspace operand preserves the retail stack frame. */
 MemcardImageNode *MenuCard_CreateImageNode(s32 kind) {
     s32 workspace[1];
-    MemcardImageNode *node = D_801D136C;
-    MemcardImageNode *tail = D_801D137C;
+    MemcardImageNode *node = g_MemcardFreeImageNodes;
+    MemcardImageNode *tail = g_MemcardPendingNodeTail;
     MemcardImage *imageData;
     MemcardImagePreset *preset = &D_801D0D5C[kind];
     __asm__("" : : "m"(workspace[0]));
-    D_801D136C = node->next;
+    g_MemcardFreeImageNodes = node->next;
     node->next = 0;
-    if (tail) { tail->next = node; D_801D137C = node; }
-    else { D_801D137C = node; D_801D1378 = node; }
+    if (tail) { tail->next = node; g_MemcardPendingNodeTail = node; }
+    else { g_MemcardPendingNodeTail = node; g_MemcardPendingNodeHead = node; }
     node->draw = 0; node->update = 0; node->field14 = 0; node->image = 0;
     node->x = 0; node->y = 0; node->width = 0; node->height = 0;
     node->intensity = 0; node->targetY = 0; node->stepY = 0;
     node->parameter = 0; node->kind = 0; node->freePending = 0;
-    imageData = (MemcardImage *)(D_80193254 + D_80193258[kind]);
+    imageData = (MemcardImage *)(D_80193254 + g_MemcardImageOffsets[kind]);
     node->kind = kind;
     node->image = imageData;
     {
@@ -400,20 +400,20 @@ MemcardImageNode *MenuCard_CreateImageNode(s32 kind) {
 
 void MenuCard_CreateFixedImageNode(void) {
     s32 kind;
-    MemcardImageNode *node = D_801D136C;
+    MemcardImageNode *node = g_MemcardFreeImageNodes;
     register MemcardImageNode *tail;
     MemcardImage *imageData;
     register MemcardImagePreset *preset;
     {
         MemcardImageNode *next = node->next;
         kind = 4;
-        D_801D136C = next;
+        g_MemcardFreeImageNodes = next;
     }
-    tail = D_801D137C;
+    tail = g_MemcardPendingNodeTail;
     preset = &D_801D0D8C;
     node->next = 0;
-    if (tail) { tail->next = node; D_801D137C = node; }
-    else { D_801D137C = node; D_801D1378 = node; }
+    if (tail) { tail->next = node; g_MemcardPendingNodeTail = node; }
+    else { g_MemcardPendingNodeTail = node; g_MemcardPendingNodeHead = node; }
     node->draw = 0; node->update = 0; node->field14 = 0; node->image = 0;
     node->x = 0; node->y = 0; node->width = 0; node->height = 0;
     node->intensity = 0; node->targetY = 0; node->stepY = 0;
@@ -440,20 +440,20 @@ void MenuCard_CreateFixedImageNode(void) {
 void MenuCard_CreateImageGroup(void) {
     {
         register s32 kind;
-        MemcardImageNode *node = D_801D136C;
+        MemcardImageNode *node = g_MemcardFreeImageNodes;
         register MemcardImageNode *tail;
         MemcardImage *imageData;
         register MemcardImagePreset *preset;
         {
             MemcardImageNode *next = node->next;
             kind = 7;
-            D_801D136C = next;
+            g_MemcardFreeImageNodes = next;
         }
-        tail = D_801D137C;
+        tail = g_MemcardPendingNodeTail;
         preset = &D_801D0DB0;
         node->next = 0;
-        if (tail) { tail->next = node; D_801D137C = node; }
-        else { D_801D137C = node; D_801D1378 = node; }
+        if (tail) { tail->next = node; g_MemcardPendingNodeTail = node; }
+        else { g_MemcardPendingNodeTail = node; g_MemcardPendingNodeHead = node; }
         node->draw = 0; node->update = 0; node->field14 = 0; node->image = 0;
         node->x = 0; node->y = 0; node->width = 0; node->height = 0;
         node->intensity = 0; node->targetY = 0; node->stepY = 0;
@@ -480,20 +480,20 @@ void MenuCard_CreateImageGroup(void) {
     MenuCard_CreateImageNode(5)->field14 = D_80192F98;
     {
         register s32 kind;
-        MemcardImageNode *node = D_801D136C;
+        MemcardImageNode *node = g_MemcardFreeImageNodes;
         register MemcardImageNode *tail;
         MemcardImage *imageData;
         register MemcardImagePreset *preset;
         {
             MemcardImageNode *next = node->next;
             kind = 6;
-            D_801D136C = next;
+            g_MemcardFreeImageNodes = next;
         }
-        tail = D_801D137C;
+        tail = g_MemcardPendingNodeTail;
         preset = &D_801D0DA4;
         node->next = 0;
-        if (tail) { tail->next = node; D_801D137C = node; }
-        else { D_801D137C = node; D_801D1378 = node; }
+        if (tail) { tail->next = node; g_MemcardPendingNodeTail = node; }
+        else { g_MemcardPendingNodeTail = node; g_MemcardPendingNodeHead = node; }
         node->draw = 0; node->update = 0; node->field14 = 0; node->image = 0;
         node->x = 0; node->y = 0; node->width = 0; node->height = 0;
         node->intensity = 0; node->targetY = 0; node->stepY = 0;

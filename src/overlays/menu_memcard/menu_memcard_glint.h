@@ -58,7 +58,7 @@ extern RenderColor D_801ED80C, D_801ED810, D_801ED814;
 extern u8 D_801F1BB0[];
 extern u8 D_801F1C28[];
 extern u8 D_801F1CD8[];
-extern GteShortVector D_801F1F28;
+extern GteShortVector g_MemcardGlintOrigin;
 extern s16 D_801F1F3A;
 extern s16 D_801F1F38;
 
