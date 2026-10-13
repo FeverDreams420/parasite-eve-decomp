@@ -164,14 +164,14 @@ void SceneE08_InitContext(RoomEnt *ent, void *arg1, SceneE08LinkInitState *state
     g_SceneE08GlowRingsSprite.g = 0x80;
     g_SceneE08GlowRingsSprite.b = 0xF0;
     g_SceneE08GlowRingsSprite.flip = 0;
-    D_801994A8.cell = 0x46;
-    D_801994A8.clut = 3;
-    D_801994A8.offset = -0x190;
-    D_801994A8.depth = 0x80;
-    D_801994A8.r = 0xA0;
-    D_801994A8.g = 0x80;
-    D_801994A8.b = 0xF0;
-    D_801994A8.flip = 0;
+    g_SceneE08ParticleClusterSprite.cell = 0x46;
+    g_SceneE08ParticleClusterSprite.clut = 3;
+    g_SceneE08ParticleClusterSprite.offset = -0x190;
+    g_SceneE08ParticleClusterSprite.depth = 0x80;
+    g_SceneE08ParticleClusterSprite.r = 0xA0;
+    g_SceneE08ParticleClusterSprite.g = 0x80;
+    g_SceneE08ParticleClusterSprite.b = 0xF0;
+    g_SceneE08ParticleClusterSprite.flip = 0;
 }
 
 void SceneE08_DrawContext(void) {
@@ -342,7 +342,7 @@ void SceneE08_InitParticleCluster(int unused0, int unused1, SceneParticleCluster
     }
     slots->count = 30;
     {
-        void *volatile *sound = D_800B0E64;
+        void *volatile *sound = g_LoadedSceneAssetBlock;
         if (*sound) {
             Akao_SendTableCommand(*sound, 0x608, 0, 0x80, 0x7F);
         }
@@ -358,7 +358,7 @@ void SceneE08_DrawParticleCluster(void *unused0, void *unused1, SceneParticleClu
     Vec4 scratch, draw;
     SceneParticleOwner *owner;
     register unsigned i;
-    s16 *slot = &D_801994B2;
+    s16 *slot = &g_SceneE08ParticleClusterSpriteDepth;
 
     owner = FieldFx_GetScriptContext();
     i = 0;
@@ -508,14 +508,14 @@ void SceneE08_InitOrbContext(RoomEnt *ent, void *unused, SceneE08State *state) {
     state->counter = 0;
     state->flag = 0;
 
-    D_801994B8.cell = 0x46;
-    D_801994B8.clut = 3;
-    D_801994B8.offset = -400;
-    D_801994B8.depth = 128;
-    D_801994B8.r = 240;
-    D_801994B8.g = 64;
-    D_801994B8.b = 64;
-    D_801994B8.flip = 0;
+    g_SceneE08GlowSpritesSprite.cell = 0x46;
+    g_SceneE08GlowSpritesSprite.clut = 3;
+    g_SceneE08GlowSpritesSprite.offset = -400;
+    g_SceneE08GlowSpritesSprite.depth = 128;
+    g_SceneE08GlowSpritesSprite.r = 240;
+    g_SceneE08GlowSpritesSprite.g = 64;
+    g_SceneE08GlowSpritesSprite.b = 64;
+    g_SceneE08GlowSpritesSprite.flip = 0;
 
     g_SceneE08RingSpritesFlashSprite.cell = 0xA4;
     g_SceneE08RingSpritesFlashSprite.clut = 10;
@@ -588,7 +588,7 @@ void SceneE08_DrawFadeSlots(void *unused0, void *unused1, char *effect) {
     SceneE08GlowSprites *base = (SceneE08GlowSprites *)effect;
     register unsigned i;
     int diag = 0x1000;
-    s16 *slot = &D_801994C2;
+    s16 *slot = &g_SceneE08GlowSpritesSpriteDepth;
     owner = FieldFx_GetScriptContext();
     i = 0;
         asm volatile("" : : "r"(slot));
@@ -703,8 +703,8 @@ void SceneE08_InitPlayerOrb(void *object, void *timer, ScenePlayerOrb *orb)
     orb->active = 0;
     orb->fade = 0;
     orb->delay = *FieldFx_RegPtr(1);
-    if (D_800B0E64[0] != 0) {
-        Akao_SendTableCommand(D_800B0E64[0], 0x606, 0, 0x80, 0x7F);
+    if (g_LoadedSceneAssetBlock[0] != 0) {
+        Akao_SendTableCommand(g_LoadedSceneAssetBlock[0], 0x606, 0, 0x80, 0x7F);
     }
 }
 
@@ -818,7 +818,7 @@ void SceneE08_UpdatePlayerOrb(void *object, ScenePlayerOrbTimer *timer, ScenePla
 }
 
 void SceneE08_InitRingSprites(void *unused0, void *unused1, SceneRingSpritesState *effect) {
-    u8 *mid = D_801995D4;
+    u8 *mid = g_SceneE08RingSpritesRing0Mode;
     u8 *source;
     int width;
     FieldRingGeometry *base;
@@ -834,16 +834,16 @@ void SceneE08_InitRingSprites(void *unused0, void *unused1, SceneRingSpritesStat
     effect->depth = width;
 
     base[0].mode = 8;
-    D_801995DA = 0;
-    D_801995DC = width;
-    D_801995D0 = 120;
-    D_801995D1 = 100;
-    D_801995D2 = 30;
-    D_801995CC = 0;
-    D_801995CD = 0;
-    D_801995CE = 0;
-    D_801995D6 = 1800;
-    D_801995D8 = 1200;
+    g_SceneE08RingSpritesRing0Offset = 0;
+    g_SceneE08RingSpritesRing0Intensity = width;
+    g_SceneE08RingSpritesRing0Color1R = 120;
+    g_SceneE08RingSpritesRing0Color1G = 100;
+    g_SceneE08RingSpritesRing0Color1B = 30;
+    g_SceneE08RingSpritesRing0Color0R = 0;
+    g_SceneE08RingSpritesRing0Color0G = 0;
+    g_SceneE08RingSpritesRing0Color0B = 0;
+    g_SceneE08RingSpritesRing0Extent0 = 1800;
+    g_SceneE08RingSpritesRing0Extent1 = 1200;
     source = g_SceneE08RingSpritesSource;
     base[0].source = source;
     FieldFx_BuildRingGeometry(base);
@@ -996,7 +996,7 @@ void SceneE08_InitSlotsContext(RoomEnt *ent, void *unused, SceneE08InitState *st
     register int intensity asm("$3");
     register int mode asm("$2");
     register int offset asm("$5");
-    void *volatile *sound = D_800B0E64;
+    void *volatile *sound = g_LoadedSceneAssetBlock;
     void *handle;
     int playerX;
 
@@ -1012,15 +1012,15 @@ void SceneE08_InitSlotsContext(RoomEnt *ent, void *unused, SceneE08InitState *st
     offset = -400;
 
     D_80199688 = offset;
-    D_801996A8 = offset;
+    g_SceneE08CentreGlowSpriteOffset = offset;
     /* Empty compiler barriers retain the retail register lifetimes. */
     player = g_PlayerEntity;
     asm volatile ("" : : "r"(player));
     half = 0x80;
     asm volatile ("" : : "r"(half));
     D_80199685 = mode;
-    D_801996A4 = 0x44;
-    D_801996A5 = 2;
+    g_SceneE08CentreGlowSpriteCell = 0x44;
+    g_SceneE08CentreGlowSpriteClut = 2;
     D_801996B0.cell = 0x60;
     D_801996B0.clut = 0x40;
     D_80199684 = intensity;
@@ -1029,11 +1029,11 @@ void SceneE08_InitSlotsContext(RoomEnt *ent, void *unused, SceneE08InitState *st
     D_80199681 = intensity;
     D_80199682 = intensity;
     D_80199686 = 0;
-    D_801996AA = half;
-    D_801996A0[0] = intensity;
-    D_801996A1 = intensity;
-    D_801996A2 = intensity;
-    D_801996A6 = 0;
+    g_SceneE08CentreGlowSpriteDepth = half;
+    g_SceneE08CentreGlowSprite[0] = intensity;
+    g_SceneE08CentreGlowSpriteG = intensity;
+    g_SceneE08CentreGlowSpriteB = intensity;
+    g_SceneE08CentreGlowSpriteFlip = 0;
     D_801996B0.offset = -500;
     D_801996B0.depth = half;
     D_801996B0.r = intensity;
@@ -1135,7 +1135,7 @@ void SceneE08_DrawCentreGlow(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
     matrix.t[0] = glow->x + g_SceneE08CentreX;
     matrix.t[1] = glow->y;
     matrix.t[2] = glow->z + g_SceneE08CentreZ;
-    FieldFx_DrawGlowSprite((FieldGlowSprite *)D_801996A0, &matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)g_SceneE08CentreGlowSprite, &matrix, 1);
 }
 
 void SceneE08_UpdateCentreGlow(void *arg0, RoomFxControl *control, void *arg2) {
@@ -1259,8 +1259,8 @@ void SceneE08_DrawParticleSlots(void *object, void *timer, SceneParticleSlots *s
     offset.y = 0;
     offset.z = g_SceneE08CentreZ;
     position = offset;
-    offset = D_8018F040;
-    color = D_8018F048;
+    offset = g_SceneE08ParticleSlotOffsetInit;
+    color = g_SceneE08ParticleSlotColorInit;
     g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot3];
     g_FieldFxSpriteParams.palette = 3;
     g_FieldFxSpriteParams.parameter06 = 0;
@@ -1342,10 +1342,10 @@ void SceneE08_UpdateParticleSlots(int unused, u8 *state, SceneParticleSlots *slo
 void FieldFx_BuildRingGeometry(void *);
 
 void SceneE08_InitRingEffect(void *unused0, void *unused1, SceneE08RingEffectState *effect) {
-    u8 *mid = (u8 *)&D_80199604;
+    u8 *mid = (u8 *)&g_SceneE08RingEffectRing0Mode;
     u8 *source;
     FieldRingGeometry *ring;
-    FieldRingGeometry *record = (FieldRingGeometry *)((u8 *)&D_80199604 - PE1_OFFSETOF(FieldRingGeometry, mode));
+    FieldRingGeometry *record = (FieldRingGeometry *)((u8 *)&g_SceneE08RingEffectRing0Mode - PE1_OFFSETOF(FieldRingGeometry, mode));
     int intensity = 0x80;
     register int span asm("$19");
     asm("" : "=r"(mid) : "0"(mid));
@@ -1629,7 +1629,7 @@ void SceneE08_DrawOrbitParticles(void *unused0, void *unused1, SceneE08OrbitPart
     SceneE08Vector transformed, v;
     /* Keep the matrix scale live before the first rendering setup call. */
     register s16 scale asm("$19") = 0x1000;
-    char *table = D_801996A0;
+    char *table = g_SceneE08CentreGlowSprite;
     Ovl178Position *owner;
     unsigned i;
 
@@ -1985,13 +1985,13 @@ void SceneE08_InitLayeredSpriteContext(SceneGrabHead *actor, void *unused, Scene
     g_SceneE08TrailGlowFloorSprite.offset = -100;
     g_SceneE08TrailGlowFloorSprite.g = 16;
     g_SceneE08TrailGlowFloorSprite.b = 5;
-    D_80199564 = 70;
-    D_80199565 = 3;
-    D_80199568 = 1;
+    g_SceneE08LayeredSpriteCell = 70;
+    g_SceneE08LayeredSpriteClut = 3;
+    g_SceneE08LayeredSpriteOffset = 1;
     D_80199540.cell = 96;
     D_80199555 = one;
     g_SceneE08TrailGlowFloorSprite.clut = one;
-    soundAddress = (RoomSoundSlot *)D_800B0E64;
+    soundAddress = (RoomSoundSlot *)g_LoadedSceneAssetBlock;
     D_80199554 = sixtyFour;
     D_8019955A = half128;
     D_80199550 = byte128;
@@ -2002,11 +2002,11 @@ void SceneE08_InitLayeredSpriteContext(SceneGrabHead *actor, void *unused, Scene
     g_SceneE08TrailGlowFloorSprite.depth = half128;
     g_SceneE08TrailGlowFloorSprite.r = thirtyTwo;
     g_SceneE08TrailGlowFloorSprite.flip = two;
-    D_8019956A = half128;
-    D_80199560 = byte128;
-    D_80199561 = byte128;
-    D_80199562 = byte128;
-    D_80199566 = 0;
+    g_SceneE08LayeredSpriteDepth = half128;
+    g_SceneE08LayeredSpriteR = byte128;
+    g_SceneE08LayeredSpriteG = byte128;
+    g_SceneE08LayeredSpriteB = byte128;
+    g_SceneE08LayeredSpriteFlip = 0;
     D_80199540.clut = 7;
     D_80199540.offset = 0;
     D_80199540.depth = half128;
@@ -2219,16 +2219,16 @@ void SceneE08_DrawLayeredSprite(void *unused, u16 *phase, SceneLayeredSpriteStat
     firstScale = g_SceneE08LayeredSpriteScale;
     ScaleMatrix(&matrix, &firstScale);
     if (phase[1] & 1) {
-        D_80199560 = 0xFF;
-        D_80199561 = 0xA0;
+        g_SceneE08LayeredSpriteR = 0xFF;
+        g_SceneE08LayeredSpriteG = 0xA0;
     } else {
-        D_80199560 = 0xA0;
-        D_80199561 = 0xFF;
+        g_SceneE08LayeredSpriteR = 0xA0;
+        g_SceneE08LayeredSpriteG = 0xFF;
     }
-    D_80199562 = 0x60;
-    asm("" : : "m"(D_80199562));
+    g_SceneE08LayeredSpriteB = 0x60;
+    asm("" : : "m"(g_SceneE08LayeredSpriteB));
 
-    alphaBase = &D_8019956A;
+    alphaBase = &g_SceneE08LayeredSpriteDepth;
     alpha = alphaBase;
     matrix.t[0] = state->center[0].parts.integer;
     red = (u8 *)((char *)alpha - 10);
@@ -2244,8 +2244,8 @@ void SceneE08_DrawLayeredSprite(void *unused, u16 *phase, SceneLayeredSpriteStat
     FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)alpha - 10), &matrix, 0);
 
     *red = 0x40;
-    D_80199561 = 0x20;
-    D_80199562 = 0;
+    g_SceneE08LayeredSpriteG = 0x20;
+    g_SceneE08LayeredSpriteB = 0;
     for (i = 0; i < 5; ++i) {
         RotMatrix(&state->layerSeeds[i].vector, &matrix);
         layerScale = g_SceneE08LayeredSpriteScale;
@@ -2507,7 +2507,7 @@ void SceneE08_DrawExpandingGlow(void *arg0, void *arg1, SceneE08ExpandingGlow *g
     matrix.t[1] = glow->y;
     matrix.t[2] = glow->z;
 
-    draw_slot = &D_801994D2;
+    draw_slot = &g_SceneE08ArmGlowSpriteDepth;
     *draw_slot = glow->depth;
     FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)draw_slot - 0xA), &matrix, 1);
 }
