@@ -171,7 +171,6 @@ int Menu_StepEquipConfirm(MenuWidgetNode *node, int input) {
     int allowed;
     int first_width;
     int width;
-    register MenuWidgetNode *second_parent asm("$19");
     register u8 *dialog_text asm("$17");
     MenuConfirmCallback callback;
 
@@ -245,13 +244,14 @@ reserved:
             width = 0x78;
         }
 
-        second_parent = MenuWidget_FindByModeAndSelectedBase(1, 0x29);
+        /* The input node is no longer needed on this confirmation path. */
+        node = MenuWidget_FindByModeAndSelectedBase(1, 0x29);
         /* Copy the returned node before preparing the next lookup. */
-        asm volatile("" : : "r"(second_parent));
-        second_parent->grid_width = width + 0x14;
-        second_parent->x = (0x12C - width) >> 1;
+        asm volatile("" : : "r"(node));
+        node->grid_width = width + 0x14;
+        node->x = (0x12C - width) >> 1;
         option_node = MenuWidget_FindByModeAndSelectedBase(2, 0x29);
-        option_node->x = (second_parent->grid_width - 0x80) >> 1;
+        option_node->x = (node->grid_width - 0x80) >> 1;
         goto confirm;
         }
 simple_confirm:
