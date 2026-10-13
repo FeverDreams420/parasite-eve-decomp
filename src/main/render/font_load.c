@@ -31,7 +31,7 @@ int Render_LoadFontGlyph(int code)
     }
     offset = (u8)code * sizeof(FontGlyphRecord);
     sourceOffset = offset + PE1_OFFSETOF(FontGlyphTable, groups.unknown[0]);
-    source = D_800B0E6C;
+    source = g_SceneLoadScratchBuffer[0];
     i = 0;
     bytePtr = source + sourceOffset;
     g_FontActiveGlyphTable.groups.unknown[0] = *bytePtr;
@@ -42,13 +42,13 @@ int Render_LoadFontGlyph(int code)
     g_FontActiveGlyphTable.groups.count = source[sourceOffset];
     sourceOffset = offset + PE1_OFFSETOF(FontGlyphTable, groups.codes);
     for (i = 0; i < 24; i++, sourceOffset++)
-        g_FontActiveGlyphTable.groups.codes[i] = D_800B0E6C[sourceOffset];
-    g_FontActiveGlyphTable.slots.count = D_800B0E6C[sourceOffset++];
+        g_FontActiveGlyphTable.groups.codes[i] = g_SceneLoadScratchBuffer[0][sourceOffset];
+    g_FontActiveGlyphTable.slots.count = g_SceneLoadScratchBuffer[0][sourceOffset++];
     for (i = 0; i < 100; i++, sourceOffset++)
-        g_FontActiveGlyphTable.slots.indices[i] = D_800B0E6C[sourceOffset];
+        g_FontActiveGlyphTable.slots.indices[i] = g_SceneLoadScratchBuffer[0][sourceOffset];
     for (i = 0; i < 100; i++, sourceOffset++)
-        g_FontActiveGlyphTable.slots.groupKeys[i] = D_800B0E6C[sourceOffset];
+        g_FontActiveGlyphTable.slots.groupKeys[i] = g_SceneLoadScratchBuffer[0][sourceOffset];
     for (i = 0; i < 100; i++, sourceOffset++)
-        g_FontActiveGlyphTable.slots.unknownC9[i] = D_800B0E6C[sourceOffset];
+        g_FontActiveGlyphTable.slots.unknownC9[i] = g_SceneLoadScratchBuffer[0][sourceOffset];
     return 0;
 }

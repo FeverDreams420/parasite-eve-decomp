@@ -180,7 +180,7 @@ int Render_LoadFontGlyphAlt(void)
         }
     }
 
-    g_FontActiveGlyphTable.codeCount = D_800B0E6C[0];
+    g_FontActiveGlyphTable.codeCount = g_SceneLoadScratchBuffer[0][0];
     if (g_FontSelectionState.loadFailed == 0 && g_FontSelectionState.seed == 0) {
         do {
             g_FontSelectionState.seed = rand() % 0x7FFF;

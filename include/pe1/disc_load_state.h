@@ -4,7 +4,8 @@
 #include "common.h"
 
 /* The disc-load view begins at the PE.IMG base LBA. Its destination pointer
- * is also read through D_800B0E6C while copying the selected glyph table. */
+ * is also read as g_SceneLoadScratchBuffer[0] while copying the selected glyph
+ * table. */
 typedef struct FontGlyphLoadState {
     u32 baseLba;
     u8 unknown04[0x90];
