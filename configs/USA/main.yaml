@@ -19,8 +19,11 @@ options:
   migrate_rodata_to_functions: False
   find_file_boundaries: True
 
-  # Runtime GP setup in __SN_ENTRY_POINT @ 0x800725B0.
+  # Runtime GP setup in __SN_ENTRY_POINT @ 0x800725B0. gp_value serves the
+  # retail disassembly; the link derives $gp from the layout: retail's $gp is
+  # the start of the .sdata run, whose first word is the startup's _ramsize.
   gp_value: 0x8009CD70
+  ld_gp_expression: _ramsize
 
   o_as_suffix: False
   use_legacy_include_asm: False
@@ -911,10 +914,13 @@ segments:
 
   # Data separates the initial code from the field-engine code. Keep a
   # separate linker segment so section ordering preserves retail addresses.
+  # The link places it after main (vram_symbol); vram stays for the retail
+  # disassembly.
   - name: field_engine
     type: code
     start: 0xB24A0
     vram: 0x800C1CA0
+    vram_symbol: main_VRAM_END
     align: 4
     subalign: 4
     bss_size: 0x0

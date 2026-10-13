@@ -2236,3 +2236,5 @@ D_800E2368 = 0x800E2368;
 g_FieldSfxQueueCount = 0x8009CDB4; // size:0x1
 g_FieldSfxQueue = 0x800A3180; // size:0x150
 g_FieldActorListHead = 0x8009D20C; // size:0x4
+_ramsize = 0x8009CD70; // size:0x4
+_stacksize = 0x8009CD74; // size:0x4
