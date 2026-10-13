@@ -130,3 +130,42 @@ address,overlay,old_name,new_name,evidence
 0x8019B314,scene_e19_cruiser,D_8019B314,g_SceneE19GrabPlayerTranslation[1],Same block.
 0x8019B318,scene_e19_cruiser,D_8019B318,g_SceneE19GrabPlayerTranslation[2],Same block.
 0x8019B66E,scene_e19_cruiser,D_8019B66E,g_SceneE19HomingBurstParams[1],"SceneE19_SetHomingBurstParams stores first at g_SceneE19HomingBurstParams (0x8019B66C) and second at +2; declared s16[2], byte-identical."
+0x8018F1CC,room_m318_chrysler,D_8018F1CC,g_RoomM318GetMayaPosErrorFormat,"Literal 'ThGetMayaPos Error Type %d,Name %d' passed to printf by the actor search that fails to find (type_id, sub_id)."
+0x8018F1F0,room_m318_chrysler,D_8018F1F0,g_RoomM318FanSweepSparkColor,"Bound to ROOM_FAN_SWEEP_SPARK_COLOR: the colour of the fan sweep spark (8C,78,46)."
+0x8018F1F4,room_m318_chrysler,D_8018F1F4,g_RoomM318ZeroSpin,"Zero GteRotation copied as 'spin' by EmberBurstParticleCallback, EmberFountainParticleCallback, EmberSpiralParticleCallback."
+0x8018F1FC,room_m318_chrysler,D_8018F1FC,g_RoomM318EmberParticleColor,"Colour (80,80,80) of RoomM318_EmberBurstParticleCallback and RoomM318_CrossFlash."
+0x8018F200,room_m318_chrysler,D_8018F200,g_RoomM318EmberRingColor,"RoomM318_EmberBurst ringColor (6E,C8,00), also the colour of RoomM318_EmberFountain."
+0x8018F204,room_m318_chrysler,D_8018F204,g_RoomM318EmberHaloColor,"RoomM318_EmberBurst haloColor (A0,A0,0A)."
+0x8018F208,room_m318_chrysler,D_8018F208,g_RoomM318FlatTilt,"{0x400,0,0,0} spin of RoomM318_RisingColumnParticleCallback (flat ground-plane tilt)."
+0x8018F210,room_m318_chrysler,D_8018F210,g_RoomM318FlashBurstColor,"RoomM318_FlashBurst local colour (74,50,80)."
+0x8018F214,room_m318_chrysler,D_8018F214,g_RoomM318TwinRibbonRoot,"RoomM318_TwinRibbon local 'root' point (zero), transformed on a joint."
+0x8018F21C,room_m318_chrysler,D_8018F21C,g_RoomM318TwinRibbonTip,"RoomM318_TwinRibbon local 'tip' point {-41,0,-235}."
+0x8018F224,room_m318_chrysler,D_8018F224,g_RoomM318TwinRibbonFork,"RoomM318_TwinRibbon local 'fork' point {0,0,-400}."
+0x8018F22C,room_m318_chrysler,D_8018F22C,g_RoomM318TwinRibbonShed,"RoomM318_TwinRibbon local 'shed' point {0,0,-32}."
+0x8018F234,room_m318_chrysler,D_8018F234,g_RoomM318TwinRibbonColorA,"RoomM318_TwinRibbon colorA (80,80,28)."
+0x8018F238,room_m318_chrysler,D_8018F238,g_RoomM318TwinRibbonColorB,"RoomM318_TwinRibbon colorB (80,32,32)."
+0x8018F23C,room_m318_chrysler,D_8018F23C,g_RoomM318TwinRibbonColorC,"RoomM318_TwinRibbon colorC (80,00,64)."
+0x8018F240,room_m318_chrysler,D_8018F240,g_RoomM318EmberFountainParticleColor,"RoomM318_EmberFountainParticleCallback local 'seed' colour (8C,8C,32)."
+0x80199464,room_m318_chrysler,D_80199464,g_RoomM318FanSweepTrailColorTrack,Only reader: RoomM318_FanSweepTrailCallback FieldFx_SampleColorTrack.
+0x8019948C,room_m318_chrysler,D_8019948C,g_RoomM318SpiralDropSparkColorTrack,Only reader: RoomM318_SpiralDropSparkCallback.
+0x801994BC,room_m318_chrysler,D_801994BC,g_RoomM318SpiralDropColorTrack,Only reader: RoomM318_SpiralDrop (ring band colour).
+0x801995BC,room_m318_chrysler,D_801995BC,g_RoomM318StarFlareColorTrackA,"RoomM318_StarFlare: first track, colours the star fan and ring band."
+0x801995DC,room_m318_chrysler,D_801995DC,g_RoomM318StarFlareColorTrackB,"RoomM318_StarFlare: second track, colours the narrow star fan."
+0x801995FC,room_m318_chrysler,D_801995FC,g_RoomM318ShakeBurstParticleColorTrack,Only reader: RoomM318_ShakeBurstParticleCallback.
+0x80199674,room_m318_chrysler,D_80199674,g_RoomM318EmberBurstParticleColorTrack,Only reader: RoomM318_EmberBurstParticleCallback.
+0x801996EC,room_m318_chrysler,D_801996EC,g_RoomM318RisingColumnParticleColorTrack,Only reader: RoomM318_RisingColumnParticleCallback (two sample sites).
+0x80199770,room_m318_chrysler,D_80199770,g_RoomM318FlashBurstColorTrack,Only reader: RoomM318_FlashBurst glow colour.
+0x80199798,room_m318_chrysler,D_80199798,g_RoomM318CrossFlashParticleColorTrack,Only reader: RoomM318_CrossFlashParticleCallback.
+0x80199868,room_m318_chrysler,D_80199868,g_RoomM318EmberFountainParticleColorTrack,Only reader: RoomM318_EmberFountainParticleCallback (two sites).
+0x80199890,room_m318_chrysler,D_80199890,g_RoomM318EmberSpiralColorTrack,Readers: RoomM318_EmberSpiralParticleCallback and RoomM318_EmberSpiral.
+0x801998F8,room_m318_chrysler,D_801998F8,g_RoomM318FanSweepAnchor,Written from sweep x/y/z by RoomM318_FanSweep (draw case); bound to ROOM_FAN_SWEEP_SPARK_ANCHOR for the spark.
+0x80199900,room_m318_chrysler,D_80199900,g_RoomM318FanSweepSparkPool,RoomM318_FanSweep stores sweep->pool; bound to ROOM_FAN_SWEEP_SPARK_TRAIL.
+0x80199904,room_m318_chrysler,D_80199904,g_RoomM318ShakeSweepAnchor,Written from the anchor x/y/z by RoomM318_ShakeSweep and read as the particle origin by RoomM318_ShakeSweepParticleCallback.
+0x80199924,room_m318_chrysler,D_80199924,g_RoomM318RisingColumnAnchor,Written from column x/y/z by RoomM318_RisingColumn; read as the draw position by RisingColumnParticleCallback.
+0x80199930,room_m318_chrysler,D_80199930,g_RoomM318CrossFlashAnchor,Written from flash x/y/z by RoomM318_CrossFlash; read as origin by RoomM318_CrossFlashParticleCallback.
+0x8019993C,room_m318_chrysler,D_8019993C,g_RoomM318EmberFountainAnchor,Written from fountain x/y/z by RoomM318_EmberFountain; read by RoomM318_EmberFountainParticleCallback to place particles.
+0x801998F4,room_m318_chrysler,D_801998F4,g_RoomM318ActorParams[1],"Block g_RoomM318ActorParams (0x801998F0): RoomM318_SetActorParams stores arg2 at [0], arg1 at [1]; declared int[2], byte-identical."
+0x80199910,room_m318_chrysler,D_80199910,g_RoomM318EmberBurstParams[1],"Block g_RoomM318EmberBurstParams (0x8019990C), same setter shape; int[2]."
+0x80199918,room_m318_chrysler,D_80199918,g_RoomM318RisingColumnParams[1],"Block g_RoomM318RisingColumnParams (0x80199914): RoomM318_SetRisingColumnParams writes arg1 at [0] in mode 1, arg1/arg2/arg3 at [1..3] otherwise; int[4]."
+0x8019991C,room_m318_chrysler,D_8019991C,g_RoomM318RisingColumnParams[2],Same block.
+0x80199920,room_m318_chrysler,D_80199920,g_RoomM318RisingColumnParams[3],Same block.
