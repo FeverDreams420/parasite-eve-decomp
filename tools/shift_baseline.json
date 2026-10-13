@@ -1,17 +1,17 @@
 {
  "counts": {
-  "exe:relocs_to_absolute_program": 10,
+  "exe:relocs_to_absolute_program": 0,
   "exe:unrelocated:data_word": 3,
   "exe:unrelocated:lui": 7,
   "overlays:abi_loader_contract": 458,
   "overlays:distinct_main_addresses": 327,
   "overlays:main_references": 7287,
   "overlays:own_overlay_pinned": 161,
-  "shift_test:gprel_to_pinned": 6,
+  "shift_test:gprel_to_pinned": 0,
   "shift_test:literal_data_word": 3,
   "shift_test:literal_jump": 0,
   "shift_test:literal_lui": 7,
-  "shift_test:pinned_symbol_reference": 4,
+  "shift_test:pinned_symbol_reference": 0,
   "shift_test:relocated_unchanged_other": 0,
   "shift_test:unexplained_difference": 0,
   "shift_test:unexplained_relocated": 0,
@@ -24,10 +24,9 @@
   "src:overlays:alias_address_named_owned": 3,
   "src:overlays:pointer_integer_cast": 74,
   "undefined_addr_aliases.main.txt:kernel": 1,
-  "undefined_syms_manual.txt:common_pin": 1,
-  "undefined_syms_manual.txt:data_c_unit/named_elsewhere": 1,
   "undefined_syms_manual.txt:hardware": 10,
-  "undefined_syms_manual.txt:kernel": 4,
-  "undefined_syms_manual.txt:symbolic_alias": 84
+  "undefined_syms_manual.txt:kernel": 2,
+  "undefined_syms_manual.txt:symbolic_alias": 77,
+  "undefined_syms_manual.txt:unowned": 0
  }
 }
