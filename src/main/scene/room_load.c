@@ -689,7 +689,7 @@ int CdRom_DetectDiscChange(void) {
     return 0;
 }
 
-/* Matching debt: pins, empty barriers, one retry jump, and a
+/* Matching debt: empty barriers, one retry jump, and a
  * 32-byte unused stack reserve retain retail allocation and scheduling.
  * The shifted state view preserves the bank-row address calculation. */
 int Scene_LoadEntityTexture(void)
@@ -704,7 +704,7 @@ int Scene_LoadEntityTexture(void)
     u32 timOffset;
     SceneBankAssetRecord *record;
     SceneBankAssetRecord *firstRecord;
-    register unsigned i asm("$16");
+    unsigned i;
     u32 packed;
     u32 offsetMask;
     int index;
@@ -770,7 +770,9 @@ retry:
             state->entity_texture_phase = 4;
             return 1;
         }
-        if (result != 0)
+        /* Reuse the counter scratch for readiness before the next loop phase. */
+        i = result != 0;
+        if (i)
             return 1;
         state->entity_texture_phase = 6;
         break;
