@@ -509,7 +509,7 @@ PAD, LIBPAD PADIF, LIBMATH MULDF3 and LIBPAD PADPORTD are one unit each now):
 - LIBAPI PAD (`pad.c`, GCC 2.7.2 with GNU as): `Sys_SetInterruptHandler`
   stores its second handler through a post-incremented pointer. With
   `handlers[1] = ...` cse folds the register-plus-offset address into the
-  constant `D_800A34B4+4` (find_best_addr folds every non-register address)
+  constant `g_PadIntQueueHandlers+4` (find_best_addr folds every non-register address)
   and the store goes out absolute, which is why the part used GCC 2.8.1.
 - LIBDS DSSYS_2 parts 1 to 3 (`dssys_2.c`): `CQ_delete_command` copies
   the read index through a second pointer variable (`state = end - 1;

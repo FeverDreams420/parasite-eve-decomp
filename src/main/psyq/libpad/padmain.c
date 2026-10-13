@@ -6,7 +6,6 @@
 #include "pe1/psyq_pad_main.h"
 
 #include "padmain_externs.h"
-#include "padmain_externs_1.h"
 #include "padmain_externs_2.h"
 #include "padmain_externs_3.h"
 
@@ -55,7 +54,7 @@ int MemCard_TimerReadyCallback(void);
 void _padSetVsyncParam(void) {
     void **table;
 
-    table = D_800A5AB4;
+    table = g_PadVsyncIntQueueNode.handlers;
     asm volatile("" : "=r"(table) : "0"(table));
     table[0] = MemCard_TimerCallback;
     table[1] = MemCard_TimerReadyCallback;
@@ -148,8 +147,8 @@ int _padChkVsync(void) {
 void _padStartCom(void) {
     g_MemCardServiceReady = 0;
     EnterCriticalSection();
-    SysDeqIntRP(2, g_PadVsyncIntQueueNode);
-    SysEnqIntRP(2, g_PadVsyncIntQueueNode);
+    SysDeqIntRP(2, &g_PadVsyncIntQueueNode);
+    SysEnqIntRP(2, &g_PadVsyncIntQueueNode);
     D_8009B784->status = -2;
     D_8009B784->mask |= 1;
     ChangeClearRCnt(3, 0);
@@ -169,7 +168,7 @@ void _padStartCom(void) {
 void _padStopCom(void) {
     EnterCriticalSection();
     ChangeClearRCnt(3, 1);
-    SysDeqIntRP(2, g_PadVsyncIntQueueNode);
+    SysDeqIntRP(2, &g_PadVsyncIntQueueNode);
     ExitCriticalSection();
 }
 
