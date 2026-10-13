@@ -38,7 +38,7 @@ static inline void Start(FieldActor *actor, FieldSfxQueueEntry *event)
     node->flags |= 4;
     node->trigger_value = event->taskValue;
     node->target14 = event->taskArgument;
-    node->next = (ScriptNode *)actor->script_node_lists[2];
+    node->next = actor->script_node_lists[2];
     if (node->next)
         node->next->prev = node;
     actor->script_node_lists[2] = node;
