@@ -45,6 +45,6 @@ typedef struct RoomM256TrailPalettes { u16 first, second; } RoomM256TrailPalette
 int rand(void);
 void FieldFx_ModelSetTexture(int,int);
 
-int func_801940B0(int mode, void *effect);
+int RoomM256_TrailCallback(int mode, void *effect);
 
 #endif

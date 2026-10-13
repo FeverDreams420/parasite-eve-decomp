@@ -14,17 +14,17 @@
 
 /* Cosine halves of the packed sine table words (pe1/gte_sine_table.h). */
 
-void func_80192680(RoomM256Swing *state);
+void RoomM256_SwingStep(RoomM256Swing *state);
 
-void func_80192654(RoomM256Swing *obj) {
+void RoomM256_SwingAwaitMode(RoomM256Swing *obj) {
     FieldActor *slot = obj->actor;
 
     if (slot->mode == 0xB) {
-        obj->cycle.callback = func_80192680;
+        obj->cycle.callback = RoomM256_SwingStep;
     }
 }
 
-void func_80192680(RoomM256Swing *state) {
+void RoomM256_SwingStep(RoomM256Swing *state) {
     FieldActor *actor = state->actor;
     RoomM256SwingCycle *base = &state->cycle;
     int first;
@@ -59,7 +59,7 @@ void func_80192680(RoomM256Swing *state) {
     if (state->cycle.tick >= state->cycle.length) {
         state->cycle.segment = (u16)state->cycle.segment + 1;
         if (state->cycle.segment >= 3) {
-            func_80192808(state);
+            RoomM256_SwingRelease(state);
         } else {
             state->cycle.started = 0;
         }
@@ -70,7 +70,7 @@ void func_80192680(RoomM256Swing *state) {
     }
 }
 
-int func_80192808(RoomM256Swing *obj) {
+int RoomM256_SwingRelease(RoomM256Swing *obj) {
     int *state;
 
     obj->actor->render_object.rotation_overrides[0].matrix_index = 0;
@@ -84,7 +84,7 @@ int func_80192808(RoomM256Swing *obj) {
     return 0;
 }
 
-int func_8019283C(void) {
+int RoomM256_SwingNop6(void) {
     return 0;
 }
 
@@ -103,7 +103,7 @@ int func_8019283C(void) {
 /* Scatter drop: falls and jitters, sheds three kinds of splash children,
  * flashes the scene on contact with the player and expires once it leaves
  * the walkable area; the splash children slow down and bounce. */
-int func_80192844(int mode, RoomM256Drop *drop) {
+int RoomM256_ScatterDropCallback(int mode, RoomM256Drop *drop) {
     GteRotation rotation = D_8018F1CC;
     RoomM256DropColor color = D_8018F1D4;
     RoomM256Drop *child;
@@ -311,7 +311,7 @@ const RenderColor D_8018F218 = {0xC8, 0xBE, 0x18, 0};
 const RenderColor D_8018F21C = {0x0A, 0x80, 0xF0, 0};
 const GteRotation D_8018F220 = {0, 0, -10, 0};
 
-int func_801934AC(int mode, u16 *counter) {
+int RoomM256_ScatterDropEmitter(int mode, u16 *counter) {
     RoomOrbitPairTemplate8 template = D_8018F208;
     s16 position[4];
     s16 target[4];
@@ -335,7 +335,7 @@ int func_801934AC(int mode, u16 *counter) {
     }
     pool = ANIM_POOL_AS(RoomOrbitPairChannel)->pool;
     return FieldFx_InitCallbackList(pool, 20, 50,
-                         (FieldFxCallbackListCallback)func_80192844);
+                         (FieldFxCallbackListCallback)RoomM256_ScatterDropCallback);
     case 1:
     pool = ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
     FieldFx_TransformMatrixPoint(pool, 4, &template, position);
@@ -387,7 +387,7 @@ int func_801934AC(int mode, u16 *counter) {
 /* Spark that jitters sideways (state 0) or swirls on a spinning circle
  * (state 1) while it falls with damped velocity and bounces off the
  * floor height; draws as a fixed or a pulsing sprite. */
-int func_8019377C(int mode, RoomM256SwirlSpark *spark) {
+int RoomM256_SwirlSparkCallback(int mode, RoomM256SwirlSpark *spark) {
     RenderMatrixSlot *matrixSlot;
     int fall;
     int bounce;
@@ -478,7 +478,7 @@ int func_8019377C(int mode, RoomM256SwirlSpark *spark) {
  * effect is young sheds two swirl sparks per frame from the tracked joint,
  * aimed through one of three (then one of two) headings picked by a
  * rotating counter; mode 2 sets the sprite parameters. */
-int func_80193BFC(int mode, s16 *counter) {
+int RoomM256_SwirlSparkEmitter(int mode, s16 *counter) {
     RoomM256Template template = D_8018F210;
     GteShortVector position;
     GteShortVector base;
@@ -503,7 +503,7 @@ int func_80193BFC(int mode, s16 *counter) {
                 Akao_SendTableCommand(*soundSlot, 0x5BF, 0x80, 0x80, volume);
         }
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x20,
-                             (FieldFxCallbackListCallback)func_8019377C);
+                             (FieldFxCallbackListCallback)RoomM256_SwirlSparkCallback);
     case 1:
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &template, &position);
         FieldFx_GetTransformLookAngles((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &base);
@@ -587,7 +587,7 @@ int func_80193BFC(int mode, s16 *counter) {
     return 0;
 }
 
-s32 func_801940B0(int mode, void *effect) {
+s32 RoomM256_TrailCallback(int mode, void *effect) {
     RoomM256TrailEffect *state = effect;
     RenderColor color = D_8018F218;
     RenderColor darkColor = D_8018F21C;
@@ -1081,7 +1081,7 @@ checkLifetime:
     return 0;
 }
 
-int func_80195320(int mode, u16 *out) {
+int RoomM256_TrailEmitter(int mode, u16 *out) {
     FieldActor *actor;
     FieldActorState *state;
     u8 *action;
@@ -1107,7 +1107,7 @@ int func_80195320(int mode, u16 *out) {
             }
         }
         return FieldFx_InitCallbackList(g_FieldFxActiveTaskSlot->end, 0x18, 0x20,
-                               func_801940B0);
+                               RoomM256_TrailCallback);
 
         case 1:
     if (g_FieldFxCurrentAge == mode) {
@@ -1140,7 +1140,7 @@ int func_80195320(int mode, u16 *out) {
     return 0;
 }
 
-int func_8019552C(int mode, RoomModelPulseParticle *particle) {
+int RoomM256_ModelPulseParticleCallback(int mode, RoomModelPulseParticle *particle) {
     GteShortVector position;
     GteShortVector color;
     int scale;
@@ -1156,19 +1156,19 @@ int func_8019552C(int mode, RoomModelPulseParticle *particle) {
         break;
     case 2:
         scale = particle->scale * rcos((s16)particle->frame << 6) / 4096;
-        FieldFx_OffsetPointByAngles(&D_801960A0, &position, scale, &D_80196098,
+        FieldFx_OffsetPointByAngles(&g_RoomM256PulseCenter, &position, scale, &g_RoomM256PulseAngles,
                       scale, (s16)particle->offset);
-        FieldFx_SampleColorTrack(D_80195E64, &color, 0x30 - (scale * 48) / 1024);
+        FieldFx_SampleColorTrack(g_RoomM256PulseParticleColorTrack, &color, 0x30 - (scale * 48) / 1024);
         kind = g_FieldFxSpriteParams.palette;
         palette = g_FieldFxPaletteTable[kind];
         if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
         clut = GetClut(0x20, palette);
         FieldFx_DrawShapeQuads(&position, 0, 0x1000, 0x1000,
                        (s16)g_FieldFxSpriteParams.parameter02 * 2 + 0xD8, clut, 3,
-                       D_80196094, (RenderColor *)&color);
+                       g_RoomM256PulseBrightness, (RenderColor *)&color);
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
-        FieldFx_DrawHaloedPoint(&position, &color, D_80196094, 1);
+        FieldFx_DrawHaloedPoint(&position, &color, g_RoomM256PulseBrightness, 1);
         break;
     }
     return 0;
@@ -1183,7 +1183,7 @@ int func_8019552C(int mode, RoomModelPulseParticle *particle) {
  * spin stores and the cos call survive in retail, and the brightness test is
  * the branch that splits the scheduling block before the /40 division (its
  * empty jump is only removed after scheduling). */
-int func_80195728(int mode, s16 *state) {
+int RoomM256_ModelPulse(int mode, s16 *state) {
     GteRotation rotation = D_8018F258;
     GteShortVector position;
     GteRotation spin;
@@ -1200,10 +1200,10 @@ int func_80195728(int mode, s16 *state) {
     switch (mode) {
     case 0:
         *state = 0;
-        D_801960A8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5487704);
-        FieldFx_ModelScrollUv(D_801960A8, 0, 0);
+        g_RoomM256PulseModel = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5487704);
+        FieldFx_ModelScrollUv(g_RoomM256PulseModel, 0, 0);
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 8, 0x10,
-                             (FieldFxCallbackListCallback)func_8019552C);
+                             (FieldFxCallbackListCallback)RoomM256_ModelPulseParticleCallback);
     case 1:
         if (*state < 0x80) *state += 4;
         if (g_FieldFxCurrentAge == 1) {
@@ -1241,16 +1241,16 @@ int func_80195728(int mode, s16 *state) {
         brightness = *state;
         if (g_FieldFxCurrentAge != 0) brightness = brightness * 2 / 3;
         rcos((g_FieldFxCurrentAge << 10) / 40);
-        FieldFx_SampleColorTrack(D_80195E8C, &color, g_FieldFxCurrentAge * 3);
+        FieldFx_SampleColorTrack(g_RoomM256PulseColorTrack, &color, g_FieldFxCurrentAge * 3);
         FieldFx_DrawStarFan(&position, 0xA0, 0xA0, 8, 0, 0x1000, 0x1000, &color, 0,
                       0x80, 1);
-        D_80196094 = *state;
-        D_801960A0.x = position.x;
-        D_801960A0.y = position.y;
-        D_801960A0.z = position.z;
+        g_RoomM256PulseBrightness = *state;
+        g_RoomM256PulseCenter.x = position.x;
+        g_RoomM256PulseCenter.y = position.y;
+        g_RoomM256PulseCenter.z = position.z;
         FieldFx_GetTransformLookAngles((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 2,
-                      &D_80196098);
-        D_80196098.x += 0x400;
+                      &g_RoomM256PulseAngles);
+        g_RoomM256PulseAngles.x += 0x400;
         if (g_FieldFxCurrentAge >= 4) {
             int angle;
 
@@ -1282,7 +1282,7 @@ int func_80195728(int mode, s16 *state) {
                 FieldFx_ModelSetTexture(page, clut);
             }
             FieldFx_ModelSetSemiTrans(1);
-            RotMatrixYXZ(&D_80196098, &matrix);
+            RotMatrixYXZ(&g_RoomM256PulseAngles, &matrix);
             matrix.t[0] = position.x;
             matrix.t[1] = position.y;
             matrix.t[2] = position.z;
@@ -1290,16 +1290,16 @@ int func_80195728(int mode, s16 *state) {
             scale.y = size;
             scale.z = size;
             ScaleMatrix(&matrix, &scale);
-            FieldFx_ModelSaveColors(D_801960A8);
-            FieldFx_ModelScaleColors(D_801960A8, (u16)brightness);
-            FieldFx_ModelDraw(D_801960A8, (GteMatrix *)&matrix);
-            FieldFx_ModelRestoreColors(D_801960A8);
+            FieldFx_ModelSaveColors(g_RoomM256PulseModel);
+            FieldFx_ModelScaleColors(g_RoomM256PulseModel, (u16)brightness);
+            FieldFx_ModelDraw(g_RoomM256PulseModel, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(g_RoomM256PulseModel);
         }
         g_FieldFxSpriteParams.parameter00 = 0x10;
         g_FieldFxSpriteParams.parameter02 = 1;
         g_FieldFxSpriteParams.extent_x = 0x10;
         g_FieldFxSpriteParams.extent_y = 0x10;
-        D_80196098.x += 0x600;
+        g_RoomM256PulseAngles.x += 0x600;
         {
             int tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot2];
             g_FieldFxSpriteParams.palette = 2;
@@ -1312,11 +1312,11 @@ int func_80195728(int mode, s16 *state) {
     return 0;
 }
 
-void *func_80195CC8(void) {
-    return D_80195EEC;
+void *RoomM256_ScatterConfigure(void) {
+    return g_RoomM256ScatterConfig;
 }
 
-void *func_80195CD8(void *arg0, int value) {
+void *RoomM256_SetTrailTurnScale(void *arg0, int value) {
     if (value < 0x200) {
         value = 0x200;
     }

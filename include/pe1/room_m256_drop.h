@@ -16,7 +16,7 @@
 #include "pe1/render_prim.h"
 #include "pe1/room_floor.h"
 
-/* room_m256 scatter drop (func_80192844): a falling drop that jitters,
+/* room_m256 scatter drop (RoomM256_ScatterDropCallback): a falling drop that jitters,
  * sheds three kinds of splash children, flashes the scene when it reaches
  * the player and expires when it leaves the walkable area. */
 typedef struct RoomM256Drop {

@@ -4,7 +4,7 @@
 #include "common.h"
 #include "pe1/field_actor.h"
 
-/* Room m256 swing module (class D_80195DA8): once its actor enters mode
+/* Room m256 swing module (class g_RoomM256SwingClass): once its actor enters mode
  * 0xB, the update callback eases the actor's first rotation override
  * through three cosine segments, angles[i] to angles[i + 1] over
  * durations[i] frames, then closes the object. Script command 0x100 sets

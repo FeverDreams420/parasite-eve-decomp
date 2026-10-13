@@ -1,13 +1,13 @@
 #include "pe1/room_m256_swing.h"
 
-int func_8019257C(void) {
+int RoomM256_SwingNop0(void) {
     return 0;
 }
 
-void func_80192654(void);
+void RoomM256_SwingAwaitMode(void);
 
-int func_80192584(RoomM256Swing *arg0) {
-    arg0->cycle.callback = func_80192654;
+int RoomM256_SwingInit(RoomM256Swing *arg0) {
+    arg0->cycle.callback = RoomM256_SwingAwaitMode;
     arg0->cycle.started = 0;
     arg0->cycle.signal = 0;
     arg0->cycle.segment = 0;
@@ -16,7 +16,7 @@ int func_80192584(RoomM256Swing *arg0) {
     return 0;
 }
 
-int func_801925AC(RoomM256Swing *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+int RoomM256_SwingConfigure(RoomM256Swing *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
     switch ((unsigned int)arg2) {
     case 0x19:
         if (arg1 != 1) {
@@ -40,6 +40,6 @@ int func_801925AC(RoomM256Swing *arg0, int arg1, int arg2, int arg3, int arg4, i
     return 0;
 }
 
-int func_80192624(void) {
+int RoomM256_SwingNop3(void) {
     return 0;
 }

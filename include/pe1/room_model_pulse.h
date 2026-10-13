@@ -5,10 +5,10 @@
 #include "pe1/room_model_pulse_particle.h"
 #include "pe1/room_spark.h"
 
-/* room_m256 pulsing model effect: one controller (func_80195728) that seeds
+/* room_m256 pulsing model effect: one controller (RoomM256_ModelPulse) that seeds
  * sixteen ring particles on frame 1, draws a ring sprite at the slot-2
  * position and, from frame 4 on, a model scaled by cos and brightened by sin.
- * The ring particles (func_8019552C) read the shared state below. */
+ * The ring particles (RoomM256_ModelPulseParticleCallback) read the shared state below. */
 
 typedef struct RoomModelPulseMatrix {
     s16 m[3][3];
@@ -21,10 +21,10 @@ typedef struct RoomModelPulseScale {
 } RoomModelPulseScale;
 
 extern GteRotation D_8018F258;          /* ring placement rotation seed */
-extern u8 D_80195E8C[];                 /* colour ramp table */
-extern s16 D_80196094;                  /* ring brightness */
-extern void *D_801960A8;                /* model asset */
+extern u8 g_RoomM256PulseColorTrack[];                 /* colour ramp table */
+extern s16 g_RoomM256PulseBrightness;                  /* ring brightness */
+extern void *g_RoomM256PulseModel;                /* model asset */
 
-int func_80195728(int mode, s16 *state);
+int RoomM256_ModelPulse(int mode, s16 *state);
 
 #endif /* PE1_ROOM_MODEL_PULSE_H */

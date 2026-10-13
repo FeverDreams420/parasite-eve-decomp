@@ -15,12 +15,12 @@
 
 /* ABI declarations used by the room_m256 effect dispatcher. */
 extern int D_80195EF8;
-extern int func_801940B0(int mode, void *state);
+extern int RoomM256_TrailCallback(int mode, void *state);
 
-int func_80195320(int mode, u16 *out);
+int RoomM256_TrailEmitter(int mode, u16 *out);
 
-extern char D_80195E64[];
-extern s16 D_80196094;
+extern char g_RoomM256PulseParticleColorTrack[];
+extern s16 g_RoomM256PulseBrightness;
 
 void FieldFx_OffsetPointByAngles(void *, void *, int, void *, int, int);
 

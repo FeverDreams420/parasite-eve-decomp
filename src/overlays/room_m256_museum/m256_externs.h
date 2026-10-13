@@ -5,8 +5,8 @@
 #include "pe1/room_m256_swing.h"
 
 extern short D_800966EE[];
-int func_80192808(RoomM256Swing *obj);
-extern char D_80195EEC[];
+int RoomM256_SwingRelease(RoomM256Swing *obj);
+extern char g_RoomM256ScatterConfig[];
 extern int D_80195EF0;
 extern char D_80195EF4[];
 #endif /* PE1_EXT_M256 */
