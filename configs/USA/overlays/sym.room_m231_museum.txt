@@ -66,3 +66,4 @@ g_RoomClassTable = 0x80194720; // size:0xA8 allow_addend:true
 g_RoomM231_D_8018EFE8 = 0x8018EFE8;
 g_RoomM231_D_8019489C = 0x8019489C;
 g_RoomM231_D_801D01E0 = 0x801D01E0;
+g_RoomM231_D_801948BC = 0x801948BC;
