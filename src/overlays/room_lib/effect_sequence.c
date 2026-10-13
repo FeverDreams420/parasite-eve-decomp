@@ -824,7 +824,7 @@ void RoomEffect_UpdatePairedSprite(void *unused,
         int y;
 
         random = rand();
-        life = *(unsigned short *)&state->sparkleLife;
+        life = (unsigned short)state->sparkleLife;
         alpha = state->sparkleAlpha;
         y = state->sparkleY;
         life--;
@@ -1085,7 +1085,7 @@ void RoomEffect_UpdatePairedSpriteBurst(
         int y;
 
         random = rand();
-        life = *(unsigned short *)&state->sparkleLife;
+        life = (unsigned short)state->sparkleLife;
         alpha = state->sparkleAlpha;
         y = state->sparkleY;
         life--;
@@ -1278,7 +1278,7 @@ void RoomEffect_UpdateSparkleHeight(
         int y;
 
         random = rand();
-        life = *(unsigned short *)&state->sparkleLife;
+        life = (unsigned short)state->sparkleLife;
         alpha = state->sparkleAlpha;
         y = state->sparkleY;
         life--;
