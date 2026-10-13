@@ -3105,6 +3105,7 @@ g_StLastFrameLoc = 0x800A3490;
 g_StLastFrameNumber = 0x800A3494;
 g_StoreImageName = 0x800118E0;
 g_StrEndCallback = 0x800B0CCC;
+g_TextboxChoiceCursor = 0x8009EC70;
 g_TextboxFogTilePackets = 0x8009ECA8;
 g_TextboxFontPages = 0x80091644;
 g_TextboxGlyphSpacing = 0x800916A0;

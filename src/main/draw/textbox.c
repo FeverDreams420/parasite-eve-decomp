@@ -117,8 +117,8 @@ void Render_SetupFogLayer(void *source) {
         g_TextboxEntries[(u8)i].control.flags = flags;
     }
     i = 0;
-    page_source = D_80091680;
-    draw_base = D_8009EC70;
+    page_source = &g_TextboxFontPages[3].tpage;
+    draw_base = (u8 *)g_TextboxChoiceCursor;
     tile_base = g_TextboxFogTilePackets;
     tile_payload_base = tile_base + 8;
     g_DialogueChoiceCursor = 0;
@@ -137,7 +137,7 @@ void Render_SetupFogLayer(void *source) {
         SetDrawTPage(draw_mode, 0, 1, page_source[0]);
         SetSprt(sprite);
         if (MargePrim(draw_mode, sprite)) exit(-1);
-        sprite_base = D_8009EC78;
+        sprite_base = (u8 *)&g_TextboxChoiceCursor[0].sprite;
 
         sprite_fields = (RenderSpritePacket *)(((u8)i * 28) + (int)sprite_base);
         SetShadeTex(sprite_fields, 1);
@@ -152,7 +152,7 @@ void Render_SetupFogLayer(void *source) {
         sprite_fields->width = 0x18;
         sprite_fields->height = 0xC;
         sprite_fields->v = color;
-        *(u16 *)(D_8009EC86 + (u8)i * 28) = page_source[1];
+        *(u16 *)((u8)i * 28 + (u8 *)&g_TextboxChoiceCursor[0].sprite.clut) = page_source[1];
         tpage = GetTPage(x_arg, y_arg, zero_arg, 0);
         {
             TextboxTableAddress at;
@@ -748,9 +748,9 @@ void Menu_DrawTextboxEntries(void) {
                         selectionOffset = selectionFrame * 0x1C;
                         selectionOrderingOffset = selectionFrame * 4;
                         selectionSprite =
-                            (RenderSpritePacket *)(selectionOffset + (u8 *)D_8009EC78);
+                            (RenderSpritePacket *)(selectionOffset + (u8 *)&g_TextboxChoiceCursor[0].sprite);
                         selectionSprite->x = selectionCursor->x;
-                        selectionBase = (u8 *)D_8009EC78 - 8;
+                        selectionBase = (u8 *)g_TextboxChoiceCursor;
                         selectionSprite->y = (s16)(selectionCursor->y + ((s8)g_DialogueChoiceCursor * 0xC));
                         {
                             TextboxTableAddress ordering;
