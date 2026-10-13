@@ -101,7 +101,7 @@ void Battle_UpdatePlayerTurn(void)
 
 void Battle_ApplyPlayerHit(void) {
     u32 committed;
-    register int mask asm("$5");
+    int mask;
     unsigned int index;
     Combatant *actor;
     int flags;
@@ -124,9 +124,8 @@ void Battle_ApplyPlayerHit(void) {
 
     if (D_8009D254->animLastFrame == D_8009D254->animPrev.parts.integer) {
         Entity_SetActionMode(D_8009D254, g_ActiveActor->actionMode12);
-        actor = g_ActiveActor;
         index = g_BattleActionIndex;
-        actor->stateFlags |= committed;
+        g_ActiveActor->stateFlags |= committed;
 
         Battle_ApplyDamage((s16)ACTION_AT(index) - 3);
         Scene_LoadRoomAssets(0x55, D_8009D254);
