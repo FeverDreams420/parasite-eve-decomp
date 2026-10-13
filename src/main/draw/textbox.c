@@ -73,7 +73,7 @@ void Render_SetupFogLayer(void *source) {
     register u8 *draw_base asm("$23");
     u8 *tile_payload_base;
     int sentinel;
-    register u8 *sprite_base asm("$11");
+    u8 *sprite_base;
     int offset;
     u8 *draw_mode;
     u8 *sprite;
@@ -98,6 +98,7 @@ void Render_SetupFogLayer(void *source) {
     mask2 =0xFFEFFFFF;
     mask3 =0xFFDFFFFF;
     mask4 =0xFE3FFFFF;
+    sprite_base = (u8 *)&g_TextboxChoiceCursor[0].sprite;
     mask5 =0xFDFFFFFF;
     sentinel = -1;
     for (; (u8)i < 4; ++i) {
@@ -137,7 +138,6 @@ void Render_SetupFogLayer(void *source) {
         SetDrawTPage(draw_mode, 0, 1, page_source[0]);
         SetSprt(sprite);
         if (MargePrim(draw_mode, sprite)) exit(-1);
-        sprite_base = (u8 *)&g_TextboxChoiceCursor[0].sprite;
 
         sprite_fields = (RenderSpritePacket *)(((u8)i * 28) + (int)sprite_base);
         SetShadeTex(sprite_fields, 1);
@@ -153,7 +153,8 @@ void Render_SetupFogLayer(void *source) {
         sprite_fields->height = 0xC;
         sprite_fields->v = color;
         *(u16 *)((u8)i * 28 + (u8 *)&g_TextboxChoiceCursor[0].sprite.clut) = page_source[1];
-        tpage = GetTPage(x_arg, y_arg, zero_arg, 0);
+        mask1 = x_arg;
+        tpage = GetTPage(mask1, y_arg, zero_arg, 0);
         {
             TextboxTableAddress at;
 
