@@ -871,19 +871,19 @@ void Menu_DrawBonusPointSlotValue(void) {
 
 void Menu_ExitBonusPointAllocation(void) {
     s32 index;
-    u8 *dst;
-    u8 *src;
+    u16 *dst;
+    s32 *src;
     u16 value;
 
-    dst = (u8 *)g_AyaStatAgility;
+    dst = g_AyaStatAgility;
     index = 0;
-    src = (u8 *)&g_BonusPointStatDeltas;
+    src = g_BonusPointStatDeltas;
     do {
-        value = *(u16 *)src;
-        src += 4;
+        value = *src;
+        src++;
         index += 1;
-        *(u16 *)dst = value;
-        dst += 2;
+        *dst = value;
+        dst++;
     } while (index < 7);
     g_AyaBonusPoints[0] = g_BonusPointDisplayValue;
     Inv_RecalcSlotStats();
@@ -953,7 +953,7 @@ s32 Menu_BonusPointCancelHandler(void *arg0, s32 arg1) {
     s32 temp_s0;
     s32 var_a0;
     u16 *var_a1;
-    u16 *var_v1;
+    s32 *var_v1;
     u16 temp_v0;
 
     temp_s0 = MenuWidget_GetChild(arg0, 0);
@@ -979,10 +979,10 @@ s32 Menu_BonusPointCancelHandler(void *arg0, s32 arg1) {
         g_MenuItemRenameMode = 0;
         var_a1 = g_AyaStatAgility;
         var_a0 = 0;
-        var_v1 = (u16 *)&g_BonusPointStatDeltas;
+        var_v1 = g_BonusPointStatDeltas;
         do {
             temp_v0 = *var_v1;
-            var_v1 += 2;
+            var_v1++;
             var_a0 += 1;
             *var_a1 = temp_v0;
             var_a1 += 1;
