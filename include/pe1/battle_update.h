@@ -27,11 +27,10 @@ void srand(unsigned int);
 /* Only element zero is accessed in the wide matching views below. */
 extern u8 g_BattleSuspendedModeState;
 extern s32 g_BattleFrameCounter;
-extern s8 D_8009D1F0[16];
 extern u32 g_FieldPadPressed;
-extern u8 D_8009D235[16];
+extern u8 g_BattleSpritePrimCountdown;
 extern u8 g_BattleActionActorCount;
-extern s32 D_8009D290[16];
+extern int g_BattleAttackAnimFrame;
 extern s32 g_BattleImpactPmSlot;
 extern void *g_AkaoBgmHandle[16];
 extern BattleEntity *g_BattleActionActors[7];

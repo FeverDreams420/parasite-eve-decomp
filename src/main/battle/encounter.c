@@ -167,7 +167,7 @@ void Battle_StartEncounter(int mode) {
     entity = D_8009D254;
     g_ActiveActor = entity->core;
     g_BattleFrameCounter = 0;
-    *(u32 *)&D_8009D290 = 0;
+    g_BattleAttackAnimFrame = 0;
     g_BattleModeState = 0;
     g_BattleSuspendedModeState = 0;
     D_8009CE78 = 0;
@@ -182,7 +182,7 @@ void Battle_StartEncounter(int mode) {
     initial_flags = g_BattleResultFlags;
     D_8009D1A8.summary = 0;
     D_8009D1CE = 0;
-    D_8009D235[0] = 0;
+    g_BattleSpritePrimCountdown = 0;
     g_BattleExpReward = 0;
     g_BattlePeBonusReward = 0;
     initial_flags &= -0x301;
@@ -370,18 +370,18 @@ void Battle_Update(void) {
                 if ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) {
                     opened = 0;
                     if (g_FieldPadPressed & 0x200) {
-                        (D_8009D1F0[0]) = 0;
+                        g_BattleItemMenuState = 0;
                         opened = 1;
                     } else if (g_FieldPadPressed & 0x80) {
                         opened = 1;
-                        (D_8009D1F0[0]) = opened;
+                        g_BattleItemMenuState = opened;
                         Inv_OpenAyaItemList(1);
                         Render_BeginSceneLoad();
                     }
                     if ((u8)opened != 0) {
                         Akao_Cmd_21(0, 0xFF);
                         g_BattleModeState = 1;
-                        (D_8009D290[0]) = 0;
+                        g_BattleAttackAnimFrame = 0;
                         g_GameStateFlags = g_GameStateFlags | 4;
                         menuMode = 0;
                         g_BattleTargetCount = Battle_BuildTargetList();
@@ -422,7 +422,7 @@ void Battle_Update(void) {
             Pm_SendCmd(g_BattleImpactPmSlot, 0, 0, 1, 0, 0);
             g_BattleActionActorCount = 0;
         }
-        if ((D_8009D235[0]) != 0) {
+        if (g_BattleSpritePrimCountdown != 0) {
             Draw_QueuePrimitive();
         }
         player = D_8009D254;
