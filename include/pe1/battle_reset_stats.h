@@ -10,7 +10,6 @@ extern u8 g_BattleEnemyEscapeFlag;
 extern u16 g_BattleHitActionPending;
 extern u8 D_8009D29A;
 extern u8 g_BattleHitActionSubmode[];
-extern s32 D_8009D29C[1];
 
 extern unsigned int D_8009D2E8;
 

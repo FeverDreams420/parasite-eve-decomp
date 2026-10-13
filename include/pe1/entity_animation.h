@@ -17,7 +17,7 @@ extern Combatant *g_ActiveActor;
 extern void *g_BattlePendingEnemySpawn[];
 extern u8 g_BattleHitActionMode[];
 extern u8 g_BattleHitActionSubmode[];
-extern u32 g_BattleHitActionParam[];
+extern s32 g_BattleHitActionParam[1];
 extern int g_BattleModeState;
 
 void Entity_AdvanceAnim(BattleEntity *entity);

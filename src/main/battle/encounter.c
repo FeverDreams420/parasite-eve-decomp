@@ -134,7 +134,7 @@ void Battle_ResetEnemyStats(int mode) {
     g_BattleHitActionPending = 0;
     D_8009D29A = 0;
     g_BattleHitActionSubmode[0] = 0;
-    D_8009D29C[0] = 0;
+    g_BattleHitActionParam[0] = 0;
 }
 
 /* Reset the PE gauge fill and remainder gradients of both draw buffers. */
@@ -440,8 +440,8 @@ void Battle_Update(void) {
                 g_BattleHitActionPending = 0;
                 Entity_SetActionMode(D_8009D254, D_8009D29A);
                 player = D_8009D254;
-                player->animFrame = D_8009D29C[0];
-                player->animPrev.fixed = D_8009D29C[0] + 0xFFFF0000;
+                player->animFrame = g_BattleHitActionParam[0];
+                player->animPrev.fixed = g_BattleHitActionParam[0] + 0xFFFF0000;
             }
         }
         if ((D_8009D254->actionMode == 0xD) && !(g_DiscChangeFlags & 1)) {
@@ -1273,8 +1273,8 @@ void Battle_PhaseInitEnemyTurn(void) {
                             g_BattleHitActionPending = 0;
                             Entity_SetActionMode(D_8009D254, D_8009D29A);
                             player = D_8009D254;
-                            player->animFrame = (D_8009D29C[0]);
-                            player->animPrev.fixed = (D_8009D29C[0] + 0xFFFF0000);
+                            player->animFrame = g_BattleHitActionParam[0];
+                            player->animPrev.fixed = (g_BattleHitActionParam[0] + 0xFFFF0000);
                         } else {
                             Entity_SetActionMode(entity, g_ActiveActor->actionMode12);
                         }

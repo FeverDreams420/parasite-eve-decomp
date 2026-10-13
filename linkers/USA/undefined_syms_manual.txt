@@ -106,7 +106,6 @@ g_EntityCollisionWallParam = g_WallPolygonVertexCount;
 g_ActiveActorRecord = g_ActiveActor;
 D_8009D290 = g_BattleAttackAnimFrame;
 D_8009D29A = g_BattleHitActionMode;
-D_8009D29C = g_BattleHitActionParam;
 D_8009D2B0 = g_BattleTargetCount;
 D_8009D2C8 = g_AkaoCurTrack;
 D_8009D2D8 = g_BattleActiveTurnSlot;
