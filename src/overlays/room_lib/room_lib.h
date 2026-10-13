@@ -22,6 +22,7 @@
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
 #include "pe1/room_fx.h"
+#include "pe1/room_interface.h"
 #include "pe1/room_particle_state.h"
 #include "pe1/room_twelve_effect.h"
 

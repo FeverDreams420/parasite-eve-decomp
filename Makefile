@@ -293,6 +293,8 @@ overlay-split: overlay-extract
 # A shared library source (src/overlays/room_lib/) is compiled into every
 # overlay that lists it; splat's per-function disassembly of it lands beside
 # the overlay's asm and is not linked.
+# PE_OVERLAY gives the room interface names their per-overlay spelling
+# (include/pe1/room_interface.h).
 overlay-build: overlay-split
 	@grep -o '$(OVERLAY_BUILD)/asm/[^ ()]*\.s\.o' $(OVERLAY_LD) | sort -u | while read obj; do \
 	    asm="$${obj#$(OVERLAY_BUILD)/}"; asm="$${asm%.o}"; \
@@ -303,7 +305,7 @@ overlay-build: overlay-split
 	@grep -o '$(OVERLAY_BUILD)/src/[^ ()]*\.c\.o' $(OVERLAY_LD) | sort -u | while read obj; do \
 	    src="$${obj#$(OVERLAY_BUILD)/}"; src="$${src%.o}"; \
 	    mkdir -p "$$(dirname "$$obj")"; \
-	    $(CC_WRAPPER) "$$src" "$$obj" || exit $$?; \
+	    $(CC_WRAPPER) "$$src" "$$obj" -DPE_OVERLAY=$(OVERLAY) || exit $$?; \
 	done
 	@$(PY) tools/scripts/overlay_link_symbols.py $(OVERLAY_BUILD) \
 	    --ld $(OVERLAY_LD) $(if $(filter $(OVERLAY),$(OVERLAY_VMA_OVERLAP)),--pin-defined) \

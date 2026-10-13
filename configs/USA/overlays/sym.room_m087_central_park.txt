@@ -77,5 +77,5 @@ g_RoomThreeParticleDrawList = 0x801934F8;
 g_RoomThreeParticleUpdateList = 0x80193504;
 g_RoomThreeParticleInitList = 0x801934EC;
 g_RoomThreeParticleSpawnLayout = 0x80193510;
-g_RoomClassTable = 0x8019357C; // size:0xA8 allow_addend:true
 g_RoomM087_D_8018EFE8 = 0x8018EFE8;
+g_RoomClassTable__room_m087_central_park = 0x8019357C; // size:0xA8 allow_addend:true

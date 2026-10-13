@@ -7,6 +7,7 @@
 #include "pe1/field_sprite_state.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/room_floor.h"
+#include "pe1/room_interface.h"
 #include "pe1/scene_archive.h"
 
 /* The effect sequence (src/overlays/room_lib/effect_sequence.c):

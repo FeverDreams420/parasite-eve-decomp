@@ -1,4 +1,4 @@
-RoomLib_SlotTable = 0x80193430;
+RoomLib_SlotTable__room_m116_nypd = 0x80193430;
 RoomLib_HandlerDNop0 = 0x8018F1E0; // type:func
 RoomLib_InitHandlerD = 0x8018F1E8; // type:func
 RoomLib_ConfigureHandlerD = 0x8018F288; // type:func
@@ -54,9 +54,9 @@ RoomLib_ReleaseHandlerA = 0x801924D8; // type:func
 RoomLib_HandlerANop6 = 0x801924F4; // type:func
 RoomEffect_LineBurstParticle = 0x801924FC; // type:func
 RoomEffect_LineBurstController = 0x80192898; // type:func
-RoomLib_SlotSet = 0x801932EC; // type:func
-g_RoomClassTable = 0x80193330; // size:0xA8 allow_addend:true
 g_RoomM116_D_8018EFE8 = 0x8018EFE8;
 g_RoomM116_D_801D01E0 = 0x801D01E0;
 g_RoomM116_D_801933D8 = 0x801933D8;
 g_RoomM116_D_801D01F8 = 0x801D01F8;
+RoomLib_SlotSet__room_m116_nypd = 0x801932EC; // type:func
+g_RoomClassTable__room_m116_nypd = 0x80193330; // size:0xA8 allow_addend:true

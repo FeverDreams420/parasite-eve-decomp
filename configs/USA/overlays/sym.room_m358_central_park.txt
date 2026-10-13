@@ -61,6 +61,6 @@ RoomLib_WindowHandler = 0x80192814; // type:func
 RoomLib_WindowArrived = 0x80193208; // type:func
 RoomLib_ReleaseWindowClass = 0x80193250; // type:func
 RoomLib_WindowClassNop6 = 0x801932C8; // type:func
-g_RoomClassTable = 0x801932D0; // size:0xC4 allow_addend:true
 g_RoomM358_D_8018EFE8 = 0x8018EFE8;
 g_RoomM358_D_80193394 = 0x80193394;
+g_RoomClassTable__room_m358_central_park = 0x801932D0; // size:0xC4 allow_addend:true

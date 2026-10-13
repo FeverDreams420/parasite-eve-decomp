@@ -1,6 +1,6 @@
 RoomLib_UpdateCallback = 0x80192660; // type:func
-RoomLib_GrabAwaitStance = 0x80192688; // type:func
-RoomLib_GrabOnApproach = 0x801926B4; // type:func
+RoomLib_GrabAwaitStance__scene_e19_cruiser = 0x80192688; // type:func
+RoomLib_GrabOnApproach__scene_e19_cruiser = 0x801926B4; // type:func
 RoomLib_HandlerDNop0 = 0x8018F270; // type:func
 RoomLib_InitHandlerD = 0x8018F278; // type:func
 RoomLib_ConfigureHandlerD = 0x8018F318; // type:func
@@ -54,7 +54,7 @@ RoomLib_HandlerA = 0x801922D4; // type:func
 RoomLib_HandlerF = 0x801923E8; // type:func
 RoomLib_ReleaseHandlerA = 0x80192568; // type:func
 RoomLib_HandlerANop6 = 0x80192584; // type:func
-g_RoomClassTable = 0x8019B254; // size:0xA8 allow_addend:true
+g_RoomClassTable__scene_e19_cruiser = 0x8019B254; // size:0xA8 allow_addend:true
 SceneE19_GrabNop0 = 0x8019258C; // type:func
 SceneE19_GrabInit = 0x80192594; // type:func
 SceneE19_GrabConfigure = 0x80192630; // type:func

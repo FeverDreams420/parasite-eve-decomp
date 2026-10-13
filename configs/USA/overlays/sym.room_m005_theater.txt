@@ -1,6 +1,6 @@
 RoomM005_FxOrbiter = 0x8018F018; // type:func
-RoomLib_SetTaskVar0 = 0x80190A6C; // type:func
-g_RoomScriptRecord = 0x80190B80;
+RoomLib_SetTaskVar0__room_m005_theater = 0x80190A6C; // type:func
+g_RoomScriptRecord__room_m005_theater = 0x80190B80;
 RoomM005_Rec2 = 0x80190AD4;
 RoomM005_Orbiter = 0x8018F330; // type:func
 RoomM005_CrossFlare = 0x8018F614; // type:func
