@@ -571,12 +571,12 @@ void FxCommon_InitScene(void)
         D_8019BFF8 = 1;
         FxCommon_SamplePath(0, selectedMotion + 1, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion);
         /* Shared volatile is scheduling debt in other callers; this store is ordinary. */
-        *(s16 *)&D_8019C054 = 0;
+        *(s16 *)&g_FxCommonMotionRemaining0 = 0;
         g_FxCommonCameraTarget.x = motion.vector.x;
         g_FxCommonCameraTarget.y = motion.vector.y;
         g_FxCommonCameraTarget.z = motion.vector.z;
         motionCount = FxCommon_SamplePath(0, selectedMotion, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion) - 2;
-        D_8019C050 = 0;
+        g_FxCommonMotionRemaining1 = 0;
         D_8019C040 = motionCount;
         D_8019C041 = 0;
         D_8019C042 = selectedMotion;

@@ -16,6 +16,17 @@ extern FxCommonShortVec3 g_FxCommonMotionOrigin1;
 extern FxCommonShortVec3 g_FxCommonMotionTarget1;
 extern FxCommonShortVec3 g_FxCommonMotionOrigin0;
 extern FxCommonShortVec3 g_FxCommonMotionTarget0;
+/* Per-frame step of each lane and the right shift that scales its accumulator. */
+extern volatile s32 g_FxCommonMotionStep0X, g_FxCommonMotionStep0Y, g_FxCommonMotionStep0Z;
+extern volatile s32 g_FxCommonMotionStep1X, g_FxCommonMotionStep1Y, g_FxCommonMotionStep1Z;
+extern s16 g_FxCommonMotionShift0;
+extern s16 g_FxCommonMotionShift1;
+/* Volatile scalar views of the lane vectors' first components and of both
+ * accumulators; the lane initialisers store through these. */
+extern volatile s16 g_FxCommonMotionOrigin0X, g_FxCommonMotionTarget0X;
+extern volatile s16 g_FxCommonMotionOrigin1X, g_FxCommonMotionTarget1X;
+extern volatile s32 g_FxCommonMotionAccum0X, g_FxCommonMotionAccum0Y, g_FxCommonMotionAccum0Z;
+extern volatile s32 g_FxCommonMotionAccum1X, g_FxCommonMotionAccum1Y, g_FxCommonMotionAccum1Z;
 /* Ordinary counter views; legacy callers use volatile scheduling declarations. */
 extern s16 g_FxCommonMotionRemaining0;
 extern s16 g_FxCommonMotionRemaining1;

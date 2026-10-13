@@ -44,7 +44,7 @@ void FxCommon_InitCameraPath(int index, int unused1, int unused2, int source)
     lookup = Draw_GetTimTableEntry(&g_FxCommonTimTable, 2);
     shortIndex = savedIndex;
     FxCommon_SamplePath(source, shortIndex + 1, lookup, &point, &scratch);
-    D_8019C054 = 0;
+    g_FxCommonMotionRemaining0 = 0;
     g_FxCommonCameraTarget.x = point.x;
     g_FxCommonCameraTarget.y = point.y;
     g_FxCommonCameraTarget.z = point.z;
@@ -52,7 +52,7 @@ void FxCommon_InitCameraPath(int index, int unused1, int unused2, int source)
     lookup = Draw_GetTimTableEntry(&g_FxCommonTimTable, 2);
     result = FxCommon_SamplePath(source, shortIndex, lookup, &point, &scratch);
     D_8019C040 = result - 2;
-    D_8019C050 = 0;
+    g_FxCommonMotionRemaining1 = 0;
     D_8019C041 = 0;
     D_8019C042 = savedIndex;
     g_FxCommonMarkerFade = 0;

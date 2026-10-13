@@ -22,3 +22,23 @@ address,overlay,old_name,name,evidence
 0x8019C810,fx_common,D_8019C810,g_FxCommonCameraTarget.x,Interior of g_FxCommonCameraTarget (sym 0x8019C810): camera_path.c writes the sampled path point there.
 0x8019C814,fx_common,D_8019C814,g_FxCommonCameraTarget.y,Interior of g_FxCommonCameraTarget (+4).
 0x8019C818,fx_common,D_8019C818,g_FxCommonCameraTarget.z,Interior of g_FxCommonCameraTarget (+8).
+0x8019C08C,fx_common,D_8019C08C,g_FxCommonMotionStep0X,Lane 0 (look-at target) per-frame step: FxCommon_SetMotionEndpoints/FxCommon_StartCameraMove store endpoint - current target; FxCommon_StepEffects adds it to g_FxCommonMotionAccum0 each frame. Volatile scalar kept (retail stores each component with its own lui).
+0x8019C090,fx_common,D_8019C090,g_FxCommonMotionStep0Y,Y component of the lane 0 step (see g_FxCommonMotionStep0X).
+0x8019C094,fx_common,D_8019C094,g_FxCommonMotionStep0Z,Z component of the lane 0 step (see g_FxCommonMotionStep0X).
+0x8019C05C,fx_common,D_8019C05C,g_FxCommonMotionStep1X,"Lane 1 (eye) per-frame step: endpoint - current camera position, added to g_FxCommonMotionAccum1 by FxCommon_StepEffects."
+0x8019C060,fx_common,D_8019C060,g_FxCommonMotionStep1Y,Y component of the lane 1 step.
+0x8019C064,fx_common,D_8019C064,g_FxCommonMotionStep1Z,Z component of the lane 1 step.
+0x8019C09C,fx_common,D_8019C09C,g_FxCommonMotionAccum0X,"Volatile scalar view of g_FxCommonMotionAccum0.x (sym 0x8019C09C): the lane initialisers zero it, FxCommon_StepEffects accumulates into it."
+0x8019C0A0,fx_common,D_8019C0A0,g_FxCommonMotionAccum0Y,"Same, interior of g_FxCommonMotionAccum0 (+4)."
+0x8019C0A4,fx_common,D_8019C0A4,g_FxCommonMotionAccum0Z,"Same, interior of g_FxCommonMotionAccum0 (+8)."
+0x8019C06C,fx_common,D_8019C06C,g_FxCommonMotionAccum1X,Volatile scalar view of g_FxCommonMotionAccum1.x (sym 0x8019C06C).
+0x8019C070,fx_common,D_8019C070,g_FxCommonMotionAccum1Y,Interior of g_FxCommonMotionAccum1 (+4).
+0x8019C074,fx_common,D_8019C074,g_FxCommonMotionAccum1Z,Interior of g_FxCommonMotionAccum1 (+8).
+0x8019C0AC,fx_common,D_8019C0AC,g_FxCommonMotionOrigin0X,Volatile halfword view of g_FxCommonMotionOrigin0.x (sym 0x8019C0AC); the initialisers store the current target there while y and z go through the volatile pointer.
+0x8019C0B4,fx_common,D_8019C0B4,g_FxCommonMotionTarget0X,Volatile halfword view of g_FxCommonMotionTarget0.x (sym 0x8019C0B4).
+0x8019C07C,fx_common,D_8019C07C,g_FxCommonMotionOrigin1X,Volatile halfword view of g_FxCommonMotionOrigin1.x (sym 0x8019C07C).
+0x8019C084,fx_common,D_8019C084,g_FxCommonMotionTarget1X,Volatile halfword view of g_FxCommonMotionTarget1.x (sym 0x8019C084).
+0x8019C050,fx_common,D_8019C050,g_FxCommonMotionRemaining1,Same address as g_FxCommonMotionRemaining1 (sym): lane 1 frame counter the initialisers set to 1 << shift and FxCommon_StepEffects decrements.
+0x8019C054,fx_common,D_8019C054,g_FxCommonMotionRemaining0,Same address as g_FxCommonMotionRemaining0 (sym): lane 0 frame counter.
+0x8019C052,fx_common,D_8019C052,g_FxCommonMotionShift1,Lane 1 shift: FxCommon_SetMotionEndpoints stores ai there and remaining1 = 1 << ai; FxCommon_StepEffects scales accum1 by >> shift.
+0x8019C056,fx_common,D_8019C056,g_FxCommonMotionShift0,"Lane 0 shift: stores bi, remaining0 = 1 << bi; FxCommon_StepEffects scales accum0 by >> shift."
