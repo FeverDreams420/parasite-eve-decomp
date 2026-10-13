@@ -706,9 +706,7 @@ void Menu_CursorRenderData(ItemDataRecord *record) {
 void Menu_DrawActiveListSlot(s32 arg0) {
     s16 temp_v1;
     s32 temp_v1_3;
-    /* Match debt: retail copies the item ID into a1 before the range
-     * tests and reads the key-item range from that copy (lev 12 without). */
-    register s32 temp_a1 asm("$5");
+    s32 temp_a1;
     u32 temp_a0;
     u32 var_a0;
     ItemDataRecord *temp_v1_2;
@@ -743,7 +741,8 @@ void Menu_DrawActiveListSlot(s32 arg0) {
     saved_a1 = var_a1;
     if ((arg0 >= 0) && (arg0 < g_InvSlotLimit)) {
         temp_v1_3 = g_InvItemPtr[arg0];
-        temp_a1 = temp_v1_3;
+        /* Inventory IDs retain their signed 16-bit representation. */
+        temp_a1 = (s16)temp_v1_3;
         if ((temp_v1_3 - 0x100) < 0x80U) {
             var_v0 = &((ItemDataRecord *)g_EquipItemDataTable)[temp_v1_3];
         } else {
