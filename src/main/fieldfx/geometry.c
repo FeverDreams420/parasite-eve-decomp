@@ -122,8 +122,7 @@ static inline int div4096(int value) {
 }
 
 int FieldFx_IsPlayerInSegmentBand(s16 *a, s16 *b, int radius) {
-    /* Match note: target reuses $s0 for the angle and then the x offset. */
-    register int angle asm("$16");
+    int angle;
     GteShortVector points[4];
     int dx;
     int dz;
@@ -136,13 +135,15 @@ int FieldFx_IsPlayerInSegmentBand(s16 *a, s16 *b, int radius) {
     x = div4096(rsin(angle) * radius);
     z = div4096(rcos(angle) * radius);
 
-    points[0].x = a[0] - x;
+    /* Both trig calls are complete; reuse the angle scratch for the X offset. */
+    angle = x;
+    points[0].x = a[0] - angle;
     points[0].z = a[2] - z;
-    points[1].x = a[0] + x;
+    points[1].x = a[0] + angle;
     points[1].z = a[2] + z;
-    points[2].x = b[0] - x;
+    points[2].x = b[0] - angle;
     points[2].z = b[2] - z;
-    points[3].x = b[0] + x;
+    points[3].x = b[0] + angle;
     points[3].z = b[2] + z;
 
     return FieldFx_IsPlayerInQuadXZ(points);
