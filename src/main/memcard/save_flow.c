@@ -1039,6 +1039,8 @@ void Save_StartWriteSlot(int port, int arg_slot) {
     int sequence;
     int next_state;
     char *path;
+    char *formatBuffer;
+    int firstSlotLetter;
 
     slot = arg_slot;
     state = &g_MemCardPortStates[port];
@@ -1048,7 +1050,9 @@ void Save_StartWriteSlot(int port, int arg_slot) {
     }
 
     slot_state = &state->slots[slot];
+    firstSlotLetter = 0x41;
     MemCard_CloseAll();
+    formatBuffer = D_8009EE70;
     Save_BuildHeader();
 
     sequence = state->sequence;
@@ -1060,7 +1064,7 @@ void Save_StartWriteSlot(int port, int arg_slot) {
         } else {
             next_sequence = sequence + 1;
         }
-        path = D_8009EE70;
+        path = formatBuffer;
         state->selectedSlot = slot;
         state->sequence = next_sequence;
     }
@@ -1069,9 +1073,9 @@ void Save_StartWriteSlot(int port, int arg_slot) {
     sprintf(path, D_80092224,
                     state > g_MemCardPortStates,
                     state->slots[formattedSlot].titleStyleFlag + 0x30,
-                    formattedSlot + 0x41);
+                    formattedSlot + firstSlotLetter);
     /* Recompute the path address after formatting it. */
-    asm volatile("" : "=r"(path) : "0"(D_8009EE70));
+    path = D_8009EE70;
     Save_BuildCardFile(path);
 
     state->listCursor = slot;
