@@ -3,8 +3,9 @@
 
 The overlays share one load window, so each links on its own. A single-
 executable PC port needs every global name to be unique. For each global
-symbol defined in the object files of two or more built overlays
-(``build/USA/overlays/*/**/*.o``) this classifies the definitions:
+symbol defined in the linked object files of two or more built overlays
+this classifies the definitions. Cached objects absent from the current
+linker scripts are ignored:
 
 * ``identical``   same section kind, same size, same bytes once relocated words
                   are masked, and the same relocation targets (shared sources
@@ -36,6 +37,9 @@ from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+from tools.scripts.overlay_link_symbols import linked_objects
+
 BUILD = ROOT / "build/USA"
 OVERLAYS = BUILD / "overlays"
 MAIN_ELF = BUILD / "main.elf"
@@ -162,8 +166,11 @@ def built_state() -> tuple[int, int]:
 def collect() -> dict:
     defs: dict[str, list] = defaultdict(list)
     for ov in sorted(p for p in OVERLAYS.iterdir() if p.is_dir()):
-        for obj in sorted(ov.rglob("*.o")):
-            scan_object(obj, ov.name, defs)
+        script = ROOT / "linkers/USA/overlays" / (ov.name + ".ld")
+        if not script.exists():
+            continue
+        for obj in linked_objects(script, ov.relative_to(ROOT)):
+            scan_object(ROOT / obj, ov.name, defs)
     main = main_globals()
     identical, conflicting = {}, {}
     for name, lst in defs.items():
