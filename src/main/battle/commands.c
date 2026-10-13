@@ -175,7 +175,7 @@ void Inv_SetActiveList(int mode, int *slot) {
         if (active) {
             register BattleAction *data asm("$5") = active->action;
             ItemDataRecord *item = *(ItemDataRecord **)selection;
-            register u32 word asm("$3") = data->attackWord;
+            u32 word = data->attackWord;
             int kind;
             int encoded;
             u32 flags2;
