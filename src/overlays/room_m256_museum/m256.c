@@ -20,7 +20,7 @@ void func_80192654(RoomM256Swing *obj) {
     FieldActor *slot = obj->actor;
 
     if (slot->mode == 0xB) {
-        obj->cycle.callback = (void (*)(void))func_80192680;
+        obj->cycle.callback = func_80192680;
     }
 }
 
@@ -1274,7 +1274,7 @@ int func_80195728(int mode, s16 *state) {
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 0;
                 D_800F3368.tpage = tpage;
-                page = (tpages[D_800E11EA] | ((int (*)(int, int, int, int))GetTPage)(0, 1, 0, 0)) & 0xFFFF;
+                page = (tpages[D_800E11EA] | GetTPage(0, 1, 0, 0)) & 0xFFFF;
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
