@@ -110,7 +110,7 @@ gone:
   `g_SaveRuntimeState`/`g_AyaSaveState`, `g_FieldFxSpriteParams` and
   inventory array labels;
 - second spellings of a named object kept for a type, qualifier or overlay
-  declaration (`D_800A76A0`, `D_800A76A4`, `D_800B0CE2`, `D_800B0DBA`,
+  declaration (`g_GameClockFlags`, `D_800A76A4`, `D_800B0CE2`, `D_800B0DBA`,
   `D_800B0DBC`, `D_800B0DCD`, `D_800B0E38`, `D_800B0E3C`, `D_800B0E4C`,
   `D_800B0E50`, `D_800B0E54`, `D_800B0E58`, `D_800B0E64`, `D_800B0E6C`,
   `D_800B89F8`, `D_800BCF88`);

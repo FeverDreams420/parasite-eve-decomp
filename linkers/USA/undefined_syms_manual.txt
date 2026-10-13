@@ -47,14 +47,14 @@ g_ActiveDrawSlotRecord = g_ActiveDrawSlot;
  * small-data view next to an indexed array view, or a byte cursor next to a
  * word cursor). They follow their blob label. */
 g_ScriptCursor = g_ScriptCursorAddress;
-D_8009D090 = g_InvSavedSelectionIndex;
-D_8009D098 = g_InvSavedSelectionFromStorage;
-D_8009D14C = g_DrawBlendColor;
+g_InvSavedSelectionIndex0 = g_InvSavedSelectionIndex;
+g_InvSavedSelectionFromStorage0 = g_InvSavedSelectionFromStorage;
+g_DrawBlendColorPair = g_DrawBlendColor;
 
 /* alias, large COMMON pool (wave 2c): second names of blob labels whose
  * declarations differ in type (record views); they move with the label
  * named in configs/USA/sym.main.txt. */
-D_800A76A0 = g_GameTimers;
+g_GameClockFlags = g_GameTimers;
 g_GameStateFlagsWord = g_GameState;
 g_DrawEnabledByte = g_DrawEnabled;
 g_SeqElapsedRecord = g_SeqElapsed;
@@ -84,7 +84,7 @@ D_8009B46C = g_SpuReverbWorkAreaTable;
  * scalar/array views); they move with the label. */
 g_GameStateFlagsRecord = g_GameStateFlags;
 g_GameStateBlock = g_GameStateFlags;
-D_8009D1A8 = g_BattleActiveEntity;
+g_BattleScanPanel = g_BattleActiveEntity;
 g_BattleResultFlagsRecord = g_BattleResultFlags;
 g_EntityCollisionWallParam = g_WallPolygonVertexCount;
 g_ActiveActorRecord = g_ActiveActor;

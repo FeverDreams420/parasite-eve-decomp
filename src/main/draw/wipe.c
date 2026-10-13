@@ -102,7 +102,7 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
     p = pair;
     p->first.color.bytes.code |= 2;
     p->second.color.bytes.code |= 2;
-    color = D_8009D14C[mode];
+    color = g_DrawBlendColorPair[mode];
     if (COORD(a).y == COORD(b).y) {
         COORD(farA).x += magnitude;
         COORD(farB).x += (secondVertex & 0x80) ? magnitude : -magnitude;

@@ -180,7 +180,7 @@ void Battle_StartEncounter(int mode) {
     neg_one = -1;
     *(u8 *)&g_BattleResultFlags = 0;
     initial_flags = g_BattleResultFlags;
-    D_8009D1A8.summary = 0;
+    g_BattleScanPanel.summary = 0;
     g_BattleSaveOverlayActive = 0;
     g_BattleSpritePrimCountdown = 0;
     g_BattleExpReward = 0;

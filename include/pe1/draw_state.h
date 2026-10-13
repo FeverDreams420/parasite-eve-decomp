@@ -109,7 +109,9 @@ void Draw_EmitWipeBarRect(int width, int height, int mode);
 
 extern signed char g_DrawBaseX[];
 extern s32 g_DrawBufferIndex;
-extern u32 D_8009D14C[];
+/* g_DrawBlendColor and the halved blend Draw_BlendColor stores after it
+ * (g_DrawScratchBuffer) as one pair; the wipe bars pick one by mode. */
+extern u32 g_DrawBlendColorPair[];
 extern GpuDrawEnabledFlag g_DrawEnabled;
 extern short g_SeqElapsed;
 extern volatile unsigned char g_SceneInitSubphase;

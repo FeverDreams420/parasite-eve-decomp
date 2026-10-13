@@ -29,7 +29,9 @@ typedef struct SavePromptBlock {
     SaveSlotSummary **summary; /* 0x8009D1A8 */
     SavePromptState prompt;    /* 0x8009D1AC */
 } SavePromptBlock;
-extern SavePromptBlock D_8009D1A8;
+/* g_BattleActiveEntity (the Scan target, PE_SPELL_SCAN in battle/attack.c)
+ * and g_BattleResultFlags as the record the Scan HP panel reads. */
+extern SavePromptBlock g_BattleScanPanel;
 
 /* Prompt texts: two fixed lines, then per-window tables. */
 extern u8 g_AnalyzeHpUnknownText[];

@@ -71,8 +71,8 @@ extern s16 g_InvActiveListItems[];
  * incomplete arrays avoids the old, overlapping three-element declarations. */
 extern s32 g_InvSavedSelectionIndex[];
 extern s32 g_InvSavedSelectionFromStorage[];
-extern s32 D_8009D090, g_InvSavedSelectionIndex1; /* indices 0, 1 */
-extern s32 D_8009D098, g_InvSavedSelectionFromStorage1; /* storage flags 0, 1 */
+extern s32 g_InvSavedSelectionIndex0, g_InvSavedSelectionIndex1; /* indices 0, 1 */
+extern s32 g_InvSavedSelectionFromStorage0, g_InvSavedSelectionFromStorage1; /* storage flags 0, 1 */
 extern s16 *g_InvActiveListOverride;
 extern s32 g_InvOverrideSlotLimit;
 extern u32 g_InvStorageSelectionBits[];

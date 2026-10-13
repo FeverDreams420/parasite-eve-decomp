@@ -23,9 +23,9 @@ s32 g_InvSelectionBitWords;
 u8 *D_8009D084;
 s32 D_8009D088;
 s32 D_8009D08C;
-s32 D_8009D090;
+s32 g_InvSavedSelectionIndex0;
 s32 g_InvSavedSelectionIndex1;
-s32 D_8009D098;
+s32 g_InvSavedSelectionFromStorage0;
 s32 g_InvSavedSelectionFromStorage1;
 s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
@@ -255,8 +255,8 @@ static inline void RestoreList(int storage) {
     }
 }
 void Inv_BuildStorageDisplay(void) {
-    RestoreList(D_8009D098);
-    *LookupTrackedItem(D_8009D090) = g_InvSavedSelectionRecord0;
+    RestoreList(g_InvSavedSelectionFromStorage0);
+    *LookupTrackedItem(g_InvSavedSelectionIndex0) = g_InvSavedSelectionRecord0;
     RestoreList(g_InvSavedSelectionFromStorage1);
     *LookupTrackedItem(g_InvSavedSelectionIndex1) = g_InvSavedSelectionRecord1;
 }
