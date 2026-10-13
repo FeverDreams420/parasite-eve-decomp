@@ -130,7 +130,7 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
             angle += 0x1F;
         }
         saved0 = angle >> 5;
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         FieldFx_DrawPointTile((GteShortVector *)fx, (u8 *)&blob, saved0, 1);

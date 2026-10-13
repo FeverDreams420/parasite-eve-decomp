@@ -315,7 +315,7 @@ int RoomM005_BeaconDriftCallback(int mode, RoomM005DriftingSpriteState *state) {
         if (g_FieldFxCurrentAge >= 6) return 1;
         break;
     case 2:
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         position.x = state->x;
@@ -438,7 +438,7 @@ int RoomM005_JointBeacon(int mode, RoomM005Beacon *state) {
             g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[*index];
             g_FieldFxSpriteParams.palette = 3;
             g_FieldFxSpriteParams.parameter06 = 0;
-            slot = &D_800BCFA4;
+            slot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(slot->value);
             gte_ldtransmatrix(slot->value);
             page = (u16)(tpages[*index] | GetTPage(0, 1, 0, 0));
@@ -522,7 +522,7 @@ int RoomM005_JointBeacon(int mode, RoomM005Beacon *state) {
             alpha = rcos((g_FieldFxCurrentAge << 10) / 12) / 32;
             size = rsin((g_FieldFxCurrentAge << 10) / 12);
             {
-                RenderMatrixSlot *slot = &D_800BCFA4;
+                RenderMatrixSlot *slot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(slot->value);
                 gte_ldtransmatrix(slot->value);
             }

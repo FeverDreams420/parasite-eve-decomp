@@ -996,14 +996,14 @@ int func_80191E30(int id, s32 *state)
     PushMatrix();
     SetTransMatrix(&D_8019CC30);
     SetRotMatrix(&D_8019CC30);
-    matrixSlot = &D_800BCFA4.value;
+    matrixSlot = &g_ViewMatrixSlot.value;
     savedMatrix = *matrixSlot;
     *matrixSlot = &D_8019CC30;
-    savedOutput = D_800BCFA8.distance;
-    D_800BCFA8.distance = &size;
+    savedOutput = g_ProjectionSlot.distance;
+    g_ProjectionSlot.distance = &size;
     result = Akao_SendTableCommand(resource, id, 0, 0x80, 1);
     *matrixSlot = savedMatrix;
-    D_800BCFA8.distance = savedOutput;
+    g_ProjectionSlot.distance = savedOutput;
     PopMatrix();
     return result;
 }
@@ -1026,11 +1026,11 @@ void func_80191EFC(int handle, volatile s32 *state)
     PushMatrix();
     SetTransMatrix(&D_8019CC30);
     SetRotMatrix(&D_8019CC30);
-    matrixSlot = &D_800BCFA4.value;
+    matrixSlot = &g_ViewMatrixSlot.value;
     savedMatrix = *matrixSlot;
     *matrixSlot = &D_8019CC30;
-    savedOutput = D_800BCFA8.distance;
-    D_800BCFA8.distance = &scratch.size;
+    savedOutput = g_ProjectionSlot.distance;
+    g_ProjectionSlot.distance = &scratch.size;
     scratch.vector.x = state[0];
     scratch.vector.y = state[1];
     scratch.vector.z = state[2];
@@ -1038,6 +1038,6 @@ void func_80191EFC(int handle, volatile s32 *state)
     Akao_Cmd_A0(handle, 0, scratch.valueB);
     Akao_Cmd_A2(handle, 0, scratch.valueA);
     *matrixSlot = savedMatrix;
-    D_800BCFA8.distance = savedOutput;
+    g_ProjectionSlot.distance = savedOutput;
     PopMatrix();
 }

@@ -68,7 +68,7 @@ int RoomM089_SpiralTrailCallback(int mode, RoomM089SpiralTrail *trail, GteShortV
         }
         break;
     case 2:
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         switch (trail->state) {
@@ -372,7 +372,7 @@ int RoomM089_SwirlRiseSprite(int mode, RoomSwirlRiseState *state,
         }
         break;
     case 2:
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         switch (state->phase) {

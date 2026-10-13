@@ -88,8 +88,8 @@ s32 MenuCard_LinkEffect(s32 mode, MemcardLinkState *state) {
             FieldFx_SampleColorTrack(D_801F1D5C, &color, state->timer);
             FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D86, &offset, &first);
             FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D88, &offset, &second);
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             FieldFx_DrawHistoryTrail(&first, &second, 16, (unsigned char *)&color2, (unsigned char *)&color1,
                          state->opacity, (struct FieldTrailPair *)&state->rotation, 1);
         }
@@ -176,8 +176,8 @@ s32 MenuCard_TrailEffect(s32 mode, MemcardTrailState *state) {
         if (state->timer >= 32) return 2;
         break;
     case 2:
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         FieldFx_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);
         g_FieldFxSpriteParams.parameter00 = 32;
         g_FieldFxSpriteParams.parameter02 = 2;
@@ -301,7 +301,7 @@ s32 MenuCard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
         }
         break;
     case 2:
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         FieldFx_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);

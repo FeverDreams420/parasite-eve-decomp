@@ -73,8 +73,8 @@ int RoomM123_JointTriangleCallback(int mode, RoomM123JointTriangle *triangle) {
         }
         break;
     case 2:
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x28, &offset, &corners[0]);
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x22, &offset, &corners[1]);
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x1D, &tip, &corners[2]);
@@ -86,8 +86,8 @@ int RoomM123_JointTriangleCallback(int mode, RoomM123JointTriangle *triangle) {
             LoadAverageShort12(&corners[3], &corners[1], 0x1000 - weight, weight, &corners[1]);
             LoadAverageShort12(&corners[3], &corners[2], 0x1000 - weight, weight, &corners[2]);
             width = (triangle->frame << 7) / 24;
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             FieldFx_DrawGlowLine(&corners[0], &corners[1], &color, &color, width, width, 1);
             FieldFx_DrawGlowLine(&corners[1], &corners[2], &color, &color, width, width, 1);
             FieldFx_DrawGlowLine(&corners[2], &corners[0], &color, &color, width, width, 1);
@@ -104,7 +104,7 @@ int RoomM123_JointTriangleCallback(int mode, RoomM123JointTriangle *triangle) {
                 weight = position - 0x2000;
                 LoadAverageShort12(&corners[2], &corners[0], 0x1000 - weight, weight, &corners[0]);
             }
-            matrixSlot = &D_800BCFA4;
+            matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             width = rsin(triangle->frame << 8) / 32;
@@ -199,7 +199,7 @@ int RoomM123_GlowBurstParticleCallback(int mode, RoomM123PulsingParticle *partic
             FieldFx_DrawShapeQuads(&position, 0, 0x1000, 0x1000,
                           (s16)g_FieldFxSpriteParams.parameter02 * 2 + 0xD8, clut, 3, g_RoomScriptRecord,
                           (RenderColor *)&color);
-            matrixSlot = &D_800BCFA4;
+            matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             FieldFx_DrawHaloedPoint(&position, &color, g_RoomScriptRecord, 1);
@@ -207,7 +207,7 @@ int RoomM123_GlowBurstParticleCallback(int mode, RoomM123PulsingParticle *partic
              * from frame 16 on. */
             if ((s16)particle->frame < 16) break;
         }
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         FieldFx_SampleColorTrack(g_RoomM123GlowColorTrack, &color, 0x30 - (scale * 48) / 1024);
@@ -540,7 +540,7 @@ int RoomM123_JointBeacon(int mode, RoomM123Beacon *state) {
                 matrix.t[0] = state->position.x;
                 matrix.t[1] = state->position.y;
                 matrix.t[2] = state->position.z;
-                slot = &D_800BCFA4;
+                slot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(slot->value);
                 gte_ldtransmatrix(slot->value);
                 g_FieldFxSpriteParams.tpage = tpages[*index];
@@ -575,7 +575,7 @@ int RoomM123_JointBeacon(int mode, RoomM123Beacon *state) {
         matrix.t[1] = state->position.y;
         matrix.t[2] = state->position.z;
         {
-            RenderMatrixSlot *slot = &D_800BCFA4;
+            RenderMatrixSlot *slot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(slot->value);
             gte_ldtransmatrix(slot->value);
         }
@@ -775,7 +775,7 @@ int RoomM123_PulseRingCallback(int mode, RoomPulseParticle *particle, int *refer
     case 2:
         if (particle->state != 0)
             break;
-        matrixSlot = &D_800BCFA4.value;
+        matrixSlot = &g_ViewMatrixSlot.value;
         gte_ldrotmatrix(*matrixSlot);
         gte_ldtransmatrix(*matrixSlot);
         FieldFx_SampleColorTrack((void *)*reference, color, particle->frame);

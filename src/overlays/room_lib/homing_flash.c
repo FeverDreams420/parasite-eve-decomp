@@ -273,7 +273,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
             LoadAverageShort12(&target, state, 0x1000 - blend, blend, &output);
             FieldFx_SampleColorTrack(g_RoomFlashColorRamp, &color,
                           (s16)state->frame);
-            matrixSlot = &D_800BCFA4;
+            matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             FieldFx_DrawGlowLine(&target, &output, &color, &color, 0, 0x80, 1);
@@ -282,7 +282,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
             frame = (s16)state->frame;
             if (frame >= 5) break;
             FieldFx_SampleColorTrack(g_RoomFlashColorRamp, &color, frame + 4);
-            matrixSlot = &D_800BCFA4;
+            matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             FieldFx_DrawGlowLine(&target, state, &color, &color, 0, 0x80, 1);

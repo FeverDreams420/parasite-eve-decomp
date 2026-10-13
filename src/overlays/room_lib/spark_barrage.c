@@ -388,7 +388,7 @@ int RoomEffect_BouncingSparkParticle(int mode, RoomDampedSpark *spark) {
             break;
         }
         case 1:
-            matrixSlot = &D_800BCFA4;
+            matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             FieldFx_DrawPointTile((GteShortVector *)spark, (u8 *)&shade, 0x80, 0xFF);
@@ -618,7 +618,7 @@ int RoomEffect_WaveSparkParticle(int mode, RoomPhasedSpark *spark) {
             }
             scale = rcos((s16)spark->timer << 7);
             FieldFx_SampleColorTrack(g_RoomWaveSparkColors, &color, (s16)spark->timer);
-            matrixSlot = &D_800BCFA4;
+            matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             FieldFx_DrawRingBand(&position, 0x15E, 0x2BC, 0x18, 0, scale, scale, 0, &color,
@@ -809,8 +809,8 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
                 g_RoomCometSparkTrail.drift = spark->drift;
                 g_RoomCometSparkTrail.position = *(GteRotation *)spark;
                 g_RoomCometSparkTrail.velocity = *(GteRotation *)&spark->vx;
-                gte_ldrotmatrix(D_800BCFA4.value);
-                gte_ldtransmatrix(D_800BCFA4.value);
+                gte_ldrotmatrix(g_ViewMatrixSlot.value);
+                gte_ldtransmatrix(g_ViewMatrixSlot.value);
                 FieldFx_SampleColorTrack(g_RoomCometSparkColors, &color,
                               (s16)spark->timer * 2);
                 kind = g_FieldFxSpriteParams.palette;
@@ -833,8 +833,8 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
             g_FieldFxSpriteParams.parameter06 = 1;
             g_FieldFxSpriteParams.parameter0A = 5;
             scale = rsin((s16)spark->timer << 6);
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             FieldFx_SampleColorTrack(g_RoomCometSparkColors, &color, (s16)spark->timer);
             FieldFx_DrawRingBand((GteShortVector *)spark, 0x1F4, 0x320, 0x18, spin, scale,
                           scale, 0, &color, 0x80, 1);

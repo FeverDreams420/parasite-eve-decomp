@@ -153,7 +153,7 @@ int RoomM404_SinkingDropCallback(int mode, RoomM404Drop *drop) {
         break;
     case 2:
         {
-            RenderMatrixSlot *slot = &D_800BCFA4;
+            RenderMatrixSlot *slot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(slot->value);
             gte_ldtransmatrix(slot->value);
         }
@@ -171,7 +171,7 @@ int RoomM404_SinkingDropCallback(int mode, RoomM404Drop *drop) {
             }
             if (rand() & 3) return 0;
             {
-                RenderMatrixSlot *slot = &D_800BCFA4;
+                RenderMatrixSlot *slot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(slot->value);
                 gte_ldtransmatrix(slot->value);
             }
@@ -216,7 +216,7 @@ int RoomM404_SinkingDropCallback(int mode, RoomM404Drop *drop) {
             g_FieldFxSpriteParams.extent_x = g_FieldFxSpriteParams.parameter00;
             g_FieldFxSpriteParams.extent_y = g_FieldFxSpriteParams.parameter00;
             {
-                RenderMatrixSlot *slot = &D_800BCFA4;
+                RenderMatrixSlot *slot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(slot->value);
                 gte_ldtransmatrix(slot->value);
             }
@@ -351,7 +351,7 @@ int RoomM404_DebrisSparkCallback(int mode, RoomDampedSpark *spark) {
     case 2:
         switch (spark->state) {
         case 0:
-            matrixSlot = &D_800BCFA4;
+            matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             FieldFx_DrawPointTile((GteShortVector *)spark, (unsigned char *)&color, 40, 0xFF);

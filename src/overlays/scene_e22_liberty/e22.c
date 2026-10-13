@@ -80,7 +80,7 @@ int SceneE22_RingBurstParticleCallback(int mode, RoomOrbitTrailParticle *p) {
             offset.y += D_801994EC.y;
             offset.z += D_801994EC.z;
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -116,7 +116,7 @@ int SceneE22_RingBurstParticleCallback(int mode, RoomOrbitTrailParticle *p) {
             radius = p->radius * scale / 4096;
             size = rcos((s16)p->timer << 7) * 240 / 4096;
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -204,7 +204,7 @@ int SceneE22_RingBurst(int mode, RoomOrbitRingBurst *burst) {
         return 1;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -508,7 +508,7 @@ int SceneE22_EmberDriftParticleCallback(int mode, RoomOrbitTrailParticle *p) {
             size = rcos(((s16)p->timer << 10) / 24) / 2 + 0x800;
             turn.z = g_FieldFxCurrentAge << 6;
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -644,7 +644,7 @@ int SceneE22_EmberDrift(int mode, SceneE22EmberBurst *burst) {
         break;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -911,7 +911,7 @@ int SceneE22_EmberColumn(int mode, GteShortVector *anchor) {
         return 2;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -992,7 +992,7 @@ int SceneE22_SwirlRingParticleCallback(int mode, RoomOrbitTrailParticle *p) {
         case 0:
             size = rcos(((s16)p->timer << 10) / 12) / 8;
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -1125,7 +1125,7 @@ int SceneE22_SwirlRing(int mode, SceneE22SwirlRing *swirl) {
         break;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -1325,7 +1325,7 @@ int SceneE22_TwistModel(int mode, SceneE22TwistModel *bolt) {
         break;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -1569,7 +1569,7 @@ int SceneE22_TwistBeamCallback(int mode, RoomOrbitTrailParticle *p) {
             v = 0xA0;
             *(u32 *)&color = 0x808080;
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -1587,7 +1587,7 @@ int SceneE22_TwistBeamCallback(int mode, RoomOrbitTrailParticle *p) {
         case 2:
             size = rcos((s16)p->timer << 6) / 8;
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -1725,7 +1725,7 @@ int SceneE22_SweepBolt(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin
         break;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -1959,7 +1959,7 @@ int SceneE22_QuakeBlast(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *t
         position.y = fx->position.y;
         position.z = fx->position.z;
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }

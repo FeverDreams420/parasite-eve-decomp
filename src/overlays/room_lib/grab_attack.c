@@ -637,7 +637,7 @@ int RoomEffect_GroundSweepController(int mode, RoomGroundSweep *sweep,
             g_FieldFxSpriteParams.tpage = tpage;
         }
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -773,7 +773,7 @@ int RoomEffect_OrbitTrailParticle(int mode, RoomOrbitTrailParticle *p) {
             LoadAverageShort12(&g_RoomGrabOrbitCentre, &offset, 0x1000 - weight,
                           weight, &blend);
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -809,7 +809,7 @@ int RoomEffect_OrbitTrailParticle(int mode, RoomOrbitTrailParticle *p) {
             offset.y += g_RoomGrabOrbitCentre.y;
             offset.z += g_RoomGrabOrbitCentre.z;
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -902,7 +902,7 @@ int RoomEffect_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
         return 1;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -1044,7 +1044,7 @@ int RoomEffect_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
         break;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }

@@ -206,7 +206,7 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             }
             return 0;
         case 4:
-            matrixSlot = &D_800BCFA4;
+            matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             fade = rcos(((s16)flare->timer << 10) / 24) / 32;

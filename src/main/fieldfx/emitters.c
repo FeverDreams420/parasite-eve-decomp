@@ -225,8 +225,8 @@ int FieldFx_DiamondEmitter(int mode, RenderDiamondEmitter *state)
         if (g_FieldFxCurrentAge >= 72) return 1;
         break;
     case 2:
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
 
         g_DiamondParticleAnchor.x = state->position.x;
         g_DiamondParticleAnchor.y = state->position.y;
@@ -410,8 +410,8 @@ int FieldFx_TwinModelEffect(int mode, FieldFxTwinModel *state)
         g_FieldFxSpriteParams.palette = 1;
         FieldFx_EnsureEffectTexturePage(1);
         g_FieldFxSpriteParams.parameter06 = 1;
-        gte_ldrotmatrix((const GteMatrixWords *)D_800BCFA4.value);
-        gte_ldtransmatrix((const GteMatrixWords *)D_800BCFA4.value);
+        gte_ldrotmatrix((const GteMatrixWords *)g_ViewMatrixSlot.value);
+        gte_ldtransmatrix((const GteMatrixWords *)g_ViewMatrixSlot.value);
         {
             int tpage = (u16)(g_FieldFxTpageTable[g_FieldFxTpageSlots[9]] | GetTPage(0, 3, 0, 0));
             int kind = g_FieldFxSpriteParams.palette;
@@ -870,8 +870,8 @@ int FieldFx_SettlingSprite(int mode, RenderSettlingSprite *state)
                 state->stage = 2;
             break;
         }
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         FieldFx_DrawHaloedPoint(&position, &color, 128, 1);
         palette = g_FieldFxPaletteTable[g_FieldFxSpriteParams.palette];
         if (g_FieldFxSpriteParams.palette == 4 && g_FieldFxAltPaletteFlag)
@@ -989,8 +989,8 @@ int FieldFx_FlashBurst(int mode, FieldFlashBurst *state)
             FieldFx_EnsureEffectTexturePage(1);
             tpages = g_FieldFxTpageTable;
             g_FieldFxSpriteParams.parameter06 = 0;
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             {
                 int tpage = (u16)(tpages[slots[0]] | GetTPage(0, 1, 0, 0));
                 int kind = g_FieldFxSpriteParams.palette;

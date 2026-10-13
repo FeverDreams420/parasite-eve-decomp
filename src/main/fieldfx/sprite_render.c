@@ -7,6 +7,7 @@
 #include "pe1/field_shaded_ring.h"
 #include "pe1/field_sprite_state.h"
 #include "pe1/field_textured_strip.h"
+#include "pe1/geom_state.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
 #include "pe1/psyq_bios.h"
@@ -210,7 +211,7 @@ void FieldFx_DrawOrientedSprite(FieldOrientedSprite *sprite)
     g_FieldFxScratch->local.t[0] = 0;
     g_FieldFxScratch->local.t[1] = 0;
     g_FieldFxScratch->local.t[2] = 0;
-    g_FieldFxScratch->matrix = *D_800BCFA4.value;
+    g_FieldFxScratch->matrix = *g_ViewMatrixSlot.value;
     g_FieldFxScratch->matrix.t[0] += (g_FieldFxScratch->matrix.m[0][2] * sprite->position.z +
                                 g_FieldFxScratch->matrix.m[0][1] * sprite->position.y +
                                 g_FieldFxScratch->matrix.m[0][0] * sprite->position.x) / 4096;
@@ -305,7 +306,7 @@ void FieldFx_DrawBillboard(FieldBillboard *board)
     }
     {
         GteMatrix **slot;
-        slot = &D_800BCFA4.value;
+        slot = &g_ViewMatrixSlot.value;
         gte_ldrotmatrix((const GteMatrixWords *)*slot);
         gte_ldtransmatrix((const GteMatrixWords *)*slot);
     }
@@ -313,7 +314,7 @@ void FieldFx_DrawBillboard(FieldBillboard *board)
                                      &g_FieldFxBillboardScratch->p, &g_FieldFxBillboardScratch->flag);
     g_FieldFxBillboardScratch->centerX = g_FieldFxBillboardScratch->screen.word;
     g_FieldFxBillboardScratch->centerY = g_FieldFxBillboardScratch->screen.xy.y;
-    distance = D_800BCFA8.distance[0];
+    distance = g_GeomScroll.state.position.projectionDistance[0];
     projectedWidth = (width << 5) * distance / (g_FieldFxBillboardScratch->depth * 4 + distance);
     projectedHeight =
         (height << 5) * distance / (g_FieldFxBillboardScratch->depth * 4 + distance);
@@ -414,7 +415,7 @@ void FieldFx_DrawGlowSprite(FieldGlowSprite *sprite, GteMatrix *placement, u8 mo
     g_FieldFxScratch = FIELDFX_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
-        gte_ldrotmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
         gte_ldclmv(placement);
         gte_rtir();
         gte_stclmv(&g_FieldFxScratch->matrix);
@@ -425,15 +426,15 @@ void FieldFx_DrawGlowSprite(FieldGlowSprite *sprite, GteMatrix *placement, u8 mo
         gte_rtir();
         gte_stclmv((u16 *)&g_FieldFxScratch->matrix + 2);
         /* Transform placement translation with the camera matrix. */
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         gte_ldlv0(placement->t);
         gte_rt();
         gte_stlvl(g_FieldFxScratch->matrix.t);
         gte_ldrotmatrix(&g_FieldFxScratch->matrix);
         gte_ldtransmatrix(&g_FieldFxScratch->matrix);
     } else {
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         position.x = placement->t[0];
         position.y = placement->t[1];
         position.z = placement->t[2];
@@ -524,7 +525,7 @@ void FieldFx_DrawShadedQuad(FieldShadedQuadColors *colors, GteMatrix *placement,
     g_FieldFxScratch = FIELDFX_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
-        gte_ldrotmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
         gte_ldclmv(placement);
         gte_rtir();
         gte_stclmv(&g_FieldFxScratch->matrix);
@@ -535,15 +536,15 @@ void FieldFx_DrawShadedQuad(FieldShadedQuadColors *colors, GteMatrix *placement,
         gte_rtir();
         gte_stclmv((u16 *)&g_FieldFxScratch->matrix + 2);
         /* Transform placement translation with the camera matrix. */
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         gte_ldlv0(placement->t);
         gte_rt();
         gte_stlvl(g_FieldFxScratch->matrix.t);
         gte_ldrotmatrix(&g_FieldFxScratch->matrix);
         gte_ldtransmatrix(&g_FieldFxScratch->matrix);
     } else {
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         position.x = placement->t[0];
         position.y = placement->t[1];
         position.z = placement->t[2];
@@ -634,7 +635,7 @@ void FieldFx_DrawShadedRing(FieldShadedRing *ring, GteMatrix *placement, u8 mode
     g_FieldFxScratch = FIELDFX_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
-        gte_ldrotmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
         gte_ldclmv(placement);
         gte_rtir();
         gte_stclmv(&g_FieldFxScratch->matrix);
@@ -645,15 +646,15 @@ void FieldFx_DrawShadedRing(FieldShadedRing *ring, GteMatrix *placement, u8 mode
         gte_rtir();
         gte_stclmv((u16 *)&g_FieldFxScratch->matrix + 2);
         /* Transform placement translation with the camera matrix. */
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         gte_ldlv0(placement->t);
         gte_rt();
         gte_stlvl(g_FieldFxScratch->matrix.t);
         gte_ldrotmatrix(&g_FieldFxScratch->matrix);
         gte_ldtransmatrix(&g_FieldFxScratch->matrix);
     } else {
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         position.x = placement->t[0];
         position.y = placement->t[1];
         position.z = placement->t[2];
@@ -810,8 +811,8 @@ void FieldFx_DrawTexturedStrip(FieldTexturedStrip *strip)
         quad[1] = node->edgeB;
         quad[2] = node[1].edgeA;
         quad[3] = node[1].edgeB;
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         depth = RotTransPers4(&quad[0], &quad[1], &quad[2], &quad[3],
                               &packet->x0, &packet->x1, &packet->x2,
                               &packet->x3, &p, &flag);

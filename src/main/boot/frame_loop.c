@@ -8,6 +8,7 @@
 #include "pe1/boot_disc_check.h"
 #include "pe1/field_movement.h"
 #include "pe1/game_state.h"
+#include "pe1/geom_state.h"
 #include "pe1/gte.h"
 #include "pe1/pad_state.h"
 #include "pe1/psyq_gpu.h"
@@ -89,7 +90,7 @@ void Boot_RunFrame(void)
     if (g_SceneDispatchCur == D_8009D280) {
         scene_flags = &g_GameState.bank_state_12;
         state = &g_GameState;
-        fade = (RenderTintTargetView *)&D_800BCFE8;
+        fade = (RenderTintTargetView *)&g_ScreenTint.targetR;
         do {
             g_DrawPacketOffset = 0;
             *scene_flags = 0;
@@ -139,7 +140,7 @@ void Boot_RunFrame(void)
                 /* A finished fade to white reloads fade colour 15. */
                 if (!g_GlobalFrameCounter[0] && fade->packed.red_green == 0xFF00FFu &&
                     fade->packed.blue == 0xFF) {
-                    if (fade->colour.fade_mode & 0x40) {
+                    if (fade->colour.fadeMode & 0x40) {
                         Render_SetFadeColour(15);
                     }
                 }

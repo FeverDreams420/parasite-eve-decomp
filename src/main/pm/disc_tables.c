@@ -13,6 +13,7 @@
 #include "pe1/draw_buffers.h"
 #include "pe1/draw_state.h"
 #include "pe1/font.h"
+#include "pe1/geom_state.h"
 #include "pe1/menu_queue.h"
 #include "pe1/pe_image.h"
 #include "pe1/psyq_bios.h"
@@ -99,7 +100,7 @@ int Draw_InitDisplay(int mode) {
         ClearOTagR(slots[g_ActiveDrawSlot], 0x1000);
         Render_SetCDDCSlot();
         Draw_RenderFrame();
-    } while ((g_ScreenTransitionState[0] & 3) != one);
+    } while ((g_ScreenTint.fadeMode & 3) != one);
 
     g_SceneInitSubphase = 0;
     Menu_ConsumeEquipSlotFlag();

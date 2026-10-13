@@ -219,8 +219,8 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
         }
         break;
     case 2:
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         switch (spark->state) {
         case 0:
             g_FieldFxSpriteParams.parameter00 = 0x20;
@@ -496,7 +496,7 @@ int RoomEffect_DampedSparkParticle(int mode, RoomDampedSpark *spark) {
         }
         break;
     case 2:
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         switch (spark->state) {
@@ -807,7 +807,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
         }
         break;
     case 2:
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         if (fx->brightness != 0) {
@@ -847,7 +847,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
             int kind;
             int palette;
             int page;
-            matrixSlot = &D_800BCFA4;
+            matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             {

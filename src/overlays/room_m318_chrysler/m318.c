@@ -119,7 +119,7 @@ int RoomM318_FanSweep(int mode, RoomFanSweep *sweep, RoomEmberBurstParams *param
         break;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -317,7 +317,7 @@ int RoomM318_ShakeSweepParticleCallback(int mode, RoomShakeSweepParticle *p) {
             g_FieldFxSpriteParams.tpage = tpage;
         }
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -856,7 +856,7 @@ int RoomM318_EmberBurst(int mode, RoomEmberBurst *burst, RoomEmberBurstParams *p
         break;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -1034,7 +1034,7 @@ int RoomM318_RisingColumn(int mode, RoomRisingColumn *column,
         return 1;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -1210,7 +1210,7 @@ int RoomM318_FlashBurst(int mode, RoomShakeBurstPoint *burst) {
         return 2;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -1322,7 +1322,7 @@ int RoomM318_CrossFlashParticleCallback(int mode, RoomCrossFlashParticle *p) {
                 length = rsin((s16)p->timer << 5) * 1900 / 4096;
             width = rcos(angle) / 64 + 0x20;
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -1425,7 +1425,7 @@ int RoomM318_CrossFlash(int mode, RoomCrossFlash *flash) {
         return 2;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -1558,7 +1558,7 @@ int RoomM318_TwinRibbon(int mode, RoomTwinRibbon *ribbon, RoomTwinRibbonParams *
         break;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -1840,7 +1840,7 @@ int RoomM318_EmberFountain(int mode, RoomEmberFountain *fountain) {
         return 1;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -2112,7 +2112,7 @@ int RoomM318_EmberSpiral(int mode, RoomEmberSpiral *spiral) {
         return 2;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }

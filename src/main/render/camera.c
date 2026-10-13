@@ -404,7 +404,7 @@ int Render_SetViewport(s16 *position) {
         }
     }
     {
-        register int distance = *D_800BCFA8.distance;
+        register int distance = *g_GeomScroll.state.position.projectionDistance;
         gte_ctc2_26(distance);
     }
     gte_ldv0(local.point);
@@ -413,21 +413,21 @@ int Render_SetViewport(s16 *position) {
     screen_x = local.projected[0];
     screen_y = local.projected[1];
     if (camera->flags & 128) {
-        g_CameraFocusScreenX = screen_x;
-        g_CameraOffsetScreenY = screen_y;
+        g_GeomScroll.state.position.cameraOffsetX = screen_x;
+        g_GeomScroll.state.position.cameraOffsetY = screen_y;
     }
     geometry.state = g_GeomState;
-    sum_x = g_CameraFocusScreenX + screen_x;
+    sum_x = g_GeomScroll.state.position.cameraOffsetX + screen_x;
     screen_x = sum_x / 2;
-    g_CameraFocusScreenX = screen_x;
-    sum_y = g_CameraOffsetScreenY + screen_y;
+    g_GeomScroll.state.position.cameraOffsetX = screen_x;
+    sum_y = g_GeomScroll.state.position.cameraOffsetY + screen_y;
     sum_y += (unsigned)sum_y >> 31;
     view_x = 320 - screen_x;
 
     offset_geometry.state = g_GeomState;
 
     screen_y = sum_y >> 1;
-    g_CameraOffsetScreenY = screen_y;
+    g_GeomScroll.state.position.cameraOffsetY = screen_y;
     asm volatile("" : : : "memory");
     viewAddress.word = geometry.word + offset_geometry.state->entry_offset_1C;
     view = viewAddress.viewport;
@@ -464,8 +464,8 @@ int Render_SetViewport(s16 *position) {
         axisValue = y_bound - 112;
         view_y = viewportValue - axisValue;
     }
-    g_CameraScreenOffsetX = view_x;
-    D_800BCF96 = view_y;
+    g_GeomScroll.state.position.screenOffsetX = view_x;
+    g_GeomScroll.state.position.screenOffsetY = view_y;
     selected_x = target_x;
     if (g_GeomScroll.state.flags & 64) {
         register int signed_y;
@@ -480,33 +480,33 @@ int Render_SetViewport(s16 *position) {
         chosen_bound = axisValue;
         if (viewportValue < axisValue) {
             signed_y = (unsigned)target_y << 16;
-            D_800BCF8C.x = chosen_bound;
+            g_GeomScroll.state.position.x = chosen_bound;
         } else {
             axisValue = view->maxX;
             chosen_bound = axisValue;
             if (axisValue < viewportValue) {
                 signed_y = (unsigned)target_y << 16;
-                D_800BCF8C.x = chosen_bound;
+                g_GeomScroll.state.position.x = chosen_bound;
             } else {
                 signed_y = (unsigned)target_y << 16;
-                D_800BCF8C.x = selected_x;
+                g_GeomScroll.state.position.x = selected_x;
             }
         }
         signed_y >>= 16;
         axisValue = view->minY;
         chosen_bound = axisValue;
         if (signed_y < axisValue) {
-            g_CameraClampedY[0] = chosen_bound;
+            g_GeomScroll.state.position.y = chosen_bound;
             return 0;
         }
         axisValue = view->maxY;
         upper_y = axisValue;
         asm("" : "=r"(upper_y) : "0"(upper_y));
         if (axisValue < signed_y) {
-            g_CameraClampedY[0] = upper_y;
+            g_GeomScroll.state.position.y = upper_y;
             return 0;
         }
-        g_CameraClampedY[0] = target_y;
+        g_GeomScroll.state.position.y = target_y;
     }
     return 0;
 }
@@ -561,23 +561,23 @@ int Render_StepCameraTransition(void)
     if (mode != 1 && mode != 2 && mode != 3)
         return 0;
     {
-        u16 targetX = D_800BCF9C, x = D_800BCF98;
-        u16 targetY = D_800BCF9E, y = g_CameraTransitionStartY;
-        u16 time = D_800BCFA0;
-        duration = D_800BCFA2;
+        u16 targetX = g_GeomScroll.state.position.targetX, x = g_GeomScroll.state.position.startX;
+        u16 targetY = g_GeomScroll.state.position.targetY, y = g_GeomScroll.state.position.startY;
+        u16 time = g_GeomScroll.state.position.elapsed;
+        duration = g_GeomScroll.state.position.duration;
         dx = targetX - x;
         dy = targetY - y;
         if (!smooth) {
             int movedX = (short)dx * (short)time / (short)duration;
             int movedY = (short)dy * (short)time / (short)duration;
-            D_800BCF8C.x = x + movedX;
-            g_CameraClampedY[0] = y + movedY;
+            g_GeomScroll.state.position.x = x + movedX;
+            g_GeomScroll.state.position.y = y + movedY;
         } else {
             int weight = rcos((short)time * 2048 / (short)duration + 2048) + 4096;
             int movedX = (short)dx * weight / 8192;
             int movedY = (short)dy * weight / 8192;
-            D_800BCF8C.x = D_800BCF98 + movedX;
-            g_CameraClampedY[0] = g_CameraTransitionStartY + movedY;
+            g_GeomScroll.state.position.x = g_GeomScroll.state.position.startX + movedX;
+            g_GeomScroll.state.position.y = g_GeomScroll.state.position.startY + movedY;
         }
     }
     {
@@ -586,19 +586,19 @@ int Render_StepCameraTransition(void)
         GEOM_STATE_OFFSET(views, base, entry_offset_1C, 0);
         view = &views.viewport[g_GeomGroupSel];
         {
-            unsigned int offset = 160 - (D_800BCF8C.x - (short)view->width / 2);
+            unsigned int offset = 160 - (g_GeomScroll.state.position.x - (short)view->width / 2);
             g_CameraScreenOffsetX = offset;
         }
         {
-            unsigned int offset = 112 - ((short)g_CameraClampedY[0] - (short)view->height / 2);
-            D_800BCF96 = offset;
+            unsigned int offset = 112 - (g_GeomScroll.state.position.y - (short)view->height / 2);
+            g_GeomScroll.state.position.screenOffsetY = offset;
         }
     }
     if (mode == 1)
         g_RenderStateFlags = (g_RenderStateFlags & ~7) | 2;
     {
-        u16 time = D_800BCFA0 + 1;
-        D_800BCFA0 = time;
+        u16 time = g_GeomScroll.state.position.elapsed + 1;
+        g_GeomScroll.state.position.elapsed = time;
         if ((short)time > (short)duration) {
             unsigned int completed = g_RenderStateFlags;
             if ((completed & 7) == 2)
@@ -625,8 +625,8 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
 
     if (!(camera->flags & 64))
         return -21;
-    D_800BCF98 = D_800BCF8C.x;
-    g_CameraTransitionStartY = g_CameraClampedY[0];
+    g_GeomScroll.state.position.startX = g_GeomScroll.state.position.x;
+    g_GeomScroll.state.position.startY = (u16)g_GeomScroll.state.position.y;
     vector.x = position[0] >> 16;
     vector.y = (position[1] >> 16) - (u16)g_CameraFocusHeight[0];
     vector.z = position[2] >> 16;
@@ -671,13 +671,13 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
         y = view->minY;
     else if (y > view->maxY)
         y = view->maxY;
-    D_800BCF9C = x;
-    D_800BCF9E = y;
+    g_GeomScroll.state.position.targetX = x;
+    g_GeomScroll.state.position.targetY = y;
     if (duration == -1)
-        D_800BCFA2 = 30;
+        g_GeomScroll.state.position.duration = 30;
     else
-        D_800BCFA2 = duration;
-    D_800BCFA0 = 1;
+        g_GeomScroll.state.position.duration = duration;
+    g_GeomScroll.state.position.elapsed = 1;
     if (mode == -1)
         g_RenderStateFlags = (g_RenderStateFlags & ~7) | 3;
     else {
@@ -698,32 +698,32 @@ int Render_LoadGeomState(int index) {
 
     GEOM_STATE_OFFSET(table, base, entry_offset_1C, index * 52);
     entry = table.viewport;
-    *D_800BCFA8.distance = entry->prefix.gpu.geom_screen;
+    *g_GeomScroll.state.position.projectionDistance = entry->prefix.gpu.geom_screen;
     SetGeomScreen(entry->prefix.gpu.geom_screen);
 
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     dst[0] = entry->prefix.gpu.half02;
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     dst[1] = entry->prefix.gpu.half04;
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     dst[2] = entry->prefix.gpu.half06;
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     dst[3] = entry->prefix.gpu.half08;
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     dst[4] = entry->prefix.gpu.half0A;
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     dst[5] = entry->prefix.gpu.half0C;
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     dst[6] = entry->prefix.gpu.half0E;
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     dst[7] = entry->prefix.gpu.half10;
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     dst[8] = entry->prefix.gpu.half12;
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     ((u32 *)dst)[5] = entry->prefix.gpu.word14;
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     ((u32 *)dst)[6] = entry->prefix.gpu.word18;
-    dst = g_GeomVramPacketDst;
+    dst = (u16 *)g_GeomScroll.words.viewMatrix;
     ((u32 *)dst)[7] = entry->prefix.gpu.word1C;
 
     g_GeomGroupSel = index;
@@ -780,20 +780,20 @@ int CdRom_SetSeekPos(unsigned int arg0) {
     unsigned short old1;
     unsigned short old2;
 
-    old0 = (u16)D_800BCFE8;
-    old1 = g_ScreenTransitionTargetY;
-    old2 = (u16)g_ScreenTintTargetB;
+    old0 = (u16)g_ScreenTint.targetR;
+    old1 = g_ScreenTint.targetG;
+    old2 = (u16)g_ScreenTint.targetB;
 
-    D_800BCFE8 = 0xFF;
-    g_ScreenTransitionTargetY = 0xFF;
-    g_ScreenTintTargetB = 0xFF;
-    g_ScreenTransitionState[0] = 2;
-    g_ScreenTransitionMode = 2;
-    g_ScreenTransitionFadeColor = arg0;
-    D_800BCFF8 = 0;
-    D_800BCFF0 = old0;
-    g_ScreenTransitionStartY = old1;
-    D_800BCFF4 = old2;
+    g_ScreenTint.targetR = 0xFF;
+    g_ScreenTint.targetG = 0xFF;
+    g_ScreenTint.targetB = 0xFF;
+    g_ScreenTint.fadeMode = 2;
+    g_ScreenTint.blendMode = 2;
+    g_ScreenTint.duration = arg0;
+    g_ScreenTint.frame = 0;
+    g_ScreenTint.startR = old0;
+    g_ScreenTint.startG = old1;
+    g_ScreenTint.startB = old2;
 
     return 0;
 }
@@ -804,31 +804,31 @@ int CdRom_SetScreenPos(int arg0, int arg1, int arg2, int arg3, unsigned short ar
     unsigned short old2;
     int mode;
 
-    old0 = (u16)D_800BCFE8;
-    old1 = g_ScreenTransitionTargetY;
-    old2 = (u16)g_ScreenTintTargetB;
+    old0 = (u16)g_ScreenTint.targetR;
+    old1 = g_ScreenTint.targetG;
+    old2 = (u16)g_ScreenTint.targetB;
 
-    D_800BCFE8 = arg1;
-    g_ScreenTransitionTargetY = arg2;
-    g_ScreenTintTargetB = arg3;
-    g_ScreenTransitionState[0] = 2;
-    g_ScreenTransitionFadeColor = arg0;
-    D_800BCFF8 = 0;
-    D_800BCFF0 = old0;
+    g_ScreenTint.targetR = arg1;
+    g_ScreenTint.targetG = arg2;
+    g_ScreenTint.targetB = arg3;
+    g_ScreenTint.fadeMode = 2;
+    g_ScreenTint.duration = arg0;
+    g_ScreenTint.frame = 0;
+    g_ScreenTint.startR = old0;
     mode = arg4;
-    g_ScreenTransitionStartY = old1;
-    D_800BCFF4 = old2;
+    g_ScreenTint.startG = old1;
+    g_ScreenTint.startB = old2;
 
     if (mode >= 4) {
-        g_ScreenTransitionMode = 1;
+        g_ScreenTint.blendMode = 1;
         return 0;
     }
     if (mode < 0) {
-        g_ScreenTransitionMode = 1;
+        g_ScreenTint.blendMode = 1;
         return 0;
     }
 
-    g_ScreenTransitionMode = arg4;
+    g_ScreenTint.blendMode = arg4;
     return 0;
 }
 
@@ -837,19 +837,19 @@ int Render_SetFadeColour(unsigned int arg0) {
     unsigned short old1;
     unsigned short old2;
 
-    old0 = (u16)D_800BCFE8;
-    old1 = g_ScreenTransitionTargetY;
-    old2 = (u16)g_ScreenTintTargetB;
+    old0 = (u16)g_ScreenTint.targetR;
+    old1 = g_ScreenTint.targetG;
+    old2 = (u16)g_ScreenTint.targetB;
 
-    g_ScreenTransitionState[0] = 6;
-    D_800BCFE8 = 0;
-    g_ScreenTransitionTargetY = 0;
-    g_ScreenTintTargetB = 0;
-    g_ScreenTransitionFadeColor = arg0;
-    D_800BCFF8 = 0;
-    D_800BCFF0 = old0;
-    g_ScreenTransitionStartY = old1;
-    D_800BCFF4 = old2;
+    g_ScreenTint.fadeMode = 6;
+    g_ScreenTint.targetR = 0;
+    g_ScreenTint.targetG = 0;
+    g_ScreenTint.targetB = 0;
+    g_ScreenTint.duration = arg0;
+    g_ScreenTint.frame = 0;
+    g_ScreenTint.startR = old0;
+    g_ScreenTint.startG = old1;
+    g_ScreenTint.startB = old2;
 
     return 0;
 }

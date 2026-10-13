@@ -527,8 +527,8 @@ int SceneE19_Blast(int mode, SceneE19Blast *blast)
         center.x = blast->position.x;
         center.y = blast->position.y;
         center.z = blast->position.z;
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
 
         g_FieldFxSpriteParams.parameter0A = 0;
         g_FieldFxSpriteParams.depth = 4;
@@ -611,8 +611,8 @@ int SceneE19_Blast(int mode, SceneE19Blast *blast)
             FieldFx_ModelScaleColors(g_SceneE19BlastModel1, 0x40);
             FieldFx_ModelDraw(g_SceneE19BlastModel1, &shellMatrix1);
             FieldFx_ModelRestoreColors(g_SceneE19BlastModel1);
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             FieldFx_DrawStarFan(&center, 0x12C, 0x12C, 0xC, 0, 0x1000, 0x1000, &glowColor, 0, intensity, 1);
             intensity = rcos(phase) / 32;
             radialScale = rsin(phase);
@@ -687,8 +687,8 @@ int SceneE19_Blast(int mode, SceneE19Blast *blast)
             FieldFx_ModelScaleColors(g_SceneE19BlastModel1, 0x40);
             FieldFx_ModelDraw(g_SceneE19BlastModel1, &shellMatrix2);
             FieldFx_ModelRestoreColors(g_SceneE19BlastModel1);
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             FieldFx_DrawStarFan(&center, 0x12C, 0x12C, 0xC, 0, 0x1000, 0x1000, &glowColor, 0, intensity, 1);
             intensity = 0x80;
             if (g_FieldFxCurrentAge & 1) {
@@ -830,8 +830,8 @@ int SceneE19_Blast(int mode, SceneE19Blast *blast)
             FieldFx_ModelDraw(g_SceneE19BlastModel3, &shellMatrix3c);
             FieldFx_ModelRestoreColors(g_SceneE19BlastModel3);
             center.y = height;
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             FieldFx_DrawStarFan(&center, 0x9C4, 0x9C4, 0xC, 0, 0x1000, 0x1000, &glowColor, 0, intensity, 1);
             radialScale = rsin(phase) / 4 + 0xC00;
             intensity = rcos(phase) / 32;
@@ -1226,8 +1226,8 @@ test_timer:
         clut = GetClut(16, palette);
         FieldFx_DrawShapeQuads(&particle->position, (GteRotation *)&rotation, 8192, 8192,
                      152, clut, 1, intensity, 0);
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         FieldFx_DrawStarFan(&particle->position, 600, 600, 5,
                      0, 4096, 4096, &color, 0, 70, 1);
         if (particle->timer < 24 && (particle->position.pad & 1)) {
@@ -1260,8 +1260,8 @@ if (floorIndex == 4 && g_FieldFxAltPaletteFlag) palette += 4;
             FieldFx_DrawPulledSprite(&temporaryPosition, 6144, 6144, 154,
                          clut, 1, intensity / 2, 0, 1536);
         }
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         if (particle->timer < 13 && !(particle->position.pad & 1)) {
             FieldFx_DrawRotatedTriangle(&particle->position, (GteRotation *)&particle->angles,
                          1900, (12 - particle->timer) << 8,
@@ -1374,7 +1374,7 @@ int SceneE19_HomingBurst(int mode, SceneHomingBurst *burst)
             fade = 0x80 - (time << 7) / 24;
             scale = rsin((time << 10) / 24);
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -1436,7 +1436,7 @@ int SceneE19_HomingBurst(int mode, SceneHomingBurst *burst)
                               GetClut(0x90, palette), 1, fade / 2, 0);
             }
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -1505,7 +1505,7 @@ int SceneE19_SpinRayCallback(int mode, SceneSpinRay *ray)
         break;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -1791,7 +1791,7 @@ int SceneE19_EmberFlareParticleCallback(int mode, RoomOrbitTrailParticle *p) {
             glow = rcos(((s16)p->timer << 10) / 24) / 32;
             size = rsin(((s16)p->timer << 10) / 24);
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -1924,7 +1924,7 @@ int SceneE19_EmberFlare(int mode, SceneE22EmberBurst *burst) {
         break;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -2061,7 +2061,7 @@ int SceneE19_OrbitTrailParticleCallback(int mode, RoomOrbitTrailParticle *p) {
             LoadAverageShort12(&g_SceneE19OrbitTrailCenter, &offset, 0x1000 - weight,
                           weight, &blend);
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -2104,7 +2104,7 @@ int SceneE19_OrbitTrailParticleCallback(int mode, RoomOrbitTrailParticle *p) {
             offset.y += g_SceneE19OrbitTrailCenter.y;
             offset.z += g_SceneE19OrbitTrailCenter.z;
             {
-                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
@@ -2197,7 +2197,7 @@ int SceneE19_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
         return 1;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -2669,7 +2669,7 @@ int SceneE19_TwinGlow(int mode, SceneTwinGlow *glow)
         return 2;
     case 2:
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }

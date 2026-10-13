@@ -206,7 +206,7 @@ s32 Render_DrawWireframeModel(RenderAnimFrame *frame, void *position, s32 scale,
     transform.translation[1] = position_input->y;
     transform.translation[2] = position_input->z;
     RotMatrixY(yaw & 0xFFFF, (GteMatrix *)&transform);
-    matrix_slot = &D_800BCFA4.value;
+    matrix_slot = &g_ViewMatrixSlot.value;
     matrix_value = *matrix_slot;
     gte_ldrotmatrix(matrix_value);
     {

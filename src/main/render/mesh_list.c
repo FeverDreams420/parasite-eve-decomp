@@ -403,9 +403,9 @@ s32 Render_BuildMeshList(void) {
     s32 i;
 
     base.state = g_GeomState;
-    base.state->out_disp_x = base.state->disp_src_x - ((u16)D_800BCF8C.x - 160);
+    base.state->out_disp_x = base.state->disp_src_x - ((u16)g_GeomScroll.state.position.x - 160);
     count = base.state->entry_count06;
-    base.state->out_disp_y = base.state->disp_src_y - (g_CameraClampedY[0] - 112);
+    base.state->out_disp_y = base.state->disp_src_y - ((u16)g_GeomScroll.state.position.y - 112);
     base.word += base.state->entry_offset;
     i = 0;
     if (i < count) {
@@ -575,7 +575,7 @@ int Render_ScrollEntries(void)
 
         i = 0;
         if (i < count) {
-            GeomScrollCoordinates *camera = &D_800BCF8C;
+            GeomScrollCoordinates *camera = &g_GeomScroll.state.position;
 
             entry = &entries->scroll;
             do {
@@ -610,10 +610,10 @@ int Render_ScrollEntries(void)
             } while (++i < count);
         }
         if (g_GeomScroll.state.flags & 0x80) {
-            unsigned short x = D_800BCF8C.x, y = g_CameraClampedY[0];
+            unsigned short x = g_GeomScroll.state.position.x, y = g_GeomScroll.state.position.y;
             g_GeomScroll.state.flags &= ~0x80;
-            g_CameraSavedX = x;
-            g_CameraSavedY = y;
+            g_GeomScroll.state.position.savedX = x;
+            g_GeomScroll.state.position.savedY = y;
         }
     }
     return 0;

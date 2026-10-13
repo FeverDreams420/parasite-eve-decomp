@@ -161,7 +161,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
         }
         break;
     case 2: {
-        RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+        RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         if (state->color != 0) {

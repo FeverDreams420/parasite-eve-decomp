@@ -45,7 +45,7 @@ int RoomLib_UpdateTimedRender(int mode, RoomFxTimedRenderState *state) {
         if (state->disabled != 0) {
             return 0;
         }
-        matrixSlot = &D_800BCFA4.value;
+        matrixSlot = &g_ViewMatrixSlot.value;
         gte_ldrotmatrix(*matrixSlot);
         gte_ldtransmatrix(*matrixSlot);
         FieldFx_SampleColorTrack(&RoomLib_TimedRenderTable, &work,

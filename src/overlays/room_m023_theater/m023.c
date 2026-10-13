@@ -37,7 +37,7 @@ int RoomM023_DriftPulseCallback(int mode, RoomDriftPulseState *state) {
         }
         break;
     case 2:
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         switch (state->phase) {
@@ -431,7 +431,7 @@ int RoomM023_JointBeacon(int mode, RoomM023Beacon *state) {
             g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[*index];
             g_FieldFxSpriteParams.palette = 3;
             g_FieldFxSpriteParams.parameter06 = 0;
-            slot = &D_800BCFA4;
+            slot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(slot->value);
             gte_ldtransmatrix(slot->value);
             page = (u16)(g_FieldFxTpageTable[*index] | GetTPage(0, 1, 0, 0));

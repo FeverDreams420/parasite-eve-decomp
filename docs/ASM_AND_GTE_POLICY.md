@@ -370,11 +370,11 @@ interleaved with `ctc2`, rotation then translation) and are written with
 `include/pe1/gte.h`, the same helpers the other scene_e19 and room effects
 use for this slot:
 
-    gte_ldrotmatrix(D_800BCFA4.value);
-    gte_ldtransmatrix(D_800BCFA4.value);
+    gte_ldrotmatrix(g_ViewMatrixSlot.value);
+    gte_ldtransmatrix(g_ViewMatrixSlot.value);
 
 The compiler emits the pointer load for the `"r"` operand: the two reads of
-`D_800BCFA4.value` share the slot address (retail's `la`/`lw 0(v0)`) and the
+`g_ViewMatrixSlot.value` share the slot address (retail's `la`/`lw 0(v0)`) and the
 second read is a common subexpression, so both transfers use one base
 register. C reads of the eight words instead fold the slot address into an
 absolute `lui`/`lw` and schedule the loads with the surrounding code (lev 47

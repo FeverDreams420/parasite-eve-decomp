@@ -195,7 +195,7 @@ int RoomM086_SeekerController(int mode, RoomM086SeekerController *state, RoomM08
 
     switch (mode) {
     case 0:
-        slot = &D_800BCFA4;
+        slot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(slot->value);
         gte_ldtransmatrix(slot->value);
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM086Channel)->pool, 7, &anchor, state);

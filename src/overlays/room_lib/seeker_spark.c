@@ -106,8 +106,8 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
         }
         break;
     case 2:
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         switch (spark->state) {
         case 0: {
             int clut;
@@ -115,8 +115,8 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
             int palette;
 
             intensity = ((g_FieldFxCurrentAge & 1) << 5) + 0x60;
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             /* The tpage lookup comes first so its indexed load is
              * scheduled ahead of the parameter stores, as in retail. */
             g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlots[4]];
@@ -134,8 +134,8 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
             if (g_FieldFxCurrentAge & 3) {
                 return 0;
             }
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             FieldFx_AnglesToVector((GteShortVector *)&spark->vx, 0xF0, &delta);
             delta.x += spark->x;
             delta.y += spark->y;

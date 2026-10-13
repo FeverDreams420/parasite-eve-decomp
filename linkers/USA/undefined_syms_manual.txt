@@ -29,10 +29,9 @@ g_SpuReverbEnableHigh = 0x1F801D9A;
 g_CardPatchContinuation = 0x0000DFFC;
 D_A000DFAC = 0xA000DFAC;
 
-/* alias: overlay view names. Overlays link main's addresses by name from the
- * built main executable (tools/scripts/overlay_link_symbols.py); these
- * overlay spellings follow the main label they alias. */
-D_800BCFA4 = g_GeomVramPacketDst;
+/* alias: the old spelling of the view matrix slot, still used by
+ * fieldfx/geometry.c. */
+D_800BCFA4 = g_ViewMatrixSlot;
 
 /* alias: the player actor word, defined as D_8009D254 (a BattleEntity
  * pointer) in field/actor_collision's .data. g_PlayerEntity is the
@@ -77,8 +76,6 @@ D_800B89F8 = g_EntityRenderScratch;
 D_800B8AC0 = g_AkaoVoiceStateTable;
 D_800BC000 = g_AkaoVoiceChannelTable;
 D_800BCF88 = g_RenderStateFlags;
-D_800BCFEA = g_ScreenTransitionTargetY;
-D_800BCFF2 = g_ScreenTransitionStartY;
 D_800BD024 = g_GeomOtZ;
 g_PadPort1Buffer = g_AnalogStickState;
 D_800C0D90 = g_AkaoSpuCommonAttr;

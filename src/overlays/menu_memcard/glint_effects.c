@@ -131,8 +131,8 @@ int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst) {
         position.x = burst->x;
         position.y = burst->y;
         position.z = burst->z;
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         g_FieldFxSpriteParams.parameter00 = 32;
         g_FieldFxSpriteParams.parameter02 = 2;
         g_FieldFxSpriteParams.extent_x = 32;
@@ -149,8 +149,8 @@ int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst) {
         switch (burst->state) {
         case 0:
             angle = (burst->timer << 10) / 24;
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             fade = rsin(angle) / 32;
             if (g_FieldFxCurrentAge & 1) {
                 fade = fade * 15 / 16;
@@ -168,8 +168,8 @@ int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst) {
                 amount = 0x80 - burst->timer * 32;
                 FieldFx_DrawScreenTint((unsigned char *)&ring, amount, 1, 8);
             }
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             fade = rcos(angle) / 32;
             if (g_FieldFxCurrentAge & 1) {
                 fade = fade * 15 / 16;
@@ -453,7 +453,7 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         }
         return 2;
     case 2:
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         g_FieldFxSpriteParams.parameter00 = 32;
@@ -668,7 +668,7 @@ int MenuCard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
         }
         break;
     case 2:
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         g_FieldFxSpriteParams.parameter00 = 32;
@@ -789,7 +789,7 @@ int MenuCard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
                 width = rsin((s16)p->timer << 5) * 1900 / 4096;
             }
             height = rcos(angle) / 32 + 64;
-            matrixSlot = &D_800BCFA4;
+            matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             size = (s16)(p->timer & 3);
@@ -946,7 +946,7 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
         }
         break;
     case 2: {
-        RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+        RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         D_801F1F28.x = burst->x;

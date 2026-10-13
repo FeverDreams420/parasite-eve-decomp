@@ -224,7 +224,7 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
             if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0, palette);
             FieldFx_DrawShapeQuads(&target, 0, width, height, 0, clut, 1, 0x80, &color);
-            matrixSlot = &D_800BCFA4;
+            matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             intensity = rcos((state->timer << 10) / 20) / 64;
@@ -399,8 +399,8 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
         }
         break;
     case 2:
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         switch (spark->state) {
         case 0:
             opacity = 0x80 - ((spark->timer & 1) << 6);

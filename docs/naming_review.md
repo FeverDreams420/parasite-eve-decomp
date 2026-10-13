@@ -20,10 +20,15 @@ Left unnamed on purpose:
 - 540 symbols the proposers could not explain.
 
 Existing names found to be wrong, not yet changed:
-`g_ScreenTransitionTargetY`/`StartY`/`FadeColor` (0x800BCFEA/F2/F6) are the tint
-target green, start green and duration; `g_GeomVramPacketDst` (0x800BCFA4) is the
-view-matrix pointer; `g_EntityWorkBuffer` (0x800A77F0) is the script variable
+`g_EntityWorkBuffer` (0x800A77F0) is the script variable
 bank; `g_PlayTimeSeconds` (0x800A76BC) counts frames.
+
+The fields of the scroll state at 0x800BCF88 (`g_GeomScroll`, with the tint
+block `g_ScreenTint`) are reached as struct members; the former
+`g_ScreenTransitionTargetY`/`StartY`/`FadeColor` were the tint target green,
+start green and duration. Two one-field record views remain where retail
+addresses the word itself: `g_ViewMatrixSlot` (0x800BCFA4, the view matrix
+pointer, formerly `g_GeomVramPacketDst`) and `g_ProjectionSlot` (0x800BCFA8).
 
 Two functions at overlay addresses (`func_801909B4`, `func_8019234C`) keep their
 address names: the same address is a different function in other overlays.

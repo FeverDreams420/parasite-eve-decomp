@@ -237,8 +237,8 @@ int FieldFx_ScatterBurstEmitter(int mode, RenderArcingEmitter *state)
             return 1;
         break;
     case 2:
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         g_FieldFxSpriteParams.parameter00 = 32;
         g_FieldFxSpriteParams.parameter02 = 2;
         g_FieldFxSpriteParams.extent_x = 32;
@@ -368,8 +368,8 @@ int FieldFx_CosineSparkEmitter(int mode, RenderArcingEmitter *state)
                           &color, 128, 1);
         }
         g_FieldFxSpriteParams.depth = 64;
-        gte_ldrotmatrix((const GteMatrixWords *)D_800BCFA4.value);
-        gte_ldtransmatrix((const GteMatrixWords *)D_800BCFA4.value);
+        gte_ldrotmatrix((const GteMatrixWords *)g_ViewMatrixSlot.value);
+        gte_ldtransmatrix((const GteMatrixWords *)g_ViewMatrixSlot.value);
         FieldFx_TransformTranslation(&state->position, 0);
         break;
     }
@@ -608,8 +608,8 @@ int FieldFx_SpiralEmitter(int mode, RenderArcingEmitter *state)
         FieldFx_EnsureEffectTexturePage(0);
         tpages = g_FieldFxTpageTable;
         g_FieldFxSpriteParams.parameter06 = 0;
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         {
             int tpage = (u16)(tpages[slots[0]] | GetTPage(0, 1, 0, 0));
             int kind = g_FieldFxSpriteParams.palette;
@@ -860,7 +860,7 @@ int FieldFx_FanSweep(int mode, FieldFanSweep *sweep)
     case 2:
         {
             GteMatrix **slot;
-            slot = &D_800BCFA4.value;
+            slot = &g_ViewMatrixSlot.value;
             gte_ldrotmatrix((const GteMatrixWords *)*slot);
             gte_ldtransmatrix((const GteMatrixWords *)*slot);
         }
@@ -1157,8 +1157,8 @@ int FieldFx_OrbitingSpriteEmitter(int mode, RenderOrbitingEmitter *state)
         g_OrbitingEffectParticlePool = state->particles;
         break;
     case 2:
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         g_FieldFxSpriteParams.parameter00 = 16;
         g_FieldFxSpriteParams.parameter02 = 1;
         g_FieldFxSpriteParams.extent_x = 16;
@@ -1224,7 +1224,7 @@ int FieldFx_OrbitingSpriteBurst(int mode, RenderOrbitingEmitter *state)
     case 2:
         {
             GteMatrix **slot;
-            slot = &D_800BCFA4.value;
+            slot = &g_ViewMatrixSlot.value;
             gte_ldrotmatrix((const GteMatrixWords *)*slot);
             gte_ldtransmatrix((const GteMatrixWords *)*slot);
         }
@@ -1477,7 +1477,7 @@ int FieldFx_HelicalSpriteEmitter(int mode, RenderOrbitingEmitter *state)
     case 2:
         {
             GteMatrix **slot;
-            slot = &D_800BCFA4.value;
+            slot = &g_ViewMatrixSlot.value;
             gte_ldrotmatrix((const GteMatrixWords *)*slot);
             gte_ldtransmatrix((const GteMatrixWords *)*slot);
         }
@@ -1599,7 +1599,7 @@ int FieldFx_DampedSparkEmitter(int mode, RenderSparkEmitter *state)
         }
         {
             GteMatrix **slot;
-            slot = &D_800BCFA4.value;
+            slot = &g_ViewMatrixSlot.value;
             gte_ldrotmatrix((const GteMatrixWords *)*slot);
             gte_ldtransmatrix((const GteMatrixWords *)*slot);
         }

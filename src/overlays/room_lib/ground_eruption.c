@@ -570,7 +570,7 @@ void RoomEffect_GroundEruptionDrawShadow(
     stack.matrix.t[2] = fx->z;
     depthSlot = &g_RoomEruptionShadowPacket.depth;
     *depthSlot = fx->depth;
-    matrixSlot = &D_800BCFA4;
+    matrixSlot = &g_ViewMatrixSlot;
     gte_ldrotmatrix(matrixSlot->value);
     gte_ldtransmatrix(matrixSlot->value);
     FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)depthSlot - 0xA), &stack.matrix, 1);

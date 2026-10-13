@@ -68,8 +68,8 @@ int SPINNING_MODEL_FUNC(int mode, FieldFxSpinningModel *state)
         g_FieldFxSpriteParams.palette = 1;
         FieldFx_EnsureEffectTexturePage(1);
         g_FieldFxSpriteParams.parameter06 = 1;
-        gte_ldrotmatrix(D_800BCFA4.value);
-        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldrotmatrix(g_ViewMatrixSlot.value);
+        gte_ldtransmatrix(g_ViewMatrixSlot.value);
         tpage = (u16)(g_FieldFxTpageTable[g_FieldFxTpageSlots[9]] | GetTPage(0, 1, 0, 0));
         kind = g_FieldFxSpriteParams.palette;
         palette = g_FieldFxPaletteTable[kind];

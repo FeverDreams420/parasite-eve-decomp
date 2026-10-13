@@ -13,6 +13,7 @@
 
 #include "pe1/entity_frame_update.h"
 #include "pe1/gte.h"
+#include "pe1/render_matrix_slot.h"
 #include "pe1/render_object.h"
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
@@ -93,7 +94,7 @@ int RoomEffect_MirrorTick(RoomFxMirror *mirror) {
         RoomEffect_ModelUpdate(&mirror->object->geom);
         Render_TransformVertices((RenderObjectEntity *)&mirror->object->geom);
         Render_TransformMorphVertices((RenderObjectEntity *)&mirror->object->geom,
-                                      g_GeomVramPacketDst);
+                                      (u32 *)g_ViewMatrixSlot.value);
         RoomEffect_ModelDraw((RenderObjectEntity *)&mirror->object->geom);
     }
     return 0;

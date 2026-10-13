@@ -801,7 +801,7 @@ int Script_SetCdRomScreenPos(unsigned short **arg0) {
 }
 
 int Script_ClearEntityFlag40(void) {
-    unsigned char *ptr = g_ScreenTransitionState;
+    unsigned char *ptr = &g_ScreenTint.fadeMode;
 
     *ptr &= 0xBF;
     return 1;
@@ -1005,7 +1005,7 @@ int Script_SetMenuSlotEntry(int **arg0) {
 }
 
 int Entity_YieldOnLoading(void) {
-    if ((g_ScreenTransitionState[0] & 3) >= 2) {
+    if ((g_ScreenTint.fadeMode & 3) >= 2) {
         g_SceneDataTable0 -= 8;
         g_ScriptNodePool->active = 1;
         return 0;

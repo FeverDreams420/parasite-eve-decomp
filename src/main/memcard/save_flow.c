@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/game_timers.h"
+#include "pe1/geom_state.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/memcard.h"
 #include "pe1/memcard_save_state.h"
@@ -27,7 +28,7 @@ void Save_SerializeTail(void) {
     SAVE_PUT(SaveBytes2, &g_GameState.requested_entity_bank);
     SAVE_PUT(SaveBytes2, &g_GameState.current_story_day);
     SAVE_PUT(SaveU8, &g_GameState.story_day_flags);
-    SAVE_PUT(SaveU8, &g_ScreenTransitionState[0]);
+    SAVE_PUT(SaveU8, &g_ScreenTint.fadeMode);
     SAVE_PUT(SaveBytes70, &g_AyaBattleState);
     SAVE_PUT(SaveBytes18, &g_SavedBattleStateTail);
     SAVE_PUT(SaveBytes8, &g_BattleEquipStateBlock);
@@ -47,7 +48,7 @@ void Save_DeserializeTail(void) {
     SAVE_GET(SaveBytes2, &g_GameState.requested_entity_bank);
     SAVE_GET(SaveBytes2, &g_GameState.current_story_day);
     SAVE_GET(SaveU8, &g_GameState.story_day_flags);
-    SAVE_GET(SaveU8, &g_ScreenTransitionState[0]);
+    SAVE_GET(SaveU8, &g_ScreenTint.fadeMode);
     SAVE_GET(SaveBytes70, &g_AyaBattleState);
     SAVE_GET(SaveBytes18, &g_SavedBattleStateTail);
     SAVE_GET(SaveBytes8, &g_BattleEquipStateBlock);

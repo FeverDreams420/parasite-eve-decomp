@@ -161,8 +161,8 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
         case 1:
             scale = ((g_FieldFxCurrentAge / 3) & 1) * 32 + 32;
             i = 0;
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             {
                 u16 kind = g_FieldFxSpriteParams.palette;
                 palette = g_FieldFxPaletteTable[kind];
@@ -180,8 +180,8 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             rcos((trail->timer << 10) / 20);
             /* Shares the loop index's register with retail (s0). */
             i = (g_FieldFxCurrentAge & 1) << 7;
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             /* tpage is the first parameter store, so its address stays in a
              * register and parameter00 is later written through it. */
             g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot3];
@@ -317,7 +317,7 @@ int RoomEffect_ModelBurstParticle(int mode, RoomModelBurstParticle *state) {
         scale = rcos((short)state->frame << 6) / 32;
         rcos((short)state->frame << 6);
         u = (g_FieldFxCurrentAge & 1) << 7;
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         kind = g_FieldFxSpriteParams.palette;
@@ -422,7 +422,7 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
         g_RoomModelBurstAnchor.y = position.y;
         g_RoomModelBurstAnchor.z = position.z;
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
@@ -607,8 +607,8 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
         case 1:
             scale = ((g_FieldFxCurrentAge / 2) & 1) * 32 + 32;
             i = 0;
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             {
                 u16 kind = g_FieldFxSpriteParams.palette;
                 palette = g_FieldFxPaletteTable[kind];
@@ -626,8 +626,8 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             rcos((trail->timer << 10) / 20);
             /* Shares the loop index's register with retail (s0). */
             i = (g_FieldFxCurrentAge & 1) << 7;
-            gte_ldrotmatrix(D_800BCFA4.value);
-            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldrotmatrix(g_ViewMatrixSlot.value);
+            gte_ldtransmatrix(g_ViewMatrixSlot.value);
             /* tpage is the first parameter store, so its address stays in a
              * register and parameter00 is later written through it. */
             g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot3];
@@ -759,7 +759,7 @@ int RoomEffect_ScatterBurstParticle(int mode, RoomModelBurstParticle *state) {
         scale = rcos((short)state->frame << 6) / 32;
         rcos((short)state->frame << 6);
         u = (g_FieldFxCurrentAge & 1) << 7;
-        matrixSlot = &D_800BCFA4;
+        matrixSlot = &g_ViewMatrixSlot;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         kind = g_FieldFxSpriteParams.palette;
@@ -862,7 +862,7 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
         g_RoomScatterBurstAnchor.y = position.y;
         g_RoomScatterBurstAnchor.z = position.z;
         {
-            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            RenderMatrixSlot *matrixSlot = &g_ViewMatrixSlot;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }

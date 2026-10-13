@@ -140,9 +140,10 @@ typedef struct GeomScrollEntry {
     u8 reserved24[20];
 } GeomScrollEntry;
 
-/* Observed prefix of the scroll state, not a claim about its full extent.
- * This address-based view spans the interleaved screen-tint block too.
- * The origin pair is also written by script dispatch at 0x800BD028/2A. */
+/* Camera and view part of the scroll state (from 0x800BCF8C), with the
+ * interleaved screen-tint block. x/y is the camera position after clamping
+ * to the room bounds; a transition moves it from start to target over
+ * duration frames. The origin pair is also written by script dispatch. */
 typedef struct GeomScrollCoordinates {
     s16 x, y;
     u16 savedX, savedY;
@@ -150,14 +151,21 @@ typedef struct GeomScrollCoordinates {
     u16 startX, startY;
     u16 targetX, targetY;
     u16 elapsed, duration;
-    u32 *matrixWords;
-    s32 *projectionDistance;
-    /* Viewport bounds saved by Render_DrawMeshList (D_800BCFAC..B2). */
+    u32 *matrixWords;           /* g_ViewMatrixSlot */
+    s32 *projectionDistance;    /* g_ProjectionSlot */
+    /* Viewport bounds saved by Render_DrawMeshList. */
     s16 boundsMinX, boundsMaxX, boundsMinY, boundsMaxY;
-    /* Projected screen position of the active actor (g_CameraFocusScreenX/B6). */
+    /* Projected screen position of the active actor. */
     s16 cameraOffsetX, cameraOffsetY;
     RenderTintState tint;
-    u8 reserved70[0x2C];
+    u8 meshTintLevel;           /* 0x70: g_RenderMeshTintLevel */
+    u8 groupSelect;             /* 0x71: g_GeomGroupSel, selected viewport */
+    s16 focusHeight;            /* 0x72: g_CameraFocusHeight */
+    GteMatrix cameraBasis;      /* 0x74: g_CameraBasisMatrix */
+    u16 baseAngleDigital;       /* 0x94: g_CameraBaseAngleDigital */
+    u16 baseAngleAnalog;        /* 0x96: g_CameraBaseAngleAnalog */
+    u8 otZ;                     /* 0x98: g_GeomOtZ */
+    u8 lightTint[3];            /* 0x99: g_RoomLightTint */
     s16 originX, originY;
 } GeomScrollCoordinates;
 
@@ -168,8 +176,8 @@ typedef struct GeomScrollState {
 
 /* The same state as the view reset (Render_InitViewState) writes it: every
  * halfword pair is cleared with one word store, and the two words after the
- * timer point at the current view matrix (the RenderMatrixSlot D_800BCFA4)
- * and at its projection distance (D_800BCFA8). */
+ * timer point at the current view matrix (the RenderMatrixSlot g_ViewMatrixSlot)
+ * and at its projection distance (g_ProjectionSlot). */
 typedef struct GeomScrollWords {
     u32 flags;
     u32 position;               /* x, y */
@@ -182,7 +190,7 @@ typedef struct GeomScrollWords {
     s32 *projectionDistance;
     u32 savedBoundsX;           /* saved viewport X bounds */
     u32 savedBoundsY;           /* saved viewport Y bounds */
-    u32 cameraOffset;           /* g_CameraFocusScreenX, g_CameraOffsetScreenY */
+    u32 cameraOffset;           /* cameraOffsetX, cameraOffsetY */
     u8 reserved30[0x70];
     u32 origin;                 /* originX, originY */
 } GeomScrollWords;
@@ -209,6 +217,12 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(GeomScrollState, position) == 4,
                   geom_scroll_position_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(GeomScrollCoordinates, originX) == 0x9C,
                   geom_scroll_origin_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(GeomScrollCoordinates, meshTintLevel) == 0x70,
+                  geom_scroll_mesh_tint_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(GeomScrollCoordinates, cameraBasis) == 0x74,
+                  geom_scroll_camera_basis_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(GeomScrollCoordinates, otZ) == 0x98,
+                  geom_scroll_ot_z_offset);
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(GeomScrollState, position.tint) == 0x30,
                   geom_scroll_tint_offset);
@@ -257,7 +271,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(GeomState, entry_offset_1C) == 0x1C,
 extern GeomState * volatile g_GeomState;
 
 extern u8 g_GeomGroupSel;
-extern u16 *volatile g_GeomVramPacketDst;
 int Render_StepGroupAnimations(void);
 int Render_ScrollEntries(void);
 int Render_StepCameraTransition(void);
@@ -332,8 +345,10 @@ typedef union GeomStateAddress {
 int Render_UpdateScrollPosition(void *position, int duration, int mode);
 extern s16 g_CameraFocusHeight[];
 extern int g_RenderStateFlags;
-extern u16 g_CameraScreenOffsetX, D_800BCF96, D_800BCF98, g_CameraTransitionStartY;
-extern u16 D_800BCF9C, D_800BCF9E, D_800BCFA0, D_800BCFA2;
+/* g_GeomScroll.state.position.screenOffsetX as its own symbol:
+ * Render_StepCameraTransition stores it through this name; with the record
+ * view cc1 schedules the following screenOffsetY computation differently. */
+extern u16 g_CameraScreenOffsetX;
 
 /* Existing absolute symbols expose overlapping views of the scroll state.
  * The symbol is the leading flags word, a volatile scalar: the grab effects
@@ -343,12 +358,12 @@ extern u16 D_800BCF9C, D_800BCF9E, D_800BCFA0, D_800BCFA2;
  * g_GeomScroll, which generates the same code as a record declaration. */
 extern volatile int D_800BCF88;
 #define g_GeomScroll (*(GeomScrollRecord *)&D_800BCF88)
+/* The screen tint and fade parameters inside the scroll state. */
+#define g_ScreenTint (g_GeomScroll.state.position.tint)
 extern char g_RenderMeshTintLevel;
 /* Screen fade length and elapsed frames (Render_StartFadeIn/StepFade). */
 extern u8 g_RenderFadeFrameCount;
 extern u8 g_RenderFadeFrameCounter;
-extern GeomScrollCoordinates D_800BCF8C;
-extern u16 g_CameraSavedX, g_CameraSavedY;
 
 int Render_TransformPoint(GeomEntry *entry, int x, int y, int depth);
 int Render_ClipPoint(int x, int y, int z);

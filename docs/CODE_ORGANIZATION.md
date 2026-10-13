@@ -945,7 +945,7 @@ changing bytes:
   `void` return where retail fills the epilogue delay slot; deleting the
   `-fno-schedule-insns` markers of CollisionQueries_2 and BurstEffect_2.
 - GTE macro operands are the objects themselves, not pinned pointers:
-  `gte_ldrotmatrix(D_800BCFA4.value)`, `gte_ldv3(g_FieldFxCellQuad, &D_800F3318,
+  `gte_ldrotmatrix(g_ViewMatrixSlot.value)`, `gte_ldv3(g_FieldFxCellQuad, &D_800F3318,
   &g_FieldFxCellQuadBottomLeft)`, `gte_ldv0(&D_800F3328)`, `gte_stsxy3(&p->x0, &p->x1, &p->x2)`,
   `gte_stszotz(&depth)`. A constant or memory operand of an `"r"` input is
   loaded by reload, and reload takes its spill registers round robin
@@ -1099,7 +1099,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
   takes cc1 `-G0` (`Battle_EncounterInitializationFlow`); a unit that needs
   a record or volatile cast of a small word to read absolutely takes cc1
   `-G8`, which makes the small symbol a cheap address (`FxCommon_*`
-  with the projection slot record `D_800BCFA8`,
+  with the projection slot record `g_ProjectionSlot`,
   `RoomEffect_ConfiguredPulseCallback` with `*(volatile u16 *)&g_FieldFxTpageSlot2`).
   The cc1 `-G8` trick needs a unit without small data definitions of its
   own: in `room_lib/grab_attack.c` its `.sdata` is discarded by the overlay

@@ -193,7 +193,7 @@ int Render_PrepareFrame(void) {
         gte_SetGeomOffset(cx, 112);
     }
     {
-        GteMatrix **slot = &D_800BCFA4.value;
+        GteMatrix **slot = &g_GeomScroll.words.viewMatrix;
         register GteMatrix *view asm("$6");
 
         asm("" : "=r"(slot) : "0"(slot));
@@ -209,8 +209,8 @@ int Render_PrepareFrame(void) {
         int word = local.projected.word;
         int x = local.projected.xy[0];
 
-        g_CameraFocusScreenX = x;
-        g_CameraOffsetScreenY = word >> 16;
+        g_GeomScroll.state.position.cameraOffsetX = x;
+        g_GeomScroll.state.position.cameraOffsetY = word >> 16;
         return ret;
     }
 }
@@ -235,27 +235,27 @@ s32 CdRom_InitScreenState(void) {
     GeomScrollState *state = &g_GeomScroll.state;
     s32 i;
 
-    g_GeomScroll.state.position.tint.target_b = 0xFF;
-    g_GeomScroll.state.position.tint.target_g = 0xFF;
-    g_GeomScroll.state.position.tint.target_r = 0xFF;
-    g_GeomScroll.state.position.tint.fade_mode = 1;
-    g_GeomScroll.state.position.tint.start_b = 0;
-    g_GeomScroll.state.position.tint.start_g = 0;
-    g_GeomScroll.state.position.tint.start_r = 0;
-    g_GeomScroll.state.position.tint.blend_mode = 2;
+    g_GeomScroll.state.position.tint.targetB = 0xFF;
+    g_GeomScroll.state.position.tint.targetG = 0xFF;
+    g_GeomScroll.state.position.tint.targetR = 0xFF;
+    g_GeomScroll.state.position.tint.fadeMode = 1;
+    g_GeomScroll.state.position.tint.startB = 0;
+    g_GeomScroll.state.position.tint.startG = 0;
+    g_GeomScroll.state.position.tint.startR = 0;
+    g_GeomScroll.state.position.tint.blendMode = 2;
     for (i = 0; i < 2; i++) {
         state->position.tint.tiles[i].tag.length = 3;
         state->position.tint.tiles[i].command = 0x60;
-        state->position.tint.tiles[i].r = state->position.tint.target_r;
-        state->position.tint.tiles[i].g = state->position.tint.target_g;
-        state->position.tint.tiles[i].b = state->position.tint.target_b;
+        state->position.tint.tiles[i].r = state->position.tint.targetR;
+        state->position.tint.tiles[i].g = state->position.tint.targetG;
+        state->position.tint.tiles[i].b = state->position.tint.targetB;
         state->position.tint.tiles[i].x = 0;
         state->position.tint.tiles[i].y = 0;
         state->position.tint.tiles[i].width = 320;
         state->position.tint.tiles[i].height = 224;
         state->position.tint.tiles[i].command |= 2;
         state->position.tint.modes[i].tag.length = 1;
-        state->position.tint.modes[i].command = 0xE1000400 | ((state->position.tint.blend_mode & 3) << 5);
+        state->position.tint.modes[i].command = 0xE1000400 | ((state->position.tint.blendMode & 3) << 5);
     }
     state->position.tint.duration = 0;
     state->position.tint.frame = 0;
@@ -279,8 +279,8 @@ typedef union RenderTagAddress {
 
 int Render_SetCDDCSlot(void) {
     GeomScrollState *state = &g_GeomScroll.state;
-    int mode = g_ScreenTransitionState[0] & 3;
-    int stop = g_ScreenTransitionState[0] & 4;
+    int mode = g_ScreenTint.fadeMode & 3;
+    int stop = g_ScreenTint.fadeMode & 4;
     int divisor, frame;
     int slot;
     int modeSlot;
@@ -290,21 +290,21 @@ int Render_SetCDDCSlot(void) {
         return 0;
     }
     if (mode == 2) {
-        divisor = g_ScreenTransitionFadeColor - 1;
+        divisor = g_ScreenTint.duration - 1;
         if (divisor <= 0) {
             divisor = 1;
         }
-        frame = D_800BCFF8;
+        frame = g_ScreenTint.frame;
         state->position.tint.tiles[g_ActiveDrawSlot].r =
-            D_800BCFF0 + (D_800BCFE8 - D_800BCFF0) * frame / divisor;
+            g_ScreenTint.startR + (g_ScreenTint.targetR - g_ScreenTint.startR) * frame / divisor;
         state->position.tint.tiles[g_ActiveDrawSlot].g =
-            D_800BCFF2 + (D_800BCFEA - D_800BCFF2) * frame / divisor;
+            g_ScreenTint.startG + (g_ScreenTint.targetG - g_ScreenTint.startG) * frame / divisor;
         state->position.tint.tiles[g_ActiveDrawSlot].b =
-            D_800BCFF4 + (g_ScreenTintTargetB - D_800BCFF4) * frame / divisor;
+            g_ScreenTint.startB + (g_ScreenTint.targetB - g_ScreenTint.startB) * frame / divisor;
     } else {
-        state->position.tint.tiles[g_ActiveDrawSlot].r = D_800BCFE8;
-        state->position.tint.tiles[g_ActiveDrawSlot].g = D_800BCFEA;
-        state->position.tint.tiles[g_ActiveDrawSlot].b = g_ScreenTintTargetB;
+        state->position.tint.tiles[g_ActiveDrawSlot].r = g_ScreenTint.targetR;
+        state->position.tint.tiles[g_ActiveDrawSlot].g = g_ScreenTint.targetG;
+        state->position.tint.tiles[g_ActiveDrawSlot].b = g_ScreenTint.targetB;
     }
     buffers = &D_800B0E38;
     slot = g_ActiveDrawSlot;
@@ -313,16 +313,16 @@ int Render_SetCDDCSlot(void) {
     (slot + state->position.tint.modes)->tag.length = 1;
     modeSlot = g_ActiveDrawSlot;
     (modeSlot + state->position.tint.modes)->command =
-        0xe1000400 | ((state->position.tint.blend_mode & 3) << 5);
+        0xe1000400 | ((state->position.tint.blendMode & 3) << 5);
     linkPrimitive(&buffers->ordering[modeSlot][3],
                   &state->position.tint.modes[modeSlot].tag);
     if (mode == 2) {
         state->position.tint.frame++;
         if (state->position.tint.frame >= state->position.tint.duration) {
             if (stop) {
-                state->position.tint.fade_mode = 0;
+                state->position.tint.fadeMode = 0;
             } else {
-                state->position.tint.fade_mode = 1;
+                state->position.tint.fadeMode = 1;
             }
         }
     }

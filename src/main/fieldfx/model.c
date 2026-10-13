@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/field_textured_model.h"
+#include "pe1/geom_state.h"
 #include "pe1/gte.h"
 #include "pe1/render_object.h"
 #include "pe1/render_prim.h"
@@ -213,7 +214,7 @@ void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
     sp->tpage = g_FieldFxModelTpage;
     sp->clut = g_FieldFxModelClut;
     sp->semiTrans = g_FieldFxModelSemiTrans;
-    CompMatrix(D_800BCFA4.value, placement, &sp->matrix);
+    CompMatrix(g_GeomScroll.words.viewMatrix, placement, &sp->matrix);
     SetTransMatrix(&sp->matrix);
     SetRotMatrix(&sp->matrix);
     header = &model->header;

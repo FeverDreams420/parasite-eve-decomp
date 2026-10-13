@@ -10,6 +10,7 @@
 #include "pe1/game_audio_state.h"
 #include "pe1/game_state.h"
 #include "pe1/game_state_types.h"
+#include "pe1/geom_state.h"
 #include "pe1/gpu_image.h"
 #include "pe1/gte.h"
 #include "pe1/pe_image.h"
@@ -131,9 +132,9 @@ int Akao_Calc3DPan(AkaoPackedRect3 *pos, int *pan, int *volume)
 
     Render_SetGteScreenOffset();
     state = &g_GameState;
-    gte_ldrotmatrix(D_800BCFA4.value);
-    gte_ldtransmatrix(D_800BCFA4.value);
-    gte_ctc2_26(*D_800BCFA8.distance);
+    gte_ldrotmatrix(g_ViewMatrixSlot.value);
+    gte_ldtransmatrix(g_ViewMatrixSlot.value);
+    gte_ctc2_26(*g_GeomScroll.state.position.projectionDistance);
     depth = RotTransPers((GteShortVector *)pos, (int *)&sxy, (int *)&x, (int *)&y);
     x = (short)sxy;
     y = sxy >> 16;
