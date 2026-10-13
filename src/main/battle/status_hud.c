@@ -529,7 +529,7 @@ void Battle_LayoutStatusPrimRow(int bottomY)
                 (unsigned int *)(((slot * 3) << 4) +
                     ((row << 4) + bufferBase.address)));
         row++;
-    } while ((u8)row < 3);
+    } while (row < 3);
 }
 
 static inline RenderSpritePacket *HighlightSpriteAt(RenderSpritePacket *base, int slot, unsigned byte_offset)
@@ -853,7 +853,7 @@ void Battle_DrawATBGauge(void)
     sprite->x = D_8009E358[g_ActiveDrawSlot * 3].x0 + 8;
     sprite->y = y;
     AddPrim((unsigned *)D_800B0E38.ordering[g_ActiveDrawSlot] + 4, (unsigned *)packet);
-    while (i < (signed char)Pad_GetMenuPressedBitOrDisabled()) {
+    while (i < Pad_GetMenuPressedBitOrDisabled()) {
         int kind = D_800BE830[i].command;
         if (kind == 1) {
             --ammo;
@@ -1321,7 +1321,7 @@ void Battle_DrawActiveStatus(void)
     if (!(g_GameStateFlags & 2)) {
         g_ActiveActor = D_8009D254->core;
     }
-    if ((u16)g_ActiveActor->hpAlive >= 9001) {
+    if (g_ActiveActor->hpAlive >= 9001) {
         g_ActiveActor->hpAlive = 9000;
     }
     currentGauge = g_ActiveActor->exp_or_acc;
