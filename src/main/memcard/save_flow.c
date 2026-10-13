@@ -1033,7 +1033,8 @@ void MemCard_UpdateSaveState(int port) {
 void Save_StartWriteSlot(int port, int arg_slot) {
     MemCardPortState *state;
     MemCardSaveSlot *slot_state;
-    register int slot asm("$16");
+    int slot;
+    u8 formattedSlot;
     int status;
     int sequence;
     int next_state;
@@ -1046,7 +1047,7 @@ void Save_StartWriteSlot(int port, int arg_slot) {
         return;
     }
 
-    /* Keep the original slot register for the slot-array address calculation. */
+    /* Keep the slot copy distinct for the slot-array address calculation. */
     asm volatile("" : "=r"(slot) : "0"(slot));
     slot_state = &state->slots[slot];
     MemCard_CloseAll();
@@ -1068,10 +1069,11 @@ void Save_StartWriteSlot(int port, int arg_slot) {
         state->sequence = next_sequence;
     }
 
+    formattedSlot = (u8)slot;
     sprintf(path, D_80092224,
                     state > g_MemCardPortStates,
-                    state->slots[(u8)slot].titleStyleFlag + 0x30,
-                    (u8)slot + 0x41);
+                    state->slots[formattedSlot].titleStyleFlag + 0x30,
+                    formattedSlot + 0x41);
     /* Recompute the path address after formatting it. */
     asm volatile("" : "=r"(path) : "0"(D_8009EE70));
     Save_BuildCardFile(path);
