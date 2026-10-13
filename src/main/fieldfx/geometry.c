@@ -16,6 +16,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_star_fan.h"
 #include "pe1/field_textured_ribbon.h"
+#include "pe1/field_tri_test.h"
 #include "pe1/field_tile.h"
 #include "pe1/fieldfx_task.h"
 #include "pe1/geom_state.h"
@@ -113,17 +114,6 @@ void FieldFx_RotateVector(const GteMatrixWords *matrix,
     output->z = result.z;
 }
 
-typedef struct ArcPointComponent {
-    s16 value;
-    s16 reserved02;
-} ArcPointComponent;
-
-typedef struct AlternatingArcPoints {
-    ArcPointComponent component[8];
-} AlternatingArcPoints;
-
-int func_800C6B20(void *arg0);
-
 static inline int div4096(int value) {
     if (value < 0) {
         value += 0xFFF;
@@ -134,7 +124,7 @@ static inline int div4096(int value) {
 int func_800CEB8C(s16 *a, s16 *b, int radius) {
     /* Match note: target reuses $s0 for the angle and then the x offset. */
     register int angle asm("$16");
-    AlternatingArcPoints points;
+    GteShortVector points[4];
     int dx;
     int dz;
     int x;
@@ -146,16 +136,16 @@ int func_800CEB8C(s16 *a, s16 *b, int radius) {
     x = div4096(rsin(angle) * radius);
     z = div4096(rcos(angle) * radius);
 
-    points.component[0].value = a[0] - x;
-    points.component[1].value = a[2] - z;
-    points.component[2].value = a[0] + x;
-    points.component[3].value = a[2] + z;
-    points.component[4].value = b[0] - x;
-    points.component[5].value = b[2] - z;
-    points.component[6].value = b[0] + x;
-    points.component[7].value = b[2] + z;
+    points[0].x = a[0] - x;
+    points[0].z = a[2] - z;
+    points[1].x = a[0] + x;
+    points[1].z = a[2] + z;
+    points[2].x = b[0] - x;
+    points[2].z = b[2] - z;
+    points[3].x = b[0] + x;
+    points[3].z = b[2] + z;
 
-    return func_800C6B20(&points);
+    return func_800C6B20(points);
 }
 
 void func_800CECAC(void) {
