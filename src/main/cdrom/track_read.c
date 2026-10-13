@@ -2,6 +2,8 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
+/* Before akao.h. The bound in cdrom_bgm.h keeps each table read absolute. */
+#include "pe1/cdrom_bgm.h"
 #include "common.h"
 #include "pe1/akao.h"
 #include "pe1/akao/commands.h"
@@ -394,8 +396,7 @@ int CdRom_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
     return busy;
 }
 
-/* Matching debt: three table aliases and the retry jump. The aliases preserve
- * independent absolute reads of the table pointer around callbacks. */
+/* Matching debt: the retry jump. */
 int CdRom_StepReadState(int active)
 {
     Pe1GameState *state = &g_GameState;
@@ -411,10 +412,10 @@ retry:
             Akao_Cmd_F1();
             if (active) {
                 if (!(g_GameState.flags & 0x400000)) {
-                    if (*tableCheck) {
-                        Akao_SendTableCommand(*g_AkaoBgmHandle, 0x451, 0, 0x80, 0x7F);
-                        if (*tableCheckAgain)
-                            Akao_SendTableCommand(*tableAgain, 0x452, 0, 0x80, 0x7F);
+                    if (g_AkaoBgmHandle[0]) {
+                        Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x451, 0, 0x80, 0x7F);
+                        if (g_AkaoBgmHandle[0])
+                            Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x452, 0, 0x80, 0x7F);
                     }
                 }
                 state->cd_transition_phase = 44;
