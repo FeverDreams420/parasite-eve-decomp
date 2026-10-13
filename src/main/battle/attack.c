@@ -107,6 +107,7 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
     register int nextIndexB asm("$3");
     int indexAlt;
     int indexDefault;
+    BattleEntity **actorField;
     int angle;
     int direction;
     register int predicate asm("$2");
@@ -132,9 +133,9 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
     ready:
         }
         D_8009D274 = 0;
+        actorField = &turnSlot->actor;
         { u8 animMode = g_ActiveActor->action->animMode[1]; D_8009CE39 = animMode; }
-        asm volatile("");
-        { height = turnSlot->actor->renderObject.target_y; angle = height - g_BattlePlayerAimHeight; }
+        { height = (*actorField)->renderObject.target_y; angle = height - g_BattlePlayerAimHeight; }
         { facingAngle = ratan2(angle, Battle_CalcDistToPlayer(turnSlot->actor, D_8009D254));
         if (facingAngle < -0xAB) direction = 0; else { predicate = facingAngle < 0xE4; if (predicate) direction = 1; else direction = 2; } }
         Entity_SetActionMode(D_8009D254, *(direction + g_ActiveActor->followUpAngleActionModes));
