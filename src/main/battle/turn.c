@@ -419,9 +419,9 @@ int Battle_StepEnemyTurn(s8 mode) {
                 SetSlot(g_BattleActionQueueCount, D_8009D254, queuedCommand, (s8)D_8009D2D8);
                 if (!(g_GameStateFlags & 2)) {
                     g_ActiveActor = D_8009D254->core;
-                    Asset_Find08Alt(0x453, 1, (s16)D_8009D254->posX.parts.integer,
-                                    (s16)D_8009D254->posY.parts.integer,
-                                    (s16)D_8009D254->posZ.parts.integer);
+                    Asset_Find08Alt(0x453, 1, D_8009D254->posX.parts.integer,
+                                    D_8009D254->posY.parts.integer,
+                                    D_8009D254->posZ.parts.integer);
                 }
                 switch (command) {
                 case 407:
@@ -1058,7 +1058,7 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
                             actor->entityFlags &= ~0x1000;
                             Entity_TickAnimSequences(actor);
                         }
-                    } else if (((u8) enemy->motionPhase >= 2U) && (enemy->motionFrames != 0)) {
+                    } else if ((enemy->motionPhase >= 2U) && (enemy->motionFrames != 0)) {
                         actor->posX.fixed += enemy->motionAmplitude * rsin(enemy->motionAngle) * 0x10;
                         actor->posZ.fixed += enemy->motionAmplitude * rcos(enemy->motionAngle) * 0x10;
                         enemy->motionFrames -= 1;
