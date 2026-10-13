@@ -147,9 +147,9 @@ void func_80196498(void)
     SetFarColor(0xFF, 0xFF, 0xFF);
     textureIndexOrHasPoints = 0;
     do {
-        textureY = g_FxTextureSetup[textureIndexOrHasPoints].y;
-        g_FxTextureSetup[textureIndexOrHasPoints].tpage = ((u32) (textureY & 0x100) >> 4) | (((g_FxTextureSetup[textureIndexOrHasPoints].x & 0x3FF) >> 6) | 0x20) | ((textureY & 0x200) * 4);
-        g_FxTextureSetup[textureIndexOrHasPoints].clut = (g_FxTextureSetup[textureIndexOrHasPoints].h << 6) | (((u16) g_FxTextureSetup[textureIndexOrHasPoints].w >> 4) & 0x3F);
+        textureY = D_80091648[textureIndexOrHasPoints].y;
+        D_80091648[textureIndexOrHasPoints].tpage = ((u32) (textureY & 0x100) >> 4) | (((D_80091648[textureIndexOrHasPoints].x & 0x3FF) >> 6) | 0x20) | ((textureY & 0x200) * 4);
+        D_80091648[textureIndexOrHasPoints].clut = (D_80091648[textureIndexOrHasPoints].h << 6) | (((u16) D_80091648[textureIndexOrHasPoints].w >> 4) & 0x3F);
         textureIndexOrHasPoints++;
     } while (textureIndexOrHasPoints < 2);
     if ((D_8019C008 != 0) || (Render_SetupFogLayer(Draw_GetTimTableEntry(&D_801D0260, 0)), (D_8019C008 != 0))) {

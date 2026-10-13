@@ -24,10 +24,10 @@ void func_80192030(void)
     int i;
 
     fade = 1;
-    night = g_FxCommonSceneIds.flags & 0x2000;
-    g_FxCommonSceneIds.room = 999;
+    night = D_800A77F4.flags & 0x2000;
+    D_800A77F4.room = 999;
     D_8009D280 = 0xA9400048;
-    room = g_FxCommonSceneIds.area;
+    room = D_800A77F4.area;
     if (room == 0x80) {
         D_8009D280 = 0xA80650C8;
     } else if (room == 0x78) {
@@ -126,7 +126,7 @@ void func_80192030(void)
     if (fade == 1) {
         D_800B0DB4 = -1;
         D_800B0DB2 = -1;
-        g_FxCommonGameFlags &= ~0x40;
+        D_800B0CD8 &= ~0x40;
         Akao_Cmd_F0();
     }
     Akao_Cmd_F1();

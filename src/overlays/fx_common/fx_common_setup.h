@@ -9,7 +9,7 @@ typedef struct FxTextureSetup { s16 x,y,w,h,tpage,clut; s32 reserved; } FxTextur
 typedef char FxTextureSetupSizeCheck[sizeof(FxTextureSetup)==16 ? 1 : -1];
 typedef char FxTextureSetupTpageCheck[(u32)&((FxTextureSetup*)0)->tpage==8 ? 1 : -1];
 typedef char FxTextureSetupClutCheck[(u32)&((FxTextureSetup*)0)->clut==10 ? 1 : -1];
-extern FxTextureSetup g_FxTextureSetup[] asm("D_80091648");
+extern FxTextureSetup D_80091648[];
 extern u32 D_800A77FC;
 
 /* Room and area identifiers in the main executable's scene state. */
@@ -20,8 +20,8 @@ typedef struct FxCommonSceneIds {
     u8 pad0C[0x118];
     s32 area;          /* 0x124 */
 } FxCommonSceneIds;
-extern FxCommonSceneIds g_FxCommonSceneIds asm("D_800A77F4");
-extern u32 g_FxCommonGameFlags asm("D_800B0CD8");
+extern FxCommonSceneIds D_800A77F4;
+extern u32 D_800B0CD8;
 extern s32 D_8019C000;
 extern s32 D_8019C004;
 int Save_GetMetadataWindowIndex(void);
