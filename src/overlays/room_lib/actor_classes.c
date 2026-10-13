@@ -1042,7 +1042,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
     RoomLibHandlerBState *state = (RoomLibHandlerBState *)&self->sub;
     RoomLink *link = self->link;
     int previousValue;
-    register int a0 asm("$4");
+    register int a0;
     RoomLibArcWork *scratch;
     int result;
 
