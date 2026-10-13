@@ -925,7 +925,7 @@ void Spu_UpdateVoiceRegisters(AkaoTrack *voice, u32 voice_mask) {
         voice->pitch_lfo_depth = scaled;
 
         if (voice->pitch_lfo_counter == 0 && voice->pitch_lfo_phase != 1) {
-            table = (s16 *)voice->pitch_lfo_table;
+            table = voice->pitch_lfo_table;
             if (table[0] == 0 && table[1] == 0) {
                 table += table[2];
             }
@@ -944,7 +944,7 @@ void Spu_UpdateVoiceRegisters(AkaoTrack *voice, u32 voice_mask) {
         voice->volume_lfo_slide_duration--;
         voice->volume_lfo_target += (u16)voice->volume_lfo_delta;
         if (voice->volume_lfo_counter == 0 && voice->volume_lfo_phase != 1) {
-            table = (s16 *)voice->volume_lfo_table;
+            table = voice->volume_lfo_table;
             if (table[0] == 0 && table[1] == 0) {
                 table += table[2];
             }
@@ -962,7 +962,7 @@ void Spu_UpdateVoiceRegisters(AkaoTrack *voice, u32 voice_mask) {
         voice->aux_lfo_slide_duration--;
         voice->aux_lfo_target += (u16)voice->aux_lfo_delta;
         if (voice->aux_lfo_phase != 1) {
-            table = (s16 *)voice->aux_lfo_table;
+            table = voice->aux_lfo_table;
             if (table[0] == 0 && table[1] == 0) {
                 table += table[2];
             }
@@ -1033,7 +1033,7 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
         track->pitch_lfo_depth = depth;
 
         if (track->pitch_lfo_phase != 1) {
-            table = (s16 *)track->pitch_lfo_table;
+            table = track->pitch_lfo_table;
             if (table[0] == 0 && table[1] == 0) {
                 table += table[2];
             }
@@ -1052,7 +1052,7 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
         track->volume_lfo_slide_duration--;
         track->volume_lfo_target += (u16)track->volume_lfo_delta;
         if (track->volume_lfo_phase != 1) {
-            table = (s16 *)track->volume_lfo_table;
+            table = track->volume_lfo_table;
             if (table[0] == 0 && table[1] == 0) {
                 table += table[2];
             }
@@ -1073,7 +1073,7 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
         track->aux_lfo_slide_duration--;
         track->aux_lfo_target += (u16)track->aux_lfo_delta;
         if (track->aux_lfo_phase != 1) {
-            table = (s16 *)track->aux_lfo_table;
+            table = track->aux_lfo_table;
             if (table[0] == 0 && table[1] == 0) {
                 table += table[2];
             }
