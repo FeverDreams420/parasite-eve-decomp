@@ -58,6 +58,8 @@ segments:
       - [0x1C60, c, ../room_lib/actor_classes]
       - [0x4F7C, c, ../room_lib/dropped_flare]
       - [0x5C20, data]
+      - [0x5D10, .data, ../room_lib/actor_class_table]
+      - [0x5DB8, data]
   - [0x6000]
 # source slice: scanner
 # extract locally with: dd if=disc/extracted/PE.IMG of=original/USA/overlays/scene_e10.bin bs=2048 skip=96270 count=12

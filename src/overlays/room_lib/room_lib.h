@@ -1087,4 +1087,26 @@ void RoomLib_HandlerGFloorWalker(struct RoomEnt *obj);
 int RoomLib_ReleaseHandlerG(RoomEnt *o);
 int RoomLib_HandlerGNop6(void);
 
+/* One row of a room's class table (g_RoomClassTable) per actor class. */
+#define ROOMLIB_ACTOR_CLASS_D \
+    { RoomLib_HandlerDNop0, RoomLib_InitHandlerD, RoomLib_ConfigureHandlerD, \
+      RoomLib_HandlerDNop3, RoomLib_UpdateHandlerD, RoomLib_ReleaseHandlerD, \
+      RoomLib_HandlerDNop6 }
+#define ROOMLIB_ACTOR_CLASS_E \
+    { RoomLib_HandlerENop0, RoomLib_InitHandlerE, RoomLib_ConfigureHandlerE, \
+      RoomLib_HandlerENop3, RoomLib_UpdateHandlerE, RoomLib_ReleaseHandlerE, \
+      RoomLib_HandlerENop6 }
+#define ROOMLIB_ACTOR_CLASS_B \
+    { RoomLib_HandlerBNop0, RoomLib_InitHandlerB, RoomLib_ConfigureHandlerB, \
+      RoomLib_HandlerBNop3, RoomLib_UpdateHandlerB, RoomLib_ReleaseHandlerB, \
+      RoomLib_HandlerBNop6 }
+#define ROOMLIB_ACTOR_CLASS_C \
+    { RoomLib_HandlerCNop0, RoomLib_InitHandlerC, RoomLib_ConfigureHandlerC, \
+      RoomLib_HandlerCNop3, RoomLib_UpdateHandlerC, RoomLib_ReleaseHandlerC, \
+      RoomLib_HandlerCNop6 }
+#define ROOMLIB_ACTOR_CLASS_A \
+    { RoomLib_HandlerANop0, RoomLib_InitHandlerA, RoomLib_ConfigureHandlerA, \
+      RoomLib_HandlerANop3, RoomLib_UpdateHandlerA, RoomLib_ReleaseHandlerA, \
+      RoomLib_HandlerANop6 }
+
 #endif

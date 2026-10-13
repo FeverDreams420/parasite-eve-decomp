@@ -23,6 +23,12 @@ struct RoomEnt;
 
 typedef int (*RoomModuleHandler)();
 
+/* A room's class table: one row per class, its seven methods in slot order
+ * (no-op, Init, Configure, no-op, Update, Release, no-op). The rows are the
+ * room's (room_lib/actor_class_table.c and its window-class variants). */
+#define ROOM_CLASS_METHODS 7
+extern RoomModuleHandler g_RoomClassTable[][ROOM_CLASS_METHODS];
+
 /* Command program planted into the engine slot (opcode in the high half of
  * each word, -1 terminated). */
 extern int g_RoomScript[];

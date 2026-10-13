@@ -59,7 +59,7 @@ segments:
       - [0x4F8C, data, D_80193F74]
       - [0x4FA8, data, D_80193F90]
       - [0x5020, data, D_80194008]
-      - [0x5060, data, D_80194048]
+      - [0x5028, .data, ../room_lib/actor_class_table]
       - [0x50D0, data, D_801940B8]
       - [0x50D4, data, D_801940BC]
       - [0x50D8, data, D_801940C0]
