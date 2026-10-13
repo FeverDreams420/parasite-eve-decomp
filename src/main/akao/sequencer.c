@@ -5,6 +5,7 @@
 #include "pe1/akao/spu_common.h"
 #include "pe1/akao/tick.h"
 #include "pe1/akao/track.h"
+#include "pe1/akao/voice_masks.h"
 #include "pe1/akao/voice_state.h"
 #include "pe1/akao_counters.h"
 #include "pe1/akao_script.h"
@@ -107,7 +108,7 @@ void Spu_StepReverbLoad(void)
     pending = g_SpuActiveVoiceMask;
     if (pending) {
         count = 0x1000;
-        track = (AkaoTrack *)D_800BC000;
+        track = g_AkaoVoiceChannelTable;
         do {
             if (pending & count) {
                 if (track->panpot_duration) {
@@ -286,7 +287,7 @@ void Akao_Tick(void)
         if ((accumulator & 0xFFFF0000) || (g_AkaoSeqPendingFlags & 4)) {
             g_AkaoSfxTickAccumulator = accumulator & 0xFFFF;
             bit = 0x1000;
-            track = D_800BC000;
+            track = (AkaoTickTrack *)g_AkaoVoiceChannelTable;
             do {
                 if (mask & bit) {
                     if (!(g_AkaoSeqPendingFlags & 2) || (track->timing.key_on_mask & 0x2000000)) {

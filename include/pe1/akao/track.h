@@ -143,7 +143,7 @@ typedef struct AkaoNestedSource {
     /* 0x10 */ AkaoU32 pan_target;
 } AkaoNestedSource;
 
-/* One of the twelve nested-stream voice slots at D_800BC000. */
+/* One of the twelve nested-stream voice slots at g_AkaoVoiceChannelTable. */
 typedef struct AkaoNestedVoiceSlot {
     /* 0x00 */ unsigned char pad_00[0x2C];
     /* 0x2C */ AkaoU32 flags;

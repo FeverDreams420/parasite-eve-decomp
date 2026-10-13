@@ -19,11 +19,11 @@ typedef struct RenderLightingState {
     RenderLightingMatrix color;  /* 0x20 */
     u8 light_colors[3][4];       /* 0x40: r, g, b per light */
 } RenderLightingState;
-/* Existing absolute symbols expose individual matrix elements. */
-extern s16 D_800BEA42, D_800BEA44, D_800BEA46, D_800BEA48, D_800BEA4A;
-extern s16 D_800BEA4C, D_800BEA4E, D_800BEA50;
-extern s16 D_800BEA62, D_800BEA64, D_800BEA66, D_800BEA68, D_800BEA6A;
-extern s16 D_800BEA6C, D_800BEA6E, D_800BEA70;
+/* One-field views of g_RenderLightingState.matrix.m[0][1] (light 0
+ * direction y) and m[1][0] (light 1 direction x). Draw_InitPipeline takes
+ * the light row addresses from them; written as fields, cc1 reuses the
+ * register that already holds the matrix base and retail does not. */
+extern s16 g_RenderLight0DirY, g_RenderLight1DirX;
 typedef struct RenderLightColor {
     u8 r, g, b;
 } RenderLightColor;

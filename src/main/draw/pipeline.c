@@ -64,7 +64,7 @@ void Draw_InitPipeline(void) {
     Entity_InitFreePool();
     Script_InitNodeFreeList();
 
-    Boot_SetBackColor((char *)&D_800BEA42 - 2, 0x28, 0x28, 0x28);
+    Boot_SetBackColor((char *)&g_RenderLight0DirY - 2, 0x28, 0x28, 0x28);
     BARRIER();
 
     v1 = 0;
@@ -76,8 +76,8 @@ void Draw_InitPipeline(void) {
     t0 = 0x7FFF;
     a0p = (char *)&g_RenderLightingState;
     *(s16 *)a0p = t0;
-    D_800BEA42 = t1;
-    D_800BEA44 = v1;
+    g_RenderLightingState.matrix.m[0][1] = t1;
+    g_RenderLightingState.matrix.m[0][2] = v1;
     Boot_SetLightColor(a0p, 0, 0xFF, 0xFF, 0xFF);
 
     v1 = 0;
@@ -87,10 +87,10 @@ void Draw_InitPipeline(void) {
     if (v1 < -0x7FFF) {
         v1 = -0x7FFF;
     }
-    p = (char *)&D_800BEA46;
+    p = (char *)&g_RenderLight1DirX;
     *(s16 *)p = t0;
-    D_800BEA48 = t1;
-    D_800BEA4A = v1;
+    g_RenderLightingState.matrix.m[1][1] = t1;
+    g_RenderLightingState.matrix.m[1][2] = v1;
     Boot_SetLightColor(p - 6, 1, 0x80, 0x80, 0x80);
 
     v1 = 0x10000;
@@ -109,10 +109,10 @@ void Draw_InitPipeline(void) {
             }
         }
     }
-    p = (char *)&D_800BEA4C;
+    p = (char *)&g_RenderLightingState.matrix.m[2][0];
     *(s16 *)p = t0;
-    D_800BEA4E = t1;
-    D_800BEA50 = v1;
+    g_RenderLightingState.matrix.m[2][1] = t1;
+    g_RenderLightingState.matrix.m[2][2] = v1;
     Boot_SetLightColor(p - 0xC, 2, 0x60, 0x60, 0x60);
 
     one = 1;

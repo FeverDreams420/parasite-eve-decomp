@@ -502,7 +502,7 @@ void Seq_StartNestedTrack(AkaoTrack *track, AkaoNestedSource *source, unsigned i
         int count;
 
         mask = 0x1000;
-        track_reg = (AkaoTrack *)D_800BC000;
+        track_reg = g_AkaoVoiceChannelTable;
         count = 0xC;
         busy_mask = 0x02000000;
         active_loop_mask = active_mask;
@@ -673,7 +673,7 @@ void Spu_MarkActiveVoicesDirty(void) {
     AkaoTrack *track;
     unsigned int *flags;
     mask = g_SpuActiveVoiceMask;
-    track = (AkaoTrack *)D_800BC000;
+    track = g_AkaoVoiceChannelTable;
         if (mask != 0) {
         bit = 0x1000;
         flags = (unsigned int *)track + 0x3D;

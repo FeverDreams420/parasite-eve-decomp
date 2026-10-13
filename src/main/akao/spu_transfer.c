@@ -3,6 +3,7 @@
 #include "pe1/akao/file_header.h"
 #include "pe1/akao/init_state.h"
 #include "pe1/akao/tick.h"
+#include "pe1/akao/voice_masks.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_spu_internal.h"
 
@@ -169,7 +170,7 @@ void Spu_InitVoiceState(void) {
         SpuSetVoiceVolumeAttr(i, 0, 0, 0, 0);
     }
 
-    voice = D_800BC000;
+    voice = (AkaoTickTrack *)g_AkaoVoiceChannelTable;
     for (i = AKAO_SPU_VOICE_SFX_START_INDEX; i < AKAO_VOICE_COUNT; i++, voice++) {
         voice->track.flags = 0;
         voice->track.assigned_voice_index = i;
