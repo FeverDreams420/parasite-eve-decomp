@@ -362,7 +362,7 @@ int func_800C6B90(s16 *pos, int extraRadius) {
     s16 local[4];
     BattleEntity *entity = D_8009D254;
     int x = entity->posX.parts.integer;
-    int radius = (s16)entity->renderObject.hit_cylinder.radius;
+    int radius = entity->renderObject.hit_cylinder.radius;
     int z;
     int x_sq;
     int z_sq;
