@@ -13,6 +13,7 @@
 #include "pe1/fieldfx_callback_list.h"
 #include "pe1/fieldfx_calls.h"
 #include "pe1/fieldfx_slot.h"
+#include "pe1/fieldfx_state.h"
 #include "pe1/fieldfx_task_pool.h"
 #include "pe1/gte.h"
 #include "pe1/gte_sine_table.h"
@@ -108,10 +109,6 @@ extern struct FieldActor *g_PlayerEntity; /* the player actor (0x8009D254) */
 /* Field object status: 0 no model, 1 model without data, 2 inactive,
  * 3 active, 4 disabled object, 5 the player. */
 extern int FieldFx_GetStatus(void *object);
-extern void FieldFx_Spawn6(int a, int b, int c, int d, int e, int f);
-extern void FieldFx_Register(void *o, void *table);
-extern int FieldFx_UpdateSlots(void *o, void *table);
-extern int FieldFx_RunScript(void *o, void *tableA, void *tableB);
 extern int func_80192BFC();
 
 typedef struct RoomRenderNode {
