@@ -173,7 +173,7 @@ int func_80192DA0(int mode, volatile RoomSpiralDropSparkRecord *record) {
         position.z = z;
         palette = D_800E1204[kind];
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6);
-        func_800CEE20((GteShortVector *)&position, 0, 2048, 2048, 6, clut, 1, 128, (RenderColor *)color);
+        func_800CEE20(&position, 0, 2048, 2048, 6, clut, 1, 128, (RenderColor *)color);
         break;
     }
     }
@@ -1485,7 +1485,7 @@ int func_80196C48(int mode, RoomM318Pulse *pulse) {
             D_800F3368.tpage = tpage;
         }
         clut = GetClut(clutX, clutY);
-        size = (int)cosine / 2;
+        size = cosine / 2;
         func_800CEE20((GteShortVector *)pulse, 0, size, size, 104 + settings[1] * (pulse->age & 3), clut, 1, (sine >> 5) / 2, 0);
     }
     }
@@ -2025,7 +2025,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
             if (*(void *volatile *)soundSlot != 0)
                 Akao_SendTableCommand(*soundSlot, 0x5EE, 0x80, 0x80, volume);
         }
-        D_80199944 = (void *)Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5509704);
+        D_80199944 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5509704);
         FieldFx_ModelScrollUv(D_80199944, 0, 0);
         if (FX_TASK_AS(RoomShakeBurstEvent)->active) {
             pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
