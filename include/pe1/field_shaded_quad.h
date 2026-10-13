@@ -33,11 +33,8 @@ typedef struct FieldShadedQuadPacket {
 extern char *D_800B0E58[];
 
 /* Corners of the sprite quad around its centre, 16 units per texel; set by
- * FieldFx_SetSpriteCellSize. */
-extern GteShortVector g_FieldFxCellQuad[];
-extern GteShortVector D_800F3318;
-extern GteShortVector g_FieldFxCellQuadBottomLeft;
-extern GteShortVector D_800F3328;
+ * FieldFx_SetSpriteCellSize: top left, top right, bottom left, bottom right. */
+extern GteShortVector g_FieldFxCellQuad[4];
 
 /* A packet tag seen as the 32-bit address the DMA chain links through. */
 typedef union FieldShadedQuadLink {

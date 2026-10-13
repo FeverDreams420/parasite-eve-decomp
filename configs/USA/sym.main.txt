@@ -2858,7 +2858,6 @@ g_FieldFxBillboardScratch = 0x800E284C;
 g_FieldFxBlackColor = 0x800C22A0;
 g_FieldFxBouncingSpriteTint = 0x800C22D0;
 g_FieldFxCellQuad = 0x800F3310;
-g_FieldFxCellQuadBottomLeft = 0x800F3320;
 g_FieldFxCosineEffectTint = 0x800C22C0;
 g_FieldFxCurrentAge = 0x800E27EC;
 g_FieldFxDampedSparkTint = 0x800C22E4;

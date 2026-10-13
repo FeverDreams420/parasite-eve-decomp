@@ -71,15 +71,15 @@ void FieldFx_SetSpriteCellSize(int width, int height) {
     g_FieldFxCellQuad[0].x = -x;
     g_FieldFxCellQuad[0].y = -y;
     g_FieldFxCellQuad[0].z = 0;
-    D_800F3318.x = x;
-    D_800F3318.y = -y;
-    D_800F3318.z = 0;
-    g_FieldFxCellQuadBottomLeft.x = -x;
-    g_FieldFxCellQuadBottomLeft.y = y;
-    g_FieldFxCellQuadBottomLeft.z = 0;
-    D_800F3328.x = x;
-    D_800F3328.y = y;
-    D_800F3328.z = 0;
+    g_FieldFxCellQuad[1].x = x;
+    g_FieldFxCellQuad[1].y = -y;
+    g_FieldFxCellQuad[1].z = 0;
+    g_FieldFxCellQuad[2].x = -x;
+    g_FieldFxCellQuad[2].y = y;
+    g_FieldFxCellQuad[2].z = 0;
+    g_FieldFxCellQuad[3].x = x;
+    g_FieldFxCellQuad[3].y = y;
+    g_FieldFxCellQuad[3].z = 0;
 
     g_FieldFxSpriteCellUMax = widthMinus;
     g_FieldFxSpriteCellVExtent = heightMinus;
@@ -224,7 +224,7 @@ void FieldFx_DrawOrientedSprite(FieldOrientedSprite *sprite)
     gte_CompMatrix(&g_FieldFxScratch->matrix, &g_FieldFxScratch->local, &g_FieldFxScratch->matrix);
     gte_ldrotmatrix(&g_FieldFxScratch->matrix);
     gte_ldtransmatrix(&g_FieldFxScratch->matrix);
-    gte_ldv3(g_FieldFxCellQuad, &D_800F3318, &g_FieldFxCellQuadBottomLeft);
+    gte_ldv3(g_FieldFxCellQuad, &g_FieldFxCellQuad[1], &g_FieldFxCellQuad[2]);
     gte_rtpt_padded();
     packet->tag.length = 9;
     packet->code = 0x2C;
@@ -245,7 +245,7 @@ void FieldFx_DrawOrientedSprite(FieldOrientedSprite *sprite)
     }
     gte_stotz(&g_FieldFxScratch->depth);
     gte_stsxy3(&packet->x0, &packet->x1, &packet->x2);
-    gte_ldv0(&D_800F3328);
+    gte_ldv0(&g_FieldFxCellQuad[3]);
     gte_rtps();
     packet->tpage = g_FieldFxSpriteTpageValue;
     packet->clut = GetClut(g_FieldFxSpriteClutX + g_FieldFxScratch->clutX,
@@ -443,7 +443,7 @@ void FieldFx_DrawGlowSprite(FieldGlowSprite *sprite, GteMatrix *placement, u8 mo
         gte_ldtransmatrix((const GteMatrixWords *)placement);
     }
     FieldFx_ScaleColor((s16)sprite->depth, &sprite->r, &packet->r0);
-    gte_ldv3(g_FieldFxCellQuad, &D_800F3318, &g_FieldFxCellQuadBottomLeft);
+    gte_ldv3(g_FieldFxCellQuad, &g_FieldFxCellQuad[1], &g_FieldFxCellQuad[2]);
     gte_rtpt_padded();
     g_FieldFxScratch->v = D_800F3422 + (sprite->cell & 0xF0);
     g_FieldFxScratch->u = (sprite->cell - g_FieldFxScratch->v) << 4;
@@ -495,7 +495,7 @@ void FieldFx_DrawGlowSprite(FieldGlowSprite *sprite, GteMatrix *placement, u8 mo
         xy1 = &packet->x1;
         xy2 = &packet->x2;
         gte_stsxy3(xy0, xy1, xy2);
-        gte_ldv0(&D_800F3328);
+        gte_ldv0(&g_FieldFxCellQuad[3]);
         gte_cop2_hazard_slot();
         gte_cop2_hazard_slot();
         gte_rtps_command();
@@ -556,7 +556,7 @@ void FieldFx_DrawShadedQuad(FieldShadedQuadColors *colors, GteMatrix *placement,
     FieldFx_ScaleColor(colors->brightness, colors->rgb[1], &packet->r1);
     FieldFx_ScaleColor(colors->brightness, colors->rgb[2], &packet->r2);
     FieldFx_ScaleColor(colors->brightness, colors->rgb[3], &packet->r3);
-    gte_ldv3(g_FieldFxCellQuad, &D_800F3318, &g_FieldFxCellQuadBottomLeft);
+    gte_ldv3(g_FieldFxCellQuad, &g_FieldFxCellQuad[1], &g_FieldFxCellQuad[2]);
     gte_rtpt_padded();
     packet->tag.length = 8;
     packet->code = 0x38;
@@ -576,7 +576,7 @@ void FieldFx_DrawShadedQuad(FieldShadedQuadColors *colors, GteMatrix *placement,
         xy1 = &packet->x1;
         xy2 = &packet->x2;
         gte_stsxy3(xy0, xy1, xy2);
-        gte_ldv0(&D_800F3328);
+        gte_ldv0(&g_FieldFxCellQuad[3]);
         gte_cop2_hazard_slot();
         gte_cop2_hazard_slot();
         gte_rtps_command();

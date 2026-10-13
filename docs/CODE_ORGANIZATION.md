@@ -945,8 +945,8 @@ changing bytes:
   `void` return where retail fills the epilogue delay slot; deleting the
   `-fno-schedule-insns` markers of CollisionQueries_2 and BurstEffect_2.
 - GTE macro operands are the objects themselves, not pinned pointers:
-  `gte_ldrotmatrix(g_ViewMatrixSlot.value)`, `gte_ldv3(g_FieldFxCellQuad, &D_800F3318,
-  &g_FieldFxCellQuadBottomLeft)`, `gte_ldv0(&D_800F3328)`, `gte_stsxy3(&p->x0, &p->x1, &p->x2)`,
+  `gte_ldrotmatrix(g_ViewMatrixSlot.value)`, `gte_ldv3(g_FieldFxCellQuad, &g_FieldFxCellQuad[1],
+  &g_FieldFxCellQuad[2])`, `gte_ldv0(&g_FieldFxCellQuad[3])`, `gte_stsxy3(&p->x0, &p->x1, &p->x2)`,
   `gte_stszotz(&depth)`. A constant or memory operand of an `"r"` input is
   loaded by reload, and reload takes its spill registers round robin
   (`last_spill_reg`); the number of spill registers is the largest number one
