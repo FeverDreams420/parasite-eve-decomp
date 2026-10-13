@@ -14,7 +14,7 @@ int func_80192504(void) {
 int func_8019250C(RoomSelectionState *obj) {
     int ret;
 
-    obj->callback = (void (*)(RoomSelectionState *))RoomLib_GrabAwaitStance;
+    obj->callback = RoomLib_GrabAwaitStance;
     obj->started = 0;
     obj->placementChecked = 0;
     obj->verticalTicks = 0;
