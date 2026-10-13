@@ -991,9 +991,9 @@ int func_801992A0(int event,FadingModelState *state)
             register int scaled asm("$2")=low*parts;
                         scaled=scaled/256;
                         {
-                register int selected asm("$3")=scaled+1;
-                asm volatile("" : : "r"(selected));
-                index=selected;
+                size=scaled+1;
+                asm volatile("" : : "r"(size));
+                index=size;
             }
         }
         {
