@@ -837,3 +837,95 @@ all overlays, because the Makefile does not track header dependencies):
 None of them is a fixed address: a relative alias moves with its label.
 They are naming debt; the record and overlay groups are the ones worth a
 dedicated pass.
+
+## 10. A shifted build in an emulator (2026-10-13)
+
+The link-level tests (`shift-test`, `shift-full-test`) prove that every word
+that should move does. Whether a shifted build actually runs was tested by
+booting one, with tools that write only to a scratch directory:
+
+- `tools/scripts/shift_disc.py --pad P --out DIR` relinks main and all 190
+  overlays with the pad, repacks `PE.IMG` (section 3.7), fits the executable
+  into its disc file and writes a copy of the retail disc image with every
+  changed Mode 2 Form 1 sector re-encoded (EDC, P and Q parity). The codec
+  recomputes 64 untouched retail sectors identically, and `--pad 0
+  --rewrite-all` rewrites 989 executable and 16310 `PE.IMG` sectors and
+  gives back the retail `.bin` byte for byte. The executable cannot grow on
+  the disc (its directory record and the files after it fix its sectors);
+  a shift adds zero bytes at the end of the window block, which are cut and
+  the header text size lowered by as much, so the BIOS loads as many bytes
+  as from the retail file. `--insert-before INPUT` puts the pad before one
+  input of the linker script instead of at the start of `.main`.
+- `tools/scripts/emu_boot_test.py` drives DuckStation's regression runner
+  (AI control port and GDB server) through a fixed input script: publisher
+  screen, title, New Game, the opening movie, the street in front of
+  Carnegie Hall, name entry, the first playable room, the aisle and lobby,
+  the concert hall, the opera to the fire and the stage, 16 checkpoints over
+  33834 frames. At each it saves the picture and reads the scene token and
+  the program counter over GDB; `--compare` checks a run against the
+  retail one pixel by pixel. Emulation is deterministic, so a shifted build
+  that behaves like retail gives the same pictures on the same frames.
+
+Bugs the emulator found, fixed (retail stays byte-identical):
+
+- the PS-X EXE header kept the retail entry point 0x80072534: the BIOS
+  started every shifted build inside the code before the startup (header
+  now from `__SN_ENTRY_POINT`, section 3.6);
+- block pointers in `PE.IMG` data outside the overlay slices: the second
+  video player's file table and the credits line table
+  (`linkers/USA/pe_img_pointers.txt`, section 3.7);
+- overlay data that held addresses as numbers: menu_memcard's first video
+  file table (bytes, so New Game played the next movie), its effect
+  descriptors' work areas, and boot_display's credit tables (labels in the
+  overlays' symbol files and `overlay_abi.txt`).
+
+Results, every checkpoint compared with retail:
+
+| pad | inserted | result |
+| --- | --- | --- |
+| 0x10 | start of `.main` | 16/16 identical pictures and scene tokens |
+| 0x100 | start of `.main` | hangs during boot, no picture (PC at the BIOS vector 0xA0) |
+| 0x800 | start of `.main` | 16/16 identical |
+| 0x1FF0 (link maximum) | start of `.main` | crash during boot |
+| 0x100, 0x1000, 0x1400 | before `draw/frame.c.o` | 16/16 identical |
+| 0x1800, 0x1E00, 0x1FF0 | before `draw/frame.c.o` | crash during boot |
+| 0x100 | start, primitive-queue units rebuilt with a symbol (scratch, not matching) | 16/16 identical |
+
+What blocks, precisely:
+
+1. The primitive-queue block (section 9, "Literals that stay"). With the pad
+   at the start of `.main` the block moves while the six `lui`/`ori`
+   constants of `Draw_InitGpuHwRegs` and `Draw_FlushPrimQueue` keep its
+   retail address. At 0x100 that address holds the shifted
+   `Draw_InitGpuHwRegs` itself: RAM 0x80070E40..0x80070E4C read 5, 3, 2, 1
+   (the table it computes) where the executable has its loop, and the game
+   never shows a picture (the program counter stays at the BIOS vector
+   0xA0). At 0x10 and 0x800 the stores land in the
+   tail of `Draw_PackPrimColor` and in `Render_DrawWireframeModel`, which
+   this script never runs, so those runs pass by luck. Rebuilding the two
+   units with a symbol for the block (a scratch experiment, not
+   byte-identical) makes the 0x100 run identical to retail: on this path it
+   is the only blocker for growth before 0x80070E04.
+2. Run-time memory above the linked image. The link allows 0x1FF0 bytes
+   (image end up to the initial `$sp`), but retail writes RAM above the
+   image end at run time: after zeroing 0x801FE000..0x801FFF00 at the entry
+   point, writes appear from the first screen on, up to 0x801FF8A8, 0x18A8
+   bytes past the image end (in runs 0x800 apart), and they move with the
+   block when it moves (pad 0x1000: the same pattern 0x1000 higher); the
+   stack lives at the top (0x801FFF00 down). Which buffer it is was not
+   identified (the runner's write watchpoints did not fire reliably). Pads of 0x1800 and more crash during boot; 0x1400 is
+   the largest pad tested that plays the script. The real growth room is
+   therefore below the 0x1FF0 the link check reports, and the check should
+   count the run-time extent of the block's last buffers and the stack.
+3. Not on this path: overlay data words that hold their own function
+   addresses as numbers (handler and class tables, mostly in `databin`
+   blobs): 947 words in 36 overlays, listed by `shift_full_test.py`. A
+   shifted build would call retail addresses in those rooms (Central Park,
+   the museum, the Chrysler building, room_m022, scenes e09/e10). Room data
+   blobs may hold other address words that are not function starts; those
+   are not counted.
+
+Not verified: XA audio and sound in general (the runner has no audio
+output; only the CD command stream was compared for the movies), whether
+every movie plays (only the opening ones), any room or scene after the
+stage, battles, saving and loading, disc 2, and real hardware.
