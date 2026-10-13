@@ -1153,14 +1153,11 @@ void RoomLib_HandlerB(RoomEnt *obj) {
 
     previousValue = state->phaseValue;
     {
-        register int delta asm("$2") = state->mode;
         int enabled = state->heading;
-        a0 = previousValue - delta;
+        a0 = previousValue - state->mode;
         state->phaseValue = a0;
         if (enabled != 0) {
-            delta = previousValue ^ a0;
-
-            if (delta < 0) {
+            if ((previousValue ^ a0) < 0) {
                 state->callback = RoomLib_HandlerBPhase;
                 state->started = 0;
                 self->flag3 = 2;
