@@ -412,7 +412,7 @@ void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
         save->pe_bonus_pool = 0;
     }
 
-    stat_src = (s16 *)D_800C0E00.stats.levels;
+    stat_src = D_800C0E00.stats.levels;
     i = 0;
     do {
         g_BonusPointStatDeltas[i] = *stat_src++;
@@ -562,7 +562,7 @@ void Menu_InitBonusPointAllocState(int gained_points) {
     }
     g_MenuBonusPointDisplayTarget = D_800C0E00.bonus_points + gained_points;
 
-    source = (s16 *)D_800C0E00.stats.levels;
+    source = D_800C0E00.stats.levels;
     stat = 0;
     multipliers = g_BonusPointStatMultipliers;
     query_results = g_BonusPointStatQueryResults;
