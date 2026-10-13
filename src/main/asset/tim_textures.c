@@ -87,7 +87,7 @@ restart:
                 Draw_LoadTimAsset(&entry[i], blob);
             blob = &state->loaded_scene_assets->header;
             for (key = 0x73DECD80; ; key += 4) {
-                image = (TimPackedImage *)Asset_FindTable08ByU32Key(blob, key);
+                image = Asset_FindTable08ByU32Key(blob, key);
                 if (!image) break;
                 rect.x = (image->geometry >> 10) & 0x7FF;
                 rect.y = image->geometry >> 21;
