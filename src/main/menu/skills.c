@@ -171,7 +171,7 @@ int Menu_StepEquipConfirm(MenuWidgetNode *node, int input) {
     int allowed;
     int first_width;
     int width;
-    register u8 *dialog_text asm("$17");
+    u8 *dialog_text;
     MenuConfirmCallback callback;
 
     handled = 0;
@@ -282,8 +282,7 @@ error:
             } else {
                 child->cursor_x = -1;
                 parent = MenuWidget_FindByModeAndSelectedBase(2, 6);
-                option_node = MenuWidget_GetCurrentNode();
-                if (parent == option_node) {
+                if (parent == MenuWidget_GetCurrentNode()) {
                     parent->cursor_x = ((unsigned)parent->has_scroll < 1U);
                     MenuWidget_SetCurrentNode(parent);
                 } else {
