@@ -186,14 +186,13 @@ void Inv_SetActiveList(int mode, int *slot) {
             kind = item->kind;
             data = active->action;
             if (kind != 0 && (unsigned)kind < 8) {
-                asm volatile("" ::: "memory");
                 encoded = kind - 4;
                 if (encoded <= 0) encoded = 1;
             } else {
                             item = *(ItemDataRecord **)selection;
                 kind = item->kind;
-                if ((unsigned)kind < 19) encoded = 0;
-                else encoded = kind - 18;
+                encoded = 0;
+                if ((unsigned)kind >= 19) encoded = kind - 18;
             }
             flags2 = data->attackWord;
             flags2 &= 0xFFCFFFFF;
