@@ -672,13 +672,11 @@ void Menu_DrawStatsList(void) {
     int var_a0;
     int var_a1;
     s32 *var_s3;
-    /* Match debt: with either pin gone loop.c strength-reduces the
-     * multiplier index into a sixth saved pointer; retail indexes it
-     * (lev 20-25). */
+    /* Match debt: retain the modifier-table iterator in s4. */
     register s32 *var_s4 asm("$20");
     s32 temp_s0;
     s32 temp_s1;
-    register s32 var_a0_2 asm("$4");
+    s32 var_a0_2;
     s32 var_s2;
 
     var_s4 = Battle_GetModifierTable() + 1;
@@ -701,8 +699,10 @@ void Menu_DrawStatsList(void) {
                 var_a0 = 0x6F;
             }
             Draw_PrintTextById(var_a0);
+            /* The printed marker ID is dead; reuse its scratch for the sign. */
+            var_a0 = temp_s1 < 0;
             var_a0_2 = temp_s1;
-            if (temp_s1 < 0) {
+            if (var_a0) {
                 var_a0_2 = -var_a0_2;
             }
             Draw_PrintNumberWidth2(var_a0_2);
