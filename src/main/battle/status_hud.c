@@ -1021,15 +1021,16 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
         *(D_800B01D4 + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0x50;
         *(D_800B01D5 + ((g_BattleStatusPanelSlot * 0x8C) + (g_ActiveDrawSlot * 0x578))) = 0xE0;
         {
-            register s32 slot asm("$7") = g_ActiveDrawSlot;
-            missFrameOffset = slot * 0x578;
+            /* screenY is complete; reuse the Y scratch for the draw slot. */
+            y = g_ActiveDrawSlot;
+            missFrameOffset = y * 0x578;
             panelOffset = g_BattleStatusPanelSlot * 0x8C;
             missSprite = (RenderSpritePacket *)(missFrameOffset + panelOffset + ((u8 *)D_800B01C8));
             missSprite->width = 0x18;
             missSprite->x = screenX;
             missSprite->y = screenY;
             missSprite->height = 8;
-            AddPrim(((u32 *)D_800B0E38.ordering[slot]) + 7, panelOffset + ((((u8 *)D_800B01C8) - 8) + missFrameOffset));
+            AddPrim(((u32 *)D_800B0E38.ordering[y]) + 7, panelOffset + ((((u8 *)D_800B01C8) - 8) + missFrameOffset));
         }
     } else {
         value = number;
