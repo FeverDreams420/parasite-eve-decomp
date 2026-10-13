@@ -380,7 +380,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, Room
                 inputArg = &stack.primaryMatrix;
                 asm("" : "=r"(arg0), "=r"(inputArg)
                     : "0"(arg0), "1"(inputArg));
-                scaleValue = (s16)scaleValue >> 1;
+                scaleValue = scaleValue >> 1;
                 stack.position.z += drawState->life[i] << 4;
                 RotMatrixYXZ(arg0, inputArg);
                 memset(sourceScale, 0, 0x10);
@@ -497,6 +497,6 @@ void RoomLib_UpdateDebrisTriplet(void *unused, RoomDebrisOwner *owner,
         }
     }
     state->speed += state->acceleration;
-    if ((s16)state->speed < 0) state->speed = 0;
+    if (state->speed < 0) state->speed = 0;
     if (state->remaining == 0) owner->phase = 2;
 }
