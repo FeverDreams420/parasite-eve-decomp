@@ -236,7 +236,7 @@ int Battle_CalcRelativeAngle(BattleEntity *, BattleEntity *);
 
 void Battle_UpdateEntityFacing(BattleEntity *entity)
 {
-    FacingCore *core = (FacingCore *)entity->core;
+    FacingCore *core = entity->core;
     s16 direction;
     int mode;
     int phase;
@@ -300,7 +300,7 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
     int i;
     u8 all_done;
 
-    state = (EnemyCombatant *)entity->core;
+    state = entity->core;
 
     switch (state->deathAnimPhase) {
     case 0:
