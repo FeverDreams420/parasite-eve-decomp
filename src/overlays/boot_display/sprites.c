@@ -165,12 +165,11 @@ void BootDisplay_StepImageSprite(void) {
         register u32 frame asm("$2") = g_BootDisplayFrameCounter;
         u32 divisor = 450;
         u32 phase;
-        register u32 threshold asm("$2");
         /* Preserve retail hardware division rather than reciprocal multiplication. */
         asm("" : "=r"(divisor) : "0"(divisor));
         phase = frame % divisor;
-        threshold = divisor - 93;
-        if (phase == threshold) g_BootDisplayTransition = 2;
+        frame = divisor - 93;
+        if (phase == frame) g_BootDisplayTransition = 2;
         if (phase == 0) {
             g_BootDisplayState = 6;
             g_BootDisplayTransition = 0;
