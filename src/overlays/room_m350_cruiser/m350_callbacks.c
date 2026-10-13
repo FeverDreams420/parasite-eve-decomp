@@ -808,6 +808,7 @@ int func_80198CF8(int event,State *state)
         int frame,angle,delta,cosine,sine;
         int phase;
         int target;
+        register int height asm("$2");
         register int speed asm("$5");
         if(instance->mode!=9) return 0;
         if(instance->state && instance->state->action_state[0]==1)
@@ -816,8 +817,8 @@ int func_80198CF8(int event,State *state)
             register int current asm("$3")=instance->anim.parts.integer;
             frame=current;
         if(D_8019A8B8.repeats>0) {
-            register int signedFrame asm("$2")=(short)current;
-            if(signedFrame>=30) {
+            height=(short)current;
+            if(height>=30) {
                 instance->anim.fixed=0x50000;
                 D_8019A8B8.repeats--;
             }
@@ -885,7 +886,6 @@ int func_80198CF8(int event,State *state)
         asm("" : "=r"(nextPhase) : "0"(nextPhase));
         if(phase<16) {
             int sample,floor;
-            register int height asm("$2");
             phase=nextPhase+1;
             state->heightPhase=phase;
             sample=D_800966EC[((unsigned int)phase<<6)&0xFC0].part.sin;
