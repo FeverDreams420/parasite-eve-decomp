@@ -35,6 +35,6 @@ extern volatile int g_GameClockLimit;
 extern unsigned int g_PlayTimeFrameCounter;
 
 /* Frames left on the timed state that Entity_UpdateTimers clears with flag 0x100. */
-extern u16 D_8009D228;
+extern u16 g_ActorEffectFlag100Timer;
 
 #endif

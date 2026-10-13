@@ -334,12 +334,12 @@ void Battle_ResolveHitOnTimer(void)
                         if (Inv_AddItem(((EnemyCombatant *)selectedSlot->actor->core)->stealItemId) != 0)
                         {
                             EnemyCombatant *enemy = selectedSlot->actor->core;
-                            D_8009D1CE = 1;
+                            g_BattleSaveOverlayActive = 1;
                             g_CurItemEffectData = Inv_GetItemEffectData(enemy->stealItemId, 2);
                         }
                         else
                         {
-                            D_8009D1CE = 1;
+                            g_BattleSaveOverlayActive = 1;
                             g_CurItemEffectData = Inv_GetItemEffectData(((EnemyCombatant *)selectedSlot->actor->core)->stealItemId, 1);
                             ((EnemyCombatant *)selectedSlot->actor->core)->stealItemId = 0;
                         }
@@ -577,7 +577,7 @@ void Battle_ApplyDamage(int damageKind) {
 }
 
 s32 rand(void);
-s16 g_ActorEffectFlag100Timer;
+u16 g_ActorEffectFlag100Timer;
 void *g_BattleActiveEntity;
 
 /* The acting combatant, reloaded after every structure store as retail does. */

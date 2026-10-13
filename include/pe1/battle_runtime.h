@@ -39,11 +39,10 @@ extern u8 D_8009D2D8;
 extern unsigned char g_BattleRemainingActions;
 extern u8 g_BattleActionAnimModes[4];
 extern unsigned int g_BattleResultFlags;
-extern u8 D_8009D1CE;
-/* D_8009D1CE read as the signed save-overlay flag, and the actor effect
- * timer at 0x8009D228 read as a signed count. */
-extern s8 g_BattleSaveOverlayActive;
-extern s16 g_ActorEffectFlag100Timer;
+/* Message overlay step of Menu_SaveOverlayDraw (0 idle, 1 show, 2 wait),
+ * and the frames left on the actor effect that flag 0x100 marks. */
+extern u8 g_BattleSaveOverlayActive;
+extern u16 g_ActorEffectFlag100Timer;
 extern u8 g_BattleSlotCancelPending;
 extern u8 g_BattleActionIndex;
 extern u8 g_BattleActionQueueCount;

@@ -11,7 +11,7 @@
  * through $gp, every other extern stays absolute. */
 unsigned char g_MenuActiveMode;
 unsigned char g_SaveOverlayTimer;
-u8 D_8009D1CE;
+u8 g_BattleSaveOverlayActive;
 u8 *g_CurItemEffectData;
 
 void Save_DrawSlotMetadata(void)
@@ -96,7 +96,7 @@ void Menu_SaveOverlayDraw(void)
     short color;
     int y;
     int value;
-    switch (D_8009D1CE) {
+    switch (g_BattleSaveOverlayActive) {
     case 1:
         color = -1;
         Draw_ResetTextboxes();
@@ -104,18 +104,18 @@ void Menu_SaveOverlayDraw(void)
         y = g_MenuActiveMode < 2 ? 15 : 195;
         Menu_SetTextCursorRect(value, y, 0, 0);
         Render_SetupColorTable(0, 2, &color);
-        value = D_8009D1CE;
+        value = g_BattleSaveOverlayActive;
         g_TextboxEntries[0].state = 2;
         g_SaveOverlayTimer = 75;
         g_TextboxEntries[0].message = g_CurItemEffectData;
         value++;
-        D_8009D1CE = value;
+        g_BattleSaveOverlayActive = value;
         g_TextboxEntries[0].control.flags |= 0x2000000;
         break;
     case 2:
         if (!g_SaveOverlayTimer) {
             Draw_ResetTextboxes();
-            D_8009D1CE = 0;
+            g_BattleSaveOverlayActive = 0;
         }
         break;
     }

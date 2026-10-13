@@ -200,7 +200,7 @@ void Battle_Init(void)
     g_BattleActionAnimModes[3] = config5->animMode[3];
 
     Draw_ResetTextboxes();
-    D_8009D1CE = 0;
+    g_BattleSaveOverlayActive = 0;
     g_BattleResultFlags &= ~0x300;
     Battle_InitFadeVars();
     g_BattleSlotCancelPending = 0;

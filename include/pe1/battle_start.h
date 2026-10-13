@@ -11,7 +11,7 @@ extern BattleEntity *g_BattleActionActors[7];
 extern int g_BattleFrameCounter;
 extern int g_BattleModeState;
 extern u8 g_BattleSuspendedModeState, D_8009CE78, g_BattleGaugeCapLatch, g_BattleStepIndex;
-extern u8 D_8009D1CE, g_BattleSpritePrimCountdown;
+extern u8 g_BattleSaveOverlayActive, g_BattleSpritePrimCountdown;
 extern u32 g_BattleExpReward;
 extern u16 g_BattlePeBonusReward;
 

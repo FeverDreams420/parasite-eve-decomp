@@ -99,7 +99,7 @@ int Battle_RollEscapeChance(void) {
     if (result <= 0) {
         Combatant *player;
         int attempts;
-        D_8009D1CE = 1;
+        g_BattleSaveOverlayActive = 1;
         if (result == -1)
             g_CurItemEffectData = g_EscapeBlockedTexts + Save_GetMetadataWindowIndex() * 14;
         else

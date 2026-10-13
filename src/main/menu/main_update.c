@@ -928,7 +928,7 @@ void Menu_MainUpdate(s32 arg0) {
             coordinate = &var_t0.entity->posZ.parts.integer;
             tail_sp = *coordinate;
             tail_a1 = 0;
-            D_8009D1CE = 0;
+            g_BattleSaveOverlayActive = 0;
             Asset_Find08Alt(tail_a0, tail_a1, tail_a2, tail_a3, tail_sp);
         }
         }

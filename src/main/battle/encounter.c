@@ -181,7 +181,7 @@ void Battle_StartEncounter(int mode) {
     *(u8 *)&g_BattleResultFlags = 0;
     initial_flags = g_BattleResultFlags;
     D_8009D1A8.summary = 0;
-    D_8009D1CE = 0;
+    g_BattleSaveOverlayActive = 0;
     g_BattleSpritePrimCountdown = 0;
     g_BattleExpReward = 0;
     g_BattlePeBonusReward = 0;
@@ -518,7 +518,7 @@ void Battle_Update(void) {
 
         }
     }
-    if (((D_8009D1CE) != 0) && (g_BattleModeState == 0)) {
+    if (((g_BattleSaveOverlayActive) != 0) && (g_BattleModeState == 0)) {
         Menu_SaveOverlayDraw();
     }
     if (g_BattleEnemyEscapeFlag != 0) {

@@ -282,8 +282,8 @@ void Entity_UpdateTimers(void) {
         }
     }
     if ((*state_flags) & AYA_HASTE) {
-        global_timer = D_8009D228 - 1;
-        D_8009D228 = global_timer;
+        global_timer = g_ActorEffectFlag100Timer - 1;
+        g_ActorEffectFlag100Timer = global_timer;
         if ((global_timer << 0x10) <= 0) {
             (*state_flags) = ((*state_flags) & ~AYA_HASTE);
         }
