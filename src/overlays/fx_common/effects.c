@@ -17,7 +17,7 @@ void func_8019200C(void)
 
 /* Choose the room to return to once the effect sequence ends, clear the
  * screen, fade the music out and hand control back to the scene loader. */
-void func_80192030(void)
+void FxCommon_EndSequence(void)
 {
     FxCommonRect area;
     s32 room;
@@ -153,7 +153,7 @@ void func_8019234C(void)
     D_8019C00E = 0;
     last = 0;
     func_80196498();
-    func_80191DE8(D_8019C034 != 10);
+    FxCommon_SetAkao3dVolumeRange(D_8019C034 != 10);
     srand(VSync(-1));
     started = 0;
     D_8019C03C = rand() % 3000000;
@@ -170,22 +170,22 @@ void func_8019234C(void)
             D_8019C024 = 1;
             Boot_Shutdown();
         }
-        func_801942FC();
+        FxCommon_StepEffects();
         if (D_8019C00E != 0)
             continue;
 
-        func_8018F05C();
-        func_8018F92C((void *)&g_FxCommonCameraPosition);
+        FxCommon_UpdateCameraMatrices();
+        FxCommon_UpdateFrustumPlanes((void *)&g_FxCommonCameraPosition);
         if (D_8019C02A != 0)
-            D_8019C02A = func_80194108(D_8019C02A);
+            D_8019C02A = FxCommon_StepFadeIntensity(D_8019C02A);
         func_80192740();
-        func_80192800();
-        func_80193478();
+        FxCommon_DrawSceneNodes();
+        FxCommon_StepPathNodes();
         if (!started) {
-            handle = func_80191E30(0xABE, D_801EA578->state);
+            handle = FxCommon_SendTableCommand3d(0xABE, D_801EA578->state);
             started = 1;
         } else if (D_8019C0C0 == 0) {
-            func_80191EFC(handle, D_801EA578->state);
+            FxCommon_Apply3dPan(handle, D_801EA578->state);
         }
         if (D_8019C034 == 10 || (D_8019C044 == 1 && D_8019C045 == 0))
             Menu_DrawTextboxEntries();
@@ -211,7 +211,7 @@ void func_8019234C(void)
         D_8019CC14 = VSync(1);
         DrawSync(0);
         VSync(2);
-        func_80193AB0();
+        FxCommon_StepMotionBlend();
         ResetGraph(1);
         PutDrawEnv(((FxCommonFrame *)D_8019C9C0)->drawEnv);
         PutDispEnv(((FxCommonFrame *)D_8019C9C0)->dispEnv);
@@ -222,10 +222,10 @@ void func_8019234C(void)
         D_8019C9C0 = next;
         g_ActiveDrawSlot ^= 1;
         ClearOTagR(next->allocation, 0x1000);
-        func_8019BF8C((void **)D_8019C9C0);
+        FxCommon_SelectBufferAllocation((void **)D_8019C9C0);
     }
     if (D_8019C00E == 0)
-        func_80192030();
+        FxCommon_EndSequence();
 }
 
 void func_80192740(void)
@@ -263,18 +263,18 @@ void func_80192740(void)
         src2[0xFFF] = (src2[0xFFF] & highMask) | lowWord;
     }
     if (D_8019C02C != 0)
-        D_8019C02C = func_80193B5C(D_8019C02C);
+        D_8019C02C = FxCommon_DrawEffectMarkers(D_8019C02C);
 }
 
 #define DRAW(node, pass, force, mirrored) \
-    func_80190E04((node), D_8019C9C0, (pass), (force), (mirrored))
+    FxCommon_DrawTransformNodeCulled((node), D_8019C9C0, (pass), (force), (mirrored))
 #define DRAW_PAIR(node, pass, mode) \
-    func_80191114((node), D_8019C9C0, (pass), (mode))
+    FxCommon_DrawLodNode((node), D_8019C9C0, (pass), (mode))
 
 /* Draw every scene node for this frame, each with its depth bias: the
  * backdrop, the turning fans, the static props, the camera path nodes and
  * their echoes, the effect node pairs and the overlay nodes. */
-void func_80192800(void)
+void FxCommon_DrawSceneNodes(void)
 {
     int i;
 
@@ -419,7 +419,7 @@ void func_80192800(void)
         DRAW_PAIR(g_FxCommonRuntime.pairedNodes[15], 0, 1);
     }
     D_801EA5E0 = 500;
-    func_80190D3C(D_801EA260, D_8019C9C0);
+    FxCommon_DrawTransformNode(D_801EA260, D_8019C9C0);
 }
 
 #undef DRAW
@@ -427,20 +427,20 @@ void func_80192800(void)
 
 /* Move the path-following nodes one step along their recorded paths, bank
  * the two flyers into their turns, and copy each flyer onto its shadow. */
-void func_80193478(void)
+void FxCommon_StepPathNodes(void)
 {
     GteShortVector bank0;
     GteShortVector bank1;
 
-    func_8018F55C(D_8019C038, 0x4A, Draw_GetTimTableEntry(&D_801D0260, 2),
+    FxCommon_SamplePath(D_8019C038, 0x4A, Draw_GetTimTableEntry(&D_801D0260, 2),
                   (FxCommonVec3 *)g_FxCommonPathNodes[4]->matrix.t,
                   &g_FxCommonPathNodes[4]->seed.angles);
-    func_8018F55C(D_8019C038, 0x4B, Draw_GetTimTableEntry(&D_801D0260, 2),
+    FxCommon_SamplePath(D_8019C038, 0x4B, Draw_GetTimTableEntry(&D_801D0260, 2),
                   (FxCommonVec3 *)g_FxCommonPathNodes[5]->matrix.t,
                   &g_FxCommonPathNodes[5]->seed.angles);
-    func_8018F55C(D_8019C03C, 0x4C, Draw_GetTimTableEntry(&D_801D0260, 2),
+    FxCommon_SamplePath(D_8019C03C, 0x4C, Draw_GetTimTableEntry(&D_801D0260, 2),
                   (FxCommonVec3 *)g_FxCommonPathNodes[0]->matrix.t, &bank0);
-    func_8018F55C(D_8019C03C, 0x4D, Draw_GetTimTableEntry(&D_801D0260, 2),
+    FxCommon_SamplePath(D_8019C03C, 0x4D, Draw_GetTimTableEntry(&D_801D0260, 2),
                   (FxCommonVec3 *)g_FxCommonPathNodes[2]->matrix.t, &bank1);
 
     g_FxCommonPathNodes[0]->seed.component[0] = bank0.x;
@@ -480,7 +480,7 @@ void func_80193478(void)
     D_8019C03C += 0x10;
 }
 
-void func_801938E8(s16 base)
+void FxCommon_SnapMotionWhole(s16 base)
 {
     FxCommonMotionRecord sample;
     GteShortVector extra;
@@ -488,7 +488,7 @@ void func_801938E8(s16 base)
 
     D_8019C058 = 0;
     for (i = 0; i < 10; i++) {
-        func_8018F55C(i << 8, base + 0x40,
+        FxCommon_SamplePath(i << 8, base + 0x40,
                       Draw_GetTimTableEntry(&D_801D0260, 2), &sample.vector, &extra);
         D_8019CAA8[i].vector.x = sample.vector.x << 16;
         D_8019CAA8[i].vector.y = sample.vector.y << 16;
@@ -496,7 +496,7 @@ void func_801938E8(s16 base)
     }
 }
 
-void func_801939B0(s16 base)
+void FxCommon_BeginMotionBlend(s16 base)
 {
     FxCommonMotionRecord sample;
     GteShortVector extra;
@@ -504,7 +504,7 @@ void func_801939B0(s16 base)
 
     D_8019C058 = 0x20;
     for (i = 0; i < 10; i++) {
-        func_8018F55C(i << 8, base + 0x40,
+        FxCommon_SamplePath(i << 8, base + 0x40,
                       Draw_GetTimTableEntry(&D_801D0260, 2), &sample.vector, &extra);
         g_FxCommonMotionDeltas[i].vector.x =
             ((sample.vector.x << 16) - D_8019CAA8[i].vector.x) >> 5;
@@ -515,7 +515,7 @@ void func_801939B0(s16 base)
     }
 }
 
-void func_80193AB0(void)
+void FxCommon_StepMotionBlend(void)
 {
     FxCommonMotionLane *x;
     FxCommonMotionLane *y;
@@ -553,7 +553,7 @@ void func_80193AB0(void)
 /* Fade the effect markers in or out by eight steps and draw, for every
  * enabled effect, a line from its projected position to a two-part label
  * (the selected effect uses the brighter palette). */
-s16 func_80193B5C(s16 value)
+s16 FxCommon_DrawEffectMarkers(s16 value)
 {
     s16 level;
     FxCommonDrawModePacket *mode;
@@ -731,26 +731,26 @@ s16 func_80193B5C(s16 value)
 
 #undef FX_MODE_PACKET
 
-s16 func_80194108(s16 value)
+s16 FxCommon_StepFadeIntensity(s16 value)
 {
     s16 result;
 
     result = value;
     if (value > 0) {
         if (value < 0xFF) {
-            func_801941A4((u8)result);
+            FxCommon_DrawFullScreenFade((u8)result);
             result = value + 0x10;
         } else {
-            func_801941A4(0xFF);
+            FxCommon_DrawFullScreenFade(0xFF);
         }
     }
 
     if (result < 0) {
         if (result >= -0xFE) {
-            func_801941A4((u8)(result - 1));
+            FxCommon_DrawFullScreenFade((u8)(result - 1));
             result -= 0x10;
         } else {
-            func_801941A4(0);
+            FxCommon_DrawFullScreenFade(0);
             result = 0;
         }
     }
@@ -758,7 +758,7 @@ s16 func_80194108(s16 value)
     return result;
 }
 
-void func_801941A4(int intensity)
+void FxCommon_DrawFullScreenFade(int intensity)
 {
     FxCommonPacketCursor *packet;
     FxCommonBuffer *quadBuffer;
@@ -818,7 +818,7 @@ void func_801941A4(int intensity)
 }
 
 /* Advance effect selection, resource transitions and the two motion blends. */
-void func_801942FC(void)
+void FxCommon_StepEffects(void)
 {
     FxCommonMotionRecord mode1Sample;
     FxCommonMotionRecord mode1NextSample;
@@ -923,8 +923,8 @@ void func_801942FC(void)
                         D_8019C044 = 0;
                         D_8019C045 = 0;
                         D_8019C13C = 0;
-                        func_8018F55C(D_8019C038 + 0x20, 0x4A, Draw_GetTimTableEntry((&D_801D0260), 2), &mode1Sample.vector, &sampleExtra);
-                        func_8018F55C(D_8019C038 + 0x20, 0x4B, Draw_GetTimTableEntry((&D_801D0260), 2), &mode1NextSample.vector, &sampleExtra);
+                        FxCommon_SamplePath(D_8019C038 + 0x20, 0x4A, Draw_GetTimTableEntry((&D_801D0260), 2), &mode1Sample.vector, &sampleExtra);
+                        FxCommon_SamplePath(D_8019C038 + 0x20, 0x4B, Draw_GetTimTableEntry((&D_801D0260), 2), &mode1NextSample.vector, &sampleExtra);
                         copyX = mode1Sample.vector.x;
                         copyY = mode1Sample.vector.y;
                         copyZ = mode1Sample.vector.z;
@@ -959,8 +959,8 @@ void func_801942FC(void)
                     D_8019C044 = 0;
                     D_8019C045 = 0;
                     D_8019C13C = 0;
-                    func_8018F55C(D_8019C03C + 0x100, 0x4C, Draw_GetTimTableEntry((&D_801D0260), 2), &mode2Sample.vector, &sampleExtra);
-                    func_8018F55C(D_8019C03C + 0x100, 0x4D, Draw_GetTimTableEntry((&D_801D0260), 2), &mode2NextSample.vector, &sampleExtra);
+                    FxCommon_SamplePath(D_8019C03C + 0x100, 0x4C, Draw_GetTimTableEntry((&D_801D0260), 2), &mode2Sample.vector, &sampleExtra);
+                    FxCommon_SamplePath(D_8019C03C + 0x100, 0x4D, Draw_GetTimTableEntry((&D_801D0260), 2), &mode2NextSample.vector, &sampleExtra);
                     shortA.x = (s16) mode2NextSample.vector.x;
                     shortA.y = (s16) mode2NextSample.vector.y;
                     shortA.z = (s16) mode2NextSample.vector.z;
@@ -1048,7 +1048,7 @@ void func_801942FC(void)
                         D_8019C058 = 0x20;
                         motionBase0 = (s16)phase0;
                         do {
-                            func_8018F55C(motionIndex0 << 8, motionBase0 + 0x40, Draw_GetTimTableEntry((&D_801D0260), 2), &motionSample.vector, &motionExtra);
+                            FxCommon_SamplePath(motionIndex0 << 8, motionBase0 + 0x40, Draw_GetTimTableEntry((&D_801D0260), 2), &motionSample.vector, &motionExtra);
                             motionIndex0 += 1;
                             g_FxCommonMotionDeltas[motionSlot0].vector.x = ((motionSample.vector.x << 0x10) - D_8019CAA8[motionSlot0].vector.x) >> 5;
                             g_FxCommonMotionDeltas[motionSlot0].vector.y = ((motionSample.vector.y << 0x10) - D_8019CAA8[motionSlot0].vector.y) >> 5;
@@ -1079,7 +1079,7 @@ void func_801942FC(void)
                         D_8019C058 = 0x20;
                         motionBase1 = (s16)phase1;
                         do {
-                            func_8018F55C(motionIndex1 << 8, motionBase1 + 0x40, Draw_GetTimTableEntry((&D_801D0260), 2), &motionSample.vector, &motionExtra);
+                            FxCommon_SamplePath(motionIndex1 << 8, motionBase1 + 0x40, Draw_GetTimTableEntry((&D_801D0260), 2), &motionSample.vector, &motionExtra);
                             motionIndex1 += 1;
                             g_FxCommonMotionDeltas[motionSlot1].vector.x = ((motionSample.vector.x << 0x10) - D_8019CAA8[motionSlot1].vector.x) >> 5;
                             g_FxCommonMotionDeltas[motionSlot1].vector.y = ((motionSample.vector.y << 0x10) - D_8019CAA8[motionSlot1].vector.y) >> 5;
@@ -1108,45 +1108,45 @@ void func_801942FC(void)
         g_FxCommonCameraTarget.z = D_801EA578->state[2];
     }
     if (D_8019C046 == 1) {
-        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[3], Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraPosition, &sampleExtra);
-        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[2], Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraTarget, &sampleExtra);
+        FxCommon_SamplePath(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[3], Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraPosition, &sampleExtra);
+        FxCommon_SamplePath(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[2], Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraTarget, &sampleExtra);
         D_8019C04C += 0x80;
     }
     if (D_8019C034 == 0xA) {
         D_8019C030 += 1;
-        func_8018F55C(D_8019C04C, 0x4E, Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraPosition, &sampleExtra);
-        func_8018F55C(D_8019C04C, 0x4F, Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraTarget, &sampleExtra);
+        FxCommon_SamplePath(D_8019C04C, 0x4E, Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraPosition, &sampleExtra);
+        FxCommon_SamplePath(D_8019C04C, 0x4F, Draw_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonCameraTarget, &sampleExtra);
         D_8019C04C += 0x10;
         if ((s16) D_8019C030 == 0x4B) {
-            D_8019C0C4 = func_801958D4(0xB, 0U);
+            D_8019C0C4 = FxCommon_SwitchResource(0xB, 0U);
             D_8019C0C8 = 0;
         }
         if ((s16)D_8019C030 == 0x11D) {
-            func_801958D4(0xE, 1U);
+            FxCommon_SwitchResource(0xE, 1U);
         }
         if ((s16)D_8019C030 == 0x13B) {
-            D_8019C0C4 = func_801958D4(0xC, 0U);
+            D_8019C0C4 = FxCommon_SwitchResource(0xC, 0U);
             D_8019C0C8 = 0;
         }
         if ((s16)D_8019C030 == 0x20D) {
-            func_801958D4(0xE, 1U);
+            FxCommon_SwitchResource(0xE, 1U);
         }
         if ((s16)D_8019C030 == 0x22B) {
-            D_8019C0C4 = func_801958D4(0xD, 0U);
+            D_8019C0C4 = FxCommon_SwitchResource(0xD, 0U);
             D_8019C0C8 = 0;
         }
         if ((s16)D_8019C030 == 0x2FD) {
-            func_801958D4(0xE, 1U);
+            FxCommon_SwitchResource(0xE, 1U);
         }
         if ((s16)D_8019C030 == 0x31B) {
-            D_8019C0C4 = func_801958D4(0xE, 0U);
+            D_8019C0C4 = FxCommon_SwitchResource(0xE, 0U);
             D_8019C0C8 = 0;
         }
         if ((s16)D_8019C030 == 0x3ED) {
-            func_801958D4(0xE, 1U);
+            FxCommon_SwitchResource(0xE, 1U);
         }
         if ((s16)D_8019C030 == 0x40B) {
-            D_8019C0C4 = func_801958D4(0xE, 1U);
+            D_8019C0C4 = FxCommon_SwitchResource(0xE, 1U);
         }
         if (D_8019C0C8 == 0) {
             D_8019C0CD = 0;
@@ -1179,7 +1179,7 @@ void func_801942FC(void)
             Akao_Cmd_C1_WithSlot(g_SceneAudioSlot0Handle, 0xDC, 0);
         }
     }
-    func_80195D3C();
+    FxCommon_StepCameraPath();
     if (D_8019C018 != 0) {
         D_8019C018 = 0;
         if (D_8019C01C == 1) {
@@ -1234,7 +1234,7 @@ void func_801942FC(void)
 #undef DRAW_PAIR
 #undef FX_MODE_PACKET
 
-s16 func_801958D4(s16 resourceId, u8 action)
+s16 FxCommon_SwitchResource(s16 resourceId, u8 action)
 {
     s16 result;
     s16 id;
@@ -1300,7 +1300,7 @@ void func_80195994(s32 index, s32 first, s32 second, u32 source) {
     base = Draw_GetTimTableEntry(lookupTable, lookupCount);
     setupIndex = (s16)index;
     extraPtr = &extra;
-    func_8018F55C(sourceValue, g_FxCommonEffectSetup[setupIndex].motionIndices[0], base, &point.vector, extraPtr);
+    FxCommon_SamplePath(sourceValue, g_FxCommonEffectSetup[setupIndex].motionIndices[0], base, &point.vector, extraPtr);
 
     lookupTable = table;
     firstValue &= 0xff;
@@ -1328,7 +1328,7 @@ void func_80195994(s32 index, s32 first, s32 second, u32 source) {
     target0->z = pz;
 
     base = Draw_GetTimTableEntry(lookupTable, 2);
-    func_8018F55C(sourceValue, g_FxCommonEffectSetup[setupIndex].motionIndices[1], base, &point.vector, extraPtr);
+    FxCommon_SamplePath(sourceValue, g_FxCommonEffectSetup[setupIndex].motionIndices[1], base, &point.vector, extraPtr);
 
     asm volatile("" : : "r"(secondValue));
     secondValue &= 0xff;

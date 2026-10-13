@@ -9,7 +9,7 @@
 
 /* Build both frame buffers' full-screen gradient quads (sky, shade, the
  * semi-transparent bottom and top fades) and their three draw modes. */
-void func_80195F6C(void)
+void FxCommon_InitFadeQuads(void)
 {
     u32 i;
 
@@ -137,9 +137,9 @@ void func_80196498(void)
     register void *resourceData asm("$3");
     FxCommonPoint8 *point;
 
-    func_80191854();
-    func_80190998();
-    func_80195F6C();
+    FxCommon_SelectRoomVariant();
+    FxCommon_InitNodePools();
+    FxCommon_InitFadeQuads();
     SetLightMatrix(&D_8019C11C);
     SetColorMatrix(&D_8019C0FC);
     SetBackColor(0x40, 0x40, 0x40);
@@ -533,7 +533,7 @@ void func_80196498(void)
     asm("" : : "r"((u16)motionBase) : "$16");
     variantOrMotionOffset = 0;
     for (; motionIndex < 10; ++motionIndex) {
-        func_8018F55C(motionIndex << 8, motionBase + 0x40, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion);
+        FxCommon_SamplePath(motionIndex << 8, motionBase + 0x40, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion);
         *((s32 *)((u8 *)D_8019CAA8 + variantOrMotionOffset)) = motion.vector.x << 0x10;
         *((s32 *)((u8 *)D_8019CAAC + variantOrMotionOffset)) = motion.vector.y << 0x10;
         *((s32 *)((u8 *)D_8019CAB0 + variantOrMotionOffset)) = motion.vector.z << 0x10;
@@ -568,13 +568,13 @@ void func_80196498(void)
         D_8019C044 = 1;
         D_8019C048 = 1;
         D_8019BFF8 = 1;
-        func_8018F55C(0, selectedMotion + 1, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion);
+        FxCommon_SamplePath(0, selectedMotion + 1, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion);
         /* Shared volatile is scheduling debt in other callers; this store is ordinary. */
         *(s16 *)&D_8019C054 = 0;
         D_8019C810 = motion.vector.x;
         D_8019C814 = motion.vector.y;
         D_8019C818 = motion.vector.z;
-        motionCount = func_8018F55C(0, selectedMotion, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion) - 2;
+        motionCount = FxCommon_SamplePath(0, selectedMotion, Draw_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion) - 2;
         D_8019C050 = 0;
         D_8019C040 = motionCount;
         D_8019C041 = 0;

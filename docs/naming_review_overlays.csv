@@ -106,3 +106,44 @@ address,overlay,old_name,name,evidence
 0x80192C28,room_m049_nypd;room_m050_nypd;room_m090_soho;room_m344_museum;room_m374_central_park,D_80192C28,g_EffectSequenceFinalGlowSprite,"effect_sequence.c: grey 0x90 preset whose depth follows final_alpha, drawn last"
 0x80192C34,room_m049_nypd;room_m050_nypd;room_m090_soho;room_m344_museum;room_m374_central_park,D_80192C34,g_EffectSequenceModel,"effect_sequence.c: loaded via Asset_FindTable08ByU32Key and passed to FieldFx_Model* draw calls"
 0x80192C38,room_m049_nypd;room_m050_nypd;room_m090_soho;room_m344_museum;room_m374_central_park,D_80192C38,g_EffectSequenceSparkleSprite,"effect_sequence.c: preset whose depth follows sparkle_alpha, drawn in the sparkle function"
+0x8018F05C,fx_common,func_8018F05C,FxCommon_UpdateCameraMatrices,"camera.c: builds the view matrix D_8019CC30 with CompMatrix, the look-at matrix and the billboard rotation from camera position and target"
+0x8018F344,fx_common,func_8018F344,FxCommon_BuildLookAtMatrix,"camera.c: normalised side/up/forward rows plus negated rotated eye translation; called by FxCommon_UpdateCameraMatrices with up vector (0,-20000,0)"
+0x8018F55C,fx_common,func_8018F55C,FxCommon_SamplePath,camera.c: interpolates a closed path of short points by segment index and 8-bit fraction and returns the point count; called from camera_path.c and effects.c
+0x8018F92C,fx_common,func_8018F92C,FxCommon_UpdateFrustumPlanes,camera.c: rotates four frustum corners by the camera matrix and rebuilds four side planes through the eye with OuterProduct0
+0x8018FFF4,fx_common,func_8018FFF4,FxCommon_IsPointInView,camera.c: tests an int point against two frustum side planes and returns the both-visible flag
+0x80190124,fx_common,func_80190124,FxCommon_IsShortPointInView,camera.c: same two-plane frustum test as FxCommon_IsPointInView on a short point
+0x80190998,fx_common,func_80190998,FxCommon_InitNodePools,"camera.c: resets 200 transform nodes, the index free list D_8019C830, the link array D_801E4A88 to -1 and the bucket list heads"
+0x80190D08,fx_common,func_80190D08,FxCommon_ReleaseNode,camera.c: unlinks the node from its bucket list then frees its index link
+0x80190D3C,fx_common,func_80190D3C,FxCommon_DrawTransformNode,"camera.c: RotMatrix of the node seed, CompMatrix with the view matrix, then FxCommon_DrawPolyResource"
+0x80190E04,fx_common,func_80190E04,FxCommon_DrawTransformNodeCulled,camera.c: bounds test with FxCommon_CheckFourBoundsWithMargin then FxCommon_DrawModel/Tinted/Flat by pass and mirror flag; used by the DRAW macro in effects.c
+0x80191114,fx_common,func_80191114,FxCommon_DrawLodNode,camera.c: selects near/middle/far model kind by node depth then draws with FxCommon_DrawModel or FxCommon_DrawModelTinted
+0x80191580,fx_common,func_80191580,FxCommon_ResetTransformNode,"camera.c: writes identity matrix, zero seed and default record into a node; called for all 200 pool slots in FxCommon_InitNodePools"
+0x801915DC,fx_common,func_801915DC,FxCommon_AllocIndexLink,camera.c: pops the free-list head D_8019CBC0 and inserts the index into the D_801E4A88 doubly linked list
+0x80191678,fx_common,func_80191678,FxCommon_FreeIndexLink,camera.c: unlinks the index from D_801E4A88 and pushes it on the free list; called by FxCommon_ReleaseNode
+0x80191740,fx_common,func_80191740,FxCommon_BeginRecordIteration,camera.c: sets cursor D_8019CC50 to the list sentinel 200 that func_80191754 walks
+0x80191754,fx_common,func_80191754,FxCommon_NextRecord,camera.c: advances cursor D_8019CC50 along the D_801E4A8A links and returns &D_801E4E00[record] or 0 at the end
+0x801917BC,fx_common,func_801917BC,FxCommon_LinkNodeToParent,"camera.c: sets parent, bucket = parent bucket + 1 and inserts the node at the head of D_8019CCBC[bucket]"
+0x80191834,fx_common,func_80191834,FxCommon_UnlinkNode,camera.c: removes the node from its previous/next list; called by FxCommon_ReleaseNode
+0x80191854,fx_common,func_80191854,FxCommon_SelectRoomVariant,"camera.c: picks D_8019CC52 from D_800A77F4.room and the path flags from the area, then calls func_80191C94"
+0x80191C94,fx_common,func_80191C94,FxCommon_LoadEffectSectors,camera.c: CdRom_ReadSectorsFromLba of ranges D_80093170/72/74 into D_801D0260 and D_8019CE10 with retry on -1
+0x80191DE8,fx_common,func_80191DE8,FxCommon_SetAkao3dVolumeRange,camera.c: writes g_Akao3dVolumeMin/Max (0x10/0x10 or 0x10/0x40) by argument
+0x80191E30,fx_common,func_80191E30,FxCommon_SendTableCommand3d,camera.c: temporarily installs the view matrix and calls Akao_SendTableCommand on TIM table entry 3
+0x80191EFC,fx_common,func_80191EFC,FxCommon_Apply3dPan,"camera.c: installs the view matrix, Akao_Calc3DPan on a position, then Akao_Cmd_A0/A2 for the handle"
+0x80192030,fx_common,func_80192030,FxCommon_EndSequence,"effects.c: header comment, chooses the return room, clears the screen, fades music out and hands control to the scene loader"
+0x80192800,fx_common,func_80192800,FxCommon_DrawSceneNodes,"effects.c: header comment, draws every scene node (backdrop, fans, props, path nodes, echoes, pairs) through the DRAW macros"
+0x80193478,fx_common,func_80193478,FxCommon_StepPathNodes,"effects.c: header comment, moves path-following nodes one step along their paths and copies flyers onto their shadows"
+0x801938E8,fx_common,func_801938E8,FxCommon_SnapMotionWhole,effects.c: samples 10 path points with FxCommon_SamplePath into D_8019CAA8 and sets blend counter D_8019C058 to 0
+0x801939B0,fx_common,func_801939B0,FxCommon_BeginMotionBlend,"effects.c: samples 10 path points, stores (sample - whole) >> 5 into g_FxCommonMotionDeltas and sets D_8019C058 to 0x20"
+0x80193AB0,fx_common,func_80193AB0,FxCommon_StepMotionBlend,effects.c: decrements D_8019C058 and adds g_FxCommonMotionDeltas into the motion lanes of D_8019CAB0
+0x80193B5C,fx_common,func_80193B5C,FxCommon_DrawEffectMarkers,"effects.c: header comment, fades markers by eight steps and draws a line to a label per enabled effect; called as D_8019C02C = func_80193B5C(D_8019C02C) from func_80192740"
+0x80194108,fx_common,func_80194108,FxCommon_StepFadeIntensity,effects.c: ramps the value by 0x10 toward 0xFF or -0xFE and calls func_801941A4 with the clamped intensity
+0x801941A4,fx_common,func_801941A4,FxCommon_DrawFullScreenFade,effects.c: builds a 320x240 semi-transparent POLY_G4 of uniform colour intensity plus a draw-mode packet in the active buffer
+0x801942FC,fx_common,func_801942FC,FxCommon_StepEffects,"effects.c: header comment, advances effect selection, resource transitions and the two motion blends"
+0x801958D4,fx_common,func_801958D4,FxCommon_SwitchResource,"effects.c: closes the textbox page, sets the highlight colour and Render_SetupColorTable when the id differs from g_FxCommonResourceState.active"
+0x80195D3C,fx_common,func_80195D3C,FxCommon_StepCameraPath,"camera_path.c: decrements D_8019C040, advances D_8019C041 and writes the camera target and position from FxCommon_SamplePath"
+0x80195E4C,fx_common,func_80195E4C,FxCommon_InitCameraPath,camera_path.c: samples the path start into camera target and position and sets D_8019C040 from the path point count
+0x80195F6C,fx_common,func_80195F6C,FxCommon_InitFadeQuads,"effect_init.c: header comment, builds both buffers' sky, shade, bottom and top fade quads and the three draw modes"
+0x8019959C,fx_common,func_8019959C,FxCommon_GetOffsetTableValue,model_buffers.c: reads the offset table entry at index and returns the value it points to
+0x8019BD78,fx_common,func_8019BD78,FxCommon_InitDisplay,"model_buffers.c: SetGeomOffset/Screen, DefDraw/DispEnv, ClearOTagR and ClearImage for both buffers, sets D_8019C9C0 to the first"
+0x8019BF50,fx_common,func_8019BF50,FxCommon_ClearActiveOrdering,model_buffers.c: ClearOTagR on the active buffer's allocation then func_8019BF8C resets its allocation pointer
+0x8019BF8C,fx_common,func_8019BF8C,FxCommon_SelectBufferAllocation,model_buffers.c: stores D_800B0E4C[0] or [1] depending on whether the buffer is the first frame buffer

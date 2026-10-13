@@ -1293,7 +1293,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
     }
 }
 
-int func_8019959C(FxCommonOffsetTable *table, int index)
+int FxCommon_GetOffsetTableValue(FxCommonOffsetTable *table, int index)
 {
     FxCommonOffsetByte *base;
     FxCommonOffsetByte *cursor;
@@ -2042,9 +2042,9 @@ void SetFarColor(int, int, int);
 void SetFogNearFar(int, int, int);
 void SetGeomOffset(int, int);
 void SetGeomScreen(int);
-void func_8019BF8C(void **);
+void FxCommon_SelectBufferAllocation(void **);
 
-void func_8019BD78(void) {
+void FxCommon_InitDisplay(void) {
     char *base = &D_8019C1F8;
     s16 rect[4];
 
@@ -2055,8 +2055,8 @@ void func_8019BD78(void) {
     SetGeomOffset(0xA0, 0x78);
     SetGeomScreen(0x300);
 
-    func_8019BF8C((void **)base);
-    func_8019BF8C((void **)(base + 0x78));
+    FxCommon_SelectBufferAllocation((void **)base);
+    FxCommon_SelectBufferAllocation((void **)(base + 0x78));
     D_8019C1FC = D_800B0E38.ordering[0];
     D_8019C274 = D_800B0E3C;
     ClearOTagR(D_8019C1FC, 0x1000);
@@ -2093,13 +2093,13 @@ void func_8019BD78(void) {
     D_8019C9C0 = (FxCommonBuffer *)base;
 }
 
-void func_8019BF50(void)
+void FxCommon_ClearActiveOrdering(void)
 {
     ClearOTagR(D_8019C9C0->allocation, 0x1000);
-    func_8019BF8C((void **)D_8019C9C0);
+    FxCommon_SelectBufferAllocation((void **)D_8019C9C0);
 }
 
-void func_8019BF8C(void **buffer)
+void FxCommon_SelectBufferAllocation(void **buffer)
 {
     if (buffer == (void **)&D_8019C1F8) {
         *buffer = D_800B0E4C;

@@ -31,7 +31,7 @@ extern short D_801E4DA8;
 extern short D_801E4DAA;
 extern short D_801E4DAC;
 extern short D_801E4DAE;
-void func_80191580(FxCommonTransformNode *node);
+void FxCommon_ResetTransformNode(FxCommonTransformNode *node);
 extern u16 D_80093170[];
 extern u16 D_80093174[];
 extern u16 D_80093172[];

@@ -14,8 +14,8 @@ extern s32 D_8019C000;
 extern s32 D_8019C004;
 int Save_GetMetadataWindowIndex(void);
 void Menu_SetEquipSlotIndex(int enabled);
-void func_8019BD78(void);
-void func_80191C94(void);
+void FxCommon_InitDisplay(void);
+void FxCommon_LoadEffectSectors(void);
 extern s32 D_8019BFF4;
 extern s32 D_8019BFF8;
 extern s32 D_8019BFFC;
@@ -72,18 +72,18 @@ void Render_SetupFogLayer(void *);
 void SetFogNearFar(int,int,int);
 void SetBackColor(int,int,int);
 void SetFarColor(int,int,int);
-void func_80190998(void);
+void FxCommon_InitNodePools(void);
 FxCommonNode *func_80190AEC(FxCommonNode *,void *);
 FxCommonNode *func_80190B78(FxCommonNode *,s16,void *);
 FxCommonNode *func_80190C1C(FxCommonNode *,s16,s16,s16,void *,void *,void *);
-void func_80191854(void);
+void FxCommon_SelectRoomVariant(void);
 /* The two camera lanes advance for 1 << durationShift frames. */
 void func_80195994(int setupIndex, int targetDurationShift,
                    int eyeDurationShift, u32 pathPosition);
-void func_80195F6C(void);
+void FxCommon_InitFadeQuads(void);
 
 /* Double-buffered full-screen gradient overlays and their draw-mode
- * packets, built once by func_80195F6C. */
+ * packets, built once by FxCommon_InitFadeQuads. */
 extern FxCommonGradientQuad g_FxCommonSkyQuads[2];
 extern FxCommonGradientQuad g_FxCommonShadeQuads[2];
 extern FxCommonGradientQuad g_FxCommonFloorFadeQuads[2];
@@ -92,7 +92,7 @@ extern FxCommonDrawModePacket g_FxCommonDrawModes0[2];
 extern FxCommonDrawModePacket g_FxCommonDrawModes1[2];
 extern FxCommonDrawModePacket g_FxCommonDrawModes2[2];
 
-/* Effect markers drawn by func_80193B5C: a line from the effect position
+/* Effect markers drawn by FxCommon_DrawEffectMarkers: a line from the effect position
  * to its label and two textured label halves. */
 typedef struct FxCommonLinePacket {
     FxCommonPacketTag tag;

@@ -21,7 +21,7 @@ typedef struct FxAssetSource {
 
 /* Aim the effect camera from its position at its target: build the view
  * matrix, the look-at matrix and the billboard rotation used by sprites. */
-void func_8018F05C(void)
+void FxCommon_UpdateCameraMatrices(void)
 {
     GteVector offset;
     GteVector unit;
@@ -55,7 +55,7 @@ void func_8018F05C(void)
     eye.x = g_FxCommonCameraPosition.x;
     eye.y = g_FxCommonCameraPosition.y;
     eye.z = g_FxCommonCameraPosition.z;
-    func_8018F344((GteMatrix *)&D_8019CC30, &eye, &target, &up);
+    FxCommon_BuildLookAtMatrix((GteMatrix *)&D_8019CC30, &eye, &target, &up);
 
     D_8019BFC4->x = -ratan2(SquareRoot0(offset.x * offset.x + offset.z * offset.z),
                               -offset.y) + 0x400;
@@ -72,7 +72,7 @@ void func_8018F05C(void)
 /* Build a camera matrix looking from eye toward target with the given up
  * vector: the rows are the normalised side, up and forward axes, and the
  * translation is the rotated eye position negated. */
-void func_8018F344(GteMatrix *out, GteShortVector *eye,
+void FxCommon_BuildLookAtMatrix(GteMatrix *out, GteShortVector *eye,
                    GteShortVector *target, GteVector *up)
 {
     GteVector work;
@@ -122,7 +122,7 @@ void func_8018F344(GteMatrix *out, GteShortVector *eye,
  * its upper bits and an 8-bit fraction below.  Writes the interpolated point
  * and a yaw/bank pair derived from the two neighbouring segment headings,
  * and returns the path's point count. */
-int func_8018F55C(u32 position, int index, void *table,
+int FxCommon_SamplePath(u32 position, int index, void *table,
                   FxCommonVec3 *out, GteShortVector *extra)
 {
     GteVector start;
@@ -225,7 +225,7 @@ int func_8018F55C(u32 position, int index, void *table,
 /* Rotate the four frustum corners by the camera matrix and rebuild the
  * four side planes through the eye: normal, distance, the signed distance
  * of the next corner and the normal length. */
-void func_8018F92C(FxCommonVec3 *eye)
+void FxCommon_UpdateFrustumPlanes(FxCommonVec3 *eye)
 {
     GteVector corner0;
     GteVector corner1;
@@ -307,7 +307,7 @@ void func_8018F92C(FxCommonVec3 *eye)
     PopMatrix();
 }
 
-int func_8018FFF4(int *point)
+int FxCommon_IsPointInView(int *point)
 {
     int first, second;
     int secondVisible;
@@ -331,7 +331,7 @@ int func_8018FFF4(int *point)
     return firstVisible & secondVisible;
 }
 
-int func_80190124(short *point)
+int FxCommon_IsShortPointInView(short *point)
 {
     int first, second;
     int secondVisible;
@@ -494,7 +494,7 @@ int FxCommon_CheckFourBoundsWithMargin(int *point, int margin) {
 /* Sentinel nodes of the three node lists: each head node links back to
  * its tail node, each tail node on to its head. */
 
-void func_80190998(void)
+void FxCommon_InitNodePools(void)
 {
     int i, offset;
     char *slot;
@@ -502,9 +502,9 @@ void func_80190998(void)
     i = 1;
     slot = D_801E4E6C;
     for (; i < 200; i++, slot += 108)
-        func_80191580(slot);
+        FxCommon_ResetTransformNode(slot);
 
-    func_80191580(&D_8019C340);
+    FxCommon_ResetTransformNode(&D_8019C340);
     D_8019C39C = 0;
     D_8019CBC0 = 0;
     for (i = 0; i < 200; i++)
@@ -543,49 +543,49 @@ void func_80190998(void)
     D_801E4DAE = -1;
 }
 
-int func_801915DC(void);
-void func_801917BC(FxCommonNode *node, FxCommonNode *parent);
+int FxCommon_AllocIndexLink(void);
+void FxCommon_LinkNodeToParent(FxCommonNode *node, FxCommonNode *parent);
 
 FxCommonNode *func_80190AEC(FxCommonNode *parent, void *payload)
 {
-    int index = func_801915DC();
+    int index = FxCommon_AllocIndexLink();
     FxCommonNode *node = (FxCommonNode *)&D_801E4E00[(s16)index];
 
     node->type = 0;
     node->args.payload = payload;
     node->id = index;
-    func_801917BC(node, parent);
+    FxCommon_LinkNodeToParent(node, parent);
     node->state[0] = 0;
     node->state[1] = 0;
     node->state[2] = 0;
     return node;
 }
 
-int func_8019959C(void *payload, int type);
+int FxCommon_GetOffsetTableValue(void *payload, int type);
 
 FxCommonNode *func_80190B78(FxCommonNode *parent, s16 type, void *payload)
 {
-    int index = func_801915DC();
+    int index = FxCommon_AllocIndexLink();
     FxCommonNode *node = (FxCommonNode *)&D_801E4E00[(s16)index];
 
     node->type = type;
     node->args.payload = payload;
     node->id = index;
-    node->value32 = func_8019959C(payload, type);
-    func_801917BC(node, parent);
+    node->value32 = FxCommon_GetOffsetTableValue(payload, type);
+    FxCommon_LinkNodeToParent(node, parent);
     node->state[0] = 0;
     node->state[1] = 0;
     node->state[2] = 0;
     return node;
 }
 
-int func_8019959C(void *payload, int subtype);
+int FxCommon_GetOffsetTableValue(void *payload, int subtype);
 
 FxCommonNode *func_80190C1C(FxCommonNode *parent, s16 subtype, s16 variant,
                             s16 type, void *data38, void *data3C,
                             void *payload)
 {
-    int index = func_801915DC();
+    int index = FxCommon_AllocIndexLink();
     FxCommonNode *node = (FxCommonNode *)&D_801E4E00[(s16)index];
 
     node->args.configured.subtype = subtype;
@@ -593,23 +593,23 @@ FxCommonNode *func_80190C1C(FxCommonNode *parent, s16 subtype, s16 variant,
     node->type = type;
     node->id = index;
     node->args.configured.payload = payload;
-    node->value36 = func_8019959C(payload, subtype);
+    node->value36 = FxCommon_GetOffsetTableValue(payload, subtype);
     node->data38 = data38;
     node->data3C = data3C;
-    func_801917BC(node, parent);
+    FxCommon_LinkNodeToParent(node, parent);
     node->state[1] = 0;
     node->state[2] = 0;
     node->state[3] = 0;
     return node;
 }
 
-void func_80190D08(FxCommonNode *node)
+void FxCommon_ReleaseNode(FxCommonNode *node)
 {
-    func_80191834(node);
-    func_80191678(node->id);
+    FxCommon_UnlinkNode(node);
+    FxCommon_FreeIndexLink(node->id);
 }
 
-void func_80190D3C(FxCommonTransformNode *node, void *context)
+void FxCommon_DrawTransformNode(FxCommonTransformNode *node, void *context)
 {
     RotMatrix(&node->seed.room, &node->matrix);
     *D_8019BFF0 = node->matrix;
@@ -623,7 +623,7 @@ void func_80190D3C(FxCommonTransformNode *node, void *context)
  * the mirror matrix for mirrored nodes, then draw it with the renderer that
  * matches its pass and mirror state.  `state` holds the visibility test and
  * then the pass. */
-void func_80190E04(FxCommonTransformNode *node, FxCommonBuffer *context, u8 pass, u8 force,
+void FxCommon_DrawTransformNodeCulled(FxCommonTransformNode *node, FxCommonBuffer *context, u8 pass, u8 force,
                    u8 mirrored)
 {
     GteVector position;
@@ -659,7 +659,7 @@ void func_80190E04(FxCommonTransformNode *node, FxCommonBuffer *context, u8 pass
 /* Rebuild a level-of-detail node's matrix (mode 2 composes it with the mirror
  * matrix and keeps the original translation), then draw the model kind that
  * matches its view depth when it is on screen or forced. */
-void func_80191114(FxCommonLodNode *node, FxCommonBuffer *context, u8 force, u8 mode)
+void FxCommon_DrawLodNode(FxCommonLodNode *node, FxCommonBuffer *context, u8 force, u8 mode)
 {
     GteVector position;
     GteMatrix mirror;
@@ -715,7 +715,7 @@ void func_80191114(FxCommonLodNode *node, FxCommonBuffer *context, u8 force, u8 
     }
 }
 
-void func_80191580(FxCommonTransformNode *node)
+void FxCommon_ResetTransformNode(FxCommonTransformNode *node)
 {
     node->matrix.t[2] = 1000;
     node->matrix.m[0][0] = 0x1000;
@@ -737,7 +737,7 @@ void func_80191580(FxCommonTransformNode *node)
     node->next = 0;
 }
 
-int func_801915DC(void)
+int FxCommon_AllocIndexLink(void)
 {
     s16 index = D_8019CBC0;
     s16 current = D_8019C9D0;
@@ -757,7 +757,7 @@ int func_801915DC(void)
     return index;
 }
 
-void func_80191678(s16 index)
+void FxCommon_FreeIndexLink(s16 index)
 {
     int freeHead;
 
@@ -775,12 +775,12 @@ void func_80191678(s16 index)
     D_8019C830[index] = freeHead;
 }
 
-void func_80191740(void)
+void FxCommon_BeginRecordIteration(void)
 {
     D_8019CC50 = 200;
 }
 
-FxCommonRecord *func_80191754(void)
+FxCommonRecord *FxCommon_NextRecord(void)
 {
     int record = D_801E4A8A[D_8019CC50].record;
 
@@ -794,7 +794,7 @@ FxCommonRecord *func_80191754(void)
     return &D_801E4E00[record];
 }
 
-void func_801917BC(FxCommonNode *node, FxCommonNode *parent)
+void FxCommon_LinkNodeToParent(FxCommonNode *node, FxCommonNode *parent)
 {
     int bucket;
 
@@ -807,7 +807,7 @@ void func_801917BC(FxCommonNode *node, FxCommonNode *parent)
     D_8019CCBC[bucket].head = node;
 }
 
-void func_80191834(FxCommonNode *node)
+void FxCommon_UnlinkNode(FxCommonNode *node)
 {
     node->previous->next = node->next;
     node->next->previous = node->previous;
@@ -815,10 +815,10 @@ void func_80191834(FxCommonNode *node)
 
 /* Pick the effect variant, mirror pairs and texture flag for the current
  * room and area before the shared effect assets are set up. */
-void func_80191854(void)
+void FxCommon_SelectRoomVariant(void)
 {
 
-    func_8019BD78();
+    FxCommon_InitDisplay();
     if (Save_GetMetadataWindowIndex() == 0)
         D_8019C008 = 0;
     else
@@ -923,10 +923,10 @@ void func_80191854(void)
         D_8019C1F0 = 1;
     else
         D_8019C1F0 = 0;
-    func_80191C94();
+    FxCommon_LoadEffectSectors();
 }
 
-void func_80191C94(void) {
+void FxCommon_LoadEffectSectors(void) {
     FxAssetSource *resource = (FxAssetSource *)&D_800B0CD8;
     u16 *range;
     int result;
@@ -971,7 +971,7 @@ third:
     }
 }
 
-void func_80191DE8(int extended)
+void FxCommon_SetAkao3dVolumeRange(int extended)
 {
     if (extended == 0) {
         g_Akao3dVolumeMin = 0x10;
@@ -984,7 +984,7 @@ void func_80191DE8(int extended)
     D_800B0DD2 = 0xFFF;
 }
 
-int func_80191E30(int id, s32 *state)
+int FxCommon_SendTableCommand3d(int id, s32 *state)
 {
     int size = 0x300;
     void *resource;
@@ -1009,7 +1009,7 @@ int func_80191E30(int id, s32 *state)
     return result;
 }
 
-void func_80191EFC(int handle, volatile s32 *state)
+void FxCommon_Apply3dPan(int handle, volatile s32 *state)
 {
     struct FxCommonApplyScratch {
         int size;

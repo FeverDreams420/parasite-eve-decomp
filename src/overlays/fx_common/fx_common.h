@@ -143,7 +143,7 @@ PE1_STATIC_ASSERT(sizeof(FxCommonTransformSeed) == 8,
 PE1_STATIC_ASSERT(sizeof(FxCommonTransformNode) == sizeof(FxCommonRecord),
                   fx_common_transform_node_record_size);
 
-/* Level-of-detail model node drawn by func_80191114: the model kind is picked
+/* Level-of-detail model node drawn by FxCommon_DrawLodNode: the model kind is picked
  * by the view depth against nearDepth / farDepth. */
 typedef struct FxCommonLodNode {
     s16 id;
@@ -263,8 +263,8 @@ extern TimRelativeTable D_801D0260;
 
 void Akao_Cmd_A9(int mode, int arg1);
 void SetSemiTrans(void *packet, int enabled);
-s16 func_80193B5C(s16 value);
-int func_8018F55C(u32 position, int radius, void *allocation,
+s16 FxCommon_DrawEffectMarkers(s16 value);
+int FxCommon_SamplePath(u32 position, int radius, void *allocation,
                    FxCommonVec3 *vector, GteShortVector *angles);
 void *PushMatrix(void);
 int PopMatrix(void);
@@ -273,10 +273,10 @@ void Akao_Cmd_A2(int handle, int index, int value);
 void Draw_CloseTextboxPage(int resourceId);
 void Menu_SetHighlightColor(int resourceId, int red, int green, int blue);
 void Render_SetupColorTable(int resourceId, int mode, s16 *result);
-void func_801941A4(int value);
-void func_80191678(s16 id);
-void func_80191834(FxCommonNode *node);
-void func_8019BF8C(void **buffer);
+void FxCommon_DrawFullScreenFade(int value);
+void FxCommon_FreeIndexLink(s16 id);
+void FxCommon_UnlinkNode(FxCommonNode *node);
+void FxCommon_SelectBufferAllocation(void **buffer);
 typedef struct FxCommonPolyResource FxCommonPolyResource;
 void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource);
 int FxCommon_CheckBoundsWithMargin(int *point, int margin);
