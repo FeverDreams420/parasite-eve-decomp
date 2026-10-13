@@ -224,7 +224,7 @@ void RoomEffect_ModelDraw(RenderObjectEntity *entity) {
     RenderPrimitiveDescriptor *record = entity->primitive_descriptors;
     u8 *packets = entity->primitive_buffer;
     int slot = g_ActiveDrawSlot;
-    u32 *ordering = (u32 *)D_800B0E38.ordering[slot];
+    u32 *ordering = D_800B0E38.ordering[slot];
     s32 *z = D_800A636C;
     u32 xy0, xy1, xy2;
     int a, b, c, d;
