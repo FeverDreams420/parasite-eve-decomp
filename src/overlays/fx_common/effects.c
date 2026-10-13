@@ -5,12 +5,12 @@
 #include "fx_common_motion.h"
 #include "fx_common_render.h"
 
-void func_80191FE8(void)
+void FxCommon_MuteMusic(void)
 {
     Akao_Cmd_A9(1, 0);
 }
 
-void func_8019200C(void)
+void FxCommon_FadeMusicOut(void)
 {
     Akao_Cmd_A9(30, 0);
 }
@@ -152,7 +152,7 @@ void func_8019234C(void)
     g_ActiveDrawSlot = 0;
     D_8019C00E = 0;
     last = 0;
-    func_80196498();
+    FxCommon_InitScene();
     FxCommon_SetAkao3dVolumeRange(D_8019C034 != 10);
     srand(VSync(-1));
     started = 0;
@@ -178,7 +178,7 @@ void func_8019234C(void)
         FxCommon_UpdateFrustumPlanes((void *)&g_FxCommonCameraPosition);
         if (D_8019C02A != 0)
             D_8019C02A = FxCommon_StepFadeIntensity(D_8019C02A);
-        func_80192740();
+        FxCommon_DrawNightShadeAndMarkers();
         FxCommon_DrawSceneNodes();
         FxCommon_StepPathNodes();
         if (!started) {
@@ -228,7 +228,7 @@ void func_8019234C(void)
         FxCommon_EndSequence();
 }
 
-void func_80192740(void)
+void FxCommon_DrawNightShadeAndMarkers(void)
 {
     if (D_8019C1F0 == 1) {
         u32 *dst = D_801EA598;
@@ -873,7 +873,7 @@ void FxCommon_StepEffects(void)
         }
     }
     if (D_8019C045 == 1) {
-        func_80195994(g_FxCommonRoomVariant, 0, 0, D_8019CC1C << 8);
+        FxCommon_StartCameraMove(g_FxCommonRoomVariant, 0, 0, D_8019CC1C << 8);
         rowIndex = g_FxCommonRoomVariant;
         if (D_8019CC1C >= g_FxCommonEffectSetup[rowIndex].value30) {
             D_8019C032 = 0;
@@ -887,7 +887,7 @@ void FxCommon_StepEffects(void)
     if ((D_8019C026 != 0) && (D_8019C045 == 0) && (D_8019C034 != 0xA) && (D_8019C046 == 0) && (D_8019BFF8 == -1)) {
         nextFrame = D_8019CC1C + 1;
         D_8019CC1C = nextFrame;
-        func_80195994(g_FxCommonRoomVariant, 0, 0, nextFrame << 8);
+        FxCommon_StartCameraMove(g_FxCommonRoomVariant, 0, 0, nextFrame << 8);
     }
     if ((D_8019C044 == 1) && (elapsed = D_8019C048 + 1, D_8019C048 = elapsed, ((elapsed < 0xC9) == 0)) && (D_8019C040 == 0)) {
         if (D_8019C046 == 0) {
@@ -906,7 +906,7 @@ void FxCommon_StepEffects(void)
                 if ((nextMode << 0x10) == 0) {
                     g_FxCommonMarkerFade = 1;
                     D_8019C045 = 0;
-                    func_80195994(g_FxCommonRoomVariant, 4, 5, 0);
+                    FxCommon_StartCameraMove(g_FxCommonRoomVariant, 4, 5, 0);
                     if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
                         Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                     }
@@ -974,7 +974,7 @@ void FxCommon_StepEffects(void)
                 D_8019C034 = 0;
                 g_FxCommonMarkerFade = 1;
                 D_8019C045 = 0;
-                func_80195994(g_FxCommonRoomVariant, 4, 5, 0);
+                FxCommon_StartCameraMove(g_FxCommonRoomVariant, 4, 5, 0);
                 if ((D_8019C026 == 0) && (g_AkaoBgmHandle[0] != 0)) {
                     Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                 }
@@ -1020,7 +1020,7 @@ void FxCommon_StepEffects(void)
                         if (g_AkaoBgmHandle[0] != 0) {
                             Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x44D, 0, 0x80, 0x7F);
                         }
-                        func_80195994(g_FxCommonRoomVariant, 4, 5, 0);
+                        FxCommon_StartCameraMove(g_FxCommonRoomVariant, 4, 5, 0);
                         g_FxCommonMarkerFade = 1;
                         D_8019C044 = 0;
                         D_8019C045 = 0;
@@ -1041,7 +1041,7 @@ void FxCommon_StepEffects(void)
                         } while (g_FxCommonEffectSetup[nextIndex0].enabled == 0);
                         D_8019C018 = 1;
                         D_8019CC1C = g_FxCommonEffectSetup[nextIndex0].value0c;
-                        func_80195994(nextIndex0, 4, 5, 0);
+                        FxCommon_StartCameraMove(nextIndex0, 4, 5, 0);
                         motionIndex0 = 0;
                         motionSlot0 = 0;
                         phase0 = g_FxCommonRoomVariant;
@@ -1072,7 +1072,7 @@ void FxCommon_StepEffects(void)
                         } while (g_FxCommonEffectSetup[nextIndex1].enabled == 0);
                         D_8019C018 = 1;
                         D_8019CC1C = g_FxCommonEffectSetup[nextIndex1].value0c;
-                        func_80195994(nextIndex1, 4, 5, 0);
+                        FxCommon_StartCameraMove(nextIndex1, 4, 5, 0);
                         motionIndex1 = 0;
                         motionSlot1 = 0;
                         phase1 = g_FxCommonRoomVariant;
@@ -1259,7 +1259,7 @@ s16 FxCommon_SwitchResource(s16 resourceId, u8 action)
 
 /* Pins and empty scheduling barriers preserve the retail argument setup,
  * interleaved vector reads, and snapshot stores; tracked in crutch debt. */
-void func_80195994(s32 index, s32 first, s32 second, u32 source) {
+void FxCommon_StartCameraMove(s32 index, s32 first, s32 second, u32 source) {
     FxCommonMotionRecord point;
     GteShortVector extra;
     s32 secondMask;

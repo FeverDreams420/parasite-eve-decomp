@@ -73,12 +73,12 @@ void SetFogNearFar(int,int,int);
 void SetBackColor(int,int,int);
 void SetFarColor(int,int,int);
 void FxCommon_InitNodePools(void);
-FxCommonNode *func_80190AEC(FxCommonNode *,void *);
-FxCommonNode *func_80190B78(FxCommonNode *,s16,void *);
-FxCommonNode *func_80190C1C(FxCommonNode *,s16,s16,s16,void *,void *,void *);
+FxCommonNode *FxCommon_CreateBareNode(FxCommonNode *,void *);
+FxCommonNode *FxCommon_CreateTypedNode(FxCommonNode *,s16,void *);
+FxCommonNode *FxCommon_CreateConfiguredNode(FxCommonNode *,s16,s16,s16,void *,void *,void *);
 void FxCommon_SelectRoomVariant(void);
 /* The two camera lanes advance for 1 << durationShift frames. */
-void func_80195994(int setupIndex, int targetDurationShift,
+void FxCommon_StartCameraMove(int setupIndex, int targetDurationShift,
                    int eyeDurationShift, u32 pathPosition);
 void FxCommon_InitFadeQuads(void);
 

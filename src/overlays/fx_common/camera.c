@@ -546,7 +546,7 @@ void FxCommon_InitNodePools(void)
 int FxCommon_AllocIndexLink(void);
 void FxCommon_LinkNodeToParent(FxCommonNode *node, FxCommonNode *parent);
 
-FxCommonNode *func_80190AEC(FxCommonNode *parent, void *payload)
+FxCommonNode *FxCommon_CreateBareNode(FxCommonNode *parent, void *payload)
 {
     int index = FxCommon_AllocIndexLink();
     FxCommonNode *node = (FxCommonNode *)&g_FxCommonRecords[(s16)index];
@@ -563,7 +563,7 @@ FxCommonNode *func_80190AEC(FxCommonNode *parent, void *payload)
 
 int FxCommon_GetOffsetTableValue(void *payload, int type);
 
-FxCommonNode *func_80190B78(FxCommonNode *parent, s16 type, void *payload)
+FxCommonNode *FxCommon_CreateTypedNode(FxCommonNode *parent, s16 type, void *payload)
 {
     int index = FxCommon_AllocIndexLink();
     FxCommonNode *node = (FxCommonNode *)&g_FxCommonRecords[(s16)index];
@@ -581,7 +581,7 @@ FxCommonNode *func_80190B78(FxCommonNode *parent, s16 type, void *payload)
 
 int FxCommon_GetOffsetTableValue(void *payload, int subtype);
 
-FxCommonNode *func_80190C1C(FxCommonNode *parent, s16 subtype, s16 variant,
+FxCommonNode *FxCommon_CreateConfiguredNode(FxCommonNode *parent, s16 subtype, s16 variant,
                             s16 type, void *data38, void *data3C,
                             void *payload)
 {

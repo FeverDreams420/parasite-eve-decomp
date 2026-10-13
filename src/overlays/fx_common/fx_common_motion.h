@@ -71,7 +71,7 @@ extern s8 D_800B0DB2;
 extern s8 g_SceneAudioSlot0Key;
 
 void Akao_Cmd_C1_WithSlot(int channel, int value, int mode);
-void func_80196498(void);
+void FxCommon_InitScene(void);
 void FxCommon_SetAkao3dVolumeRange(int enabled);
 s32 VSync(s32 value);
 void Field_HandleStateTransition(void);
@@ -91,7 +91,7 @@ extern s32 g_FxCommonFrustumSide0, g_FxCommonFrustumSide1, g_FxCommonFrustumSide
 extern s32 g_FxCommonFrustumLength0, g_FxCommonFrustumLength1, g_FxCommonFrustumLength2, g_FxCommonFrustumLength3;
 void OuterProduct0(GteVector *a, GteVector *b, GteVector *out);
 s16 FxCommon_StepFadeIntensity(s16 value);
-void func_80192740(void);
+void FxCommon_DrawNightShadeAndMarkers(void);
 void FxCommon_DrawSceneNodes(void);
 
 /* Per-frame scene draw (FxCommon_DrawSceneNodes): depth bias for the next node,

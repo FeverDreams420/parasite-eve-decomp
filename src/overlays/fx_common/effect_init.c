@@ -78,7 +78,7 @@ void FxCommon_InitFadeQuads(void)
     }
 }
 
-void func_80196498(void)
+void FxCommon_InitScene(void)
 {
     s32 firstPointOffset;
     s32 pointIndex;
@@ -371,7 +371,7 @@ void func_80196498(void)
         *yCursor = (s16) (u16)pointList->y;
         pointZ = (u16)pointList->z;
         *zCursor = (s16) pointZ;
-        firstInitialNode = func_80190C1C(&g_FxCommonDefaultNode, *subtypeCursor, *variantCursor, *typeCursor, (void *) g_FxCommonEffectSetup[pointIndex].parameter38, (void *) g_FxCommonEffectSetup[pointIndex].parameter3c, Draw_GetTimTableEntry(&D_8019CE10, 0));
+        firstInitialNode = FxCommon_CreateConfiguredNode(&g_FxCommonDefaultNode, *subtypeCursor, *variantCursor, *typeCursor, (void *) g_FxCommonEffectSetup[pointIndex].parameter38, (void *) g_FxCommonEffectSetup[pointIndex].parameter3c, Draw_GetTimTableEntry(&D_8019CE10, 0));
         initialSlots[pointIndex] = firstInitialNode;
         firstInitialNode->state[1] = setupCursor->position[0];
         (initialSlots[pointIndex])->state[2] = (s32) *yCursor;
@@ -382,7 +382,7 @@ void func_80196498(void)
         initialNodeType = *typeCursor;
         initialNodeVariant = *variantCursor;
         initialNodeSubtype = *subtypeCursor;
-        secondInitialNode = func_80190C1C(&g_FxCommonDefaultNode, initialNodeSubtype, initialNodeVariant, initialNodeType, (void *)0x3E8, (void *)0x1F4, initialResource);
+        secondInitialNode = FxCommon_CreateConfiguredNode(&g_FxCommonDefaultNode, initialNodeSubtype, initialNodeVariant, initialNodeType, (void *)0x3E8, (void *)0x1F4, initialResource);
         *secondInitialSlot = secondInitialNode;
         secondInitialNode->state[1] = setupCursor->position[0];
         (*secondInitialSlot)->state[2] = (s32) *yCursor;
@@ -401,41 +401,41 @@ void func_80196498(void)
         setupCursor++;
     }
     nodeResource = Draw_GetTimTableEntry(&D_8019CE10, 0);
-    g_FxCommonRuntime.node0 = func_80190AEC(&g_FxCommonDefaultNode, Draw_GetTimTableEntry(&D_8019CE10, 1));
-    D_8019C180 = func_80190B78(&g_FxCommonDefaultNode, 0x51, nodeResource);
-    D_8019CDA0 = func_80190B78(&g_FxCommonDefaultNode, 0x28, nodeResource);
-    D_8019CDA4 = func_80190B78(&g_FxCommonDefaultNode, 0x29, nodeResource);
-    D_8019CDA8 = func_80190B78(&g_FxCommonDefaultNode, 0x2A, nodeResource);
-    D_8019CDAC = func_80190B78(&g_FxCommonDefaultNode, 0x2B, nodeResource);
-    D_8019CDB0 = func_80190B78(&g_FxCommonDefaultNode, 0x2C, nodeResource);
-    D_8019CDB4 = func_80190B78(&g_FxCommonDefaultNode, 0x2D, nodeResource);
-    D_8019CDB8 = func_80190B78(&g_FxCommonDefaultNode, 0x2E, nodeResource);
-    D_8019CDBC = func_80190B78(&g_FxCommonDefaultNode, 0x2F, nodeResource);
-    D_8019CDC0 = func_80190B78(&g_FxCommonDefaultNode, 0x30, nodeResource);
-    D_8019CDC4 = func_80190B78(&g_FxCommonDefaultNode, 0x31, nodeResource);
-    D_8019CDC8 = func_80190B78(&g_FxCommonDefaultNode, 0x32, nodeResource);
-    g_FxCommonRuntime.node25 = func_80190B78(&g_FxCommonDefaultNode, 0x25, nodeResource);
-    D_8019CC28 = func_80190B78(&g_FxCommonDefaultNode, 0x54, nodeResource);
-    D_801EA588 = func_80190B78(&g_FxCommonDefaultNode, 0x23, nodeResource);
-    D_801EA58C = func_80190B78(&g_FxCommonDefaultNode, 0x23, nodeResource);
-    D_801EA578 = func_80190B78(&g_FxCommonDefaultNode, 0x52, nodeResource);
-    D_801EA580 = func_80190B78(&g_FxCommonDefaultNode, 0x52, nodeResource);
-    D_801EA57C = func_80190B78(&g_FxCommonDefaultNode, 0x52, nodeResource);
-    D_801EA584 = func_80190B78(&g_FxCommonDefaultNode, 0x52, nodeResource);
-    D_8019C148 = func_80190B78(&g_FxCommonDefaultNode, 0x53, nodeResource);
-    D_8019C150 = func_80190B78(&g_FxCommonDefaultNode, 0x53, nodeResource);
-    D_8019C14C = func_80190B78(&g_FxCommonDefaultNode, 0x53, nodeResource);
-    D_8019C154 = func_80190B78(&g_FxCommonDefaultNode, 0x53, nodeResource);
-    D_8019CC20 = func_80190B78(&g_FxCommonDefaultNode, 0x21, nodeResource);
-    D_8019CC24 = func_80190B78(&g_FxCommonDefaultNode, 0x21, nodeResource);
-    g_FxCommonType26Nodes[0] = func_80190B78(&g_FxCommonDefaultNode, 0x26, nodeResource);
-    g_FxCommonType26Nodes[1] = func_80190B78(&g_FxCommonDefaultNode, 0x26, nodeResource);
-    g_FxCommonType26Nodes[2] = func_80190B78(&g_FxCommonDefaultNode, 0x26, nodeResource);
-    g_FxCommonType26Nodes[3] = func_80190B78(&g_FxCommonDefaultNode, 0x26, nodeResource);
-    D_8019C820 = func_80190C1C(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x2710, (void *)0x1F40, nodeResource);
-    D_8019C824 = func_80190C1C(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x14, (void *)0xA, nodeResource);
-    g_FxCommonPairedNodes[0] = func_80190C1C(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x2710, (void *)0x1F40, nodeResource);
-    g_FxCommonPairedNodes[1] = func_80190C1C(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x14, (void *)0xA, nodeResource);
+    g_FxCommonRuntime.node0 = FxCommon_CreateBareNode(&g_FxCommonDefaultNode, Draw_GetTimTableEntry(&D_8019CE10, 1));
+    D_8019C180 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x51, nodeResource);
+    D_8019CDA0 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x28, nodeResource);
+    D_8019CDA4 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x29, nodeResource);
+    D_8019CDA8 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x2A, nodeResource);
+    D_8019CDAC = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x2B, nodeResource);
+    D_8019CDB0 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x2C, nodeResource);
+    D_8019CDB4 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x2D, nodeResource);
+    D_8019CDB8 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x2E, nodeResource);
+    D_8019CDBC = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x2F, nodeResource);
+    D_8019CDC0 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x30, nodeResource);
+    D_8019CDC4 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x31, nodeResource);
+    D_8019CDC8 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x32, nodeResource);
+    g_FxCommonRuntime.node25 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x25, nodeResource);
+    D_8019CC28 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x54, nodeResource);
+    D_801EA588 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x23, nodeResource);
+    D_801EA58C = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x23, nodeResource);
+    D_801EA578 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x52, nodeResource);
+    D_801EA580 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x52, nodeResource);
+    D_801EA57C = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x52, nodeResource);
+    D_801EA584 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x52, nodeResource);
+    D_8019C148 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x53, nodeResource);
+    D_8019C150 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x53, nodeResource);
+    D_8019C14C = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x53, nodeResource);
+    D_8019C154 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x53, nodeResource);
+    D_8019CC20 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x21, nodeResource);
+    D_8019CC24 = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x21, nodeResource);
+    g_FxCommonType26Nodes[0] = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x26, nodeResource);
+    g_FxCommonType26Nodes[1] = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x26, nodeResource);
+    g_FxCommonType26Nodes[2] = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x26, nodeResource);
+    g_FxCommonType26Nodes[3] = FxCommon_CreateTypedNode(&g_FxCommonDefaultNode, 0x26, nodeResource);
+    D_8019C820 = FxCommon_CreateConfiguredNode(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x2710, (void *)0x1F40, nodeResource);
+    D_8019C824 = FxCommon_CreateConfiguredNode(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x14, (void *)0xA, nodeResource);
+    g_FxCommonPairedNodes[0] = FxCommon_CreateConfiguredNode(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x2710, (void *)0x1F40, nodeResource);
+    g_FxCommonPairedNodes[1] = FxCommon_CreateConfiguredNode(&g_FxCommonDefaultNode, 0x22, 0x20, 0x20, (void *)0x14, (void *)0xA, nodeResource);
     (g_FxCommonPairedNodes[0])->value2E = 0xC8;
     (g_FxCommonPairedNodes[1])->value2E = 0xC8;
     g_FxCommonPairedNodes[0]->state[1] = 0x334;
@@ -493,7 +493,7 @@ void func_80196498(void)
             do {
                 effectRoot = &g_FxCommonDefaultNode;
                 variantOrMotionOffset = variantBase + 0x34;
-                firstNode = func_80190C1C(effectRoot, (s16) nodeSubtype, variantOrMotionOffset, (s16) nodeType, (void *) (u16) *(short *)((u8 *)D_8019C0D4 + tableIndex), (void *) (u16) *(short *)((u8 *)D_8019C0E8 + tableIndex), nodeResource);
+                firstNode = FxCommon_CreateConfiguredNode(effectRoot, (s16) nodeSubtype, variantOrMotionOffset, (s16) nodeType, (void *) (u16) *(short *)((u8 *)D_8019C0D4 + tableIndex), (void *) (u16) *(short *)((u8 *)D_8019C0E8 + tableIndex), nodeResource);
                 firstSlot = &D_8019C3B0[D_8019C020];
                 D_8019C3B0[D_8019C020] = firstNode;
                 firstNode->state[1] = point->x;
@@ -501,7 +501,7 @@ void func_80196498(void)
                 yNode->state[2] = point->y;
                 D_8019C020 += 1;
                 (*firstSlot)->state[3] = point->z;
-                secondNode = func_80190C1C(effectRoot, (s16) nodeSubtype, variantOrMotionOffset, (s16) nodeType, (void *)0x7D0, (void *)0x1F4, nodeResource);
+                secondNode = FxCommon_CreateConfiguredNode(effectRoot, (s16) nodeSubtype, variantOrMotionOffset, (s16) nodeType, (void *)0x7D0, (void *)0x1F4, nodeResource);
                 nodeIndex = D_8019C020;
                 secondSlot = &D_8019C3B0[nodeIndex];
                 D_8019C3B0[nodeIndex] = secondNode;
@@ -525,7 +525,7 @@ void func_80196498(void)
     g_FxCommonRuntime.node25->state[0] = 0;
     g_FxCommonRuntime.node25->state[1] = 0x758;
     g_FxCommonRuntime.node25->state[2] = 0;
-    func_80195994(g_FxCommonRoomVariant, 1, 1, 0);
+    FxCommon_StartCameraMove(g_FxCommonRoomVariant, 1, 1, 0);
     motionIndex = 0;
     g_FxCommonMotionBlendFrames = 0;
     motionBase = (s16) (u16) g_FxCommonRoomVariant;
@@ -556,7 +556,7 @@ void func_80196498(void)
         g_FxCommonMarkerFade = 0;
         D_8019C02E = 0;
         D_8019C034 = 0xA;
-        func_80195994(7, 0, 0, 0);
+        FxCommon_StartCameraMove(7, 0, 0, 0);
         D_8019C00D = 1;
     }
     if (D_8019BFF4 == 7) {
