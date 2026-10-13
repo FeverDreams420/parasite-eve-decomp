@@ -113,3 +113,7 @@ g_MenuCardVideoVlcTable = 0x80122430;
 g_MenuCardVideoStreamRing = 0x80122434;
 g_MenuCardVideoDisplay = 0x801228CC;
 g_MenuCardVideoSavedDrawEnv = 0x80122814;
+g_MenuCardVideoDirectory = 0x80120FF4; // type:asciz
+g_MenuCardVideoDirectoryLate = 0x80120FFC;
+g_MenuCardScreenVideoDirectory = 0x8018F2E4; // type:asciz
+g_MenuCardScreenVideoDirectoryLate = 0x8018F2EC; // type:asciz

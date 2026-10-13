@@ -86,8 +86,8 @@
 #define MENUCARD_VIDEO_TABLE g_MenuCardVideoTable
 #define MENUCARD_VIDEO_ENTRY g_MenuCardVideoEntry
 #define MENUCARD_VIDEO_SET_DISPLAY MenuCardFirst_SetVideoDisplay
-#define MENUCARD_VIDEO_DIRECTORY D_80120FF4
-#define MENUCARD_VIDEO_DIRECTORY_LATE D_80120FFC
+#define MENUCARD_VIDEO_DIRECTORY g_MenuCardVideoDirectory
+#define MENUCARD_VIDEO_DIRECTORY_LATE g_MenuCardVideoDirectoryLate
 #define MENUCARD_VIDEO_FILE g_MenuCardVideoFile
 #define MENUCARD_VIDEO_RESTART g_MenuCardVideoRestartLoc
 #define MENUCARD_VIDEO_DISPLAY g_MenuCardVideoDisplay

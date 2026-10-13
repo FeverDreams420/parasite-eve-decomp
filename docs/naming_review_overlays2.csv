@@ -222,3 +222,7 @@ address,overlay,old_name,name,evidence
 0x8019319C,menu_memcard,D_8019319C,MenuCard_CreateFadeImageNodeAtLoad,"fade.c function after DecreaseFade, + 0x4C"
 0x801931BC,menu_memcard,D_801931BC,MenuCard_AttachFadePayloadAtLoad,"0x20 bytes later, matches the tail copy MenuCard_AttachFadePayload layout"
 0x80193200,menu_memcard,D_80193200,MenuCard_StepFadeToImagesAtLoad,"the payload AttachFadePayload stores; 0x44 after the previous, matching the tail copy"
+0x80120FF4,menu_memcard,D_80120FF4,g_MenuCardVideoDirectory,"asciz ""\FMV1"": video_open.inc strcat()s it before the file name when the movie number is below 21 (first player copy)"
+0x80120FFC,menu_memcard,D_80120FFC,g_MenuCardVideoDirectoryLate,"""\FMV2"" prefix for movie numbers 21 and up (first copy)"
+0x8018F2E4,menu_memcard,D_8018F2E4,g_MenuCardScreenVideoDirectory,"""\FMV1"" prefix for movies below 21 (second copy)"
+0x8018F2EC,menu_memcard,D_8018F2EC,g_MenuCardScreenVideoDirectoryLate,"""\FMV2"" prefix for movies 21 and up (second copy)"

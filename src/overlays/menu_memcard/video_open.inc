@@ -3,8 +3,8 @@
 #define MENUCARD_VIDEO_TABLE g_MenuCardScreenVideoTable
 #define MENUCARD_VIDEO_ENTRY g_MenuCardScreenVideoEntry
 #define MENUCARD_VIDEO_SET_DISPLAY MenuCard_SetVideoDisplay
-#define MENUCARD_VIDEO_DIRECTORY D_8018F2E4
-#define MENUCARD_VIDEO_DIRECTORY_LATE D_8018F2EC
+#define MENUCARD_VIDEO_DIRECTORY g_MenuCardScreenVideoDirectory
+#define MENUCARD_VIDEO_DIRECTORY_LATE g_MenuCardScreenVideoDirectoryLate
 #define MENUCARD_VIDEO_FILE g_MenuCardScreenVideoFile
 #define MENUCARD_VIDEO_RESTART g_MenuCardScreenVideoRestartLoc
 #define MENUCARD_VIDEO_DISPLAY g_MenuCardScreenVideoDisplay
