@@ -32,7 +32,7 @@ u8 g_BattleGaugeCapLatch;
 int g_BattleModeState;
 s8 g_BattleLiveEnemyCount;
 s16 g_MenuFrameCommand;
-s8 D_8009D2B0;
+s8 g_BattleTargetCount;
 s32 g_BattleImpactPmSlot;
 u8 g_BattleStepIndex;
 u32 g_BattleExpReward;
@@ -197,7 +197,7 @@ void Battle_StartEncounter(int mode) {
         g_BattleActionActors[(u8)i] = 0;
     }
 
-    srand(D_8009D250);
+    srand(g_FrameRngCounter);
     Battle_ResetEnemyStats(0);
     Battle_SetupEnemyAnims();
 
@@ -272,14 +272,14 @@ void Battle_Update(void) {
         if (g_ActiveActor->hpAlive >= 0x2328U) {
             g_ActiveActor->hpAlive = 0x2328U;
             if (g_BattleGaugeCapLatch == 0) {
-                srand(D_8009D250);
+                srand(g_FrameRngCounter);
                 if ((g_AkaoBgmHandle[0]) != 0) {
                     Akao_SendTableCommand((g_AkaoBgmHandle[0]), 0x454, 0, 0x80, 0x7F);
                 }
                 g_BattleGaugeCapLatch = 1;
             }
             if (!(g_ActiveActor->stateFlags & 0x2000) && (g_BattleLiveEnemyCount != 0)) {
-                if ((D_8009D250 & 3) == 0) {
+                if ((g_FrameRngCounter & 3) == 0) {
                     register int topGreen asm("$8") = 0x46;
                     register int topBlue asm("$7") = 0x82;
                     register int bottomRed asm("$6") = 0x9F;
@@ -302,7 +302,7 @@ void Battle_Update(void) {
                     g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
                     asm("" : : "i"(0));
                     g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
-                } else if ((D_8009D250 & 3) == 1) {
+                } else if ((g_FrameRngCounter & 3) == 1) {
                     int red = 0x50;
                     register int green asm("$6") = 0xA3;
                     int blue = 0xBE;
@@ -323,7 +323,7 @@ void Battle_Update(void) {
                     g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
                     asm("" : : "i"(1));
                     g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
-                } else if ((D_8009D250 & 3) == 2) {
+                } else if ((g_FrameRngCounter & 3) == 2) {
                     int topRed = 0x9F;
                     register int topGreen asm("$8") = 0xFF;
                     int topBlue = 0xF9;
@@ -346,7 +346,7 @@ void Battle_Update(void) {
                     g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
                     asm("" : : "i"(2));
                     g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
-                } else if ((D_8009D250 & 3) == 3) {
+                } else if ((g_FrameRngCounter & 3) == 3) {
                     int red = 0x50;
                     register int green asm("$6") = 0xA3;
                     int blue = 0xBE;
@@ -384,9 +384,9 @@ void Battle_Update(void) {
                         (D_8009D290[0]) = 0;
                         g_GameStateFlags = g_GameStateFlags | 4;
                         menuMode = 0;
-                        D_8009D2B0 = Battle_BuildTargetList();
+                        g_BattleTargetCount = Battle_BuildTargetList();
                         Battle_Init();
-                        if (D_8009D2B0 != 0) {
+                        if (g_BattleTargetCount != 0) {
                             Menu_SetItemContext(0);
                         } else {
                             Menu_SetItemContext(1);
@@ -1069,7 +1069,7 @@ void Battle_PhaseInitEnemyTurn(void) {
     g_GameStateFlags = gameFlags & clearMask;
     /* Animate the charged gauge and status highlight using the draw slot. */
     if (hp >= 0x2328U) {
-        if ((D_8009D250 & 3) == 0) {
+        if ((g_FrameRngCounter & 3) == 0) {
             register int topGreen asm("$8") = 0x46;
             register int topBlue asm("$7") = 0x82;
             register int bottomRed asm("$6") = 0x9F;
@@ -1092,7 +1092,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(0));
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
-        } else if ((D_8009D250 & 3) == 1) {
+        } else if ((g_FrameRngCounter & 3) == 1) {
             register int red asm("$5") = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -1113,7 +1113,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
             asm("" : : "i"(1));
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
-        } else if ((D_8009D250 & 3) == 2) {
+        } else if ((g_FrameRngCounter & 3) == 2) {
             register int topRed asm("$7") = 0x9F;
             register int topGreen asm("$8") = 0xFF;
             register int topBlue asm("$6") = 0xF9;
@@ -1136,7 +1136,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(2));
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
-        } else if ((D_8009D250 & 3) == 3) {
+        } else if ((g_FrameRngCounter & 3) == 3) {
             int red = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -1159,7 +1159,7 @@ void Battle_PhaseInitEnemyTurn(void) {
         }
     }
     if (g_ActiveActor->stateFlags & 0x2000) {
-        if ((D_8009D250 & 3) == 0) {
+        if ((g_FrameRngCounter & 3) == 0) {
             register int topRed asm("$9") = 0xFF;
             register int topGreen asm("$8") = 0x3D;
             register int topBlue asm("$7") = 0x81;
@@ -1180,7 +1180,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             g_BattlePeGauges[g_ActiveDrawSlot][1].g3 = bottomGreen;
             asm("" : : "i"(0));
             g_BattlePeGauges[g_ActiveDrawSlot][1].b3 = bottomBlue;
-        } else if ((D_8009D250 & 3) == 1) {
+        } else if ((g_FrameRngCounter & 3) == 1) {
             register int red asm("$6") = 0xC1;
             register int green asm("$5") = 0x28;
             int blue = 0x41;
@@ -1198,7 +1198,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             g_BattlePeGauges[g_ActiveDrawSlot][1].g3 = green;
             asm("" : : "i"(1));
             g_BattlePeGauges[g_ActiveDrawSlot][1].b3 = blue;
-        } else if ((D_8009D250 & 3) == 2) {
+        } else if ((g_FrameRngCounter & 3) == 2) {
             register int topRed asm("$9") = 0x83;
             register int topGreen asm("$8") = 0x13;
             register int topBlue asm("$7") = 1;
@@ -1219,7 +1219,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             g_BattlePeGauges[g_ActiveDrawSlot][1].g3 = bottomGreen;
             asm("" : : "i"(2));
             g_BattlePeGauges[g_ActiveDrawSlot][1].b3 = bottomBlue;
-        } else if ((D_8009D250 & 3) == 3) {
+        } else if ((g_FrameRngCounter & 3) == 3) {
             register int red asm("$6") = 0xC1;
             register int green asm("$5") = 0x28;
             int blue = 0x41;
@@ -1330,7 +1330,7 @@ void Battle_PhaseHitReaction(void) {
     BattleEntity *entity;
     EnemyCombatant *enemy;
     if (g_ActiveActor->hpAlive >= 0x2328U) {
-        if ((D_8009D250 & 3) == 0) {
+        if ((g_FrameRngCounter & 3) == 0) {
             register int topGreen asm("$8") = 0x46;
             register int topBlue asm("$7") = 0x82;
             register int bottomRed asm("$6") = 0x9F;
@@ -1353,7 +1353,7 @@ void Battle_PhaseHitReaction(void) {
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(0));
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
-        } else if ((D_8009D250 & 3) == 1) {
+        } else if ((g_FrameRngCounter & 3) == 1) {
             register int red asm("$5") = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -1374,7 +1374,7 @@ void Battle_PhaseHitReaction(void) {
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
             asm("" : : "i"(1));
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
-        } else if ((D_8009D250 & 3) == 2) {
+        } else if ((g_FrameRngCounter & 3) == 2) {
             register int topRed asm("$7") = 0x9F;
             register int topGreen asm("$8") = 0xFF;
             register int topBlue asm("$6") = 0xF9;
@@ -1397,7 +1397,7 @@ void Battle_PhaseHitReaction(void) {
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(2));
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
-        } else if ((D_8009D250 & 3) == 3) {
+        } else if ((g_FrameRngCounter & 3) == 3) {
             int red = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -1483,7 +1483,7 @@ void Battle_PhaseEndTurn(void) {
     ready = 1;
     /* Animate the charged gauge and active status colors. */
     if (hp >= 0x2328U) {
-        if ((D_8009D250 & 3) == 0) {
+        if ((g_FrameRngCounter & 3) == 0) {
             register int topGreen asm("$8") = 0x46;
             register int topBlue asm("$7") = 0x82;
             register int bottomRed asm("$6") = 0x9F;
@@ -1506,7 +1506,7 @@ void Battle_PhaseEndTurn(void) {
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(0));
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
-        } else if ((D_8009D250 & 3) == 1) {
+        } else if ((g_FrameRngCounter & 3) == 1) {
             register int red asm("$5") = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -1527,7 +1527,7 @@ void Battle_PhaseEndTurn(void) {
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = green;
             asm("" : : "i"(1));
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = blue;
-        } else if ((D_8009D250 & 3) == 2) {
+        } else if ((g_FrameRngCounter & 3) == 2) {
             register int topRed asm("$7") = 0x9F;
             register int topGreen asm("$8") = 0xFF;
             register int topBlue asm("$6") = 0xF9;
@@ -1550,7 +1550,7 @@ void Battle_PhaseEndTurn(void) {
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.g = bottomGreen;
             asm("" : : "i"(2));
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
-        } else if ((D_8009D250 & 3) == 3) {
+        } else if ((g_FrameRngCounter & 3) == 3) {
             int red = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -1573,7 +1573,7 @@ void Battle_PhaseEndTurn(void) {
         }
     }
     if (g_ActiveActor->stateFlags & 0x2000) {
-        if ((D_8009D250 & 3) == 0) {
+        if ((g_FrameRngCounter & 3) == 0) {
             register int topRed asm("$9") = 0xFF;
             register int topGreen asm("$8") = 0x3D;
             register int topBlue asm("$7") = 0x81;
@@ -1594,7 +1594,7 @@ void Battle_PhaseEndTurn(void) {
             g_BattlePeGauges[g_ActiveDrawSlot][1].g3 = bottomGreen;
             asm("" : : "i"(0));
             g_BattlePeGauges[g_ActiveDrawSlot][1].b3 = bottomBlue;
-        } else if ((D_8009D250 & 3) == 1) {
+        } else if ((g_FrameRngCounter & 3) == 1) {
             register int red asm("$6") = 0xC1;
             register int green asm("$5") = 0x28;
             int blue = 0x41;
@@ -1612,7 +1612,7 @@ void Battle_PhaseEndTurn(void) {
             g_BattlePeGauges[g_ActiveDrawSlot][1].g3 = green;
             asm("" : : "i"(1));
             g_BattlePeGauges[g_ActiveDrawSlot][1].b3 = blue;
-        } else if ((D_8009D250 & 3) == 2) {
+        } else if ((g_FrameRngCounter & 3) == 2) {
             register int topRed asm("$9") = 0x83;
             register int topGreen asm("$8") = 0x13;
             register int topBlue asm("$7") = 1;
@@ -1633,7 +1633,7 @@ void Battle_PhaseEndTurn(void) {
             g_BattlePeGauges[g_ActiveDrawSlot][1].g3 = bottomGreen;
             asm("" : : "i"(2));
             g_BattlePeGauges[g_ActiveDrawSlot][1].b3 = bottomBlue;
-        } else if ((D_8009D250 & 3) == 3) {
+        } else if ((g_FrameRngCounter & 3) == 3) {
             register int red asm("$6") = 0xC1;
             register int green asm("$5") = 0x28;
             int blue = 0x41;

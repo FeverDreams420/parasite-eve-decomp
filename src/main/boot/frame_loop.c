@@ -117,7 +117,7 @@ void Boot_RunFrame(void)
                 ClearOTagR((u32 *)slot.state->shared_buffers.ordering_tables[0],
                            0x1000);
             }
-            D_8009D250 = D_8009D250 + 1;
+            g_FrameRngCounter = g_FrameRngCounter + 1;
             Scene_UpdateEntityList();
             Entity_FrameUpdate();
 

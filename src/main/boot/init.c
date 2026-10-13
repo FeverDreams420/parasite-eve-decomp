@@ -69,7 +69,6 @@ void Boot_BuildRenderFlagTable(void);
 M2C_UNK Save_PostInitStub();
 M2C_UNK CdRom_InitScreenState();
 M2C_UNK Draw_InitGpuHwRegs();
-#define g_FrameRngCounter (g_FrameRngCounter[0])
 
 void Boot_InitSubsystems(void) {
     u32 var_s0;

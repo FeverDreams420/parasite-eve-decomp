@@ -19,7 +19,7 @@ extern unsigned int g_BattleResultFlags;
 extern unsigned int g_GameStateFlags;
 extern unsigned int D_8009D2E8;
 extern s32 D_8009D290[16];
-extern u32 D_8009D250;
+extern u32 g_FrameRngCounter;
 extern s16 g_BattlePlayerAimHeight; /* battle camera height: player's model Y - 100 */
 
 void Save_ResetGlobalFlags(void);

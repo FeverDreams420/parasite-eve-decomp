@@ -33,7 +33,9 @@ extern u16 g_FontUiLbaTbl[];
 extern u16 g_SceneInitLbaTbl0[];
 
 /* System start-up (boot/init.c). */
-extern s32 g_FrameRngCounter[];
+/* Frame counter stepped by Boot_RunFrame; battle colour cycles, the status
+ * pointer rotation and the battle srand seed read it. */
+extern u32 g_FrameRngCounter;
 
 /* Pad sampling (boot/init.c): render flag table, the
  * button mask per game bit, frames each bit has been held, the actuator

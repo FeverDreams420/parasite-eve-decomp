@@ -56,7 +56,7 @@ extern BattleAction g_BattleMenuActionRecord;
 extern BattleEffectBits g_BattleMenuEffectBits;
 extern BattleAttackBits g_BattleMenuAttackBits;
 extern BattleTurnBits g_BattleMenuTurnBits;
-extern s8 D_8009D2B0;
+extern s8 g_BattleTargetCount;
 extern struct FieldActor *g_FieldActorListHead; /* actor list head */
 extern u8 g_EscapeFailedTexts[];
 extern u8 g_EscapeBlockedTexts[];

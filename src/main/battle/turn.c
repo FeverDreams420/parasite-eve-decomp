@@ -118,22 +118,22 @@ s8 g_BattleTargetIndex;
 #define PLAY_TABLE_SOUND(command) \
     { if (g_AkaoBgmHandle[0]) Akao_SendTableCommand(g_AkaoBgmHandle[0], command, 0, 0x80, 0x7F); }
 void Battle_CycleTarget(s8 mode) {
-    if (D_8009D2B0 >= 2) {
+    if (g_BattleTargetCount >= 2) {
         if (mode != 1 && mode != 2) {
             if (g_FieldPadPressed & 0x10) {
                 Battle_MarkActiveEntities(g_BattleTargetList, g_BattleTargetIndex);
-                g_BattleTargetIndex = (g_BattleTargetIndex + 1) % D_8009D2B0;
+                g_BattleTargetIndex = (g_BattleTargetIndex + 1) % g_BattleTargetCount;
                 Battle_InitFadeVars();
                 PLAY_TABLE_SOUND(0x44E)
             }
             if (g_FieldPadPressed & 0x40) {
                 Battle_MarkActiveEntities(g_BattleTargetList, g_BattleTargetIndex);
-                g_BattleTargetIndex = (g_BattleTargetIndex + D_8009D2B0 - 1) % D_8009D2B0;
+                g_BattleTargetIndex = (g_BattleTargetIndex + g_BattleTargetCount - 1) % g_BattleTargetCount;
                 Battle_InitFadeVars();
                 PLAY_TABLE_SOUND(0x44E)
             }
         }
-    } else if (!D_8009D2B0) mode = 8;
+    } else if (!g_BattleTargetCount) mode = 8;
     switch (mode) {
     case 0: case 1: case 2: case 3: {
         s8 outOfRange;
@@ -281,7 +281,7 @@ int Battle_HandleItemMenu(void) {
                 Battle_CycleTarget(mode);
                 if ((g_FieldPadPressed&0x200)&&!cancelled) {
                     g_BattleSlotCancelPending=0;
-                    if(D_8009D2B0) {
+                    if(g_BattleTargetCount) {
                         Battle_FillActionQueue(&g_BattleTargetList[g_BattleTargetIndex]);
                         if(!g_BattleRemainingActions) {
                             g_BattleActiveTurnSlot--;
@@ -347,7 +347,7 @@ void Battle_FillActionQueue(BattleTarget *target) {
         for (i = 0; i < (int)(g_ActiveActor->action->turnWord & 15) * 3 / 2; i++) {
             int index = g_BattleActionQueueCount;
             int randomValue = rand();
-            BattleEntity *actor = g_BattleTargetList[randomValue % D_8009D2B0].actor;
+            BattleEntity *actor = g_BattleTargetList[randomValue % g_BattleTargetCount].actor;
             SetSlot(index, actor, 2, (s8)D_8009D2D8);
             g_BattleActionQueueCount++;
         }
@@ -399,7 +399,7 @@ int Battle_StepEnemyTurn(s8 mode) {
                     for (mode = 0; (u8)mode < 7; mode++) {
                         int index = g_BattleActionQueueCount;
                         int randomValue = rand();
-                        SetSlot(index, g_BattleTargetList[randomValue % D_8009D2B0].actor,
+                        SetSlot(index, g_BattleTargetList[randomValue % g_BattleTargetCount].actor,
                                 g_MenuFrameCommand, (s8)D_8009D2D8);
                         g_BattleActionQueueCount++;
                     }
@@ -522,7 +522,7 @@ void Battle_AdvanceTurnSlot(void)
         int mode = g_ActiveActor->action->turnWord & 0xC0;
         if (mode == 0xC0) {
             D_8009D2D8++;
-            g_BattleActionQueueCount = savedIndex - (u8)D_8009D2B0;
+            g_BattleActionQueueCount = savedIndex - (u8)g_BattleTargetCount;
         } else if (mode == 0x40) {
             int word;
             D_8009D2D8++;
@@ -565,7 +565,7 @@ u8 g_BattleFadeLevel;
 s8 g_BattleFadeStep;
 
 void Battle_InitFadeVars(void) {
-    if (g_BattleTargetCount[0] != 0) {
+    if (g_BattleTargetCount != 0) {
         g_BattleFadeLevel = 0x80;
         g_BattleFadeStep = -8;
     }
@@ -605,7 +605,7 @@ void Battle_StepPlayerTurn(BattleTarget *targets, int index, int mode)
     u8 slot;
     int targetMode;
 
-    if (D_8009D2B0 == 0) {
+    if (g_BattleTargetCount == 0) {
         return;
     }
     if (g_BattleFadeLevel < 0x41) {
@@ -749,7 +749,7 @@ void Battle_MarkActiveEntities(BattleTarget *table, int selected_index)
   BattleEntity *cached_active;
   unsigned char slot;
   BattleEntity *active;
-  if (D_8009D2B0 == 0)
+  if (g_BattleTargetCount == 0)
   {
     return;
   }

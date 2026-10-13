@@ -414,7 +414,7 @@ void Battle_BuildStatusPrimHeader(RenderObjectEntity *object, s8 outOfRange)
     GteMatrix translation;
     GteShortVector pointer[3] = { { -3, -16, 0 }, { 3, -16, 0 }, { 0, 0, 0 } };
     GteVector projected[3];
-    GteShortVector angles = { 0, 0, (D_8009D250 << 6) & 0xFFF };
+    GteShortVector angles = { 0, 0, (g_FrameRngCounter << 6) & 0xFFF };
     GteVector offset = { object->projected_target_x, object->projected_target_y, 0 };
     s32 flag;
     s16 x;

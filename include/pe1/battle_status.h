@@ -190,7 +190,7 @@ typedef struct BattleStatusPointerPrim {
 extern RenderLinePacket g_BattleStatusPointerLines[2][2];
 extern BattleStatusPointerPrim g_BattleStatusPointerTriangles[2];
 /* Frame counter; drives the pointer's rotation. */
-extern u32 D_8009D250;
+extern u32 g_FrameRngCounter;
 
 void RotTrans(const GteShortVector *v, GteVector *out, s32 *flag);
 
