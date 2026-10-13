@@ -1024,7 +1024,7 @@ s32 Battle_StepAyaAction(void)
       s32 *saved;
       s32 x;
       s32 y;
-      register int effect asm("$4");
+      register int effect;
       if (player->renderObject.variant_visible == 0)
       {
         effect = 0x4B6;
@@ -1047,7 +1047,6 @@ s32 Battle_StepAyaAction(void)
         player->rotationX = transfer;
         transfer = g_AyaSavedRotation.facing;
         player->facingAngle = transfer;
-        asm volatile("" : : "r"(transfer));
         scratch = (u16)g_AyaSavedRotation.z;
         player->rotationZ = scratch;
         transfer = player->posZ.parts.integer;
