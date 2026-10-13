@@ -50,7 +50,7 @@ mode1:
             }
             func_800CEE20((GteShortVector *)rec, 0, scale, scale,
                           ((s16)D_800F3368.parameter02 * ((D_800E27EC << 3) / 14)) + 0xE0,
-                          (u16)GetClut(0x40, tex), 1, fade, 0);
+                          GetClut(0x40, tex), 1, fade, 0);
         }
 
     }
