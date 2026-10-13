@@ -1568,6 +1568,7 @@ case 2:
         int rawPage;
         int kind;
         int i;
+        register int size asm("$17");
         int *in,*out;
         Matrix *transforms;
         i=0;
@@ -1586,7 +1587,6 @@ case 2:
         FieldFx_ModelScaleColors(state->asset,(unsigned short)state->brightness);
         i=0;
         for (;i<3;) {
-            register int size asm("$17");
             register int next asm("$7");
             register int product asm("$3");
             register int high asm("$9");
@@ -1624,7 +1624,6 @@ case 2:
         }
         {
             register int triple asm("$2")=state->size*3;
-            register int size asm("$17");
             asm("" : : "r"(triple));
             size=triple*2;
             for (;i<3;i++) {
