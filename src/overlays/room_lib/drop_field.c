@@ -458,7 +458,7 @@ void RoomEffect_DrawRingPair(void *unused0, void *unused1,
     seed0 = *(RoomFxSeed8 *)&s_DropFieldTiltX;
     seed1 = *(RoomFxSeed8 *)&s_DropFieldTiltY;
     func_800C3238(2);
-    depth_slot = (u16 *)&g_RoomDropFieldRings[0].intensity;
+    depth_slot = &g_RoomDropFieldRings[0].intensity;
     *depth_slot = fx->depth;
     g_RoomDropFieldRings[1].intensity = fx->depth;
     RotMatrix(&seed1, &matrix);
@@ -584,7 +584,7 @@ void RoomEffect_DrawStagedMotion(void *unused,
     int variant;
     int handle;
 
-    owner = (RoomStagedMotionRenderOwner *)FieldFx_GetScriptContext();
+    owner = FieldFx_GetScriptContext();
     seedA = *(RoomStagedMotionSeed *)&s_DropFieldNoTilt;
     seedB = *(RoomStagedMotionSeed *)&s_DropFieldTiltX;
     func_800C2EAC(owner->owner);
@@ -722,7 +722,7 @@ void RoomEffect_UpdateStagedMotion(void *entity,
     char *spawn;
     int i;
 
-    owner = (RoomDropFieldState *)FieldFx_GetScriptContext();
+    owner = FieldFx_GetScriptContext();
     state->fallStep += owner->fallRate << 8;
     state->radiusStep += (state->radiusStep * owner->radiusRate) >> 12;
     for (i = 0; (unsigned int)i < state->count; i++) {
@@ -1263,7 +1263,7 @@ void RoomEffect_DrawQuadSprites(void *unused0, void *unused1,
         gte_stir123_column(matrix);
         gte_ldrtir12_matrix_column(column1);
         gte_stir123_column(column1);
-        work = (unsigned short *)&stack.matrix.m[0][2];
+        work = &stack.matrix.m[0][2];
         gte_ldrtir12_matrix_column(work);
         gte_stir123_column(work);
         gte_ldtransmatrix(&state->rotation);
