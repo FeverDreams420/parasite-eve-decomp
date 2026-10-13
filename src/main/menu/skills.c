@@ -217,7 +217,7 @@ reserved:
 
         dialog_text = g_MenuItemLabelBuffer;
         dialog_text[0] = 0xFF;
-        Text_AppendFFTerminatedBytes(dialog_text, (void *)Text_LookupTable4(0));
+        Text_AppendFFTerminatedBytes(dialog_text, Text_LookupTable4(0));
         g_MenuItemPrimListHandles[0] = 0;
         callback = Menu_OnEquipConfirm;
         first_width = Draw_MeasureTextWidth(dialog_text);
@@ -237,7 +237,7 @@ reserved:
             option_node->y = height - 0x14;
         }
 
-        Text_CopyFFTerminatedBytes(g_MenuItemLabelBuffer, (void *)Text_LookupTable4(0x71));
+        Text_CopyFFTerminatedBytes(g_MenuItemLabelBuffer, Text_LookupTable4(0x71));
         Text_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Inv_LookupActiveListDisplayData(item));
         if (Draw_MeasureTextWidth(g_MenuItemLabelBuffer) >= 0x78) {
             width = Draw_MeasureTextWidth(g_MenuItemLabelBuffer);
