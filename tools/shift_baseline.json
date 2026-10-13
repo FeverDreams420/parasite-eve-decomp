@@ -25,7 +25,7 @@
   "undefined_addr_aliases.main.txt:kernel": 1,
   "undefined_syms_manual.txt:hardware": 10,
   "undefined_syms_manual.txt:kernel": 2,
-  "undefined_syms_manual.txt:symbolic_alias": 69,
+  "undefined_syms_manual.txt:symbolic_alias": 66,
   "undefined_syms_manual.txt:unowned": 0
  }
 }
