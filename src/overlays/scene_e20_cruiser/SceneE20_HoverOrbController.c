@@ -131,7 +131,7 @@ update: {
         if ((temp_v0_5 == 1) && (rand() & 1)) {
             Asset_Find08w(0x5FF, func_800D3FD8(), effect->position.x, effect->position.y, (s32) effect->position.z);
         }
-        temp_s3 = rsin((s32) (effect->timer << 0xA) / (s16) effect->duration);
+        temp_s3 = rsin((effect->timer << 0xA) / effect->duration);
         LoadAverageShort12(&effect->previousPosition, &effect->target, 0x1000 - temp_s3, temp_s3, &effect->position);
         func_800CE870((char *)D_8009D254, 1, (s16 *)&effect->endpoint);
         if (effect->timer >= effect->duration) {
@@ -161,7 +161,7 @@ update: {
                 effect->commandedEndpoint.z = (s16) (u16) command->position.z;
                                 var_a1_2 = command->duration;
                 effect->previousEndpoint.x = (s16) endpointX;
-                effect->previousEndpoint.z = (s16) temp_v1;
+                effect->previousEndpoint.z = temp_v1;
                 effect->previousEndpoint.y = (s16) (u16) effect->endpoint.y;
                 effect->duration = (s16) var_a1_2;
             }
@@ -173,7 +173,7 @@ update: {
         if (temp_v0_7 == 1) {
             Asset_Find08w(0x5FF, func_800D3FD8(), effect->position.x, effect->position.y, (s32) effect->position.z);
         }
-        temp_s3 = rsin((s32) (effect->timer << 0xA) / (s16) effect->duration);
+        temp_s3 = rsin((effect->timer << 0xA) / effect->duration);
         temp_s0_3 = 0x1000 - temp_s3;
         LoadAverageShort12(&effect->previousPosition, &effect->target, temp_s0_3, temp_s3, &effect->position);
         LoadAverageShort12(&effect->previousEndpoint, &effect->commandedEndpoint, temp_s0_3, temp_s3, &effect->endpoint);
@@ -408,7 +408,7 @@ block_63:
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
             D_800F3368.tpage = texturePage;
-            func_800CEE20(&effect->position, NULL, 0x2000, 0x2000, 6, GetClut(paletteX, paletteY + 5) & 0xFFFF, 3, (s32) var_s0, (struct RenderColor *)&beamColor);
+            func_800CEE20(&effect->position, NULL, 0x2000, 0x2000, 6, GetClut(paletteX, paletteY + 5) & 0xFFFF, 3, var_s0, (struct RenderColor *)&beamColor);
         }
         D_800F3368.depth = 0xB;
         return 0;
