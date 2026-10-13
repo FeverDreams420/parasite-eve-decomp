@@ -23,7 +23,7 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 u8 g_BattleSuspendedModeState;
-s32 D_8009D1D0;
+void *g_BattlePendingEnemySpawn;
 s32 g_BattleFrameCounter;
 u8 g_BattleActionActorCount;
 u8 g_BattleEnemyEscapeFlag;
@@ -60,7 +60,7 @@ void Save_InitSystem(void)
  * record field: the record is not small data, so its address stays in a
  * register for the read-modify-write, as retail has it. */
 u8 g_BattleStepIndex, D_8009CE78, g_BattleSuspendedModeState;
-int D_8009D1D0;
+void *g_BattlePendingEnemySpawn;
 int g_BattleFrameCounter;
 u16 g_BattlePeBonusReward;
 u8 g_BattleEnemyEscapeFlag;
@@ -86,7 +86,7 @@ void Battle_ResetEnemyStats(int mode) {
     actor->hpAlive = 0;
     actor->atbGauge = 0;
     actor->hpMirror = actor->curHP;
-    D_8009D1D0 = 0;
+    g_BattlePendingEnemySpawn = 0;
 
     if ((mode & 0xFF) == 1) {
         g_BattleEnemyHoldTimer[0] = 0x5A;
@@ -132,7 +132,7 @@ void Battle_ResetEnemyStats(int mode) {
     Battle_FlushScriptSounds();
     Draw_ResetTextboxes();
     g_BattleHitActionPending = 0;
-    D_8009D29A = 0;
+    g_BattleHitActionMode[0] = 0;
     g_BattleHitActionSubmode[0] = 0;
     g_BattleHitActionParam[0] = 0;
 }
@@ -429,16 +429,16 @@ void Battle_Update(void) {
         if ((player->animLastFrame == player->animPrev.parts.integer) && (player->actionMode < 4U)) {
             if (g_BattleHitActionPending == 0) {
                 Entity_SetActionMode(player, g_ActiveActor->actionMode12);
-                if (!(g_DiscChangeFlags & 1) && ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) && (g_BattleModeState == 0) && (g_ActiveActor->action->turnWord & 0x8000) && (D_8009D1D0 != 0)) {
-                    Battle_RollEnemySpawn(D_8009D1D0);
-                    D_8009D1D0 = 0;
+                if (!(g_DiscChangeFlags & 1) && ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) && (g_BattleModeState == 0) && (g_ActiveActor->action->turnWord & 0x8000) && (g_BattlePendingEnemySpawn != 0)) {
+                    Battle_RollEnemySpawn(g_BattlePendingEnemySpawn);
+                    g_BattlePendingEnemySpawn = 0;
                 }
             } else {
                 if (g_BattleHitActionPending >= 2U) {
                     player->entityFlags |= 0x100;
                 }
                 g_BattleHitActionPending = 0;
-                Entity_SetActionMode(D_8009D254, D_8009D29A);
+                Entity_SetActionMode(D_8009D254, g_BattleHitActionMode[0]);
                 player = D_8009D254;
                 player->animFrame = g_BattleHitActionParam[0];
                 player->animPrev.fixed = g_BattleHitActionParam[0] + 0xFFFF0000;
@@ -1271,7 +1271,7 @@ void Battle_PhaseInitEnemyTurn(void) {
                                 entity->entityFlags = (entityFlags | 0x100);
                             }
                             g_BattleHitActionPending = 0;
-                            Entity_SetActionMode(D_8009D254, D_8009D29A);
+                            Entity_SetActionMode(D_8009D254, g_BattleHitActionMode[0]);
                             player = D_8009D254;
                             player->animFrame = g_BattleHitActionParam[0];
                             player->animPrev.fixed = (g_BattleHitActionParam[0] + 0xFFFF0000);

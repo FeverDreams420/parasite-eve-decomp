@@ -98,7 +98,7 @@ void Entity_ResolveDropTable(void *arg0) {
             if ((s16)g_ActiveActor->curHP != 0) {
                 Entity_ApplyHitAndSetAnim(arg0);
                 if (!(g_PlayerEntity->flags & 0x100)) {
-                    g_BattlePendingEnemySpawn[0] = arg0;
+                    g_BattlePendingEnemySpawn = arg0;
                 }
             }
         } else if (value > 0) {

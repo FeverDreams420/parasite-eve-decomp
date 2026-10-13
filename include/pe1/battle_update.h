@@ -7,7 +7,7 @@
 int Akao_SendTableCommand(void *, int, int, int, int);
 int Battle_BuildTargetList(void);
 void Battle_ResolveHitOnTimer(void);
-void Battle_RollEnemySpawn(int);
+void Battle_RollEnemySpawn(void *);
 void Battle_StepEscapeOrDeath(void);
 void Battle_StepLevelUp(void);
 void Battle_StepPostBattle(void);
@@ -26,7 +26,6 @@ void srand(unsigned int);
 
 /* Only element zero is accessed in the wide matching views below. */
 extern u8 g_BattleSuspendedModeState;
-extern s32 D_8009D1D0;
 extern s32 g_BattleFrameCounter;
 extern s8 D_8009D1F0[16];
 extern u32 g_FieldPadPressed;

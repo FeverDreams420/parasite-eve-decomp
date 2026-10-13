@@ -14,8 +14,8 @@ extern EntityActionTable D_800B0E98[];
 
 /* Battle state the entity hit and drop handlers read and write. */
 extern Combatant *g_ActiveActor;
-extern void *g_BattlePendingEnemySpawn[];
-extern u8 g_BattleHitActionMode[];
+extern void *g_BattlePendingEnemySpawn;
+extern u8 g_BattleHitActionMode[1];
 extern u8 g_BattleHitActionSubmode[];
 extern s32 g_BattleHitActionParam[1];
 extern int g_BattleModeState;

@@ -4,11 +4,9 @@
 #include "pe1/battle.h"
 
 extern Combatant *g_ActiveActor;
-extern int D_8009D1D0;
 extern u8 g_BattleEnemyHoldTimer[];
 extern u8 g_BattleEnemyEscapeFlag;
 extern u16 g_BattleHitActionPending;
-extern u8 D_8009D29A;
 extern u8 g_BattleHitActionSubmode[];
 
 extern unsigned int D_8009D2E8;
