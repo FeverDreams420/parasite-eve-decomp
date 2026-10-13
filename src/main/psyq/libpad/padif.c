@@ -163,9 +163,9 @@ setup:
         register int opposite;
         opposite = !original;
         if (g_MemCardWriteBlockCount >= 2) {
-            register int *count asm("$16");
-            register CardObjAddress table asm("$3");
-            register int scaled asm("$2");
+            register int *count;
+            register CardObjAddress table;
+            register int scaled;
             table.count = D_8009B77C;
             scaled = opposite * 4;
             table.word = scaled + table.word;
@@ -181,7 +181,7 @@ setup:
                     break;
                 if (remaining > 0) {
                     /* Preserve the retail multiply and interior byte cursor. */
-                    register int scaled asm("$2");
+                    register int scaled;
                     register CardObjAddress child asm("$3");
                     scaled = remaining * sizeof(CardObj);
                     child.obj = g_MemCardObjArray;
@@ -237,7 +237,6 @@ setup:
                 if (!MemCard_WaitReadyForTransfer()) {
                 timeout:
                     result = -3;
-                    asm("" : : "r"(result));
                     goto done;
                 }
                 --g_MemCardWriteBlockCount;

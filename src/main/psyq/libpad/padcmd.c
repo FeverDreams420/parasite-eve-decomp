@@ -282,7 +282,6 @@ int LIBPAD_PADCMD_text_3A0(CardObj *inPort) {
 
         if (port->combinationBytesRemaining != 0) {
     zero:
-        asm("" ::: "memory");
         return 0;
         }
     exhausted:
@@ -346,7 +345,7 @@ s32 Render_CheckParticleBounds(CardObj *arg0) {
     s32 written;
     s32 needed;
     register u8 *out asm("$6");
-    register s32 limit asm("$2");
+    register s32 limit;
 
     i = 0;
     if (arg0->actuatorCount != 0) {
