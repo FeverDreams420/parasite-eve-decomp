@@ -1074,7 +1074,7 @@ int Inv_LoadWayneItemsAsOverride(short *items) {
 
     if (items != 0) {
         int base = g_InvCategoryBaseItemId;
-        u16 *out = (u16 *)g_InvActiveListItems;
+        u16 *out = g_InvActiveListItems;
         int end = base + 3;
         int id;
         while (count < 10 && (id = items[0]) != 0) {
