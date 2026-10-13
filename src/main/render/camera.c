@@ -430,7 +430,6 @@ int Render_SetViewport(s16 *position) {
 
     screen_y = sum_y >> 1;
     g_GeomScroll.state.position.cameraOffsetY = screen_y;
-    asm volatile("" : : : "memory");
     viewAddress.word = geometry.word + offset_geometry.state->entry_offset_1C;
     view = viewAddress.viewport;
     view += g_GeomGroupSel;
