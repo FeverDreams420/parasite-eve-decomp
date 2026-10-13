@@ -47,7 +47,7 @@ void Entity_ResetAllPools(void)
     } while (i < 0x200);
 
     i = 0;
-    ptr = (int *)g_ScriptNodeActiveFlags;
+    ptr = g_ScriptNodeActiveFlags;
     do {
         i++;
         *ptr = 0;
