@@ -609,7 +609,7 @@ int Entity_MarkNodeFree(void) {
     entity = g_CurrentEntity;
     skip = g_ScriptNodePool;
     do {
-        node = (ScriptNode *)entity->script_node_lists[i];
+        node = entity->script_node_lists[i];
         while (node != 0) {
             if (node != skip) {
                 node->flags |= 0x10;
