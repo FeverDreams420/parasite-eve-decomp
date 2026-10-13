@@ -483,7 +483,7 @@ void Inv_RebuildSelectionBitset(void) {
 
     range = D_800923D8;
     if (range < D_800923D8 + 8) {
-        table_base = (int *)D_800A77F0;
+        table_base = D_800A77F0;
         range_stop_ptr = &range->stop;
         do {
             start = range->start;
@@ -995,7 +995,7 @@ int Inv_CountByValue(int arg0) {
     if ((arg0 >= g_InvCategoryBaseItemId) && (arg0 < g_InvCategoryBaseItemId + 3)) {
         count = g_InvCategoryItemTable[arg0 - g_InvCategoryBaseItemId].count;
     } else {
-        ptr = (u16 *)g_InvItemPtr;
+        ptr = g_InvItemPtr;
         end = ptr + g_InvSlotLimit;
         if (ptr < end) {
             iter_end = end;
