@@ -878,9 +878,9 @@ g_StrFileDirBuffer = 0x80011614; // type:u32
 // Targets of data words that hold a program address, labelled so the word
 // assembles as a relocated symbol reference (docs/CODE_ORGANIZATION.md,
 // Shiftability). The buffers g_StrFileDirBuffer and g_PmTaskProgramBuffer
-// point at, the "Fatal Error" entry of the severity names g_ErrorSeverityNames, and
+// point at (g_StrFileDirArea is in configs/USA/sym.main_only.txt), the
+// "Fatal Error" entry of the severity names g_ErrorSeverityNames, and
 // the RCS version strings of LIBETC intr.c, LIBGPU sys.c and LIBCD bios.c.
-g_StrFileDirArea = 0x8018EFF0;
 g_PmTaskProgramArea = 0x801ED7F8;
 g_ErrorSeverityFatalName = 0x80010EA0;
 g_IntrVersion = 0x8001170C;

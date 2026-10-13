@@ -441,7 +441,7 @@ def object_symbols(obj: pathlib.Path) -> dict[str, int]:
 @functools.lru_cache(maxsize=None)
 def main_symbol_addresses() -> dict[str, int]:
     """Retail addresses of main.exe symbols from configs/ and linkers/."""
-    files = [ROOT / "configs/USA/sym.main.txt",
+    files = [ROOT / "configs/USA/sym.main.txt", ROOT / "configs/USA/sym.main_only.txt",
              *sorted((ROOT / "linkers/USA").glob("undefined_*.txt"))]
     rx = re.compile(r"^\s*(\w+)\s*=\s*(0x[0-9A-Fa-f]+)\s*;", re.M)
     known = {}

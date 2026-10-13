@@ -37,6 +37,7 @@ options:
 
   symbol_addrs_path:
     - configs/USA/sym.main.txt
+    - configs/USA/sym.main_only.txt
   reloc_addrs_path:
     - configs/USA/rel.main.txt
 
