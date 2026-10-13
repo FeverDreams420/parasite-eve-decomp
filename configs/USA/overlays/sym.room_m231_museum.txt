@@ -62,7 +62,6 @@ g_RoomSparkRingColorRamp = 0x80194844;
 g_RoomM231_D_8018EFE8 = 0x8018EFE8;
 g_RoomM231_D_8019489C = 0x8019489C;
 g_RoomM231_D_801D01E0 = 0x801D01E0;
-g_RoomM231_D_801948BC = 0x801948BC;
 g_RoomSparkSlot__room_m231_museum = 0x80194900;
 RoomLib_SetArgs3__room_m231_museum = 0x80192C68; // type:func
 g_RoomScriptArgs__room_m231_museum = 0x801948F4;

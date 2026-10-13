@@ -1,42 +1,25 @@
 {
  "counts": {
-  "identical": 961,
-  "conflicting": 25,
-  "conflicting_named": 25,
+  "identical": 902,
+  "conflicting": 1,
+  "conflicting_named": 1,
   "conflicting_auto": 0,
-  "conflicting_interface": 24,
-  "conflicting_main": 1,
+  "conflicting_interface": 1,
+  "conflicting_main": 0,
   "conflicting_private": 0,
-  "overlay_vs_main": 8,
-  "overlay_vs_main_named": 1
+  "overlay_vs_main": 7,
+  "overlay_vs_main_named": 0
  },
  "conflicting": [
-  "RoomLib_GrabOnApproach",
-  "RoomLib_PairB",
-  "RoomLib_SlotTable",
-  "g_RoomCaptureFrameWord",
-  "g_RoomClassTable",
-  "g_RoomDrawList",
-  "g_RoomDropFieldDrawList",
-  "g_RoomDropFieldParticleFrames",
-  "g_RoomEruptionSpawnLayout",
-  "g_RoomGlowOrbScript",
-  "g_RoomGrabSweepSide",
-  "g_RoomGrabTrailTrack",
-  "g_RoomInitList",
-  "g_RoomMotionTrailA",
-  "g_RoomPairedGlowColorTable",
-  "g_RoomPairedGlowPacket",
-  "g_RoomScatterBurstLayer",
-  "g_RoomScript",
-  "g_RoomScriptArg",
-  "g_RoomScriptArgs",
-  "g_RoomScriptRecord",
-  "g_RoomSparkSlot",
-  "g_RoomSpawnLayout",
-  "g_RoomUpdateList",
-  "g_StrFileDirArea"
+  "g_RoomCaptureFrameWord"
  ],
+ "conflicting_locations": {
+  "g_RoomCaptureFrameWord": [
+   "room_m156_hospital:0x80192C3C",
+   "room_m291_chrysler:0x80192C3C",
+   "room_m380_hospital:0x80192C3C"
+  ]
+ },
  "overlay_vs_main": [
   "D_8010BCF8",
   "D_80120D00",
@@ -44,7 +27,6 @@
   "func_80121C04",
   "func_80122040",
   "func_801909B4",
-  "func_8019234C",
-  "g_StrFileDirArea"
+  "func_8019234C"
  ]
 }

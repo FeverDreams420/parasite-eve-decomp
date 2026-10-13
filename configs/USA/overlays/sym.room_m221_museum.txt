@@ -59,7 +59,6 @@ RoomEffect_SetSparkSlot__room_m221_museum = 0x80193FC0; // type:func
 g_RoomSparkRingColorRamp = 0x80194098;
 g_RoomM221_D_8018EFE8 = 0x8018EFE8;
 g_RoomM221_D_801940F0 = 0x801940F0;
-g_RoomM221_D_80194110 = 0x80194110;
 g_RoomSparkSlot__room_m221_museum = 0x80194148;
 g_RoomClassTable__room_m221_museum = 0x80193FD0; // size:0xA8 allow_addend:true
 g_RoomM221BurstSparkEffects = 0x80194110;
