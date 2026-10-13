@@ -968,7 +968,6 @@ int func_801992A0(int event,FadingModelState *state)
         int halfSize;
         int sizeBits;
         int cosine,divisor;
-        register int size asm("$3");
         int sine;
         int product;
         if(D_8019A8C4) return 2;
@@ -991,25 +990,24 @@ int func_801992A0(int event,FadingModelState *state)
             register int scaled asm("$2")=low*parts;
                         scaled=scaled/256;
                         {
-                size=scaled+1;
-                asm volatile("" : : "r"(size));
-                index=size;
+                parts=scaled+1;
+                asm volatile("" : : "r"(parts));
+                index=parts;
             }
-        }
         {
         Instance *ySource;
         Instance *zSource;
         particle->position.x=instance->render_object.matrices[index].translation[0];
                 ySource=(Instance *)actor->instance;
         asm volatile("" : : "r"(ySource));
-        size=particle->size;
+        parts=particle->size;
         asm volatile("" ::: "memory");
         sizeBits=(unsigned short)particle->size;
         particle->position.y=ySource->render_object.matrices[index].translation[1];
         asm volatile("" : : : "$2");
         {
             u8 low7=random&127;
-            product=low7*size;
+            product=low7*parts;
         }
         zSource=(Instance *)actor->instance;
         asm volatile("" : : "r"(zSource));
@@ -1054,6 +1052,7 @@ int func_801992A0(int event,FadingModelState *state)
         particle->position.z=(unsigned short)particle->position.z+(unsigned short)offset.z;
         state->delay=0; state->count=(unsigned short)state->count+1;
         Asset_Find08w(0x5FE,((Instance *)ANIM_OWNER_AS(RoomM350Actor)->instance)->state->progress,particle->position.x,particle->position.y,particle->position.z);
+        }
     }
         break;
     case 2:
