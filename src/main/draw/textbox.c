@@ -434,7 +434,7 @@ void Menu_DrawTextboxEntries(void) {
                 textbox->control.parts.delay = 0U;
                 textbox->control.parts.elapsed = 0U;
                 textbox->control.flags = textbox->control.flags & sectionMask;
-                textbox->message = (u8 *)D_8009CE90;
+                textbox->message = D_8009CE90;
                 while (1) {
                     temp_a0_2 = textbox->message;
                     temp_v0 = *temp_a0_2;
