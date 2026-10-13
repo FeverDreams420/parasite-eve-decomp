@@ -139,7 +139,7 @@ void Render_SetupFogLayer(void *source) {
         if (MargePrim(draw_mode, sprite)) exit(-1);
         sprite_base = D_8009EC78;
 
-        sprite_fields = (RenderSpritePacket *)((int)((u8)i * 28) + (int)sprite_base);
+        sprite_fields = (RenderSpritePacket *)(((u8)i * 28) + (int)sprite_base);
         SetShadeTex(sprite_fields, 1);
         x_arg = 0;
 
@@ -165,7 +165,7 @@ void Render_SetupFogLayer(void *source) {
         SetDrawTPage(tile_mode, 0, 1, tpage & 0xFFFF);
         SetTile(tile);
         if (MargePrim(tile_mode, tile)) exit(-1);
-        payload = (u8 *)((int)((u8)i * 24) + (int)tile_payload_base);
+        payload = (u8 *)(((u8)i * 24) + (int)tile_payload_base);
         dither_enabled = 1;
         {
             int two = 2;
@@ -602,13 +602,13 @@ void Menu_DrawTextboxEntries(void) {
                         currentPacket->sprite.y = cursor.y;
                         currentPacket->sprite.u = (s8)uv.x;
                         currentPacket->sprite.v = (s8)uv.y;
-                        currentPacket->sprite.color.bytes.r = (u8)D_8009CEA8;
+                        currentPacket->sprite.color.bytes.r = D_8009CEA8;
                         currentPacket->sprite.width = 0xC;
-                        currentPacket->sprite.color.bytes.g = (u8)D_8009CEAC;
+                        currentPacket->sprite.color.bytes.g = D_8009CEAC;
                         linkPacket = currentPacket;
                         currentPacket->sprite.height = 0xC;
-                        currentPacket->sprite.color.bytes.b = (u8)D_8009CEB0;
-                        currentPacket->sprite.clut = (u16)D_80091644[2].clut;
+                        currentPacket->sprite.color.bytes.b = D_8009CEB0;
+                        currentPacket->sprite.clut = D_80091644[2].clut;
                         stream++;
                         AddPrim(linkOrdering, (unsigned int *)linkPacket);
                         currentPacket++;
@@ -701,14 +701,14 @@ void Menu_DrawTextboxEntries(void) {
                                 auxiliaryPacket->sprite.u = (s8)uv.x;
                                 auxiliaryPacket->sprite.v = (s8)uv.y;
                                 currentPacket++;
-                                auxiliaryPacket->sprite.color.bytes.r = (u8)D_8009CEA8;
+                                auxiliaryPacket->sprite.color.bytes.r = D_8009CEA8;
                                 nextPacket++;
-                                auxiliaryPacket->sprite.color.bytes.g = (u8)D_8009CEAC;
+                                auxiliaryPacket->sprite.color.bytes.g = D_8009CEAC;
                                 auxiliaryPacket->sprite.width = 12;
                                 auxiliaryPacket->sprite.height = 12;
-                                auxiliaryPacket->sprite.color.bytes.b = (u8)D_8009CEB0;
+                                auxiliaryPacket->sprite.color.bytes.b = D_8009CEB0;
                                 temp_a1_3 = auxiliaryPacket;
-                                auxiliaryPacket->sprite.clut = (u16)font->clut;
+                                auxiliaryPacket->sprite.clut = font->clut;
                                 auxiliaryPacket++;
                                 AddPrim(orderingTable, temp_a1_3);
                                 cursor.x += glyphAdvance;
@@ -749,7 +749,7 @@ void Menu_DrawTextboxEntries(void) {
                         selectionOrderingOffset = selectionFrame * 4;
                         selectionSprite =
                             (RenderSpritePacket *)(selectionOffset + (u8 *)D_8009EC78);
-                        selectionSprite->x = (u16)selectionCursor->x;
+                        selectionSprite->x = selectionCursor->x;
                         selectionBase = (u8 *)D_8009EC78 - 8;
                         selectionSprite->y = (s16)(selectionCursor->y + ((s8)g_DialogueChoiceCursor * 0xC));
                         {
@@ -782,13 +782,13 @@ void Menu_DrawTextboxEntries(void) {
                         currentPacket->sprite.y = cursor.y;
                         currentPacket->sprite.u = (s8)uv.x;
                         currentPacket->sprite.v = (s8)uv.y;
-                        currentPacket->sprite.color.bytes.r = (u8)D_8009CEA8;
+                        currentPacket->sprite.color.bytes.r = D_8009CEA8;
                         currentPacket->sprite.width = 0xC;
-                        currentPacket->sprite.color.bytes.g = (u8)D_8009CEAC;
+                        currentPacket->sprite.color.bytes.g = D_8009CEAC;
                         linkPacket = currentPacket;
                         currentPacket->sprite.height = 0xC;
-                        currentPacket->sprite.color.bytes.b = (u8)D_8009CEB0;
-                        currentPacket->sprite.clut = (u16)font->clut;
+                        currentPacket->sprite.color.bytes.b = D_8009CEB0;
+                        currentPacket->sprite.clut = font->clut;
                         stream++;
                         AddPrim(linkOrdering, (unsigned int *)linkPacket);
                         currentPacket++;
@@ -814,13 +814,13 @@ void Menu_DrawTextboxEntries(void) {
                     currentPacket->sprite.y = cursor.y;
                     currentPacket->sprite.u = (s8)uv.x;
                     currentPacket->sprite.v = (s8)uv.y;
-                    currentPacket->sprite.color.bytes.r = (u8)D_8009CEA8;
+                    currentPacket->sprite.color.bytes.r = D_8009CEA8;
                     currentPacket->sprite.width = 0xC;
-                    currentPacket->sprite.color.bytes.g = (u8)D_8009CEAC;
+                    currentPacket->sprite.color.bytes.g = D_8009CEAC;
                     linkPacket = currentPacket;
                     currentPacket->sprite.height = 0xC;
-                    currentPacket->sprite.color.bytes.b = (u8)D_8009CEB0;
-                    currentPacket->sprite.clut = (u16)D_80091644[1].clut;
+                    currentPacket->sprite.color.bytes.b = D_8009CEB0;
+                    currentPacket->sprite.clut = D_80091644[1].clut;
                     stream++;
                     AddPrim(linkOrdering, (unsigned int *)linkPacket);
                     currentPacket++;
@@ -842,13 +842,13 @@ void Menu_DrawTextboxEntries(void) {
                     currentPacket->sprite.y = cursor.y;
                     currentPacket->sprite.u = (s8)uv.x;
                     currentPacket->sprite.v = (s8)uv.y;
-                    currentPacket->sprite.color.bytes.r = (u8)D_8009CEA8;
+                    currentPacket->sprite.color.bytes.r = D_8009CEA8;
                     currentPacket->sprite.width = 0xC;
-                    currentPacket->sprite.color.bytes.g = (u8)D_8009CEAC;
+                    currentPacket->sprite.color.bytes.g = D_8009CEAC;
                     linkPacket = currentPacket;
                     currentPacket->sprite.height = 0xC;
-                    currentPacket->sprite.color.bytes.b = (u8)D_8009CEB0;
-                    currentPacket->sprite.clut = (u16)D_80091644[1].clut;
+                    currentPacket->sprite.color.bytes.b = D_8009CEB0;
+                    currentPacket->sprite.clut = D_80091644[1].clut;
                     stream++;
                     AddPrim(linkOrdering, (unsigned int *)linkPacket);
                     currentPacket++;
@@ -879,13 +879,13 @@ void Menu_DrawTextboxEntries(void) {
                     currentPacket->sprite.y = cursor.y;
                     currentPacket->sprite.u = (s8)uv.x;
                     currentPacket->sprite.v = (s8)uv.y;
-                    currentPacket->sprite.color.bytes.r = (u8)D_8009CEA8;
+                    currentPacket->sprite.color.bytes.r = D_8009CEA8;
                     currentPacket->sprite.width = 12;
-                    currentPacket->sprite.color.bytes.g = (u8)D_8009CEAC;
+                    currentPacket->sprite.color.bytes.g = D_8009CEAC;
                     currentPacket->sprite.height = 12;
                     nextPacket++;
-                    currentPacket->sprite.color.bytes.b = (u8)D_8009CEB0;
-                    currentPacket->sprite.clut = (u16)font->clut;
+                    currentPacket->sprite.color.bytes.b = D_8009CEB0;
+                    currentPacket->sprite.clut = font->clut;
 
                     AddPrim(orderingTable, (unsigned int *)(currentPacket++));
                     temp_v1_11 = D_800916A0[*stream].right;
