@@ -466,7 +466,7 @@ int func_8019360C(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(((RoomM350Emitter *)ANIM_POOL_AS(RoomM350Emitter))->pool,8,2,
+        return func_800CE560((ANIM_POOL_AS(RoomM350Emitter))->pool,8,2,
                              (FieldFxCallbackListCallback)func_80192E4C);
         case 1:
     {
@@ -481,7 +481,7 @@ int func_8019360C(int event) {
         if (frame < 8) return 0;
         if (previous < 8) {
             for (i=0;i<2;i++) {
-                RoomM350SweepTrap *particle = func_800CE610(((RoomM350Emitter *)ANIM_POOL_AS(RoomM350Emitter))->pool);
+                RoomM350SweepTrap *particle = func_800CE610((ANIM_POOL_AS(RoomM350Emitter))->pool);
                 if (!particle) break;
                 particle->anchor = &D_8019A778[i];
                 particle->done = 0;
@@ -1453,7 +1453,7 @@ case 0:
         FieldFx_ModelScrollUv(state->asset,0,0);
         state->size=0;
         {
-            int yaw=((short )D_8019A82A[0]);
+            int yaw=(D_8019A82A[0]);
             state->initialized=0;
             state->yaw=yaw<<8;
         }
