@@ -33,7 +33,6 @@ void Draw_InitDrawModeTilePacket(void *, int);
 void SetSemiTrans(void *, int);
 void SetShadeTex(void *, int);
 void SetPolyF3(void *);
-void SetPolyG4(void *);
 void SetPolyFT4(RenderTexturedQuad *);
 void SetTile(void *);
 u16 GetClut(int, int);

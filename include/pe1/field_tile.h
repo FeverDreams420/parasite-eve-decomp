@@ -58,6 +58,5 @@ PE1_STATIC_ASSERT(sizeof(FieldG4Packet) == 0x24, field_g4_packet_size);
 
 void SetSemiTrans(void *packet, int dither);
 void SetTile1(FieldTilePoint *tile);
-void SetPolyG4(void *packet);
 
 #endif

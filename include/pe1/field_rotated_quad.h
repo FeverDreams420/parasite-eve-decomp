@@ -37,7 +37,6 @@ PE1_STATIC_ASSERT(sizeof(FieldGt4Packet) == 0x34, field_gt4_packet_size);
 extern RenderColor D_800C22A0;
 /* Texture page of the current sprite parameter block. */
 
-void SetPolyGT4(FieldGt4Packet *packet);
 void MulRotMatrix(GteMatrix *matrix);
 
 #endif /* PE1_FIELD_ROTATED_QUAD_H */

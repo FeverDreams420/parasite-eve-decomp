@@ -107,6 +107,8 @@ void GPU_memset(unsigned char *dst, int value, int count);
 int Gpu_SetDisplayBuffer(void);
 
 void SetTile(void *tile);
+void SetPolyG4(void *packet);
+void SetPolyGT4(void *packet);
 void SetSprt(void *sprite);
 int MargePrim(void *first, void *second);
 

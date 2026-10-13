@@ -148,7 +148,6 @@ typedef struct FxCommonFixedVec {
 } FxCommonFixedVec;
 
 extern FxCommonFixedVec g_FxCommonMotionWhole[10];
-void SetPolyGT4(FxCommonMarkerQuad *packet);
 int RotTransPers3(GteShortVector *v0, GteShortVector *v1, GteShortVector *v2,
                   s32 *sxy0, s32 *sxy1, s32 *sxy2, s32 *p, s32 *flag);
 
