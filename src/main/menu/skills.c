@@ -167,7 +167,7 @@ int Menu_StepEquipConfirm(MenuWidgetNode *node, int input) {
     MenuWidgetNode *dialog;
     MenuWidgetNode *option_node;
     int item;
-    register int handled asm("$18");
+    int handled;
     int allowed;
     int first_width;
     int width;
@@ -246,8 +246,6 @@ reserved:
 
         /* The input node is no longer needed on this confirmation path. */
         node = MenuWidget_FindByModeAndSelectedBase(1, 0x29);
-        /* Copy the returned node before preparing the next lookup. */
-        asm volatile("" : : "r"(node));
         node->grid_width = width + 0x14;
         node->x = (0x12C - width) >> 1;
         option_node = MenuWidget_FindByModeAndSelectedBase(2, 0x29);
