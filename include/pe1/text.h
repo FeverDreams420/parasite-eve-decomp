@@ -71,7 +71,7 @@ void Draw_PrintTextById(unsigned int textId);
  *   Draw_LookupGlyphMetrics / Draw_EmitGlyph back the metrics/advance.
  *
  * MESSAGE SOURCE: messages are looked up by index from PE asset tables (loaded
- * from PE.IMG): Text_LookupTable0/4/8/C/10 (e.g. Text_LookupTable4 = func_8005DC4C,
+ * from PE.IMG): Text_LookupTable0/4/8/C/10 (e.g. Text_LookupTable4 at 0x8005DC4C,
  * used by Draw_PrintTextById and many Menu_Draw* helpers). The string returned
  * is the 0xFF-terminated glyph-code array above.
  *

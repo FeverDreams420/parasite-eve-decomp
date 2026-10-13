@@ -71,8 +71,8 @@ typedef struct AyaSaveState {
     /* 0x24 */ u32 parasite_spell_flags; /* g_AyaParasiteSpellFlags: unlocked-spell bitmask [CONFIRMED 0x1 at new game] */
 
     /* 0x28..0x35: 7 u16 stat-allocation LEVELS (0-based, status screen shows +1),
-     * written as one 7-entry array in Inv_InitNewGameInventory (loop from
-     * func_8005DB8C) and read via the g_AyaStat* accessors. These are the
+     * written as one 7-entry array in Inv_InitNewGameInventory (loop over
+     * Aya_GetStatGrowthTable) and read via the g_AyaStat* accessors. These are the
      * bonus-point allocation levels per category (all 0 at new game ->
      * every status stat shows "1"), NOT the final combat values. */
     /* 0x28 */ AyaStatAllocationWords stats;
