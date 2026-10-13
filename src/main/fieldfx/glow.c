@@ -1376,7 +1376,7 @@ int func_800CB8E0(void *arg0, void *arg1, FieldFxMovingParticle *anim) {
     *field = anim->brightness;
     RotMatrix(&rot, &matrix);
 
-    position = (s16 *)&anim->position.x;
+    position = &anim->position.x;
     matrix.t[0] = position[0];
     matrix.t[1] = position[1];
     matrix.t[2] = position[2];
