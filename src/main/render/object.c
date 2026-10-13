@@ -789,7 +789,7 @@ void Anim_SetInterpRate(RenderObjectEntity *obj, int arg1) {
     if ((short)arg1 == 0) {
         value = 1;
     }
-    divisor = 0x80 / (short)value;
+    divisor = 0x80 / value;
 
     obj->fade_duration = value;
     obj->fade_red_step = divisor;
