@@ -58,7 +58,7 @@ void Menu_CreateEquipScreen(MenuWidgetNode *arg0) {
     parent = MenuWidget_CreateSimpleNode(1, arg0, 0, 0);
     node = MenuWidget_CreateNode(1, parent, parent);
     currentNode = node;
-    parent->update = (void (*)())Menu_InventoryInputHandler;
+    parent->update = Menu_InventoryInputHandler;
     node->draw = Menu_DrawSelectableEquipSlotList;
     MenuWidget_SetCurrentNode(currentNode);
     node->itemAction = (MenuWidgetItemAction)Inv_SwapSlots;
@@ -308,7 +308,7 @@ void Menu_OpenItemActionSubmenu(MenuWidgetNode *arg0, s32 arg1, s32 arg2) {
     temp_v0_2 = MenuWidget_CreateSimpleNode(var_s0, arg0, 0, 1);
     temp_s1 = MenuWidget_CreateNode(var_s0, temp_v0_2, temp_v0_2);
     temp_a0 = temp_s1;
-    temp_v0_2->update = (void (*)())Menu_StepEquipScreen;
+    temp_v0_2->update = Menu_StepEquipScreen;
     temp_s1->draw = Menu_DrawContextActionList;
     MenuWidget_SetCurrentNode(temp_a0);
     var_s0_2 = 0;
