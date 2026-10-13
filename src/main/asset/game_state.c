@@ -596,12 +596,12 @@ void Boot_InitMemoryLayout(void) {
     ptr += const_8000;
     g_RenderBackBufferBase[0] = ptr2;
     ptr2 = ptr + 0x3800;
-    D_800B0E5C = ptr2;
+    g_ScriptSpriteBuffer = ptr2;
     tmp = g_StrFileDirBuffer;
     g_RenderAnimBufferBase[0] = ptr;
     ptr += 0x7000;
     g_ScenePmSlotBanks = ptr;
     g_SceneLoadScratchBuffer[0] = g_SceneLoadScratchArea;
     g_LoadedSceneAssetBlock[0] = tmp - 8;
-    D_800B0E68 = tmp;
+    g_StrFileDirectory = tmp;
 }

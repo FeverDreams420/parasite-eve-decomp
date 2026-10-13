@@ -131,7 +131,7 @@ s32 MenuCard_PlayVideo(s32 index) {
     s32 result = 0;
     register u32 *flags asm("$3");
     s32 ready;
-    flags=&D_800B0CD8;
+    flags=&g_GameStateFlagsWord;
     *flags |= 0x200;
     g_MenuCardScreenVideoTable[entry].wide=1;
     SetDispMask(0); DrawSync(0); ResetGraph(1);
@@ -141,6 +141,7 @@ retry:
         s32 readError = -1;
         s32 pollError;
         do {} while(CdRom_ReadSectorsFromLba(D_800B0DD8.baseLba+range->start,g_MdecOverlayLoadBase,range->end-range->start)==readError);
+        do {} while(CdRom_ReadSectorsFromLba(g_DiscLoadState.baseLba+range->start,D_8001160C,range->end-range->start)==readError);
         pollError=-1;
         for (;;) {
             ready=CdRom_PollReady();
@@ -178,7 +179,7 @@ retry:
         }
     }
     { register s32 returnValue asm("$2") = result;
-        flags=&D_800B0CD8;
+        flags=&g_GameStateFlagsWord;
         *flags &= ~0x200;
         return returnValue; }
 }

@@ -340,7 +340,7 @@ typedef union AkaoTickTrack {
 typedef char AkaoTickTrackSizeCheck[sizeof(AkaoTickTrack) == 0x11C ? 1 : -1];
 
 /* The 48 sequencer tracks: 24 for music, 24 saved or for sound effects. */
-extern AkaoTickTrack D_800B8AC0[48];
+extern AkaoTickTrack g_AkaoSequencerTracks[48];
 
 void Seq_StartNestedStreams(AkaoNestedSource *source, void *first, void *second);
 

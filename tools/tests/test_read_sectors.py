@@ -12,7 +12,7 @@ import unittest
 ROOT=Path(__file__).resolve().parents[2]
 base=0x8006CDA4
 syms={
-    'D_800B0CD8':0x800B0CD8, 'D_8009317C':0x8009317C, 'D_8009D170':0x8009D170,
+    'g_GameStateFlagsWord':0x800B0CD8, 'D_8009317C':0x8009317C, 'D_8009D170':0x8009D170,
     'Spu_SetStreamModeA':0x80087198, 'Spu_SetStreamModeB':0x80087414,
     'CdRom_ReadSectors':0x8006E6D4, 'CdRom_PollReady':0x8006E7E8,
     'Akao_StepNoteSequencer':0x800871AC, 'Spu_UploadSampleBlockBlocking':0x80087090,
@@ -74,7 +74,7 @@ class ReadSectorsTests(unittest.TestCase):
             m.hook_add(UC_HOOK_CODE,hook)
             for phase,kind,first_result,blocking,remaining,maximum,mutate,index,channel,lo,hi,archive,image_base in cases:
                 case=(candidate,phase,kind,first_result,blocking,remaining,maximum,mutate,index,channel,lo,hi,archive,image_base)
-                state=syms['D_800B0CD8'];table=syms['D_8009317C'];globals_=syms['D_8009D170']
+                state=syms['g_GameStateFlagsWord'];table=syms['D_8009317C'];globals_=syms['D_8009D170']
                 put(state,b'\xA5'*0x104);put(state+0xF0,bytes([phase]));word(state+0x100,image_base)
                 put(table,b'\x5A'*32)
                 word(table,archive)

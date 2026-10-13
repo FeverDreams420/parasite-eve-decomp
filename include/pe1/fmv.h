@@ -25,7 +25,7 @@
  *   (token values are per-scene; the point is FMV gets a distinct token and
  *    returns to a gameplay token on completion.)
  *
- *   FMV-ACTIVE FLAGS in D_800B0CD8[0] (0x800B0CD8): the bits set only while a
+ *   FMV-ACTIVE FLAGS in g_GameStateFlagsWord[0] (0x800B0CD8): the bits set only while a
  *   movie plays are 0x8000 | 0x200 | 0x40 = 0x8240. They clear on exit. (0x2000
  *   is a general "game running" bit that persists into gameplay; 0x40000000 is
  *   always set here.)

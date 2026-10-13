@@ -124,7 +124,7 @@ void Draw_InitPipeline(void) {
     }
 
     one = 1;
-    Scene_SetStoryDay(B(D_800B0CE4));
+    Scene_SetStoryDay(g_GameState.current_story_day);
     while (Scene_LoadEntityTextures() == one) {
     }
 

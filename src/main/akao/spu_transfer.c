@@ -154,7 +154,7 @@ void Spu_InitVoiceState(void) {
     g_AkaoSeqPendingFlags = reset;
     g_AkaoSeqBusyFlags = reset;
 
-    voice = D_800B8AC0;
+    voice = g_AkaoSequencerTracks;
     for (i = 0; i < AKAO_VOICE_COUNT; i++, voice++) {
         voice->track.flags = 0;
         voice->track.assigned_voice_index = AKAO_VOICE_COUNT;

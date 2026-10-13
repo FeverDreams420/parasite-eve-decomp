@@ -984,7 +984,7 @@ void Menu_DrawSaveMetadataPreview(void) {
 /* Name entry screen input: the two page handlers share one object
  * (contiguous at 0x8004E074, private data and helpers).
  *
- * The game-state flags are cleared through their scalar symbol D_800B0CD8,
+ * The game-state flags are cleared through their scalar symbol g_GameStateFlagsWord,
  * which keeps retail's absolute lui/lw and lui/sw under cc1 -G8. */
 
 int Menu_StepNameEntry(MenuWidgetNode *parent, unsigned int flags)
@@ -1045,7 +1045,7 @@ int Menu_StepNameEntry(MenuWidgetNode *parent, unsigned int flags)
                 Inv_SetActiveList(9, 0);
                 if (!g_MenuRenameTargetRecord)
                     Menu_CopyPromptCodes((unsigned char *)Save_GetActiveMetadataBuffer());
-                D_800B0CD8 &= ~0x8000;
+                g_GameStateFlagsWord &= ~0x8000;
                 Menu_PlayConfirmSound();
             } else {
                 Menu_PlayErrorSound();
@@ -1109,7 +1109,7 @@ int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input) {
                 if (g_MenuRenameTargetRecord == 0) {
                     Menu_CopyPromptCodes((unsigned char *)Save_GetActiveMetadataBuffer());
                 }
-                D_800B0CD8 &= 0xFFFF7FFF;
+                g_GameStateFlagsWord &= 0xFFFF7FFF;
                 Menu_PlayConfirmSound();
             } else {
                 Menu_PlayErrorSound();
@@ -1221,7 +1221,7 @@ name_input_back:
                 if (g_MenuRenameTargetRecord == 0) {
                     Menu_CopyPromptCodes((unsigned char *)Save_GetActiveMetadataBuffer());
                 }
-                D_800B0CD8 &= 0xFFFF7FFF;
+                g_GameStateFlagsWord &= 0xFFFF7FFF;
                 Menu_PlayConfirmSound();
             } else {
                 Menu_PlayErrorSound();

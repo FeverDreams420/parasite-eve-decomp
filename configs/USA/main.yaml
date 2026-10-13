@@ -343,7 +343,7 @@ segments:
       # (g_MemCardProgressPrimList), the save/load entry point, the rename screen and
       # the name entry page input handlers (private data and helpers). One -G8
       # FORCE_G0 unit with COMMON $gp words; the name entry clears the game-state flags
-      # through D_800B0CD8, which retires its old cc1 -G4096 marker.
+      # through g_GameStateFlagsWord, which retires its old cc1 -G4096 marker.
       - [0x3CCB4, c, menu/save_screens]
       # Inventory screens (G0464): equip and inventory screen builders and the equip
       # list container draw (helper calls, G0462); weapon and armor list draws, the

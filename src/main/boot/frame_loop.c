@@ -149,7 +149,7 @@ void Boot_RunFrame(void)
             VSync(2);
             }
 
-            if (!(D_800B0CD8 & 0x4200) &&
+            if (!(g_GameStateFlagsWord & 0x4200) &&
                 (g_FieldPadBits & 0x0F000006u) == 0x0F000006u) {
                 Boot_Shutdown();
             }
@@ -165,7 +165,7 @@ loop_end_check:
         } while (g_SceneDispatchCur == D_8009D280);
     }
 
-    if (D_800B0CD8 & 0x200) {
+    if (g_GameStateFlagsWord & 0x200) {
         clear_rect.x = 0;
         clear_rect.y = 0;
         clear_rect.w = 0x140;
@@ -177,12 +177,12 @@ loop_end_check:
     Render_Noop(1);
     Asset_UnloadTableEntries();
     g_GameStateFlags = (g_GameStateFlags | 0x40) & ~0x3800u;
-    status = D_800B0CD8 | 2;
+    status = g_GameStateFlagsWord | 2;
     {
         u32 first_status = status & ~0x800u;
-        D_800B0CD8 = first_status;
+        g_GameStateFlagsWord = first_status;
         if (status & 0x200)
-            D_800B0CD8 = (first_status | 2u) & ~0x8200u;
+            g_GameStateFlagsWord = (first_status | 2u) & ~0x8200u;
     }
 }
 

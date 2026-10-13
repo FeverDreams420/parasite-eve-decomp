@@ -79,7 +79,7 @@ void Spu_StepReverbLoad(void)
         g_AkaoGlobalD2CCSlideCounter--;
         value = oldGlobalParam + g_AkaoGlobalD2CCSlideStep;
         if ((value & 0xFF0000) != (oldGlobalParam & 0xFF0000)) {
-            track = (AkaoTrack *)D_800B8AC0;
+            track = (AkaoTrack *)g_AkaoSequencerTracks;
             for (count = 24; count != 0; --count, ++track)
                 track->update_flags |= 0x10;
         }
@@ -91,7 +91,7 @@ void Spu_StepReverbLoad(void)
         bank->pitch_slide_duration--;
         value = oldPrimaryPitch + bank->pitch_delta;
         if ((value & 0x7F0000) != (oldPrimaryPitch & 0x7F0000))
-            Seq_MarkDirtyTracks((AkaoTrack *)D_800B8AC0);
+            Seq_MarkDirtyTracks((AkaoTrack *)g_AkaoSequencerTracks);
         ((AkaoSequencerBank *)D_8009D2C8)->pitch_current = value;
         bank = (AkaoSequencerBank *)((AkaoBankCursor *)&D_8009D2C8)->bank;
     }
@@ -170,7 +170,7 @@ void Akao_Tick(void)
             D_8009D2C8->timing.tick_accumulator &= 0xFFFF;
             do {
                 bit = 1;
-                track = D_800B8AC0;
+                track = g_AkaoSequencerTracks;
                 mask = D_8009D2C8->timing.active_voice_mask;
                 do {
                     if (mask & bit) {
@@ -231,7 +231,7 @@ void Akao_Tick(void)
         if ((D_8009D2C8->timing.tick_accumulator & 0xFFFF0000) || (g_AkaoSeqPendingFlags & 4)) {
             D_8009D2C8->timing.tick_accumulator &= 0xFFFF;
             bit = 1;
-            track = &D_800B8AC0[24];
+            track = &g_AkaoSequencerTracks[24];
             mask = D_8009D2C8->timing.active_voice_mask;
             do {
                 if (mask & bit) {
@@ -275,7 +275,7 @@ void Akao_Tick(void)
     if (!D_8009D2C8->timing.active_voice_mask && !D_8009D2C8->timing.pending_restore_mask
         && D_8009D2C8[1].timing.active_voice_mask) {
         Akao_CopyWords(D_8009D2C8[1].words, D_8009D2C8->words, sizeof(AkaoTickBank));
-        Akao_CopyWords(D_800B8AC0[24].words, D_800B8AC0[0].words, sizeof(AkaoTickTrack) * 24);
+        Akao_CopyWords(g_AkaoSequencerTracks[24].words, g_AkaoSequencerTracks[0].words, sizeof(AkaoTickTrack) * 24);
         D_8009D2C8[1].timing.bank_id = 0;
         D_8009D2C8[1].timing.active_voice_mask = 0;
     }

@@ -1200,7 +1200,7 @@ void Akao_SetVoiceKeyOff(AkaoTrack *voice, u32 voice_mask, int index) {
         }
 
         if ((flags & AKAO_TRACK_FLAG_VOICE_ALLOCATED) != 0) {
-            target = &D_800B8AC0[voice->voice_index].track;
+            target = &g_AkaoSequencerTracks[voice->voice_index].track;
             target->volume_left = voice->volume_left;
             target->volume_right = voice->volume_right;
             base_volume = voice->pitch_slide_current >> 1;

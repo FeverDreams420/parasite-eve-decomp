@@ -18,7 +18,7 @@
  */
 
 extern u8 g_SceneAreaType;
-extern s8 D_800B0CE4[];
+extern s8 g_CurrentStoryDay[];
 extern u32 g_PeImageBaseLba;
 extern u16 g_PeImageSectorTable[], g_PeImageSectorBoundsNext[];
 extern u8 g_EntityRenderScratch[];

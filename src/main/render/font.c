@@ -162,8 +162,8 @@ int Render_LoadFontGlyphAlt(void)
     u8 duplicate;
     u8 j;
 
-    state = &D_800B0DD8;
     range = &g_PeImageSectorTable[79];
+    state = &g_DiscLoadState;
     do {
         read_status = CdRom_ReadSectorsFromLba(state->baseLba + range[0],
                                              state->buffer,

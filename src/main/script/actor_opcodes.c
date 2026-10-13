@@ -1214,7 +1214,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         if (locals.slot + 2U < 2U) {
             break;
         }
-        *args->result = Akao_Cmd_10(D_800B0CE8.voice_banks[locals.slot]);
+        *args->result = Akao_Cmd_10(g_AkaoRuntimeState.voice_banks[locals.slot]);
         Akao_Cmd_C0_WithSlot(0, 0x7F);
         CdRom_RegisterAudioSlot(locals.slot, *args->arg1, *args->result, 0x7F);
         break;
@@ -1230,7 +1230,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
             break;
         }
         *args->result = Akao_Cmd_19_Then_C0(
-            D_800B0CE8.voice_banks[locals.slot], *args->arg2);
+            g_AkaoRuntimeState.voice_banks[locals.slot], *args->arg2);
         CdRom_RegisterAudioSlot(locals.slot, *args->arg1, *args->result,
                                   *args->arg2);
         break;
@@ -1317,7 +1317,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         break;
     case 0x12C:
         *args->result = Akao_SendTableCommand(
-            D_800B0CE8.archive, *args->arg1, *args->arg2, *args->arg3,
+            g_AkaoRuntimeState.archive, *args->arg1, *args->arg2, *args->arg3,
             *args->arg4);
         break;
     case 0x12D:
@@ -1366,10 +1366,10 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         Akao_Cmd_F1();
         break;
     case 0x15E:
-        D_800B0CE8.position_y = *args->arg1;
-        D_800B0CE8.position_x = *args->arg2;
-        D_800B0CE8.position_w = *args->arg3;
-        D_800B0CE8.position_z = *args->arg4;
+        g_AkaoRuntimeState.position_y = *args->arg1;
+        g_AkaoRuntimeState.position_x = *args->arg2;
+        g_AkaoRuntimeState.position_w = *args->arg3;
+        g_AkaoRuntimeState.position_z = *args->arg4;
         break;
     case 0x15F:
         *args->result = Asset_Find08w(
@@ -1410,9 +1410,9 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
                                      ((Pe1Fixed16_16 *)args->arg4)->parts.integer);
         break;
     case 0x190:
-        base = D_800B0CE8.archive;
+        base = g_AkaoRuntimeState.archive;
         table_info = ((AkaoArchiveSection *)(base +
-            ((AkaoArchiveHeader *)D_800B0CE8.archive)->section_offset))->asset_table;
+            ((AkaoArchiveHeader *)g_AkaoRuntimeState.archive)->section_offset))->asset_table;
         base += table_info & 0x3FFFFF;
         count = 0;
         entry_count = table_info >> 22;
@@ -1455,12 +1455,12 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         *args->result = locals.slot;
         break;
     case 0x195:
-        D_800B0CE8.defer_enabled = 1;
+        g_AkaoRuntimeState.defer_enabled = 1;
         break;
     case 0x196:
     case 0x197:
-        if (D_800B0CE8.deferred_count < 0x10) {
-            deferred = &g_DeferredAkaoCommands[D_800B0CE8.deferred_count];
+        if (g_AkaoRuntimeState.deferred_count < 0x10) {
+            deferred = &g_DeferredAkaoCommands[g_AkaoRuntimeState.deferred_count];
             deferred->actor_type = g_CurrentEntity->type_id;
             deferred->actor_id = g_CurrentEntity->sub_id;
             deferred->command = *args->arg1;
@@ -1471,7 +1471,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
             } else {
                 deferred->arg3 = *args->arg4;
             }
-            deferred_count = &D_800B0CE8.deferred_count;
+            deferred_count = &g_AkaoRuntimeState.deferred_count;
             (*deferred_count)++;
         }
         break;
@@ -1479,15 +1479,15 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         volume = *args->arg1;
         locals.volumes[3] = 0;
         locals.volumes[1] = 0;
-        D_800B0CE8.cd_volume = volume;
+        g_AkaoRuntimeState.cd_volume = volume;
         locals.volumes[2] = volume;
         locals.volumes[0] = volume;
         DsMix((CdlATV *)locals.volumes);
         break;
 archive_match:
-        D_800B0CE8.selected_id = current->id;
-        D_800B0CE8.selected_value = current->value8;
-        D_800B0CE8.selected_data = D_800B0CE8.archive +
+        g_AkaoRuntimeState.selected_id = current->id;
+        g_AkaoRuntimeState.selected_value = current->value8;
+        g_AkaoRuntimeState.selected_data = g_AkaoRuntimeState.archive +
                                     (current->data_offset & 0xFFFFFF);
         break;
     case 0x19A:

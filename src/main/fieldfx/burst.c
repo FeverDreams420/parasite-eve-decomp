@@ -564,7 +564,7 @@ int BurstEffect_InitTarget(void) {
     g_BurstEffectTargetPosition.y = data->render_object.target_y;
     g_BurstEffectTargetPosition.z = data->render_object.target_z;
 
-    if (D_800B0CE8.reset_pending != 0) {
+    if (g_AkaoRuntimeState.reset_pending != 0) {
         Akao_Cmd_24(g_FieldEffectSoundHeader, 0, 0x80, 0x7F);
     }
 
@@ -885,7 +885,7 @@ int BurstEffectB_InitTarget(void) {
     g_BurstEffectBTargetPosition.y = data->render_object.target_y;
     g_BurstEffectBTargetPosition.z = data->render_object.target_z;
 
-    if (D_800B0CE8.reset_pending != 0) {
+    if (g_AkaoRuntimeState.reset_pending != 0) {
         Akao_Cmd_24(g_FieldEffectSoundHeader, 0, 0x80, 0x7F);
     }
 

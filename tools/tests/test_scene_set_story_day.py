@@ -23,8 +23,8 @@ class SceneSetStoryDayTests(unittest.TestCase):
         entry, stop, state, flags_address, lock = 0x8006C4C4, 0x80010000, 0x800B0CD8, 0x8009D1A0, 0x8009D2E8
         retail = (ROOT/'assets/USA/main.exe').read_bytes()[0x5CCC4:0x5CDBC]
         symbols = dict(g_GameState=state, g_GameStateFlags=flags_address,
-                       D_8009D2E8=lock, D_800B0CE4=state+12,
-                       D_800B0CE5=state+13, D_800B0CE6=state+14)
+                       D_8009D2E8=lock, g_CurrentStoryDay=state+12,
+                       g_PendingStoryDay=state+13, D_800B0CE6=state+14)
         with tempfile.TemporaryDirectory() as directory:
             work = Path(directory)
             script = ''.join(f'{name} = 0x{address:X};\n' for name, address in symbols.items())

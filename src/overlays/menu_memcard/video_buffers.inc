@@ -72,7 +72,7 @@ s32 MENUCARD_INIT_VIDEO_BUFFERS_NAME(s8 count, u8 **buffers) {
     rectangle.w = 192;
     rectangle.h = 256;
     MoveImage(&rectangle, 512, 0);
-    if (!(D_800B0CD8 & 0x08000000)) {
+    if (!(g_GameStateFlagsWord & 0x08000000)) {
         rectangle.x = 0;
         rectangle.y = 448;
         rectangle.w = 320;

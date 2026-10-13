@@ -14,6 +14,6 @@ typedef struct FontGlyphLoadState {
 /* PE.IMG base LBA, and the font loader's destination pointer. The process
  * manager, the boot disc table, the scene loader and the memcard video
  * player read sectors relative to baseLba. */
-extern FontGlyphLoadState D_800B0DD8;
+extern FontGlyphLoadState g_DiscLoadState;
 
 #endif /* PE1_DISC_LOAD_STATE_H */

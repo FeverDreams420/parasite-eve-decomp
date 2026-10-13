@@ -390,7 +390,7 @@ The marker sets that unified the most units:
   `ASPSX_VERSION` 2.70/2.77. `-fno-force-mem` turned out unnecessary for
   `Battle_FinalizeAttackResult` and the geometry control entries.
 - Three one-line C changes from `docs/REORGANIZATION_G_FLAGS.md`: the name
-  entry clears the game-state flags through `D_800B0CD8` (#29), the player
+  entry clears the game-state flags through `g_GameStateFlagsWord` (#29), the player
   palette sets the story-day flag through `&g_GameState.story_day_flags`
   (#14), and `g_RenderCounter` is declared unsized (#19).
 
@@ -705,7 +705,7 @@ Crutches still in place (lev is the only metric):
   just before its first store while retail loads it early into v1, which
   shifts every later register (best lev 92).
 - `Boot_InitMemoryLayout` (2 pins, 4 pointer-integer casts, volatile
-  `g_SceneBankAssetSource`..`D_800B0E68` views): without the pins the buffer cursors and
+  `g_SceneBankAssetSource`..`g_StrFileDirectory` views): without the pins the buffer cursors and
   the 0x8000/0x48000 constants trade registers in every declaration order
   (lev 44), and without volatile the scheduler interleaves the game-state
   stores with the render buffer stores differently.
@@ -1073,8 +1073,8 @@ How the earlier groups were closed, for the next symbols of the same kind:
 - Element views of one table became a union element type
   (`GteSineWord` for the sine table `rcossin_tbl`) or the record the data is
   (`FieldGlowSprite` for the scene_e08 sprites, `DISPENV`/`DRAWENV` for
-  `D_800BCE80`/`D_800BCDC8`, `AkaoTickTrack` for `D_800B8AC0`,
-  `FontGlyphLoadState` for `D_800B0DD8`). Where a function needs the old
+  `D_800BCE80`/`D_800BCDC8`, `AkaoTickTrack` for `g_AkaoSequencerTracks`,
+  `FontGlyphLoadState` for `g_DiscLoadState`). Where a function needs the old
   array arithmetic, it casts the table at the use.
 - Per-overlay data declared differently by two headers of one overlay got
   one owner header in the overlay directory (`room_m350_data.h`,
@@ -1091,7 +1091,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
   (`(*(T *)&sym)`) produce the same code, so the word is declared as the
   scalar and the record users read it through a view: `D_800BCF88` is the
   scroll state's flags word (`volatile int`, the grab effects' absolute
-  read-modify-write) and `g_GeomScroll` the record view; `D_800B0CD8` is
+  read-modify-write) and `g_GeomScroll` the record view; `g_GameStateFlagsWord` is
   `g_GameState.flags` as a `u32` (the frame loop, process manager and CD
   boot read), while every record and array user reads `g_GameState`;
   `D_800B0CE6` is `g_GameState.story_day_flags` as a `u8`. The opposite
@@ -2109,7 +2109,7 @@ What is left, and why:
   the C name moves every overlay reference to a name main lacks until
   overlays link against main's symbols (step 3 below).
 - fx_common's views of main data (`g_FxTextureSetup`, `g_FxCommonSceneIds`,
-  `g_FxCommonGameFlags` on `g_FieldBgTextureSlots`, `D_800B0CD8`) have
+  `g_FxCommonGameFlags` on `g_FieldBgTextureSlots`, `g_GameStateFlagsWord`) have
   types that differ from main's declarations (signed fields, a record over a
   word), so they wait for the same step.
 - `psyq_cd.h`'s halfword view of `g_CdStreamReady` (memory card overlay)
@@ -2296,7 +2296,7 @@ of scope). Recipes, none of which changed a byte:
   with the background texture blob (`shared_buffers` union), the voice bank
   work bounds are `u8 *`, the fade primitives use a `Pe1PrimTag` byte view
   for the `len` byte, and 0x004 is `saved_state_004`. Work-buffer bases
-  (`g_RenderFrontBufferBase` and the `g_SceneBankAssetSource..D_800B0E68` views) are
+  (`g_RenderFrontBufferBase` and the `g_SceneBankAssetSource..g_StrFileDirectory` views) are
   byte pointers.
 - A state pointer stepped by a word index (`Pe1GameStateAddress`), an
   allocation slot addressed by byte offset (`EntityAllocationAddress`), the

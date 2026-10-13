@@ -19,8 +19,8 @@ int Render_LoadFontGlyph(int code)
     u8 *bytePtr;
     FontGlyphLoadState *state;
     u16 *range;
-    state = &D_800B0DD8;
     range = &g_PeImageSectorTable[79];
+    state = &g_DiscLoadState;
     do {
         status = CdRom_ReadSectorsFromLba(state->baseLba + range[0], state->buffer,
                                             range[1] - range[0]);

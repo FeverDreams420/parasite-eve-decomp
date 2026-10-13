@@ -695,7 +695,7 @@ int CdRom_DetectDiscChange(void) {
 int Scene_LoadEntityTexture(void)
 {
     int bank = *D_800B0CE2;
-    u32 lba = D_800B0DD8.baseLba;
+    u32 lba = g_DiscLoadState.baseLba;
     Pe1GameState *state = &g_GameState;
     SceneAssetBlob *blob;
     SceneAssetDirectory *directory;
@@ -845,7 +845,7 @@ s32 Scene_InitEntityPlayer(s32 resume) {
         if (area < 5) {
             saved = g_SavedSceneAreaType;
             if (g_SceneAreaType != saved) {
-                D_800B0CD8 = g_GameState.flags | 0x200000;
+                g_GameStateFlagsWord = g_GameState.flags | 0x200000;
             }
             if ((area >> 1) != ((saved - 0xA) / 2)) {
                 g_DiscChangeFlags |= 4;
@@ -865,7 +865,7 @@ s32 Scene_InitEntityPlayer(s32 resume) {
         return 1;
     case 37:
         g_GameState.story_day_flags |= 4;
-        Scene_SetStoryDay(D_800B0CE4[0]);
+        Scene_SetStoryDay(g_CurrentStoryDay[0]);
         gameState->scene_init_phase = 0x26;
         return 1;
     case 38:
@@ -900,7 +900,7 @@ s32 Scene_InitEntityPlayer(s32 resume) {
             FieldActor *player = g_PlayerEntity;
             player->render_object.header->shadow_radius = player->render_object.hit_cylinder.radius * 2;
         }
-        D_800B0CD8 = g_GameState.flags & ~0x60000;
+        g_GameStateFlagsWord = g_GameState.flags & ~0x60000;
         if (resume) {
             gameState->flags |= 0x80000;
         } else {
@@ -923,10 +923,10 @@ int Scene_SetStoryDay(s32 storyDay) {
     if (storyDay == -1) {
         u8 pending;
         u8 storyFlags;
-        pending = D_800B0CE5;
+        pending = g_PendingStoryDay;
         storyFlags = g_DiscChangeFlags;
         storyDay = (s8)pending;
-        D_800B0CE4[0] = pending;
+        g_CurrentStoryDay[0] = pending;
         g_DiscChangeFlags = storyFlags | 3;
     }
 
@@ -958,7 +958,7 @@ int Scene_SetStoryDay(s32 storyDay) {
 int Scene_LoadEntityTextures(void)
 {
     int area = g_SceneAreaType;
-    int day = D_800B0CE4[0];
+    int day = g_CurrentStoryDay[0];
     u32 lba = g_PeImageBaseLba;
     Pe1GameState *state = &g_GameState;
     SceneAssetView *view;

@@ -60,7 +60,7 @@ void MENUCARD_RESET_DISPLAY_STATE_NAME(void) {
         rect.h = 0x100;
         MoveImage(&rect, 0x140, 0);
 
-        if ((D_800B0CD8 & 0x8000000) == 0) {
+        if ((g_GameStateFlagsWord & 0x8000000) == 0) {
             rect.x = 0x200;
             rect.y = 0x100;
             rect.w = 0x140;

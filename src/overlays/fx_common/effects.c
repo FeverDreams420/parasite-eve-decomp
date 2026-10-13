@@ -129,7 +129,7 @@ void FxCommon_EndSequence(void)
     if (fade == 1) {
         g_SceneAudioSlot0Key = -1;
         g_GameState.scene_audio.tracks.banks[0] = -1;
-        D_800B0CD8 &= ~0x40;
+        g_GameStateFlagsWord &= ~0x40;
         Akao_Cmd_F0();
     }
     Akao_Cmd_F1();

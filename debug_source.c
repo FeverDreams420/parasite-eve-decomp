@@ -90,7 +90,7 @@ extern u8 *D_801D0DF8;
 extern u8 *D_801D0DFC;
 extern u8 D_800B0DBA;
 extern s16 D_800B0DBC;
-extern u32 D_800B0CD8;
+extern u32 g_GameStateFlagsWord;
 extern void func_8007512C(VideoRect *, s32, s32);
 s32 MenuCard_InitVideoBuffers(s8 count, u8 **buffers);
 typedef struct VideoDiscRange
@@ -110,7 +110,7 @@ extern u16 D_80093160;
 extern u16 D_80093162;
 extern void *g_MdecOverlayLoadBase;
 extern u8 *g_CdLoadAreaBase;
-extern u32 D_800B0DD8;
+extern u32 g_DiscLoadState;
 extern u32 D_8009D26C;
 extern s32 func_8006E6A8(u32, void *, s32);
 extern s32 CdRom_PollReady(void);
