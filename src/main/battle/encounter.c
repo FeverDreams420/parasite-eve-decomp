@@ -165,7 +165,7 @@ void Battle_StartEncounter(int mode) {
     int mode_reg;
     u32 initial_flags;
     entity = D_8009D254;
-    g_ActiveActor = (Combatant *)entity->core;
+    g_ActiveActor = entity->core;
     D_8009D1E8 = 0;
     *(u32 *)&D_8009D290 = 0;
     g_BattleModeState = 0;
