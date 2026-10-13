@@ -128,7 +128,6 @@ int Render_DrawSpriteEntry(GeomEntry *input)
         s32 divisor_x;
         s32 remainder_y;
         s32 signed_x;
-        register s32 signed_y asm("$2");
         s32 base_y;
         signed_x = (s16)raw_x;
         mod_x = entry->anim_mod_x;
@@ -137,10 +136,10 @@ int Render_DrawSpriteEntry(GeomEntry *input)
         signed_x += divisor_x;
         scroll_x = signed_x % divisor_x;
         mod_y = entry->anim_mod_y;
-        signed_y = (s16)raw_y;
-        signed_y -= 224;
-        signed_y += mod_y & 0xFFFF;
-        remainder_y = signed_y % (mod_y & 0xFFFF);
+        modulus_y = (s16)raw_y;
+        modulus_y -= 224;
+        modulus_y += mod_y & 0xFFFF;
+        remainder_y = modulus_y % (mod_y & 0xFFFF);
         i = 0;
         raw_x = mod_x - 320;
         scroll_x -= raw_x;
