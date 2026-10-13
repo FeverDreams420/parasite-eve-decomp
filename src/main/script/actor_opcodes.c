@@ -901,7 +901,7 @@ s32 Script_GetAngleToEntity(s32 *args[]) {
     if (angle >= 0x1001) {
         angle -= 0x1000;
     }
-    angle -= (s16)g_CurrentEntity->rot_y;
+    angle -= g_CurrentEntity->rot_y;
     if (angle < 0) {
         angle += 0x1000;
     }
