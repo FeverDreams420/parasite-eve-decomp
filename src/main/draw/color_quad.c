@@ -40,7 +40,7 @@ void Draw_AllocColorQuad(int width, int height) {
     int firstBottom;
     int firstLeft;
     int secondRight;
-    register int secondTop asm("$5");
+    register s16 secondTop asm("$5");
     u32 secondBottom;
     int secondBound;
     int tileY;
@@ -149,8 +149,7 @@ void Draw_AllocColorQuad(int width, int height) {
     packet = second;
     secondRight = ratio + 0xE5;
     secondTop = shadeOffset + 0xAA;
-    asm volatile("" : "=r"(secondRight), "=r"(secondTop)
-        : "0"(secondRight), "1"(secondTop));
+    asm volatile("" : "=r"(secondRight) : "0"(secondRight));
     secondBottom = shadeOffset + 0xAD;
     mask24 = 0xFFFFFF;
     darkColor = 0x303030;
