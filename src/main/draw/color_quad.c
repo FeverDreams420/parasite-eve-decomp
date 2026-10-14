@@ -42,7 +42,7 @@ void Draw_AllocColorQuad(int width, int height) {
     int firstLeft;
     int coordinate;
     s16 secondTop;
-    u32 secondBottom;
+    u32 packetValue;
     int secondBound;
     int tileY;
     register u32 tileMask24 asm("$5");
@@ -52,7 +52,6 @@ void Draw_AllocColorQuad(int width, int height) {
     int tileCode;
     register u32 modeMask24 asm("$4");
     u32 modeMaskTop;
-    register u32 modeColor2 asm("$7");
     u32 *modeOt;
     u32 modeTag;
     u32 secondTag;
@@ -152,7 +151,7 @@ void Draw_AllocColorQuad(int width, int height) {
     packet = second;
     coordinate = ratio + 0xE5;
     secondTop = shadeOffset + 0xAA;
-    secondBottom = shadeOffset + 0xAD;
+    packetValue = shadeOffset + 0xAD;
     mask24 = 0xFFFFFF;
     value = 0x303030;
     color = 0x181818;
@@ -177,7 +176,7 @@ void Draw_AllocColorQuad(int width, int height) {
     packet->x0 = packet->x2;
     packet->x3 = secondBound;
     packet->x1 = secondBound;
-    packet->y3 = secondBottom;
+    packet->y3 = packetValue;
     /* The X stores are complete; reuse the coordinate scratch for Y. */
     coordinate = packet->y3;
     packet->y2 = coordinate;
@@ -188,8 +187,8 @@ void Draw_AllocColorQuad(int width, int height) {
     g_DrawTextDimmed = 0;
     ot = g_DrawOrderingTableEntry;
     packet->tag = (secondTag & tileMask24) | (*ot & mask24);
-    secondBottom = *ot & tileMask24;
-    linkHigh = secondBottom;
+    packetValue = *ot & tileMask24;
+    linkHigh = packetValue;
     old = g_DrawPacketCursor;
     link.packet = packet;
     *ot = linkHigh | (link.word & mask24);
@@ -242,13 +241,14 @@ void Draw_AllocColorQuad(int width, int height) {
     }
     modeMask24 = 0xFFFFFF;
     color = 0x808080;
-    modeColor2 = 0x400000;
+    /* The previous packet is linked; reuse its scratch word for the color. */
+    packetValue = 0x400000;
     modeMaskTop = 0xFF000000;
     modeTag = drawMode->tag;
     modeOt = g_DrawOrderingTableEntry;
-    modeColor2 |= shadedColorLow;
+    packetValue |= shadedColorLow;
     g_DrawPrimColor = color;
-    g_DrawColorShaded = modeColor2;
+    g_DrawColorShaded = packetValue;
     drawMode->tag = (modeTag & modeMaskTop) | (*modeOt & modeMask24);
     link.packet = drawMode;
     *modeOt = (*modeOt & modeMaskTop) | (link.word & modeMask24);
