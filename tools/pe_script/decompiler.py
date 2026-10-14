@@ -1,0 +1,971 @@
+"""Parasite Eve 1 Script Decompiler (Scene VM & FieldFx VM).
+
+Converts binary `taskBlock` (`RelocBlock`) archives and `FieldFx` room scripts
+into a structured, human-readable C-like DSL that round-trips 100% byte-for-byte.
+"""
+
+from __future__ import annotations
+import struct
+from dataclasses import dataclass, field
+from typing import Any
+
+from tools.pe_script.mapping import (
+    ENUM_GROUPS,
+    EXPR_OPS,
+    GLOBAL_VARS,
+    MODE_GLOBAL,
+    MODE_IMM,
+    MODE_LOCAL,
+    MODE_REG,
+    MODE_ROOM,
+    OPCODES_BY_ID,
+)
+from tools.scripts.pe1_text import _CODE_TO_CH
+
+
+# ---------------------------------------------------------------------------
+# Expression AST nodes
+# ---------------------------------------------------------------------------
+@dataclass(frozen=True)
+class LeafExpr:
+    mode: int
+    value: int
+
+    def format(self, arg_type: str = "int", vec3_kind_val: int | None = None) -> str:
+        if self.mode == MODE_IMM:
+            return format_immediate(self.value, arg_type, vec3_kind_val)
+        if self.mode == MODE_LOCAL:
+            return f"local[{self.value}]"
+        if self.mode == MODE_GLOBAL:
+            name = GLOBAL_VARS.get(self.value)
+            if name is not None:
+                return f"global[{name}]"
+            return f"global[{self.value}]"
+        if self.mode == MODE_ROOM:
+            return f"room[{self.value}]"
+        if self.mode == MODE_REG:
+            return f"reg[{self.value}]"
+        raise ValueError(f"Unknown operand mode {self.mode}")
+
+
+@dataclass(frozen=True)
+class UnaryExpr:
+    eop: int
+    operand: ExprNode
+
+    def format(self, arg_type: str = "int", vec3_kind_val: int | None = None) -> str:
+        spec = EXPR_OPS[self.eop]
+        if spec.is_func:
+            return f"{spec.symbol}({self.operand.format()})"
+        inner = self.operand.format()
+        if isinstance(self.operand, (BinaryExpr, UnaryExpr)):
+            return f"{spec.symbol}({inner})"
+        return f"{spec.symbol}{inner}"
+
+
+@dataclass(frozen=True)
+class BinaryExpr:
+    eop: int
+    lhs: ExprNode
+    rhs: ExprNode
+
+    def format(self, arg_type: str = "int", vec3_kind_val: int | None = None) -> str:
+        spec = EXPR_OPS[self.eop]
+        if spec.is_func:
+            return f"{spec.symbol}({self.lhs.format()}, {self.rhs.format()})"
+        lhs_str = self.lhs.format()
+        rhs_str = self.rhs.format()
+        if isinstance(self.lhs, BinaryExpr) and not EXPR_OPS[self.lhs.eop].is_func:
+            if EXPR_OPS[self.lhs.eop].precedence < spec.precedence:
+                lhs_str = f"({lhs_str})"
+        if isinstance(self.rhs, BinaryExpr) and not EXPR_OPS[self.rhs.eop].is_func:
+            if EXPR_OPS[self.rhs.eop].precedence <= spec.precedence:
+                rhs_str = f"({rhs_str})"
+        return f"{lhs_str} {spec.symbol} {rhs_str}"
+
+
+ExprNode = LeafExpr | UnaryExpr | BinaryExpr
+
+
+def _to_s32(val: int) -> int:
+    val &= 0xFFFFFFFF
+    return val - 0x100000000 if val & 0x80000000 else val
+
+
+def format_fixed16(val: int) -> str:
+    uval = val & 0xFFFFFFFF
+    sval = _to_s32(uval)
+    # Exact quarters (.0, .25, .5, .75) in 16.16 fixed-point
+    if (uval & 0x3FFF) == 0 and -0x80000000 <= sval <= 0x7FFFFFFF:
+        fval = sval / 65536.0
+        if (uval & 0xFFFF) == 0:
+            return f"{int(sval >> 16)}.0fp"
+        if (uval & 0x7FFF) == 0:
+            return f"{fval:.1f}fp"
+        return f"{fval:.2f}fp"
+    return f"0x{uval:08X}"
+
+
+def format_immediate(val: int, arg_type: str = "int", vec3_kind_val: int | None = None) -> str:
+    uval = val & 0xFFFFFFFF
+    sval = _to_s32(uval)
+
+    if arg_type in ENUM_GROUPS:
+        enum_map = ENUM_GROUPS[arg_type]
+        if sval in enum_map:
+            return enum_map[sval]
+
+    if arg_type == "label" or arg_type == "poly_label":
+        prefix = "poly" if arg_type == "poly_label" else "label"
+        return f"@{prefix}_{uval:04X}"
+
+    if arg_type == "label_or_neg":
+        if sval < 0:
+            return str(sval)
+        return f"@label_{uval:04X}"
+
+    if arg_type == "fixed":
+        return format_fixed16(uval)
+
+    if arg_type == "fixed_if_pos":
+        if vec3_kind_val in (0, 1):
+            return format_fixed16(uval)
+        return str(sval) if -0x10000 < sval < 0x10000 else f"0x{uval:08X}"
+
+    if arg_type == "hex":
+        if 0 <= uval <= 9:
+            return str(uval)
+        return f"0x{uval:X}"
+
+    # Default "int": decimal for [-65536..65536], hex for bitmasks / large constants
+    if -0x10000 <= sval <= 0x10000:
+        return str(sval)
+    return f"0x{uval:08X}"
+
+
+# ---------------------------------------------------------------------------
+# Low-level decoded instruction / statement representations
+# ---------------------------------------------------------------------------
+@dataclass
+class RawInstruction:
+    hw_offset: int
+    opcode: int
+    modes: tuple[int, ...]
+    args: tuple[int, ...]
+
+    @property
+    def word_len(self) -> int:
+        return 2 + len(self.args)
+
+    @property
+    def end_hw(self) -> int:
+        return self.hw_offset + self.word_len * 2
+
+
+@dataclass
+class FoldedStmt:
+    start_hw: int
+    instr_hw: int
+    end_hw: int
+    kind: str  # "jump", "jiz", "cond_branch", "assign", "fixed_op", "call", "polygon"
+    opcode: int = 0
+    exprs: list[ExprNode] = field(default_factory=list)
+    target_hw: int | None = None
+    reg_override: int | None = None
+    vertices: list[tuple[int, int]] = field(default_factory=list)
+    comment: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# High-level structured AST nodes
+# ---------------------------------------------------------------------------
+@dataclass
+class BlockStmt:
+    kind: str  # "while", "if", "case_if", "leaf"
+    start_hw: int
+    end_hw: int
+    cond: ExprNode | None = None
+    rhs_cond: ExprNode | None = None
+    then_body: list[BlockStmt] = field(default_factory=list)
+    else_body: list[BlockStmt] = field(default_factory=list)
+    else_start_hw: int | None = None
+    else_jump_reg_override: int | None = None
+    leaf: FoldedStmt | None = None
+    reg_override: int | None = None
+
+
+# ---------------------------------------------------------------------------
+# Room Dialogue Decoder (for helpful inline comments)
+# ---------------------------------------------------------------------------
+def extract_room_dialogues(room_bytes: bytes) -> dict[int, str]:
+    """Extract English dialogue strings from a room archive's taskSlots[1]."""
+    if len(room_bytes) < 8:
+        return {}
+    _, dir_off = struct.unpack_from("<II", room_bytes, 0)
+    if dir_off + 0x34 > len(room_bytes):
+        return {}
+    d = struct.unpack_from("<13I", room_bytes, dir_off)
+    ts_packed = d[8]  # 0x20: taskSlots
+    ts_off = ts_packed & 0x3FFFFF
+    ts_cnt = ts_packed >> 22
+    if ts_cnt < 2 or ts_off + ts_cnt * 8 > len(room_bytes):
+        return {}
+
+    # Slot 1 holds English text in USA PE.IMG
+    blob_off = None
+    for i in range(ts_cnt):
+        _, r1 = struct.unpack_from("<II", room_bytes, ts_off + i * 8)
+        slot = r1 >> 24
+        poff = r1 & 0xFFFFFF
+        if slot == 1:
+            blob_off = poff
+            break
+    if blob_off is None or blob_off >= len(room_bytes):
+        return {}
+
+    blob = room_bytes[blob_off:]
+    dialogues: dict[int, str] = {}
+    i = 0
+    while i + 3 < len(blob):
+        if blob[i] in (0xFF, 0xF9) and blob[i + 1] == 0xFE:
+            page_id = blob[i + 2]
+            pos = i + 3
+            chars: list[str] = []
+            while pos < len(blob) and blob[pos] not in (0xFF, 0xF9):
+                b = blob[pos]
+                if b == 0xF7:
+                    chars.append(" / ")
+                elif b == 0xF8:
+                    chars.append(" | ")
+                elif b == 0xFA:
+                    chars.append("{Aya}")
+                elif b == 0xFB and pos + 1 < len(blob):
+                    pos += 1
+                    chars.append(f"<FB:{blob[pos]:02X}>")
+                elif b in _CODE_TO_CH:
+                    chars.append(_CODE_TO_CH[b])
+                else:
+                    chars.append(f"<{b:02X}>")
+                pos += 1
+            if page_id not in dialogues:
+                text = " ".join("".join(chars).split())
+                if len(text) > 90:
+                    text = text[:87] + "..."
+                dialogues[page_id] = text
+            i = pos
+        else:
+            i += 1
+    return dialogues
+
+
+# ---------------------------------------------------------------------------
+# Actor Script Decompilation Pipeline
+# ---------------------------------------------------------------------------
+def decode_actor_words(words: tuple[int, ...]) -> tuple[list[RawInstruction], dict[int, int]]:
+    """Decode an actor script's 32-bit word stream into instructions and polygon data words."""
+    if not words:
+        raise ValueError("Empty actor script")
+
+    has_term = words[-1] == 0xFFFFFFFF
+    data_words: set[int] = set()
+    poly_bounds: dict[int, int] = {}  # start_word -> max_end_word
+    instrs: list[RawInstruction] = []
+
+    pc = 0
+    limit = len(words) - 1 if has_term else len(words)
+    unref_start: int | None = None
+
+    while pc < limit:
+        if pc in data_words:
+            if unref_start is not None:
+                poly_bounds[unref_start] = max(poly_bounds.get(unref_start, unref_start), pc)
+                unref_start = None
+            pc += 1
+            continue
+        if pc + 1 >= limit:
+            break
+        hdr = words[pc]
+        tail = words[pc + 1]
+        op = hdr & 0x1FFF
+        argc = (hdr >> 13) & 0xF
+        hdr_unused = hdr >> (17 + 3 * min(argc, 5))
+        tail_unused = tail >> (3 * max(0, argc - 5))
+        modes = tuple(
+            (hdr >> (17 + 3 * k)) & 7 if k < 5 else (tail >> (3 * (k - 5))) & 7
+            for k in range(argc)
+        )
+        # Check if (hdr, tail) is an unreferenced polygon vertex pair (x, z)
+        if (
+            hdr_unused != 0
+            or tail_unused != 0
+            or op not in OPCODES_BY_ID
+            or argc != OPCODES_BY_ID[op].argc
+            or any(m > 4 for m in modes)
+        ):
+            if unref_start is None:
+                unref_start = pc
+            data_words.add(pc)
+            data_words.add(pc + 1)
+            pc += 2
+            continue
+
+        if unref_start is not None:
+            poly_bounds[unref_start] = max(poly_bounds.get(unref_start, unref_start), pc)
+            unref_start = None
+
+        args = words[pc + 2 : pc + 2 + argc]
+        instrs.append(RawInstruction(pc * 2, op, modes, args))
+
+        if op == 0xAC and modes[0] == MODE_IMM and modes[1] == MODE_IMM:
+            w_off = args[0] // 2
+            w_end = w_off + args[1] * 2
+            data_words.update(range(w_off, w_end))
+            poly_bounds[w_off] = max(poly_bounds.get(w_off, w_off), w_end)
+        elif op == 0xE2 and modes[3] == MODE_IMM and modes[2] == MODE_IMM:
+            w_off = args[3] // 2
+            w_end = w_off + args[2] * 2
+            data_words.update(range(w_off, w_end))
+            poly_bounds[w_off] = max(poly_bounds.get(w_off, w_off), w_end)
+        elif op == 0xE3 and modes[0] == MODE_IMM and modes[1] == MODE_IMM:
+            w_off = args[0] // 2
+            w_end = w_off + args[1] * 2
+            data_words.update(range(w_off, w_end))
+            poly_bounds[w_off] = max(poly_bounds.get(w_off, w_off), w_end)
+
+        pc += 2 + argc
+
+    if unref_start is not None:
+        poly_bounds[unref_start] = max(poly_bounds.get(unref_start, unref_start), limit)
+
+    return instrs, poly_bounds
+
+
+def fold_actor_instructions(
+    words: tuple[int, ...],
+    instrs: list[RawInstruction],
+    poly_bounds: dict[int, int],
+    dialogues: dict[int, str] | None = None,
+) -> list[FoldedStmt]:
+    """Fold `EvalExpr` register chains into expression trees and interleave polygon blocks."""
+    # First, compute predicted reg_counter at each instruction using Square's exact rule
+    reg_counter = 0
+    reg_overrides: dict[int, int] = {}
+    for ins in instrs:
+        if ins.opcode == 0x09 and ins.modes[1] == MODE_REG:
+            actual_reg = ins.args[1]
+            if actual_reg != reg_counter:
+                reg_overrides[ins.hw_offset] = actual_reg
+            reg_counter = actual_reg + 1
+        elif ins.opcode in (0x05, 0x1D):
+            pass
+        else:
+            reg_counter = 0
+
+    # Collect all jump/callback target halfword offsets to know where chains must break
+    jump_targets: set[int] = set()
+    for ins in instrs:
+        if ins.opcode == 0x00 and ins.modes[0] == MODE_IMM:
+            jump_targets.add(ins.args[0])
+        elif ins.opcode == 0x05 and ins.modes[1] == MODE_IMM:
+            jump_targets.add(ins.args[1])
+        elif ins.opcode == 0x1D and ins.modes[2] == MODE_IMM:
+            jump_targets.add(ins.args[2])
+        elif ins.opcode == 0x12 and ins.modes[0] == MODE_IMM:
+            jump_targets.add(ins.args[0])
+        elif ins.opcode == 0x14 and ins.modes[1] == MODE_IMM and _to_s32(ins.args[1]) >= 0:
+            jump_targets.add(ins.args[1])
+
+    # Build polygon segments split at every referenced poly start_word
+    sorted_poly_starts = sorted(poly_bounds.keys())
+    poly_stmts_by_hw: dict[int, FoldedStmt] = {}
+    for idx_p, w_start in enumerate(sorted_poly_starts):
+        w_end = poly_bounds[w_start]
+        if idx_p + 1 < len(sorted_poly_starts) and sorted_poly_starts[idx_p + 1] < w_end:
+            w_end = sorted_poly_starts[idx_p + 1]
+        verts: list[tuple[int, int]] = []
+        for w in range(w_start, w_end, 2):
+            verts.append((words[w], words[w + 1]))
+        poly_stmts_by_hw[w_start * 2] = FoldedStmt(
+            start_hw=w_start * 2,
+            instr_hw=w_start * 2,
+            end_hw=w_end * 2,
+            kind="polygon",
+            vertices=verts,
+        )
+
+    # Fold instructions
+    folded_code: list[FoldedStmt] = []
+    i = 0
+    while i < len(instrs):
+        ins = instrs[i]
+        if ins.opcode == 0x09 and ins.modes[1] == MODE_REG:
+            chain = [ins]
+            i += 1
+            while (
+                i < len(instrs)
+                and instrs[i].opcode == 0x09
+                and instrs[i].modes[1] == MODE_REG
+                and instrs[i].hw_offset not in jump_targets
+            ):
+                chain.append(instrs[i])
+                i += 1
+            consumer = instrs[i]
+            i += 1
+
+            reg_map: dict[int, ExprNode] = {}
+            chain_override = reg_overrides.get(chain[0].hw_offset)
+            for c_ins in chain:
+                eop, dst_r, lhs_v, rhs_v = c_ins.args
+                lhs_m, rhs_m = c_ins.modes[2], c_ins.modes[3]
+                lhs_node = reg_map[lhs_v] if lhs_m == MODE_REG else LeafExpr(lhs_m, lhs_v)
+                spec = EXPR_OPS[eop]
+                if spec.is_unary:
+                    reg_map[dst_r] = UnaryExpr(eop, lhs_node)
+                else:
+                    rhs_node = reg_map[rhs_v] if rhs_m == MODE_REG else LeafExpr(rhs_m, rhs_v)
+                    reg_map[dst_r] = BinaryExpr(eop, lhs_node, rhs_node)
+
+            con_exprs: list[ExprNode] = []
+            for km, ka in zip(consumer.modes, consumer.args):
+                if km == MODE_REG:
+                    con_exprs.append(reg_map[ka])
+                else:
+                    con_exprs.append(LeafExpr(km, ka))
+
+            stmt = _make_consumer_stmt(
+                chain[0].hw_offset, consumer, con_exprs, chain_override, dialogues
+            )
+            folded_code.append(stmt)
+        else:
+            con_exprs = [LeafExpr(km, ka) for km, ka in zip(ins.modes, ins.args)]
+            stmt = _make_consumer_stmt(
+                ins.hw_offset, ins, con_exprs, reg_overrides.get(ins.hw_offset), dialogues
+            )
+            folded_code.append(stmt)
+            i += 1
+
+    # Merge folded_code and poly_stmts_by_hw in ascending start_hw order
+    all_stmts = sorted(
+        folded_code + list(poly_stmts_by_hw.values()),
+        key=lambda s: s.start_hw,
+    )
+    return all_stmts
+
+
+def _make_consumer_stmt(
+    start_hw: int,
+    consumer: RawInstruction,
+    exprs: list[ExprNode],
+    reg_override: int | None,
+    dialogues: dict[int, str] | None,
+) -> FoldedStmt:
+    op = consumer.opcode
+    comment = None
+    if dialogues and op in (0x0D, 0xD1) and consumer.modes[0] == MODE_IMM:
+        page_id = consumer.args[0]
+        if page_id in dialogues:
+            comment = f'"{dialogues[page_id]}"'
+
+    if op == 0x00 and consumer.modes[0] == MODE_IMM:
+        return FoldedStmt(
+            start_hw=start_hw,
+            instr_hw=consumer.hw_offset,
+            end_hw=consumer.end_hw,
+            kind="jump",
+            opcode=op,
+            exprs=exprs,
+            target_hw=consumer.args[0],
+            reg_override=reg_override,
+        )
+    if op == 0x05 and consumer.modes[1] == MODE_IMM:
+        return FoldedStmt(
+            start_hw=start_hw,
+            instr_hw=consumer.hw_offset,
+            end_hw=consumer.end_hw,
+            kind="jiz",
+            opcode=op,
+            exprs=[exprs[0]],
+            target_hw=consumer.args[1],
+            reg_override=reg_override,
+        )
+    if op == 0x1D and consumer.modes[2] == MODE_IMM:
+        return FoldedStmt(
+            start_hw=start_hw,
+            instr_hw=consumer.hw_offset,
+            end_hw=consumer.end_hw,
+            kind="cond_branch",
+            opcode=op,
+            exprs=[exprs[0], exprs[1]],
+            target_hw=consumer.args[2],
+            reg_override=reg_override,
+        )
+    if op == 0x0A:
+        return FoldedStmt(
+            start_hw=start_hw,
+            instr_hw=consumer.hw_offset,
+            end_hw=consumer.end_hw,
+            kind="assign",
+            opcode=op,
+            exprs=exprs,
+            reg_override=reg_override,
+        )
+    if op == 0x09 and consumer.modes[1] == MODE_LOCAL:
+        eop = consumer.args[0]
+        return FoldedStmt(
+            start_hw=start_hw,
+            instr_hw=consumer.hw_offset,
+            end_hw=consumer.end_hw,
+            kind="fixed_op",
+            opcode=op,
+            exprs=[exprs[1], BinaryExpr(eop, exprs[2], exprs[3])],
+            reg_override=reg_override,
+        )
+    return FoldedStmt(
+        start_hw=start_hw,
+        instr_hw=consumer.hw_offset,
+        end_hw=consumer.end_hw,
+        kind="call",
+        opcode=op,
+        exprs=exprs,
+        reg_override=reg_override,
+        comment=comment,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Control-Flow Structurer (Lossless 1:1 AST Recovery)
+# ---------------------------------------------------------------------------
+def structure_statements(stmts: list[FoldedStmt]) -> tuple[list[BlockStmt], set[int]]:
+    """Recover nested `while`, `if / else`, `if`, and `case_if` blocks losslessly.
+
+    Returns `(structured_blocks, required_labels)` where `required_labels` is the
+    exact set of halfword offsets that are still referenced by explicit labels
+    (`goto`, `if_not`, `if_ne`, `SpawnThread`, `SetEventHandler`).
+    """
+    hw_to_idx: dict[int, int] = {s.start_hw: idx for idx, s in enumerate(stmts)}
+    end_hw_to_idx: dict[int, int] = {s.end_hw: idx + 1 for idx, s in enumerate(stmts)}
+
+    def struct_slice(lo: int, hi: int) -> list[BlockStmt]:
+        out: list[BlockStmt] = []
+        limit_hw = stmts[hi - 1].end_hw if hi > lo else 0
+        k = lo
+        while k < hi:
+            s = stmts[k]
+
+            # 1. Check for `while (cond) { body }`:
+            # s is `jiz` targeting `@loop_end` (<= limit_hw), and the statement
+            # ending at `@loop_end` is `jump` back to `s.start_hw`, with no polygons inside.
+            if s.kind == "jiz" and s.target_hw is not None and s.end_hw < s.target_hw <= limit_hw:
+                end_idx = end_hw_to_idx.get(s.target_hw)
+                if end_idx is not None and k + 1 < end_idx <= hi:
+                    back_stmt = stmts[end_idx - 1]
+                    if (
+                        back_stmt.kind == "jump"
+                        and back_stmt.target_hw == s.start_hw
+                        and back_stmt.reg_override is None
+                        and not any(x.kind == "polygon" for x in stmts[k + 1 : end_idx])
+                        and not any(
+                            x.kind in ("jiz", "cond_branch") and x.target_hw == s.target_hw
+                            for x in stmts[k + 1 : end_idx - 1]
+                        )
+                    ):
+                        body = struct_slice(k + 1, end_idx - 1)
+                        out.append(
+                            BlockStmt(
+                                kind="while",
+                                start_hw=s.start_hw,
+                                end_hw=s.target_hw,
+                                cond=s.exprs[0],
+                                then_body=body,
+                                reg_override=s.reg_override,
+                            )
+                        )
+                        k = end_idx
+                        continue
+
+            # 2. Check for `if (cond) { then } [else { else }]`:
+            if s.kind == "jiz" and s.target_hw is not None and s.end_hw <= s.target_hw <= limit_hw:
+                target_idx = end_hw_to_idx.get(s.target_hw) if s.target_hw > s.end_hw else k + 1
+                if target_idx is not None and k < target_idx <= hi and not any(
+                    x.kind == "polygon" for x in stmts[k + 1 : target_idx]
+                ):
+                    # Check if `target_idx - 1` is an `else` jump `Jump(@else_end)`
+                    can_else = False
+                    else_end_idx = None
+                    if target_idx > k + 1:
+                        last_then = stmts[target_idx - 1]
+                        if (
+                            last_then.kind == "jump"
+                            and last_then.target_hw is not None
+                            and s.target_hw < last_then.target_hw <= limit_hw
+                            and last_then.reg_override is None
+                        ):
+                            cand_end_idx = end_hw_to_idx.get(last_then.target_hw)
+                            if (
+                                cand_end_idx is not None
+                                and target_idx < cand_end_idx <= hi
+                                and not any(x.kind == "polygon" for x in stmts[target_idx:cand_end_idx])
+                                # Do not claim `last_then` as an `else` jump if an inner branch in
+                                # `then_body` also targets `s.target_hw` (in that case `s.target_hw`
+                                # is the shared end of an outer `if` without `else`).
+                                and not any(
+                                    x.kind in ("jiz", "cond_branch") and x.target_hw == s.target_hw
+                                    for x in stmts[k + 1 : target_idx - 1]
+                                )
+                            ):
+                                can_else = True
+                                else_end_idx = cand_end_idx
+
+                    if can_else and else_end_idx is not None:
+                        then_b = struct_slice(k + 1, target_idx - 1)
+                        else_b = struct_slice(target_idx, else_end_idx)
+                        out.append(
+                            BlockStmt(
+                                kind="if",
+                                start_hw=s.start_hw,
+                                end_hw=stmts[else_end_idx - 1].end_hw,
+                                cond=s.exprs[0],
+                                then_body=then_b,
+                                else_body=else_b,
+                                else_start_hw=s.target_hw,
+                                reg_override=s.reg_override,
+                            )
+                        )
+                        k = else_end_idx
+                        continue
+                    else:
+                        then_b = struct_slice(k + 1, target_idx)
+                        out.append(
+                            BlockStmt(
+                                kind="if",
+                                start_hw=s.start_hw,
+                                end_hw=s.target_hw,
+                                cond=s.exprs[0],
+                                then_body=then_b,
+                                reg_override=s.reg_override,
+                            )
+                        )
+                        k = target_idx
+                        continue
+
+            # 3. Check for `case_if (lhs == rhs) { body }` (0x1D CondBranch):
+            if s.kind == "cond_branch" and s.target_hw is not None and s.end_hw <= s.target_hw <= limit_hw:
+                target_idx = end_hw_to_idx.get(s.target_hw) if s.target_hw > s.end_hw else k + 1
+                if target_idx is not None and k < target_idx <= hi and not any(
+                    x.kind == "polygon" for x in stmts[k + 1 : target_idx]
+                ):
+                    then_b = struct_slice(k + 1, target_idx)
+                    out.append(
+                        BlockStmt(
+                            kind="case_if",
+                            start_hw=s.start_hw,
+                            end_hw=s.target_hw,
+                            cond=s.exprs[0],
+                            rhs_cond=s.exprs[1],
+                            then_body=then_b,
+                            reg_override=s.reg_override,
+                        )
+                    )
+                    k = target_idx
+                    continue
+
+            # Fallback: leaf statement
+            out.append(BlockStmt(kind="leaf", start_hw=s.start_hw, end_hw=s.end_hw, leaf=s))
+            k += 1
+
+        return out
+
+    blocks = struct_slice(0, len(stmts))
+
+    # Collect all halfword offsets that are still referenced by any leaf statement
+    required_labels: set[int] = set()
+
+    def collect_labels(blks: list[BlockStmt]) -> None:
+        for b in blks:
+            if b.kind == "leaf" and b.leaf is not None:
+                lf = b.leaf
+                if lf.kind in ("jump", "jiz", "cond_branch") and lf.target_hw is not None:
+                    required_labels.add(lf.target_hw)
+                elif lf.kind == "call":
+                    if lf.opcode == 0x12 and isinstance(lf.exprs[0], LeafExpr) and lf.exprs[0].mode == MODE_IMM:
+                        required_labels.add(lf.exprs[0].value)
+                    elif (
+                        lf.opcode == 0x14
+                        and isinstance(lf.exprs[1], LeafExpr)
+                        and lf.exprs[1].mode == MODE_IMM
+                        and _to_s32(lf.exprs[1].value) >= 0
+                    ):
+                        required_labels.add(lf.exprs[1].value)
+            else:
+                collect_labels(b.then_body)
+                collect_labels(b.else_body)
+
+    collect_labels(blocks)
+    return blocks, required_labels
+
+
+# ---------------------------------------------------------------------------
+# Code Formatter (DSL Emitter)
+# ---------------------------------------------------------------------------
+def format_actor_blocks(
+    actor_idx: int,
+    blocks: list[BlockStmt],
+    required_labels: set[int],
+    end_hw: int,
+    has_terminator: bool = True,
+) -> list[str]:
+    term_attr = "" if has_terminator else " @no_terminator"
+    lines: list[str] = [f"actor_script actor_{actor_idx}{term_attr} {{"]
+    emitted_labels: set[int] = set()
+
+    def emit_label_if_needed(hw: int, indent: int) -> None:
+        if hw in required_labels and hw not in emitted_labels:
+            emitted_labels.add(hw)
+            pad = "    " * max(0, indent - 1)
+            lines.append(f"{pad}@label_{hw:04X}:")
+
+    def emit_block_list(blks: list[BlockStmt], indent: int) -> None:
+        for b in blks:
+            emit_block(b, indent)
+
+    def emit_block(b: BlockStmt, indent: int, is_else_if: bool = False) -> None:
+        if not is_else_if:
+            emit_label_if_needed(b.start_hw, indent)
+        pad = "    " * indent
+        reg_attr = f" @reg({b.reg_override})" if b.reg_override is not None else ""
+
+        if b.kind == "while":
+            assert b.cond is not None
+            lines.append(f"{pad}while{reg_attr} ({b.cond.format()}) {{")
+            emit_block_list(b.then_body, indent + 1)
+            emit_label_if_needed(b.end_hw - 6, indent + 1)
+            lines.append(f"{pad}}}")
+            return
+
+        if b.kind == "case_if":
+            assert b.cond is not None and b.rhs_cond is not None
+            cmp_str = BinaryExpr(11, b.cond, b.rhs_cond).format()
+            lines.append(f"{pad}case_if{reg_attr} ({cmp_str}) {{")
+            emit_block_list(b.then_body, indent + 1)
+            lines.append(f"{pad}}}")
+            return
+
+        if b.kind == "if":
+            assert b.cond is not None
+            prefix = "" if is_else_if else pad
+            header = f"{prefix}if{reg_attr} ({b.cond.format()}) {{"
+            if is_else_if:
+                lines[-1] = lines[-1] + " else " + header
+            else:
+                lines.append(header)
+            emit_block_list(b.then_body, indent + 1)
+            if b.else_body:
+                assert b.else_start_hw is not None
+                emit_label_if_needed(b.else_start_hw - 6, indent + 1)
+                # Can we format as `else if`? Only if else_start_hw is not a required label
+                # and else_body is a single `if` block!
+                if (
+                    len(b.else_body) == 1
+                    and b.else_body[0].kind == "if"
+                    and b.else_start_hw not in required_labels
+                ):
+                    lines.append(f"{pad}}}")
+                    emit_block(b.else_body[0], indent, is_else_if=True)
+                else:
+                    lines.append(f"{pad}}} else {{")
+                    emit_label_if_needed(b.else_start_hw, indent + 1)
+                    emit_block_list(b.else_body, indent + 1)
+                    lines.append(f"{pad}}}")
+            else:
+                lines.append(f"{pad}}}")
+            return
+
+        # Leaf statement
+        lf = b.leaf
+        assert lf is not None
+        if lf.instr_hw != lf.start_hw:
+            emit_label_if_needed(lf.instr_hw, indent)
+        lf_reg = f"@reg({lf.reg_override}) " if lf.reg_override is not None else ""
+
+        if lf.kind == "polygon":
+            lines.append(f"{pad}polygon @poly_{lf.start_hw:04X} {{")
+            for vx, vz in lf.vertices:
+                lines.append(f"{pad}    ({format_fixed16(vx)}, {format_fixed16(vz)}),")
+            lines.append(f"{pad}}}")
+        elif lf.kind == "jump":
+            lines.append(f"{pad}goto @label_{lf.target_hw:04X};")
+        elif lf.kind == "jiz":
+            lines.append(f"{pad}{lf_reg}if_not ({lf.exprs[0].format()}) goto @label_{lf.target_hw:04X};")
+        elif lf.kind == "cond_branch":
+            cmp_str = BinaryExpr(14, lf.exprs[0], lf.exprs[1]).format()
+            lines.append(
+                f"{pad}{lf_reg}if_ne ({cmp_str}) goto @label_{lf.target_hw:04X};"
+            )
+        elif lf.kind in ("assign", "fixed_op"):
+            lines.append(f"{pad}{lf_reg}{lf.exprs[0].format()} = {lf.exprs[1].format()};")
+        elif lf.kind == "call":
+            spec = OPCODES_BY_ID[lf.opcode]
+            vec3_kind_val = None
+            if lf.opcode in (0x0B, 0x0C) and isinstance(lf.exprs[0], LeafExpr) and lf.exprs[0].mode == MODE_IMM:
+                vec3_kind_val = _to_s32(lf.exprs[0].value)
+            fmt_args = [
+                expr.format(arg_t, vec3_kind_val)
+                for expr, arg_t in zip(lf.exprs, spec.arg_types)
+            ]
+            call_str = f"{pad}{lf_reg}{spec.name}({', '.join(fmt_args)});"
+            if lf.comment:
+                call_str += f" // {lf.comment}"
+            lines.append(call_str)
+
+    emit_block_list(blocks, 1)
+    emit_label_if_needed(end_hw, 1)
+    lines.append("}")
+    return lines
+
+
+# ---------------------------------------------------------------------------
+# Top-Level `RelocBlock` (`taskBlock`) and `PE.IMG` Room Decompilers
+# ---------------------------------------------------------------------------
+def decompile_task_block(
+    task_block: bytes,
+    room_id: int | None = None,
+    dialogues: dict[int, str] | None = None,
+) -> str:
+    """Decompile a binary `taskBlock` (`RelocBlock`) into the structured `.pes` DSL."""
+    u0_off, count = struct.unpack_from("<II", task_block, 0)
+    offsets = list(struct.unpack_from(f"<{count}I", task_block, 8)) + [u0_off]
+
+    u0_bytes = task_block[u0_off:]
+    spawn_cnt = u0_bytes[0]
+    spawns: list[tuple[int, int]] = []
+    for s_idx in range(spawn_cnt):
+        t_id = u0_bytes[1 + 2 * s_idx]
+        sub_id = u0_bytes[2 + 2 * s_idx]
+        spawns.append((t_id, sub_id))
+
+    header_name = f"room_{room_id:03d}" if room_id is not None else "task_block"
+    out_lines: list[str] = [
+        f"// Parasite Eve 1 Scene Script ({header_name})",
+        f"room_script {header_name} {{",
+    ]
+
+    if spawns:
+        spawn_items = ", ".join(f"({t}, {s})" for t, s in spawns)
+        out_lines.append(f"    spawn_table {{ {spawn_items} }}")
+    else:
+        out_lines.append("    spawn_table {}")
+    out_lines.append("")
+
+    for a_idx in range(count):
+        s_start = offsets[a_idx]
+        s_end = offsets[a_idx + 1]
+        words = struct.unpack_from(f"<{(s_end - s_start) // 4}I", task_block, s_start)
+        has_term = bool(words and words[-1] == 0xFFFFFFFF)
+        instrs, poly_bounds = decode_actor_words(words)
+        folded = fold_actor_instructions(words, instrs, poly_bounds, dialogues)
+        blocks, req_labels = structure_statements(folded)
+        end_hw = ((len(words) - 1) if has_term else len(words)) * 2
+        actor_lines = format_actor_blocks(a_idx, blocks, req_labels, end_hw, has_term)
+        for line in actor_lines:
+            out_lines.append("    " + line if line else "")
+        if a_idx + 1 < count:
+            out_lines.append("")
+
+    out_lines.append("}")
+    return "\n".join(out_lines) + "\n"
+
+
+def extract_room_from_pe_img(
+    pe_img: bytes,
+    main_exe: bytes,
+    room_id: int,
+    room_table_offset: int = 0x83B78,
+) -> tuple[bytes, dict[int, str]]:
+    """Extract `(task_block_bytes, dialogues)` for `room_id` from `PE.IMG`."""
+    start, packed = struct.unpack_from("<II", main_exe, room_table_offset + room_id * 8)
+    scratch = packed & 0xFF
+    tex = (packed >> 8) & 0xFFF
+    room_sec = (packed >> 20) & 0xFFF
+    if room_sec == 0:
+        raise ValueError(f"Room {room_id} has 0 room sectors in g_RoomSectorTable")
+
+    room_off = (start + scratch + tex) * 2048
+    room_bytes = pe_img[room_off : room_off + room_sec * 2048]
+    _, dir_off = struct.unpack_from("<II", room_bytes, 0)
+    d = struct.unpack_from("<13I", room_bytes, dir_off)
+    tb_rec_off = d[5] & 0x3FFFFF
+    td_rec_off = d[6] & 0x3FFFFF
+    tb_off = struct.unpack_from("<III", room_bytes, tb_rec_off)[1] & 0xFFFFFF
+    td_off = struct.unpack_from("<III", room_bytes, td_rec_off)[1] & 0xFFFFFF
+
+    task_block = room_bytes[tb_off:td_off]
+    dialogues = extract_room_dialogues(room_bytes)
+    return task_block, dialogues
+
+
+# ---------------------------------------------------------------------------
+# VM 2: FieldFx Room Effect Script Decompiler (`FieldFx_RunScript`)
+# ---------------------------------------------------------------------------
+def decompile_fieldfx_script(words: list[int] | tuple[int, ...], name: str = "fieldfx_0") -> str:
+    """Decompile a 32-bit `FieldFx_RunScript` word array into readable DSL."""
+    targets: set[int] = set()
+    for pc, w in enumerate(words):
+        u = w & 0xFFFFFFFF
+        if u in (0xFFFFFFFF, 0xFFFFFFFE, 0xFFFFFFFD):
+            continue
+        op = u >> 16
+        if 0x1000 <= op <= 0x3FFF:
+            rel = op & 0xFF
+            if rel >= 0x80:
+                rel -= 0x100
+            targets.add(pc + rel)
+
+    lines: list[str] = [f"fieldfx_script {name} {{"]
+    for pc, w in enumerate(words):
+        if pc in targets:
+            lines.append(f"@label_{pc:04X}:")
+        u = w & 0xFFFFFFFF
+        if u == 0xFFFFFFFF:
+            lines.append("    halt;")
+            continue
+        if u == 0xFFFFFFFE:
+            lines.append("    nop;")
+            continue
+        if u == 0xFFFFFFFD:
+            lines.append("    free_all_slots;")
+            continue
+        op = u >> 16
+        operand = u & 0xFFFF
+        s_operand = operand - 0x10000 if operand & 0x8000 else operand
+        if op == 0x0001:
+            lines.append(f"    start_slot({s_operand});")
+        elif op == 0x0002:
+            lines.append(f"    wait({s_operand});")
+        elif 0x0010 <= op <= 0x001F:
+            lines.append(f"    r{op - 0x10} = {s_operand};")
+        elif 0x0020 <= op <= 0x002F:
+            lines.append(f"    r{op - 0x20} += {s_operand};")
+        elif 0x0030 <= op <= 0x003F:
+            lines.append(f"    r{op - 0x30} -= {s_operand};")
+        elif 0x0040 <= op <= 0x004F:
+            lines.append(f"    r{op - 0x40} = vars[{s_operand}];")
+        elif 0x0050 <= op <= 0x005F:
+            lines.append(f"    vars[{s_operand}] = r{op - 0x50};")
+        elif 0x1000 <= op <= 0x1FFF:
+            reg = (op >> 8) & 0xF
+            rel = (op & 0xFF) - 0x100 if (op & 0xFF) >= 0x80 else (op & 0xFF)
+            lines.append(f"    if (r{reg} == {s_operand}) goto @label_{pc + rel:04X};")
+        elif 0x2000 <= op <= 0x2FFF:
+            reg = (op >> 8) & 0xF
+            rel = (op & 0xFF) - 0x100 if (op & 0xFF) >= 0x80 else (op & 0xFF)
+            lines.append(f"    if (r{reg} != {s_operand}) goto @label_{pc + rel:04X};")
+        elif 0x3000 <= op <= 0x3FFF:
+            rel = (op & 0xFF) - 0x100 if (op & 0xFF) >= 0x80 else (op & 0xFF)
+            if operand != 0:
+                lines.append(f"    goto @label_{pc + rel:04X} ({s_operand});")
+            else:
+                lines.append(f"    goto @label_{pc + rel:04X};")
+        else:
+            lines.append(f"    raw_word(0x{u:08X});")
+    lines.append("}")
+    return "\n".join(lines) + "\n"

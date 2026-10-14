@@ -1,0 +1,486 @@
+// Parasite Eve 1 Scene Script (room_354)
+room_script room_354 {
+    spawn_table { (2, 0) }
+
+    actor_script actor_0 {
+        DestroySelf();
+    }
+
+    actor_script actor_1 {
+        SetEventHandler(EVENT_INTERACT, @label_0010);
+        PauseSceneEvents();
+        ExitThread();
+    @label_0010:
+        GetThreadTarget14(local[5]);
+        if (local[5] == 0) {
+            local[16] = 1;
+            StartScreenFadeRect(88, 0, 0, 0, 0);
+            SpawnThread(@label_0B44);
+            SpawnThread(@label_0BB0);
+            SpawnThread(@label_00FA);
+        }
+        if (local[5] == 1) {
+            room[19] = 0;
+            SpawnThread(@label_0270);
+            SpawnThread(@label_06DA);
+            SpawnThread(@label_0084);
+        }
+        ExitThread();
+    @label_0084:
+        while (1) {
+            CheckPadInput(PAD_PRESSED, 2, local[2]);
+            if (local[2] != 0) {
+                AkaoCmd(0xCE, 8, 15, 0, 0, local[4]);
+                StartScreenFade(15);
+                WaitScreenFade();
+                AkaoCmd(0xD0, 0, 0, 0, 0, local[4]);
+                AkaoCmd(0xC9, 8, 0, 0, 0, local[4]);
+                ChangeRoom(0xA9400048);
+                ExitThread();
+            }
+            Wait(1);
+        }
+    @label_00FA:
+        while (1) {
+            CheckPadInput(PAD_PRESSED, 0x20000000, local[2]);
+            if (local[2] != 0) {
+                local[16] = 20;
+            }
+            Wait(1);
+        }
+        while (1) {
+            CheckPadInput(PAD_PRESSED, 0x80000000, local[2]);
+            if (local[2] != 0) {
+                AkaoCmd(0x12C, 1100, 0, 128, 123, local[3]);
+                if (room[19] == 1) {
+                    PlayFieldSfx(2, 0, 11);
+                    StartScreenFade(60);
+                    WaitScreenFade();
+                    ChangeRoom(0xA8065248);
+                    ExitThread();
+                }
+                if (room[19] == 2) {
+                    PlayFieldSfx(2, 0, 11);
+                    StartScreenFade(60);
+                    WaitScreenFade();
+                    ChangeRoom(0xA8065248);
+                    ExitThread();
+                }
+                if (room[19] == 3) {
+                    PlayFieldSfx(2, 0, 11);
+                    StartScreenFade(60);
+                    WaitScreenFade();
+                    ChangeRoom(0xA8065248);
+                    ExitThread();
+                }
+                if (room[19] == 4) {
+                    PlayFieldSfx(2, 0, 11);
+                    StartScreenFade(60);
+                    WaitScreenFade();
+                    ChangeRoom(0xA8065248);
+                    ExitThread();
+                }
+                if (room[19] == 5) {
+                    PlayFieldSfx(2, 0, 11);
+                    StartScreenFade(60);
+                    WaitScreenFade();
+                    ChangeRoom(0xA8065248);
+                    ExitThread();
+                }
+            }
+            Wait(1);
+        }
+    @label_0270:
+        while (1) {
+            CheckPadInput(PAD_PRESSED, 0x80000000, local[2]);
+            if (local[2] != 0) {
+                AkaoCmd(0x12C, 1102, 0, 128, 123, local[3]);
+                room[19] = room[19] - 1;
+                if (room[19] < 0) {
+                    StartScreenFade(30);
+                    WaitScreenFade();
+                    ChangeRoom(0xA8065248);
+                }
+                if (room[19] == 6) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 1);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 1);
+                    Wait(2);
+                }
+                if (room[19] == 5) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 1);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 1);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+                if (room[19] == 4) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 1);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 1);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+                if (room[19] == 3) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 1);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 1);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+                if (room[19] == 2) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 1);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 1);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+                if (room[19] == 1) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 1);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 1);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+                if (room[19] == 0) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 1);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 1);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+            }
+            Wait(1);
+        }
+    @label_06DA:
+        while (1) {
+            CheckPadInput(PAD_PRESSED, 0x20000000, local[2]);
+            if (local[2] != 0) {
+                AkaoCmd(0x12C, 1102, 0, 128, 123, local[3]);
+                room[19] = room[19] + 1;
+                if (room[19] >= 7) {
+                    StartScreenFade(30);
+                    WaitScreenFade();
+                    ChangeRoom(0xA80651C8);
+                }
+                if (room[19] == 6) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 1);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 1);
+                    Wait(2);
+                }
+                if (room[19] == 5) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 1);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 1);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+                if (room[19] == 4) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 1);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 1);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+                if (room[19] == 3) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 1);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 1);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+                if (room[19] == 2) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 1);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 1);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+                if (room[19] == 1) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 0);
+                    SetGeomEntryVisible(1, 1);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 0);
+                    SetGeomEntryVisible(9, 1);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+                if (room[19] == 0) {
+                    Wait(1);
+                    SetGeomEntryVisible(0, 1);
+                    SetGeomEntryVisible(1, 0);
+                    SetGeomEntryVisible(2, 0);
+                    SetGeomEntryVisible(3, 0);
+                    SetGeomEntryVisible(4, 0);
+                    SetGeomEntryVisible(5, 0);
+                    SetGeomEntryVisible(6, 0);
+                    SetGeomEntryVisible(8, 1);
+                    SetGeomEntryVisible(9, 0);
+                    SetGeomEntryVisible(10, 0);
+                    SetGeomEntryVisible(11, 0);
+                    SetGeomEntryVisible(12, 0);
+                    SetGeomEntryVisible(13, 0);
+                    SetGeomEntryVisible(14, 0);
+                    Wait(2);
+                }
+            }
+            Wait(1);
+        }
+    @label_0B44:
+        local[10] = local[10] - local[16];
+        if (local[10] <= -100) {
+            local[10] = -100;
+            SetFadeColor(0xFF);
+            PlayFieldSfx(2, 0, 10);
+            Wait(1);
+            WaitScreenFade();
+            ExitThread();
+        } else {
+            Wait(1);
+            SetGeomEntryPos(13, 25, local[10], 0);
+        }
+        goto @label_0B44;
+    @label_0BB0:
+        local[13] = local[13] + local[16];
+        if (local[13] >= 100) {
+            local[13] = 100;
+            Wait(1);
+            ExitThread();
+        } else {
+            Wait(1);
+            SetGeomEntryPos(14, 0, local[13], 0);
+        }
+        goto @label_0BB0;
+    }
+
+    actor_script actor_2 {
+        AkaoCmd(0xC8, 8, 0, 0, 0, local[0]);
+        AkaoCmd(0xCD, 8, 69, 0, 0, local[0]);
+        AkaoCmd(0xD0, -48, 0, 0, 0, local[0]);
+        ClearScreenFadeFlag40();
+        SpawnActor(1, 0, 0.0fp, 0.0fp, 0.0fp);
+        SetEventHandler(EVENT_INTERACT, @label_011C);
+        Wait(1);
+        SetGeomEntryVisible(16, 1);
+        SetGeomEntryVisible(15, 1);
+        SetGeomEntryVisible(14, 0);
+        SetGeomEntryVisible(13, 0);
+        SetGeomEntryVisible(12, 0);
+        SetGeomEntryVisible(11, 0);
+        SetGeomEntryVisible(10, 0);
+        SetGeomEntryVisible(9, 0);
+        SetGeomEntryVisible(8, 0);
+        SetGeomEntryVisible(7, 1);
+        SetGeomEntryVisible(6, 0);
+        SetGeomEntryVisible(5, 0);
+        SetGeomEntryVisible(4, 0);
+        SetGeomEntryVisible(3, 0);
+        SetGeomEntryVisible(2, 0);
+        SetGeomEntryVisible(1, 0);
+        SetGeomEntryVisible(0, 0);
+        SetFadeColor(0x1E);
+        WaitScreenFade();
+        Wait(5);
+        AkaoCmd(0x12C, 1110, 0, 128, 123, local[4]);
+        SetGeomEntryVisible(8, 1);
+        SetGeomEntryVisible(0, 1);
+        PlayFieldSfx(1, 0, 1);
+        Wait(1);
+        ExitThread();
+    @label_011C:
+        GetThreadTarget14(local[5]);
+        if (local[5] == 10) {
+            Wait(8);
+            AkaoCmd(0x12C, 1110, 0, 128, 123, local[4]);
+            SetGeomEntryVisible(0, 1);
+            SetGeomEntryVisible(7, 1);
+            PlayFieldSfx(1, 0, 1);
+        }
+        if (local[5] == 11) {
+            local[8] = -240;
+            local[9] = 240;
+            SpawnThread(@label_01DC);
+            SpawnThread(@label_0276);
+            SpawnThread(@label_01A0);
+        }
+        ExitThread();
+    @label_01A0:
+        while (1) {
+            CheckPadInput(PAD_PRESSED, 0x20000000, local[13]);
+            if (local[13] != 0) {
+                StartScreenFade(3);
+                ExitThread();
+            }
+            Wait(1);
+        }
+    @label_01DC:
+        local[6] = local[8] - local[10];
+        local[10] = local[10] + 5;
+        if (local[6] >= 0) {
+            ExitThread();
+        } else {
+            Wait(1);
+            SetGeomEntryPos(0, local[6], 18, 0);
+            SetGeomEntryPos(1, local[6], 18, 0);
+            SetGeomEntryPos(2, local[6], 18, 0);
+            SetGeomEntryPos(3, local[6], 18, 0);
+            SetGeomEntryPos(4, local[6], 18, 0);
+            SetGeomEntryPos(5, local[6], 18, 0);
+        }
+        goto @label_01DC;
+    @label_0276:
+        local[7] = local[9] - local[11];
+        local[11] = local[11] - 5;
+        if (local[7] <= 0) {
+            ExitThread();
+        } else {
+            Wait(1);
+            SetGeomEntryPos(7, local[7], 18, 0);
+        }
+        goto @label_0276;
+    }
+}

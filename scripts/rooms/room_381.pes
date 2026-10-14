@@ -1,0 +1,12 @@
+// Parasite Eve 1 Scene Script (room_381)
+room_script room_381 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 @no_terminator {
+        ExitThread();
+    }
+
+    actor_script actor_1 @no_terminator {
+        ExitThread();
+    }
+}

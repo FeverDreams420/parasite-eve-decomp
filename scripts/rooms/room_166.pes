@@ -1,0 +1,2757 @@
+// Parasite Eve 1 Scene Script (room_166)
+room_script room_166 {
+    spawn_table { (1, 0), (4, 0), (9, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(95, 120, 10);
+        SceneCmd(2601, 96, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_022E);
+        SetEventHandler(EVENT_TOUCH, @label_022A);
+        if (global[ROOM] == 169) {
+            if (global[54] & 1) {
+                SetEntityVec3(VEC3_POS, 1706.0fp, 0.0fp, 11.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+                global[54] = global[54] & -2;
+            } else {
+                SetEntityVec3(VEC3_POS, -1815.0fp, 0.0fp, -94.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+            }
+        }
+        if (global[ROOM] == 168) {
+            if (global[54] & 1) {
+                SetEntityVec3(VEC3_POS, 75.0fp, 0.0fp, -1807.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+                global[54] = global[54] & -2;
+            } else {
+                SetEntityVec3(VEC3_POS, -26.0fp, 0.0fp, 1808.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            }
+        }
+        if (global[ROOM] == 166) {
+            if (global[54] & 1) {
+                SetEntityVec3(VEC3_POS, 1706.0fp, 0.0fp, 11.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+                global[54] = global[54] & -2;
+            } else {
+                SetEntityVec3(VEC3_POS, -1815.0fp, 0.0fp, -94.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+            }
+        }
+        if (global[ROOM] == 170) {
+            SetEntityVec3(VEC3_POS, 1706.0fp, 0.0fp, 11.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+        }
+        if (global[ROOM] == 171) {
+            SetEntityVec3(VEC3_POS, -1715.0fp, 0.0fp, 11.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+        }
+        if (global[ROOM] == 172) {
+            SetEntityVec3(VEC3_POS, -26.0fp, 0.0fp, 1808.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        }
+        SetFadeColor(0x1E);
+        SetAnim(21);
+        UnlockPlayerInput();
+        ResumeSceneEvents();
+        Wait(1);
+        ExitThread();
+        ExitThread();
+    @label_022A:
+        ExitThread();
+    @label_022E:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            ExitThread();
+        }
+        if (local[4] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            ExitThread();
+        }
+        if (local[4] == 116) {
+            SetAnim(21);
+            LockPlayerInput();
+            PauseSceneEvents();
+            StopActorMotion();
+            ExitThread();
+        }
+        if (local[4] == 101) {
+            LockPlayerInput();
+            PauseSceneEvents();
+            StopActorMotion();
+            SetAnimStep(0x10000);
+            SpawnThread(@label_04A8);
+            ExitThread();
+        }
+        if (local[4] == 113) {
+            SetRenderFlagsC0();
+            SetEntityVec3(VEC3_POS, room[11], 0.0fp, room[12]);
+            SetEntityVec3(VEC3_ROT, 0, room[13], 0);
+            Wait(1);
+            SetBattleRenderMode80();
+            ClearBit(room[0], 2);
+            ClearBit(room[0], 3);
+            ClearBit(room[0], 4);
+            ClearBit(room[0], 0);
+            ClearBit(room[0], 4);
+            ClearBit(room[0], 8);
+            ClearBit(room[0], 9);
+            ClearBit(room[0], 10);
+            ClearBit(room[0], 11);
+            SetBit(room[0], 14);
+            room[11] = 0;
+            room[12] = 0;
+            room[13] = 0;
+            StopAllPmSlots();
+            PlayModelAnimAndWait(10);
+            SetFadeColor(0xF);
+            WaitScreenFade();
+            PlayAnimOnceAndWait(28);
+            SetAnim(21);
+            PlayFieldSfx(9, 0, 115);
+            ClearGameStateFlags(0x1000);
+            ClearGameStateFlags(0x800);
+            ClearBit(global[10], 29);
+            ExitThread();
+        }
+        if (local[4] == 114) {
+            SetRenderFlagsC0();
+            Wait(1);
+            if (room[0] & 1) {
+                SetBattleRenderMode80();
+                SetEntityVec3(VEC3_POS, room[11], 0.0fp, room[12]);
+                SetEntityVec3(VEC3_ROT, 0, room[13], 0);
+                PlayModelAnimAndWait(10);
+                SetFadeColor(0xF);
+                WaitScreenFade();
+            } else {
+                ResetCameraToPlayer();
+                WaitDiscIdle();
+            }
+            ClearBit(room[0], 2);
+            ClearBit(room[0], 3);
+            ClearBit(room[0], 1);
+            ClearBit(room[0], 0);
+            ClearBit(room[0], 4);
+            SetBit(room[0], 8);
+            SetBit(room[0], 9);
+            SetBit(room[0], 10);
+            SetBit(room[0], 11);
+            ClearGameStateFlags(0x1000);
+            ClearGameStateFlags(0x800);
+            ClearBit(global[10], 29);
+            PlayFieldSfx(9, 0, 115);
+            StopAllPmSlots();
+            ExitThread();
+        }
+        ExitThread();
+    @label_04A8:
+        TestBit(room[0], 8, local[9]);
+        if (local[9] != 0) {
+            StopActorMotion();
+            SetAnim(4);
+            SetFogNearFar(259, 214, 60);
+            SetMoveFactor(0x30000);
+            GetEntityVec3(VEC3_POS, local[6], local[7], local[8]);
+            if (!(local[6] == 0x032E0000 && local[8] == 0x005E0000)) {
+                TurnTowardPoint(814.0fp, 94.0fp, 128);
+                SetAnim(5);
+                DisableActorRendering();
+                MoveTowardPoint(814.0fp, 94.0fp, 128);
+                EnableActorRendering();
+                StopActorMotion();
+            }
+            SetAnim(4);
+            WaitDiscIdle();
+            ClearRenderFlagsC0();
+            SetMoveFactor(0x10000);
+            if (!(local[6] == 0x00520000 && local[8] == 0x00140000)) {
+                TurnTowardPoint(82.0fp, 20.0fp, 256);
+            }
+            SetBit(room[0], 4);
+            ExitThread();
+        }
+        TestBit(room[0], 9, local[9]);
+        if (local[9] != 0) {
+            StopActorMotion();
+            SetAnim(4);
+            SetFogNearFar(259, 214, 60);
+            SetMoveFactor(0x30000);
+            GetEntityVec3(VEC3_POS, local[6], local[7], local[8]);
+            if (!(local[6] == 0x000A0000 && local[8] == 0xFC880000)) {
+                TurnTowardPoint(10.0fp, -888.0fp, 128);
+                SetAnim(5);
+                DisableActorRendering();
+                MoveTowardPoint(10.0fp, -888.0fp, 128);
+                EnableActorRendering();
+                StopActorMotion();
+            }
+            SetAnim(4);
+            WaitDiscIdle();
+            ClearRenderFlagsC0();
+            SetMoveFactor(0x10000);
+            if (!(local[6] == 0x00520000 && local[8] == 0x00140000)) {
+                TurnTowardPoint(82.0fp, 20.0fp, 256);
+            }
+            SetBit(room[0], 4);
+            ExitThread();
+        }
+        TestBit(room[0], 10, local[9]);
+        if (local[9] != 0) {
+            StopActorMotion();
+            SetAnim(4);
+            SetFogNearFar(259, 214, 60);
+            SetMoveFactor(0x30000);
+            GetEntityVec3(VEC3_POS, local[6], local[7], local[8]);
+            if (!(local[6] == 0xFCEA0000 && local[8] == 0xFFCE0000)) {
+                TurnTowardPoint(-790.0fp, -50.0fp, 128);
+                SetAnim(5);
+                DisableActorRendering();
+                MoveTowardPoint(-790.0fp, -50.0fp, 128);
+                EnableActorRendering();
+                StopActorMotion();
+            }
+            SetAnim(4);
+            WaitDiscIdle();
+            ClearRenderFlagsC0();
+            SetMoveFactor(0x10000);
+            if (!(local[6] == 0x00520000 && local[8] == 0x00140000)) {
+                TurnTowardPoint(82.0fp, 20.0fp, 256);
+            }
+            SetBit(room[0], 4);
+            ExitThread();
+        }
+        TestBit(room[0], 11, local[9]);
+        if (local[9] != 0) {
+            StopActorMotion();
+            SetAnim(4);
+            SetFogNearFar(259, 214, 60);
+            SetMoveFactor(0x30000);
+            GetEntityVec3(VEC3_POS, local[6], local[7], local[8]);
+            if (!(local[6] == 0xFFD80000 && local[8] == 0x02F80000)) {
+                TurnTowardPoint(-40.0fp, 760.0fp, 128);
+                SetAnim(5);
+                DisableActorRendering();
+                MoveTowardPoint(-40.0fp, 760.0fp, 128);
+                EnableActorRendering();
+                StopActorMotion();
+            }
+            SetAnim(4);
+            WaitDiscIdle();
+            ClearRenderFlagsC0();
+            SetMoveFactor(0x10000);
+            if (!(local[6] == 0x00520000 && local[8] == 0x00140000)) {
+                TurnTowardPoint(82.0fp, 20.0fp, 256);
+            }
+            SetBit(room[0], 4);
+            ExitThread();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        SetMeshFadeLevel(112);
+        SetCameraBaseAngle(0, 384);
+        AkaoCmd(0x193, 1042, 1034, 0, 0, room[17]);
+        SceneCmd(2700, 225, 255, 245, 0, 0, 0, room[17]);
+        AkaoCmd(0xC8, 44, 0, 0, 0, room[17]);
+        SetEventHandler(EVENT_INTERACT, @label_013A);
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SpawnThread(@label_0088);
+        ExitThread();
+    @label_0088:
+        GetThreadId(local[10]);
+        GetActorPositionByType(0, 0, 0, local[5], local[6], local[7], local[8]);
+        TestPointInQuad(-154.0fp, 4176.0fp, -154.0fp, -2680.0fp, 109.0fp, -2680.0fp, 109.0fp, 4176.0fp, local[5], local[7], local[9]);
+        if (local[9] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[8]);
+        }
+        GetActorPositionByType(0, 0, 0, local[5], local[6], local[7], local[8]);
+        TestPointInQuad(-2858.0fp, -157.0fp, -2858.0fp, 144.0fp, 3777.0fp, 144.0fp, 3777.0fp, -157.0fp, local[5], local[7], local[9]);
+        if (local[9] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[8]);
+        }
+        Wait(1);
+        goto @label_0088;
+    @label_013A:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 252) {
+            KillThread(local[10]);
+            PlayFieldSfx(2, 0, 251);
+            ExitThread();
+        }
+        if (local[3] == 253) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnThread(@label_0088);
+            ExitThread();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetEventHandler(EVENT_INTERACT, @label_0448);
+        Wait(1);
+        SpawnThread(@label_002A);
+        SpawnThread(@label_0178);
+        SpawnThread(@label_02C6);
+        SpawnThread(@label_03B0);
+        ExitThread();
+    @label_002A:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-2033.0fp, -400.0fp, -1725.0fp, 400.0fp, -2188.0fp, 400.0fp, -2435.0fp, -400.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            if (global[56] == 2) {
+                PauseSceneEvents();
+                LockPlayerInput();
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[56] = global[56] - 1;
+                global[ROOM] = 167;
+                ChangeRoom(0xA80270C8);
+                ExitThread();
+            }
+            if (global[55] == 4 && global[56] == 8) {
+                PauseSceneEvents();
+                LockPlayerInput();
+                global[54] = global[54] & -2;
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[ROOM] = 167;
+                ChangeRoom(0xA8026348);
+                ExitThread();
+            } else {
+                PauseSceneEvents();
+                LockPlayerInput();
+                global[54] = global[54] & -2;
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[56] = global[56] - 1;
+                global[ROOM] = 167;
+                ChangeRoom(0xA80264C8);
+                ExitThread();
+            }
+        }
+        Wait(1);
+        goto @label_002A;
+    @label_0178:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(1600.0fp, -400.0fp, 2367.0fp, 380.0fp, 3312.0fp, 400.0fp, 3312.0fp, -400.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            if (global[56] == 10) {
+                PauseSceneEvents();
+                LockPlayerInput();
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[56] = global[56] + 1;
+                global[ROOM] = 167;
+                ChangeRoom(0xA8027048);
+                ExitThread();
+            }
+            if (global[55] == 4 && global[56] == 6) {
+                PauseSceneEvents();
+                LockPlayerInput();
+                global[54] = global[54] | 1;
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[ROOM] = 167;
+                ChangeRoom(0xA8026348);
+                ExitThread();
+            } else {
+                PauseSceneEvents();
+                LockPlayerInput();
+                global[54] = global[54] | 1;
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[56] = global[56] + 1;
+                global[ROOM] = 167;
+                ChangeRoom(0xA80264C8);
+                ExitThread();
+            }
+        }
+        Wait(1);
+        goto @label_0178;
+    @label_02C6:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-350.0fp, 1705.0fp, 460.0fp, 3484.0fp, 450.0fp, 4200.0fp, -308.0fp, 4200.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            if (global[55] >= 4) {
+                PauseSceneEvents();
+                LockPlayerInput();
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[55] = global[55] + 1;
+                global[ROOM] = 167;
+                ChangeRoom(0xA8027148);
+                ExitThread();
+            } else {
+                PauseSceneEvents();
+                LockPlayerInput();
+                global[54] = global[54] & -2;
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[55] = global[55] + 1;
+                global[ROOM] = 167;
+                ChangeRoom(0xA8026448);
+                ExitThread();
+            }
+        }
+        Wait(1);
+        goto @label_02C6;
+    @label_03B0:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-333.0fp, -2384.0fp, 460.0fp, -1718.0fp, 460.0fp, -2358.0fp, -320.0fp, -2718.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            global[54] = global[54] | 1;
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[55] = global[55] - 1;
+            global[ROOM] = 167;
+            ChangeRoom(0xA8026448);
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_03B0;
+    @label_0448:
+        GetThreadTarget14(local[5]);
+        if (local[5] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+    @label_0000:
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 0);
+        SetGeomEntryField8(0, 0);
+        Wait(4);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 1);
+        SetGeomEntryField8(0, 0);
+        Wait(4);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 2);
+        SetGeomEntryField8(0, 0);
+        Wait(4);
+        goto @label_0000;
+    }
+
+    actor_script actor_4 {
+        if (global[55] == 4 && global[56] == 6) {
+            SpawnActor(5, 0, 1773.0fp, 0.0fp, 302.0fp);
+            ExitThread();
+        }
+        if (global[55] == 2 && global[56] == 8) {
+            SpawnActor(6, 0, -817.0fp, 0.0fp, -976.0fp);
+            ExitThread();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_5 {
+        SetHitCylinder(20, 132, 10);
+        SetEventHandler(EVENT_TOUCH, @label_0086);
+        SetActorFlag400();
+        EnableActorCollision();
+        SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        SetBit(room[7], 1);
+        local[0] = 2;
+        if (global[87] & 1) {
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        } else {
+            SetAnim(0);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        }
+        Wait(1);
+        ExitThread();
+    @label_0086:
+        if (room[0] & 8) {
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[10], local[15], local[11], local[15]);
+        GetEntityVec3(VEC3_POS, local[13], local[15], local[14]);
+        Atan2(local[14] - local[11], local[13] - local[10], local[1]);
+        local[1] = 4096 - (local[1] + 1024) & 4095;
+        GetActorPositionByType(5, 0, 0, local[15], local[12], local[15], local[15]);
+        local[1] = local[1] - local[12] & 4095;
+        if (local[1] > 768 && local[1] < 3328) {
+            ExitThread();
+        }
+        GetThreadTargets18_1C(local[2], local[3]);
+        if (local[2] == 0) {
+            CheckPadInput(PAD_PRESSED, 0x100, local[4]);
+            if (local[4] != 0) {
+                PlayFieldSfx(0, 0, 254);
+                if (global[87] & 1) {
+                    OpenTextbox(2); // "Drop an item here? / <FB:09>2 Yes / No"
+                    WaitTextbox(2);
+                    GetChoiceResult(local[6]);
+                    if (local[6] == 0) {
+                        RunSubSceneWithTimeout(0, local[8]);
+                        Wait(1);
+                        if (local[8] != -1) {
+                            global[192] = local[8];
+                            AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                            SetAnim(3);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(30);
+                            WaitAnimEnd();
+                            global[87] = global[87] & -2;
+                        }
+                    }
+                } else {
+                    AkaoCmd(0x15F, 1113, 0, 0, 0, local[6]);
+                    SetAnim(1);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(30);
+                    WaitAnimEnd();
+                    global[87] = global[87] | 1;
+                    if (global[192] == 0) {
+                        local[9] = local[0];
+                    } else {
+                        local[9] = global[192];
+                    }
+                    GiveItem(local[9], local[8]);
+                    if (local[8] == 0) {
+                        ShowReceivedItemPopup(local[9]);
+                        global[192] = 0;
+                    } else {
+                        OpenTextbox(3); // "Your inventory is full, | Would you like to exchange items? / <FB:09>2 Yes / No"
+                        WaitTextbox(3);
+                        GetChoiceResult(local[6]);
+                        if (local[6] == 0) {
+                            RunSubSceneWithTimeout(local[9], local[8]);
+                            if (local[8] != -1) {
+                                ShowReceivedItemPopup(local[9]);
+                                global[192] = local[8];
+                            }
+                            Wait(1);
+                        }
+                        AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                        SetAnim(3);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(30);
+                        WaitAnimEnd();
+                        global[87] = global[87] & -2;
+                    }
+                }
+                PlayFieldSfx(0, 0, 255);
+            }
+        }
+        ExitThread();
+    }
+
+    actor_script actor_6 {
+        SetHitCylinder(20, 70, 10);
+        SetEventHandler(EVENT_TOUCH, @label_0086);
+        SetActorFlag400();
+        EnableActorCollision();
+        SetEntityVec3(VEC3_ROT, 0, 2432, 0);
+        SetBit(room[7], 1);
+        local[0] = 104;
+        if (global[88] & 4096) {
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        } else {
+            SetAnim(0);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        }
+        Wait(1);
+        ExitThread();
+    @label_0086:
+        if (room[0] & 8) {
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[10], local[15], local[11], local[15]);
+        GetEntityVec3(VEC3_POS, local[13], local[15], local[14]);
+        Atan2(local[14] - local[11], local[13] - local[10], local[1]);
+        local[1] = 4096 - (local[1] + 1024) & 4095;
+        GetActorPositionByType(5, 0, 0, local[15], local[12], local[15], local[15]);
+        local[1] = local[1] - local[12] & 4095;
+        if (local[1] > 768 && local[1] < 3328) {
+            ExitThread();
+        }
+        GetThreadTargets18_1C(local[2], local[3]);
+        if (local[2] == 0) {
+            CheckPadInput(PAD_PRESSED, 0x100, local[4]);
+            if (local[4] != 0) {
+                PlayFieldSfx(0, 0, 254);
+                if (global[88] & 4096) {
+                    OpenTextbox(2); // "Drop an item here? / <FB:09>2 Yes / No"
+                    WaitTextbox(2);
+                    GetChoiceResult(local[6]);
+                    if (local[6] == 0) {
+                        RunSubSceneWithTimeout(0, local[8]);
+                        Wait(1);
+                        if (local[8] != -1) {
+                            global[236] = local[8];
+                            AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                            SetAnim(3);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(30);
+                            WaitAnimEnd();
+                            global[88] = global[88] & -4097;
+                        }
+                    }
+                } else {
+                    AkaoCmd(0x15F, 1113, 0, 0, 0, local[6]);
+                    SetAnim(1);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(30);
+                    WaitAnimEnd();
+                    global[88] = global[88] | 4096;
+                    if (global[236] == 0) {
+                        local[9] = local[0];
+                    } else {
+                        local[9] = global[236];
+                    }
+                    GiveItem(local[9], local[8]);
+                    if (local[8] == 0) {
+                        ShowReceivedItemPopup(local[9]);
+                        global[236] = 0;
+                    } else {
+                        OpenTextbox(3); // "Your inventory is full, | Would you like to exchange items? / <FB:09>2 Yes / No"
+                        WaitTextbox(3);
+                        GetChoiceResult(local[6]);
+                        if (local[6] == 0) {
+                            RunSubSceneWithTimeout(local[9], local[8]);
+                            if (local[8] != -1) {
+                                ShowReceivedItemPopup(local[9]);
+                                global[236] = local[8];
+                            }
+                            Wait(1);
+                        }
+                        AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                        SetAnim(3);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(30);
+                        WaitAnimEnd();
+                        global[88] = global[88] & -4097;
+                    }
+                }
+                PlayFieldSfx(0, 0, 255);
+            }
+        }
+        ExitThread();
+    }
+
+    actor_script actor_7 {
+        SetHitCylinder(70, 130, 10);
+        SetRenderTableIndex(2);
+        ScaleShadowRadius(0xCCCC);
+        SceneCmd(2601, 96, 0, 0, 0, 0, 0, local[0]);
+        GetSubId(local[8]);
+        Random(local[35], 0, 2);
+        if (local[35] == 0) {
+            local[35] = -1;
+        }
+        local[5] = -1;
+        local[51] = 100;
+        SetMoveFactor(0x1E0000);
+        room[29] = room[29] + 1;
+        SetBit(room[24], local[8]);
+        local[6] = local[8];
+        SetActorRoamFlag();
+        EnableActorCollision();
+        SetActorFlag1000000();
+        room[10] = global[80];
+        if (room[10] == 0) {
+            room[10] = 65536;
+        }
+        Random(local[54], 0, 100);
+        if (local[54] > 9) {
+            local[54] = 14;
+            if (local[54] > 39) {
+                local[54] = 7;
+            }
+        } else {
+            local[54] = 1;
+        }
+        Random(local[55], 0, 100);
+        if (local[55] > 19) {
+            local[55] = 7;
+        } else {
+            local[55] = 14;
+        }
+        AllocBattleActorSlot();
+        SetBattleField(40, 301);
+        SetBattleField(41, 23);
+        SetBattleField(42, 0);
+        Random(local[19], 6000, 9000);
+        SetBattleField(43, local[19]);
+        SetBattleField(44, room[10] * 112 >> 16);
+        SetBattleField(45, room[10] * 112 >> 16);
+        SetBattleField(60, room[10] * 112 >> 16);
+        SetBattleField(61, room[10] * 36 >> 16);
+        SetBattleField(62, 98);
+        SetBattleField(63, 26);
+        SetBattleField(64, 6);
+        SetBattleField(90, 10);
+        SetBattleField(91, 4);
+        SetBattleField(65, 4);
+        SetBattleField(66, 60);
+        SetBattleField(67, 12);
+        SetBattleField(68, 124);
+        SetBattleField(69, 2);
+        SetBattleField(92, local[54]);
+        SetBattleField(93, local[55]);
+        SetBattleField(100, 0);
+        SetBattleField(101, 0);
+        SetBattleField(102, 0);
+        SetBattleField(103, 2);
+        SetBattleField(104, 0);
+        SetBattleField(105, 0);
+        SetBattleField(106, 2);
+        SetBattleField(107, 2);
+        SetBattleField(108, 0);
+        SetBattleField(109, 0);
+        SetBattleField(110, 10);
+        room[4] = room[4] + 23;
+        room[1] = room[1] + 98;
+        room[2] = room[2] + 1;
+        SetupModelPartAnim11(1, 0, 6, 7, room[10] * 123 >> 16, 9, 17, -1, -1, 2, 17);
+        SetupModelPartAnim5(3, 4, 8, 9, room[10] * 110 >> 16);
+        SetBattleField(50, 1288);
+        SetBattleField(51, 1287);
+        SetBattleField(52, 1289);
+        SetBattleField(53, 1527);
+        SetBattleField(54, 1527);
+        SetBattleField(55, 1527);
+        if (0) {
+            SetBattleField(109, 1);
+        }
+        if (0) {
+            SetBattleField(109, 1);
+        }
+        if (0) {
+            SetBattleField(109, 1);
+        }
+        if (0) {
+            SetBattleField(109, 1);
+        }
+        if (0) {
+            SetBattleField(109, 1);
+        }
+        SetMoveSpeed(0x14000);
+        HideActor();
+        DisableActorRendering();
+        CameraSnapToActor(0, 0, 2048);
+        GetSubId(local[6]);
+        QueryActorField(ACTOR_ACTION, 7, local[6], local[19]);
+        SetAnimFrame(local[6] * 15 % local[19]);
+        PlayModelAnimAndWait(60);
+        EnableActorRendering();
+        if (local[8] == 31) {
+            PlayFieldSfx(9, 0, 112);
+        }
+        while (!(room[0] & 4)) {
+            Wait(1);
+        }
+        GetEntityVec3(VEC3_POS, local[29], local[30], local[31]);
+        local[39] = 16;
+        local[40] = 16;
+        TestPointInPolygon(local[29], local[31], 3, @poly_1A36, local[23]);
+        if (local[23] != 0) {
+            local[39] = 0;
+            local[40] = 0;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_19DE, local[23]);
+        if (local[23] != 0) {
+            local[39] = 1;
+            local[40] = 1;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_19EA, local[23]);
+        if (local[23] != 0) {
+            local[39] = 2;
+            local[40] = 2;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_19F6, local[23]);
+        if (local[23] != 0) {
+            local[39] = 3;
+            local[40] = 3;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_1A02, local[23]);
+        if (local[23] != 0) {
+            local[39] = 4;
+            local[40] = 4;
+        }
+        TestPointInPolygon(local[29], local[31], 4, @poly_1A0E, local[23]);
+        if (local[23] != 0) {
+            local[39] = 5;
+            local[40] = 5;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_1A1E, local[23]);
+        if (local[23] != 0) {
+            local[39] = 6;
+            local[40] = 6;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_1A2A, local[23]);
+        if (local[23] != 0) {
+            local[39] = 7;
+            local[40] = 7;
+        }
+        TestPointInPolygon(local[29], local[31], 8, @poly_1A42, local[23]);
+        if (local[23] != 0) {
+            local[39] = 8;
+            local[40] = local[40] | 8;
+        }
+        if (local[39] < 16) {
+            SetBit(room[25], local[39]);
+            SetBit(room[26], local[40]);
+        }
+        GetEntityVec3(VEC3_ROT, local[19], local[20], local[21]);
+        Wait((31 - local[8]) * 24 + (local[20] & 7) + 1);
+        SpawnThread(@label_06C6);
+        SpawnThread(@label_17E6);
+        ExitThread();
+    @label_06C6:
+        if ((local[17] & 4096) != 0 && room[31] != 0) {
+            GetActorPositionByType(0, room[31], room[32], local[19], local[20], local[21], local[23]);
+            SetEntityVec3(VEC3_POS, local[19], local[20], local[21]);
+        }
+        GetDistanceToActor(0, 0, local[10]);
+        GetAngleToActor(0, 0, local[11]);
+        GetActorPositionByType(0, 0, 0, local[14], local[15], local[16], local[23]);
+        GetEntityVec3(VEC3_POS, local[29], local[30], local[31]);
+        Random(local[22], 0, 101);
+        if ((local[17] & 2048) == 0) {
+            local[12] = 0;
+            local[13] = 0;
+            TestPointInPolygon(local[14], local[16], 3, @poly_1A36, local[23]);
+            if (local[23] != 0) {
+                local[12] = 0;
+                local[13] = 0;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_19DE, local[23]);
+            if (local[23] != 0) {
+                local[12] = 1;
+                local[13] = 1;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_19EA, local[23]);
+            if (local[23] != 0) {
+                local[12] = 2;
+                local[13] = 2;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_19F6, local[23]);
+            if (local[23] != 0) {
+                local[12] = 3;
+                local[13] = 3;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_1A02, local[23]);
+            if (local[23] != 0) {
+                local[12] = 4;
+                local[13] = 4;
+            }
+            TestPointInPolygon(local[14], local[16], 4, @poly_1A0E, local[23]);
+            if (local[23] != 0) {
+                local[12] = 5;
+                local[13] = 5;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_1A1E, local[23]);
+            if (local[23] != 0) {
+                local[12] = 6;
+                local[13] = 6;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_1A2A, local[23]);
+            if (local[23] != 0) {
+                local[12] = 7;
+                local[13] = 7;
+            }
+            TestPointInPolygon(local[14], local[16], 8, @poly_1A42, local[23]);
+            if (local[23] != 0) {
+                local[12] = 8;
+                local[13] = local[13] | 8;
+            }
+            ClearBit(room[25], local[39]);
+            local[39] = 16;
+            local[40] = 16;
+            TestPointInPolygon(local[29], local[31], 3, @poly_1A36, local[23]);
+            if (local[23] != 0) {
+                local[39] = 0;
+                local[40] = 0;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_19DE, local[23]);
+            if (local[23] != 0) {
+                local[39] = 1;
+                local[40] = 1;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_19EA, local[23]);
+            if (local[23] != 0) {
+                local[39] = 2;
+                local[40] = 2;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_19F6, local[23]);
+            if (local[23] != 0) {
+                local[39] = 3;
+                local[40] = 3;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_1A02, local[23]);
+            if (local[23] != 0) {
+                local[39] = 4;
+                local[40] = 4;
+            }
+            TestPointInPolygon(local[29], local[31], 4, @poly_1A0E, local[23]);
+            if (local[23] != 0) {
+                local[39] = 5;
+                local[40] = 5;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_1A1E, local[23]);
+            if (local[23] != 0) {
+                local[39] = 6;
+                local[40] = 6;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_1A2A, local[23]);
+            if (local[23] != 0) {
+                local[39] = 7;
+                local[40] = 7;
+            }
+            TestPointInPolygon(local[29], local[31], 8, @poly_1A42, local[23]);
+            if (local[23] != 0) {
+                local[39] = 8;
+                local[40] = local[40] | 8;
+            }
+            if (local[39] < 16) {
+                SetBit(room[25], local[39]);
+                SetBit(room[26], local[40]);
+            }
+        }
+        local[18] = 0;
+        if ((local[17] & 40) == 0) {
+            ClearBit(room[22], local[8]);
+            if ((local[17] & 16) == 0) {
+                local[18] = 2;
+            } else {
+                local[18] = 4;
+                Random(local[22], 0, 256);
+                local[24] = 0;
+                local[25] = 0;
+                TestBit(room[22], 31, local[23]);
+                if (local[23] != 0) {
+                    local[24] = local[24] + 1;
+                }
+                TestBit(room[22], 30, local[23]);
+                if (local[23] != 0) {
+                    local[24] = local[24] + 1;
+                }
+                TestBit(room[22], 29, local[23]);
+                if (local[23] != 0) {
+                    local[24] = local[24] + 1;
+                }
+                TestBit(room[22], 28, local[23]);
+                if (local[23] != 0) {
+                    local[24] = local[24] + 1;
+                }
+                if (local[24] == 1) {
+                    local[25] = 150;
+                }
+                if (local[24] == 2) {
+                    local[25] = 200;
+                }
+                if (local[24] >= 3) {
+                    local[25] = 256;
+                }
+                if (room[22] != 0 && local[22] < local[25]) {
+                    local[18] = 2;
+                }
+            }
+        }
+        if ((local[17] & 32) == 0) {
+            if ((local[17] & 1) != 0) {
+                local[17] = local[17] & -2;
+                local[18] = 1;
+            }
+            if ((local[17] & 4) != 0) {
+                local[17] = local[17] & -5;
+                local[18] = 1;
+            }
+        }
+        case_if (local[18] == 1) {
+            StopActorMotion();
+            local[17] = local[17] & -9;
+            local[17] = local[17] & -33;
+            ClearBit(room[22], local[8]);
+            ClearBit(room[23], local[8]);
+            ClearBit(room[27], local[41]);
+            KillThread(local[1]);
+            EnableActorRendering();
+            if (local[5] != -1) {
+                StopPmSlotOnSelf(local[5]);
+                local[5] = -1;
+            }
+            goto @label_0FEC;
+            goto @label_0E58;
+        }
+        case_if (local[18] == 2) {
+        @label_0E58:
+            StopActorMotion();
+            local[17] = local[17] & -9;
+            KillThread(local[1]);
+            local[17] = local[17] | 8;
+            if (local[5] != -1) {
+                StopPmSlotOnSelf(local[5]);
+                local[5] = -1;
+            }
+            SpawnThread(@label_1172);
+            goto @label_0FEC;
+            goto @label_0EC8;
+        }
+        case_if (local[18] == 4) {
+        @label_0EC8:
+            StopActorMotion();
+            local[17] = local[17] & -17;
+            local[17] = local[17] & -9;
+            KillThread(local[1]);
+            local[17] = local[17] | 32;
+            SetBit(room[22], local[8]);
+            if (local[5] != -1) {
+                StopPmSlotOnSelf(local[5]);
+                local[5] = -1;
+            }
+            local[4] = 0;
+            SpawnThread(@label_14C8);
+            goto @label_0FEC;
+            goto @label_0F5C;
+        }
+        case_if (local[18] == 5) {
+        @label_0F5C:
+            StopActorMotion();
+            local[17] = local[17] & -17;
+            local[17] = local[17] & -9;
+            KillThread(local[1]);
+            local[17] = local[17] | 32;
+            SetBit(room[22], local[8]);
+            if (local[5] != -1) {
+                StopPmSlotOnSelf(local[5]);
+                local[5] = -1;
+            }
+            local[4] = 0;
+            SpawnThread(@label_15D6);
+            goto @label_0FEC;
+            goto @label_0FEC;
+        }
+        goto @label_0FEC;
+    @label_0FEC:
+        Wait(1);
+        goto @label_06C6;
+        GetThreadTargets18_1C(local[44], local[45]);
+        if (local[44] == 0) {
+            if ((local[17] & 2) == 0) {
+                local[17] = local[17] | 3;
+                local[25] = 512;
+                local[23] = 0;
+                while (local[23] == 0) {
+                    Atan2((local[16] - local[31]) / 65536, (local[14] - local[29]) / 65536, local[24]);
+                    Cos(local[24] - 2048 & 4095, local[46]);
+                    local[46] = local[46] * local[25] + local[29];
+                    Sin(local[24] - 2048 & 4095, local[47]);
+                    local[47] = local[47] * local[25] + local[31];
+                    TestPointInPolygon(local[46], local[47], 9, @poly_1A62, local[23]);
+                    local[25] = local[25] - 64;
+                    if (local[25] < 0) {
+                        local[23] = 1;
+                    }
+                }
+            }
+            ExitThread();
+        }
+        ExitThread();
+    @label_1172:
+        GetThreadId(local[1]);
+        Wait(5);
+        GetGameTimeCounter(1, local[23]);
+        local[41] = (local[23] >> 7) * 5 & 7;
+        if (local[41] == local[12]) {
+            local[41] = 8;
+        }
+        if (local[48] >= 9000) {
+            CameraSnapToActor(0, 0, 32);
+            Wait(5);
+        }
+        case_if (local[41] == 0) {
+            local[19] = 0x03300000;
+            local[21] = 0x01350000;
+            goto @label_1348;
+            goto @label_1222;
+        }
+        case_if (local[41] == 1) {
+        @label_1222:
+            local[19] = 0x03600000;
+            local[21] = 0xFF580000;
+            goto @label_1348;
+            goto @label_1248;
+        }
+        case_if (local[41] == 2) {
+        @label_1248:
+            local[19] = 0x01880000;
+            local[21] = 0xFD7B0000;
+            goto @label_1348;
+            goto @label_126E;
+        }
+        case_if (local[41] == 3) {
+        @label_126E:
+            local[19] = 0xFF8A0000;
+            local[21] = 0xFD690000;
+            goto @label_1348;
+            goto @label_1294;
+        }
+        case_if (local[41] == 4) {
+        @label_1294:
+            local[19] = 0xFD840000;
+            local[21] = 0xFEDF0000;
+            goto @label_1348;
+            goto @label_12BA;
+        }
+        case_if (local[41] == 5) {
+        @label_12BA:
+            local[19] = 0xFD3E0000;
+            local[21] = 0x00C30000;
+            goto @label_1348;
+            goto @label_12E0;
+        }
+        case_if (local[41] == 6) {
+        @label_12E0:
+            local[19] = 0xFEE60000;
+            local[21] = 0x02AD0000;
+            goto @label_1348;
+            goto @label_1306;
+        }
+        case_if (local[41] == 7) {
+        @label_1306:
+            local[19] = 0x00FB0000;
+            local[21] = 0x02B90000;
+            goto @label_1348;
+            goto @label_132C;
+        }
+        case_if (local[41] == 8) {
+        @label_132C:
+            local[19] = 0x00520000;
+            local[21] = 0x00140000;
+            goto @label_1348;
+            goto @label_1348;
+        }
+    @label_1348:
+        case_if (local[8] == 28) {
+            local[19] = local[19] - 0x00A00000;
+            goto @label_13F0;
+            goto @label_137C;
+        }
+        case_if (local[8] == 29) {
+        @label_137C:
+            local[19] = local[19] + 0x00A00000;
+            goto @label_13F0;
+            goto @label_13A6;
+        }
+        case_if (local[8] == 30) {
+        @label_13A6:
+            local[21] = local[21] - 0x00A00000;
+            goto @label_13F0;
+            goto @label_13D0;
+        }
+        case_if (local[8] == 31) {
+        @label_13D0:
+            local[21] = local[21] + 0x00A00000;
+            goto @label_13F0;
+            goto @label_13F0;
+        }
+    @label_13F0:
+        TestBit(room[25], local[41], local[23]);
+        TestBit(room[27], local[41], local[24]);
+        ClearBit(room[27], local[42]);
+        local[42] = local[41];
+        if (local[41] != 16) {
+            SetBit(room[27], local[41]);
+        }
+        LoadRoomAssets(75, local[5]);
+        SendPmCommand0(local[5], 17, local[19], 0, local[21]);
+        SendPmCommand0(local[5], 4, 0x00080000, 1, 0);
+        SendPmCommand0(local[5], 21, 0, 0, 64);
+        SendPmCommand0(local[5], 32, 1, 0, 0);
+        SendPmCommand0(local[5], 23, 0, 0, 0);
+        SendPmCommand1(local[5], 25, local[6], local[6], local[6]);
+        while (local[6]) {
+            Wait(1);
+        }
+        local[5] = -1;
+        local[17] = local[17] & -9;
+        ClearBit(room[22], local[8]);
+        ExitThread();
+    @label_14C8:
+        GetThreadId(local[3]);
+        Wait(1);
+        CameraSnapToActor(0, 0, 128);
+        LoadRoomAssets(11, local[7]);
+        SendPmCommand0(local[7], 0, 30, 0, 0);
+        SendPmCommand0(local[7], 1, 100, 0, 0);
+        SendPmCommand0(local[7], 2, 4596, 0, 0);
+        SendPmCommand0(local[7], 3, 40, 0, 0);
+        SendPmCommand0(local[7], 4, 400, 0, 0);
+        SendPmCommand0(local[7], 5, 20, 0, 0);
+        SendPmCommand0(local[7], 6, 1024, 0, 0);
+        TriggerAnimEvent(3, local[23]);
+        SetAnim(2);
+        Wait(5);
+        GetBattleField(82, local[23]);
+        while (local[23] != 0) {
+            Wait(1);
+            GetBattleField(82, local[23]);
+        }
+        Wait(1);
+        ClearBit(room[23], local[8]);
+        local[17] = local[17] & -33;
+        ClearBit(room[22], local[8]);
+        SetBattleField(43, 0);
+        room[20] = room[20] + 1;
+        ExitThread();
+    @label_15D6:
+        GetThreadId(local[3]);
+        Wait(5);
+        Atan2((local[16] - local[31]) / 65536, (local[14] - local[29]) / 65536, local[36]);
+        local[25] = 16384;
+        local[23] = 0;
+        local[19] = 0x00520000;
+        local[21] = 0x00140000;
+        while (local[23] == 0) {
+            Cos(local[36], local[19]);
+            local[19] = local[19] * local[25] + local[29];
+            Sin(local[36], local[21]);
+            local[21] = local[21] * local[25] + local[31];
+            TestPointInPolygon(local[19], local[21], 9, @poly_1A62, local[23]);
+            local[25] = local[25] - 256;
+            if (local[25] < 1024) {
+                local[23] = -1;
+            }
+        }
+        LoadRoomAssets(70, local[5]);
+        SendPmCommand0(local[5], 11, 0, 0, 0);
+        SendPmCommand0(local[5], 10, 7, -1, 1);
+        SendPmCommand0(local[5], 17, local[19], 0, local[21]);
+        SendPmCommand0(local[5], 4, 0x00B00000, 0, 0);
+        SendPmCommand0(local[5], 3, -1500, 0, 0);
+        SendPmCommand0(local[5], 22, (local[19] - local[29]) * 2 + local[29], (local[21] - local[31]) * 2 + local[31], 0x80000040);
+        SendPmCommand0(local[5], 23, 0, 0, 0);
+        TriggerAnimEvent(1, local[23]);
+        SetAnim(2);
+        Wait(5);
+        local[17] = local[17] & -33;
+        ClearBit(room[22], local[8]);
+        SetBattleField(43, 0);
+        room[20] = room[20] + 1;
+        ExitThread();
+    @label_17E6:
+        SetThreadFlag80();
+    @label_17EA:
+        if ((local[17] & 48) == 0) {
+            GetBattleField(43, local[48]);
+            if (local[48] >= 9000) {
+                local[17] = local[17] | 16;
+            }
+        }
+        GetBattleField(44, local[49]);
+        GetBattleField(60, local[50]);
+        local[49] = local[49];
+        local[51] = (local[49] - local[52]) * 100 / (local[50] - local[52]);
+        if (local[49] > local[52] && local[51] == 0) {
+            local[51] = 1;
+        }
+        if (local[49] <= local[52]) {
+            local[17] = local[17] | 16384;
+            local[51] = 0;
+        }
+        if (local[49] <= 0) {
+            ClearBit(room[24], local[8]);
+            ClearBit(room[22], local[8]);
+            room[29] = room[29] - 1;
+            room[30] = room[30] - local[0];
+            if (room[29] == 0) {
+                room[16] = 16;
+            }
+            KillOtherThreads();
+            ExitThread();
+        }
+        GetBattleField(77, local[53]);
+        if (local[53] != 0) {
+            local[17] = local[17] | 8192;
+            if ((local[17] & 2) == 0) {
+                local[17] = local[17] | 3;
+                local[46] = local[29];
+                local[47] = local[31];
+            }
+        }
+        Wait(1);
+        goto @label_17EA;
+        polygon @poly_19DE {
+            (82.0fp, 20.0fp),
+            (1519.0fp, 138.0fp),
+            (880.0fp, -636.0fp),
+        }
+        polygon @poly_19EA {
+            (82.0fp, 20.0fp),
+            (880.0fp, -636.0fp),
+            (172.0fp, -1224.0fp),
+        }
+        polygon @poly_19F6 {
+            (82.0fp, 20.0fp),
+            (172.0fp, -1224.0fp),
+            (-580.0fp, -690.0fp),
+        }
+        polygon @poly_1A02 {
+            (82.0fp, 20.0fp),
+            (-580.0fp, -690.0fp),
+            (-1310.0fp, -155.0fp),
+        }
+        polygon @poly_1A0E {
+            (82.0fp, 20.0fp),
+            (-1310.0fp, -155.0fp),
+            (-979.0fp, 553.0fp),
+            (-780.0fp, 696.0fp),
+        }
+        polygon @poly_1A1E {
+            (82.0fp, 20.0fp),
+            (-780.0fp, 696.0fp),
+            (-96.0fp, 1246.0fp),
+        }
+        polygon @poly_1A2A {
+            (82.0fp, 20.0fp),
+            (-96.0fp, 1246.0fp),
+            (744.0fp, 730.0fp),
+        }
+        polygon @poly_1A36 {
+            (82.0fp, 20.0fp),
+            (744.0fp, 730.0fp),
+            (1519.0fp, 138.0fp),
+        }
+        polygon @poly_1A42 {
+            (599.0fp, 62.0fp),
+            (441.0fp, -275.0fp),
+            (114.0fp, -427.0fp),
+            (-215.0fp, -299.0fp),
+            (-419.0fp, -43.0fp),
+            (-305.0fp, 324.0fp),
+            (17.0fp, 461.0fp),
+            (379.0fp, 339.0fp),
+        }
+        polygon @poly_1A62 {
+            (1519.0fp, 138.0fp),
+            (880.0fp, -636.0fp),
+            (172.0fp, -1224.0fp),
+            (-580.0fp, -690.0fp),
+            (-1310.0fp, -155.0fp),
+            (-979.0fp, 553.0fp),
+            (-780.0fp, 696.0fp),
+            (-96.0fp, 1246.0fp),
+            (744.0fp, 730.0fp),
+        }
+    }
+
+    actor_script actor_8 {
+        SetHitCylinder(70, 75, 20);
+        SetRenderTableIndex(3);
+        ScaleShadowRadius(0x10000);
+        SceneCmd(2601, 96, 0, 0, 0, 0, 0, local[0]);
+        GetSubId(local[8]);
+        Random(local[35], 0, 2);
+        if (local[35] == 0) {
+            local[35] = -1;
+        }
+        local[5] = -1;
+        local[51] = 100;
+        SetMoveFactor(0x1E0000);
+        room[29] = room[29] + 1;
+        SetBit(room[24], local[8]);
+        local[6] = local[8];
+        SetActorRoamFlag();
+        EnableActorCollision();
+        SetActorFlag1000000();
+        room[10] = global[80];
+        if (room[10] == 0) {
+            room[10] = 65536;
+        }
+        Random(local[54], 0, 100);
+        if (local[54] > 9) {
+            local[54] = 1;
+            if (local[54] > 39) {
+                local[54] = 0;
+            }
+        } else {
+            local[54] = 0;
+        }
+        local[55] = 13;
+        AllocBattleActorSlot();
+        SetBattleField(40, 287);
+        SetBattleField(41, 22);
+        SetBattleField(42, 0);
+        Random(local[19], 6000, 9000);
+        SetBattleField(43, local[19]);
+        SetBattleField(44, room[10] * 99 >> 16);
+        SetBattleField(45, room[10] * 99 >> 16);
+        SetBattleField(60, room[10] * 99 >> 16);
+        SetBattleField(61, room[10] * 34 >> 16);
+        SetBattleField(62, 84);
+        SetBattleField(63, 50);
+        SetBattleField(64, 6);
+        SetBattleField(90, 8);
+        SetBattleField(91, 6);
+        SetBattleField(65, 4);
+        SetBattleField(66, 60);
+        SetBattleField(67, 12);
+        SetBattleField(68, 80);
+        SetBattleField(69, 2);
+        SetBattleField(92, local[54]);
+        SetBattleField(93, local[55]);
+        SetBattleField(100, 1);
+        SetBattleField(101, 1);
+        SetBattleField(102, 1);
+        SetBattleField(103, 2);
+        SetBattleField(104, 1);
+        SetBattleField(105, 2);
+        SetBattleField(106, 2);
+        SetBattleField(107, 1);
+        SetBattleField(108, 2);
+        SetBattleField(109, 0);
+        SetBattleField(110, 10);
+        room[4] = room[4] + 22;
+        room[1] = room[1] + 84;
+        room[2] = room[2] + 1;
+        SetupModelPartAnim11(1, 1, 6, 7, room[10] * 110 >> 16, 3, 5, 6, 18, 2, 17);
+        SetBattleField(50, 1243);
+        SetBattleField(51, 1242);
+        SetBattleField(52, 1244);
+        SetBattleField(53, 1390);
+        SetBattleField(54, 1390);
+        SetBattleField(55, 1390);
+        local[17] = local[17] | 2048;
+        SetMoveSpeed(0x12666);
+        HideActor();
+        DisableActorRendering();
+        CameraSnapToActor(0, 0, 2048);
+        GetSubId(local[6]);
+        QueryActorField(ACTOR_ACTION, 8, local[6], local[19]);
+        SetAnimFrame(local[6] * 15 % local[19]);
+        PlayModelAnimAndWait(60);
+        EnableActorRendering();
+        if (local[8] == 31) {
+            PlayFieldSfx(9, 0, 112);
+        }
+        while (!(room[0] & 4)) {
+            Wait(1);
+        }
+        GetEntityVec3(VEC3_POS, local[29], local[30], local[31]);
+        local[39] = 16;
+        local[40] = 16;
+        TestPointInPolygon(local[29], local[31], 3, @poly_18AC, local[23]);
+        if (local[23] != 0) {
+            local[39] = 0;
+            local[40] = 0;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_1854, local[23]);
+        if (local[23] != 0) {
+            local[39] = 1;
+            local[40] = 1;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_1860, local[23]);
+        if (local[23] != 0) {
+            local[39] = 2;
+            local[40] = 2;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_186C, local[23]);
+        if (local[23] != 0) {
+            local[39] = 3;
+            local[40] = 3;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_1878, local[23]);
+        if (local[23] != 0) {
+            local[39] = 4;
+            local[40] = 4;
+        }
+        TestPointInPolygon(local[29], local[31], 4, @poly_1884, local[23]);
+        if (local[23] != 0) {
+            local[39] = 5;
+            local[40] = 5;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_1894, local[23]);
+        if (local[23] != 0) {
+            local[39] = 6;
+            local[40] = 6;
+        }
+        TestPointInPolygon(local[29], local[31], 3, @poly_18A0, local[23]);
+        if (local[23] != 0) {
+            local[39] = 7;
+            local[40] = 7;
+        }
+        TestPointInPolygon(local[29], local[31], 8, @poly_18B8, local[23]);
+        if (local[23] != 0) {
+            local[39] = 8;
+            local[40] = local[40] | 8;
+        }
+        if (local[39] < 16) {
+            SetBit(room[25], local[39]);
+            SetBit(room[26], local[40]);
+        }
+        GetEntityVec3(VEC3_ROT, local[19], local[20], local[21]);
+        Wait((31 - local[8]) * 24 + (local[20] & 7) + 1);
+        SetEventHandler(EVENT_TOUCH, @label_0DEA);
+        SpawnThread(@label_0640);
+        SpawnThread(@label_165C);
+        ExitThread();
+    @label_0640:
+        if ((local[17] & 4096) != 0 && room[31] != 0) {
+            GetActorPositionByType(0, room[31], room[32], local[19], local[20], local[21], local[23]);
+            SetEntityVec3(VEC3_POS, local[19], local[20], local[21]);
+        }
+        GetDistanceToActor(0, 0, local[10]);
+        GetAngleToActor(0, 0, local[11]);
+        GetActorPositionByType(0, 0, 0, local[14], local[15], local[16], local[23]);
+        GetEntityVec3(VEC3_POS, local[29], local[30], local[31]);
+        Random(local[22], 0, 101);
+        if ((local[17] & 2048) == 0) {
+            local[12] = 0;
+            local[13] = 0;
+            TestPointInPolygon(local[14], local[16], 3, @poly_18AC, local[23]);
+            if (local[23] != 0) {
+                local[12] = 0;
+                local[13] = 0;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_1854, local[23]);
+            if (local[23] != 0) {
+                local[12] = 1;
+                local[13] = 1;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_1860, local[23]);
+            if (local[23] != 0) {
+                local[12] = 2;
+                local[13] = 2;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_186C, local[23]);
+            if (local[23] != 0) {
+                local[12] = 3;
+                local[13] = 3;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_1878, local[23]);
+            if (local[23] != 0) {
+                local[12] = 4;
+                local[13] = 4;
+            }
+            TestPointInPolygon(local[14], local[16], 4, @poly_1884, local[23]);
+            if (local[23] != 0) {
+                local[12] = 5;
+                local[13] = 5;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_1894, local[23]);
+            if (local[23] != 0) {
+                local[12] = 6;
+                local[13] = 6;
+            }
+            TestPointInPolygon(local[14], local[16], 3, @poly_18A0, local[23]);
+            if (local[23] != 0) {
+                local[12] = 7;
+                local[13] = 7;
+            }
+            TestPointInPolygon(local[14], local[16], 8, @poly_18B8, local[23]);
+            if (local[23] != 0) {
+                local[12] = 8;
+                local[13] = local[13] | 8;
+            }
+            ClearBit(room[25], local[39]);
+            local[39] = 16;
+            local[40] = 16;
+            TestPointInPolygon(local[29], local[31], 3, @poly_18AC, local[23]);
+            if (local[23] != 0) {
+                local[39] = 0;
+                local[40] = 0;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_1854, local[23]);
+            if (local[23] != 0) {
+                local[39] = 1;
+                local[40] = 1;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_1860, local[23]);
+            if (local[23] != 0) {
+                local[39] = 2;
+                local[40] = 2;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_186C, local[23]);
+            if (local[23] != 0) {
+                local[39] = 3;
+                local[40] = 3;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_1878, local[23]);
+            if (local[23] != 0) {
+                local[39] = 4;
+                local[40] = 4;
+            }
+            TestPointInPolygon(local[29], local[31], 4, @poly_1884, local[23]);
+            if (local[23] != 0) {
+                local[39] = 5;
+                local[40] = 5;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_1894, local[23]);
+            if (local[23] != 0) {
+                local[39] = 6;
+                local[40] = 6;
+            }
+            TestPointInPolygon(local[29], local[31], 3, @poly_18A0, local[23]);
+            if (local[23] != 0) {
+                local[39] = 7;
+                local[40] = 7;
+            }
+            TestPointInPolygon(local[29], local[31], 8, @poly_18B8, local[23]);
+            if (local[23] != 0) {
+                local[39] = 8;
+                local[40] = local[40] | 8;
+            }
+            if (local[39] < 16) {
+                SetBit(room[25], local[39]);
+                SetBit(room[26], local[40]);
+            }
+        }
+        local[18] = 0;
+        if ((local[17] & 40) == 0) {
+            ClearBit(room[22], local[8]);
+            if ((local[17] & 16) == 0) {
+                local[18] = 2;
+            } else {
+                local[18] = 4;
+                if ((local[11] + 800 & 4095) > 1600) {
+                    local[18] = 2;
+                }
+                if (local[10] > 0x03200000) {
+                    local[18] = 2;
+                }
+            }
+        }
+        if ((local[17] & 32) == 0) {
+            if ((local[17] & 1) != 0) {
+                local[17] = local[17] & -2;
+                local[18] = 1;
+            }
+            if ((local[17] & 4) != 0) {
+                local[17] = local[17] & -5;
+                local[18] = 1;
+            }
+        }
+        case_if (local[18] == 1) {
+            StopActorMotion();
+            local[17] = local[17] & -9;
+            local[17] = local[17] & -33;
+            ClearBit(room[22], local[8]);
+            ClearBit(room[23], local[8]);
+            ClearBit(room[27], local[41]);
+            KillThread(local[1]);
+            EnableActorRendering();
+            if (local[5] != -1) {
+                StopPmSlotOnSelf(local[5]);
+                local[5] = -1;
+            }
+            QueryActorField(ACTOR_MODE, 8, local[8], local[23]);
+            if (local[23] != 2) {
+                SetAnim(2);
+            }
+            goto @label_0DDE;
+            goto @label_0CDE;
+        }
+        case_if (local[18] == 2) {
+        @label_0CDE:
+            StopActorMotion();
+            local[17] = local[17] & -9;
+            KillThread(local[1]);
+            local[17] = local[17] | 8;
+            if (local[5] != -1) {
+                StopPmSlotOnSelf(local[5]);
+                local[5] = -1;
+            }
+            SpawnThread(@label_0F64);
+            goto @label_0DDE;
+            goto @label_0D4E;
+        }
+        case_if (local[18] == 4) {
+        @label_0D4E:
+            StopActorMotion();
+            local[17] = local[17] & -17;
+            local[17] = local[17] & -9;
+            KillThread(local[1]);
+            local[17] = local[17] | 32;
+            SetBit(room[22], local[8]);
+            if (local[5] != -1) {
+                StopPmSlotOnSelf(local[5]);
+                local[5] = -1;
+            }
+            local[4] = 0;
+            SpawnThread(@label_143C);
+            goto @label_0DDE;
+            goto @label_0DDE;
+        }
+        goto @label_0DDE;
+    @label_0DDE:
+        Wait(1);
+        goto @label_0640;
+    @label_0DEA:
+        GetThreadTargets18_1C(local[44], local[45]);
+        if (local[44] == 0) {
+            if ((local[17] & 2) == 0) {
+                local[17] = local[17] | 3;
+                local[25] = 512;
+                local[23] = 0;
+                while (local[23] == 0) {
+                    Atan2((local[16] - local[31]) / 65536, (local[14] - local[29]) / 65536, local[24]);
+                    Cos(local[24] - 2048 & 4095, local[46]);
+                    local[46] = local[46] * local[25] + local[29];
+                    Sin(local[24] - 2048 & 4095, local[47]);
+                    local[47] = local[47] * local[25] + local[31];
+                    TestPointInPolygon(local[46], local[47], 9, @poly_18D8, local[23]);
+                    local[25] = local[25] - 64;
+                    if (local[25] < 0) {
+                        local[23] = 1;
+                    }
+                }
+            }
+            ExitThread();
+        }
+        ExitThread();
+    @label_0F64:
+        GetThreadId(local[1]);
+        Wait(4);
+        PlayAnimOnceAndWait(17);
+        SetAnim(4);
+        Random(local[2], 5, 30);
+    @label_0F86:
+        Wait(1);
+        Atan2((local[16] - 0x00140000) / 65536, (local[14] - 0x00520000) / 65536, local[23]);
+        if ((local[23] - local[35] & 4095) < 2048) {
+            local[35] = local[35] - 32;
+        } else {
+            local[35] = local[35] + 32;
+        }
+        case_if (local[8] == 28) {
+            local[24] = -600;
+            local[25] = 540;
+            goto @label_10B8;
+            goto @label_1050;
+        }
+        case_if (local[8] == 29) {
+        @label_1050:
+            local[24] = -200;
+            local[25] = 500;
+            goto @label_10B8;
+            goto @label_1076;
+        }
+        case_if (local[8] == 30) {
+        @label_1076:
+            local[24] = 200;
+            local[25] = 560;
+            goto @label_10B8;
+            goto @label_109C;
+        }
+        case_if (local[8] == 31) {
+        @label_109C:
+            local[24] = 600;
+            local[25] = 520;
+            goto @label_10B8;
+            goto @label_10B8;
+        }
+    @label_10B8:
+        Cos(local[35] + local[24] & 4095, local[19]);
+        local[19] = local[14] + local[19] * local[25];
+        Sin(local[35] + local[24] & 4095, local[21]);
+        local[21] = local[16] + local[21] * local[25];
+        if (local[29] < local[19]) {
+            local[26] = local[26] + 32768;
+        } else {
+            local[26] = local[26] - 32768;
+        }
+        if (local[31] < local[21]) {
+            local[28] = local[28] + 32768;
+        } else {
+            local[28] = local[28] - 32768;
+        }
+        if (local[26] > 0x00080000) {
+            local[26] = 0x00080000;
+        }
+        if (local[26] < 0xFFF80000) {
+            local[26] = 0xFFF80000;
+        }
+        if (local[28] > 0x00080000) {
+            local[28] = 0x00080000;
+        }
+        if (local[28] < 0xFFF80000) {
+            local[28] = 0xFFF80000;
+        }
+        local[19] = (local[19] - local[29]) / 65536;
+        local[21] = (local[21] - local[31]) / 65536;
+        Sqrt(local[19] * local[19] + local[21] * local[21], local[23]);
+        if (local[23] * 65536 < 0x00400000) {
+            local[26] = local[26] / 2;
+            local[28] = local[28] / 2;
+        }
+        SetEntityVec3(VEC3_POS, local[29] + local[26], 0.0fp, local[31] + local[28]);
+        GetAngleToActor(0, 0, local[23]);
+        GetEntityVec3(VEC3_ROT, local[19], local[20], local[21]);
+        if (local[23] > 40 && local[23] < 2048) {
+            local[20] = local[20] + 40;
+        }
+        if (local[23] < 4056 && local[23] > 2047) {
+            local[20] = local[20] - 40;
+        }
+        SetEntityVec3(VEC3_ROT, local[19], local[20] & 4095, local[21]);
+        if ((local[17] & 16) == 0) {
+            goto @label_0F86;
+        }
+        local[2] = local[2] - 1;
+        if (local[2] > 0) {
+            goto @label_0F86;
+        }
+        PlayAnimOnceAndWait(16);
+        SetAnim(2);
+        Wait(1);
+        local[17] = local[17] & -9;
+        ClearBit(room[22], local[8]);
+        EnableActorRendering();
+        ExitThread();
+    @label_143C:
+        GetThreadId(local[3]);
+        SpawnThread(@label_14F4);
+        Wait(3);
+        LoadRoomAssets(70, local[5]);
+        SendPmCommand0(local[5], 11, 0, 0, 0);
+        SendPmCommand0(local[5], 10, 7, -1, 0);
+        SendPmCommand0(local[5], 26, local[14], local[16], 0x01900000);
+        SendPmCommand0(local[5], 4, 0x00500000, 0, 0);
+        SendPmCommand0(local[5], 3, 0, 0, 0);
+        SendPmCommand0(local[5], 30, 1, 0, 0);
+        SendPmCommand0(local[5], 23, 0, 0, 0);
+        TriggerAnimEvent(1, local[4]);
+        SetAnim(2);
+        Wait(3);
+        local[17] = local[17] & -33;
+        ClearBit(room[22], local[8]);
+        SetBattleField(43, 0);
+        ExitThread();
+    @label_14F4:
+        local[23] = 2;
+        while (local[23] == 2 || local[23] == 6) {
+            local[24] = 64;
+            GetAngleToActor(0, 0, local[23]);
+            GetEntityVec3(VEC3_ROT, local[19], local[20], local[21]);
+            if (local[23] > local[24] && local[23] < 2048) {
+                local[20] = local[20] + local[24];
+            }
+            if (local[23] < 4096 - local[24] && local[23] >= 2048) {
+                local[20] = local[20] - local[24];
+            }
+            SetEntityVec3(VEC3_ROT, local[19], local[20] & 4095, local[21]);
+            Wait(1);
+            if (local[4] == 1) {
+                ExitThread();
+            }
+            QueryActorField(ACTOR_MODE, 8, local[8], local[23]);
+        }
+        if (local[5] != -1) {
+            SendPmCommand0(local[5], 30, 0, 0, 0);
+            SendPmCommand0(local[5], 22, local[14], local[16], 64);
+            SendPmCommand0(local[5], 26, local[14], local[16], 0x012C0000);
+        }
+        ExitThread();
+    @label_165C:
+        SetThreadFlag80();
+    @label_1660:
+        if ((local[17] & 48) == 0) {
+            GetBattleField(43, local[48]);
+            if (local[48] >= 9000) {
+                local[17] = local[17] | 16;
+            }
+        }
+        GetBattleField(44, local[49]);
+        GetBattleField(60, local[50]);
+        local[49] = local[49];
+        local[51] = (local[49] - local[52]) * 100 / (local[50] - local[52]);
+        if (local[49] > local[52] && local[51] == 0) {
+            local[51] = 1;
+        }
+        if (local[49] <= local[52]) {
+            local[17] = local[17] | 16384;
+            local[51] = 0;
+        }
+        if (local[49] <= 0) {
+            ClearBit(room[24], local[8]);
+            ClearBit(room[22], local[8]);
+            room[29] = room[29] - 1;
+            room[30] = room[30] - local[0];
+            if (room[29] == 0) {
+                room[16] = 16;
+            }
+            KillOtherThreads();
+            ExitThread();
+        }
+        GetBattleField(77, local[53]);
+        if (local[53] != 0) {
+            local[17] = local[17] | 8192;
+            if ((local[17] & 2) == 0) {
+                local[17] = local[17] | 3;
+                local[46] = local[29];
+                local[47] = local[31];
+            }
+        }
+        Wait(1);
+        goto @label_1660;
+        polygon @poly_1854 {
+            (82.0fp, 20.0fp),
+            (1519.0fp, 138.0fp),
+            (880.0fp, -636.0fp),
+        }
+        polygon @poly_1860 {
+            (82.0fp, 20.0fp),
+            (880.0fp, -636.0fp),
+            (172.0fp, -1224.0fp),
+        }
+        polygon @poly_186C {
+            (82.0fp, 20.0fp),
+            (172.0fp, -1224.0fp),
+            (-580.0fp, -690.0fp),
+        }
+        polygon @poly_1878 {
+            (82.0fp, 20.0fp),
+            (-580.0fp, -690.0fp),
+            (-1310.0fp, -155.0fp),
+        }
+        polygon @poly_1884 {
+            (82.0fp, 20.0fp),
+            (-1310.0fp, -155.0fp),
+            (-979.0fp, 553.0fp),
+            (-780.0fp, 696.0fp),
+        }
+        polygon @poly_1894 {
+            (82.0fp, 20.0fp),
+            (-780.0fp, 696.0fp),
+            (-96.0fp, 1246.0fp),
+        }
+        polygon @poly_18A0 {
+            (82.0fp, 20.0fp),
+            (-96.0fp, 1246.0fp),
+            (744.0fp, 730.0fp),
+        }
+        polygon @poly_18AC {
+            (82.0fp, 20.0fp),
+            (744.0fp, 730.0fp),
+            (1519.0fp, 138.0fp),
+        }
+        polygon @poly_18B8 {
+            (599.0fp, 62.0fp),
+            (441.0fp, -275.0fp),
+            (114.0fp, -427.0fp),
+            (-215.0fp, -299.0fp),
+            (-419.0fp, -43.0fp),
+            (-305.0fp, 324.0fp),
+            (17.0fp, 461.0fp),
+            (379.0fp, 339.0fp),
+        }
+        polygon @poly_18D8 {
+            (1519.0fp, 138.0fp),
+            (880.0fp, -636.0fp),
+            (172.0fp, -1224.0fp),
+            (-580.0fp, -690.0fp),
+            (-1310.0fp, -155.0fp),
+            (-979.0fp, 553.0fp),
+            (-780.0fp, 696.0fp),
+            (-96.0fp, 1246.0fp),
+            (744.0fp, 730.0fp),
+        }
+    }
+
+    actor_script actor_9 {
+        SetActorBattleField(0, 0, 255, 0);
+        local[1] = 256;
+        local[2] = 102;
+        local[3] = 76;
+        local[4] = 42;
+        AkaoCmd(0x194, 114, 0, 0, 0, local[0]);
+        AkaoCmd(0x194, 99, 0, 0, 0, local[0]);
+        room[18] = 0;
+        room[19] = 0;
+        room[21] = 0;
+        room[22] = 0;
+        room[23] = 0;
+        room[24] = 0;
+        room[25] = 0;
+        room[26] = 0;
+        room[27] = 0;
+        room[28] = 0;
+        room[20] = 0;
+        room[29] = 0;
+        room[30] = 0;
+        room[31] = 0;
+        room[32] = 0;
+        room[33] = 0;
+        room[16] = 0;
+        Wait(1);
+        SetEventHandler(EVENT_INTERACT, @label_1324);
+        SpawnThread(@label_04CE);
+        SpawnThread(@label_086E);
+        SpawnThread(@label_0C0E);
+    @label_00F4:
+        GetThreadId(local[25]);
+        Wait(1);
+        GetPlayerInputFlag(local[33]);
+        if (local[33] == 0) {
+            goto @label_00F4;
+        }
+        GetActorPositionByType(0, 0, 0, local[5], local[33], local[9], local[33]);
+        GetActorPositionByType(5, 0, 0, local[33], local[29], local[33], local[33]);
+        TestPointInQuad(1300.0fp, 731.0fp, 1100.0fp, 731.0fp, 1100.0fp, -1250.0fp, 1300.0fp, -1250.0fp, local[5], local[9], local[21]);
+        if (local[21] == 1) {
+            if (!(global[10] & 0x80000000)) {
+                if (0) {
+                    if (global[11] & 1 << global[20]) {
+                        goto @label_00F4;
+                    }
+                    SetBit(global[11], global[20]);
+                }
+                if (!(room[0] & 32)) {
+                    if (!(room[0] & 8)) {
+                        if (!(room[0] & 256)) {
+                            SetBit(room[0], 8);
+                            if (!(room[0] & 512)) {
+                                if (!(room[0] & 1024)) {
+                                    if (!(room[0] & 2048)) {
+                                        if (0) {
+                                            local[36] = local[1];
+                                        } else {
+                                            local[34] = global[20] >> 4 & 3;
+                                            case_if (local[34] == 0) {
+                                                local[36] = local[1];
+                                                goto @label_033E;
+                                                goto @label_02EE;
+                                            }
+                                            case_if (local[34] == 1) {
+                                            @label_02EE:
+                                                local[36] = local[2];
+                                                goto @label_033E;
+                                                goto @label_030C;
+                                            }
+                                            case_if (local[34] == 2) {
+                                            @label_030C:
+                                                local[36] = local[3];
+                                                goto @label_033E;
+                                                goto @label_032A;
+                                            }
+                                            case_if (local[34] == 3) {
+                                            @label_032A:
+                                                local[36] = local[4];
+                                                goto @label_033E;
+                                                goto @label_033E;
+                                            }
+                                        }
+                                    @label_033E:
+                                        GetGameTimeCounter(1, local[37]);
+                                        local[37] = local[37] & 255;
+                                        if (local[37] > 193) {
+                                            Random(global[78], 0, 256);
+                                        }
+                                        global[78] = global[78] * 5 + 1 & 255;
+                                        room[8] = global[78];
+                                        local[35] = global[78];
+                                        if (local[35] < local[36]) {
+                                            room[11] = local[6];
+                                            room[12] = local[10];
+                                            room[13] = local[29] + 2048 & 4095;
+                                            PlayFieldSfx(0, 0, 116);
+                                            room[4] = 0;
+                                            room[1] = 0;
+                                            KillThread(local[26]);
+                                            KillThread(local[27]);
+                                            KillThread(local[28]);
+                                            PlayFieldSfx(1, 0, 252);
+                                            SetBit(room[0], 3);
+                                            MemCardStepInit(2);
+                                            GetBattleModeState(local[38]);
+                                            while (local[38] != 0) {
+                                                Wait(1);
+                                                GetBattleModeState(local[38]);
+                                            }
+                                            SetBattleModeState6();
+                                            while (local[38] != 7) {
+                                                Wait(1);
+                                                GetBattleModeState(local[38]);
+                                            }
+                                            LockPlayerInput();
+                                            PauseSceneEvents();
+                                            PlayFieldSfx(9, 0, 100);
+                                            PlayFieldSfx(0, 0, 101);
+                                            SpawnThread(@label_0FAE);
+                                            ExitThread();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        local[6] = local[5];
+        local[10] = local[9];
+        goto @label_00F4;
+    @label_04CE:
+        GetThreadId(local[26]);
+        Wait(1);
+        GetPlayerInputFlag(local[33]);
+        if (local[33] == 0) {
+            goto @label_04CE;
+        }
+        GetActorPositionByType(0, 0, 0, local[7], local[33], local[11], local[33]);
+        GetActorPositionByType(5, 0, 0, local[33], local[30], local[33], local[33]);
+        TestPointInQuad(657.0fp, -1500.0fp, -385.0fp, -1500.0fp, -385.0fp, -1300.0fp, 657.0fp, -1300.0fp, local[7], local[11], local[22]);
+        if (local[22] == 1) {
+            if (!(global[10] & 0x80000000)) {
+                if (0) {
+                    if (global[11] & 1 << global[20]) {
+                        goto @label_04CE;
+                    }
+                    SetBit(global[11], global[20]);
+                }
+                if (!(room[0] & 32)) {
+                    if (!(room[0] & 8)) {
+                        if (!(room[0] & 512)) {
+                            SetBit(room[0], 9);
+                            if (!(room[0] & 256)) {
+                                if (!(room[0] & 1024)) {
+                                    if (!(room[0] & 2048)) {
+                                        if (0) {
+                                            local[36] = local[1];
+                                        } else {
+                                            local[34] = global[20] >> 4 & 3;
+                                            case_if (local[34] == 0) {
+                                                local[36] = local[1];
+                                                goto @label_0718;
+                                                goto @label_06C8;
+                                            }
+                                            case_if (local[34] == 1) {
+                                            @label_06C8:
+                                                local[36] = local[2];
+                                                goto @label_0718;
+                                                goto @label_06E6;
+                                            }
+                                            case_if (local[34] == 2) {
+                                            @label_06E6:
+                                                local[36] = local[3];
+                                                goto @label_0718;
+                                                goto @label_0704;
+                                            }
+                                            case_if (local[34] == 3) {
+                                            @label_0704:
+                                                local[36] = local[4];
+                                                goto @label_0718;
+                                                goto @label_0718;
+                                            }
+                                        }
+                                    @label_0718:
+                                        global[78] = global[78] * 5 + 1 & 255;
+                                        room[8] = global[78];
+                                        local[35] = global[78];
+                                        if (local[35] < local[36]) {
+                                            room[11] = local[8];
+                                            room[12] = local[12];
+                                            room[13] = local[30] + 2048 & 4095;
+                                            PlayFieldSfx(0, 0, 116);
+                                            room[4] = 0;
+                                            room[1] = 0;
+                                            KillThread(local[25]);
+                                            KillThread(local[27]);
+                                            KillThread(local[28]);
+                                            PlayFieldSfx(1, 0, 252);
+                                            SetBit(room[0], 3);
+                                            MemCardStepInit(2);
+                                            GetBattleModeState(local[38]);
+                                            while (local[38] != 0) {
+                                                Wait(1);
+                                                GetBattleModeState(local[38]);
+                                            }
+                                            SetBattleModeState6();
+                                            while (local[38] != 7) {
+                                                Wait(1);
+                                                GetBattleModeState(local[38]);
+                                            }
+                                            LockPlayerInput();
+                                            PauseSceneEvents();
+                                            PlayFieldSfx(9, 0, 100);
+                                            PlayFieldSfx(0, 0, 101);
+                                            SpawnThread(@label_0FAE);
+                                            ExitThread();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        local[8] = local[7];
+        local[12] = local[11];
+        goto @label_04CE;
+    @label_086E:
+        GetThreadId(local[27]);
+        Wait(1);
+        GetPlayerInputFlag(local[33]);
+        if (local[33] == 0) {
+            goto @label_086E;
+        }
+        GetActorPositionByType(0, 0, 0, local[13], local[33], local[14], local[33]);
+        GetActorPositionByType(5, 0, 0, local[33], local[31], local[33], local[33]);
+        TestPointInQuad(-1300.0fp, 660.0fp, -1500.0fp, 660.0fp, -1500.0fp, -795.0fp, -1300.0fp, -795.0fp, local[13], local[14], local[23]);
+        if (local[23] == 1) {
+            if (!(global[10] & 0x80000000)) {
+                if (0) {
+                    if (global[11] & 1 << global[20]) {
+                        goto @label_086E;
+                    }
+                    SetBit(global[11], global[20]);
+                }
+                if (!(room[0] & 32)) {
+                    if (!(room[0] & 8)) {
+                        if (!(room[0] & 1024)) {
+                            SetBit(room[0], 10);
+                            if (!(room[0] & 256)) {
+                                if (!(room[0] & 512)) {
+                                    if (!(room[0] & 2048)) {
+                                        if (0) {
+                                            local[36] = local[1];
+                                        } else {
+                                            local[34] = global[20] >> 4 & 3;
+                                            case_if (local[34] == 0) {
+                                                local[36] = local[1];
+                                                goto @label_0AB8;
+                                                goto @label_0A68;
+                                            }
+                                            case_if (local[34] == 1) {
+                                            @label_0A68:
+                                                local[36] = local[2];
+                                                goto @label_0AB8;
+                                                goto @label_0A86;
+                                            }
+                                            case_if (local[34] == 2) {
+                                            @label_0A86:
+                                                local[36] = local[3];
+                                                goto @label_0AB8;
+                                                goto @label_0AA4;
+                                            }
+                                            case_if (local[34] == 3) {
+                                            @label_0AA4:
+                                                local[36] = local[4];
+                                                goto @label_0AB8;
+                                                goto @label_0AB8;
+                                            }
+                                        }
+                                    @label_0AB8:
+                                        global[78] = global[78] * 5 + 1 & 255;
+                                        room[8] = global[78];
+                                        local[35] = global[78];
+                                        if (local[35] < local[36]) {
+                                            room[11] = local[15];
+                                            room[12] = local[16];
+                                            room[13] = local[31] + 2048 & 4095;
+                                            PlayFieldSfx(0, 0, 116);
+                                            room[4] = 0;
+                                            room[1] = 0;
+                                            KillThread(local[25]);
+                                            KillThread(local[26]);
+                                            KillThread(local[28]);
+                                            PlayFieldSfx(1, 0, 252);
+                                            SetBit(room[0], 3);
+                                            MemCardStepInit(2);
+                                            GetBattleModeState(local[38]);
+                                            while (local[38] != 0) {
+                                                Wait(1);
+                                                GetBattleModeState(local[38]);
+                                            }
+                                            SetBattleModeState6();
+                                            while (local[38] != 7) {
+                                                Wait(1);
+                                                GetBattleModeState(local[38]);
+                                            }
+                                            LockPlayerInput();
+                                            PauseSceneEvents();
+                                            PlayFieldSfx(9, 0, 100);
+                                            PlayFieldSfx(0, 0, 101);
+                                            SpawnThread(@label_0FAE);
+                                            ExitThread();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        local[15] = local[13];
+        local[16] = local[14];
+        goto @label_086E;
+    @label_0C0E:
+        GetThreadId(local[28]);
+        Wait(1);
+        GetPlayerInputFlag(local[33]);
+        if (local[33] == 0) {
+            goto @label_0C0E;
+        }
+        GetActorPositionByType(0, 0, 0, local[17], local[33], local[18], local[33]);
+        GetActorPositionByType(5, 0, 0, local[33], local[32], local[33], local[33]);
+        TestPointInQuad(-873.0fp, 1200.0fp, 835.0fp, 1200.0fp, 835.0fp, 1400.0fp, -873.0fp, 1400.0fp, local[17], local[18], local[24]);
+        if (local[24] == 1) {
+            if (!(global[10] & 0x80000000)) {
+                if (0) {
+                    if (global[11] & 1 << global[20]) {
+                        goto @label_0C0E;
+                    }
+                    SetBit(global[11], global[20]);
+                }
+                if (!(room[0] & 32)) {
+                    if (!(room[0] & 8)) {
+                        if (!(room[0] & 2048)) {
+                            SetBit(room[0], 11);
+                            if (!(room[0] & 256)) {
+                                if (!(room[0] & 512)) {
+                                    if (!(room[0] & 1024)) {
+                                        if (0) {
+                                            local[36] = local[1];
+                                        } else {
+                                            local[34] = global[20] >> 4 & 3;
+                                            case_if (local[34] == 0) {
+                                                local[36] = local[1];
+                                                goto @label_0E58;
+                                                goto @label_0E08;
+                                            }
+                                            case_if (local[34] == 1) {
+                                            @label_0E08:
+                                                local[36] = local[2];
+                                                goto @label_0E58;
+                                                goto @label_0E26;
+                                            }
+                                            case_if (local[34] == 2) {
+                                            @label_0E26:
+                                                local[36] = local[3];
+                                                goto @label_0E58;
+                                                goto @label_0E44;
+                                            }
+                                            case_if (local[34] == 3) {
+                                            @label_0E44:
+                                                local[36] = local[4];
+                                                goto @label_0E58;
+                                                goto @label_0E58;
+                                            }
+                                        }
+                                    @label_0E58:
+                                        global[78] = global[78] * 5 + 1 & 255;
+                                        room[8] = global[78];
+                                        local[35] = global[78];
+                                        if (local[35] < local[36]) {
+                                            room[11] = local[19];
+                                            room[12] = local[20];
+                                            room[13] = local[32] + 2048 & 4095;
+                                            PlayFieldSfx(0, 0, 116);
+                                            room[4] = 0;
+                                            room[1] = 0;
+                                            KillThread(local[26]);
+                                            KillThread(local[27]);
+                                            KillThread(local[25]);
+                                            PlayFieldSfx(1, 0, 252);
+                                            SetBit(room[0], 3);
+                                            MemCardStepInit(2);
+                                            GetBattleModeState(local[38]);
+                                            while (local[38] != 0) {
+                                                Wait(1);
+                                                GetBattleModeState(local[38]);
+                                            }
+                                            SetBattleModeState6();
+                                            while (local[38] != 7) {
+                                                Wait(1);
+                                                GetBattleModeState(local[38]);
+                                            }
+                                            LockPlayerInput();
+                                            PauseSceneEvents();
+                                            PlayFieldSfx(9, 0, 100);
+                                            PlayFieldSfx(0, 0, 101);
+                                            SpawnThread(@label_0FAE);
+                                            ExitThread();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        local[19] = local[17];
+        local[20] = local[18];
+        goto @label_0C0E;
+    @label_0FAE:
+        while (!(room[0] & 4)) {
+            Wait(1);
+        }
+    @label_0FDA:
+        Wait(1);
+        local[39] = 0;
+        GetBattleModeState(local[39]);
+        if (local[39] == 10) {
+            LockPlayerInput();
+            PauseSceneEvents();
+            UnlockPlayerMoveBit2();
+            if (0) {
+                room[11] = 0;
+                room[12] = 0;
+                room[13] = 0;
+            }
+            StartScreenFade(30);
+            WaitScreenFade();
+            PlayFieldSfx(1, 0, 117);
+            PlayFieldSfx(0, 0, 113);
+            KillOtherThreads();
+            ExitThread();
+        }
+        if (local[39] == 9) {
+            LockPlayerInput();
+            UnlockPlayerMoveBit2();
+            PauseSceneEvents();
+            room[11] = 0;
+            room[12] = 0;
+            room[13] = 0;
+            KillOtherThreads();
+            if (room[0] & 4096) {
+                if (0) {
+                    goto @label_1272;
+                }
+                local[40] = global[18] & 3;
+                local[40] = local[40] + 1 & 3;
+                GetEquipSlotState(local[41]);
+                local[41] = (local[41] - 1) % 10 * 2 + 2;
+                local[34] = 3;
+                local[34] = local[34] << local[41];
+                local[34] = ~local[34];
+                global[18] = global[18] & local[34];
+                global[18] = global[18] | local[40] << local[41];
+            } else if (1) {
+                if (0) {
+                    goto @label_1272;
+                }
+                local[40] = global[20] >> 4 & 3;
+                if (local[40] < 3) {
+                    local[34] = 3;
+                    local[34] = local[34] << 4;
+                    local[34] = ~local[34];
+                    global[20] = global[20] & local[34];
+                    local[34] = local[40] + 1 & 3;
+                    local[34] = local[34] << 4;
+                    global[20] = global[20] | local[34];
+                }
+            } else {
+                SetBit(room[0], 5);
+            }
+        @label_1272:
+            GetActorPositionByType(0, 0, 0, local[5], local[41], local[9], local[41]);
+            TestPointInQuad(0.0fp, 0.0fp, 0.0fp, 0.0fp, 0.0fp, 0.0fp, 0.0fp, 0.0fp, local[5], local[9], local[21]);
+            if (room[0] & 8192) {
+                if (local[21] == 1) {
+                    goto @label_12F8;
+                }
+            }
+            if (local[21] != 1) {
+            } else {
+                SetBit(room[0], 0);
+                StartScreenFade(30);
+                WaitScreenFade();
+            }
+        @label_12F8:
+            PlayFieldSfx(1, 0, 117);
+            PlayFieldSfx(0, 0, 114);
+            ExitThread();
+        }
+        goto @label_0FDA;
+        ExitThread();
+        Random(local[43], 0, 100);
+    @label_1324:
+        GetThreadTarget14(local[42]);
+        if (local[42] == 100) {
+            GetGameTimeCounter(1, local[45]);
+            local[45] = local[45] & 31;
+            TestBit(room[0], 8, local[44]);
+            if (local[44] != 0 && local[45] < 8) {
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 29, -636.0fp, 0.0fp, -289.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 30, -282.0fp, 0.0fp, 685.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 31, -706.0fp, 0.0fp, 195.0fp);
+                }
+                ExitThread();
+            }
+            if (local[44] != 0 && local[45] >= 8) {
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 29, -636.0fp, 0.0fp, -289.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 30, -282.0fp, 0.0fp, 685.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 31, -706.0fp, 0.0fp, 195.0fp);
+                }
+                ExitThread();
+            }
+            TestBit(room[0], 9, local[44]);
+            if (local[44] != 0 && local[45] < 8) {
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 28, -282.0fp, 0.0fp, 685.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 29, 251.0fp, 0.0fp, 697.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 30, 864.0fp, 0.0fp, -168.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 31, 816.0fp, 0.0fp, 309.0fp);
+                }
+                ExitThread();
+            }
+            if (local[44] != 0 && local[45] >= 8) {
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 28, -282.0fp, 0.0fp, 685.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 29, 251.0fp, 0.0fp, 697.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 30, -706.0fp, 0.0fp, 195.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 31, 816.0fp, 0.0fp, 309.0fp);
+                }
+                ExitThread();
+            }
+            TestBit(room[0], 10, local[44]);
+            if (local[44] != 0 && local[45] < 8) {
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(8, 29, 392.0fp, 0.0fp, -645.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(8, 30, 864.0fp, 0.0fp, -168.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 31, 816.0fp, 0.0fp, 309.0fp);
+                }
+                ExitThread();
+            }
+            if (local[44] != 0 && local[45] >= 8) {
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 29, 392.0fp, 0.0fp, -645.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(8, 30, 816.0fp, 0.0fp, 309.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(8, 31, 864.0fp, 0.0fp, -168.0fp);
+                }
+                ExitThread();
+            }
+            TestBit(room[0], 11, local[44]);
+            if (local[44] != 0 && local[45] < 8) {
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 28, -118.0fp, 0.0fp, -663.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(8, 29, 392.0fp, 0.0fp, -645.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(8, 30, 864.0fp, 0.0fp, -168.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 31, -636.0fp, 0.0fp, -289.0fp);
+                }
+                ExitThread();
+            }
+            if (local[44] != 0 && local[45] >= 8) {
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 28, -636.0fp, 0.0fp, -289.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(7, 29, 392.0fp, 0.0fp, -645.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(8, 30, -118.0fp, 0.0fp, -663.0fp);
+                }
+                Random(local[43], 0, 100);
+                if (local[43] <= 100) {
+                    SpawnActor(8, 31, 864.0fp, 0.0fp, -168.0fp);
+                }
+                ExitThread();
+            }
+            ExitThread();
+        }
+        if (local[42] == 112) {
+            while (!(room[0] & 16)) {
+                Wait(1);
+            }
+            SetWallCollisionPolygon(@poly_1E36, 9);
+            SetWalkableFloorPolygon(@poly_1E5A, 9);
+            LockPlayerMoveBit2();
+            GetActorBattleField(0, 0, 6, local[52]);
+            if (local[52] != 9000) {
+                GetActorBattleField(0, 0, 1, local[46]);
+                GetActorBattleField(0, 0, 14, local[47]);
+                if (room[2] == 1) {
+                } else {
+                    room[4] = room[4] / room[2];
+                    room[1] = room[1] / room[2];
+                }
+                local[46] = local[46] - room[4];
+                if (local[46] > 1) {
+                    local[48] = 0x00013333;
+                } else if (local[46] == 1) {
+                    local[48] = 0x00011999;
+                } else if (local[46] == 0) {
+                    local[48] = 65536;
+                } else if (local[46] == -1) {
+                    local[48] = 58982;
+                } else {
+                    local[48] = 52428;
+                }
+                local[47] = fixed_div(room[1] << 16, local[47] << 16);
+                if (local[47] >= 2) {
+                    local[49] = 58982;
+                } else if (local[47] >= 0x00018000) {
+                    local[49] = 52428;
+                } else if (local[47] >= 0x00013333) {
+                    local[49] = 45875;
+                } else if (local[47] >= 52428) {
+                    local[49] = 32768;
+                } else if (local[47] >= 32768) {
+                    local[49] = 19660;
+                } else {
+                    local[49] = 6553;
+                }
+                Random(local[50], 0, 11);
+                if (local[50] == 10) {
+                    local[50] = 0x00014CCC;
+                } else if (local[50] > 6) {
+                    local[50] = 0x00011999;
+                } else if (local[50] > 4) {
+                    local[50] = 58982;
+                } else if (local[50] > 2) {
+                    local[50] = 49152;
+                } else if (local[50] > 0) {
+                    local[50] = 32768;
+                } else {
+                    local[50] = 16384;
+                }
+                GetActorBattleField(0, 0, 1, local[46]);
+                if (local[46] < 11) {
+                    local[51] = 52428;
+                } else if (local[46] < 21) {
+                    local[51] = 32768;
+                } else if (local[46] < 31) {
+                    local[51] = 19660;
+                } else if (local[46] < 41) {
+                    local[51] = 13107;
+                } else {
+                    local[51] = 6553;
+                }
+                local[48] = fixed_mul(0x23280000, local[48]);
+                local[49] = fixed_mul(local[48], local[49]);
+                local[50] = fixed_mul(local[49], local[50]);
+                local[51] = fixed_mul(local[50], local[51]);
+                local[51] = local[51] >> 16;
+                room[3] = local[51];
+                SetActorBattleField(0, 0, 6, local[51]);
+            }
+            SetBit(room[0], 2);
+            ResumeSceneEvents();
+            UnlockPlayerInput();
+            SignalSceneExit();
+            ClearBattleModeState();
+            ExitThread();
+        }
+        if (local[42] == 115) {
+            PlayFieldSfx(1, 0, 253);
+            SpawnThread(@label_00F4);
+            SpawnThread(@label_04CE);
+            SpawnThread(@label_086E);
+            SpawnThread(@label_0C0E);
+            Wait(1);
+            ResumeSceneEvents();
+            UnlockPlayerInput();
+            ExitThread();
+        }
+        ExitThread();
+        polygon @poly_1E36 {
+            (1519.0fp, 138.0fp),
+            (880.0fp, -636.0fp),
+            (172.0fp, -1224.0fp),
+            (-580.0fp, -690.0fp),
+            (-1310.0fp, -155.0fp),
+            (-979.0fp, 553.0fp),
+            (-780.0fp, 696.0fp),
+            (-96.0fp, 1246.0fp),
+            (744.0fp, 730.0fp),
+        }
+        polygon @poly_1E5A {
+            (1878.25fp, 167.5fp),
+            (1079.5fp, -800.0fp),
+            (194.5fp, -1535.0fp),
+            (-745.5fp, -867.5fp),
+            (-1658.0fp, -198.75fp),
+            (-1244.25fp, 686.25fp),
+            (-995.5fp, 865.0fp),
+            (-140.5fp, 1552.5fp),
+            (909.5fp, 907.5fp),
+        }
+    }
+}

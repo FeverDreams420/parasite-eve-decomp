@@ -1,0 +1,122 @@
+// Parasite Eve 1 Scene Script (room_133)
+room_script room_133 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(95, 125, 20);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00C4);
+        if (global[ROOM] == 321) {
+            SetEntityVec3(VEC3_POS, -72.0fp, -50.0fp, -749.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 1536, 0);
+            goto @label_0082;
+        } else {
+            SetEntityVec3(VEC3_POS, -72.0fp, -50.0fp, -749.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            goto @label_0082;
+        }
+        Wait(1);
+    @label_0082:
+        SetAnim(29);
+        OpenTextbox(34); // "Eve. Hope you enjoy your stay,"
+        WaitTextbox(34);
+        PlayFieldSfx(2, 0, 2);
+        SetAnim(21);
+        SetAnim(40);
+        SetAnimFrame(0);
+        PlayAnimToFrame(18);
+        WaitAnimEnd();
+        SetAnim(41);
+        ExitThread();
+    @label_00C4:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            goto @label_0082;
+        }
+        if (local[3] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            goto @label_0082;
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        LockPlayerInput();
+        AkaoCmd(0x193, 1020, 1016, 0, 0, room[17]);
+        AkaoCmd(0xC8, 10, 0, 0, 0, room[17]);
+        SceneCmd(2700, 105, 175, 255, 0, 0, 0, room[17]);
+        SetCameraBaseAngle(0, 0);
+        EnablePlayerMovement();
+        SetEventHandler(EVENT_INTERACT, @label_0086);
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        LockPlayerInput();
+        Wait(1);
+        SetFadeColor(0x1E);
+        Wait(1);
+    @label_0082:
+        ExitThread();
+    @label_0086:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 252) {
+            PlayFieldSfx(2, 0, 251);
+            goto @label_0082;
+        }
+        if (local[3] == 253) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            goto @label_0082;
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        room[18] = 0;
+        SetEventHandler(EVENT_INTERACT, @label_00AE);
+        Wait(1);
+    @label_0016:
+        ExitThread();
+    @label_001A:
+        AkaoCmd(0x12C, 2464, 0, 128, 60, room[17]);
+        SpawnThread(@label_0060);
+        Wait(15);
+        StartScreenFade(30);
+        WaitScreenFade();
+        global[ROOM] = 134;
+        global[AREA] = 473;
+        ChangeRoom(0xA8062148);
+        ExitThread();
+        goto @label_0016;
+    @label_0060:
+        while (room[18] == 0) {
+            Random(local[6], 126, 127);
+            SetScrollMode(160, local[6], 4);
+            WaitDiscIdle();
+            Random(local[6], 129, 130);
+            SetScrollMode(160, local[6], 4);
+            WaitDiscIdle();
+        }
+        ExitThread();
+    @label_00AE:
+        GetThreadTarget14(local[5]);
+        if (local[5] == 251) {
+            DestroySelf();
+        }
+        if (local[5] == 2) {
+            SpawnThread(@label_001A);
+            ExitThread();
+        }
+        ExitThread();
+        ExitThread();
+    }
+}

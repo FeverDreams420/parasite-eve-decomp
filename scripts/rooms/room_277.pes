@@ -1,0 +1,344 @@
+// Parasite Eve 1 Scene Script (room_277)
+room_script room_277 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(75, 100, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_011C);
+        SetEventHandler(EVENT_TOUCH, @label_0118);
+        ScaleShadowRadius(0xE147);
+        SetMoveFactor(0x10000);
+        SetCameraBaseAngle(1024, 1024);
+        Wait(1);
+        if (global[ROOM] == 276) {
+            SetEntityVec3(VEC3_POS, -900.0fp, 3.0fp, 150.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+            goto @label_0114;
+        } else if (global[ROOM] == 279) {
+            SetEntityVec3(VEC3_POS, 1234.0fp, 3.0fp, -2000.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+            goto @label_0114;
+        } else if (global[ROOM] == 280) {
+            SetEntityVec3(VEC3_POS, 1234.0fp, 3.0fp, 1750.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            goto @label_0114;
+        } else {
+            SetEntityVec3(VEC3_POS, -900.0fp, 3.0fp, 150.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+            goto @label_0114;
+        }
+        Wait(1);
+    @label_0114:
+        ExitThread();
+    @label_0118:
+        ExitThread();
+    @label_011C:
+        GetThreadTarget14(local[6]);
+        if (local[6] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SnapToSpawnPosition();
+            SetAnim(0);
+            ExitThread();
+        }
+        if (local[6] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            goto @label_0114;
+        }
+        if (local[6] == 0) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(15);
+            global[ROOM] = 278;
+            WaitScreenFade();
+            ChangeRoom(0xA8047348);
+        }
+        if (local[6] == 1) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(15);
+            global[ROOM] = 278;
+            WaitScreenFade();
+            DisableActorRendering();
+            ChangeRoom(0xA80474C8);
+        }
+        if (local[6] == 2) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(15);
+            global[ROOM] = 278;
+            WaitScreenFade();
+            global[47] = global[47] | 16;
+            ChangeRoom(0xA8048048);
+        }
+        if (local[6] == 4) {
+            PauseSceneEvents();
+            AkaoCmd(0xC9, 22, 0, 0, 0, local[4]);
+            AkaoCmd(0xD0, 0, 0, 0, 0, local[4]);
+            StartScreenFade(60);
+            SetAnim(19);
+            SetAnimFrame(0);
+            PlayAnimToFrame(24);
+            WaitAnimEnd();
+            WaitScreenFade();
+            global[ROOM] = 282;
+            ChangeRoom(0xA8083448);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1016, 1024, 0, 0, local[0]);
+        AkaoCmd(0xC8, 22, 0, 0, 0, local[0]);
+        AkaoCmd(0xCD, 22, 50, 0, 0, local[0]);
+        AkaoCmd(0xD0, 8, 0, 0, 0, local[0]);
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(7, 0, 0.0fp, 0.0fp, 0.0fp);
+        SetEventHandler(EVENT_INTERACT, @label_0108);
+        Wait(1);
+        SetMeshFadeLevel(112);
+        SetFadeColor(0x1E);
+        PlayFieldSfx(0, 0, 255);
+        if (global[47] & 8) {
+            if (!(global[47] & 16)) {
+                SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+                Wait(1);
+                goto @label_0104;
+            }
+        }
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(8);
+        PlayFieldSfx(2, 0, 6);
+        Wait(1);
+    @label_0104:
+        ExitThread();
+    @label_0108:
+        GetThreadTarget14(local[5]);
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetHitCylinder(80, 15, 255);
+        AkaoCmd(0x196, 2, 0, 1024, 0, local[4]);
+        AkaoCmd(0x196, 2, 15, 1025, 0, local[4]);
+        AkaoCmd(0x196, 6, 0, 1024, 0, local[4]);
+        AkaoCmd(0x196, 6, 60, 1025, 0, local[4]);
+        SetEventHandler(EVENT_INTERACT, @label_0218);
+        SetEventHandler(EVENT_TOUCH, @label_0174);
+        ScaleShadowRadius(0x8000);
+        SetMoveSpeed(0x13333);
+        SetMoveFactor(0x120000);
+        SetHitCylinderRadius(0x00870000);
+        if (global[ROOM] == 276) {
+            SetEntityVec3(VEC3_POS, -1400.0fp, 3.0fp, 171.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+            Wait(1);
+            room[17] = 0x00140000;
+            goto @label_0170;
+        } else if (global[ROOM] == 279) {
+            SetEntityVec3(VEC3_POS, 1284.0fp, 3.0fp, -1500.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            room[17] = 0x00050000;
+            goto @label_0170;
+        } else if (global[ROOM] == 280) {
+            SetEntityVec3(VEC3_POS, 1284.0fp, 3.0fp, 1000.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2222, 0);
+            room[17] = 0x00050000;
+            goto @label_0170;
+        } else {
+            SetEntityVec3(VEC3_POS, -1400.0fp, 3.0fp, 171.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+            Wait(1);
+            room[17] = 0x00120000;
+            goto @label_0170;
+        }
+        Wait(1);
+        SetAnim(6);
+    @label_0170:
+        ExitThread();
+    @label_0174:
+        GetThreadTargets18_1C(local[0], local[1]);
+        if (local[0] == 0) {
+            DisableActorRendering();
+            KillOtherThreads();
+            PlayFieldSfx(6, 0, 8);
+            PlayFieldSfx(5, 0, 8);
+            PlayFieldSfx(0, 0, 254);
+            PauseSceneEvents();
+            StopActorMotion();
+            SetAnimStep(0x20000);
+            AkaoCmd(0x12C, 1024, 0, 128, 127, local[5]);
+            SetAnim(5);
+            SetAnimFrame(50);
+            PlayAnimToFrame(71);
+            WaitAnimEnd();
+            SetAnimStep(0x30000);
+            PlayFieldSfx(0, 0, 4);
+            SetAnim(5);
+            SetAnimFrame(0);
+            PlayAnimToFrame(49);
+            WaitAnimEnd();
+            ExitThread();
+        }
+        ExitThread();
+    @label_0218:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 7) {
+            KillOtherThreads();
+            SetAnim(2);
+            MoveTowardPoint(-576.0fp, 0.0fp, 180);
+        }
+        if (local[3] == 3) {
+            KillOtherThreads();
+            StopActorMotion();
+            SetAnim(2);
+            SetMoveFactor(0x190000);
+            CameraTrackActorZoom(0, 0, 360);
+        }
+        if (local[3] == 5) {
+            KillOtherThreads();
+            MoveTowardPoint(900.0fp, 0.0fp, 360);
+            SetAnim(2);
+            SetMoveFactor(0xF0000);
+            CameraTrackActorZoom(0, 0, 360);
+        }
+        if (local[3] == 6) {
+            SetAnim(2);
+            CameraTrackActorZoom(0, 0, 360);
+        }
+        ExitThread();
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[11], local[12], local[13], local[7]);
+            if (local[11] >= 0xFC4A0000 && local[11] <= 0x03520000) {
+                KillOtherThreads();
+                CameraTrackActorZoom(0, 0, 360);
+            } else {
+                KillOtherThreads();
+                MoveTowardPoint(950.0fp, 50.0fp, 360);
+                CameraSnapToActor(0, 0, 36);
+                CameraTrackActorZoom(0, 0, 360);
+            }
+            Wait(1);
+        }
+    }
+
+    actor_script actor_3 {
+        SetHitCylinder(95, 145, 5);
+        EnableActorCollision();
+        ScaleShadowRadius(0x8000);
+        SetMoveSpeed(0x13333);
+        if (global[ROOM] == 276) {
+            SetEntityVec3(VEC3_POS, -1400.0fp, 3.0fp, 171.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+        } else if (global[ROOM] == 279) {
+            SetEntityVec3(VEC3_POS, 1284.0fp, 3.0fp, -1500.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        } else if (global[ROOM] == 280) {
+            SetEntityVec3(VEC3_POS, 1284.0fp, 3.0fp, 1000.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2222, 0);
+        } else {
+            SetEntityVec3(VEC3_POS, -1400.0fp, 3.0fp, 171.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+        }
+        SetParentActor(2, 0);
+        ExitThread();
+    }
+
+    actor_script actor_4 {
+        Wait(1);
+    @label_0006:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(500.0fp, 1000.0fp, 500.0fp, 1200.0fp, 1750.0fp, 1200.0fp, 1750.0fp, 1000.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+            PlayFieldSfx(2, 0, 7);
+            Wait(88);
+            SpawnActor(5, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnActor(6, 0, 0.0fp, 0.0fp, 0.0fp);
+            Wait(1);
+            global[47] = global[47] | 16;
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_0006;
+    }
+
+    actor_script actor_5 {
+        Wait(1);
+        SetEventHandler(EVENT_INTERACT, @label_007A);
+    @label_000E:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-1000.0fp, 650.0fp, -1000.0fp, -1107.0fp, 720.0fp, -1107.0fp, 720.0fp, 650.0fp, local[0], local[2], local[5]);
+        if (local[5] == 1) {
+            KillOtherThreads();
+            PlayFieldSfx(2, 0, 3);
+            SpawnActor(6, 0, 0.0fp, 0.0fp, 0.0fp);
+            DestroySelf();
+        }
+        Wait(1);
+        goto @label_000E;
+    @label_007A:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 8) {
+            DestroySelf();
+        }
+    }
+
+    actor_script actor_6 {
+        Wait(1);
+        SetEventHandler(EVENT_INTERACT, @label_007A);
+    @label_000E:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(1737.0fp, 1893.0fp, 1737.0fp, -2207.0fp, 693.0fp, -2207.0fp, 693.0fp, 1893.0fp, local[0], local[2], local[5]);
+        if (local[5] == 1) {
+            KillOtherThreads();
+            PlayFieldSfx(2, 0, 5);
+            SpawnActor(5, 0, 0.0fp, 0.0fp, 0.0fp);
+            DestroySelf();
+        }
+        Wait(1);
+        goto @label_000E;
+    @label_007A:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 8) {
+            DestroySelf();
+        }
+    }
+
+    actor_script actor_7 {
+        Wait(1);
+    @label_0006:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-1100.0fp, 0.0fp, -1100.0fp, 350.0fp, -1234.0fp, 350.0fp, -1234.0fp, 0.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            PlayFieldSfx(0, 0, 0);
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(1550.0fp, -2600.0fp, 1550.0fp, -2400.0fp, 950.0fp, -2400.0fp, 950.0fp, -2600.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            PlayFieldSfx(0, 0, 1);
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(1750.0fp, 2000.0fp, 1750.0fp, 2200.0fp, 850.0fp, 2200.0fp, 850.0fp, 2000.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            PlayFieldSfx(0, 0, 2);
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_0006;
+    }
+}

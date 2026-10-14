@@ -1,0 +1,1182 @@
+// Parasite Eve 1 Scene Script (room_359)
+room_script room_359 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetEventHandler(EVENT_INTERACT, @label_0036);
+        SetEntityVec3(VEC3_POS, 61.0fp, 0.0fp, -183.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        Wait(1);
+    @label_0026:
+        Wait(1);
+        goto @label_0026;
+        ExitThread();
+    @label_0036:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[3] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        SetCameraBaseAngle(0, 0);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(5, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(6, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(7, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SpawnThread(@label_007A);
+        ExitThread();
+    @label_007A:
+        CheckPadInput(PAD_PRESSED, 0x8000000, local[0]);
+        if (local[0] != 0) {
+            StartScreenFade(15);
+            WaitScreenFade();
+            ChangeRoom(0xA8081448);
+        }
+        Wait(1);
+        goto @label_007A;
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        EnableActorCollision();
+        SetEventHandler(EVENT_TOUCH, @label_002E);
+        SetEntityVec3(VEC3_POS, -289.0fp, 0.0fp, 334.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+        Wait(1);
+        ExitThread();
+    @label_002E:
+        GetThreadTargets18_1C(local[0], local[1]);
+        if (local[0] == 0) {
+            if (room[18] == 0) {
+                CheckPadInput(PAD_PRESSED, 0x100, local[2]);
+                if (local[2] != 0) {
+                    room[18] = 1;
+                    PlayFieldSfx(0, 0, 254);
+                    SetTextboxRect(16, 110, 288, 92);
+                    OpenStyledTextbox(169); // "<FB:09>5 Cancel / Battle OFF / Battle ON / Get weapon & armor / Event skip"
+                    WaitTextbox(169);
+                    GetChoiceResult(local[4]);
+                    if (local[4] == 0) {
+                    }
+                    if (local[4] == 1) {
+                        SetBit(global[10], 31);
+                    }
+                    if (local[4] == 2) {
+                        ClearBit(global[10], 31);
+                    }
+                    if (local[4] == 3) {
+                        GiveItem(103, local[7]);
+                        GiveItem(199, local[7]);
+                        GiveItem(103, local[7]);
+                        GiveItem(128, local[7]);
+                        GiveItem(143, local[7]);
+                        GiveItem(144, local[7]);
+                        GiveItem(107, local[7]);
+                        GiveItem(173, local[7]);
+                        GiveItem(179, local[7]);
+                        GiveItem(186, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        ClampMenuRange(511);
+                    }
+                    if (local[4] == 4) {
+                        global[STORY_FLAGS] = global[STORY_FLAGS] | 4;
+                        ClampMenuRange(511);
+                    }
+                    if (local[4] == 5) {
+                        OpenTextbox(182); // "Will you save your progress? / <FB:09>2 Yes / No"
+                        WaitTextbox(182);
+                        GetChoiceResult(local[4]);
+                        if (local[4] == 0) {
+                            global[ROOM] = 998;
+                            OpenMemCardDialog();
+                        }
+                    }
+                    PlayFieldSfx(0, 0, 255);
+                }
+                room[18] = 0;
+            }
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        EnableActorCollision();
+        SetEventHandler(EVENT_TOUCH, @label_002E);
+        SetEntityVec3(VEC3_POS, 143.0fp, 0.0fp, 334.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+        Wait(1);
+        ExitThread();
+    @label_002E:
+        GetThreadTargets18_1C(local[0], local[1]);
+        if (local[0] == 0) {
+            if (room[18] == 0) {
+                CheckPadInput(PAD_PRESSED, 0x100, local[2]);
+                if (local[2] != 0) {
+                    room[18] = 1;
+                    PlayFieldSfx(0, 0, 254);
+                    SetTextboxRect(16, 110, 260, 106);
+                    OpenStyledTextbox(163); // "<FB:09>7 Cancel / Next page / Opening / Under Theatre / Sewer 1 / Theatre Exterior / NY..."
+                    WaitTextbox(163);
+                    GetChoiceResult(local[4]);
+                    if (local[4] == 0) {
+                    }
+                    if (local[4] == 1) {
+                        goto @label_01CC;
+                    }
+                    if (local[4] == 2) {
+                        global[AREA] = 0;
+                        StartScreenFade(5);
+                        WaitScreenFade();
+                        ChangeRoom(0xA80830C8);
+                    }
+                    if (local[4] == 3) {
+                        StartScreenFade(5);
+                        WaitScreenFade();
+                        global[ROOM] = 9;
+                        ChangeRoom(0xA80010C8);
+                    }
+                    if (local[4] == 4) {
+                        global[AREA] = 104;
+                        StartScreenFade(5);
+                        WaitScreenFade();
+                        ChangeRoom(0xA8002348);
+                    }
+                    if (local[4] == 5) {
+                        global[AREA] = 112;
+                        StartScreenFade(5);
+                        WaitScreenFade();
+                        ChangeRoom(0xA80654C8);
+                    }
+                    if (local[4] == 6) {
+                        global[AREA] = 136;
+                        StartScreenFade(5);
+                        WaitScreenFade();
+                        ChangeRoom(0xA8004148);
+                    }
+                }
+                room[18] = 0;
+                PlayFieldSfx(0, 0, 255);
+            }
+            ExitThread();
+        }
+    @label_01CC:
+        SetTextboxRect(16, 110, 260, 106);
+        OpenStyledTextbox(164); // "<FB:09>7 Cancel / Next Page / Museum -Day1- / NYPD -Meeting- / Central Park / NYPD -Aft..."
+        WaitTextbox(164);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+        } else {
+            if (local[4] == 2) {
+                global[AREA] = 192;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA80290C8);
+            }
+            if (local[4] == 3) {
+                global[AREA] = 216;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA8004348);
+            }
+            if (local[4] == 4) {
+                global[AREA] = 228;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA8067248);
+            }
+            if (local[4] == 5) {
+                global[AREA] = 288;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA80040C8);
+            }
+            if (local[4] == 6) {
+                global[AREA] = 296;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA8009048);
+            }
+            room[18] = 0;
+            PlayFieldSfx(0, 0, 255);
+            ExitThread();
+        }
+        SetTextboxRect(16, 110, 260, 106);
+        OpenStyledTextbox(165); // "<FB:09>7 Cancel / Next Page / Soho / Museum -Day2- / NYPD Battle / Hospital / NYPD EVE ..."
+        WaitTextbox(165);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+        } else {
+            if (local[4] == 2) {
+                global[AREA] = 304;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA80090C8);
+            }
+            if (local[4] == 3) {
+                global[AREA] = 352;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA80290C8);
+            }
+            if (local[4] == 4) {
+                global[AREA] = 384;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA80201C8);
+            }
+            if (local[4] == 5) {
+                global[AREA] = 456;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA80222C8);
+            }
+            if (local[4] == 6) {
+                global[AREA] = 528;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA8004148);
+            }
+            room[18] = 0;
+            PlayFieldSfx(0, 0, 255);
+            ExitThread();
+        }
+        SetTextboxRect(16, 110, 246, 106);
+        OpenStyledTextbox(166); // "<FB:09>7 Cancel / Next Page / Chinatown / Warehouse / Sewer 2 / Subway / Brooklyn Bridge"
+        WaitTextbox(166);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+        } else {
+            if (local[4] == 2) {
+                global[AREA] = 544;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA80260C8);
+            }
+            if (local[4] == 3) {
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA8046048);
+            }
+            if (local[4] == 4) {
+                global[AREA] = 568;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA8026348);
+            }
+            if (local[4] == 5) {
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA8028148);
+            }
+            if (local[4] == 6) {
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA80284C8);
+            }
+            room[18] = 0;
+            PlayFieldSfx(0, 0, 255);
+            ExitThread();
+        }
+        SetTextboxRect(16, 110, 288, 106);
+        OpenStyledTextbox(167); // "<FB:09>7 Cancel / Next Page / Museum Final / Street / Aircraft Carrier / Helicopter / S..."
+        WaitTextbox(167);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+        } else {
+            if (local[4] == 2) {
+                global[AREA] = 600;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA8029148);
+            }
+            if (local[4] == 3) {
+                global[AREA] = 676;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA80454C8);
+            }
+            if (local[4] == 4) {
+                global[AREA] = 680;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA80470C8);
+            }
+            if (local[4] == 5) {
+                global[AREA] = 688;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA8047148);
+            }
+            if (local[4] == 6) {
+                global[AREA] = 714;
+                StartScreenFade(5);
+                WaitScreenFade();
+                ChangeRoom(0xA80471C8);
+            }
+            room[18] = 0;
+            PlayFieldSfx(0, 0, 255);
+            ExitThread();
+        }
+        SetTextboxRect(16, 110, 260, 106);
+        OpenStyledTextbox(168); // "<FB:09>7 Cancel / Cruiser / Port / Theatre Epilogue / Chrysler 1F / Chrysler 71F / Chry..."
+        WaitTextbox(168);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+            StartScreenFade(5);
+            WaitScreenFade();
+            global[AREA] = 730;
+            ChangeRoom(0xA8082448);
+        }
+        if (local[4] == 2) {
+            global[AREA] = 738;
+            StartScreenFade(5);
+            WaitScreenFade();
+            ChangeRoom(0xA8048448);
+        }
+        if (local[4] == 3) {
+            global[AREA] = 738;
+            StartScreenFade(5);
+            WaitScreenFade();
+            ChangeRoom(0xA80671C8);
+        }
+        if (local[4] == 4) {
+            StartScreenFade(5);
+            WaitScreenFade();
+            ChangeRoom(0xA8049048);
+        }
+        if (local[4] == 5) {
+            StartScreenFade(5);
+            WaitScreenFade();
+            ChangeRoom(0xA8061148);
+        }
+        if (local[4] == 6) {
+            StartScreenFade(5);
+            WaitScreenFade();
+            ChangeRoom(0xA8061448);
+        }
+        room[18] = 0;
+        PlayFieldSfx(0, 0, 255);
+        ExitThread();
+    }
+
+    actor_script actor_4 {
+        EnableActorCollision();
+        SetEventHandler(EVENT_TOUCH, @label_002E);
+        SetEntityVec3(VEC3_POS, 599.0fp, 0.0fp, 334.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+        Wait(1);
+        ExitThread();
+    @label_002E:
+        GetThreadTargets18_1C(local[0], local[1]);
+        if (local[0] == 0) {
+            if (room[18] == 0) {
+                CheckPadInput(PAD_PRESSED, 0x100, local[2]);
+                if (local[2] != 0) {
+                    room[18] = 1;
+                    PlayFieldSfx(0, 0, 254);
+                    SetTextboxRect(16, 104, 274, 120);
+                    OpenStyledTextbox(170); // "Copcar Event / <FB:09>7 Cancel / Next Page / Theatre-NYPD / NYPD- Museum1 / Museum1-NYP..."
+                    WaitTextbox(170);
+                    GetChoiceResult(local[4]);
+                    if (local[4] == 0) {
+                    }
+                    if (local[4] == 1) {
+                        goto @label_01CC;
+                    }
+                    if (local[4] == 2) {
+                        global[AREA] = 120;
+                        StartScreenFade(5);
+                        WaitScreenFade();
+                        ChangeRoom(0xA8003348);
+                    }
+                    if (local[4] == 3) {
+                        global[AREA] = 184;
+                        StartScreenFade(5);
+                        WaitScreenFade();
+                        ChangeRoom(0xA8003448);
+                    }
+                    if (local[4] == 4) {
+                        global[AREA] = 208;
+                        StartScreenFade(5);
+                        WaitScreenFade();
+                        ChangeRoom(0xA8004048);
+                    }
+                    if (local[4] == 5) {
+                        global[AREA] = 224;
+                        StartScreenFade(5);
+                        WaitScreenFade();
+                        ChangeRoom(0xA80034C8);
+                    }
+                    if (local[4] == 6) {
+                        global[AREA] = 328;
+                        StartScreenFade(5);
+                        WaitScreenFade();
+                        ChangeRoom(0xA8003448);
+                    }
+                }
+            }
+            room[18] = 0;
+            PlayFieldSfx(0, 0, 255);
+            ExitThread();
+        }
+    @label_01CC:
+        SetTextboxRect(16, 104, 288, 92);
+        OpenStyledTextbox(171); // "<FB:09>6 Cancel / Museum2-NYPD Btl / NYPD- Hospital / Hospital-NYPD / Museum3-Big Blobb..."
+        WaitTextbox(171);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+            global[AREA] = 376;
+            StartScreenFade(5);
+            WaitScreenFade();
+            ChangeRoom(0xA80033C8);
+        }
+        if (local[4] == 2) {
+            global[AREA] = 448;
+            StartScreenFade(5);
+            WaitScreenFade();
+            ChangeRoom(0xA80034C8);
+        }
+        if (local[4] == 3) {
+            global[AREA] = 520;
+            StartScreenFade(5);
+            WaitScreenFade();
+            ChangeRoom(0xA80032C8);
+        }
+        if (local[4] == 4) {
+            global[AREA] = 664;
+            StartScreenFade(5);
+            WaitScreenFade();
+            ChangeRoom(0xA80033C8);
+        }
+        if (local[4] == 5) {
+            global[AREA] = 674;
+            StartScreenFade(5);
+            WaitScreenFade();
+            ChangeRoom(0xA80034C8);
+        }
+        room[18] = 0;
+        PlayFieldSfx(0, 0, 255);
+        ExitThread();
+    }
+
+    actor_script actor_5 {
+        EnableActorCollision();
+        SetEventHandler(EVENT_TOUCH, @label_002E);
+        SetEntityVec3(VEC3_POS, -634.0fp, 0.0fp, -544.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 3008, 0);
+        Wait(1);
+        ExitThread();
+    @label_002E:
+        GetThreadTargets18_1C(local[0], local[1]);
+        if (local[0] == 0) {
+            if (room[18] == 0) {
+                CheckPadInput(PAD_PRESSED, 0x100, local[2]);
+                if (local[2] != 0) {
+                    room[18] = 1;
+                    PlayFieldSfx(0, 0, 254);
+                    SetTextboxRect(16, 104, 218, 92);
+                    OpenStyledTextbox(185); // "<FB:09>6 Cancel / Gun 1 / Gun 2 / Gun 3 & Armor / Armor & Items / Items"
+                    WaitTextbox(185);
+                    GetChoiceResult(local[4]);
+                    if (local[4] == 0) {
+                    }
+                    if (local[4] == 1) {
+                        GiveItem(63, local[7]);
+                        GiveItem(64, local[7]);
+                        GiveItem(65, local[7]);
+                        GiveItem(66, local[7]);
+                        GiveItem(67, local[7]);
+                        GiveItem(68, local[7]);
+                        GiveItem(69, local[7]);
+                        GiveItem(70, local[7]);
+                        GiveItem(71, local[7]);
+                        GiveItem(72, local[7]);
+                        GiveItem(73, local[7]);
+                        GiveItem(74, local[7]);
+                        GiveItem(75, local[7]);
+                        GiveItem(76, local[7]);
+                        GiveItem(77, local[7]);
+                        GiveItem(78, local[7]);
+                        GiveItem(79, local[7]);
+                        GiveItem(80, local[7]);
+                        GiveItem(81, local[7]);
+                        GiveItem(82, local[7]);
+                        GiveItem(83, local[7]);
+                        GiveItem(84, local[7]);
+                        GiveItem(85, local[7]);
+                        GiveItem(86, local[7]);
+                        GiveItem(87, local[7]);
+                        GiveItem(88, local[7]);
+                        GiveItem(89, local[7]);
+                        GiveItem(90, local[7]);
+                        GiveItem(91, local[7]);
+                        GiveItem(92, local[7]);
+                        GiveItem(93, local[7]);
+                        GiveItem(94, local[7]);
+                        GiveItem(95, local[7]);
+                        GiveItem(96, local[7]);
+                        GiveItem(97, local[7]);
+                        GiveItem(98, local[7]);
+                        GiveItem(99, local[7]);
+                        GiveItem(100, local[7]);
+                        GiveItem(101, local[7]);
+                        GiveItem(102, local[7]);
+                        GiveItem(103, local[7]);
+                    }
+                    if (local[4] == 2) {
+                        GiveItem(104, local[7]);
+                        GiveItem(105, local[7]);
+                        GiveItem(106, local[7]);
+                        GiveItem(107, local[7]);
+                        GiveItem(108, local[7]);
+                        GiveItem(109, local[7]);
+                        GiveItem(110, local[7]);
+                        GiveItem(111, local[7]);
+                        GiveItem(112, local[7]);
+                        GiveItem(113, local[7]);
+                        GiveItem(114, local[7]);
+                        GiveItem(115, local[7]);
+                        GiveItem(116, local[7]);
+                        GiveItem(117, local[7]);
+                        GiveItem(118, local[7]);
+                        GiveItem(119, local[7]);
+                        GiveItem(120, local[7]);
+                        GiveItem(121, local[7]);
+                        GiveItem(122, local[7]);
+                        GiveItem(123, local[7]);
+                        GiveItem(124, local[7]);
+                        GiveItem(125, local[7]);
+                        GiveItem(126, local[7]);
+                        GiveItem(127, local[7]);
+                        GiveItem(128, local[7]);
+                        GiveItem(129, local[7]);
+                        GiveItem(130, local[7]);
+                        GiveItem(131, local[7]);
+                        GiveItem(132, local[7]);
+                        GiveItem(133, local[7]);
+                        GiveItem(134, local[7]);
+                        GiveItem(135, local[7]);
+                        GiveItem(136, local[7]);
+                        GiveItem(137, local[7]);
+                        GiveItem(138, local[7]);
+                        GiveItem(139, local[7]);
+                        GiveItem(140, local[7]);
+                        GiveItem(141, local[7]);
+                        GiveItem(142, local[7]);
+                        GiveItem(143, local[7]);
+                        GiveItem(144, local[7]);
+                    }
+                    if (local[4] == 3) {
+                        GiveItem(140, local[7]);
+                        GiveItem(141, local[7]);
+                        GiveItem(142, local[7]);
+                        GiveItem(143, local[7]);
+                        GiveItem(144, local[7]);
+                        GiveItem(145, local[7]);
+                        GiveItem(146, local[7]);
+                        GiveItem(147, local[7]);
+                        GiveItem(148, local[7]);
+                        GiveItem(149, local[7]);
+                        GiveItem(150, local[7]);
+                        GiveItem(151, local[7]);
+                        GiveItem(152, local[7]);
+                        GiveItem(153, local[7]);
+                        GiveItem(154, local[7]);
+                        GiveItem(155, local[7]);
+                        GiveItem(156, local[7]);
+                        GiveItem(157, local[7]);
+                        GiveItem(158, local[7]);
+                        GiveItem(159, local[7]);
+                        GiveItem(160, local[7]);
+                        GiveItem(161, local[7]);
+                        GiveItem(162, local[7]);
+                        GiveItem(163, local[7]);
+                        GiveItem(164, local[7]);
+                        GiveItem(165, local[7]);
+                        GiveItem(166, local[7]);
+                        GiveItem(167, local[7]);
+                        GiveItem(168, local[7]);
+                        GiveItem(169, local[7]);
+                        GiveItem(170, local[7]);
+                        GiveItem(171, local[7]);
+                        GiveItem(172, local[7]);
+                        GiveItem(173, local[7]);
+                        GiveItem(174, local[7]);
+                        GiveItem(175, local[7]);
+                        GiveItem(176, local[7]);
+                        GiveItem(177, local[7]);
+                        GiveItem(178, local[7]);
+                        GiveItem(179, local[7]);
+                        GiveItem(180, local[7]);
+                        GiveItem(181, local[7]);
+                        GiveItem(182, local[7]);
+                        GiveItem(183, local[7]);
+                        GiveItem(184, local[7]);
+                        GiveItem(185, local[7]);
+                    }
+                    if (local[4] == 4) {
+                        GiveItem(186, local[7]);
+                        GiveItem(187, local[7]);
+                        GiveItem(188, local[7]);
+                        GiveItem(189, local[7]);
+                        GiveItem(190, local[7]);
+                        GiveItem(191, local[7]);
+                        GiveItem(192, local[7]);
+                        GiveItem(193, local[7]);
+                        GiveItem(194, local[7]);
+                        GiveItem(195, local[7]);
+                        GiveItem(196, local[7]);
+                        GiveItem(197, local[7]);
+                        GiveItem(198, local[7]);
+                        GiveItem(199, local[7]);
+                        GiveItem(200, local[7]);
+                        GiveItem(201, local[7]);
+                        GiveItem(202, local[7]);
+                        GiveItem(203, local[7]);
+                        GiveItem(204, local[7]);
+                        GiveItem(205, local[7]);
+                        GiveItem(206, local[7]);
+                        GiveItem(207, local[7]);
+                        GiveItem(208, local[7]);
+                        GiveItem(209, local[7]);
+                        GiveItem(210, local[7]);
+                        GiveItem(211, local[7]);
+                        GiveItem(212, local[7]);
+                        GiveItem(213, local[7]);
+                        GiveItem(214, local[7]);
+                        GiveItem(215, local[7]);
+                        GiveItem(216, local[7]);
+                        GiveItem(217, local[7]);
+                        GiveItem(218, local[7]);
+                        GiveItem(219, local[7]);
+                        GiveItem(220, local[7]);
+                        GiveItem(221, local[7]);
+                        GiveItem(222, local[7]);
+                        GiveItem(223, local[7]);
+                        GiveItem(224, local[7]);
+                        GiveItem(225, local[7]);
+                        GiveItem(226, local[7]);
+                    }
+                    if (local[4] == 5) {
+                        GiveItem(227, local[7]);
+                        GiveItem(228, local[7]);
+                        GiveItem(229, local[7]);
+                        GiveItem(230, local[7]);
+                        GiveItem(231, local[7]);
+                        GiveItem(232, local[7]);
+                        GiveItem(233, local[7]);
+                        GiveItem(234, local[7]);
+                        GiveItem(235, local[7]);
+                    }
+                }
+            }
+            room[18] = 0;
+            PlayFieldSfx(0, 0, 255);
+            ExitThread();
+        }
+        SetTextboxRect(16, 104, 162, 92);
+        OpenStyledTextbox(175); // "<FB:09>6 Cancel / Next Page / Map BGM 1 / Map BGM 2 / Map BGM 3 / Map BGM 4"
+        WaitTextbox(175);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+        } else {
+            if (local[4] == 2) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 8, 0, 0, 0, room[17]);
+                room[19] = 8;
+            }
+            if (local[4] == 3) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 9, 0, 0, 0, room[17]);
+                room[19] = 9;
+            }
+            if (local[4] == 4) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 10, 0, 0, 0, room[17]);
+                room[19] = 10;
+            }
+            if (local[4] == 5) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 11, 0, 0, 0, room[17]);
+                room[19] = 11;
+            }
+            room[18] = 0;
+            PlayFieldSfx(0, 0, 255);
+            ExitThread();
+        }
+        SetTextboxRect(16, 104, 260, 106);
+        OpenStyledTextbox(176); // "<FB:09>7 Cancel / Next Page / Map NYC / Map Sewer / Map Battle Ever / Special Chrysler ..."
+        WaitTextbox(176);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+        } else {
+            if (local[4] == 2) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 14, 0, 0, 0, room[17]);
+                room[19] = 14;
+            }
+            if (local[4] == 3) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 13, 0, 0, 0, room[17]);
+                room[19] = 13;
+            }
+            if (local[4] == 4) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 15, 0, 0, 0, room[17]);
+                room[19] = 15;
+            }
+            if (local[4] == 5) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 6, 0, 0, 0, room[17]);
+                room[19] = 6;
+            }
+            if (local[4] == 6) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 5, 0, 0, 0, room[17]);
+                room[19] = 5;
+            }
+            room[18] = 0;
+            PlayFieldSfx(0, 0, 255);
+            ExitThread();
+        }
+        SetTextboxRect(16, 104, 232, 106);
+        OpenStyledTextbox(177); // "<FB:09>7 Cancel / Next Page / Theme AYA / Theme MITO / Subtheme AYA / Subtheme EVE / Su..."
+        WaitTextbox(177);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+        } else {
+            if (local[4] == 2) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 24, 0, 0, 0, room[17]);
+                room[19] = 24;
+            }
+            if (local[4] == 3) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 25, 0, 0, 0, room[17]);
+                room[19] = 25;
+            }
+            if (local[4] == 4) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 26, 0, 0, 0, room[17]);
+                room[19] = 26;
+            }
+            if (local[4] == 5) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 27, 0, 0, 0, room[17]);
+                room[19] = 27;
+            }
+            if (local[4] == 6) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 28, 0, 0, 0, room[17]);
+                room[19] = 28;
+            }
+            room[18] = 0;
+            PlayFieldSfx(0, 0, 255);
+            ExitThread();
+        }
+        SetTextboxRect(16, 104, 218, 106);
+        OpenStyledTextbox(178); // "<FB:09>7 Cancel / Next Page / Event {Aya} Eve / Event 1 / Event OPERA / Event ARIA / Ev..."
+        WaitTextbox(178);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+        } else {
+            if (local[4] == 2) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 37, 0, 0, 0, room[17]);
+                room[19] = 37;
+            }
+            if (local[4] == 3) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 29, 0, 0, 0, room[17]);
+                room[19] = 29;
+            }
+            if (local[4] == 4) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 30, 0, 0, 0, room[17]);
+                room[19] = 30;
+            }
+            if (local[4] == 5) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 31, 0, 0, 0, room[17]);
+                room[19] = 31;
+            }
+            if (local[4] == 6) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 32, 0, 0, 0, room[17]);
+                room[19] = 32;
+            }
+            room[18] = 0;
+            PlayFieldSfx(0, 0, 255);
+            ExitThread();
+        }
+        SetTextboxRect(16, 104, 232, 78);
+        OpenStyledTextbox(179); // "<FB:09>5 Cancel / Next Page / EVENT MEMORY 1 / EVENT MEMORY 2 / EVENT MEMORY 3"
+        WaitTextbox(179);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+        } else {
+            if (local[4] == 2) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 34, 0, 0, 0, room[17]);
+                room[19] = 34;
+            }
+            if (local[4] == 3) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 35, 0, 0, 0, room[17]);
+                room[19] = 35;
+            }
+            if (local[4] == 4) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+                AkaoCmd(0xC8, 36, 0, 0, 0, room[17]);
+                room[19] = 36;
+            }
+            room[18] = 0;
+            PlayFieldSfx(0, 0, 255);
+            ExitThread();
+        }
+        SetTextboxRect(16, 104, 232, 64);
+        OpenStyledTextbox(180); // "<FB:09>4 Cancel / Map GIGANTIC / Map HELICOPTER / Map CRUISER"
+        WaitTextbox(180);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+            AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+            AkaoCmd(0xC8, 18, 0, 0, 0, room[17]);
+            room[19] = 18;
+        }
+        if (local[4] == 2) {
+            AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+            AkaoCmd(0xC8, 20, 0, 0, 0, room[17]);
+            room[19] = 20;
+        }
+        if (local[4] == 3) {
+            AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+            AkaoCmd(0xC8, 19, 0, 0, 0, room[17]);
+            room[19] = 19;
+        }
+        room[18] = 0;
+        PlayFieldSfx(0, 0, 255);
+        ExitThread();
+    }
+
+    actor_script actor_6 {
+        EnableActorCollision();
+        SetEventHandler(EVENT_TOUCH, @label_002E);
+        SetEntityVec3(VEC3_POS, 470.0fp, 0.0fp, -544.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 3008, 0);
+        Wait(1);
+        ExitThread();
+    @label_002E:
+        GetThreadTargets18_1C(local[0], local[1]);
+        if (local[0] == 0) {
+            if (room[18] == 0) {
+                CheckPadInput(PAD_PRESSED, 0x100, local[2]);
+                if (local[2] != 0) {
+                    room[18] = 1;
+                    PlayFieldSfx(0, 0, 254);
+                    SetTextboxRect(16, 110, 288, 106);
+                    OpenStyledTextbox(181); // "<FB:09>6 Cancel / Get Poisons / Get Bullets / Get Status Item / Get Tools: etc, / Get T..."
+                    WaitTextbox(181);
+                    GetChoiceResult(local[4]);
+                    if (local[4] == 0) {
+                    }
+                    if (local[4] == 1) {
+                        GiveItem(6, local[7]);
+                        GiveItem(6, local[7]);
+                        GiveItem(6, local[7]);
+                        GiveItem(6, local[7]);
+                        GiveItem(6, local[7]);
+                        GiveItem(7, local[7]);
+                        GiveItem(7, local[7]);
+                        GiveItem(7, local[7]);
+                        GiveItem(7, local[7]);
+                        GiveItem(7, local[7]);
+                        GiveItem(8, local[7]);
+                        GiveItem(8, local[7]);
+                        GiveItem(8, local[7]);
+                        GiveItem(8, local[7]);
+                        GiveItem(8, local[7]);
+                    }
+                    if (local[4] == 2) {
+                        GiveItem(4, local[7]);
+                        GiveItem(4, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(5, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(3, local[7]);
+                        GiveItem(26, local[7]);
+                        GiveItem(27, local[7]);
+                        GiveItem(28, local[7]);
+                    }
+                    if (local[4] == 3) {
+                        GiveItem(10, local[7]);
+                        GiveItem(10, local[7]);
+                        GiveItem(10, local[7]);
+                        GiveItem(10, local[7]);
+                        GiveItem(10, local[7]);
+                        GiveItem(13, local[7]);
+                        GiveItem(13, local[7]);
+                        GiveItem(13, local[7]);
+                        GiveItem(13, local[7]);
+                        GiveItem(13, local[7]);
+                        GiveItem(14, local[7]);
+                        GiveItem(14, local[7]);
+                        GiveItem(14, local[7]);
+                        GiveItem(14, local[7]);
+                        GiveItem(14, local[7]);
+                        GiveItem(15, local[7]);
+                        GiveItem(15, local[7]);
+                        GiveItem(15, local[7]);
+                        GiveItem(15, local[7]);
+                        GiveItem(15, local[7]);
+                        GiveItem(16, local[7]);
+                        GiveItem(16, local[7]);
+                        GiveItem(16, local[7]);
+                        GiveItem(16, local[7]);
+                        GiveItem(16, local[7]);
+                        GiveItem(17, local[7]);
+                        GiveItem(17, local[7]);
+                        GiveItem(17, local[7]);
+                        GiveItem(17, local[7]);
+                        GiveItem(17, local[7]);
+                    }
+                    if (local[4] == 4) {
+                        GiveItem(18, local[7]);
+                        GiveItem(18, local[7]);
+                        GiveItem(18, local[7]);
+                        GiveItem(18, local[7]);
+                        GiveItem(18, local[7]);
+                        GiveItem(19, local[7]);
+                        GiveItem(19, local[7]);
+                        GiveItem(19, local[7]);
+                        GiveItem(19, local[7]);
+                        GiveItem(19, local[7]);
+                        GiveItem(21, local[7]);
+                        GiveItem(21, local[7]);
+                        GiveItem(21, local[7]);
+                        GiveItem(21, local[7]);
+                        GiveItem(21, local[7]);
+                        GiveItem(22, local[7]);
+                        GiveItem(22, local[7]);
+                        GiveItem(22, local[7]);
+                        GiveItem(22, local[7]);
+                        GiveItem(22, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(23, local[7]);
+                        GiveItem(20, local[7]);
+                        GiveItem(20, local[7]);
+                        GiveItem(20, local[7]);
+                        GiveItem(20, local[7]);
+                        GiveItem(20, local[7]);
+                    }
+                    if (local[4] == 5) {
+                        GiveItem(29, local[7]);
+                        GiveItem(30, local[7]);
+                        GiveItem(31, local[7]);
+                        GiveItem(32, local[7]);
+                        GiveItem(33, local[7]);
+                        GiveItem(34, local[7]);
+                        GiveItem(35, local[7]);
+                        GiveItem(36, local[7]);
+                        GiveItem(37, local[7]);
+                        GiveItem(38, local[7]);
+                        GiveItem(39, local[7]);
+                        GiveItem(40, local[7]);
+                        GiveItem(41, local[7]);
+                        GiveItem(42, local[7]);
+                        GiveItem(43, local[7]);
+                        GiveItem(44, local[7]);
+                        GiveItem(45, local[7]);
+                        GiveItem(46, local[7]);
+                        GiveItem(47, local[7]);
+                        GiveItem(48, local[7]);
+                        GiveItem(49, local[7]);
+                        GiveItem(50, local[7]);
+                        GiveItem(51, local[7]);
+                        GiveItem(52, local[7]);
+                        GiveItem(53, local[7]);
+                        GiveItem(54, local[7]);
+                        GiveItem(55, local[7]);
+                    }
+                    if (local[4] == 6) {
+                        GiveItem(103, local[8]);
+                        GiveItem(119, local[8]);
+                        GiveItem(102, local[8]);
+                        GiveItem(110, local[8]);
+                        GiveItem(130, local[8]);
+                        GiveItem(146, local[8]);
+                        GiveItem(143, local[8]);
+                        GiveItem(173, local[8]);
+                        GiveItem(179, local[8]);
+                        GiveItem(186, local[8]);
+                        GiveItem(23, local[8]);
+                        GiveItem(23, local[8]);
+                        GiveItem(23, local[8]);
+                        GiveItem(23, local[8]);
+                        GiveItem(23, local[8]);
+                        GiveItem(23, local[8]);
+                        GiveItem(23, local[8]);
+                        GiveItem(3, local[8]);
+                        GiveItem(3, local[8]);
+                        GiveItem(3, local[8]);
+                        GiveItem(5, local[8]);
+                        GiveItem(5, local[8]);
+                        GiveItem(5, local[8]);
+                        GiveItem(5, local[8]);
+                        GiveItem(5, local[8]);
+                        GiveItem(5, local[8]);
+                        GiveItem(5, local[8]);
+                        GiveItem(5, local[8]);
+                    }
+                    PlayFieldSfx(0, 0, 255);
+                }
+                room[18] = 0;
+            }
+        }
+        ExitThread();
+    }
+
+    actor_script actor_7 {
+        EnableActorCollision();
+        SetEventHandler(EVENT_TOUCH, @label_002E);
+        SetEntityVec3(VEC3_POS, -141.0fp, 0.0fp, -744.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        Wait(1);
+        ExitThread();
+    @label_002E:
+        GetThreadTargets18_1C(local[0], local[1]);
+        if (local[0] == 0) {
+            if (room[18] == 0) {
+                CheckPadInput(PAD_PRESSED, 0x100, local[2]);
+                if (local[2] != 0) {
+                    room[18] = 1;
+                    PlayFieldSfx(0, 0, 254);
+                    SetTextboxRect(16, 110, 190, 106);
+                    OpenStyledTextbox(183); // "<FB:09>7 Cancel / Next Page / Get 10F Key / Get 20F Key / Get 30F Key / Get 40F Key / G..."
+                    WaitTextbox(183);
+                    GetChoiceResult(local[4]);
+                    if (local[4] == 0) {
+                    }
+                    if (local[4] == 1) {
+                        goto @label_01E0;
+                    }
+                    if (local[4] == 2) {
+                        global[7] = global[7] | 2;
+                        GiveItem(56, local[7]);
+                    }
+                    if (local[4] == 3) {
+                        global[7] = global[7] | 4;
+                        GiveItem(57, local[7]);
+                    }
+                    if (local[4] == 4) {
+                        global[7] = global[7] | 8;
+                        GiveItem(58, local[7]);
+                    }
+                    if (local[4] == 5) {
+                        global[7] = global[7] | 256;
+                        GiveItem(59, local[7]);
+                    }
+                    if (local[4] == 6) {
+                        global[7] = global[7] | 512;
+                        GiveItem(60, local[7]);
+                    }
+                    PlayFieldSfx(0, 0, 255);
+                }
+                room[18] = 0;
+            }
+        }
+        ExitThread();
+    @label_01E0:
+        SetTextboxRect(16, 104, 190, 50);
+        OpenStyledTextbox(184); // "<FB:09>3 Cancel / Get 60F Key / Get 70F Key"
+        WaitTextbox(184);
+        GetChoiceResult(local[4]);
+        if (local[4] == 0) {
+        }
+        if (local[4] == 1) {
+            global[7] = global[7] | 1024;
+            GiveItem(61, local[7]);
+        }
+        if (local[4] == 2) {
+            global[7] = global[7] | 2048;
+            GiveItem(62, local[7]);
+        }
+        room[18] = 0;
+        PlayFieldSfx(0, 0, 255);
+        ExitThread();
+    }
+}

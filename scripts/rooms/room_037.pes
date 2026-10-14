@@ -1,0 +1,578 @@
+// Parasite Eve 1 Scene Script (room_037)
+room_script room_037 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(130, 10, 25);
+        SetEventHandler(EVENT_INTERACT, @label_004C);
+        DisableActorRendering();
+        SetActorFlag400();
+        EnableActorCollision();
+        SetEntityVec3(VEC3_POS, -130.0fp, 0.0fp, -339.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 4048, 0);
+        SetAnim(30);
+        SetRenderAlphaValue(-160);
+        Wait(1);
+    @label_0048:
+        ExitThread();
+    @label_004C:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 254) {
+            KillOtherThreads();
+            goto @label_0048;
+        }
+        if (local[3] == 255) {
+            KillOtherThreads();
+            goto @label_0048;
+        }
+        if (local[3] == 1) {
+            KillOtherThreads();
+            SetAnim(31);
+            SetAnimFrame(0);
+            PlayAnimToFrame(48);
+            WaitAnimEnd();
+            goto @label_0048;
+        }
+        if (local[3] == 2) {
+            KillOtherThreads();
+            SetAnim(32);
+            SetAnimFrame(0);
+            PlayAnimToFrame(24);
+            WaitAnimEnd();
+            goto @label_0048;
+        }
+        if (local[3] == 3) {
+            KillOtherThreads();
+            SetAnim(33);
+            SetAnimFrame(0);
+            PlayAnimToFrame(50);
+            goto @label_0048;
+        }
+        if (local[3] == 4) {
+            KillOtherThreads();
+            SetAnim(34);
+            SetAnimFrame(0);
+            PlayAnimToFrame(30);
+            WaitAnimEnd();
+            goto @label_0048;
+        }
+        if (local[3] == 5) {
+            KillOtherThreads();
+            SetAnim(35);
+            SetAnimFrame(0);
+            PlayAnimToFrame(36);
+            WaitAnimEnd();
+            goto @label_0048;
+        }
+        if (local[3] == 6) {
+            KillOtherThreads();
+            SetAnim(36);
+            SetAnimFrame(0);
+            PlayAnimToFrame(48);
+            WaitAnimEnd();
+            goto @label_0048;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x12C, 2130, 0, 128, 127, room[17]);
+        LockPlayerInput();
+        SetCameraBaseAngle(0, 0);
+        ClearScreenFadeFlag40();
+        Wait(1);
+        ClearRenderFlagsC0();
+        SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+        if (global[AREA] == 184) {
+            SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        }
+        if (global[AREA] == 328) {
+            SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        }
+        Wait(1);
+        SetGeomEntryFlags(0, 0x10);
+        SetGeomEntryFlags(1, 0x10);
+        SetGeomEntryField8(0, 65536);
+        SetGeomEntryField8(1, 65536);
+        SetGeomFlagSlot(0, 1);
+        SetGeomFlagSlot(1, 1);
+        AkaoCmd(0xC8, 14, 0, 0, 0, room[17]);
+        AkaoCmd(0xCE, 14, 30, 64, 0, room[17]);
+        SetFadeColor(0x1E);
+        PlayFieldSfx(0, 0, 255);
+        Wait(1);
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetHitCylinder(130, 10, 25);
+        EnableActorCollision();
+        SetActorFlag400();
+        DisableActorRendering();
+        SetEntityVec3(VEC3_POS, 122.0fp, 0.0fp, -372.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 16, 0);
+        SetAnim(0);
+        SetRenderAlphaValue(-160);
+        Wait(1);
+        LockPlayerInput();
+        PauseSceneEvents();
+        if (global[AREA] == 184) {
+            Wait(30);
+            if (global[STORY_FLAGS] & 4) {
+                OpenTextbox(1); // "Will you watch this event? / <FB:09>2 Watch / Skip"
+                WaitTextbox(1);
+                GetChoiceResult(local[4]);
+                if (local[4] == 0) {
+                } else if (local[4] == 1) {
+                    goto @label_0292;
+                }
+            }
+            Wait(30);
+            OpenTextbox(15); // "Daniel. We're going to the Museum / of Natural History, Dr, Hans / Klamp'll be there,"
+            SetAnim(1);
+            SetAnimFrame(0);
+            PlayAnimToFrame(42);
+            WaitTextbox(15);
+            SetAnim(0);
+            PlayFieldSfx(0, 0, 1);
+            OpenTextbox(16); // "{Aya}. Dr, Klamp,,, What's his / area of research?"
+            WaitTextbox(16);
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(26);
+            WaitAnimEnd();
+            OpenTextbox(17); // "Daniel. Well: according to the / papers: he's working on a new / theory,,, | mitochondr..."
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(50);
+            WaitTextbox(17);
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(26);
+            WaitAnimEnd();
+            SetAnim(0);
+            PlayFieldSfx(0, 0, 1);
+            OpenTextbox(18); // "{Aya}. That's odd,,, / To have a Ph,D and be working in / a museum,,,"
+            WaitTextbox(18);
+            OpenTextbox(19); // "Daniel. Well: he's pretty anti- / social and doesn't like to waste / time outside resea..."
+            SetAnim(1);
+            SetAnimFrame(0);
+            PlayAnimToFrame(42);
+            WaitTextbox(19);
+            SetAnim(0);
+            PlayFieldSfx(0, 0, 1);
+            OpenTextbox(20); // "{Aya}. Oh: GREAT,,, We're gonna / have a grand time with this one,,,"
+            WaitTextbox(20);
+            Wait(30);
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(26);
+            WaitAnimEnd();
+            OpenTextbox(21); // "Daniel. Yeah: yeah,,, I know where / you're going with this, Just be / careful this tim..."
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(50);
+            WaitTextbox(21);
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(26);
+            WaitAnimEnd();
+            SetAnim(0);
+            PlayFieldSfx(0, 0, 2);
+            Wait(24);
+            OpenTextbox(22); // "{Aya}. ,,,Are you referring to / the press conference,,,?"
+            PlayFieldSfx(0, 0, 3);
+            WaitTextbox(22);
+            OpenTextbox(23); // "Daniel. Yeah,"
+            SetAnim(1);
+            SetAnimFrame(0);
+            PlayAnimToFrame(42);
+            WaitTextbox(23);
+            SetAnim(0);
+            PlayFieldSfx(0, 0, 4);
+            Wait(30);
+            OpenTextbox(24); // "{Aya}. Daniel: why do you kiss / the chief's butt? | You two joined the force at the / ..."
+            PlayFieldSfx(0, 0, 1);
+            WaitTextbox(24);
+            Wait(60);
+            OpenTextbox(25); // "Daniel. Yeah,,, But that was YEARS / ago,,, Now: he's my boss,"
+            SetAnim(13);
+            SetAnimFrame(0);
+            PlayAnimToFrame(50);
+            WaitTextbox(25);
+            SetAnim(0);
+            Wait(30);
+        @label_0292:
+            AkaoCmd(0x131, 60, 0, 0, 0, room[17]);
+            AkaoCmd(0xCE, 14, 60, 127, 0, room[17]);
+            StartScreenFade(60);
+            WaitScreenFade();
+            AkaoCmd(0x13A, 0, 0, 0, 0, room[17]);
+            global[AREA] = 192;
+            global[FLAGS] = global[FLAGS] | 16384;
+            global[FLAGS] = global[FLAGS] | 32768;
+            if (global[AREA] >= 184) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+            }
+            if (global[AREA] >= 224) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+                global[FLAGS] = global[FLAGS] | 0x00020000;
+            }
+            if (global[AREA] >= 328) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+                global[FLAGS] = global[FLAGS] | 0x00020000;
+                global[FLAGS] = global[FLAGS] | 0x00040000;
+            }
+            if (global[AREA] >= 448) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+                global[FLAGS] = global[FLAGS] | 0x00020000;
+                global[FLAGS] = global[FLAGS] | 0x00040000;
+                global[FLAGS] = global[FLAGS] | 0x00080000;
+            }
+            if (global[AREA] >= 536) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+                global[FLAGS] = global[FLAGS] | 0x00020000;
+                global[FLAGS] = global[FLAGS] | 0x00040000;
+                global[FLAGS] = global[FLAGS] | 0x00080000;
+                global[FLAGS] = global[FLAGS] | 0x00100000;
+                global[FLAGS] = global[FLAGS] | 0x00200000;
+            }
+            if (global[AREA] >= 600) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+                global[FLAGS] = global[FLAGS] | 0x00020000;
+                global[FLAGS] = global[FLAGS] | 0x00040000;
+                global[FLAGS] = global[FLAGS] | 0x00080000;
+                global[FLAGS] = global[FLAGS] | 0x00100000;
+                global[FLAGS] = global[FLAGS] | 0x00400000;
+                global[FLAGS] = global[FLAGS] | 0x00200000;
+            }
+            if (global[STORY_FLAGS] & 1) {
+                global[FLAGS] = global[FLAGS] | 0x00800000;
+            }
+            if (global[AREA] >= 120) {
+                global[FLAGS] = global[FLAGS] | 8192;
+            }
+            if (global[AREA] >= 144) {
+                global[FLAGS] = global[FLAGS] & -8193;
+            }
+            if (global[AREA] >= 208) {
+                global[FLAGS] = global[FLAGS] | 8192;
+            }
+            if (global[AREA] >= 328) {
+                global[FLAGS] = global[FLAGS] & -8193;
+            }
+            if (global[AREA] >= 376) {
+                global[FLAGS] = global[FLAGS] | 8192;
+            }
+            if (global[AREA] >= 440) {
+                global[FLAGS] = global[FLAGS] & -8193;
+            }
+            if (global[AREA] >= 448) {
+                global[FLAGS] = global[FLAGS] | 8192;
+            }
+            if (global[AREA] >= 536) {
+                global[FLAGS] = global[FLAGS] & -8193;
+            }
+            if (global[AREA] >= 600) {
+                global[FLAGS] = global[FLAGS] | 8192;
+            }
+            global[ROOM] = 999;
+            ChangeRoom(0xA8000048);
+        }
+        if (global[AREA] == 328) {
+            Wait(30);
+            if (global[STORY_FLAGS] & 4) {
+                OpenTextbox(1); // "Will you watch this event? / <FB:09>2 Watch / Skip"
+                WaitTextbox(1);
+                GetChoiceResult(local[4]);
+                if (local[4] == 0) {
+                } else if (local[4] == 1) {
+                    goto @label_0A04;
+                }
+            }
+            Wait(30);
+            OpenTextbox(37); // "Daniel. So: where to?"
+            SetAnim(1);
+            SetAnimFrame(0);
+            PlayAnimToFrame(42);
+            WaitTextbox(37);
+            SetAnim(0);
+            Wait(30);
+            OpenTextbox(38); // "Maeda. Is there any place with a / research facility?"
+            PlayFieldSfx(3, 0, 9);
+            WaitTextbox(38);
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(26);
+            WaitAnimEnd();
+            OpenTextbox(39); // "Daniel. Research facility?"
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(50);
+            WaitTextbox(39);
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(26);
+            WaitAnimEnd();
+            SetAnim(0);
+            PlayFieldSfx(3, 0, 7);
+            Wait(34);
+            OpenTextbox(40); // "Maeda. I'd like to conduct an / experiment,,, and test something, / It might be relevant,"
+            PlayFieldSfx(3, 0, 8);
+            WaitTextbox(40);
+            PlayFieldSfx(0, 0, 2);
+            Wait(24);
+            OpenTextbox(41); // "{Aya}. How about the facility / in the museum where Klamp is at? | They had really exte..."
+            PlayFieldSfx(0, 0, 3);
+            WaitTextbox(41);
+            OpenTextbox(42); // "Daniel. No WAY: man, Anywhere but / there!"
+            SetAnim(1);
+            SetAnimFrame(0);
+            PlayAnimToFrame(42);
+            WaitTextbox(42);
+            SetAnim(0);
+            OpenTextbox(43); // "{Aya}. He should have been / evacuated by now,,, it should be / okay,"
+            PlayFieldSfx(0, 0, 3);
+            WaitTextbox(43);
+            OpenTextbox(44); // "Maeda. Err,,, yes,,, That sounds / good, Daniel: is that okay?"
+            PlayFieldSfx(3, 0, 8);
+            WaitTextbox(44);
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(26);
+            WaitAnimEnd();
+            OpenTextbox(45); // "Daniel. ,,,I'm expecting a big tip / for this!"
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(50);
+            WaitTextbox(45);
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(26);
+            WaitAnimEnd();
+            PlayFieldSfx(0, 0, 4);
+            SetAnim(14);
+            SetAnimFrame(0);
+            PlayAnimToFrame(66);
+            WaitAnimEnd();
+            AkaoCmd(0x12C, 2131, 0, 128, 127, room[17]);
+            SetGeomEntryField8(0, 0x00040000);
+            SetGeomEntryField8(1, 0x00040000);
+            Wait(30);
+        @label_0A04:
+            AkaoCmd(0x131, 30, 0, 0, 0, room[17]);
+            AkaoCmd(0xCE, 14, 30, 127, 0, room[17]);
+            StartScreenFade(30);
+            WaitScreenFade();
+            AkaoCmd(0x13A, 0, 0, 0, 0, room[17]);
+            global[AREA] = 352;
+            global[FLAGS] = global[FLAGS] | 16384;
+            global[FLAGS] = global[FLAGS] | 32768;
+            if (global[AREA] >= 184) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+            }
+            if (global[AREA] >= 224) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+                global[FLAGS] = global[FLAGS] | 0x00020000;
+            }
+            if (global[AREA] >= 328) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+                global[FLAGS] = global[FLAGS] | 0x00020000;
+                global[FLAGS] = global[FLAGS] | 0x00040000;
+            }
+            if (global[AREA] >= 448) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+                global[FLAGS] = global[FLAGS] | 0x00020000;
+                global[FLAGS] = global[FLAGS] | 0x00040000;
+                global[FLAGS] = global[FLAGS] | 0x00080000;
+            }
+            if (global[AREA] >= 536) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+                global[FLAGS] = global[FLAGS] | 0x00020000;
+                global[FLAGS] = global[FLAGS] | 0x00040000;
+                global[FLAGS] = global[FLAGS] | 0x00080000;
+                global[FLAGS] = global[FLAGS] | 0x00100000;
+                global[FLAGS] = global[FLAGS] | 0x00200000;
+            }
+            if (global[AREA] >= 600) {
+                global[FLAGS] = global[FLAGS] | 16384;
+                global[FLAGS] = global[FLAGS] | 32768;
+                global[FLAGS] = global[FLAGS] | 65536;
+                global[FLAGS] = global[FLAGS] | 0x00020000;
+                global[FLAGS] = global[FLAGS] | 0x00040000;
+                global[FLAGS] = global[FLAGS] | 0x00080000;
+                global[FLAGS] = global[FLAGS] | 0x00100000;
+                global[FLAGS] = global[FLAGS] | 0x00400000;
+                global[FLAGS] = global[FLAGS] | 0x00200000;
+            }
+            if (global[STORY_FLAGS] & 1) {
+                global[FLAGS] = global[FLAGS] | 0x00800000;
+            }
+            if (global[AREA] >= 120) {
+                global[FLAGS] = global[FLAGS] | 8192;
+            }
+            if (global[AREA] >= 144) {
+                global[FLAGS] = global[FLAGS] & -8193;
+            }
+            if (global[AREA] >= 208) {
+                global[FLAGS] = global[FLAGS] | 8192;
+            }
+            if (global[AREA] >= 328) {
+                global[FLAGS] = global[FLAGS] & -8193;
+            }
+            if (global[AREA] >= 376) {
+                global[FLAGS] = global[FLAGS] | 8192;
+            }
+            if (global[AREA] >= 440) {
+                global[FLAGS] = global[FLAGS] & -8193;
+            }
+            if (global[AREA] >= 448) {
+                global[FLAGS] = global[FLAGS] | 8192;
+            }
+            if (global[AREA] >= 536) {
+                global[FLAGS] = global[FLAGS] & -8193;
+            }
+            if (global[AREA] >= 600) {
+                global[FLAGS] = global[FLAGS] | 8192;
+            }
+            global[ROOM] = 999;
+            ChangeRoom(0xA8000048);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetHitCylinder(110, 10, 25);
+        SetEventHandler(EVENT_INTERACT, @label_0046);
+        DisableActorRendering();
+        SetActorFlag400();
+        EnableActorCollision();
+        SetEntityVec3(VEC3_POS, -4.0fp, 0.0fp, -55.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 4048, 0);
+        SetAnim(0);
+        Wait(1);
+    @label_0042:
+        ExitThread();
+    @label_0046:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 7) {
+            KillOtherThreads();
+            SetAnim(1);
+            SetAnimFrame(0);
+            PlayAnimToFrame(34);
+            goto @label_0042;
+        }
+        if (local[3] == 8) {
+            KillOtherThreads();
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(54);
+            goto @label_0042;
+        }
+        if (local[3] == 9) {
+            KillOtherThreads();
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(65);
+            goto @label_0042;
+        }
+        if (local[3] == 10) {
+            KillOtherThreads();
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(18);
+            goto @label_0042;
+        }
+        if (local[3] == 11) {
+            KillOtherThreads();
+            SetAnim(5);
+            SetAnimFrame(0);
+            PlayAnimToFrame(30);
+            goto @label_0042;
+        }
+        if (local[3] == 12) {
+            KillOtherThreads();
+            SetAnim(6);
+            SetAnimFrame(0);
+            PlayAnimToFrame(42);
+            goto @label_0042;
+        }
+        if (local[3] == 13) {
+            KillOtherThreads();
+            SetAnim(7);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            goto @label_0042;
+        }
+        if (local[3] == 14) {
+            KillOtherThreads();
+            SetAnim(8);
+            SetAnimFrame(0);
+            PlayAnimToFrame(78);
+            goto @label_0042;
+        }
+        if (local[3] == 15) {
+            KillOtherThreads();
+            SetAnim(9);
+            SetAnimFrame(0);
+            PlayAnimToFrame(66);
+            goto @label_0042;
+        }
+        if (local[3] == 16) {
+            KillOtherThreads();
+            SetAnim(10);
+            SetAnimFrame(0);
+            PlayAnimToFrame(54);
+            goto @label_0042;
+        }
+        if (local[3] == 17) {
+            KillOtherThreads();
+            SetAnim(11);
+            SetAnimFrame(0);
+            PlayAnimToFrame(14);
+            goto @label_0042;
+        }
+        if (local[3] == 18) {
+            KillOtherThreads();
+            SetAnim(12);
+            SetAnimFrame(0);
+            PlayAnimToFrame(36);
+            goto @label_0042;
+        }
+    }
+
+    actor_script actor_4 {
+        DisableActorRendering();
+        SetActorFlag400();
+        EnableActorCollision();
+        SetEntityVec3(VEC3_POS, 155.0fp, 0.0fp, -522.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 4080, 0);
+        Wait(1);
+        ExitThread();
+    }
+}

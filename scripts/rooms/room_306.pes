@@ -1,0 +1,140 @@
+// Parasite Eve 1 Scene Script (room_306)
+room_script room_306 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(115, 165, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00C0);
+        SetEventHandler(EVENT_TOUCH, @label_00BC);
+        if (global[5] == 22) {
+            SetEntityVec3(VEC3_POS, 1266.0fp, 0.0fp, -81.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+        }
+        if (global[5] == 20) {
+            SetEntityVec3(VEC3_POS, -712.0fp, 0.0fp, -81.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+        }
+        if (global[5] == 21) {
+            SetEntityVec3(VEC3_POS, -7.0fp, 0.0fp, -1891.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        }
+        Wait(1);
+        ExitThread();
+    @label_00BC:
+        ExitThread();
+    @label_00C0:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[4] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+        }
+        if (local[4] == 5) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[5] = 20;
+            SelectWorldMapDestination(20);
+        }
+        if (local[4] == 6) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[5] = 22;
+            SelectWorldMapDestination(22);
+        }
+        if (local[4] == 8) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[5] = 23;
+            SelectWorldMapDestination(23);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1002, 1024, 0, 0, room[20]);
+        LockPlayerInput();
+        SetMeshFadeLevel(76);
+        SetEventHandler(EVENT_INTERACT, @label_00D2);
+        SetCameraBaseAngle(1024, 1024);
+        ClearScreenFadeFlag40();
+        Wait(1);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetFadeColor(0x1E);
+        PlayFieldSfx(0, 0, 255);
+        Wait(1);
+    @label_006C:
+        SpawnThread(@label_0076);
+        ExitThread();
+    @label_0076:
+        GetActorPositionByType(0, 0, 0, local[5], local[6], local[7], local[8]);
+        TestPointInQuad(-778.0fp, 670.0fp, -778.0fp, 381.0fp, -1327.0fp, 381.0fp, -1327.0fp, 670.0fp, local[5], local[7], local[9]);
+        if (local[9] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[8]);
+        }
+        Wait(1);
+        goto @label_0076;
+    @label_00D2:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 252) {
+            PlayFieldSfx(2, 0, 251);
+            goto @label_006C;
+        }
+        if (local[3] == 253) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            goto @label_006C;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetEventHandler(EVENT_INTERACT, @label_0104);
+        Wait(1);
+    @label_000E:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[4]);
+        TestPointInQuad(2209.0fp, 777.0fp, 2209.0fp, -1111.0fp, 1604.0fp, -1111.0fp, 1604.0fp, 777.0fp, local[0], local[2], local[5]);
+        if (local[5] == 1) {
+            PlayFieldSfx(0, 0, 5);
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[4]);
+        TestPointInQuad(-800.0fp, 761.0fp, -800.0fp, -1098.0fp, -1034.0fp, -1098.0fp, -1034.0fp, 761.0fp, local[0], local[2], local[5]);
+        if (local[5] == 1) {
+            PlayFieldSfx(0, 0, 6);
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[4]);
+        TestPointInQuad(907.0fp, -2155.0fp, 907.0fp, -2560.0fp, -780.0fp, -2560.0fp, -780.0fp, -2155.0fp, local[0], local[2], local[5]);
+        if (local[5] == 1) {
+            PlayFieldSfx(0, 0, 8);
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_000E;
+    @label_0104:
+        GetThreadTarget14(local[7]);
+        if (local[7] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+}

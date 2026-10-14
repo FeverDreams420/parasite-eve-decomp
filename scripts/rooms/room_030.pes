@@ -1,0 +1,578 @@
+// Parasite Eve 1 Scene Script (room_030)
+room_script room_030 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(65, 165, 25);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetRenderAlphaValue(928);
+        SetActorFlag400();
+        SetMoveSpeed(0x12B85);
+        SetHitCylinderRadius(0x00600000);
+        Wait(1);
+        SetEventHandler(EVENT_INTERACT, @label_0180);
+        if (global[ROOM] == 28) {
+            SetEntityVec3(VEC3_POS, 170.0fp, 1048.0fp, -950.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        } else if (global[ROOM] == 32) {
+            SetEntityVec3(VEC3_POS, -1221.0fp, 1048.0fp, 888.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+        } else if (global[ROOM] == 334) {
+            SetEntityVec3(VEC3_POS, 1020.0fp, 1048.0fp, 2615.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+        } else {
+            SetEntityVec3(VEC3_POS, 170.0fp, 1048.0fp, -950.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        }
+        Wait(1);
+        SpawnThread(@label_0106);
+        Wait(1);
+        ExitThread();
+    @label_0106:
+        while (1) {
+            SetRenderAlphaValue(929);
+            Wait(2);
+            SetRenderAlphaValue(935);
+            Wait(2);
+            SetRenderAlphaValue(928);
+            Wait(2);
+            SetRenderAlphaValue(935);
+            Wait(2);
+            SetRenderAlphaValue(939);
+            Wait(2);
+            SetRenderAlphaValue(933);
+            Wait(2);
+            SetRenderAlphaValue(939);
+            Wait(2);
+            SetRenderAlphaValue(932);
+            Wait(2);
+            SetRenderAlphaValue(937);
+            Wait(2);
+        }
+    @label_0180:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 254) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[4] == 255) {
+            ResumeSceneEvents();
+            SetAnim(21);
+            UnlockPlayerInput();
+        }
+        if (local[4] == 4) {
+            PauseSceneEvents();
+            PlayFieldSfx(2, 0, 35);
+            CameraSnapToActor(2, 0, 88);
+            OpenTextbox(10); // "{Aya}. ?! You're the little girl / I saw at the theater,,,! Are you / lost,,,?!"
+        }
+        if (local[4] == 33) {
+            Wait(36);
+            TurnToAngleStep(1321, 12);
+        }
+        if (local[4] == 30) {
+            SetAnim(30);
+            SetAnimFrame(0);
+            PlayAnimToFrame(80);
+            WaitAnimEnd();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1030, 1042, 0, 0, local[0]);
+        AkaoCmd(0xC8, 13, 0, 0, 0, local[0]);
+        SceneCmd(2700, 205, 230, 255, 0, 0, 0, room[19]);
+        SetMeshFadeLevel(76);
+        ClearScreenFadeFlag40();
+        DisableCollisionTriangle(84);
+        DisableCollisionTriangle(86);
+        Wait(1);
+        Wait(1);
+        SpawnActor(0, 0, 200.0fp, 0.0fp, 162.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(5, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(6, 0, -1390.0fp, 1048.0fp, 4950.0fp);
+        SpawnActor(7, 0, 1400.0fp, 1048.0fp, 4950.0fp);
+        SpawnActor(8, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetEventHandler(EVENT_INTERACT, @label_0208);
+        PauseSceneEvents();
+        LockPlayerInput();
+        Wait(1);
+        SetGeomEntryField8(1, 20971);
+        SetGeomEntryFlags(1, 0x10);
+        SetGeomEntryFlags(1, 0x20);
+        SetGeomFlagSlot(1, 1);
+        SetGeomEntryField8(2, 20971);
+        SetGeomEntryFlags(2, 0x10);
+        SetGeomEntryFlags(2, 0x20);
+        SetGeomFlagSlot(2, 1);
+        if (global[34] >= 4) {
+        @label_0128:
+            SetGeomEntryField8(0, 0x00020000);
+            SetGeomFlagSlot(0, 1);
+            SetFadeColor(0x1E);
+            Wait(1);
+            ResumeSceneEvents();
+            UnlockPlayerInput();
+        } else {
+            global[34] = 4;
+            SetFadeColor(0x1E);
+            Wait(12);
+            StopActorMotion();
+            if (global[STORY_FLAGS] & 4) {
+                OpenTextbox(7); // "Will you watch this event? / <FB:01> Watch / <FB:00> Skip"
+                WaitTextbox(7);
+                GetChoiceResult(local[5]);
+                if (local[5] == 0) {
+                } else {
+                    if (local[5] == 1) {
+                        global[STORY_FLAGS] = global[STORY_FLAGS] | 2;
+                        goto @label_0128;
+                    }
+                    Wait(1);
+                }
+            }
+            PauseSceneEvents();
+            LockPlayerInput();
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            PlayFieldSfx(0, 0, 4);
+        }
+        Wait(1);
+        ExitThread();
+    @label_0208:
+        GetThreadTarget14(local[4]);
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetHitCylinder(50, 170, 20);
+        SetEventHandler(EVENT_INTERACT, @label_0046);
+        SetEventHandler(EVENT_TOUCH, @label_0166);
+        SetMoveSpeed(0x16666);
+        SetRenderAlphaValue(936);
+        SetActorFlag400();
+        SetEntityVec3(VEC3_POS, 400.0fp, 1048.0fp, 300.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        ExitThread();
+    @label_0046:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 35) {
+            AkaoCmd(0x12C, 2069, 0, 128, 123, local[5]);
+            CameraSnapToActor(0, 0, 20);
+            SetAnim(10);
+            SetAnimFrame(0);
+            PlayAnimToFrame(40);
+            WaitAnimEnd();
+            WaitTextbox(10);
+            SetAnim(10);
+            SetAnimFrame(40);
+            PlayAnimToFrame(0);
+            SetAnimStep(0x10000);
+            SetMoveFactor(0x6B333);
+            SetAnim(2);
+            PlayFieldSfx(0, 0, 33);
+            SetScrollMode(170, 112, 96);
+            MoveTowardPoint(-992.0fp, 850.0fp, 88);
+            OpenTextbox(11); // "{Aya}. ,,,Wait! Little girl,,,! / Don't,,, go,,,!"
+            AkaoCmd(0x12F, local[5], 0, 73, 0, local[4]);
+            AkaoCmd(0x12D, local[5], 0, 0, 0, local[4]);
+            MoveTowardPoint(-1296.0fp, 999.0fp, 88);
+            PlayFieldSfx(3, 0, 0);
+            SetAnimInterpRate(69);
+            MoveTowardPoint(-1818.0fp, 1174.0fp, 88);
+            ResetCameraToPlayer();
+            MoveTowardPoint(-1919.0fp, 1174.0fp, 88);
+            WaitDiscIdle();
+            WaitTextbox(11);
+            PlayFieldSfx(0, 0, 255);
+            global[34] = global[34] | 2;
+            Wait(1);
+            DestroySelf();
+        }
+        ExitThread();
+    @label_0166:
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetEventHandler(EVENT_INTERACT, @label_008A);
+        Wait(1);
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-1400.0fp, 1250.0fp, -1400.0fp, 800.0fp, -1600.0fp, 800.0fp, -1600.0fp, 1250.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                KillOtherThreads();
+                PauseSceneEvents();
+                LockPlayerInput();
+                StartScreenFade(15);
+                WaitScreenFade();
+                global[ROOM] = 31;
+                ChangeRoom(0xA8003148);
+            }
+            Wait(1);
+        }
+        ExitThread();
+    @label_008A:
+        GetThreadTarget14(local[8]);
+        if (local[8] == 0) {
+            SetGeomEntryField8(0, 15728);
+            AkaoCmd(0x12C, 2060, 0, 64, 127, local[3]);
+            SetGeomFlagSlot(0, 1);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_4 {
+        Wait(1);
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-740.0fp, -1150.0fp, -740.0fp, -1050.0fp, 740.0fp, -1050.0fp, 740.0fp, -1150.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                KillOtherThreads();
+                PauseSceneEvents();
+                LockPlayerInput();
+                StartScreenFade(20);
+                WaitScreenFade();
+                StartScreenFade(5);
+                WaitScreenFade();
+                global[ROOM] = 31;
+                ChangeRoom(0xA8002448);
+            }
+            Wait(1);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_5 {
+        Wait(1);
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(1300.0fp, 3300.0fp, 1300.0fp, 2600.0fp, 1800.0fp, 2600.0fp, 1800.0fp, 3300.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                KillOtherThreads();
+                PauseSceneEvents();
+                LockPlayerInput();
+                StartScreenFade(20);
+                WaitScreenFade();
+                global[ROOM] = 31;
+                ChangeRoom(0xA8063248);
+            }
+            Wait(1);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_6 {
+        SetHitCylinder(25, 110, 10);
+        Wait(1);
+        SetEventHandler(EVENT_TOUCH, @label_00A2);
+        Wait(1);
+        Random(local[0], 0, 100);
+        if (local[0] >= 50) {
+            local[0] = 6;
+        } else {
+            local[0] = 1;
+        }
+        if (global[84] & 16) {
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        } else {
+            SetAnim(0);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        }
+        Wait(1);
+        ExitThread();
+    @label_00A2:
+        if (room[0] & 8) {
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[10], local[15], local[11], local[15]);
+        GetEntityVec3(VEC3_POS, local[13], local[15], local[14]);
+        Atan2(local[14] - local[11], local[13] - local[10], local[1]);
+        local[1] = 4096 - (local[1] + 1024) & 4095;
+        GetActorPositionByType(5, 0, 0, local[15], local[12], local[15], local[15]);
+        local[1] = local[1] - local[12] & 4095;
+        if (local[1] > 768 && local[1] < 3328) {
+            ExitThread();
+        }
+        GetThreadTargets18_1C(local[2], local[3]);
+        if (local[2] == 0) {
+            CheckPadInput(PAD_PRESSED, 0x100, local[4]);
+            if (local[4] != 0) {
+                PlayFieldSfx(0, 0, 254);
+                if (global[84] & 16) {
+                    OpenTextbox(2); // "Drop an item here? / <FB:09>2 Yes / No"
+                    WaitTextbox(2);
+                    GetChoiceResult(local[6]);
+                    if (local[6] == 0) {
+                        RunSubSceneWithTimeout(0, local[8]);
+                        Wait(1);
+                        if (local[8] != -1) {
+                            global[119] = local[8];
+                            AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                            SetAnim(3);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(30);
+                            WaitAnimEnd();
+                            global[84] = global[84] & -17;
+                        }
+                    }
+                } else {
+                    AkaoCmd(0x15F, 1113, 0, 0, 0, local[6]);
+                    SetAnim(1);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(30);
+                    WaitAnimEnd();
+                    global[84] = global[84] | 16;
+                    if (global[119] == 0) {
+                        local[9] = local[0];
+                    } else {
+                        local[9] = global[119];
+                    }
+                    GiveItem(local[9], local[8]);
+                    if (local[8] == 0) {
+                        ShowReceivedItemPopup(local[9]);
+                        global[119] = 0;
+                    } else {
+                        OpenTextbox(3); // "Your inventory is full, | Will you replace an item? / <FB:09>2 Yes / No"
+                        WaitTextbox(3);
+                        GetChoiceResult(local[6]);
+                        if (local[6] == 0) {
+                            RunSubSceneWithTimeout(local[9], local[8]);
+                            if (local[8] != -1) {
+                                ShowReceivedItemPopup(local[9]);
+                                global[119] = local[8];
+                            }
+                            Wait(1);
+                        }
+                        AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                        SetAnim(3);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(30);
+                        WaitAnimEnd();
+                        global[84] = global[84] & -17;
+                    }
+                }
+                PlayFieldSfx(0, 0, 255);
+            }
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_7 {
+        SetHitCylinder(25, 110, 10);
+        Wait(1);
+        SetEventHandler(EVENT_TOUCH, @label_00A2);
+        Wait(1);
+        Random(local[0], 0, 100);
+        if (local[0] >= 20) {
+            local[0] = 29;
+        } else {
+            local[0] = 30;
+        }
+        if (global[84] & 32) {
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        } else {
+            SetAnim(0);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        }
+        Wait(1);
+        ExitThread();
+    @label_00A2:
+        if (room[0] & 8) {
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[10], local[15], local[11], local[15]);
+        GetEntityVec3(VEC3_POS, local[13], local[15], local[14]);
+        Atan2(local[14] - local[11], local[13] - local[10], local[1]);
+        local[1] = 4096 - (local[1] + 1024) & 4095;
+        GetActorPositionByType(5, 0, 0, local[15], local[12], local[15], local[15]);
+        local[1] = local[1] - local[12] & 4095;
+        if (local[1] > 768 && local[1] < 3328) {
+            ExitThread();
+        }
+        GetThreadTargets18_1C(local[2], local[3]);
+        if (local[2] == 0) {
+            CheckPadInput(PAD_PRESSED, 0x100, local[4]);
+            if (local[4] != 0) {
+                PlayFieldSfx(0, 0, 254);
+                if (global[84] & 32) {
+                    OpenTextbox(2); // "Drop an item here? / <FB:09>2 Yes / No"
+                    WaitTextbox(2);
+                    GetChoiceResult(local[6]);
+                    if (local[6] == 0) {
+                        RunSubSceneWithTimeout(0, local[8]);
+                        Wait(1);
+                        if (local[8] != -1) {
+                            global[121] = local[8];
+                            AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                            SetAnim(3);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(30);
+                            WaitAnimEnd();
+                            global[84] = global[84] & -33;
+                        }
+                    }
+                } else {
+                    AkaoCmd(0x15F, 1113, 0, 0, 0, local[6]);
+                    SetAnim(1);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(30);
+                    WaitAnimEnd();
+                    global[84] = global[84] | 32;
+                    if (global[121] == 0) {
+                        local[9] = local[0];
+                    } else {
+                        local[9] = global[121];
+                    }
+                    GiveItem(local[9], local[8]);
+                    if (local[8] == 0) {
+                        ShowReceivedItemPopup(local[9]);
+                        global[121] = 0;
+                    } else {
+                        OpenTextbox(3); // "Your inventory is full, | Will you replace an item? / <FB:09>2 Yes / No"
+                        WaitTextbox(3);
+                        GetChoiceResult(local[6]);
+                        if (local[6] == 0) {
+                            RunSubSceneWithTimeout(local[9], local[8]);
+                            if (local[8] != -1) {
+                                ShowReceivedItemPopup(local[9]);
+                                global[121] = local[8];
+                            }
+                            Wait(1);
+                        }
+                        AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                        SetAnim(3);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(30);
+                        WaitAnimEnd();
+                        global[84] = global[84] & -33;
+                    }
+                }
+                PlayFieldSfx(0, 0, 255);
+            }
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_8 {
+        SetHitCylinder(25, 110, 10);
+        EnableActorCollision();
+        SetEventHandler(EVENT_TOUCH, @label_00BE);
+        SetEntityVec3(VEC3_POS, -1426.0fp, 888.0fp, 306.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 3104, 0);
+        SetHitCylinderRadius(0x00C80000);
+        Wait(1);
+        Random(local[0], 0, 100);
+        if (local[0] >= 50) {
+            local[0] = 6;
+        } else {
+            local[0] = 1;
+        }
+        if (global[84] & 0x00800000) {
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        } else {
+            SetAnim(0);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        }
+        Wait(1);
+        ExitThread();
+    @label_00BE:
+        if (room[0] & 8) {
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[10], local[15], local[11], local[15]);
+        GetEntityVec3(VEC3_POS, local[13], local[15], local[14]);
+        Atan2(local[14] - local[11], local[13] - local[10], local[1]);
+        local[1] = 4096 - (local[1] + 1024) & 4095;
+        GetActorPositionByType(5, 0, 0, local[15], local[12], local[15], local[15]);
+        local[1] = local[1] - local[12] & 4095;
+        if (local[1] > 768 && local[1] < 3328) {
+            ExitThread();
+        }
+        GetThreadTargets18_1C(local[2], local[3]);
+        if (local[2] == 0) {
+            CheckPadInput(PAD_PRESSED, 0x100, local[4]);
+            if (local[4] != 0) {
+                PlayFieldSfx(0, 0, 254);
+                if (global[84] & 0x00800000) {
+                    OpenTextbox(2); // "Drop an item here? / <FB:09>2 Yes / No"
+                    WaitTextbox(2);
+                    GetChoiceResult(local[6]);
+                    if (local[6] == 0) {
+                        RunSubSceneWithTimeout(0, local[8]);
+                        Wait(1);
+                        if (local[8] != -1) {
+                            global[112] = local[8];
+                            AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                            SetAnim(3);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(30);
+                            WaitAnimEnd();
+                            global[84] = global[84] & 0xFF7FFFFF;
+                        }
+                    }
+                } else {
+                    AkaoCmd(0x15F, 1113, 0, 0, 0, local[6]);
+                    SetAnim(1);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(30);
+                    WaitAnimEnd();
+                    global[84] = global[84] | 0x00800000;
+                    if (global[112] == 0) {
+                        local[9] = local[0];
+                    } else {
+                        local[9] = global[112];
+                    }
+                    GiveItem(local[9], local[8]);
+                    if (local[8] == 0) {
+                        ShowReceivedItemPopup(local[9]);
+                        global[112] = 0;
+                    } else {
+                        OpenTextbox(3); // "Your inventory is full, | Will you replace an item? / <FB:09>2 Yes / No"
+                        WaitTextbox(3);
+                        GetChoiceResult(local[6]);
+                        if (local[6] == 0) {
+                            RunSubSceneWithTimeout(local[9], local[8]);
+                            if (local[8] != -1) {
+                                ShowReceivedItemPopup(local[9]);
+                                global[112] = local[8];
+                            }
+                            Wait(1);
+                        }
+                        AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                        SetAnim(3);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(30);
+                        WaitAnimEnd();
+                        global[84] = global[84] & 0xFF7FFFFF;
+                    }
+                }
+                PlayFieldSfx(0, 0, 255);
+            }
+        }
+        ExitThread();
+        ExitThread();
+    }
+}

@@ -1,0 +1,212 @@
+// Parasite Eve 1 Scene Script (room_142)
+room_script room_142 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(115, 125, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00F0);
+        if (global[ROOM] == 142) {
+            SetEntityVec3(VEC3_POS, 66.0fp, -14.0fp, -790.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+            if (!(global[67] & 256)) {
+                OpenTextbox(35); // "{Aya}. So much for using the / stairs,"
+                Wait(30);
+                SetAnim(30);
+                SetAnimFrame(0);
+                PlayAnimToFrame(70);
+                WaitAnimEnd();
+                WaitTextbox(35);
+                global[67] = global[67] | 256;
+                SetAnim(21);
+                UnlockPlayerInput();
+                ResumeSceneEvents();
+            }
+            goto @label_00EC;
+        } else {
+            SetEntityVec3(VEC3_POS, 66.0fp, -14.0fp, -790.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            goto @label_00EC;
+        }
+        Wait(1);
+    @label_00EC:
+        ExitThread();
+    @label_00F0:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            ExitThread();
+        }
+        if (local[3] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            ExitThread();
+        }
+        if (local[3] == 1) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[ROOM] = 143;
+            ChangeRoom(0xA8024148);
+            ExitThread();
+        }
+        if (local[3] == 2) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            GetActorPositionByType(0, 0, 0, local[10], local[11], local[12], local[13]);
+            TestPointInQuad(-575.0fp, -410.0fp, -575.0fp, -390.0fp, -555.0fp, -390.0fp, -555.0fp, -410.0fp, local[10], local[12], local[8]);
+            if (local[8] != 1) {
+                SetAnim(22);
+                TurnTowardPoint(-565.0fp, -400.0fp, 64);
+                SetAnim(21);
+            }
+            SetAnim(29);
+            SetAnimFrame(0);
+            PlayAnimToFrame(36);
+            WaitAnimEnd();
+            Random(room[14], 0, 100);
+            if (room[14] >= 20) {
+                room[14] = 29;
+            } else {
+                room[14] = 30;
+            }
+            local[7] = room[14];
+            GiveItem(local[7], local[6]);
+            if (local[6] == 0) {
+                ShowReceivedItemPopup(local[7]);
+                Wait(1);
+                global[67] = global[67] | 8192;
+                PlayFieldSfx(2, 0, 251);
+            } else {
+                OpenTextbox(4); // "Your inventory is full,"
+                WaitTextbox(4);
+            }
+            SetAnim(29);
+            SetAnimFrame(37);
+            PlayAnimToFrame(78);
+            WaitAnimEnd();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            Wait(15);
+            room[18] = 0;
+            ExitThread();
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1020, 1016, 0, 0, room[17]);
+        if (global[AREA] < 488) {
+            AkaoCmd(0xC8, 10, 0, 0, 0, room[17]);
+        } else {
+            AkaoCmd(0xC8, 9, 0, 0, 0, room[17]);
+        }
+        LockPlayerInput();
+        SetCameraBaseAngle(0, 3984);
+        EnablePlayerMovement();
+        room[18] = 0;
+        SetEventHandler(EVENT_INTERACT, @label_00EC);
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        if (!(global[67] & 8192)) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        }
+        Wait(1);
+        SetFadeColor(0x1E);
+        if (global[67] & 256) {
+            PlayFieldSfx(0, 0, 255);
+        }
+        Wait(1);
+    @label_00E8:
+        ExitThread();
+    @label_00EC:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 252) {
+            PlayFieldSfx(3, 0, 251);
+            if (!(global[65] & 256)) {
+                PlayFieldSfx(2, 0, 251);
+            }
+            goto @label_00E8;
+        }
+        if (local[3] == 253) {
+            SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+            if (!(global[65] & 256)) {
+                SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            }
+            goto @label_00E8;
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetEventHandler(EVENT_INTERACT, @label_00DE);
+        SpawnThread(@label_00B4);
+        Wait(30);
+        SpawnThread(@label_0024);
+        Wait(1);
+        ExitThread();
+    @label_0024:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-666.0fp, -400.0fp, -666.0fp, -600.0fp, -300.0fp, -600.0fp, -300.0fp, -400.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            if (room[18] == 0) {
+                CheckPadInput(PAD_PRESSED, 0x20000000, local[7]);
+                if (local[7] != 0) {
+                    room[18] = 1;
+                    PlayFieldSfx(0, 0, 2);
+                }
+            }
+        }
+        Wait(1);
+        goto @label_0024;
+    @label_00B4:
+        Random(local[8], 30, 75);
+        Wait(local[8]);
+        SceneCmd(2400, 0xFDCB0000, 0xFFF20000, 0xFE700000, 35, 3, 0, local[6]);
+        goto @label_00B4;
+    @label_00DE:
+        GetThreadTarget14(local[5]);
+        if (local[5] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetEventHandler(EVENT_INTERACT, @label_0072);
+        Wait(1);
+        SpawnThread(@label_0018);
+        ExitThread();
+    @label_0018:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-700.0fp, -700.0fp, 50.0fp, -1250.0fp, 700.0fp, -1100.0fp, -50.0fp, -2000.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            PlayFieldSfx(0, 0, 1);
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_0018;
+    @label_0072:
+        GetThreadTarget14(local[5]);
+        if (local[5] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+        ExitThread();
+    }
+}

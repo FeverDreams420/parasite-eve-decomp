@@ -1,0 +1,1225 @@
+// Parasite Eve 1 Scene Script (room_047)
+room_script room_047 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(115, 50, 20);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00D6);
+        SetEventHandler(EVENT_TOUCH, @label_00D2);
+        LockPlayerMoveMask(2);
+        if (global[ROOM] == 53) {
+            SetEntityVec3(VEC3_POS, -9.0fp, 0.0fp, 417.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        } else if (global[ROOM] == 51 || global[ROOM] == 107) {
+            SetEntityVec3(VEC3_POS, 68.0fp, 0.0fp, 1223.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        } else {
+            SetEntityVec3(VEC3_POS, 68.0fp, 0.0fp, 1223.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            goto @label_00CE;
+        }
+    @label_00CE:
+        ExitThread();
+    @label_00D2:
+        ExitThread();
+    @label_00D6:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 0) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            StartScreenFade(30);
+            EnableActorCollision();
+            SetAnim(22);
+            TurnTowardPoint(1.0fp, 1506.0fp, 180);
+            MoveTowardPoint(1.0fp, 1506.0fp, 180);
+            global[ROOM] = 52;
+            WaitScreenFade();
+            if (global[AREA] < 520) {
+                ChangeRoom(0xA80203C8);
+            } else {
+                ChangeRoom(0xA80050C8);
+            }
+        }
+        if (local[4] == 12) {
+            SetAnim(22);
+            CameraSnapToActor(2, 0, 45);
+            SetAnim(21);
+            room[19] = 1;
+        }
+        if (local[4] == 18) {
+            SetAnim(34);
+            SetAnimFrame(0);
+            PlayAnimToFrame(59);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[4] == 21) {
+            SetAnim(34);
+            SetAnimFrame(0);
+            PlayAnimToFrame(29);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[4] == 22) {
+            SetAnim(34);
+            SetAnimFrame(29);
+            PlayAnimToFrame(59);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[4] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            goto @label_00CE;
+        }
+        if (local[4] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            goto @label_00CE;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1000, 1000, 0, 0, room[21]);
+        LockPlayerInput();
+        SetMeshFadeLevel(88);
+        AkaoCmd(0xC8, 8, 0, 0, 0, room[21]);
+        ClearScreenFadeFlag40();
+        SetCameraBaseAngle(2048, 2304);
+        DisableCollisionTriangle(6);
+        DisableCollisionTriangle(49);
+        DisableCollisionTriangle(50);
+        DisableCollisionTriangle(19);
+        SetGeomEntryPos(1, 0, 0, 15);
+        SetGeomEntryPos(9, 0, 0, 80);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(5, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(6, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetFadeColor(0x1E);
+        PlayFieldSfx(0, 0, 255);
+        DestroySelf();
+    }
+
+    actor_script actor_2 {
+        SetHitCylinder(120, 55, 20);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00BA);
+        SetEventHandler(EVENT_TOUCH, @label_1C88);
+        AkaoCmd(0x196, 1, 0, 1000, 0, room[21]);
+        AkaoCmd(0x196, 1, 20, 1001, 0, room[21]);
+        AkaoCmd(0x196, 12, 0, 1000, 0, room[21]);
+        AkaoCmd(0x196, 12, 20, 1001, 0, room[21]);
+        AkaoCmd(0x196, 2, 0, 1000, 0, room[21]);
+        AkaoCmd(0x196, 2, 10, 1001, 0, room[21]);
+        SetEntityVec3(VEC3_POS, 359.0fp, 0.0fp, -449.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2016, 0);
+        SetMoveFactor(0x80000);
+        EnableActorCollision();
+        Wait(1);
+        ExitThread();
+    @label_00BA:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 2) {
+            room[17] = 1;
+            PauseSceneEvents();
+            PlayFieldSfx(0, 0, 254);
+            Wait(1);
+            PlayFieldSfx(0, 0, 12);
+            SetAnimStep(0x10000);
+            SetAnim(8);
+            SetAnimFrame(0);
+            PlayAnimToFrame(24);
+            WaitAnimEnd();
+            while (room[19] == 0) {
+                Wait(1);
+            }
+            room[19] = room[19] - 1;
+            if (!(global[46] & 256)) {
+                OpenTextbox(161); // "Wayne. Don't you worry: {Aya}, / I'll be looking after this place / for Torres! | You l..."
+                SetAnim(17);
+                SetAnimFrame(0);
+                PlayAnimToFrame(59);
+                WaitAnimEnd();
+                WaitTextbox(161);
+            } else {
+                SetAnim(17);
+                SetAnimFrame(0);
+                PlayAnimToFrame(59);
+                OpenTextbox(163); // "Wayne. Yo! You need somethin': / {Aya}?"
+                WaitTextbox(163);
+            }
+        @label_01B0:
+            SetTextboxRect(110, 128, 187, 82);
+            room[20] = 0;
+            OpenStyledTextbox(164); // "<FB:09>6 Tune up weapon / Store equipment / Store item / Discard junk / Rare T Card col..."
+            SpawnThread(@label_1C38);
+            WaitTextbox(164);
+            local[31] = 1;
+            room[20] = 1;
+            GetChoiceResult(local[5]);
+            if (local[5] == 0) {
+                CountItemInInventory(55, local[22]);
+                CountItemInInventory(21, local[23]);
+                CountItemInInventory(221, local[32]);
+                CountItemInInventory(222, local[33]);
+                CountItemInInventory(223, local[34]);
+                CountItemInInventory(224, local[35]);
+                CountItemInInventory(225, local[36]);
+                CountItemInInventory(226, local[37]);
+                CountItemInInventory(227, local[38]);
+                CountItemInInventory(228, local[39]);
+                CountItemInInventory(229, local[40]);
+                CountItemInInventory(230, local[41]);
+                CountItemInInventory(231, local[42]);
+                CountItemInInventory(232, local[43]);
+                CountItemInInventory(233, local[44]);
+                CountItemInInventory(234, local[45]);
+                CountItemInInventory(235, local[46]);
+                local[47] = local[22] + local[23] + local[32] + local[33] + local[34] + local[35] + local[36] + local[37] + local[38] + local[39] + local[40] + local[41] + local[42] + local[43] + local[44] + local[45] + local[46];
+                local[48] = local[47] - local[22] - local[23];
+                if (local[47] == 0) {
+                    SetAnim(17);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(59);
+                    OpenTextbox(165); // "Wayne. Sorry babe: gotta have a / permit or a T Card if you wanna / tune up your gear,"
+                    WaitTextbox(165);
+                    goto @label_01B0;
+                } else {
+                    RunSubSceneWithTimeout(0, local[6]);
+                    local[27] = local[6];
+                    if (local[6] != 55 && local[6] != 21 && !(local[6] >= 221 && local[6] <= 235)) {
+                        GiveItem(local[27], room[21]);
+                        goto @label_01B0;
+                    } else {
+                        if (local[27] >= 221 && local[27] <= 235) {
+                            SetAnimStep(0xFFFF0000);
+                            SetAnim(8);
+                            SetAnimFrame(24);
+                            PlayAnimToFrame(0);
+                            WaitAnimEnd();
+                            SetAnimStep(0x10000);
+                            OpenTextbox(166); // "Wayne. Mamma mia! This one's a / one-of-a-kind T Card! You're a / babe: {Aya}!"
+                            SetAnim(4);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(69);
+                            WaitAnimEnd();
+                            WaitTextbox(166);
+                            SetAnim(8);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(24);
+                            WaitAnimEnd();
+                        }
+                    @label_04C0:
+                        SetAnim(17);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(59);
+                        OpenTextbox(167); // "Wayne. What equipment do you wanna / tune up?"
+                        WaitTextbox(167);
+                        RunInventoryCommand(1113, 0, 0, local[49], room[21]);
+                        if (local[49] == -1) {
+                            if (local[24] == 1) {
+                                local[24] = 0;
+                                goto @label_01B0;
+                            }
+                            GiveItem(local[27], room[21]);
+                            goto @label_01B0;
+                        } else {
+                            SetAnimStep(0xFFFF0000);
+                            SetAnim(8);
+                            SetAnimFrame(24);
+                            PlayAnimToFrame(0);
+                            WaitAnimEnd();
+                            SetAnimStep(0x10000);
+                            PlayFieldSfx(0, 0, 18);
+                            SetGeomEntryPos(12, 0, 0, 15);
+                            SetAnim(9);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(50);
+                            WaitAnimEnd();
+                            SetAnim(12);
+                            TurnTowardPoint(341.0fp, -624.0fp, 45);
+                            MoveTowardPoint(341.0fp, -624.0fp, 45);
+                            SetAnim(11);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(25);
+                            WaitAnimEnd();
+                            AkaoCmd(0x12C, 2190, 0, 128, 127, room[21]);
+                            SetAnim(11);
+                            SetAnimFrame(25);
+                            PlayAnimToFrame(75);
+                            WaitAnimEnd();
+                            AkaoCmd(0x12C, 2190, 0, 128, 127, room[21]);
+                            SetAnim(11);
+                            SetAnimFrame(75);
+                            PlayAnimToFrame(150);
+                            WaitAnimEnd();
+                            GetActorPositionByType(0, 0, 0, local[21], local[14], local[14], local[14]);
+                            SetAnim(12);
+                            TurnTowardPoint(local[21], -449.0fp, 45);
+                            MoveTowardPoint(local[21], -449.0fp, 45);
+                            CameraSnapToActor(0, 0, 60);
+                            while (room[19] == 0) {
+                                Wait(1);
+                            }
+                            room[19] = room[19] - 1;
+                            OpenTextbox(168); // "Wayne. Here ya go,,, Nothin' to it!"
+                            PlayFieldSfx(0, 0, 18);
+                            SetAnim(10);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(50);
+                            WaitAnimEnd();
+                            SetGeomEntryPos(12, 0, 0, -15);
+                            SetAnim(8);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(24);
+                            WaitAnimEnd();
+                            while (room[19] == 0) {
+                                Wait(1);
+                            }
+                            room[19] = room[19] - 1;
+                            WaitTextbox(168);
+                            if (local[27] >= 221 && local[27] <= 235) {
+                                if (local[27] == 221) {
+                                    if (!(global[303] & 1)) {
+                                        global[303] = global[303] | 1;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 222) {
+                                    if (!(global[303] & 2)) {
+                                        global[303] = global[303] | 2;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 223) {
+                                    if (!(global[303] & 4)) {
+                                        global[303] = global[303] | 4;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 224) {
+                                    if (!(global[303] & 8)) {
+                                        global[303] = global[303] | 8;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 225) {
+                                    if (!(global[303] & 16)) {
+                                        global[303] = global[303] | 16;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 226) {
+                                    if (!(global[303] & 32)) {
+                                        global[303] = global[303] | 32;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 227) {
+                                    if (!(global[303] & 64)) {
+                                        global[303] = global[303] | 64;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 228) {
+                                    if (!(global[303] & 128)) {
+                                        global[303] = global[303] | 128;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 229) {
+                                    if (!(global[303] & 256)) {
+                                        global[303] = global[303] | 256;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 230) {
+                                    if (!(global[303] & 512)) {
+                                        global[303] = global[303] | 512;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 231) {
+                                    if (!(global[303] & 1024)) {
+                                        global[303] = global[303] | 1024;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 232) {
+                                    if (!(global[303] & 2048)) {
+                                        global[303] = global[303] | 2048;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 233) {
+                                    if (!(global[303] & 4096)) {
+                                        global[303] = global[303] | 4096;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 234) {
+                                    if (!(global[303] & 8192)) {
+                                        global[303] = global[303] | 8192;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                if (local[27] == 235) {
+                                    if (!(global[303] & 16384)) {
+                                        global[303] = global[303] | 16384;
+                                        global[304] = global[304] + 1;
+                                    }
+                                }
+                                local[24] = local[24] + 1;
+                                if (local[24] < 2) {
+                                    OpenTextbox(169); // "Wayne. For a T Card that rare: I'll / give you one more tune-up! | Want another tweak? ..."
+                                    WaitTextbox(169);
+                                    GetChoiceResult(local[5]);
+                                    if (local[5] == 0) {
+                                        goto @label_04C0;
+                                    } else {
+                                        local[24] = 0;
+                                    }
+                                }
+                                local[24] = 0;
+                            }
+                            goto @label_01B0;
+                        }
+                    }
+                }
+            }
+            if (local[5] == 1) {
+                OpenEquipMenu(1);
+                Wait(1);
+                goto @label_01B0;
+            }
+            if (local[5] == 2) {
+                OpenEquipMenu(0);
+                Wait(1);
+                goto @label_01B0;
+            }
+            if (local[5] == 3) {
+                CountItemInInventory(20, local[25]);
+                if (local[25] == 0) {
+                    SetAnim(17);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(59);
+                    OpenTextbox(170); // "Wayne. What are you talkin' about? / You got no junk with you right / now!"
+                    WaitTextbox(170);
+                } else {
+                    SetAnimStep(0xFFFF0000);
+                    SetAnim(8);
+                    SetAnimFrame(24);
+                    PlayAnimToFrame(0);
+                    WaitAnimEnd();
+                    SetAnimStep(0x10000);
+                    PlayFieldSfx(0, 0, 21);
+                    SetGeomEntryPos(12, 0, 0, 15);
+                    SetAnim(9);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(25);
+                    WaitAnimEnd();
+                    while (room[19] == 0) {
+                        Wait(1);
+                    }
+                    room[19] = room[19] - 1;
+                    local[29] = local[25];
+                    while (local[25] > 0) {
+                        global[48] = global[48] + 1;
+                        AkaoCmd(0x15F, 2201, 0, 0, 0, room[21]);
+                        if (local[29] <= 5) {
+                            Wait(30);
+                        }
+                        if (local[29] > 5 && local[29] <= 15) {
+                            Wait(20);
+                        }
+                        if (local[29] > 15) {
+                            Wait(10);
+                        }
+                        RunInventoryCommand(1112, 20, 0, local[20], room[21]);
+                        local[25] = local[25] - 1;
+                    }
+                    local[29] = 0;
+                    SetAnimStep(0xFFFF0000);
+                    PlayFieldSfx(0, 0, 22);
+                    SetAnim(9);
+                    SetAnimFrame(25);
+                    PlayAnimToFrame(0);
+                    WaitAnimEnd();
+                    SetAnimStep(0x10000);
+                    SetGeomEntryPos(12, 0, 0, -15);
+                    SetAnim(8);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(24);
+                    WaitAnimEnd();
+                    while (room[19] == 0) {
+                        Wait(1);
+                    }
+                    room[19] = room[19] - 1;
+                    if (global[48] >= 300) {
+                        SetAnim(17);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(59);
+                        SetTextboxRect(135, 115, 162, 94);
+                        OpenTextbox(172); // "Wayne. I got quite a bit of junk / parts now,,, | I could probably whip up a whole / gu..."
+                        WaitTextbox(172);
+                        OpenStyledTextbox(173); // "<FB:09>7 Handgun / Shotgun / Machine Gun / Rifle / Grenade Launcher / Rocket Launcher /..."
+                        WaitTextbox(173);
+                        GetChoiceResult(local[5]);
+                        SetGeomEntryPos(12, 0, 0, 15);
+                        SetAnim(1);
+                        TurnTowardPoint(341.0fp, -624.0fp, 45);
+                        MoveTowardPoint(341.0fp, -624.0fp, 45);
+                        SetAnim(11);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(25);
+                        WaitAnimEnd();
+                        AkaoCmd(0x12C, 2190, 0, 128, 127, room[21]);
+                        SetAnim(11);
+                        SetAnimFrame(25);
+                        PlayAnimToFrame(75);
+                        WaitAnimEnd();
+                        AkaoCmd(0x12C, 2190, 0, 128, 127, room[21]);
+                        SetAnim(11);
+                        SetAnimFrame(75);
+                        PlayAnimToFrame(150);
+                        WaitAnimEnd();
+                        GetActorPositionByType(0, 0, 0, local[21], local[14], local[14], local[14]);
+                        SetAnim(12);
+                        TurnTowardPoint(local[21], -449.0fp, 45);
+                        MoveTowardPoint(local[21], -449.0fp, 45);
+                        CameraSnapToActor(0, 0, 60);
+                        PauseActorAnim();
+                        if (local[5] >= 0 && local[5] <= 5) {
+                            OpenTextbox(174); // "Wayne. Ha-ha! Now: THIS is a good / gun, You can count on this one!"
+                            WaitTextbox(174);
+                        } else {
+                        @label_10B6:
+                            Random(local[26], 0, 99);
+                            if (local[26] >= 0 && local[26] <= 9) {
+                                OpenTextbox(174); // "Wayne. Ha-ha! Now: THIS is a good / gun, You can count on this one!"
+                                WaitTextbox(174);
+                                local[28] = 0;
+                            }
+                            if (local[26] >= 10 && local[26] <= 19) {
+                                OpenTextbox(174); // "Wayne. Ha-ha! Now: THIS is a good / gun, You can count on this one!"
+                                WaitTextbox(174);
+                                local[28] = 1;
+                            }
+                            if (local[26] >= 20 && local[26] <= 49) {
+                                OpenTextbox(174); // "Wayne. Ha-ha! Now: THIS is a good / gun, You can count on this one!"
+                                WaitTextbox(174);
+                                local[28] = 2;
+                            }
+                            if (local[26] >= 50 && local[26] <= 59) {
+                                OpenTextbox(174); // "Wayne. Ha-ha! Now: THIS is a good / gun, You can count on this one!"
+                                WaitTextbox(174);
+                                local[28] = 3;
+                            }
+                            if (local[26] >= 60 && local[26] <= 64) {
+                                OpenTextbox(175); // "Wayne. Um: heh heh,,, Sorry / {Aya}: I: kinda screwed up,"
+                                WaitTextbox(175);
+                                local[28] = 4;
+                            }
+                            if (local[26] >= 65 && local[26] <= 69) {
+                                OpenTextbox(175); // "Wayne. Um: heh heh,,, Sorry / {Aya}: I: kinda screwed up,"
+                                WaitTextbox(175);
+                                local[28] = 5;
+                            }
+                            if (local[26] >= 70) {
+                                goto @label_10B6;
+                            }
+                        }
+                        PlayFieldSfx(0, 0, 18);
+                        SetAnim(10);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(50);
+                        WaitAnimEnd();
+                        SetGeomEntryPos(12, 0, 0, -15);
+                        SetAnim(8);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(24);
+                        WaitAnimEnd();
+                        while (room[19] == 0) {
+                            Wait(1);
+                        }
+                        room[19] = room[19] - 1;
+                        if (local[5] == 0) {
+                            GiveItem(102, room[21]);
+                            ShowReceivedItemPopup(102);
+                            Wait(1);
+                        }
+                        if (local[5] == 1) {
+                            GiveItem(110, room[21]);
+                            ShowReceivedItemPopup(110);
+                            Wait(1);
+                        }
+                        if (local[5] == 2) {
+                            GiveItem(120, room[21]);
+                            ShowReceivedItemPopup(120);
+                            Wait(1);
+                        }
+                        if (local[5] == 3) {
+                            GiveItem(130, room[21]);
+                            ShowReceivedItemPopup(130);
+                            Wait(1);
+                        }
+                        if (local[5] == 4) {
+                            GiveItem(143, room[21]);
+                            ShowReceivedItemPopup(143);
+                            Wait(1);
+                        }
+                        if (local[5] == 5) {
+                            GiveItem(146, room[21]);
+                            ShowReceivedItemPopup(146);
+                            Wait(1);
+                        }
+                        if (local[5] == 6) {
+                            Random(local[26], 0, 99);
+                            if (local[28] == 0) {
+                                GiveItem(98, room[21]);
+                                ShowReceivedItemPopup(98);
+                                Wait(1);
+                            }
+                            if (local[28] == 1) {
+                                GiveItem(99, room[21]);
+                                ShowReceivedItemPopup(99);
+                                Wait(1);
+                            }
+                            if (local[28] == 2) {
+                                GiveItem(100, room[21]);
+                                ShowReceivedItemPopup(100);
+                                Wait(1);
+                            }
+                            if (local[28] == 3) {
+                                GiveItem(101, room[21]);
+                                ShowReceivedItemPopup(101);
+                                Wait(1);
+                            }
+                            if (local[28] == 4) {
+                                GiveItem(11, room[21]);
+                                ShowReceivedItemPopup(11);
+                                Wait(1);
+                            }
+                            if (local[28] == 5) {
+                                GiveItem(12, room[21]);
+                                ShowReceivedItemPopup(12);
+                                Wait(1);
+                            }
+                        }
+                        global[48] = global[48] - 300;
+                    }
+                }
+                goto @label_01B0;
+            }
+            if (local[5] == 4) {
+                if (global[304] == 0) {
+                    SetAnim(17);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(59);
+                    OpenTextbox(184); // "Wayne. Um: heh heh: I don't really / have one yet,,,"
+                    WaitTextbox(184);
+                } else {
+                    OpenTextbox(185); // "Wayne. Lemme show you my pride and / joy! | Well: they're all the ones that / YOU broug..."
+                    WaitTextbox(185);
+                    SetTextboxRect(150, 160, 134, 22);
+                    if (global[303] & 1) {
+                        OpenStyledTextbox(186); // "GSP Trading Card"
+                        WaitTextbox(186);
+                    }
+                    if (global[303] & 2) {
+                        OpenStyledTextbox(187); // "P38 Trading Card"
+                        WaitTextbox(187);
+                    }
+                    if (global[303] & 4) {
+                        OpenStyledTextbox(188); // "B-Hawk Trading Card"
+                        WaitTextbox(188);
+                    }
+                    if (global[303] & 8) {
+                        OpenStyledTextbox(189); // "Kasul Trading Card"
+                        WaitTextbox(189);
+                    }
+                    if (global[303] & 16) {
+                        OpenStyledTextbox(190); // "PPKS Trading Card"
+                        WaitTextbox(190);
+                    }
+                    if (global[303] & 32) {
+                        OpenStyledTextbox(191); // "M1 Trading Card"
+                        WaitTextbox(191);
+                    }
+                    if (global[303] & 64) {
+                        OpenStyledTextbox(192); // "MK5 Trading Card"
+                        WaitTextbox(192);
+                    }
+                    if (global[303] & 128) {
+                        OpenStyledTextbox(193); // "MP44 Trading Card"
+                        WaitTextbox(193);
+                    }
+                    if (global[303] & 256) {
+                        OpenStyledTextbox(194); // "BAR Trading Card"
+                        WaitTextbox(194);
+                    }
+                    if (global[303] & 512) {
+                        OpenStyledTextbox(195); // "MG42 Trading Card"
+                        WaitTextbox(195);
+                    }
+                    if (global[303] & 1024) {
+                        OpenStyledTextbox(196); // "M29 Trading Card"
+                        WaitTextbox(196);
+                    }
+                    if (global[303] & 2048) {
+                        OpenStyledTextbox(197); // "M73 Trading Card"
+                        WaitTextbox(197);
+                    }
+                    if (global[303] & 4096) {
+                        OpenStyledTextbox(198); // "Type38 Traking Card"
+                        WaitTextbox(198);
+                    }
+                    if (global[303] & 8192) {
+                        OpenStyledTextbox(199); // "Type3 Trading Card"
+                        WaitTextbox(199);
+                    }
+                    if (global[303] & 16384) {
+                        OpenStyledTextbox(200); // "Eagle Trading Card"
+                        WaitTextbox(200);
+                    }
+                    if (global[304] != 0 && global[304] <= 9) {
+                        SetAnim(17);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(59);
+                        OpenTextbox(201); // "Wayne. I see a lot of good guns in / my work: but great guns are hard / to come by,,, |..."
+                        WaitTextbox(201);
+                    }
+                    if (global[304] >= 10 && global[304] <= 13) {
+                        SetAnim(17);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(59);
+                        OpenTextbox(202); // "Wayne. Heh: heh,,, Thanks to you / {Aya}: my collection's getting / pretty big!"
+                        WaitTextbox(202);
+                        if (!(global[46] & 0x00400000)) {
+                            OpenTextbox(203); // "Wayne. Here,,, I'll give ya my tool / kit in return, | You can tune up your equipment a..."
+                            WaitTextbox(203);
+                            GiveItem(53, local[30]);
+                            while (local[30] != 0) {
+                                OpenTextbox(36); // "Wayne. What're you leaving? / <FB:09>2 Weapons;Armor / Item"
+                                WaitTextbox(36);
+                                GetChoiceResult(local[5]);
+                                if (local[5] == 0) {
+                                    OpenEquipMenu(1);
+                                    Wait(1);
+                                } else {
+                                    OpenEquipMenu(0);
+                                    Wait(1);
+                                }
+                                GiveItem(53, local[30]);
+                            }
+                            ShowReceivedItemPopup(53);
+                            Wait(1);
+                            global[46] = global[46] | 0x00400000;
+                        }
+                    }
+                    if (global[304] == 14) {
+                        SetAnim(17);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(59);
+                        OpenTextbox(204); // "Wayne. Not too many gun freaks with / this many rare trading cards! | Still would be ni..."
+                        WaitTextbox(204);
+                        if (!(global[46] & 0x00800000)) {
+                            OpenTextbox(205); // "Wayne. This here's MY special tool / kit, | With this: you can tune up your / equipment..."
+                            WaitTextbox(205);
+                            GiveItem(54, local[30]);
+                            while (local[30] != 0) {
+                                OpenTextbox(36); // "Wayne. What're you leaving? / <FB:09>2 Weapons;Armor / Item"
+                                WaitTextbox(36);
+                                GetChoiceResult(local[5]);
+                                if (local[5] == 0) {
+                                    OpenEquipMenu(1);
+                                    Wait(1);
+                                } else {
+                                    OpenEquipMenu(0);
+                                    Wait(1);
+                                }
+                                GiveItem(54, local[30]);
+                            }
+                            ShowReceivedItemPopup(54);
+                            Wait(1);
+                            global[46] = global[46] | 0x00800000;
+                        }
+                    }
+                }
+                goto @label_01B0;
+            }
+            if (local[5] == 5) {
+                goto @label_1986;
+            }
+        @label_1986:
+            local[8] = 100;
+            local[9] = 100;
+            local[10] = 100;
+            RunInventoryCommand(1103, 0, local[8], local[15], local[16]);
+            RunInventoryCommand(1104, local[9], local[10], local[18], local[17]);
+            if (local[18] > 0) {
+                OpenTextbox(178); // "Wayne. Oo! / Now THAT's good armor! | How 'bout putting a name on that? / Somethin' rea..."
+                WaitTextbox(178);
+                OpenTextbox(179); // "Put name on armor? / <FB:09>2 Yes / No"
+                WaitTextbox(179);
+                GetChoiceResult(local[5]);
+                if (local[5] == 0) {
+                    OpenSaveLoadMenu(1);
+                    Wait(1);
+                }
+            }
+            if (local[18] < -1) {
+                OpenTextbox(182); // "Wayne. Oo! / Now THAT's good armor! | It'll erase the old name: but how / 'bout putting..."
+                WaitTextbox(182);
+                OpenTextbox(179); // "Put name on armor? / <FB:09>2 Yes / No"
+                WaitTextbox(179);
+                GetChoiceResult(local[5]);
+                if (local[5] == 0) {
+                    OpenSaveLoadMenu(1);
+                    Wait(1);
+                }
+            }
+            local[11] = 100;
+            local[12] = 100;
+            local[13] = 100;
+            RunInventoryCommand(1103, 1, local[11], local[15], local[16]);
+            RunInventoryCommand(1104, local[12], local[13], local[19], local[17]);
+            if (local[19] > 0) {
+                OpenTextbox(180); // "Wayne. Mamma mia! / Now THAT's a good gun! | Say: how 'bout carving a name on / that si..."
+                WaitTextbox(180);
+                OpenTextbox(181); // "Put name on weapon? / <FB:09>2 Yes / No"
+                WaitTextbox(181);
+                GetChoiceResult(local[5]);
+                if (local[5] == 0) {
+                    OpenSaveLoadMenu(1);
+                    Wait(1);
+                }
+            }
+            if (local[19] < -1) {
+                OpenTextbox(183); // "Wayne. Now: that's another gem of a / gun,,, You oughta open your own / gun shop! | How..."
+                WaitTextbox(183);
+                OpenTextbox(181); // "Put name on weapon? / <FB:09>2 Yes / No"
+                WaitTextbox(181);
+                GetChoiceResult(local[5]);
+                if (local[5] == 0) {
+                    OpenSaveLoadMenu(1);
+                    Wait(1);
+                }
+            }
+            if (!(global[46] & 256)) {
+                OpenTextbox(162); // "Wayne. {Aya}: you take Eve / down,,, Do it for Torres: alright?"
+                SetAnim(17);
+                SetAnimFrame(0);
+                PlayAnimToFrame(59);
+                WaitAnimEnd();
+                WaitTextbox(162);
+                global[46] = global[46] | 256;
+            } else {
+                SetAnim(17);
+                SetAnimFrame(0);
+                PlayAnimToFrame(59);
+                OpenTextbox(177); // "Wayne. You come back any time now: / {Aya}!"
+                WaitTextbox(177);
+            }
+            SetAnimStep(0xFFFF0000);
+            SetAnim(8);
+            SetAnimFrame(24);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+            PlayFieldSfx(0, 0, 255);
+            room[17] = 0;
+        }
+        ExitThread();
+        while (room[20] == 0) {
+            CheckPadInput(PAD_PRESSED, 1, local[14]);
+            if (local[14] != 0) {
+                CloseTextbox(164);
+                room[20] = 1;
+                goto @label_1986;
+            }
+            Wait(1);
+        }
+        ExitThread();
+    @label_1C38:
+        while (local[31] == 0) {
+            CheckPadInput(PAD_PRESSED, 0x400, local[50]);
+            if (local[50] != 0) {
+                CloseTextbox(164);
+            }
+            Wait(1);
+        }
+        local[31] = 0;
+        ExitThread();
+    @label_1C88:
+        GetThreadTargets18_1C(local[1], local[2]);
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        Wait(1);
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-147.0fp, 1428.0fp, -147.0fp, 1374.0fp, 144.0fp, 1374.0fp, 144.0fp, 1428.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                PlayFieldSfx(0, 0, 0);
+                DestroySelf();
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(479.0fp, -121.0fp, 479.0fp, 29.0fp, 226.0fp, 29.0fp, 226.0fp, -121.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                GetActorPositionByType(5, 0, 0, local[3], local[8], local[3], local[3]);
+                if (local[8] > 3584 || local[8] < 512) {
+                    if (room[17] == 0) {
+                        CheckPadInput(PAD_PRESSED, 0x20000000, local[5]);
+                        if (local[5] != 0) {
+                            PlayFieldSfx(2, 0, 2);
+                        }
+                    }
+                }
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(937.0fp, -97.0fp, 937.0fp, 189.0fp, -26.0fp, 189.0fp, -26.0fp, -97.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                if (local[7] != 1) {
+                    LoadGeomState(1);
+                    local[7] = 1;
+                }
+            } else if (local[7] != 0) {
+                LoadGeomState(0);
+                local[7] = 0;
+            }
+            Wait(1);
+        }
+    }
+
+    actor_script actor_4 {
+        SetHitCylinder(20, 101, 20);
+        SetEventHandler(EVENT_TOUCH, @label_0092);
+        SetEntityVec3(VEC3_POS, -530.0fp, 0.0fp, 999.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 4080, 0);
+        EnableActorCollision();
+        SetHitCylinderRadius(0x00C80000);
+        ScaleShadowRadius(0x9999);
+        local[0] = 22;
+        if (global[85] & 0x20000000) {
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        } else {
+            SetAnim(0);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        }
+        Wait(1);
+        ExitThread();
+    @label_0092:
+        if (room[0] & 8) {
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[10], local[15], local[11], local[15]);
+        GetEntityVec3(VEC3_POS, local[13], local[15], local[14]);
+        Atan2(local[14] - local[11], local[13] - local[10], local[1]);
+        local[1] = 4096 - (local[1] + 1024) & 4095;
+        GetActorPositionByType(5, 0, 0, local[15], local[12], local[15], local[15]);
+        local[1] = local[1] - local[12] & 4095;
+        if (local[1] > 768 && local[1] < 3328) {
+            ExitThread();
+        }
+        GetThreadTargets18_1C(local[2], local[3]);
+        if (local[2] == 0) {
+            CheckPadInput(PAD_PRESSED, 0x100, local[4]);
+            if (local[4] != 0) {
+                PlayFieldSfx(0, 0, 254);
+                if (global[85] & 0x20000000) {
+                    OpenTextbox(2); // "Drop an item here? / <FB:09>2 Yes / No"
+                    WaitTextbox(2);
+                    GetChoiceResult(local[6]);
+                    if (local[6] == 0) {
+                        RunSubSceneWithTimeout(0, local[8]);
+                        Wait(1);
+                        if (local[8] != -1) {
+                            global[160] = local[8];
+                            AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                            SetAnim(3);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(30);
+                            WaitAnimEnd();
+                            global[85] = global[85] & 0xDFFFFFFF;
+                        }
+                    }
+                } else {
+                    AkaoCmd(0x15F, 1113, 0, 0, 0, local[6]);
+                    SetAnim(1);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(30);
+                    WaitAnimEnd();
+                    global[85] = global[85] | 0x20000000;
+                    if (global[160] == 0) {
+                        local[9] = local[0];
+                    } else {
+                        local[9] = global[160];
+                    }
+                    GiveItem(local[9], local[8]);
+                    if (local[8] == 0) {
+                        ShowReceivedItemPopup(local[9]);
+                        global[160] = 0;
+                    } else {
+                        OpenTextbox(3); // "Your inventory is full, | Would you like to exchange items? / <FB:09>2 Yes / No"
+                        WaitTextbox(3);
+                        GetChoiceResult(local[6]);
+                        if (local[6] == 0) {
+                            RunSubSceneWithTimeout(local[9], local[8]);
+                            if (local[8] != -1) {
+                                ShowReceivedItemPopup(local[9]);
+                                global[160] = local[8];
+                            }
+                            Wait(1);
+                        }
+                        AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                        SetAnim(3);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(30);
+                        WaitAnimEnd();
+                        global[85] = global[85] & 0xDFFFFFFF;
+                    }
+                }
+                PlayFieldSfx(0, 0, 255);
+            }
+        }
+        ExitThread();
+    }
+
+    actor_script actor_5 {
+        SetHitCylinder(20, 101, 20);
+        SetEventHandler(EVENT_TOUCH, @label_0100);
+        EnableActorCollision();
+        SetEntityVec3(VEC3_POS, 700.0fp, -320.0fp, -219.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 1680, 0);
+        SetActorFlag400();
+        SetHitCylinderRadius(0x00C80000);
+        ScaleShadowRadius(0x9999);
+        SetMoveSpeed(0x9999);
+        if (global[AREA] < 392) {
+            local[0] = 1;
+        }
+        if (global[AREA] >= 392 && global[AREA] < 520) {
+            local[0] = 2;
+        }
+        if (global[AREA] >= 520) {
+            local[0] = 3;
+        }
+        if (global[87] & 0x20000000) {
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        } else {
+            SetAnim(0);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        }
+        Wait(1);
+        ExitThread();
+    @label_0100:
+        if (room[0] & 8) {
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[10], local[15], local[11], local[15]);
+        GetEntityVec3(VEC3_POS, local[13], local[15], local[14]);
+        Atan2(local[14] - local[11], local[13] - local[10], local[1]);
+        local[1] = 4096 - (local[1] + 1024) & 4095;
+        GetActorPositionByType(5, 0, 0, local[15], local[12], local[15], local[15]);
+        local[1] = local[1] - local[12] & 4095;
+        if (local[1] > 768 && local[1] < 3328) {
+            ExitThread();
+        }
+        GetThreadTargets18_1C(local[2], local[3]);
+        if (local[2] == 0) {
+            CheckPadInput(PAD_PRESSED, 0x100, local[4]);
+            if (local[4] != 0) {
+                PlayFieldSfx(0, 0, 254);
+                if (global[87] & 0x20000000) {
+                    OpenTextbox(2); // "Drop an item here? / <FB:09>2 Yes / No"
+                    WaitTextbox(2);
+                    GetChoiceResult(local[6]);
+                    if (local[6] == 0) {
+                        RunSubSceneWithTimeout(0, local[8]);
+                        Wait(1);
+                        if (local[8] != -1) {
+                            global[221] = local[8];
+                            AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                            SetAnim(3);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(30);
+                            WaitAnimEnd();
+                            global[87] = global[87] & 0xDFFFFFFF;
+                        }
+                    }
+                } else {
+                    AkaoCmd(0x15F, 1113, 0, 0, 0, local[6]);
+                    SetAnim(1);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(30);
+                    WaitAnimEnd();
+                    global[87] = global[87] | 0x20000000;
+                    if (global[221] == 0) {
+                        local[9] = local[0];
+                    } else {
+                        local[9] = global[221];
+                    }
+                    GiveItem(local[9], local[8]);
+                    if (local[8] == 0) {
+                        ShowReceivedItemPopup(local[9]);
+                        global[221] = 0;
+                    } else {
+                        OpenTextbox(3); // "Your inventory is full, | Would you like to exchange items? / <FB:09>2 Yes / No"
+                        WaitTextbox(3);
+                        GetChoiceResult(local[6]);
+                        if (local[6] == 0) {
+                            RunSubSceneWithTimeout(local[9], local[8]);
+                            if (local[8] != -1) {
+                                ShowReceivedItemPopup(local[9]);
+                                global[221] = local[8];
+                            }
+                            Wait(1);
+                        }
+                        AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                        SetAnim(3);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(30);
+                        WaitAnimEnd();
+                        global[87] = global[87] & 0xDFFFFFFF;
+                    }
+                }
+                PlayFieldSfx(0, 0, 255);
+            }
+        }
+        ExitThread();
+    }
+
+    actor_script actor_6 {
+        SetHitCylinder(20, 101, 20);
+        SetEventHandler(EVENT_TOUCH, @label_0100);
+        EnableActorCollision();
+        SetEntityVec3(VEC3_POS, -1086.0fp, 0.0fp, -619.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 3056, 0);
+        SetActorFlag400();
+        SetHitCylinderRadius(0x00C80000);
+        ScaleShadowRadius(0x9999);
+        SetMoveSpeed(0xCCCC);
+        if (global[AREA] < 392) {
+            local[0] = 6;
+        }
+        if (global[AREA] >= 392 && global[AREA] < 520) {
+            local[0] = 7;
+        }
+        if (global[AREA] >= 520) {
+            local[0] = 8;
+        }
+        if (global[89] & 512) {
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        } else {
+            SetAnim(0);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        }
+        Wait(1);
+        ExitThread();
+    @label_0100:
+        if (room[0] & 8) {
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[10], local[15], local[11], local[15]);
+        GetEntityVec3(VEC3_POS, local[13], local[15], local[14]);
+        Atan2(local[14] - local[11], local[13] - local[10], local[1]);
+        local[1] = 4096 - (local[1] + 1024) & 4095;
+        GetActorPositionByType(5, 0, 0, local[15], local[12], local[15], local[15]);
+        local[1] = local[1] - local[12] & 4095;
+        if (local[1] > 768 && local[1] < 3328) {
+            ExitThread();
+        }
+        GetThreadTargets18_1C(local[2], local[3]);
+        if (local[2] == 0) {
+            CheckPadInput(PAD_PRESSED, 0x100, local[4]);
+            if (local[4] != 0) {
+                PlayFieldSfx(0, 0, 254);
+                if (global[89] & 512) {
+                    OpenTextbox(2); // "Drop an item here? / <FB:09>2 Yes / No"
+                    WaitTextbox(2);
+                    GetChoiceResult(local[6]);
+                    if (local[6] == 0) {
+                        RunSubSceneWithTimeout(0, local[8]);
+                        Wait(1);
+                        if (local[8] != -1) {
+                            global[104] = local[8];
+                            AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                            SetAnim(3);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(30);
+                            WaitAnimEnd();
+                            global[89] = global[89] & -513;
+                        }
+                    }
+                } else {
+                    AkaoCmd(0x15F, 1113, 0, 0, 0, local[6]);
+                    SetAnim(1);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(30);
+                    WaitAnimEnd();
+                    global[89] = global[89] | 512;
+                    if (global[104] == 0) {
+                        local[9] = local[0];
+                    } else {
+                        local[9] = global[104];
+                    }
+                    GiveItem(local[9], local[8]);
+                    if (local[8] == 0) {
+                        ShowReceivedItemPopup(local[9]);
+                        global[104] = 0;
+                    } else {
+                        OpenTextbox(3); // "Your inventory is full, | Would you like to exchange items? / <FB:09>2 Yes / No"
+                        WaitTextbox(3);
+                        GetChoiceResult(local[6]);
+                        if (local[6] == 0) {
+                            RunSubSceneWithTimeout(local[9], local[8]);
+                            if (local[8] != -1) {
+                                ShowReceivedItemPopup(local[9]);
+                                global[104] = local[8];
+                            }
+                            Wait(1);
+                        }
+                        AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                        SetAnim(3);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(30);
+                        WaitAnimEnd();
+                        global[89] = global[89] & -513;
+                    }
+                }
+                PlayFieldSfx(0, 0, 255);
+            }
+        }
+        ExitThread();
+    }
+}

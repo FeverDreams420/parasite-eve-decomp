@@ -1,0 +1,198 @@
+// Parasite Eve 1 Scene Script (room_108)
+room_script room_108 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(130, 100, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00E4);
+        SetEventHandler(EVENT_TOUCH, @label_00E0);
+        if (global[AREA] >= 432) {
+            LockPlayerMoveMask(2);
+        }
+        if (global[ROOM] == 108) {
+            SetEntityVec3(VEC3_POS, 19.0fp, 0.0fp, -3299.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+            goto @label_00DC;
+        } else if (global[ROOM] == 110) {
+            SetEntityVec3(VEC3_POS, 19.0fp, 0.0fp, -2393.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            goto @label_00DC;
+        } else {
+            SetEntityVec3(VEC3_POS, 72.0fp, 0.0fp, -2928.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            goto @label_00DC;
+        }
+        Wait(1);
+    @label_00DC:
+        ExitThread();
+    @label_00E0:
+        ExitThread();
+    @label_00E4:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 0) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            StartScreenFade(30);
+            GetEntityVec3(VEC3_POS, local[6], local[7], local[8]);
+            EnableActorCollision();
+            SetAnim(22);
+            TurnTowardPoint(local[6], -3597.0fp, 180);
+            MoveTowardPoint(local[6], -3597.0fp, 180);
+            global[ROOM] = 109;
+            WaitScreenFade();
+            ChangeRoom(0xA8020448);
+        }
+        if (local[4] == 1) {
+            while (room[17] == 0) {
+                Wait(1);
+            }
+            room[17] = room[17] - 1;
+            StartScreenFade(30);
+            EnableActorCollision();
+            SetAnim(22);
+            TurnTowardPoint(-3.0fp, -1851.0fp, 180);
+            MoveTowardPoint(-3.0fp, -1851.0fp, 180);
+            global[ROOM] = 109;
+            WaitScreenFade();
+            ChangeRoom(0xA8021048);
+        }
+        if (local[4] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            goto @label_00DC;
+        }
+        if (local[4] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            goto @label_00DC;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1000, 1000, 0, 0, room[18]);
+        LockPlayerInput();
+        SetMeshFadeLevel(84);
+        if (global[AREA] < 432) {
+            if (global[44] & 2048) {
+                AkaoCmd(0xC8, 15, 0, 0, 0, room[18]);
+            } else {
+                AkaoCmd(0xC8, 10, 0, 0, 0, room[18]);
+            }
+        } else {
+            AkaoCmd(0xC8, 8, 0, 0, 0, room[18]);
+        }
+        ClearScreenFadeFlag40();
+        SetCameraBaseAngle(0, 3824);
+        DisableCollisionTriangle(8);
+        DisableCollisionTriangle(41);
+        DisableCollisionTriangle(42);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetFadeColor(0x1E);
+        if (global[ROOM] == 108) {
+            PlayFieldSfx(0, 0, 255);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        Wait(1);
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-360.0fp, -3537.0fp, -360.0fp, -3438.0fp, 375.0fp, -3438.0fp, 375.0fp, -3537.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                PlayFieldSfx(0, 0, 0);
+                ExitThread();
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-171.0fp, -2211.0fp, -171.0fp, -1995.0fp, 237.0fp, -1995.0fp, 237.0fp, -2211.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                PlayFieldSfx(0, 0, 254);
+                Wait(1);
+                if (global[ROOM] == 110) {
+                    while (room[17] == 0) {
+                        Wait(1);
+                    }
+                    room[17] = room[17] - 1;
+                }
+                PlayFieldSfx(3, 0, 1);
+                PlayFieldSfx(0, 0, 1);
+                ExitThread();
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-372.0fp, -3129.0fp, -372.0fp, -2754.0fp, -210.0fp, -2754.0fp, -210.0fp, -3129.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                if (local[7] == 0) {
+                    local[7] = 1;
+                    LoadGeomState(1);
+                }
+            } else if (local[7] == 1) {
+                LoadGeomState(0);
+                local[7] = 0;
+            }
+            Wait(1);
+        }
+    }
+
+    actor_script actor_3 {
+        SetEventHandler(EVENT_INTERACT, @label_00D4);
+        Wait(1);
+        if (global[ROOM] == 110) {
+            SetGeomFlagSlot(0, 1);
+            SetGeomEntryLimit(0, 11);
+            SetGeomEntryField8(0, 0);
+            Wait(30);
+            AkaoCmd(0x12C, 2400, 0, 128, 127, room[18]);
+            SetGeomEntryField8(0, 65536);
+            SetMenuSlotEntry(0, 11, 0);
+            SpawnThread(@label_00B4);
+            while (1) {
+                GetGeomEntryField6(0, local[5]);
+                if (local[5] == 0) {
+                    goto @label_009E;
+                }
+                Wait(1);
+            }
+        @label_009E:
+            PlayFieldSfx(0, 0, 255);
+            room[17] = 1;
+        }
+        ExitThread();
+    @label_00B4:
+        while (1) {
+            GetGeomEntryField6(0, local[5]);
+            Wait(1);
+        }
+        ExitThread();
+    @label_00D4:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 1) {
+            AkaoCmd(0x12C, 2400, 0, 128, 127, room[18]);
+            SetGeomEntryField8(0, 65536);
+            SetMenuSlotEntry(0, 0, 11);
+            SpawnThread(@label_00B4);
+            while (1) {
+                GetGeomEntryField6(0, local[5]);
+                if (local[5] == 11) {
+                    goto @label_014C;
+                }
+                Wait(1);
+            }
+        @label_014C:
+            room[17] = 1;
+        }
+        ExitThread();
+    }
+}

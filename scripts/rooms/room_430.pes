@@ -1,0 +1,469 @@
+// Parasite Eve 1 Scene Script (room_430)
+room_script room_430 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetEventHandler(EVENT_INTERACT, @label_0012);
+        HideActor();
+        Wait(1);
+    @label_0012:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+        LockPlayerInput();
+        PauseSceneEvents();
+        ClearScreenFadeFlag40();
+        Wait(1);
+        if (global[ROOM] == 998) {
+            global[ROOM] = 0;
+            RunInventoryCommand(1119, 200, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 201, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 202, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 203, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 204, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 205, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 206, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 207, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 208, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 209, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 210, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 211, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 212, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 213, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 214, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 215, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 216, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 217, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 218, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 219, room[17], room[17], room[17]);
+            RunInventoryCommand(1119, 220, room[17], room[17], room[17]);
+        }
+        if (global[AREA] == 0) {
+            PlayFieldSfx(0, 0, 251);
+            Wait(5);
+            AkaoCmd(0x191, 5, 0, 0, 0, local[0]);
+            ReloadSceneData(2);
+            Noop3();
+            AkaoCmd(0x199, 128, 0, 0, 0, room[17]);
+            WaitSeqElapsedOrDraw(15);
+            AkaoCmd(0xC8, 5, 0, 0, 0, local[0]);
+            WaitDrawIdle();
+            global[AREA] = 1;
+            ChangeRoom(0xA8001048);
+            ExitThread();
+        }
+        if (global[AREA] == 756) {
+            SetFadeColor(0x1E);
+            WaitScreenFade();
+            Wait(60);
+            global[8] = global[8] + 1;
+            if (global[8] > 0) {
+                if (global[AREA] == 128) {
+                    global[310] = 0;
+                    GetGameTimeCounter(2, local[1]);
+                    local[5] = local[1];
+                    local[1] = global[310];
+                    ConvertFramesToHMS(local[5], local[2], local[3], local[4]);
+                    local[6] = local[2] * 60 + local[3];
+                    if (local[6] > 100) {
+                        global[311] = 100;
+                    } else if (local[6] > 70) {
+                        global[311] = 700 - (local[6] - 70) * 40;
+                    } else if (local[6] > 60) {
+                        global[311] = 700 - (local[6] - 60) * 30;
+                    } else if (local[6] > 50) {
+                        global[311] = 700 - (local[6] - 50) * 20;
+                    } else if (local[6] > 40) {
+                        global[311] = 800 - (local[6] - 40) * 10;
+                    } else if (local[6] == 40) {
+                        global[311] = 800;
+                    } else if (local[6] < 40) {
+                        global[311] = 800 + (40 - local[6]) * 5;
+                    }
+                    if (global[311] < 100) {
+                        global[311] = 100;
+                    }
+                    global[311] = 800;
+                }
+                if (global[AREA] == 312) {
+                    GetGameTimeCounter(2, local[1]);
+                    local[5] = local[1] - global[310];
+                    global[310] = local[1];
+                    ConvertFramesToHMS(local[5], local[2], local[3], local[4]);
+                    local[6] = local[2] * 60 + local[3];
+                    if (local[6] > 160) {
+                        global[311] = 100;
+                    } else if (local[6] > 130) {
+                        global[311] = 900 - (local[6] - 130) * 40;
+                    } else if (local[6] > 120) {
+                        global[311] = 900 - (local[6] - 120) * 30;
+                    } else if (local[6] > 110) {
+                        global[311] = 900 - (local[6] - 110) * 20;
+                    } else if (local[6] > 100) {
+                        global[311] = 1000 - (local[6] - 100) * 10;
+                    } else if (local[6] == 100) {
+                        global[311] = 1000;
+                    } else if (local[6] < 100) {
+                        global[311] = 1000 + (100 - local[6]) * 5;
+                    }
+                    global[311] = 1200;
+                }
+                if (global[AREA] == 432) {
+                    GetGameTimeCounter(2, local[1]);
+                    local[5] = local[1] - global[310];
+                    global[310] = local[1];
+                    ConvertFramesToHMS(local[5], local[2], local[3], local[4]);
+                    local[6] = local[2] * 60 + local[3];
+                    if (local[6] > 180) {
+                        global[311] = 100;
+                    } else if (local[6] > 150) {
+                        global[311] = 900 - (local[6] - 150) * 40;
+                    } else if (local[6] > 140) {
+                        global[311] = 900 - (local[6] - 140) * 30;
+                    } else if (local[6] > 130) {
+                        global[311] = 900 - (local[6] - 130) * 20;
+                    } else if (local[6] > 120) {
+                        global[311] = 1000 - (local[6] - 120) * 10;
+                    } else if (local[6] == 120) {
+                        global[311] = 1000;
+                    } else if (local[6] < 120) {
+                        global[311] = 1000 + (120 - local[6]) * 5;
+                    }
+                    global[311] = 2000;
+                }
+                if (global[AREA] == 536) {
+                    GetGameTimeCounter(2, local[1]);
+                    local[5] = local[1] - global[310];
+                    global[310] = local[1];
+                    ConvertFramesToHMS(local[5], local[2], local[3], local[4]);
+                    local[6] = local[2] * 60 + local[3];
+                    if (local[6] > 180) {
+                        global[311] = 100;
+                    } else if (local[6] > 150) {
+                        global[311] = 900 - (local[6] - 150) * 40;
+                    } else if (local[6] > 140) {
+                        global[311] = 900 - (local[6] - 140) * 30;
+                    } else if (local[6] > 130) {
+                        global[311] = 900 - (local[6] - 130) * 20;
+                    } else if (local[6] > 120) {
+                        global[311] = 1000 - (local[6] - 120) * 10;
+                    } else if (local[6] == 120) {
+                        global[311] = 1000;
+                    } else if (local[6] < 120) {
+                        global[311] = 1000 + (120 - local[6]) * 5;
+                    }
+                    global[311] = 2000;
+                }
+                if (global[AREA] == 723) {
+                    GetGameTimeCounter(2, local[1]);
+                    local[5] = local[1] - global[310];
+                    global[310] = local[1];
+                    ConvertFramesToHMS(local[5], local[2], local[3], local[4]);
+                    local[6] = local[2] * 60 + local[3];
+                    if (local[6] > 180) {
+                        global[311] = 100;
+                    } else if (local[6] > 150) {
+                        global[311] = 1900 - (local[6] - 150) * 40;
+                    } else if (local[6] > 140) {
+                        global[311] = 1900 - (local[6] - 140) * 30;
+                    } else if (local[6] > 130) {
+                        global[311] = 1900 - (local[6] - 130) * 20;
+                    } else if (local[6] > 120) {
+                        global[311] = 2000 - (local[6] - 120) * 10;
+                    } else if (local[6] == 120) {
+                        global[311] = 2000;
+                    } else if (local[6] < 120) {
+                        global[311] = 2000 + (120 - local[6]) * 5;
+                    }
+                    global[311] = 3000;
+                }
+            }
+            if (global[AREA] == 756) {
+                if (global[8] == 1) {
+                    global[311] = 3000;
+                }
+                if (global[8] >= 2) {
+                    GetGameTimeCounter(2, local[1]);
+                    local[5] = local[1] - global[310];
+                    global[310] = local[1];
+                    ConvertFramesToHMS(local[5], local[2], local[3], local[4]);
+                    local[6] = local[2] * 60 + local[3];
+                    if (local[6] > 100) {
+                        global[311] = 100;
+                    } else if (local[6] > 70) {
+                        global[311] = 700 - (local[6] - 70) * 40;
+                    } else if (local[6] > 60) {
+                        global[311] = 700 - (local[6] - 60) * 30;
+                    } else if (local[6] > 50) {
+                        global[311] = 700 - (local[6] - 50) * 20;
+                    } else if (local[6] > 40) {
+                        global[311] = 800 - (local[6] - 40) * 10;
+                    } else if (local[6] == 40) {
+                        global[311] = 800;
+                    } else if (local[6] < 40) {
+                        global[311] = 800 + (40 - local[6]) * 5;
+                    }
+                    global[311] = 1000;
+                }
+            }
+            RunInventoryCommand(1118, global[311], global[311], global[311], global[311]);
+            global[STORY_FLAGS] = global[STORY_FLAGS] | 1;
+            global[2] = 0;
+            global[FLAGS] = 0;
+            global[4] = 0;
+            global[5] = 0;
+            global[6] = 0;
+            global[7] = 0;
+            global[9] = 0;
+            global[SCENE_FLAGS] = 0;
+            global[EVENT_FLAGS] = 0;
+            global[26] = 0;
+            global[27] = 0;
+            global[34] = 0;
+            global[35] = 0;
+            global[36] = 0;
+            global[37] = 0;
+            global[38] = 0;
+            global[39] = 0;
+            global[40] = 0;
+            global[41] = 0;
+            global[42] = 0;
+            global[43] = 0;
+            global[44] = 0;
+            global[45] = 0;
+            global[46] = 0;
+            global[47] = 0;
+            global[54] = 0;
+            global[55] = 0;
+            global[56] = 0;
+            global[57] = 0;
+            global[64] = 0;
+            global[65] = 0;
+            global[66] = 0;
+            global[67] = 0;
+            global[75] = 0;
+            global[76] = 0;
+            global[77] = 0;
+            global[81] = 0;
+            global[83] = 0;
+            global[84] = 0;
+            global[85] = 0;
+            global[86] = 0;
+            global[87] = 0;
+            global[88] = 0;
+            global[89] = 0;
+            global[97] = 0;
+            global[100] = 0;
+            global[101] = 0;
+            global[102] = 0;
+            global[103] = 0;
+            global[104] = 0;
+            global[105] = 0;
+            global[106] = 0;
+            global[107] = 0;
+            global[108] = 0;
+            global[109] = 0;
+            global[110] = 0;
+            global[111] = 0;
+            global[112] = 0;
+            global[113] = 0;
+            global[114] = 0;
+            global[115] = 0;
+            global[116] = 0;
+            global[117] = 0;
+            global[118] = 0;
+            global[119] = 0;
+            global[121] = 0;
+            global[122] = 0;
+            global[123] = 0;
+            global[124] = 0;
+            global[125] = 0;
+            global[126] = 0;
+            global[127] = 0;
+            global[128] = 0;
+            global[129] = 0;
+            global[130] = 0;
+            global[131] = 0;
+            global[132] = 0;
+            global[133] = 0;
+            global[134] = 0;
+            global[135] = 0;
+            global[136] = 0;
+            global[137] = 0;
+            global[138] = 0;
+            global[139] = 0;
+            global[140] = 0;
+            global[141] = 0;
+            global[142] = 0;
+            global[143] = 0;
+            global[144] = 0;
+            global[145] = 0;
+            global[146] = 0;
+            global[147] = 0;
+            global[148] = 0;
+            global[149] = 0;
+            global[150] = 0;
+            global[151] = 0;
+            global[152] = 0;
+            global[153] = 0;
+            global[154] = 0;
+            global[155] = 0;
+            global[156] = 0;
+            global[157] = 0;
+            global[158] = 0;
+            global[159] = 0;
+            global[160] = 0;
+            global[161] = 0;
+            global[162] = 0;
+            global[163] = 0;
+            global[164] = 0;
+            global[165] = 0;
+            global[166] = 0;
+            global[167] = 0;
+            global[168] = 0;
+            global[169] = 0;
+            global[170] = 0;
+            global[171] = 0;
+            global[172] = 0;
+            global[173] = 0;
+            global[174] = 0;
+            global[175] = 0;
+            global[176] = 0;
+            global[177] = 0;
+            global[178] = 0;
+            global[179] = 0;
+            global[180] = 0;
+            global[181] = 0;
+            global[182] = 0;
+            global[183] = 0;
+            global[184] = 0;
+            global[185] = 0;
+            global[186] = 0;
+            global[187] = 0;
+            global[188] = 0;
+            global[189] = 0;
+            global[190] = 0;
+            global[191] = 0;
+            global[192] = 0;
+            global[193] = 0;
+            global[194] = 0;
+            global[195] = 0;
+            global[196] = 0;
+            global[197] = 0;
+            global[198] = 0;
+            global[199] = 0;
+            global[200] = 0;
+            global[201] = 0;
+            global[202] = 0;
+            global[203] = 0;
+            global[204] = 0;
+            global[205] = 0;
+            global[206] = 0;
+            global[207] = 0;
+            global[208] = 0;
+            global[209] = 0;
+            global[210] = 0;
+            global[211] = 0;
+            global[212] = 0;
+            global[213] = 0;
+            global[214] = 0;
+            global[215] = 0;
+            global[216] = 0;
+            global[217] = 0;
+            global[218] = 0;
+            global[219] = 0;
+            global[220] = 0;
+            global[221] = 0;
+            global[222] = 0;
+            global[223] = 0;
+            global[224] = 0;
+            global[225] = 0;
+            global[226] = 0;
+            global[227] = 0;
+            global[228] = 0;
+            global[229] = 0;
+            global[230] = 0;
+            global[231] = 0;
+            global[232] = 0;
+            global[233] = 0;
+            global[234] = 0;
+            global[235] = 0;
+            global[236] = 0;
+            global[237] = 0;
+            global[238] = 0;
+            global[239] = 0;
+            global[240] = 0;
+            global[241] = 0;
+            global[242] = 0;
+            global[243] = 0;
+            global[244] = 0;
+            global[245] = 0;
+            global[246] = 0;
+            global[247] = 0;
+            global[248] = 0;
+            global[249] = 0;
+            global[250] = 0;
+            global[251] = 0;
+            global[252] = 0;
+            global[253] = 0;
+            global[254] = 0;
+            global[255] = 0;
+            global[256] = 0;
+            global[257] = 0;
+            global[258] = 0;
+            global[259] = 0;
+            global[260] = 0;
+            global[261] = 0;
+            global[262] = 0;
+            global[310] = 0;
+            global[311] = 0;
+            global[10] = 0;
+            global[11] = global[11] & -4096;
+            ClearBit(global[11], 21);
+            ClearBit(global[11], 22);
+            global[12] = 0;
+            global[13] = 0;
+            global[14] = 0;
+            global[15] = 0;
+            global[16] = 0;
+            global[17] = 0;
+            global[18] = 0;
+            global[19] = 0;
+            global[20] = 0;
+            global[21] = 0;
+            global[22] = 0;
+            global[23] = 0;
+            global[78] = 0;
+            global[79] = 0;
+            global[82] = 0;
+            global[AREA] = 0;
+            global[ROOM] = 998;
+            RunInventoryCommand(1117, room[17], room[17], room[17], room[17]);
+            OpenMemCardDialog();
+            Wait(1);
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[AREA] = 2000;
+            ChangeRoom(0xA9400048);
+            ExitThread();
+        }
+        if (global[AREA] == 1000) {
+        @label_1648:
+            CheckPadInput(PAD_PRESSED, 0x100, local[7]);
+            if (local[7] != 0) {
+                ClearGameStateFlags(0x20000);
+                global[AREA] = 0;
+                ChangeRoom(0xA9400048);
+            }
+            Wait(1);
+            goto @label_1648;
+        }
+        ExitThread();
+    }
+}

@@ -1,0 +1,678 @@
+// Parasite Eve 1 Scene Script (room_256)
+room_script room_256 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(95, 120, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        Wait(1);
+        ScaleShadowRadius(0xB333);
+        SetHitCylinderRadius(0x002C0000);
+        SetMoveSpeed(0xCCCC);
+        SetEventHandler(EVENT_INTERACT, @label_006C);
+        SetEventHandler(EVENT_TOUCH, @label_0068);
+        SetEntityVec3(VEC3_POS, 1.5fp, 0.0fp, -164.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        Wait(1);
+        ExitThread();
+    @label_0068:
+        ExitThread();
+    @label_006C:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 254) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[4] == 255) {
+            ResumeSceneEvents();
+            SetAnim(21);
+            UnlockPlayerInput();
+        }
+        if (local[4] == 2) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            TurnTowardPoint(246.0fp, -351.0fp, 45);
+            SetAnim(32);
+            SetAnimFrame(0);
+            PlayAnimToFrame(54);
+            WaitAnimEnd();
+            CloseTextbox(23);
+        }
+        if (local[4] == 3) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            TurnTowardPoint(-357.0fp, -351.0fp, 45);
+            SetAnim(32);
+            SetAnimFrame(0);
+            PlayAnimToFrame(54);
+            WaitAnimEnd();
+            CloseTextbox(23);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        ClearScreenFadeFlag40();
+        PauseSceneEvents();
+        LockPlayerInput();
+        AkaoCmd(0x193, 1000, 1000, 0, 0, room[19]);
+        SetCameraBaseAngle(0, 4048);
+        SetMeshFadeLevel(112);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetEventHandler(EVENT_INTERACT, @label_0266);
+        Wait(1);
+        SetGeomEntryVisible(1, 1);
+        SetGeomEntryVisible(3, 1);
+        SetGeomEntryVisible(10, 1);
+        SetGeomEntryVisible(12, 1);
+        SetGeomEntryVisible(14, 1);
+        SetGeomEntryVisible(16, 1);
+        SetGeomEntryVisible(18, 1);
+        SetGeomEntryVisible(20, 1);
+        SetGeomEntryVisible(22, 1);
+        SetGeomEntryVisible(24, 1);
+        SetGeomEntryVisible(0, 0);
+        SetGeomEntryVisible(2, 0);
+        SetGeomEntryVisible(9, 0);
+        SetGeomEntryVisible(11, 0);
+        SetGeomEntryVisible(13, 0);
+        SetGeomEntryVisible(15, 0);
+        SetGeomEntryVisible(17, 0);
+        SetGeomEntryVisible(19, 0);
+        SetGeomEntryVisible(21, 0);
+        SetGeomEntryVisible(23, 0);
+        SetGeomEntryPos(9, 0, 0, 80);
+        SetGeomEntryPos(11, 0, 0, 80);
+        SetGeomEntryPos(13, 0, 0, 80);
+        SetGeomEntryPos(15, 0, 0, 80);
+        SetGeomEntryPos(17, 0, 0, 80);
+        SetGeomEntryPos(19, 0, 0, 80);
+        SetGeomEntryPos(21, 0, 0, 80);
+        SetGeomEntryPos(23, 0, 0, 80);
+        SetGeomEntryPos(10, 0, 0, 80);
+        SetGeomEntryPos(12, 0, 0, 80);
+        SetGeomEntryPos(14, 0, 0, 80);
+        SetGeomEntryPos(16, 0, 0, 80);
+        SetGeomEntryPos(18, 0, 0, 80);
+        SetGeomEntryPos(20, 0, 0, 80);
+        SetGeomEntryPos(22, 0, 0, 80);
+        SetGeomEntryPos(24, 0, 0, 80);
+        if (global[36] & 16) {
+            PlayFieldSfx(1, 0, 2);
+        }
+        if (global[36] & 32) {
+            PlayFieldSfx(1, 0, 3);
+        }
+        if (global[36] & 64) {
+            PlayFieldSfx(1, 0, 4);
+        }
+        if (global[36] & 128) {
+            PlayFieldSfx(1, 0, 5);
+        }
+        SetGeomEntryVisible(5, 0);
+        SetGeomEntryVisible(8, 1);
+        SetFadeColor(0x1E);
+        WaitScreenFade();
+        ResumeSceneEvents();
+        UnlockPlayerInput();
+        ExitThread();
+    @label_0266:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 2) {
+            SetGeomEntryVisible(15, 1);
+            SetGeomEntryVisible(13, 0);
+            SetGeomEntryVisible(11, 0);
+            SetGeomEntryVisible(9, 0);
+            SetGeomEntryVisible(23, 1);
+            SetGeomEntryVisible(21, 0);
+            SetGeomEntryVisible(19, 0);
+            SetGeomEntryVisible(17, 0);
+            CloseTextbox(23);
+        }
+        if (local[3] == 3) {
+            SetGeomEntryVisible(15, 0);
+            SetGeomEntryVisible(13, 1);
+            SetGeomEntryVisible(11, 0);
+            SetGeomEntryVisible(9, 0);
+            SetGeomEntryVisible(23, 0);
+            SetGeomEntryVisible(21, 1);
+            SetGeomEntryVisible(19, 0);
+            SetGeomEntryVisible(17, 0);
+            CloseTextbox(23);
+        }
+        if (local[3] == 4) {
+            SetGeomEntryVisible(15, 0);
+            SetGeomEntryVisible(13, 0);
+            SetGeomEntryVisible(11, 1);
+            SetGeomEntryVisible(9, 0);
+            SetGeomEntryVisible(23, 0);
+            SetGeomEntryVisible(21, 0);
+            SetGeomEntryVisible(19, 1);
+            SetGeomEntryVisible(17, 0);
+            CloseTextbox(23);
+        }
+        if (local[3] == 5) {
+            SetGeomEntryVisible(15, 0);
+            SetGeomEntryVisible(13, 0);
+            SetGeomEntryVisible(11, 0);
+            SetGeomEntryVisible(9, 1);
+            SetGeomEntryVisible(23, 0);
+            SetGeomEntryVisible(21, 0);
+            SetGeomEntryVisible(19, 0);
+            SetGeomEntryVisible(17, 1);
+            CloseTextbox(23);
+        }
+        if (local[3] == 6) {
+            SetFogNearFar(160, 120, 15);
+            WaitDiscIdle();
+            CloseTextbox(23);
+        }
+        if (local[3] == 7) {
+            SetGeomEntryVisible(0, 0);
+            SetGeomEntryVisible(2, 1);
+            CloseTextbox(23);
+        }
+        if (local[3] == 8) {
+            SetGeomEntryVisible(0, 1);
+            SetGeomEntryVisible(2, 0);
+            CloseTextbox(23);
+        }
+        if (local[3] == 9) {
+            Wait(4);
+            AkaoCmd(0x12C, 2714, 0, 127, 127, room[19]);
+            SetGeomEntryVisible(5, 0);
+            SetGeomEntryVisible(6, 1);
+            Wait(4);
+            SetGeomEntryVisible(6, 0);
+            SetGeomEntryVisible(7, 1);
+            Wait(4);
+            SetGeomEntryVisible(7, 0);
+            SetGeomEntryVisible(8, 1);
+            Wait(4);
+            CloseTextbox(23);
+        }
+        if (local[3] == 16) {
+            Wait(4);
+            AkaoCmd(0x12C, 2714, 0, 127, 127, room[19]);
+            SetGeomEntryVisible(8, 0);
+            SetGeomEntryVisible(7, 1);
+            Wait(4);
+            SetGeomEntryVisible(7, 0);
+            SetGeomEntryVisible(6, 1);
+            Wait(4);
+            SetGeomEntryVisible(6, 0);
+            SetGeomEntryVisible(5, 1);
+            Wait(4);
+            CloseTextbox(23);
+        }
+        if (local[3] == 17) {
+            SetGeomEntryVisible(0, 0);
+            SetGeomEntryVisible(2, 0);
+            CloseTextbox(23);
+        }
+        if (local[3] == 18) {
+            SetFogNearFar(160, 128, 15);
+            WaitDiscIdle();
+            CloseTextbox(23);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        Wait(1);
+        local[6] = 0;
+        if (global[36] & 16) {
+            local[8] = 1;
+        }
+        if (global[36] & 32) {
+            local[8] = 2;
+        }
+        if (global[36] & 64) {
+            local[8] = 3;
+        }
+        if (global[36] & 128) {
+            local[8] = 4;
+        }
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(135.0fp, -87.0fp, 135.0fp, -231.0fp, 282.0fp, -231.0fp, 282.0fp, -87.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1 && local[6] == 0) {
+                GetActorPositionByType(5, 0, 0, local[0], local[1], local[2], local[3]);
+                if (local[1] >= 3584 && local[1] <= 4096 || local[1] == 0) {
+                    CheckPadInput(PAD_PRESSED, 0x100, local[5]);
+                    if (local[5] != 0 && local[6] == 0) {
+                        local[6] = 1;
+                        PlayFieldSfx(0, 0, 254);
+                        SetTextboxRect(16, 138, 288, 78);
+                        OpenStyledTextbox(172); // "<FB:09>5 1F / 2F / 3F / 4F / Cancel"
+                        WaitTextbox(172);
+                        GetChoiceResult(local[7]);
+                        case_if (local[7] == 0) {
+                            PlayFieldSfx(0, 0, 2);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 16) {
+                            } else {
+                                PlayFieldSfx(1, 0, 2);
+                                PlayFieldSfx(1, 0, 16);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(16);
+                                global[36] = global[36] | 16;
+                                global[36] = global[36] & -33;
+                                global[36] = global[36] & -65;
+                                global[36] = global[36] & -129;
+                                PlayFieldSfx(1, 0, 7);
+                                local[4] = local[8] - 1;
+                                local[8] = 1;
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 6);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                while (local[4]) {
+                                    Wait(10);
+                                    local[4] = local[4] - 1;
+                                }
+                                PlayFieldSfx(1, 0, 18);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                PlayFieldSfx(1, 0, 17);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                PlayFieldSfx(1, 0, 9);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(20);
+                            }
+                            goto @label_0862;
+                            goto @label_0330;
+                        }
+                        case_if (local[7] == 1) {
+                        @label_0330:
+                            PlayFieldSfx(0, 0, 2);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 32) {
+                            } else {
+                                PlayFieldSfx(1, 0, 3);
+                                PlayFieldSfx(1, 0, 16);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(16);
+                                global[36] = global[36] & -17;
+                                global[36] = global[36] | 32;
+                                global[36] = global[36] & -65;
+                                global[36] = global[36] & -129;
+                                if (local[8] - 2 > 0) {
+                                    PlayFieldSfx(1, 0, 7);
+                                    local[4] = local[8] - 2;
+                                } else {
+                                    PlayFieldSfx(1, 0, 8);
+                                    local[4] = 1;
+                                }
+                                local[8] = 2;
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 6);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                while (local[4]) {
+                                    Wait(10);
+                                    local[4] = local[4] - 1;
+                                }
+                                PlayFieldSfx(1, 0, 18);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                PlayFieldSfx(1, 0, 17);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                PlayFieldSfx(1, 0, 9);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(20);
+                            }
+                            goto @label_0862;
+                            goto @label_04F4;
+                        }
+                        case_if (local[7] == 2) {
+                        @label_04F4:
+                            PlayFieldSfx(0, 0, 2);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 64) {
+                            } else {
+                                PlayFieldSfx(1, 0, 4);
+                                PlayFieldSfx(1, 0, 16);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(16);
+                                global[36] = global[36] & -17;
+                                global[36] = global[36] & -33;
+                                global[36] = global[36] | 64;
+                                global[36] = global[36] & -129;
+                                if (local[8] - 3 > 0) {
+                                    PlayFieldSfx(1, 0, 7);
+                                    local[4] = local[8] - 3;
+                                } else {
+                                    PlayFieldSfx(1, 0, 8);
+                                    local[4] = 3 - local[8];
+                                }
+                                local[8] = 3;
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 6);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                while (local[4]) {
+                                    Wait(10);
+                                    local[4] = local[4] - 1;
+                                }
+                                PlayFieldSfx(1, 0, 18);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                PlayFieldSfx(1, 0, 17);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                PlayFieldSfx(1, 0, 9);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(20);
+                            }
+                            goto @label_0862;
+                            goto @label_06C4;
+                        }
+                        case_if (local[7] == 3) {
+                        @label_06C4:
+                            PlayFieldSfx(0, 0, 2);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 128) {
+                            } else {
+                                PlayFieldSfx(1, 0, 5);
+                                PlayFieldSfx(1, 0, 16);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(16);
+                                global[36] = global[36] & -17;
+                                global[36] = global[36] & -33;
+                                global[36] = global[36] & -65;
+                                global[36] = global[36] | 128;
+                                PlayFieldSfx(1, 0, 8);
+                                local[4] = 4 - local[8];
+                                local[8] = 4;
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 6);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                while (local[4]) {
+                                    Wait(10);
+                                    local[4] = local[4] - 1;
+                                }
+                                PlayFieldSfx(1, 0, 18);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                PlayFieldSfx(1, 0, 17);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                PlayFieldSfx(1, 0, 9);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(20);
+                            }
+                            goto @label_0862;
+                            goto @label_0850;
+                        }
+                        case_if (local[7] == 4) {
+                        @label_0850:
+                            goto @label_0862;
+                            goto @label_0862;
+                        }
+                        goto @label_0862;
+                    @label_0862:
+                        PlayFieldSfx(0, 0, 255);
+                        local[6] = 0;
+                    }
+                }
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-135.0fp, -87.0fp, -135.0fp, -231.0fp, -282.0fp, -231.0fp, -282.0fp, -87.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1 && local[6] == 0) {
+                GetActorPositionByType(5, 0, 0, local[0], local[1], local[2], local[3]);
+                if (local[1] >= 0 && local[1] <= 512) {
+                    CheckPadInput(PAD_PRESSED, 0x100, local[5]);
+                    if (local[5] != 0 && local[6] == 0) {
+                        local[6] = 1;
+                        PlayFieldSfx(0, 0, 254);
+                        SetTextboxRect(16, 138, 288, 78);
+                        OpenStyledTextbox(172); // "<FB:09>5 1F / 2F / 3F / 4F / Cancel"
+                        WaitTextbox(172);
+                        GetChoiceResult(local[7]);
+                        case_if (local[7] == 0) {
+                            PlayFieldSfx(0, 0, 3);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 16) {
+                            } else {
+                                PlayFieldSfx(1, 0, 2);
+                                PlayFieldSfx(1, 0, 16);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(16);
+                                global[36] = global[36] | 16;
+                                global[36] = global[36] & -33;
+                                global[36] = global[36] & -65;
+                                global[36] = global[36] & -129;
+                                PlayFieldSfx(1, 0, 7);
+                                local[4] = local[8] - 1;
+                                local[8] = 1;
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 6);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                while (local[4]) {
+                                    Wait(10);
+                                    local[4] = local[4] - 1;
+                                }
+                                PlayFieldSfx(1, 0, 18);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                PlayFieldSfx(1, 0, 17);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                PlayFieldSfx(1, 0, 9);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(20);
+                            }
+                            goto @label_1038;
+                            goto @label_0B06;
+                        }
+                        case_if (local[7] == 1) {
+                        @label_0B06:
+                            PlayFieldSfx(0, 0, 3);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 32) {
+                            } else {
+                                PlayFieldSfx(1, 0, 3);
+                                PlayFieldSfx(1, 0, 16);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(16);
+                                global[36] = global[36] & -17;
+                                global[36] = global[36] | 32;
+                                global[36] = global[36] & -65;
+                                global[36] = global[36] & -129;
+                                if (local[8] - 2 > 0) {
+                                    PlayFieldSfx(1, 0, 7);
+                                    local[4] = local[8] - 2;
+                                } else {
+                                    PlayFieldSfx(1, 0, 8);
+                                    local[4] = 1;
+                                }
+                                local[8] = 2;
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 6);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                while (local[4]) {
+                                    Wait(10);
+                                    local[4] = local[4] - 1;
+                                }
+                                PlayFieldSfx(1, 0, 18);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                PlayFieldSfx(1, 0, 17);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                PlayFieldSfx(1, 0, 9);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(20);
+                            }
+                            goto @label_1038;
+                            goto @label_0CCA;
+                        }
+                        case_if (local[7] == 2) {
+                        @label_0CCA:
+                            PlayFieldSfx(0, 0, 3);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 64) {
+                            } else {
+                                PlayFieldSfx(1, 0, 4);
+                                PlayFieldSfx(1, 0, 16);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(16);
+                                global[36] = global[36] & -17;
+                                global[36] = global[36] & -33;
+                                global[36] = global[36] | 64;
+                                global[36] = global[36] & -129;
+                                if (local[8] - 3 > 0) {
+                                    PlayFieldSfx(1, 0, 7);
+                                    local[4] = local[8] - 3;
+                                } else {
+                                    PlayFieldSfx(1, 0, 8);
+                                    local[4] = 3 - local[8];
+                                }
+                                local[8] = 3;
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 6);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                while (local[4]) {
+                                    Wait(10);
+                                    local[4] = local[4] - 1;
+                                }
+                                PlayFieldSfx(1, 0, 18);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                PlayFieldSfx(1, 0, 17);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                PlayFieldSfx(1, 0, 9);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(20);
+                            }
+                            goto @label_1038;
+                            goto @label_0E9A;
+                        }
+                        case_if (local[7] == 3) {
+                        @label_0E9A:
+                            PlayFieldSfx(0, 0, 3);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 128) {
+                            } else {
+                                PlayFieldSfx(1, 0, 5);
+                                PlayFieldSfx(1, 0, 16);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(16);
+                                global[36] = global[36] & -17;
+                                global[36] = global[36] & -33;
+                                global[36] = global[36] & -65;
+                                global[36] = global[36] | 128;
+                                PlayFieldSfx(1, 0, 8);
+                                local[4] = 4 - local[8];
+                                local[8] = 4;
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 6);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                while (local[4]) {
+                                    Wait(10);
+                                    local[4] = local[4] - 1;
+                                }
+                                PlayFieldSfx(1, 0, 18);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                PlayFieldSfx(1, 0, 17);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                PlayFieldSfx(1, 0, 9);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                Wait(20);
+                            }
+                            goto @label_1038;
+                            goto @label_1026;
+                        }
+                        case_if (local[7] == 4) {
+                        @label_1026:
+                            goto @label_1038;
+                            goto @label_1038;
+                        }
+                        goto @label_1038;
+                    @label_1038:
+                        PlayFieldSfx(0, 0, 255);
+                        local[6] = 0;
+                    }
+                }
+            }
+            Wait(1);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        Wait(1);
+        local[6] = 0;
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-195.0fp, -264.0fp, -195.0fp, -360.0fp, 198.0fp, -360.0fp, 198.0fp, -264.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1 && local[6] == 0) {
+                local[6] = 1;
+                PlayFieldSfx(0, 0, 254);
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[ROOM] = 257;
+                if (global[36] & 16) {
+                    global[36] = global[36] & -17;
+                    ChangeRoom(0xA8064048);
+                }
+                if (global[36] & 32) {
+                    global[36] = global[36] & -33;
+                    ChangeRoom(0xA80641C8);
+                }
+                if (global[36] & 64) {
+                    global[36] = global[36] & -65;
+                    ChangeRoom(0xA8042348);
+                }
+                if (global[36] & 128) {
+                    global[36] = global[36] & -129;
+                    ChangeRoom(0xA80443C8);
+                }
+            }
+            Wait(1);
+        }
+        ExitThread();
+    }
+}

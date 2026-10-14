@@ -1,0 +1,175 @@
+// Parasite Eve 1 Scene Script (room_313)
+room_script room_313 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(110, 125, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00C4);
+        SetEventHandler(EVENT_TOUCH, @label_00C0);
+        if (global[ROOM] == 313) {
+            SetEntityVec3(VEC3_POS, 10.0fp, 0.0fp, 404.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        }
+        if (global[ROOM] == 315) {
+            SetEntityVec3(VEC3_POS, 5.0fp, 0.0fp, -707.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        }
+        AkaoCmd(0x196, 30, 17, 1002, 0, room[20]);
+        AkaoCmd(0x196, 30, 35, 1003, 0, room[20]);
+        AkaoCmd(0x196, 29, 15, 1002, 0, room[20]);
+        Wait(1);
+        ExitThread();
+    @label_00C0:
+        ExitThread();
+    @label_00C4:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[4] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+        }
+        if (local[4] == 3) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            SetAnim(29);
+            SetAnimFrame(0);
+            PlayAnimToFrame(20);
+            WaitAnimEnd();
+            StartScreenFade(60);
+            EnableActorCollision();
+            SetAnim(30);
+            TurnTowardPoint(0.0fp, -201.0fp, 180);
+            MoveTowardPoint(0.0fp, -201.0fp, 180);
+            WaitScreenFade();
+            global[ROOM] = 314;
+            ChangeRoom(0xA80612C8);
+        }
+        if (local[4] == 4) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[ROOM] = 314;
+            ChangeRoom(0xA80611C8);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1002, 1024, 0, 0, room[20]);
+        LockPlayerInput();
+        SetMeshFadeLevel(76);
+        global[4] = 73;
+        SetCameraBaseAngle(0, 0);
+        ClearScreenFadeFlag40();
+        Wait(1);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetFadeColor(0x1E);
+        PlayFieldSfx(0, 0, 255);
+        Wait(1);
+        SpawnThread(@label_0076);
+        ExitThread();
+    @label_0076:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-1130.0fp, 1052.0fp, -1130.0fp, 418.0fp, -317.0fp, 418.0fp, -317.0fp, 1052.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-999.0fp, 462.0fp, -999.0fp, -63.0fp, -654.0fp, -63.0fp, -654.0fp, 462.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-988.0fp, -250.0fp, -988.0fp, -455.0fp, -658.0fp, -455.0fp, -658.0fp, -250.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-933.0fp, -622.0fp, -933.0fp, -777.0fp, -483.0fp, -777.0fp, -483.0fp, -622.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-856.0fp, -843.0fp, -856.0fp, -1431.0fp, -586.0fp, -1431.0fp, -586.0fp, -843.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(898.0fp, 652.0fp, 898.0fp, 202.0fp, 1088.0fp, 202.0fp, 1088.0fp, 652.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(625.0fp, -49.0fp, 625.0fp, -442.0fp, 1027.0fp, -442.0fp, 1027.0fp, -49.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(109.0fp, -554.0fp, 109.0fp, -659.0fp, 501.0fp, -659.0fp, 501.0fp, -554.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(384.0fp, -656.0fp, 384.0fp, -840.0fp, 929.0fp, -840.0fp, 929.0fp, -656.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(591.0fp, -1011.0fp, 591.0fp, -1611.0fp, 466.0fp, -1611.0fp, 466.0fp, -1011.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(210.0fp, -839.0fp, 210.0fp, -1089.0fp, 423.0fp, -1089.0fp, 423.0fp, -839.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(810.0fp, -433.0fp, 810.0fp, -699.0fp, 986.0fp, -699.0fp, 986.0fp, -433.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(650.0fp, -844.0fp, 650.0fp, -1493.0fp, 790.0fp, -1493.0fp, 790.0fp, -844.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        Wait(1);
+        goto @label_0076;
+    }
+
+    actor_script actor_2 {
+        Wait(1);
+    @label_0006:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[4]);
+        TestPointInQuad(-362.0fp, -359.0fp, -362.0fp, -477.0fp, 365.0fp, -477.0fp, 365.0fp, -359.0fp, local[0], local[2], local[5]);
+        if (local[5] == 1) {
+            PlayFieldSfx(0, 0, 3);
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[4]);
+        TestPointInQuad(-348.0fp, 259.0fp, -348.0fp, 124.0fp, 337.0fp, 124.0fp, 337.0fp, 259.0fp, local[0], local[2], local[5]);
+        if (local[5] == 1) {
+            PlayFieldSfx(0, 0, 4);
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_0006;
+    }
+}

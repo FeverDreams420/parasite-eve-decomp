@@ -1,0 +1,306 @@
+// Parasite Eve 1 Scene Script (room_366)
+room_script room_366 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetEventHandler(EVENT_INTERACT, @label_0036);
+        SetEventHandler(EVENT_TOUCH, @label_0032);
+        SetEntityVec3(VEC3_POS, -850.0fp, 0.0fp, -1100.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        Wait(1);
+        ExitThread();
+    @label_0032:
+        ExitThread();
+    @label_0036:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[3] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        LockPlayerInput();
+        SetCameraBaseAngle(0, 1104);
+        ClearScreenFadeFlag40();
+        Wait(1);
+        if (global[AREA] == 38) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        }
+        if (global[AREA] == 94) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+        }
+        if (global[AREA] == 205) {
+            SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+        }
+        if (global[AREA] == 670) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+        }
+        Wait(1);
+        PauseSceneEvents();
+        LockPlayerInput();
+        SetFogNearFar(299, 124, 1);
+        Wait(10);
+        if (global[AREA] == 38) {
+            AkaoCmd(0xC8, 34, 0, 0, 0, room[17]);
+            StartScreenFadeRect(60, 144, 144, 144, 1);
+            WaitScreenFade();
+            Wait(90);
+            OpenTextbox(58); // "{Aya}. Wha,,,?! What is this?!"
+            WaitTextbox(58);
+            Wait(60);
+            AkaoCmd(0xCE, 34, 120, 0, 0, room[17]);
+            StartScreenFadeRect(60, 255, 255, 255, 1);
+            WaitScreenFade();
+            global[AREA] = 39;
+            ChangeRoom(0xA80002C8);
+            ExitThread();
+        }
+        if (global[AREA] == 94) {
+            AkaoCmd(0xC8, 34, 0, 0, 0, room[17]);
+            StartScreenFadeRect(60, 128, 128, 128, 1);
+            WaitScreenFade();
+            Wait(30);
+            OpenTextbox(130); // "{Aya}. ,,,What? | Where is this? Is that,,,? / Is that the little girl I saw,,,?: / No:..."
+            WaitTextbox(130);
+            PlayFieldSfx(4, 0, 1);
+            Wait(240);
+            OpenTextbox(131); // "{Aya}. ,,,That doctor?,,, Wait!"
+            WaitTextbox(131);
+            Wait(60);
+            AkaoCmd(0xCE, 34, 120, 0, 0, room[17]);
+            StartScreenFadeRect(60, 255, 255, 255, 1);
+            WaitScreenFade();
+            global[AREA] = 95;
+            ChangeRoom(0xA80614C8);
+            ExitThread();
+        }
+        if (global[AREA] == 205) {
+            AkaoCmd(0xC8, 34, 0, 0, 0, room[17]);
+            StartScreenFadeRect(60, 128, 128, 128, 1);
+            WaitScreenFade();
+            Wait(30);
+            OpenTextbox(148); // "{Aya}. ,,,This man! | I,,, know him,,, I think,,,"
+            WaitTextbox(148);
+            AkaoCmd(0xCE, 34, 120, 0, 0, room[17]);
+            StartScreenFadeRect(60, 255, 255, 255, 1);
+            WaitScreenFade();
+            global[AREA] = 206;
+            ChangeRoom(0xA80434C8);
+            ExitThread();
+        }
+        if (global[AREA] == 283) {
+            AkaoCmd(0xC8, 35, 0, 0, 0, room[17]);
+            AkaoCmd(0x12C, 1105, 0, 128, 127, room[17]);
+            AkaoCmd(0x12C, 1106, 0, 128, 127, room[17]);
+            StartScreenFadeRect(120, 128, 128, 128, 1);
+            WaitScreenFade();
+            Wait(60);
+            AkaoCmd(0x12C, 1105, 0, 128, 127, room[17]);
+            AkaoCmd(0x12C, 1106, 0, 128, 127, room[17]);
+            StartScreenFadeRect(30, 255, 255, 255, 1);
+            WaitScreenFade();
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            StartScreenFadeRect(30, 112, 112, 112, 1);
+            WaitScreenFade();
+            Wait(60);
+            AkaoCmd(0x12C, 1105, 0, 128, 127, room[17]);
+            AkaoCmd(0x12C, 1106, 0, 128, 127, room[17]);
+            StartScreenFadeRect(30, 255, 255, 255, 1);
+            WaitScreenFade();
+            SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+            StartScreenFadeRect(30, 96, 96, 96, 1);
+            WaitScreenFade();
+            Wait(60);
+            AkaoCmd(0x12C, 1105, 0, 128, 127, room[17]);
+            AkaoCmd(0x12C, 1106, 0, 128, 127, room[17]);
+            StartScreenFadeRect(30, 255, 255, 255, 1);
+            WaitScreenFade();
+            SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+            PlayFieldSfx(2, 0, 251);
+            StartScreenFadeRect(30, 80, 80, 80, 1);
+            WaitScreenFade();
+            Wait(60);
+            AkaoCmd(0xCE, 35, 120, 0, 0, room[17]);
+            StartScreenFadeRect(120, 255, 255, 255, 1);
+            WaitScreenFade();
+            global[AREA] = 284;
+            ChangeRoom(0xA8005448);
+            ExitThread();
+        }
+        if (global[AREA] == 670) {
+            AkaoCmd(0xC8, 36, 0, 0, 0, room[17]);
+            StartScreenFadeRect(60, 128, 128, 128, 1);
+            WaitScreenFade();
+            Wait(30);
+            OpenTextbox(152); // "Daniel. Your mother and your sister / were donors,"
+            WaitTextbox(152);
+            OpenTextbox(153); // "{Aya}. What,,,? Really,,,? / I never knew that,,,"
+            WaitTextbox(153);
+            StartScreenFadeRect(30, 96, 96, 96, 1);
+            WaitScreenFade();
+            OpenTextbox(154); // "Maeda. Your mother's organs / couldn't be transplanted after / the accident,,, | So May..."
+            WaitTextbox(154);
+            OpenTextbox(155); // "{Aya}. Then Eve's kidney,,, / is really Maya's kidney,,,?"
+            WaitTextbox(155);
+            StartScreenFadeRect(30, 64, 64, 64, 1);
+            WaitScreenFade();
+            OpenTextbox(156); // "Daniel. The intern that was present / at the operation was,,, You / guessed it,,,"
+            PlayFieldSfx(4, 0, 1);
+            WaitTextbox(156);
+            SetFadeColor(0x1E);
+            WaitScreenFade();
+            OpenTextbox(157); // "Daniel. Hans Klamp,,, Our main man: / Klamp: wanted to become a doctor,,,"
+            WaitTextbox(157);
+            OpenTextbox(158); // "Maeda. The doctors that were / present during the operation were / all suprised and,,, ..."
+            WaitTextbox(158);
+            StartScreenFadeRect(60, 255, 255, 255, 1);
+            WaitScreenFade();
+            global[AREA] = 671;
+            ChangeRoom(0xA80032C8);
+            ExitThread();
+        }
+        if (global[AREA] < 520) {
+            if (global[67] & 16384) {
+                AkaoCmd(0xC8, 35, 0, 0, 0, room[17]);
+                AkaoCmd(0x12C, 1105, 0, 128, 127, room[17]);
+                AkaoCmd(0x12C, 1106, 0, 128, 127, room[17]);
+                StartScreenFadeRect(120, 128, 128, 128, 1);
+                WaitScreenFade();
+                Wait(30);
+                AkaoCmd(0x12C, 1105, 0, 128, 127, room[17]);
+                AkaoCmd(0x12C, 1106, 0, 128, 127, room[17]);
+                StartScreenFadeRect(30, 255, 255, 255, 1);
+                WaitScreenFade();
+                SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+                StartScreenFadeRect(30, 112, 112, 112, 1);
+                WaitScreenFade();
+                Wait(60);
+                AkaoCmd(0x12C, 1105, 0, 128, 127, room[17]);
+                AkaoCmd(0x12C, 1106, 0, 128, 127, room[17]);
+                StartScreenFadeRect(30, 255, 255, 255, 1);
+                WaitScreenFade();
+                SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+                SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+                Wait(5);
+                PlayFieldSfx(4, 0, 69);
+                StartScreenFadeRect(30, 96, 96, 96, 1);
+                WaitScreenFade();
+                Wait(30);
+                AkaoCmd(0x12C, 1105, 0, 128, 127, room[17]);
+                AkaoCmd(0x12C, 1106, 0, 128, 127, room[17]);
+                StartScreenFadeRect(30, 255, 255, 255, 1);
+                WaitScreenFade();
+                PlayFieldSfx(2, 0, 251);
+                StartScreenFadeRect(30, 80, 80, 80, 1);
+                WaitScreenFade();
+                Wait(15);
+                AkaoCmd(0x12C, 1105, 0, 128, 127, room[17]);
+                AkaoCmd(0x12C, 1106, 0, 128, 127, room[17]);
+                StartScreenFadeRect(30, 255, 255, 255, 1);
+                WaitScreenFade();
+                ChangeRoom(0xA8023348);
+            }
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetHitCylinder(120, 140, 5);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_005A);
+        EnableActorCollision();
+        DisableActorRendering();
+        SetActorFlag400();
+        SetEntityVec3(VEC3_POS, 1008.0fp, 0.0fp, -1869.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 992, 0);
+        SetAnim(9);
+        Wait(1);
+        ExitThread();
+    @label_005A:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetHitCylinder(120, 140, 5);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        EnableActorCollision();
+        DisableActorRendering();
+        SetActorFlag400();
+        SetEntityVec3(VEC3_POS, 1044.0fp, 0.0fp, -2643.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 992, 0);
+        SetAnim(9);
+        Wait(1);
+        ExitThread();
+    }
+
+    actor_script actor_4 {
+        SetHitCylinder(120, 120, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00DA);
+        EnableActorCollision();
+        DisableActorRendering();
+        ScaleShadowRadius(0x9999);
+        SetEntityVec3(VEC3_POS, -540.0fp, 0.0fp, -2089.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+        if (global[AREA] == 205) {
+            SetEntityVec3(VEC3_POS, 1031.0fp, 0.0fp, -2477.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3840, 0);
+            SetAnim(7);
+            SetAnimFrame(45);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+        }
+        if (global[AREA] == 283) {
+            SetEntityVec3(VEC3_POS, 452.0fp, 0.0fp, -2288.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+            SetAnim(7);
+            SetAnimFrame(45);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+        }
+        Wait(1);
+        ExitThread();
+    @label_00DA:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 1) {
+            SetAnim(1);
+            TurnTowardPoint(605.0fp, -2089.0fp, 180);
+            MoveTowardPoint(605.0fp, -2089.0fp, 180);
+            SetAnim(0);
+            Wait(30);
+            SetAnim(7);
+            SetAnimFrame(0);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[4] == 69) {
+            SetEntityVec3(VEC3_POS, 469.0fp, 0.0fp, -2318.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+            SetAnim(7);
+            SetAnimFrame(45);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+        }
+        ExitThread();
+    }
+}

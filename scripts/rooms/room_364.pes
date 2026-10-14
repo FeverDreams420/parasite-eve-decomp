@@ -1,0 +1,43 @@
+// Parasite Eve 1 Scene Script (room_364)
+room_script room_364 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        DestroySelf();
+    }
+
+    actor_script actor_1 {
+        ClearScreenFadeFlag40();
+        Wait(1);
+        SetGeomEntryVisible(13, 1);
+        SetGeomEntryVisible(12, 1);
+        SetGeomEntryVisible(11, 1);
+        SetGeomEntryVisible(10, 0);
+        SetGeomEntryVisible(9, 0);
+        SetGeomEntryVisible(8, 0);
+        SetGeomEntryVisible(7, 0);
+        SetGeomEntryVisible(6, 0);
+        SetGeomEntryVisible(5, 0);
+        SetGeomEntryVisible(4, 0);
+        SetGeomEntryVisible(3, 0);
+        SetGeomEntryVisible(2, 0);
+        SetGeomEntryVisible(1, 0);
+        SetGeomEntryVisible(0, 0);
+        SetFadeColor(0x1E);
+        WaitScreenFade();
+        Wait(1);
+        SpawnThread(@label_009A);
+        Wait(1);
+        ExitThread();
+    @label_009A:
+        while (1) {
+            CheckPadInput(PAD_PRESSED, 0x20000000, local[0]);
+            if (local[0] != 0) {
+                StartScreenFade(30);
+                WaitScreenFade();
+                ChangeRoom(0xA9400048);
+            }
+            Wait(1);
+        }
+    }
+}

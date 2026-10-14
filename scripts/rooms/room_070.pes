@@ -1,0 +1,101 @@
+// Parasite Eve 1 Scene Script (room_070)
+room_script room_070 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetEventHandler(EVENT_INTERACT, @label_002E);
+        SetEntityVec3(VEC3_POS, 2831.0fp, 0.0fp, -763.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 1378, 0);
+        HideActor();
+        Wait(1);
+        ExitThread();
+    @label_002E:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[3] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+        }
+        if (local[3] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        LockPlayerInput();
+        PauseSceneEvents();
+        if (global[AREA] >= 240) {
+            AkaoCmd(0xC8, 18, 0, 0, 0, room[17]);
+        } else {
+            AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+        }
+        AkaoCmd(0x193, 1016, 1016, 0, 0, room[17]);
+        SetMeshFadeLevel(112);
+        SetEventHandler(EVENT_INTERACT, @label_008A);
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        ExitThread();
+    @label_008A:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 1) {
+            PlayFieldSfx(0, 0, 1);
+            PlayFieldSfx(2, 0, 2);
+            Wait(5);
+            AkaoCmd(0xC8, 18, 0, 0, 0, room[17]);
+            ReloadSceneData(8);
+            Noop3();
+            AkaoCmd(0x199, 136, 0, 0, 0, room[17]);
+            WaitDrawIdle();
+            global[AREA] = 240;
+            global[ROOM] = 71;
+            ChangeRoom(0xA80064C8);
+            ExitThread();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetHitCylinder(110, 145, 180);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        EnableActorCollision();
+        SetEntityVec3(VEC3_POS, 84.0fp, 0.0fp, -2093.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        SetAnim(2);
+        Wait(1);
+        SetFadeColor(0x3C);
+        WaitScreenFade();
+        Wait(30);
+        OpenTextbox(37); // "Eve. ,,,and this Christmas will be / the most special of all, | Aaaarrrgh,,,,"
+        SetAnim(23);
+        SetAnimFrame(0);
+        PlayAnimToFrame(60);
+        WaitAnimEnd();
+        SetAnim(2);
+        WaitTextbox(37);
+        Wait(60);
+        OpenTextbox(38); // "Eve. Special because I will no longer / be under the control of a host: | as I have sin..."
+        SetAnim(24);
+        SetAnimFrame(0);
+        PlayAnimToFrame(60);
+        WaitAnimEnd();
+        SetAnim(2);
+        WaitTextbox(38);
+        Wait(30);
+        global[AREA] = 240;
+        StartScreenFade(60);
+        WaitScreenFade();
+        PlayFieldSfx(1, 0, 1);
+        DestroySelf();
+    }
+}

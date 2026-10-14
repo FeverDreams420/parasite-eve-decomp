@@ -1,0 +1,196 @@
+// Parasite Eve 1 Scene Script (room_321)
+room_script room_321 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(90, 120, 20);
+        SceneCmd(2601, 96, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00EA);
+        if (global[ROOM] == 134) {
+            SetEntityVec3(VEC3_POS, -91.0fp, 0.0fp, -602.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 1536, 0);
+            SetAnim(40);
+            Wait(45);
+            SetAnim(41);
+            SetAnimFrame(0);
+            PlayAnimToFrame(42);
+            WaitAnimEnd();
+            Wait(15);
+            PlayFieldSfx(0, 0, 255);
+        } else {
+            if (global[ROOM] == 321) {
+                SetEntityVec3(VEC3_POS, -91.0fp, 0.0fp, -602.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+                goto @label_00E6;
+            } else {
+                SetEntityVec3(VEC3_POS, -91.0fp, 0.0fp, -602.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 0, 0);
+                goto @label_00E6;
+            }
+            Wait(1);
+        }
+    @label_00E6:
+        ExitThread();
+    @label_00EA:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            goto @label_00E6;
+        }
+        if (local[3] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            goto @label_00E6;
+        }
+        if (local[3] == 1) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[ROOM] = 322;
+            ChangeRoom(0xA80620C8);
+            ExitThread();
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        LockPlayerInput();
+        AkaoCmd(0x193, 1020, 1016, 0, 0, room[17]);
+        AkaoCmd(0xC8, 10, 0, 0, 0, room[17]);
+        SceneCmd(2700, 105, 175, 255, 0, 0, 0, room[17]);
+        SetCameraBaseAngle(0, 0);
+        EnablePlayerMovement();
+        SetEventHandler(EVENT_INTERACT, @label_00DA);
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        if (global[AREA] <= 473) {
+            SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        }
+        if (global[AREA] >= 476) {
+            SetGeomFlagSlot(0, 1);
+            SetGeomEntryLimit(0, 13);
+            SetGeomEntryField8(0, 0);
+            PlayFieldSfx(0, 0, 255);
+        }
+        Wait(1);
+        SetFadeColor(0x1E);
+        Wait(30);
+    @label_00D6:
+        ExitThread();
+    @label_00DA:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 252) {
+            PlayFieldSfx(2, 0, 251);
+            goto @label_00D6;
+        }
+        if (local[3] == 253) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            goto @label_00D6;
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetEventHandler(EVENT_INTERACT, @label_0072);
+        Wait(1);
+        SpawnThread(@label_0018);
+        ExitThread();
+    @label_0018:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-500.0fp, -800.0fp, -500.0fp, -950.0fp, 600.0fp, -950.0fp, 600.0fp, -800.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            PlayFieldSfx(0, 0, 1);
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_0018;
+    @label_0072:
+        GetThreadTarget14(local[5]);
+        if (local[5] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetEventHandler(EVENT_INTERACT, @label_01BC);
+        Wait(1);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 0);
+        SetGeomEntryField8(0, 0);
+        Wait(20);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 1);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 2);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 3);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 4);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 5);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 6);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 7);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 8);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 9);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 10);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 11);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 12);
+        SetGeomEntryField8(0, 0);
+        Wait(3);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 13);
+        SetGeomEntryField8(0, 0);
+        global[AREA] = 476;
+        DestroySelf();
+        ExitThread();
+    @label_01BC:
+        GetThreadTarget14(local[5]);
+        if (local[5] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+        ExitThread();
+    }
+}

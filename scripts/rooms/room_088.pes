@@ -1,0 +1,1345 @@
+// Parasite Eve 1 Scene Script (room_088)
+room_script room_088 {
+    spawn_table { (2, 0), (4, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(110, 130, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_017C);
+        SetEntityVec3(VEC3_POS, 530.0fp, 0.0fp, 474.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+        SetAnim(30);
+        SetAnimFrame(15);
+        PlayAnimToFrame(15);
+        WaitAnimEnd();
+        SetFadeColor(0x1E);
+        Wait(1);
+        SpawnThread(@label_006A);
+        ExitThread();
+    @label_006A:
+        if (global[STORY_FLAGS] & 2) {
+        } else {
+            OpenTextbox(60); // "Eve. Why? Why be on the / humans' side?"
+            PlayFieldSfx(1, 0, 1);
+            WaitTextbox(60);
+            Wait(75);
+            OpenTextbox(61); // "{Aya}. Why not? I'm a human,"
+            SetAnim(31);
+            SetAnimFrame(0);
+            PlayAnimToFrame(30);
+            WaitAnimEnd();
+            SetAnim(31);
+            SetAnimFrame(0);
+            PlayAnimToFrame(30);
+            WaitAnimEnd();
+            WaitTextbox(61);
+            OpenTextbox(62); // "Eve. Why are you going with them / and not ME?!"
+            PlayFieldSfx(1, 0, 2);
+            WaitTextbox(62);
+            Wait(95);
+            CameraSnapToActor(1, 0, 50);
+            OpenTextbox(63); // "{Aya}. What?,,,"
+            SetAnim(31);
+            SetAnimFrame(0);
+            PlayAnimToFrame(30);
+            WaitAnimEnd();
+            WaitTextbox(63);
+            SetAnim(36);
+            SetAnimFrame(0);
+            PlayAnimToFrame(17);
+            WaitAnimEnd();
+            if (global[10] & 0x80000000) {
+                goto @label_0196;
+            }
+            SetGameStateFlags(0x800);
+            SceneCmd(2900, 0, 0, 0, 0, 0, 0, room[18]);
+        }
+        PlayFieldSfx(2, 0, 50);
+        ExitThread();
+        ExitThread();
+    @label_017C:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 1) {
+        @label_0196:
+            ClearGameStateFlags(0x800);
+            if (global[STORY_FLAGS] & 2) {
+                AkaoCmd(0xCF, 40, 30, 127, 0, room[18]);
+                StartScreenFade(30);
+                WaitScreenFade();
+                AkaoCmd(0xC9, 40, 0, 0, 0, room[18]);
+                global[AREA] = 320;
+                global[ROOM] = 91;
+                ChangeRoom(0xA8009148);
+            }
+            SetAnim(30);
+            SetAnimFrame(0);
+            PlayAnimToFrame(15);
+            WaitAnimEnd();
+            CameraSnapToActor(1, 0, 180);
+            AkaoCmd(0x12C, 1107, 0, 128, 64, room[18]);
+            OpenTextbox(64); // "Eve. It seems you still don't know / who I am,"
+            PlayFieldSfx(1, 0, 2);
+            WaitTextbox(64);
+            Wait(95);
+            OpenTextbox(65); // "Eve. Well: if you don't know: your / mitochondria will,,, | That's why you were drawn t..."
+            PlayFieldSfx(1, 0, 3);
+            WaitTextbox(65);
+            Wait(120);
+            OpenTextbox(66); // "{Aya}. What are you talking / about?"
+            SetAnim(31);
+            SetAnimFrame(0);
+            PlayAnimToFrame(30);
+            WaitAnimEnd();
+            WaitTextbox(66);
+            Wait(60);
+            OpenTextbox(67); // "Eve. Here: let me explain,,, / Directly,,,"
+            WaitTextbox(67);
+            PlayFieldSfx(1, 0, 4);
+            Wait(41);
+            AkaoCmd(0x12C, 1105, 0, 128, 127, room[18]);
+            AkaoCmd(0x12C, 1106, 0, 128, 127, room[18]);
+            OpenTextbox(68); // "{Aya}. Stop it!!"
+            SetAnim(34);
+            SetAnimFrame(0);
+            PlayAnimToFrame(30);
+            WaitAnimEnd();
+            WaitTextbox(68);
+            Wait(48);
+            OpenTextbox(69); // "Eve. If we join forces: all the other / mitochondria in the world will,,,"
+            WaitTextbox(69);
+            PlayFieldSfx(1, 0, 6);
+            OpenTextbox(70); // "{Aya}. S,,, Stop!"
+            SetAnim(35);
+            SetAnimFrame(0);
+            PlayAnimToFrame(90);
+            WaitAnimEnd();
+            WaitTextbox(70);
+            StartScreenFade(30);
+            WaitScreenFade();
+            PlayFieldSfx(2, 0, 1);
+            DestroySelf();
+        }
+        if (local[4] == 2) {
+            DestroySelf();
+        }
+        if (local[4] == 5) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            ExitThread();
+        }
+        if (local[4] == 206) {
+            StopActorMotion();
+            SetMoveFactor(0x2CCCC);
+            SetAnim(5);
+            SpawnThread(@label_03C8);
+            MoveTowardPoint(530.0fp, 474.0fp, 0);
+            StopActorMotion();
+            PlayAnimOnceAndWait(4);
+            SetMoveFactor(0x10000);
+            PlayFieldSfx(4, 0, 207);
+            ExitThread();
+        @label_03C8:
+            CameraSnapToActor(1, 0, 128);
+            ExitThread();
+        }
+        if (local[4] == 116) {
+            SetAnim(21);
+            LockPlayerInput();
+            PauseSceneEvents();
+            StopActorMotion();
+            ExitThread();
+        }
+        if (local[4] == 101) {
+            LockPlayerInput();
+            PauseSceneEvents();
+            StopActorMotion();
+            SetAnimStep(0x10000);
+            SpawnThread(@label_05F2);
+            ExitThread();
+        }
+        if (local[4] == 113) {
+            SetRenderFlagsC0();
+            SetEntityVec3(VEC3_POS, room[11], 0.0fp, room[12]);
+            SetEntityVec3(VEC3_ROT, 0, room[13], 0);
+            Wait(1);
+            SetBattleRenderMode80();
+            ClearBit(room[0], 2);
+            ClearBit(room[0], 3);
+            ClearBit(room[0], 4);
+            ClearBit(room[0], 0);
+            ClearBit(room[0], 4);
+            ClearBit(room[0], 8);
+            ClearBit(room[0], 9);
+            ClearBit(room[0], 10);
+            ClearBit(room[0], 11);
+            SetBit(room[0], 14);
+            room[11] = 0;
+            room[12] = 0;
+            room[13] = 0;
+            StopAllPmSlots();
+            PlayModelAnimAndWait(10);
+            SetFadeColor(0xF);
+            WaitScreenFade();
+            PlayAnimOnceAndWait(28);
+            SetAnim(21);
+            PlayFieldSfx(4, 0, 115);
+            ClearGameStateFlags(0x1000);
+            ClearGameStateFlags(0x800);
+            ClearBit(global[10], 29);
+            ExitThread();
+        }
+        if (local[4] == 114) {
+            SetRenderFlagsC0();
+            Wait(1);
+            if (room[0] & 1) {
+                SetBattleRenderMode80();
+                SetEntityVec3(VEC3_POS, room[11], 0.0fp, room[12]);
+                SetEntityVec3(VEC3_ROT, 0, room[13], 0);
+                PlayModelAnimAndWait(10);
+                SetFadeColor(0xF);
+                WaitScreenFade();
+            } else {
+                ResetCameraToPlayer();
+                WaitDiscIdle();
+            }
+            ClearBit(room[0], 2);
+            ClearBit(room[0], 3);
+            ClearBit(room[0], 1);
+            ClearBit(room[0], 0);
+            ClearBit(room[0], 4);
+            SetBit(room[0], 8);
+            SetBit(room[0], 9);
+            SetBit(room[0], 10);
+            SetBit(room[0], 11);
+            ClearGameStateFlags(0x1000);
+            ClearGameStateFlags(0x800);
+            ClearBit(global[10], 29);
+            PlayFieldSfx(4, 0, 115);
+            StopAllPmSlots();
+            ExitThread();
+        }
+        ExitThread();
+    @label_05F2:
+        SetBit(room[0], 4);
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        SetHitCylinder(100, 245, 10);
+        SetRenderTableIndex(0);
+        ScaleShadowRadius(0x10000);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_0054);
+        SetMoveSpeed(0xCCCC);
+        SetEntityVec3(VEC3_POS, 1070.0fp, 0.0fp, 474.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 928, 0);
+        ExitThread();
+    @label_0054:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 1) {
+            KillOtherThreads();
+            SetAnim(26);
+            PlayAnimToFrame(400);
+            WaitAnimEnd();
+            SetAnim(2);
+            ExitThread();
+        }
+        if (local[4] == 2) {
+            KillOtherThreads();
+            SetAnim(27);
+            PlayAnimToFrame(400);
+            WaitAnimEnd();
+            SetAnim(2);
+            ExitThread();
+        }
+        if (local[4] == 3) {
+            KillOtherThreads();
+            SetAnim(28);
+            PlayAnimToFrame(400);
+            WaitAnimEnd();
+            SetAnim(2);
+            ExitThread();
+        }
+        if (local[4] == 4) {
+            KillOtherThreads();
+            SetAnim(30);
+            PlayAnimToFrame(75);
+            WaitAnimEnd();
+            SetAnim(31);
+            ExitThread();
+        }
+        if (local[4] == 5) {
+            KillOtherThreads();
+            DestroySelf();
+        }
+        if (local[4] == 6) {
+        }
+        if (local[4] == 200) {
+            room[10] = global[80];
+            if (room[10] == 0) {
+                room[10] = 65536;
+            }
+            Random(local[47], 0, 100);
+            if (local[47] > 19) {
+                local[47] = 51;
+            } else {
+                local[47] = 43;
+            }
+            AllocBattleActorSlot();
+            SetBattleField(40, 0);
+            SetBattleField(41, 14);
+            SetBattleField(42, 2);
+            Random(local[28], 6000, 9000);
+            SetBattleField(43, local[28]);
+            SetBattleField(44, room[10] * 330 >> 16);
+            SetBattleField(45, room[10] * 330 >> 16);
+            SetBattleField(60, room[10] * 330 >> 16);
+            SetBattleField(61, room[10] * 13 >> 16);
+            SetBattleField(62, 100);
+            SetBattleField(63, 40);
+            SetBattleField(65, 7);
+            SetBattleField(66, 60);
+            SetBattleField(67, 10);
+            SetBattleField(68, 92);
+            SetBattleField(69, 18);
+            SetBattleField(93, local[47]);
+            SetBattleField(100, 1);
+            SetBattleField(101, 1);
+            SetBattleField(102, 1);
+            SetBattleField(103, 1);
+            SetBattleField(104, 1);
+            SetBattleField(105, 1);
+            SetBattleField(106, 0);
+            SetBattleField(107, 0);
+            SetBattleField(108, 0);
+            SetBattleField(109, 1);
+            SetBattleField(110, 10);
+            room[4] = room[4] + 14;
+            room[1] = room[1] + 100;
+            room[2] = room[2] + 1;
+            SetupModelPartAnim11(0, 0, 6, 7, room[10] * 85 >> 16, 2, 14, 15, 16, 3, 20);
+            SetupModelPartAnim5(3, 0, 10, 11, room[10] * 78 >> 16);
+            SetModelPartCoords(0, 0x00020000, 0x00019999);
+            SetBattleField(50, 1339);
+            SetBattleField(51, 1338);
+            SetBattleField(52, 1340);
+            SetBattleField(53, 1466);
+            GetBattleField(44, local[28]);
+            GetBattleField(60, local[29]);
+            SetBattleField(44, local[28] + 0x000F4240);
+            SetBattleField(45, local[28] + 0x000F4240);
+            SetBattleField(60, local[29] + 0x000F4240);
+            SetActorFlags(0x4000000);
+            local[15] = 1;
+            EnableActorCollision();
+            local[13] = 128;
+            local[31] = 3000;
+            local[35] = 2048;
+            local[40] = 2048;
+            local[7] = 0;
+            local[8] = 0;
+            local[18] = -1;
+            GetSubId(local[9]);
+            PlayFieldSfx(4, 0, 112);
+            while (!(room[0] & 4)) {
+                Wait(1);
+            }
+            Wait(30);
+            SpawnThread(@label_1C9E);
+            DisableActorRendering();
+            SpawnThread(@label_1D2E);
+            local[8] = 1;
+            SpawnThread(@label_07AC);
+            LoadRoomAssets(75, local[18]);
+            SendPmCommand0(local[18], 23, 0, 1, 0);
+            SendPmCommand0(local[18], 17, 0x02950000, 0xF5100000, 0x00640000);
+            SendPmCommand0(local[18], 4, 0x00200000, 1, 0);
+            SendPmCommand1(local[18], 25, local[14], local[9], local[9]);
+            while (local[14]) {
+                Wait(1);
+            }
+            local[18] = -1;
+            Sin(local[31], local[28]);
+            local[28] = local[28] * 500 + 0x028E0000;
+            Sin(local[35], local[36]);
+            local[36] = local[36] * 100 + local[28];
+            Sin(local[40], local[37]);
+            local[37] = local[37] * 0 + 0xFEA20000;
+            Cos(local[31], local[30]);
+            local[30] = local[30] * 300 + 0x020B0000;
+            Sin(local[35], local[38]);
+            local[38] = local[38] * 60 + local[30];
+            local[31] = local[31] + local[32] & 4095;
+            local[35] = local[35] + local[39] & 4095;
+            local[40] = local[40] + local[41] & 4095;
+            SetAnim(4);
+            SpawnThread(@label_1CAC);
+            SpawnThread(@label_07BA);
+            GetActorPositionByType(0, 0, 0, local[28], local[29], local[30], local[9]);
+            LoadRoomAssets(75, local[18]);
+            SendPmCommand0(local[18], 23, 0, 1, 0);
+            SendPmCommand0(local[18], 17, local[36], local[37], local[38]);
+            SendPmCommand0(local[18], 4, 0x00400000, 1, 0);
+            SendPmCommand1(local[18], 25, local[14], local[9], local[9]);
+            while (local[14]) {
+                Wait(1);
+            }
+            local[18] = -1;
+            local[8] = 0;
+            TestBit(local[21], 7, local[11]);
+            if (local[11] == 0) {
+                SetBit(local[21], 7);
+                GetActorPositionByType(0, 0, 0, local[28], local[29], local[30], local[9]);
+                TurnTowardPoint(local[28] + 0x01F40000, local[30], 32);
+                ClearBit(local[21], 7);
+            }
+            local[32] = -7;
+            local[39] = 47;
+            local[41] = 2;
+            Random(local[9], 0, 2);
+            if (local[9] < 1) {
+                local[39] = -local[39];
+            }
+            Random(local[9], 0, 2);
+            if (local[9] < 1) {
+                local[41] = -local[41];
+            }
+            SetBattleField(43, 0);
+            local[25] = 0;
+            goto @label_0808;
+        @label_07AC:
+            TurnTowardPoint(767.0fp, 1416.0fp, 16);
+            ExitThread();
+        @label_07BA:
+            TestBit(local[21], 7, local[11]);
+            if (local[11] == 0) {
+                SetBit(local[21], 7);
+                GetActorPositionByType(0, 0, 0, local[28], local[29], local[30], local[9]);
+                TurnTowardPoint(1224.0fp, 47.0fp, 32);
+                ClearBit(local[21], 7);
+            }
+            ExitThread();
+        @label_0808:
+            EnableActorRendering();
+            SpawnThread(@label_1942);
+            SpawnThread(@label_1C5A);
+            SpawnThread(@label_0828);
+            SpawnThread(@label_1638);
+            ExitThread();
+        @label_0828:
+            GetThreadId(local[19]);
+            Wait(1);
+            if (local[25] == 0) {
+                goto @label_0828;
+            }
+            GetDistanceToActor(0, 0, local[9]);
+            if (local[9] < 0x028A0000) {
+                Random(local[9], 0, 3);
+                if (local[9] == 0) {
+                    GetBattleField(82, local[9]);
+                    while (local[9] != 0) {
+                        Wait(1);
+                        GetBattleField(82, local[9]);
+                    }
+                    if (local[15] != 1) {
+                        local[15] = 1;
+                        PlayAnimOnceAndWait(16);
+                        SetAnim(2);
+                    }
+                    local[8] = 1;
+                    SpawnThread(@label_1CBA);
+                    if (local[18] != -1) {
+                        StopPmSlotOnSelf(local[18]);
+                        local[18] = -1;
+                    }
+                    KillThread(local[20]);
+                    StopActorMotion();
+                    SpawnThread(@label_1D2E);
+                    LoadRoomAssets(75, local[18]);
+                    SendPmCommand0(local[18], 23, 0, 1, 0);
+                    SendPmCommand0(local[18], 17, 0x02DD0000, 0xF7B70000, 0x00E80000);
+                    SendPmCommand0(local[18], 4, 0x00200000, 1, 0);
+                    SendPmCommand1(local[18], 25, local[14], local[9], local[9]);
+                    SendPmCommand0(local[18], 22, 0x06A90000, 0x024B0000, 16);
+                    while (local[14]) {
+                        Wait(1);
+                    }
+                    local[18] = -1;
+                    LoadRoomAssets(75, local[18]);
+                    SendPmCommand0(local[18], 23, 0, 1, 0);
+                    SendPmCommand0(local[18], 17, 0x02DD0000, 0xF6A00000, 0x00E80000);
+                    SendPmCommand0(local[18], 4, 0x01F40000, 1, 0);
+                    SendPmCommand1(local[18], 25, local[14], local[9], local[9]);
+                    SendPmCommand0(local[18], 22, 0x06A90000, 0x024B0000, 16);
+                    while (local[14]) {
+                        Wait(1);
+                    }
+                    local[18] = -1;
+                    Random(local[9], 0, 4);
+                    case_if (local[9] == 0) {
+                        local[28] = 450;
+                        local[29] = -293;
+                        local[30] = 430;
+                        goto @label_0ABE;
+                        goto @label_0A38;
+                    }
+                    case_if (local[9] == 1) {
+                    @label_0A38:
+                        local[28] = 450;
+                        local[29] = -293;
+                        local[30] = 614;
+                        goto @label_0ABE;
+                        goto @label_0A66;
+                    }
+                    case_if (local[9] == 2) {
+                    @label_0A66:
+                        local[28] = 680;
+                        local[29] = -293;
+                        local[30] = 614;
+                        goto @label_0ABE;
+                        goto @label_0A94;
+                    }
+                    case_if (local[9] == 3) {
+                    @label_0A94:
+                        local[28] = 680;
+                        local[29] = -293;
+                        local[30] = 430;
+                        goto @label_0ABE;
+                        goto @label_0ABE;
+                    }
+                    goto @label_0ABE;
+                @label_0ABE:
+                    local[7] = 1;
+                    LoadRoomAssets(119, local[22]);
+                    SendPmCommand0(local[22], 1, local[28], local[29], local[30]);
+                    local[6] = 0;
+                    TriggerAnimEvent(3, local[6]);
+                    GetBattleField(82, local[9]);
+                    while (local[9] != 0) {
+                        Wait(1);
+                        GetBattleField(82, local[9]);
+                    }
+                    local[7] = 0;
+                    local[8] = 0;
+                    local[15] = 1;
+                    SpawnThread(@label_1D02);
+                    SpawnThread(@label_1CC8);
+                    DisableActorRendering();
+                    Sin(local[31], local[28]);
+                    local[28] = local[28] * 500 + 0x028E0000;
+                    Sin(local[35], local[36]);
+                    local[36] = local[36] * 100 + local[28];
+                    Sin(local[40], local[37]);
+                    local[37] = local[37] * 0 + 0xFEA20000;
+                    Cos(local[31], local[30]);
+                    local[30] = local[30] * 300 + 0x020B0000;
+                    Sin(local[35], local[38]);
+                    local[38] = local[38] * 60 + local[30];
+                    if (local[31] >= 256 && local[31] <= 1792) {
+                        local[32] = -local[32];
+                    }
+                    local[31] = local[31] + local[32] & 4095;
+                    local[35] = local[35] + local[39] & 4095;
+                    local[40] = local[40] + local[41] & 4095;
+                    GetActorPositionByType(0, 0, 0, local[28], local[29], local[30], local[9]);
+                    TurnTowardPoint(local[28] + 0x01F40000, local[30], 32);
+                    LoadRoomAssets(75, local[18]);
+                    SendPmCommand0(local[18], 23, 0, 1, 0);
+                    SendPmCommand0(local[18], 17, local[36], local[37], local[38]);
+                    SendPmCommand0(local[18], 4, 0x00400000, 1, 0);
+                    SendPmCommand1(local[18], 25, local[14], local[9], local[9]);
+                    SendPmCommand0(local[18], 22, local[28] + 0x01F40000, local[30], 32);
+                    while (local[14]) {
+                        Wait(1);
+                    }
+                    local[18] = -1;
+                    TestBit(local[21], 7, local[11]);
+                    if (local[11] == 0) {
+                        SetBit(local[21], 7);
+                        GetActorPositionByType(0, 0, 0, local[28], local[29], local[30], local[9]);
+                        TurnTowardPoint(local[28] + 0x01F40000, local[30], 32);
+                        ClearBit(local[21], 7);
+                    }
+                    EnableActorRendering();
+                    SpawnThread(@label_1638);
+                } else {
+                    GetBattleField(82, local[9]);
+                    while (local[9] != 0) {
+                        Wait(1);
+                        GetBattleField(82, local[9]);
+                    }
+                    local[7] = 1;
+                    if (local[15] != 1) {
+                        local[15] = 1;
+                        PlayAnimOnceAndWait(16);
+                        SetAnim(2);
+                    }
+                    KillThread(local[20]);
+                    SpawnThread(@label_1C8A);
+                    TriggerAnimEvent(0, local[6]);
+                    GetBattleField(48, local[9]);
+                    while (local[9] != 0 && local[9] != 4) {
+                        Wait(1);
+                        GetBattleField(48, local[9]);
+                    }
+                    Wait(1);
+                    local[7] = 0;
+                    local[15] = 1;
+                    KillThread(local[46]);
+                    SpawnThread(@label_1D02);
+                    DisableActorRendering();
+                    Sin(local[31], local[28]);
+                    local[28] = local[28] * 500 + 0x028E0000;
+                    Sin(local[35], local[36]);
+                    local[36] = local[36] * 100 + local[28];
+                    Sin(local[40], local[37]);
+                    local[37] = local[37] * 0 + 0xFEA20000;
+                    Cos(local[31], local[30]);
+                    local[30] = local[30] * 300 + 0x020B0000;
+                    Sin(local[35], local[38]);
+                    local[38] = local[38] * 60 + local[30];
+                    if (local[31] >= 256 && local[31] <= 1792) {
+                        local[32] = -local[32];
+                    }
+                    local[31] = local[31] + local[32] & 4095;
+                    local[35] = local[35] + local[39] & 4095;
+                    local[40] = local[40] + local[41] & 4095;
+                    GetActorPositionByType(0, 0, 0, local[28], local[29], local[30], local[9]);
+                    TurnTowardPoint(local[28] + 0x01F40000, local[30], 32);
+                    LoadRoomAssets(75, local[18]);
+                    SendPmCommand0(local[18], 23, 0, 1, 0);
+                    SendPmCommand0(local[18], 17, local[36], local[37], local[38]);
+                    SendPmCommand0(local[18], 4, 0x00400000, 1, 0);
+                    SendPmCommand1(local[18], 25, local[14], local[9], local[9]);
+                    SendPmCommand0(local[18], 22, local[28] + 0x01F40000, local[30], 32);
+                    while (local[14]) {
+                        Wait(1);
+                    }
+                    local[18] = -1;
+                    TestBit(local[21], 7, local[11]);
+                    if (local[11] == 0) {
+                        SetBit(local[21], 7);
+                        GetActorPositionByType(0, 0, 0, local[28], local[29], local[30], local[9]);
+                        TurnTowardPoint(local[28] + 0x01F40000, local[30], 32);
+                        ClearBit(local[21], 7);
+                    }
+                    EnableActorRendering();
+                    SpawnThread(@label_1638);
+                }
+            } else {
+                GetBattleField(82, local[9]);
+                while (local[9] != 0) {
+                    Wait(1);
+                    GetBattleField(82, local[9]);
+                }
+                if (local[15] != 1) {
+                    local[15] = 1;
+                    PlayAnimOnceAndWait(16);
+                    SetAnim(2);
+                }
+                local[8] = 1;
+                SpawnThread(@label_1CBA);
+                if (local[18] != -1) {
+                    StopPmSlotOnSelf(local[18]);
+                    local[18] = -1;
+                }
+                KillThread(local[20]);
+                StopActorMotion();
+                SpawnThread(@label_1D2E);
+                LoadRoomAssets(75, local[18]);
+                SendPmCommand0(local[18], 23, 0, 1, 0);
+                SendPmCommand0(local[18], 17, 0x02DD0000, 0xF7B70000, 0x00E80000);
+                SendPmCommand0(local[18], 4, 0x00200000, 1, 0);
+                SendPmCommand1(local[18], 25, local[14], local[9], local[9]);
+                SendPmCommand0(local[18], 22, 0x06A90000, 0x024B0000, 16);
+                while (local[14]) {
+                    Wait(1);
+                }
+                local[18] = -1;
+                LoadRoomAssets(75, local[18]);
+                SendPmCommand0(local[18], 23, 0, 1, 0);
+                SendPmCommand0(local[18], 17, 0x02DD0000, 0xF6A00000, 0x00E80000);
+                SendPmCommand0(local[18], 4, 0x01F40000, 1, 0);
+                SendPmCommand1(local[18], 25, local[14], local[9], local[9]);
+                SendPmCommand0(local[18], 22, 0x06A90000, 0x024B0000, 16);
+                while (local[14]) {
+                    Wait(1);
+                }
+                local[18] = -1;
+                Random(local[9], 0, 4);
+                case_if (local[9] == 0) {
+                    local[28] = 450;
+                    local[29] = -293;
+                    local[30] = 430;
+                    goto @label_1332;
+                    goto @label_12AC;
+                }
+                case_if (local[9] == 1) {
+                @label_12AC:
+                    local[28] = 450;
+                    local[29] = -293;
+                    local[30] = 614;
+                    goto @label_1332;
+                    goto @label_12DA;
+                }
+                case_if (local[9] == 2) {
+                @label_12DA:
+                    local[28] = 680;
+                    local[29] = -293;
+                    local[30] = 614;
+                    goto @label_1332;
+                    goto @label_1308;
+                }
+                case_if (local[9] == 3) {
+                @label_1308:
+                    local[28] = 680;
+                    local[29] = -293;
+                    local[30] = 430;
+                    goto @label_1332;
+                    goto @label_1332;
+                }
+                goto @label_1332;
+            @label_1332:
+                local[7] = 1;
+                LoadRoomAssets(119, local[22]);
+                SendPmCommand0(local[22], 1, local[28], local[29], local[30]);
+                local[6] = 0;
+                TriggerAnimEvent(3, local[6]);
+                GetBattleField(82, local[9]);
+                while (local[9] != 0) {
+                    Wait(1);
+                    GetBattleField(82, local[9]);
+                }
+                local[7] = 0;
+                local[8] = 0;
+                local[15] = 1;
+                SpawnThread(@label_1D02);
+                SpawnThread(@label_1CC8);
+                DisableActorRendering();
+                Sin(local[31], local[28]);
+                local[28] = local[28] * 500 + 0x028E0000;
+                Sin(local[35], local[36]);
+                local[36] = local[36] * 100 + local[28];
+                Sin(local[40], local[37]);
+                local[37] = local[37] * 0 + 0xFEA20000;
+                Cos(local[31], local[30]);
+                local[30] = local[30] * 300 + 0x020B0000;
+                Sin(local[35], local[38]);
+                local[38] = local[38] * 60 + local[30];
+                if (local[31] >= 256 && local[31] <= 1792) {
+                    local[32] = -local[32];
+                }
+                local[31] = local[31] + local[32] & 4095;
+                local[35] = local[35] + local[39] & 4095;
+                local[40] = local[40] + local[41] & 4095;
+                GetActorPositionByType(0, 0, 0, local[28], local[29], local[30], local[9]);
+                TurnTowardPoint(local[28] + 0x01F40000, local[30], 32);
+                LoadRoomAssets(75, local[18]);
+                SendPmCommand0(local[18], 23, 0, 1, 0);
+                SendPmCommand0(local[18], 17, local[36], local[37], local[38]);
+                SendPmCommand0(local[18], 4, 0x00400000, 1, 0);
+                SendPmCommand1(local[18], 25, local[14], local[9], local[9]);
+                SendPmCommand0(local[18], 22, local[28] + 0x01F40000, local[30], 32);
+                while (local[14]) {
+                    Wait(1);
+                }
+                local[18] = -1;
+                TestBit(local[21], 7, local[11]);
+                if (local[11] == 0) {
+                    SetBit(local[21], 7);
+                    GetActorPositionByType(0, 0, 0, local[28], local[29], local[30], local[9]);
+                    TurnTowardPoint(local[28] + 0x01F40000, local[30], 32);
+                    ClearBit(local[21], 7);
+                }
+                EnableActorRendering();
+                SpawnThread(@label_1638);
+            }
+            SetBattleField(43, 0);
+            local[25] = 0;
+            goto @label_0828;
+            ExitThread();
+        @label_1638:
+            GetThreadId(local[20]);
+            Random(local[9], 0, 2);
+            if (local[9] < 1) {
+                local[39] = -local[39];
+            }
+            Random(local[9], 0, 2);
+            if (local[9] < 1) {
+                local[41] = -local[41];
+            }
+        @label_16A2:
+            Wait(1);
+            Sin(local[31], local[28]);
+            local[28] = local[28] * 500 + 0x028E0000;
+            Sin(local[35], local[36]);
+            local[36] = local[36] * 100 + local[28];
+            Sin(local[40], local[37]);
+            local[37] = local[37] * 0 + 0xFEA20000;
+            Cos(local[31], local[30]);
+            local[30] = local[30] * 300 + 0x020B0000;
+            Sin(local[35], local[38]);
+            local[38] = local[38] * 60 + local[30];
+            if (local[31] >= 256 && local[31] < 1024) {
+                local[31] = 256;
+                local[32] = -local[32];
+            }
+            if (local[31] >= 1024 && local[31] <= 1792) {
+                local[31] = 1792;
+                local[32] = -local[32];
+            }
+            local[31] = local[31] + local[32] & 4095;
+            local[35] = local[35] + local[39] & 4095;
+            local[40] = local[40] + local[41] & 4095;
+            SetEntityVec3(VEC3_POS, local[36], local[37], local[38]);
+            GetActorPositionByType(0, 0, 0, local[36], local[37], local[38], local[9]);
+            GetAngleToPoint(local[36] + 0x01F40000, local[38], local[34]);
+            GetEntityVec3(VEC3_ROT, local[28], local[29], local[30]);
+            if (local[34] > 16 && local[34] < 2048) {
+                local[29] = local[29] + 16;
+            }
+            if (local[34] < 4080 && local[34] > 2047) {
+                local[29] = local[29] - 16;
+            }
+            SetEntityVec3(VEC3_ROT, local[28], local[29] & 4095, local[30]);
+            goto @label_16A2;
+            ExitThread();
+        @label_1942:
+            SetThreadFlag80();
+            GetBattleField(44, local[26]);
+            while (local[26] > 0x000F4240) {
+                Wait(1);
+                GetBattleField(44, local[26]);
+            }
+            while (local[7] == 1) {
+                Wait(1);
+            }
+            GetBattleField(82, local[9]);
+            while (local[9] != 0) {
+                Wait(1);
+                GetBattleField(82, local[9]);
+            }
+            while (local[8] == 1) {
+                Wait(1);
+            }
+            if (local[18] != -1) {
+                StopPmSlotOnSelf(local[18]);
+                local[18] = -1;
+            }
+            StopPmSlotOnSelf(local[22]);
+            StopActorMotion();
+            KillThread(local[20]);
+            KillThread(local[19]);
+            GetBattleField(48, local[9]);
+            while (local[9] != 0 && local[9] != 4) {
+                Wait(1);
+                GetBattleField(48, local[9]);
+            }
+            Wait(1);
+            SpawnThread(@label_1A76);
+            ExitThread();
+        @label_1A76:
+            GetBattleModeState(local[45]);
+            while (local[45] != 0) {
+                Wait(1);
+                GetBattleModeState(local[45]);
+            }
+            SetBattleModeState6();
+            while (local[45] != 7) {
+                Wait(1);
+                GetBattleModeState(local[45]);
+            }
+            LockPlayerInput();
+            PauseSceneEvents();
+            KillOtherThreads();
+            local[15] = 1;
+            Wait(5);
+            DisableActorRendering();
+            local[15] = 1;
+            SpawnThread(@label_1D02);
+            SpawnThread(@label_1BCC);
+            LoadRoomAssets(75, local[18]);
+            SendPmCommand0(local[18], 23, 0, 1, 0);
+            SendPmCommand0(local[18], 17, 0x02950000, 0xFA420000, 0x000F0000);
+            SendPmCommand0(local[18], 4, 0x00100000, 1, 0);
+            SendPmCommand1(local[18], 25, local[14], local[9], local[9]);
+            while (local[14]) {
+                Wait(1);
+            }
+            local[18] = -1;
+            SpawnThread(@label_1BDA);
+            LoadRoomAssets(75, local[18]);
+            SendPmCommand0(local[18], 23, 0, 1, 0);
+            SendPmCommand0(local[18], 17, 0x02600000, 0xFE250000, 0x02E90000);
+            SendPmCommand0(local[18], 4, 0x00320000, 1, 0);
+            SendPmCommand1(local[18], 25, local[14], local[9], local[9]);
+            while (local[14]) {
+                Wait(1);
+            }
+            local[18] = -1;
+            TurnTowardPoint(600.0fp, 607.0fp, 32);
+            goto @label_1BF0;
+        @label_1BCC:
+            TurnTowardPoint(661.0fp, -262.0fp, 32);
+            ExitThread();
+        @label_1BDA:
+            SetBit(local[21], 7);
+            TurnTowardPoint(661.0fp, -262.0fp, 32);
+            ExitThread();
+        @label_1BF0:
+            if (local[15] != 1) {
+                local[15] = 1;
+                PlayAnimOnceAndWait(16);
+                SetAnim(2);
+            }
+            EnableActorRendering();
+            PlayFieldSfx(0, 0, 206);
+            if (local[15] != 1) {
+                local[15] = 1;
+                PlayAnimOnceAndWait(16);
+                SetAnim(2);
+            }
+            room[17] = 1;
+            ExitThread();
+        @label_1C5A:
+            Wait(1);
+            GetBattleField(43, local[24]);
+            if (local[24] >= 9000) {
+                local[25] = 1;
+            }
+            goto @label_1C5A;
+        @label_1C8A:
+            GetThreadId(local[46]);
+            CameraSnapToActor(0, 0, 32);
+            ExitThread();
+        @label_1C9E:
+            Wait(35);
+            SetActorFlag4000();
+            ExitThread();
+        @label_1CAC:
+            Wait(20);
+            ClearActorFlag4000();
+            ExitThread();
+        @label_1CBA:
+            Wait(35);
+            SetActorFlag4000();
+            ExitThread();
+        @label_1CC8:
+            Wait(25);
+            ClearActorFlag4000();
+            ExitThread();
+            if (local[15] != 1) {
+                local[15] = 1;
+                PlayAnimOnceAndWait(16);
+                SetAnim(2);
+            }
+            ExitThread();
+        @label_1D02:
+            if (local[15] != 0) {
+                local[15] = 0;
+                PlayAnimOnceAndWait(17);
+                SetAnim(4);
+            }
+            ExitThread();
+        @label_1D2E:
+            if (local[15] != 3) {
+                local[15] = 3;
+                PlayAnimOnceAndWait(18);
+                SetAnim(3);
+            }
+            ExitThread();
+            while (1) {
+                Wait(1);
+                if (local[6] == 1) {
+                    ExitThread();
+                }
+                GetSubId(local[9]);
+                QueryActorField(ACTOR_MODE, 1, local[9], local[10]);
+                if (local[10] == 9) {
+                    TestBit(local[21], 7, local[11]);
+                    if (local[11] == 0) {
+                        SetBit(local[21], 7);
+                        CameraSnapToActor(0, 0, 512);
+                        ClearBit(local[21], 7);
+                    }
+                    ExitThread();
+                }
+            }
+            ExitThread();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        AkaoCmd(0x193, 1016, 1016, 0, 0, room[18]);
+        AkaoCmd(0x190, 40, 0, 0, 0, room[18]);
+        PauseSceneEvents();
+        LockPlayerInput();
+        SceneCmd(2900, 0, 0, 0, 0, 0, 0, room[18]);
+        SetMeshFadeLevel(112);
+        SetCameraBaseAngle(0, 0);
+        SetEventHandler(EVENT_INTERACT, @label_00B0);
+        ClearScreenFadeFlag40();
+        DisableCollisionTriangle(0);
+        DisableCollisionTriangle(1);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(1, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        ClearRenderFlagsC0();
+        SetBgEntryScrolled(33, 1, 0xFFF10000, 0);
+        Wait(1);
+        ExitThread();
+        ExitThread();
+    @label_00B0:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 50) {
+            PlayFieldSfx(4, 0, 203);
+            ExitThread();
+        }
+        if (local[3] == 253) {
+            PlayFieldSfx(0, 0, 1);
+            ExitThread();
+        }
+        if (local[3] == 1) {
+            PlayFieldSfx(1, 0, 5);
+            Wait(5);
+            ReloadSceneData(10);
+            Noop3();
+            Noop1(16383);
+            WaitSeqElapsedOrDraw(60);
+            AkaoCmd(0xCE, 40, 120, 0, 0, room[18]);
+            WaitDrawIdle();
+            global[AREA] = 283;
+            global[ROOM] = 89;
+            AkaoCmd(0xC9, 40, 0, 0, 0, room[18]);
+            ChangeRoom(0xA80663C8);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetEventHandler(EVENT_INTERACT, @label_0030);
+        Wait(1);
+        SpawnThread(@label_0056);
+        SpawnThread(@label_00A6);
+        SpawnThread(@label_00C2);
+        SpawnThread(@label_00DE);
+        SpawnThread(@label_01D4);
+        ExitThread();
+    @label_0030:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 1) {
+            DestroySelf();
+            ExitThread();
+        }
+        ExitThread();
+    @label_0056:
+        Random(local[5], 0, 7);
+        if (local[5] == local[6]) {
+            goto @label_0056;
+        }
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, local[5]);
+        SetGeomEntryField8(0, 0);
+        local[6] = local[5];
+        Wait(2);
+        goto @label_0056;
+    @label_00A6:
+        SetGeomEntryFlags(4, 0x10);
+        SetGeomEntryField8(4, 0x00020000);
+        SetGeomFlagSlot(4, 1);
+        ExitThread();
+    @label_00C2:
+        SetGeomEntryFlags(5, 0x10);
+        SetGeomEntryField8(5, 0x00020000);
+        SetGeomFlagSlot(5, 1);
+        ExitThread();
+    @label_00DE:
+        SetGeomFlagSlot(1, 1);
+        SetGeomEntryLimit(1, 0);
+        SetGeomEntryField8(1, 0);
+        Wait(1);
+        SetGeomFlagSlot(1, 1);
+        SetGeomEntryLimit(1, 1);
+        SetGeomEntryField8(1, 0);
+        Wait(1);
+        SetGeomFlagSlot(1, 1);
+        SetGeomEntryLimit(1, 2);
+        SetGeomEntryField8(1, 0);
+        Wait(1);
+        SetGeomFlagSlot(1, 1);
+        SetGeomEntryLimit(1, 3);
+        SetGeomEntryField8(1, 0);
+        Wait(1);
+        SetGeomFlagSlot(1, 1);
+        SetGeomEntryLimit(1, 4);
+        SetGeomEntryField8(1, 0);
+        Wait(1);
+        SetGeomFlagSlot(1, 1);
+        SetGeomEntryLimit(1, 5);
+        SetGeomEntryField8(1, 0);
+        Wait(1);
+        SetGeomFlagSlot(1, 1);
+        SetGeomEntryLimit(1, 6);
+        SetGeomEntryField8(1, 0);
+        Wait(1);
+        SetGeomFlagSlot(1, 1);
+        SetGeomEntryLimit(1, 7);
+        SetGeomEntryField8(1, 0);
+        Wait(1);
+        goto @label_00DE;
+    @label_01D4:
+        SetGeomEntryFlags(3, 0x10);
+        SetGeomEntryField8(3, 0x00020000);
+        SetGeomFlagSlot(3, 1);
+        ExitThread();
+    }
+
+    actor_script actor_4 {
+        SetActorBattleField(0, 0, 255, -219);
+        AkaoCmd(0x194, 131, 0, 0, 0, local[0]);
+        local[1] = 256;
+        local[2] = 102;
+        local[3] = 76;
+        local[4] = 42;
+        Wait(1);
+        room[17] = 0;
+        SetEventHandler(EVENT_INTERACT, @label_0466);
+        ExitThread();
+    @label_0056:
+        PlayFieldSfx(0, 0, 116);
+        room[4] = 0;
+        room[1] = 0;
+        PlayFieldSfx(2, 0, 252);
+        SetBit(room[0], 3);
+        MemCardStepInit(0);
+        GetBattleModeState(local[12]);
+        while (local[12] != 0) {
+            Wait(1);
+            GetBattleModeState(local[12]);
+        }
+        SetBattleModeState6();
+        while (local[12] != 7) {
+            Wait(1);
+            GetBattleModeState(local[12]);
+        }
+        LockPlayerInput();
+        PauseSceneEvents();
+        PlayFieldSfx(0, 0, 101);
+        SpawnThread(@label_00FA);
+        ExitThread();
+    @label_00FA:
+        while (!(room[0] & 4)) {
+            Wait(1);
+        }
+    @label_0126:
+        Wait(1);
+        local[13] = 0;
+        GetBattleModeState(local[13]);
+        if (local[13] == 10) {
+            LockPlayerInput();
+            PauseSceneEvents();
+            UnlockPlayerMoveBit2();
+            if (0) {
+                room[11] = 0;
+                room[12] = 0;
+                room[13] = 0;
+            }
+            StartScreenFade(30);
+            WaitScreenFade();
+            PlayFieldSfx(2, 0, 117);
+            PlayFieldSfx(0, 0, 113);
+            KillOtherThreads();
+            ExitThread();
+        }
+        if (local[13] == 9) {
+            LockPlayerInput();
+            UnlockPlayerMoveBit2();
+            PauseSceneEvents();
+            room[11] = 0;
+            room[12] = 0;
+            room[13] = 0;
+            KillOtherThreads();
+            if (room[0] & 4096) {
+                if (1) {
+                    goto @label_03BE;
+                }
+                local[14] = global[18] & 3;
+                local[14] = local[14] + 1 & 3;
+                GetEquipSlotState(local[15]);
+                local[15] = (local[15] - 1) % 10 * 2 + 2;
+                local[5] = 3;
+                local[5] = local[5] << local[15];
+                local[5] = ~local[5];
+                global[18] = global[18] & local[5];
+                global[18] = global[18] | local[14] << local[15];
+            } else if (1) {
+                if (1) {
+                    goto @label_03BE;
+                }
+                local[14] = global[15] >> 33 & 3;
+                if (local[14] < 3) {
+                    local[5] = 3;
+                    local[5] = local[5] << 33;
+                    local[5] = ~local[5];
+                    global[15] = global[15] & local[5];
+                    local[5] = local[14] + 1 & 3;
+                    local[5] = local[5] << 33;
+                    global[15] = global[15] | local[5];
+                }
+            } else {
+                SetBit(room[0], 5);
+            }
+        @label_03BE:
+            GetActorPositionByType(0, 0, 0, local[6], local[15], local[7], local[15]);
+            TestPointInQuad(0.0fp, 0.0fp, 0.0fp, 0.0fp, 0.0fp, 0.0fp, 0.0fp, 0.0fp, local[6], local[7], local[9]);
+            if (room[0] & 8192) {
+                if (local[9] == 1) {
+                    goto @label_0444;
+                }
+            }
+            if (local[9] != 1) {
+            } else {
+                SetBit(room[0], 0);
+                StartScreenFade(30);
+                WaitScreenFade();
+            }
+        @label_0444:
+            PlayFieldSfx(2, 0, 117);
+            PlayFieldSfx(0, 0, 114);
+            ExitThread();
+        }
+        goto @label_0126;
+        ExitThread();
+    @label_0466:
+        GetThreadTarget14(local[0]);
+        if (local[0] == 203) {
+            SpawnThread(@label_0056);
+            PlayFieldSfx(1, 0, 200);
+            ExitThread();
+        }
+        if (local[0] == 112) {
+            goto @label_04C2;
+            if (local[0] == 112) {
+            @label_04C2:
+                while (!(room[0] & 16)) {
+                    Wait(1);
+                }
+                SetWallCollisionPolygon(@poly_095C, 4);
+                SetWalkableFloorPolygon(@poly_096C, 4);
+                LockPlayerMoveBit2();
+                GetActorBattleField(0, 0, 6, local[22]);
+                if (local[22] != 9000) {
+                    GetActorBattleField(0, 0, 1, local[16]);
+                    GetActorBattleField(0, 0, 14, local[17]);
+                    if (room[2] == 1) {
+                    } else {
+                        room[4] = room[4] / room[2];
+                        room[1] = room[1] / room[2];
+                    }
+                    local[16] = local[16] - room[4];
+                    if (local[16] > 1) {
+                        local[18] = 0x00013333;
+                    } else if (local[16] == 1) {
+                        local[18] = 0x00011999;
+                    } else if (local[16] == 0) {
+                        local[18] = 65536;
+                    } else if (local[16] == -1) {
+                        local[18] = 58982;
+                    } else {
+                        local[18] = 52428;
+                    }
+                    local[17] = fixed_div(room[1] << 16, local[17] << 16);
+                    if (local[17] >= 2) {
+                        local[19] = 58982;
+                    } else if (local[17] >= 0x00018000) {
+                        local[19] = 52428;
+                    } else if (local[17] >= 0x00013333) {
+                        local[19] = 45875;
+                    } else if (local[17] >= 52428) {
+                        local[19] = 32768;
+                    } else if (local[17] >= 32768) {
+                        local[19] = 19660;
+                    } else {
+                        local[19] = 6553;
+                    }
+                    Random(local[20], 0, 11);
+                    if (local[20] == 10) {
+                        local[20] = 0x00014CCC;
+                    } else if (local[20] > 6) {
+                        local[20] = 0x00011999;
+                    } else if (local[20] > 4) {
+                        local[20] = 58982;
+                    } else if (local[20] > 2) {
+                        local[20] = 49152;
+                    } else if (local[20] > 0) {
+                        local[20] = 32768;
+                    } else {
+                        local[20] = 16384;
+                    }
+                    GetActorBattleField(0, 0, 1, local[16]);
+                    if (local[16] < 11) {
+                        local[21] = 52428;
+                    } else if (local[16] < 21) {
+                        local[21] = 32768;
+                    } else if (local[16] < 31) {
+                        local[21] = 19660;
+                    } else if (local[16] < 41) {
+                        local[21] = 13107;
+                    } else {
+                        local[21] = 6553;
+                    }
+                    local[18] = fixed_mul(0x23280000, local[18]);
+                    local[19] = fixed_mul(local[18], local[19]);
+                    local[20] = fixed_mul(local[19], local[20]);
+                    local[21] = fixed_mul(local[20], local[21]);
+                    local[21] = local[21] >> 16;
+                    room[3] = local[21];
+                    SetActorBattleField(0, 0, 6, local[21]);
+                }
+                SetBit(room[0], 2);
+                ResumeSceneEvents();
+                UnlockPlayerInput();
+                SignalSceneExit();
+                ClearBattleModeState();
+                ExitThread();
+            }
+        }
+        if (local[0] == 207) {
+            while (room[17] < 1) {
+                Wait(1);
+            }
+            ClearBattleModeState();
+            SetBattleModeState8();
+            GetBattleModeState(local[12]);
+            while (local[12] != 12) {
+                Wait(1);
+                GetBattleModeState(local[12]);
+            }
+            UnlockPlayerMoveBit2();
+            ClearBit(room[0], 3);
+            ClearBit(room[0], 2);
+            ClearBit(room[0], 4);
+            PauseSceneEvents();
+            PlayFieldSfx(2, 0, 253);
+            ExitThread();
+        }
+        ExitThread();
+        polygon @poly_095C {
+            (298.0fp, 371.0fp),
+            (294.0fp, 660.0fp),
+            (792.0fp, 648.0fp),
+            (819.0fp, 380.0fp),
+        }
+        polygon @poly_096C {
+            (298.0fp, 371.0fp),
+            (294.0fp, 660.0fp),
+            (792.0fp, 648.0fp),
+            (819.0fp, 380.0fp),
+        }
+    }
+}

@@ -1,0 +1,45 @@
+// Parasite Eve 1 Scene Script (room_346)
+room_script room_346 {
+    spawn_table { (0, 0), (1, 0) }
+
+    actor_script actor_0 @no_terminator {
+        ClearScreenFadeFlag40();
+        SetEntityVec3(VEC3_POS, 0.0fp, 0.0fp, -1335.0fp);
+        SetEntityVec3(VEC3_ROT, 64, 2048, 0);
+        LockPlayerInput();
+        PauseSceneEvents();
+        SetAnim(19);
+        SetAnimFrame(900);
+        PauseActorAnim();
+        ExitThread();
+    }
+
+    actor_script actor_1 @no_terminator {
+        SetEntityVec3(VEC3_POS, 0.0fp, 0.0fp, 288.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        HideActor();
+        SetMoveSpeed(0xD999);
+        SetFogNearFar(160, 253, 4);
+        WaitDiscIdle();
+        SetFadeColor(0x1E);
+        WaitScreenFade();
+        Wait(30);
+        PlayModelAnimAndWait(30);
+        Wait(30);
+        if (!(global[10] & 4)) {
+            OpenTextbox(3); // "ENEMY IDLE1"
+            WaitTextbox(3);
+        } else {
+            OpenTextbox(4); // "ENEMY IDLE2"
+            WaitTextbox(4);
+        }
+        TurnToAngleStep(2048, 64);
+        SetMoveFactor(0xA0000);
+        ApplyForwardVelocity();
+        Wait(30);
+        StartScreenFade(60);
+        WaitScreenFade();
+        OpenTextbox(9); // "ENEMY POSEFIRE1"
+        ExitThread();
+    }
+}

@@ -1,0 +1,576 @@
+// Parasite Eve 1 Scene Script (room_426)
+room_script room_426 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(80, 100, 10);
+        SceneCmd(2601, 96, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_0902);
+        SetEventHandler(EVENT_TOUCH, @label_08FE);
+        LockPlayerMoveMask(2);
+        SetEntityVec3(VEC3_POS, 970.0fp, 0.0fp, 5739.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2528, 0);
+        Wait(1);
+        Wait(30);
+        PlayFieldSfx(2, 0, 19);
+        OpenTextbox(42); // "Daniel. ,,,?! / WHAT THE HELL IS THAT?!"
+        WaitTextbox(42);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        OpenTextbox(43); // "{Aya}. ,,,You've got to / be kidding,,,"
+        SetAnim(29);
+        SetAnimFrame(0);
+        PlayAnimToFrame(79);
+        WaitAnimEnd();
+        WaitTextbox(43);
+        PlayFieldSfx(3, 0, 20);
+        OpenTextbox(44); // "Maeda. ,,,THAT is the Ultimate Being, / We,,, didn't make it in time,,,"
+        WaitTextbox(44);
+        while (room[20] == 0) {
+            Wait(1);
+        }
+        room[20] = room[20] - 1;
+        PlayFieldSfx(2, 0, 21);
+        OpenTextbox(45); // "Daniel. ,,,What're these explosions?!"
+        WaitTextbox(45);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        PlayFieldSfx(3, 0, 22);
+        OpenTextbox(46); // "Maeda. The mitochondrial energy must / be out of control,,, | ,,,to the point where it ..."
+        WaitTextbox(46);
+        while (room[20] == 0) {
+            Wait(1);
+        }
+        room[20] = room[20] - 1;
+        PlayFieldSfx(4, 0, 1);
+        Wait(60);
+        PlayFieldSfx(2, 0, 3);
+        PlayFieldSfx(3, 0, 3);
+        SetAnim(22);
+        CameraSnapToActor(4, 0, 45);
+        SetAnim(21);
+        while (room[21] == 0) {
+            Wait(1);
+        }
+        room[21] = room[21] - 1;
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        while (room[20] == 0) {
+            Wait(1);
+        }
+        room[20] = room[20] - 1;
+        PlayFieldSfx(4, 0, 2);
+        OpenTextbox(47); // "Pilot. We will escape by helicopter, / Please follow me!"
+        WaitTextbox(47);
+        while (room[21] == 0) {
+            Wait(1);
+        }
+        room[21] = room[21] - 1;
+        PlayFieldSfx(4, 0, 4);
+        PlayFieldSfx(2, 0, 5);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        PlayFieldSfx(3, 0, 6);
+        OpenTextbox(48); // "Daniel. Guess all we can do for now / is RUN!!!"
+        WaitTextbox(48);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        while (room[20] == 0) {
+            Wait(1);
+        }
+        room[20] = room[20] - 1;
+        PlayFieldSfx(2, 0, 7);
+        PlayFieldSfx(3, 0, 7);
+        SetAnim(35);
+        SetAnimFrame(0);
+        PlayAnimToFrame(41);
+        Wait(20);
+        StartScreenFade(15);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        while (room[20] == 0) {
+            Wait(1);
+        }
+        room[20] = room[20] - 1;
+        WaitScreenFade();
+        SetEntityVec3(VEC3_ROT, 0, 2003, 0);
+        LoadGeomState(1);
+        SetFadeColor(0xF);
+        PlayFieldSfx(2, 0, 8);
+        PlayFieldSfx(3, 0, 8);
+        WaitScreenFade();
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        OpenTextbox(8); // "Daniel. {Aya}: c'mon!"
+        WaitTextbox(8);
+        while (room[20] == 0) {
+            Wait(1);
+        }
+        room[20] = room[20] - 1;
+        PlayFieldSfx(3, 0, 10);
+        OpenTextbox(9); // "Maeda. {Aya},,,! What's / wrong,,,?"
+        WaitTextbox(9);
+        while (room[20] == 0) {
+            Wait(1);
+        }
+        room[20] = room[20] - 1;
+        OpenTextbox(49); // "{Aya}. I,,, I have to take care / of this,"
+        SetAnim(35);
+        SetAnimFrame(41);
+        PlayAnimToFrame(59);
+        WaitAnimEnd();
+        WaitTextbox(49);
+        PlayFieldSfx(2, 0, 9);
+        OpenTextbox(50); // "Daniel. {Aya}!!: NO!!!"
+        WaitTextbox(50);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        StartScreenFade(15);
+        WaitScreenFade();
+        LoadGeomState(0);
+        SetFadeColor(0xF);
+        WaitScreenFade();
+        OpenTextbox(51); // "{Aya}. Don't worry about me, / I'll be back!"
+        SetAnim(30);
+        SetAnimFrame(0);
+        PlayAnimToFrame(59);
+        WaitAnimEnd();
+        WaitTextbox(51);
+        OpenTextbox(52); // "Pilot. Please hurry!"
+        WaitTextbox(52);
+        PlayFieldSfx(2, 0, 11);
+        OpenTextbox(53); // "Daniel. Shut up: man!"
+        WaitTextbox(53);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        PlayFieldSfx(3, 0, 12);
+        OpenTextbox(54); // "Maeda. {Aya}: please take,,,"
+        PlayFieldSfx(2, 0, 13);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        while (room[20] == 0) {
+            Wait(1);
+        }
+        room[20] = room[20] - 1;
+        PlayFieldSfx(3, 0, 14);
+        CloseTextbox(54);
+        OpenTextbox(55); // "Daniel. Cut it out with the voodoo / stuff already: huh?! We can't be / wastin' time!!"
+        WaitTextbox(55);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        while (room[20] == 0) {
+            Wait(1);
+        }
+        room[20] = room[20] - 1;
+        StartScreenFade(15);
+        WaitScreenFade();
+        PlayFieldSfx(2, 0, 16);
+        PlayFieldSfx(3, 0, 16);
+        LoadGeomState(1);
+        SetFadeColor(0xF);
+        WaitScreenFade();
+        PlayFieldSfx(2, 0, 17);
+        PlayFieldSfx(3, 0, 18);
+        OpenTextbox(56); // "Maeda. No: Daniel: please! This is / different! It's not the voodoo / stuff,,,"
+        WaitTextbox(56);
+        OpenTextbox(57); // "Pilot. HURRY: PLEASE!"
+        WaitTextbox(57);
+        OpenTextbox(58); // "{Aya}. You two should go! NOW!!"
+        SetAnim(30);
+        SetAnimFrame(0);
+        PlayAnimToFrame(59);
+        WaitAnimEnd();
+        WaitTextbox(58);
+        OpenTextbox(59); // "Daniel. {Aya}! You're comin' / back no matter what: you hear?!"
+        WaitTextbox(59);
+        room[22] = 1;
+        Wait(30);
+        AkaoCmd(0xCE, 21, 60, 0, 0, room[17]);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = room[19] - 1;
+        while (room[20] == 0) {
+            Wait(1);
+        }
+        room[20] = room[20] - 1;
+        StartScreenFade(60);
+        WaitScreenFade();
+        PlayFieldSfx(2, 0, 100);
+        PlayFieldSfx(3, 0, 100);
+        SetEntityVec3(VEC3_POS, 1474.0fp, 138.0fp, 6030.0fp);
+        LoadGeomState(2);
+        SetAnim(34);
+        SetAnimFrame(0);
+        PlayAnimToFrame(0);
+        SetFadeColor(0x1E);
+        AkaoCmd(0xC9, 21, 0, 0, 0, room[17]);
+        AkaoCmd(0xC8, 59, 0, 0, 0, room[17]);
+        AkaoCmd(0xCD, 59, 0, 0, 0, room[17]);
+        AkaoCmd(0xCE, 59, 150, 32, 0, room[17]);
+        WaitScreenFade();
+        Wait(30);
+        SetAnim(34);
+        SetAnimFrame(0);
+        PlayAnimToFrame(104);
+        WaitAnimEnd();
+        global[AREA] = 730;
+        AkaoCmd(0xCE, 59, 40, 0, 0, room[17]);
+        StartScreenFade(30);
+        WaitScreenFade();
+        PlayFieldSfx(1, 0, 200);
+        ExitThread();
+    @label_08FE:
+        ExitThread();
+    @label_0902:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 100) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1016, 1032, 0, 0, room[17]);
+        SetEventHandler(EVENT_INTERACT, @label_0090);
+        SceneCmd(2700, 160, 180, 255, 0, 0, 0, room[17]);
+        LockPlayerInput();
+        AkaoCmd(0xC8, 21, 0, 0, 0, room[17]);
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        PauseSceneEvents();
+        SetFadeColor(0x1E);
+        ExitThread();
+    @label_0090:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 200) {
+            StartScreenFade(15);
+            WaitScreenFade();
+            PlayFieldSfx(0, 0, 100);
+            AkaoCmd(0xC9, 59, 0, 0, 0, room[17]);
+            AkaoCmd(0xC8, 43, 0, 0, 0, room[17]);
+            AkaoCmd(0xCF, 43, 45, 0, 127, room[17]);
+            ReloadSceneData(40);
+            Noop3();
+            Noop1(16383);
+            WaitDrawIdle();
+            ChangeRoom(0xA8082448);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetHitCylinder(105, 80, 25);
+        SceneCmd(2601, 96, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_009C);
+        SetEventHandler(EVENT_TOUCH, @label_0098);
+        AkaoCmd(0x196, 1, 0, 1016, 0, room[17]);
+        AkaoCmd(0x196, 1, 20, 1017, 0, room[17]);
+        AkaoCmd(0x196, 2, 0, 1016, 0, room[17]);
+        AkaoCmd(0x196, 2, 10, 1017, 0, room[17]);
+        EnableActorCollision();
+        DisableActorRendering();
+        SetEntityVec3(VEC3_POS, 534.0fp, 0.0fp, 6020.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2691, 0);
+        Wait(1);
+        ExitThread();
+    @label_0098:
+        ExitThread();
+    @label_009C:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 19) {
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(69);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[4] == 21) {
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(59);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[4] == 3) {
+            SetAnim(1);
+            CameraSnapToActor(4, 0, 45);
+            SetAnim(0);
+            room[19] = 1;
+        }
+        if (local[4] == 5) {
+            SetAnim(1);
+            CameraSnapToActor(3, 0, 45);
+            room[19] = 1;
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(69);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[4] == 7) {
+            SetMoveFactor(0x140000);
+            SetAnim(2);
+            TurnTowardPoint(660.0fp, 6600.0fp, 90);
+            MoveTowardPoint(660.0fp, 6600.0fp, 90);
+            SetMoveFactor(0x50000);
+            room[19] = 1;
+        }
+        if (local[4] == 8) {
+            SetAnim(2);
+            CameraSnapToActor(0, 0, 120);
+            SetAnim(0);
+            room[19] = 1;
+        }
+        if (local[4] == 9) {
+            SetAnimStep(0x18000);
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(59);
+            WaitAnimEnd();
+            SetAnimStep(0x10000);
+            room[19] = 1;
+        }
+        if (local[4] == 11) {
+            SetAnimStep(0xFFFF0000);
+            SetAnim(6);
+            SetAnimFrame(79);
+            PlayAnimToFrame(54);
+            WaitAnimEnd();
+            SetAnimStep(0x10000);
+            SetAnim(6);
+            SetAnimFrame(54);
+            PlayAnimToFrame(79);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[4] == 13) {
+            SetMoveFactor(0xA0000);
+            SetAnim(1);
+            TurnTowardPoint(774.0fp, 6704.0fp, 90);
+            MoveTowardPoint(774.0fp, 6704.0fp, 90);
+            TurnToAngleStep(3654, 45);
+            room[19] = 1;
+            SetAnim(11);
+            SetAnimFrame(0);
+            PlayAnimToFrame(29);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[4] == 16) {
+            SetEntityVec3(VEC3_POS, 704.0fp, 138.0fp, 6602.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2150, 0);
+            SetAnim(12);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+        }
+        if (local[4] == 17) {
+            SetAnim(12);
+            SetAnimFrame(0);
+            PlayAnimToFrame(29);
+            WaitAnimEnd();
+            while (room[22] == 0) {
+                SetAnim(13);
+                SetAnimFrame(0);
+                PlayAnimToFrame(119);
+                WaitAnimEnd();
+            }
+            SetAnim(14);
+            SetAnimFrame(0);
+            PlayAnimToFrame(29);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetHitCylinder(95, 100, 10);
+        SceneCmd(2601, 96, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_009C);
+        SetEventHandler(EVENT_TOUCH, @label_0098);
+        AkaoCmd(0x196, 1, 0, 1016, 0, room[17]);
+        AkaoCmd(0x196, 1, 15, 1017, 0, room[17]);
+        AkaoCmd(0x196, 2, 0, 1016, 0, room[17]);
+        AkaoCmd(0x196, 2, 10, 1017, 0, room[17]);
+        EnableActorCollision();
+        DisableActorRendering();
+        SetEntityVec3(VEC3_POS, 1151.0fp, 0.0fp, 6237.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2628, 0);
+        Wait(1);
+        ExitThread();
+    @label_0098:
+        ExitThread();
+    @label_009C:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 20) {
+            SetAnim(13);
+            SetAnimFrame(0);
+            PlayAnimToFrame(64);
+            WaitAnimEnd();
+            room[20] = 1;
+        }
+        if (local[4] == 22) {
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(79);
+            WaitAnimEnd();
+            room[20] = 1;
+        }
+        if (local[4] == 3) {
+            SetAnim(1);
+            CameraSnapToActor(4, 0, 45);
+            SetAnim(0);
+            room[20] = 1;
+        }
+        if (local[4] == 6) {
+            SetAnimStep(0xFFFF0000);
+            SetAnim(6);
+            SetAnimFrame(79);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+            SetAnimStep(0x10000);
+            room[20] = 1;
+        }
+        if (local[4] == 7) {
+            SetMoveFactor(0x140000);
+            SetAnimStep(0x20000);
+            SetAnim(6);
+            SetAnimFrame(70);
+            PlayAnimToFrame(79);
+            WaitAnimEnd();
+            SetAnimStep(0x10000);
+            SetAnim(2);
+            TurnTowardPoint(1064.0fp, 6649.0fp, 90);
+            MoveTowardPoint(1064.0fp, 6649.0fp, 90);
+            SetMoveFactor(0x50000);
+            room[20] = 1;
+        }
+        if (local[4] == 8) {
+            SetAnim(2);
+            CameraSnapToActor(0, 0, 120);
+            SetAnim(0);
+            room[20] = 1;
+        }
+        if (local[4] == 10) {
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(79);
+            WaitAnimEnd();
+            room[20] = 1;
+        }
+        if (local[4] == 12) {
+            SetMoveFactor(0x78000);
+            SetAnim(1);
+            TurnTowardPoint(1019.0fp, 6450.0fp, 45);
+            MoveTowardPoint(1019.0fp, 6450.0fp, 45);
+            TurnToAngleStep(91, 45);
+            SetAnim(0);
+            room[20] = 1;
+        }
+        if (local[4] == 14) {
+            SetAnim(10);
+            SetAnimFrame(0);
+            PlayAnimToFrame(20);
+            WaitAnimEnd();
+            SetAnim(11);
+            SetAnimFrame(0);
+            PlayAnimToFrame(9);
+            WaitAnimEnd();
+            room[20] = 1;
+        }
+        if (local[4] == 16) {
+            SetEntityVec3(VEC3_POS, 893.0fp, 138.0fp, 6557.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2171, 0);
+            SetAnim(12);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+        }
+        if (local[4] == 18) {
+            SetAnim(12);
+            SetAnimFrame(90);
+            PlayAnimToFrame(119);
+            WaitAnimEnd();
+            while (room[22] == 0) {
+                SetAnim(12);
+                SetAnimFrame(0);
+                PlayAnimToFrame(119);
+                WaitAnimEnd();
+            }
+            SetAnim(12);
+            SetAnimFrame(0);
+            PlayAnimToFrame(29);
+            WaitAnimEnd();
+            room[20] = 1;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_4 {
+        SetHitCylinder(85, 85, 10);
+        SceneCmd(2601, 96, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_007C);
+        SetEventHandler(EVENT_TOUCH, @label_0078);
+        AkaoCmd(0x196, 2, 0, 1016, 0, room[17]);
+        AkaoCmd(0x196, 2, 10, 1017, 0, room[17]);
+        EnableActorCollision();
+        DisableActorRendering();
+        SetEntityVec3(VEC3_POS, -583.0fp, 0.0fp, 5645.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2171, 0);
+        Wait(1);
+        ExitThread();
+    @label_0078:
+        ExitThread();
+    @label_007C:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 1) {
+            SetMoveFactor(0x140000);
+            SetAnim(2);
+            TurnTowardPoint(596.0fp, 6488.0fp, 90);
+            MoveTowardPoint(596.0fp, 6488.0fp, 90);
+            CameraSnapToActor(0, 0, 90);
+            SetAnim(0);
+            room[21] = 1;
+        }
+        if (local[4] == 2) {
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(69);
+            WaitAnimEnd();
+            room[21] = 1;
+        }
+        if (local[4] == 4) {
+            SetAnim(2);
+            TurnTowardPoint(808.0fp, 8256.0fp, 90);
+            MoveTowardPoint(808.0fp, 8256.0fp, 90);
+            DestroySelf();
+        }
+        ExitThread();
+    }
+}

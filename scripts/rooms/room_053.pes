@@ -1,0 +1,136 @@
+// Parasite Eve 1 Scene Script (room_053)
+room_script room_053 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(125, 55, 20);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_0098);
+        SetEventHandler(EVENT_TOUCH, @label_0094);
+        LockPlayerMoveMask(2);
+        if (global[ROOM] == 53) {
+            SetEntityVec3(VEC3_POS, 15.0fp, 0.0fp, -1453.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+            goto @label_0090;
+        } else {
+            SetEntityVec3(VEC3_POS, 15.0fp, 0.0fp, -345.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            goto @label_0090;
+        }
+        Wait(1);
+    @label_0090:
+        ExitThread();
+    @label_0094:
+        ExitThread();
+    @label_0098:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 0) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            StartScreenFade(30);
+            EnableActorCollision();
+            SetAnim(22);
+            TurnTowardPoint(54.0fp, -1809.0fp, 180);
+            MoveTowardPoint(54.0fp, -1809.0fp, 180);
+            global[ROOM] = 54;
+            WaitScreenFade();
+            ChangeRoom(0xA80051C8);
+        }
+        if (local[4] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            goto @label_0090;
+        }
+        if (local[4] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            goto @label_0090;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1002, 1002, 0, 0, room[18]);
+        SetEventHandler(EVENT_INTERACT, @label_009A);
+        LockPlayerInput();
+        SetMeshFadeLevel(88);
+        AkaoCmd(0xC8, 8, 0, 0, 0, local[5]);
+        ClearScreenFadeFlag40();
+        SetCameraBaseAngle(0, 3856);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 1);
+        SetGeomEntryField8(0, 0);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetFadeColor(0x1E);
+        PlayFieldSfx(0, 0, 255);
+    @label_0096:
+        ExitThread();
+    @label_009A:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 252) {
+            PlayFieldSfx(2, 0, 251);
+            PlayFieldSfx(3, 0, 251);
+            goto @label_0096;
+        }
+        if (local[3] == 253) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+            goto @label_0096;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetEventHandler(EVENT_INTERACT, @label_007E);
+        Wait(1);
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-141.0fp, -1590.0fp, -141.0fp, -1803.0fp, 219.0fp, -1803.0fp, 219.0fp, -1590.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                PlayFieldSfx(0, 0, 0);
+                PlayFieldSfx(3, 0, 1);
+                ExitThread();
+            }
+            Wait(1);
+        }
+        ExitThread();
+    @label_007E:
+        GetThreadTarget14(local[7]);
+        if (local[7] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetEventHandler(EVENT_INTERACT, @label_0030);
+        Wait(1);
+        Wait(60);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 0);
+        SetGeomEntryField8(0, 0);
+        ExitThread();
+    @label_0030:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 1) {
+            SetGeomFlagSlot(0, 1);
+            SetGeomEntryLimit(0, 1);
+            SetGeomEntryField8(0, 0);
+        }
+        if (local[3] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+}

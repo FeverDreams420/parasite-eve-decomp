@@ -1,0 +1,365 @@
+// Parasite Eve 1 Scene Script (room_340)
+room_script room_340 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(105, 120, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        Wait(1);
+        ScaleShadowRadius(0xB333);
+        SetEventHandler(EVENT_INTERACT, @label_00F4);
+        SetEventHandler(EVENT_TOUCH, @label_00F0);
+        if (global[ROOM] == 204 || global[ROOM] == 241) {
+            SetEntityVec3(VEC3_POS, 1280.0fp, 0.0fp, 0.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+        } else if (global[ROOM] == 206 || global[ROOM] == 252) {
+            SetEntityVec3(VEC3_POS, -1280.0fp, 0.0fp, 0.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+        } else {
+            SetEntityVec3(VEC3_POS, 704.0fp, 0.0fp, -487.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        }
+        Wait(1);
+        ExitThread();
+    @label_00F0:
+        ExitThread();
+    @label_00F4:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 254) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[4] == 255) {
+            ResumeSceneEvents();
+            SetAnim(21);
+            UnlockPlayerInput();
+        }
+        if (local[4] == 3) {
+            SetAnim(31);
+            SetAnimFrame(0);
+            PlayAnimToFrame(80);
+            WaitAnimEnd();
+            SetAnim(21);
+            CloseTextbox(23);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        ClearScreenFadeFlag40();
+        PauseSceneEvents();
+        LockPlayerInput();
+        AkaoCmd(0x193, 1036, 1034, 0, 0, room[19]);
+        SetCameraBaseAngle(0, 4032);
+        SetMeshFadeLevel(112);
+        SpawnActor(0, 0, 704.0fp, 0.0fp, -487.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetEventHandler(EVENT_INTERACT, @label_012E);
+        Wait(1);
+        room[22] = 1;
+        if (global[34] < 63) {
+            SetFadeColor(0x3C);
+            WaitScreenFade();
+            Wait(20);
+            PlayFieldSfx(0, 0, 3);
+            room[20] = 1;
+            room[21] = 185;
+            PlayFieldSfx(2, 0, 53);
+            SetFogNearFar(170, 215, 16);
+            OpenTextbox(23); // "<FB:07><F6>"
+            WaitTextbox(23);
+            WaitDiscIdle();
+            while (room[20]) {
+                Wait(1);
+            }
+            ResetCameraToPlayer();
+            WaitDiscIdle();
+            global[34] = 63;
+        } else if (global[34] < 64) {
+            SetFadeColor(0x3C);
+            WaitScreenFade();
+            Wait(15);
+        } else {
+            SetFadeColor(0x1E);
+            WaitScreenFade();
+        }
+        ResumeSceneEvents();
+        UnlockPlayerInput();
+        ExitThread();
+    @label_012E:
+        GetThreadTarget14(local[3]);
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetEventHandler(EVENT_INTERACT, @label_0B44);
+        Wait(1);
+        local[7] = 0;
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-855.0fp, 300.0fp, -450.0fp, 96.0fp, -390.0fp, -1053.0fp, -1494.0fp, -645.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-1419.0fp, 525.0fp, -1026.0fp, 405.0fp, -780.0fp, 579.0fp, -831.0fp, 996.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(303.0fp, 440.0fp, 796.0fp, 266.0fp, 377.0fp, -203.0fp, 8.0fp, 41.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(857.0fp, -53.0fp, 1272.0fp, -600.0fp, 801.0fp, -966.0fp, 375.0fp, -876.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(1380.0fp, -550.0fp, 1380.0fp, 550.0fp, 1580.0fp, 550.0fp, 1580.0fp, -550.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1 && local[7] == 0) {
+                local[7] = 1;
+                PauseSceneEvents();
+                LockPlayerInput();
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[42] = global[42] & -2;
+                global[ROOM] = 341;
+                ChangeRoom(0xA8040248);
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-1380.0fp, -550.0fp, -1380.0fp, 550.0fp, -1580.0fp, 550.0fp, -1580.0fp, -550.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1 && local[7] == 0) {
+                local[7] = 1;
+                PauseSceneEvents();
+                LockPlayerInput();
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[42] = global[42] & -2;
+                global[ROOM] = 341;
+                ChangeRoom(0xA8040348);
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(842.0fp, 691.0fp, 842.0fp, 516.0fp, 931.0fp, 516.0fp, 931.0fp, 691.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1 && local[7] == 0) {
+                GetActorPositionByType(5, 0, 0, local[0], local[1], local[2], local[3]);
+                if (local[1] >= 1536 && local[1] <= 2560) {
+                    CheckPadInput(PAD_PRESSED, 0x100, local[5]);
+                    if (local[5] != 0) {
+                        local[7] = 1;
+                        PlayFieldSfx(0, 0, 254);
+                        AkaoCmd(0x12C, 1117, 0, 128, 127, room[19]);
+                        AkaoCmd(0x12E, room[19], 0, 64, 0, local[9]);
+                        Wait(8);
+                        AkaoCmd(0x12C, 1117, 0, 128, 127, room[19]);
+                        AkaoCmd(0x12E, room[19], 0, 64, 0, local[9]);
+                        Wait(8);
+                        AkaoCmd(0x12C, 1117, 0, 128, 127, room[19]);
+                        AkaoCmd(0x12E, room[19], 0, 64, 0, local[9]);
+                        Wait(8);
+                        AkaoCmd(0x12C, 1116, 0, 128, 127, room[19]);
+                        AkaoCmd(0x12E, room[19], 0, 64, 0, local[9]);
+                        Wait(8);
+                        SetTextboxRect(8, 110, 260, 106);
+                        OpenStyledTextbox(191); // "What was the nutritional source / of the first organism that lived / 3,9 billion years ..."
+                        WaitTextbox(191);
+                        GetChoiceResult(local[4]);
+                        case_if (local[4] == 0) {
+                            AkaoCmd(0x12C, 1117, 0, 128, 127, room[19]);
+                            if (!(global[41] & 32)) {
+                                global[41] = global[41] | 32;
+                            } else if (!(global[41] & 64)) {
+                                global[41] = global[41] | 64;
+                            } else {
+                                global[41] = global[41] | 128;
+                            }
+                            goto @label_0B22;
+                            goto @label_04BA;
+                        }
+                        case_if (local[4] == 1) {
+                        @label_04BA:
+                            AkaoCmd(0x12C, 1116, 0, 128, 127, room[19]);
+                            if (!(global[41] & 16)) {
+                                if (!(global[41] & 32)) {
+                                    Random(local[7], 1, 16);
+                                    if (local[7] == 1) {
+                                        ShowReceivedItemPopup(22);
+                                        GiveItem(22, local[7]);
+                                        if (local[7] != 0) {
+                                            local[8] = 1;
+                                            while (local[8]) {
+                                                RunSubSceneWithTimeout(22, local[7]);
+                                                Wait(1);
+                                                if (local[7] != -1) {
+                                                    local[8] = 0;
+                                                }
+                                                Wait(1);
+                                            }
+                                        }
+                                    } else if (local[7] == 2) {
+                                        ShowReceivedItemPopup(18);
+                                        GiveItem(18, local[7]);
+                                        if (local[7] != 0) {
+                                            local[8] = 1;
+                                            while (local[8]) {
+                                                RunSubSceneWithTimeout(18, local[7]);
+                                                Wait(1);
+                                                if (local[7] != -1) {
+                                                    local[8] = 0;
+                                                }
+                                                Wait(1);
+                                            }
+                                        }
+                                    } else if (local[7] == 3 || local[7] == 4) {
+                                        ShowReceivedItemPopup(9);
+                                        GiveItem(9, local[7]);
+                                        if (local[7] != 0) {
+                                            local[8] = 1;
+                                            while (local[8]) {
+                                                RunSubSceneWithTimeout(9, local[7]);
+                                                Wait(1);
+                                                if (local[7] != -1) {
+                                                    local[8] = 0;
+                                                }
+                                                Wait(1);
+                                            }
+                                        }
+                                    } else if (5 <= local[7] && local[7] <= 10) {
+                                        ShowReceivedItemPopup(3);
+                                        GiveItem(3, local[7]);
+                                        if (local[7] != 0) {
+                                            local[8] = 1;
+                                            while (local[8]) {
+                                                RunSubSceneWithTimeout(3, local[7]);
+                                                Wait(1);
+                                                if (local[7] != -1) {
+                                                    local[8] = 0;
+                                                }
+                                                Wait(1);
+                                            }
+                                        }
+                                    } else {
+                                        ShowReceivedItemPopup(8);
+                                        GiveItem(8, local[7]);
+                                        if (local[7] != 0) {
+                                            local[8] = 1;
+                                            while (local[8]) {
+                                                RunSubSceneWithTimeout(8, local[7]);
+                                                Wait(1);
+                                                if (local[7] != -1) {
+                                                    local[8] = 0;
+                                                }
+                                                Wait(1);
+                                            }
+                                        }
+                                    }
+                                    global[41] = global[41] | 16;
+                                    global[41] = global[41] | 32;
+                                } else if (!(global[41] & 64)) {
+                                    Random(local[7], 1, 8);
+                                    if (local[7] == 1) {
+                                        ShowReceivedItemPopup(8);
+                                        GiveItem(8, local[7]);
+                                        if (local[7] != 0) {
+                                            local[8] = 1;
+                                            while (local[8]) {
+                                                RunSubSceneWithTimeout(8, local[7]);
+                                                Wait(1);
+                                                if (local[7] != -1) {
+                                                    local[8] = 0;
+                                                }
+                                                Wait(1);
+                                            }
+                                        }
+                                    } else if (local[7] == 2) {
+                                        ShowReceivedItemPopup(3);
+                                        GiveItem(3, local[7]);
+                                        if (local[7] != 0) {
+                                            local[8] = 1;
+                                            while (local[8]) {
+                                                RunSubSceneWithTimeout(3, local[7]);
+                                                Wait(1);
+                                                if (local[7] != -1) {
+                                                    local[8] = 0;
+                                                }
+                                                Wait(1);
+                                            }
+                                        }
+                                    } else if (3 <= local[7] && local[7] <= 5) {
+                                        ShowReceivedItemPopup(2);
+                                        GiveItem(2, local[7]);
+                                        if (local[7] != 0) {
+                                            local[8] = 1;
+                                            while (local[8]) {
+                                                RunSubSceneWithTimeout(2, local[7]);
+                                                Wait(1);
+                                                if (local[7] != -1) {
+                                                    local[8] = 0;
+                                                }
+                                                Wait(1);
+                                            }
+                                        }
+                                    } else {
+                                        ShowReceivedItemPopup(7);
+                                        GiveItem(7, local[7]);
+                                        if (local[7] != 0) {
+                                            local[8] = 1;
+                                            while (local[8]) {
+                                                RunSubSceneWithTimeout(7, local[7]);
+                                                Wait(1);
+                                                if (local[7] != -1) {
+                                                    local[8] = 0;
+                                                }
+                                                Wait(1);
+                                            }
+                                        }
+                                    }
+                                    global[41] = global[41] | 16;
+                                    global[41] = global[41] | 64;
+                                } else {
+                                    global[41] = global[41] | 16;
+                                    global[41] = global[41] | 128;
+                                }
+                            }
+                            goto @label_0B22;
+                            goto @label_0A7E;
+                        }
+                        case_if (local[4] == 2) {
+                        @label_0A7E:
+                            AkaoCmd(0x12C, 1117, 0, 128, 127, room[19]);
+                            if (!(global[41] & 32)) {
+                                global[41] = global[41] | 32;
+                            } else if (!(global[41] & 64)) {
+                                global[41] = global[41] | 64;
+                            } else {
+                                global[41] = global[41] | 128;
+                            }
+                            goto @label_0B22;
+                            goto @label_0B22;
+                        }
+                    @label_0B22:
+                        local[7] = 0;
+                        PlayFieldSfx(0, 0, 255);
+                    }
+                }
+            }
+            Wait(1);
+        }
+        ExitThread();
+    @label_0B44:
+        GetThreadTarget14(local[6]);
+        if (local[6] == 53) {
+            OpenTextbox(room[21]);
+            WaitTextbox(room[21]);
+            room[20] = 0;
+        }
+        if (local[6] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+}

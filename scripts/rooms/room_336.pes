@@ -1,0 +1,59 @@
+// Parasite Eve 1 Scene Script (room_336)
+room_script room_336 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 @no_terminator {
+        SetEventHandler(EVENT_INTERACT, @label_009A);
+        if (global[ROOM] == 100) {
+            SetEntityVec3(VEC3_POS, 13.0fp, 0.0fp, 1414.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            goto @label_0096;
+        } else if (global[ROOM] == 98) {
+            SetEntityVec3(VEC3_POS, -408.0fp, 0.0fp, 1061.0fp);
+            SetEntityVec3(VEC3_ROT, 0, -1024, 0);
+            goto @label_0096;
+        } else {
+            SetEntityVec3(VEC3_POS, 63.0fp, 0.0fp, 1229.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            goto @label_0096;
+        }
+    @label_0096:
+        ExitThread();
+    @label_009A:
+        GetThreadTarget14(local[3]);
+        ExitThread();
+    }
+
+    actor_script actor_1 @no_terminator {
+        ClearScreenFadeFlag40();
+        SetCameraBaseAngle(32, 3728);
+        SetGeomFlagSlot(1, 1);
+        SetGeomEntryLimit(1, 0);
+        SetGeomEntryField8(1, 0);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetFadeColor(0x1E);
+        PlayFieldSfx(0, 0, 255);
+        ExitThread();
+    }
+
+    actor_script actor_2 @no_terminator {
+        Wait(1);
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-187.0fp, 1759.0fp, -187.0fp, 1447.0fp, 203.0fp, 1447.0fp, 203.0fp, 1759.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                PlayFieldSfx(0, 0, 1);
+                DestroySelf();
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-555.0fp, 1188.0fp, -555.0fp, 949.0fp, -756.0fp, 949.0fp, -756.0fp, 1188.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1) {
+                PlayFieldSfx(0, 0, 2);
+                DestroySelf();
+            }
+            Wait(1);
+        }
+    }
+}

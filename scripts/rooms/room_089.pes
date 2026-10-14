@@ -1,0 +1,419 @@
+// Parasite Eve 1 Scene Script (room_089)
+room_script room_089 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetEventHandler(EVENT_INTERACT, @label_003E);
+        SetEventHandler(EVENT_TOUCH, @label_003A);
+        ScaleShadowRadius(0x9999);
+        if (global[AREA] < 352) {
+            LockPlayerMoveMask(2);
+        }
+        Wait(1);
+    @label_0036:
+        ExitThread();
+    @label_003A:
+        ExitThread();
+    @label_003E:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            goto @label_0036;
+        }
+        if (local[3] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            goto @label_0036;
+        }
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1012, 1022, 0, 0, room[17]);
+        LockPlayerInput();
+        PauseSceneEvents();
+        ClearScreenFadeFlag40();
+        SceneCmd(3100, 0, 0, 0, 0, 0, 0, room[17]);
+        SetMeshFadeLevel(112);
+        SetCameraBaseAngle(0, 0);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(5, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        Wait(1);
+        SpawnThread(@label_008C);
+        ExitThread();
+    @label_008C:
+        GetActorPositionByType(0, 2, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(2068.0fp, 2863.0fp, 2068.0fp, -858.0fp, 3124.0fp, -858.0fp, 3124.0fp, 2863.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            AkaoCmd(0x195, 0, 0, 0, 0, local[3]);
+        }
+        Wait(1);
+        goto @label_008C;
+    }
+
+    actor_script actor_2 {
+        SetHitCylinder(100, 120, 10);
+        SetEventHandler(EVENT_INTERACT, @label_03CA);
+        EnableActorCollision();
+        DisableActorRendering();
+        AkaoCmd(0x196, 1, 0, 1012, 0, room[17]);
+        AkaoCmd(0x196, 1, 18, 1013, 0, room[17]);
+        AkaoCmd(0x196, 14, 0, 1012, 1022, room[17]);
+        AkaoCmd(0x196, 14, 10, 1013, 1023, room[17]);
+        SetEntityVec3(VEC3_POS, 406.0fp, 0.0fp, -515.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 1408, 0);
+        Wait(1);
+        SetFogNearFar(166, 128, 1);
+        Wait(5);
+        SetAnim(13);
+        SetAnimFrame(0);
+        PlayAnimToFrame(0);
+        WaitAnimEnd();
+        SetFadeColor(0x1E);
+        SetFogNearFar(314, 128, 90);
+        PlayFieldSfx(3, 0, 15);
+        OpenTextbox(8); // "Cop A. How many times do I gotta / tell ya!! We've blocked this off! | You won't even f..."
+        Wait(90);
+        WaitTextbox(8);
+        SetAnim(13);
+        SetAnimFrame(0);
+        PlayAnimToFrame(30);
+        WaitAnimEnd();
+        SetAnim(4);
+        SetAnimFrame(0);
+        PlayAnimToFrame(70);
+        OpenTextbox(9); // "Japanese man. I told you: I've / already contacted the police about / this matter!"
+        WaitTextbox(9);
+        PlayFieldSfx(3, 0, 2);
+        OpenTextbox(10); // "Cop A. What?!"
+        WaitTextbox(10);
+        SetAnim(8);
+        SetAnimFrame(0);
+        PlayAnimToFrame(90);
+        OpenTextbox(11); // "Japanese man. ,,,Er,,, uh,,, I'm not / getting anywhere with my English,,,"
+        WaitTextbox(11);
+        PlayFieldSfx(5, 0, 14);
+        while (room[18] == 0) {
+            Wait(1);
+        }
+        room[18] = 0;
+        OpenTextbox(12); // "Cop B. Hey: you Chinese?"
+        WaitTextbox(12);
+        SetAnim(3);
+        SetAnimFrame(0);
+        PlayAnimToFrame(80);
+        OpenTextbox(13); // "Japanese man. N: no! I'm Japanese!"
+        WaitTextbox(13);
+        PlayFieldSfx(5, 0, 9);
+        OpenTextbox(14); // "Cop B. Nanda: nihonjin desuka?"
+        WaitTextbox(14);
+        SetAnim(5);
+        SetAnimFrame(0);
+        PlayAnimToFrame(80);
+        OpenTextbox(15); // "Japanese man. OH: YES! Can you speak / Japanese?"
+        WaitTextbox(15);
+        PlayFieldSfx(5, 0, 8);
+        OpenTextbox(16); // "Cop B. Chotto dake ne, Daredesuka?"
+        WaitTextbox(16);
+        SetAnim(4);
+        SetAnimFrame(0);
+        PlayAnimToFrame(70);
+        OpenTextbox(17); // "Japanese man. I am Kunihiko Maeda, / Er,,, Japanese,,, er,,,, aaa,,,"
+        WaitTextbox(17);
+        SetAnim(10);
+        SetAnimFrame(0);
+        PlayAnimToFrame(80);
+        WaitAnimEnd();
+        SetAnim(11);
+        PlayFieldSfx(3, 0, 3);
+        OpenTextbox(18); // "Cop A. Hey: if ya can't speak the / language: go back to your country! / Heh,,, he,,,!!"
+        WaitTextbox(18);
+        PlayFieldSfx(3, 0, 4);
+        OpenTextbox(19); // "Cop A. U! Argh!"
+        WaitTextbox(19);
+        PlayFieldSfx(4, 0, 12);
+        Wait(30);
+        PlayFieldSfx(4, 0, 1);
+        OpenTextbox(20); // "Cop C. Calm down, Take it easy: man, / It's bad for your heart,"
+        WaitTextbox(20);
+        PlayFieldSfx(5, 0, 13);
+        SetAnim(12);
+        SetAnimFrame(0);
+        PlayAnimToFrame(50);
+        OpenTextbox(21); // "Cop A. Uu! Argh! I'm getting,,, / I'm,,, I'm ,,,HOT!!! HELP!!"
+        WaitTextbox(21);
+        PlayFieldSfx(3, 0, 5);
+        OpenTextbox(22); // "Cop A. ARGHHHHHHHH!!!!"
+        WaitTextbox(22);
+        PlayFieldSfx(3, 0, 6);
+        PlayFieldSfx(4, 0, 7);
+        PlayFieldSfx(5, 0, 11);
+        Wait(90);
+        SetAnim(9);
+        SetAnimFrame(0);
+        PlayAnimToFrame(65);
+        WaitAnimEnd();
+        OpenTextbox(23); // "Maeda. I guess it's now or never,,,"
+        WaitTextbox(23);
+        SetAnim(15);
+        SetAnimFrame(0);
+        PlayAnimToFrame(30);
+        WaitAnimEnd();
+        SetFogNearFar(476, 128, 60);
+        SetMoveFactor(0x110000);
+        SetAnim(14);
+        TurnTowardPoint(2356.0fp, -179.0fp, 180);
+        MoveTowardPoint(2356.0fp, -179.0fp, 180);
+        SetAnim(16);
+        SetAnimFrame(0);
+        PlayAnimToFrame(30);
+        WaitAnimEnd();
+        SetAnim(17);
+        SetAnimFrame(0);
+        PlayAnimToFrame(20);
+        WaitAnimEnd();
+        OpenTextbox(24); // "Maeda. Spontaneous human combustion, / I believe that's correct,,,"
+        WaitTextbox(24);
+        SetAnim(17);
+        SetAnimFrame(20);
+        PlayAnimToFrame(60);
+        WaitAnimEnd();
+        StartScreenFade(120);
+        SetAnim(14);
+        TurnTowardPoint(2683.0fp, 1643.0fp, 180);
+        MoveTowardPoint(2683.0fp, 1643.0fp, 180);
+        WaitScreenFade();
+        global[AREA] = 304;
+        global[AREA] = 308;
+        StopPmSlotOnSelf(14);
+        AkaoCmd(0x12D, room[19], 0, 0, 0, room[17]);
+        ChangeRoom(0xA8023348);
+        ExitThread();
+    @label_03CA:
+        GetThreadTarget14(local[3]);
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetHitCylinder(130, 130, 20);
+        SetEventHandler(EVENT_INTERACT, @label_005C);
+        AkaoCmd(0x196, 1, 0, 1012, 0, room[17]);
+        AkaoCmd(0x196, 1, 18, 1013, 0, room[17]);
+        EnableActorCollision();
+        DisableActorRendering();
+        SetEntityVec3(VEC3_POS, 180.0fp, 0.0fp, 71.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 3936, 0);
+        Wait(1);
+    @label_0058:
+        ExitThread();
+    @label_005C:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 15) {
+            KillOtherThreads();
+            SetAnim(5);
+            SetAnimFrame(0);
+            PlayAnimToFrame(75);
+            WaitAnimEnd();
+            SetAnim(5);
+            SetAnimFrame(0);
+            PlayAnimToFrame(75);
+            WaitAnimEnd();
+            goto @label_0058;
+        }
+        if (local[3] == 1) {
+            KillOtherThreads();
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+            goto @label_0058;
+        }
+        if (local[3] == 2) {
+            KillOtherThreads();
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(60);
+            WaitAnimEnd();
+            goto @label_0058;
+        }
+        if (local[3] == 3) {
+            KillOtherThreads();
+            SetAnim(5);
+            SetAnimFrame(0);
+            PlayAnimToFrame(75);
+            WaitAnimEnd();
+            goto @label_0058;
+        }
+        if (local[3] == 4) {
+            KillOtherThreads();
+            SetAnim(8);
+            SetAnimFrame(0);
+            PlayAnimToFrame(40);
+            WaitAnimEnd();
+            goto @label_0058;
+        }
+        if (local[3] == 5) {
+            KillOtherThreads();
+            SetAnim(9);
+            SetAnimFrame(0);
+            PlayAnimToFrame(75);
+            WaitAnimEnd();
+            goto @label_0058;
+        }
+        if (local[3] == 6) {
+            KillOtherThreads();
+            AkaoCmd(0x12C, 2356, 0, 128, 127, room[19]);
+            LoadRoomAssets(14, local[4]);
+            SendPmCommand0(local[4], 0, 0, 0, 0);
+            SetAnim(10);
+            SetAnimFrame(0);
+            PlayAnimToFrame(40);
+            WaitAnimEnd();
+            SetAnim(11);
+            SetAnimFrame(0);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+            SetAnim(12);
+            goto @label_0058;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_4 {
+        SetHitCylinder(130, 130, 20);
+        SetEventHandler(EVENT_INTERACT, @label_0062);
+        AkaoCmd(0x196, 1, 0, 1012, 0, room[17]);
+        AkaoCmd(0x196, 1, 18, 1013, 0, room[17]);
+        EnableActorCollision();
+        DisableActorRendering();
+        SetEntityVec3(VEC3_POS, 763.0fp, 0.0fp, -294.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 512, 0);
+        SetAnim(0);
+        Wait(1);
+    @label_005E:
+        ExitThread();
+    @label_0062:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 1) {
+            KillOtherThreads();
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+            goto @label_005E;
+        }
+        if (local[3] == 2) {
+            KillOtherThreads();
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(60);
+            WaitAnimEnd();
+            goto @label_005E;
+        }
+        if (local[3] == 3) {
+            KillOtherThreads();
+            SetAnim(5);
+            SetAnimFrame(0);
+            PlayAnimToFrame(75);
+            WaitAnimEnd();
+            goto @label_005E;
+        }
+        if (local[3] == 12) {
+            KillOtherThreads();
+            SetAnim(1);
+            CameraSnapToActor(3, 0, 45);
+            SetAnim(0);
+            goto @label_005E;
+        }
+        if (local[3] == 7) {
+            KillOtherThreads();
+            SetAnim(8);
+            SetAnimFrame(0);
+            PlayAnimToFrame(40);
+            WaitAnimEnd();
+            SetAnim(9);
+            Wait(30);
+            goto @label_005E;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_5 {
+        SetHitCylinder(130, 130, 20);
+        SetEventHandler(EVENT_INTERACT, @label_005C);
+        AkaoCmd(0x196, 1, 0, 1012, 0, room[17]);
+        AkaoCmd(0x196, 1, 18, 1013, 0, room[17]);
+        EnableActorCollision();
+        DisableActorRendering();
+        SetEntityVec3(VEC3_POS, -197.0fp, 0.0fp, -387.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 3616, 0);
+        Wait(1);
+    @label_0058:
+        ExitThread();
+    @label_005C:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 14) {
+            KillOtherThreads();
+            SetAnim(1);
+            TurnTowardPoint(-74.0fp, -388.0fp, 180);
+            MoveTowardPoint(-74.0fp, -388.0fp, 180);
+            StopActorMotion();
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(40);
+            WaitAnimEnd();
+            room[18] = 1;
+            goto @label_0058;
+        }
+        if (local[3] == 8) {
+            KillOtherThreads();
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(40);
+            WaitAnimEnd();
+            goto @label_0058;
+        }
+        if (local[3] == 9) {
+            KillOtherThreads();
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(65);
+            WaitAnimEnd();
+            goto @label_0058;
+        }
+        if (local[3] == 10) {
+            KillOtherThreads();
+            SetAnim(5);
+            SetAnimFrame(0);
+            PlayAnimToFrame(72);
+            WaitAnimEnd();
+            goto @label_0058;
+        }
+        if (local[3] == 13) {
+            KillOtherThreads();
+            SetAnim(1);
+            CameraSnapToActor(3, 0, 45);
+            SetAnim(0);
+            goto @label_0058;
+        }
+        if (local[3] == 11) {
+            KillOtherThreads();
+            SetAnim(8);
+            SetAnimFrame(0);
+            PlayAnimToFrame(30);
+            WaitAnimEnd();
+            Wait(60);
+            SetAnim(9);
+            goto @label_0058;
+        }
+        ExitThread();
+    }
+}

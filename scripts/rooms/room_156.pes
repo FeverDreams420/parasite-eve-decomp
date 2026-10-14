@@ -1,0 +1,86 @@
+// Parasite Eve 1 Scene Script (room_156)
+room_script room_156 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(115, 125, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        ScaleShadowRadius(0xB333);
+        SetHitCylinderRadius(0x00330000);
+        EnableActorCollision();
+        SetEntityVec3(VEC3_POS, -1176.0fp, -12326.0fp, -6377.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        KillOtherThreads();
+        PauseSceneEvents();
+        LockPlayerInput();
+        StopActorMotion();
+        SetAnim(21);
+        SetMoveFactor(0x30000);
+        SetAnim(23);
+        TurnTowardPoint(-1825.0fp, -7250.0fp, 128);
+        MoveTowardPoint(-1825.0fp, -7250.0fp, 128);
+        SetActorFlag400();
+        SetAnim(22);
+        TurnToAngleStep(352, 128);
+        SetAnim(29);
+        SetAnimFrame(0);
+        PlayAnimToFrame(55);
+        WaitAnimEnd();
+        SetAnim(21);
+        PlayFieldSfx(1, 0, 2);
+        SetAnim(29);
+        SetAnimFrame(56);
+        PlayAnimToFrame(161);
+        WaitAnimEnd();
+        Wait(1);
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1028, 1028, 0, 0, room[17]);
+        LockPlayerInput();
+        PauseSceneEvents();
+        SetCameraBaseAngle(0, 3952);
+        EnablePlayerMovement();
+        local[5] = 90;
+        AkaoCmd(0x15F, 2502, 0, 0, 0, room[19]);
+        Wait(1);
+        SpawnThread(@label_0082);
+        SetEventHandler(EVENT_INTERACT, @label_00CE);
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetFadeColor(0x1E);
+        PlayFieldSfx(0, 0, 255);
+        Wait(1);
+        ExitThread();
+    @label_0082:
+        AkaoCmd(0x12F, room[19], room[17], 1, local[5], room[17]);
+        local[5] = local[5] + 1;
+        Wait(8);
+        if (local[5] > 127) {
+            local[5] = 125;
+        }
+        goto @label_0082;
+    @label_00CE:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 2) {
+            StartScreenFade(30);
+            WaitScreenFade();
+            PlayFieldSfx(0, 0, 251);
+            Wait(5);
+            AkaoCmd(0x13A, 0, 0, 0, 0, room[17]);
+            ReloadSceneData(18);
+            Noop3();
+            Noop1(16383);
+            WaitDrawIdle();
+            global[AREA] = 512;
+            global[ROOM] = 157;
+            ChangeRoom(0xA8025448);
+            ExitThread();
+        }
+        ExitThread();
+        ExitThread();
+    }
+}

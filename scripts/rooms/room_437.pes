@@ -1,0 +1,38 @@
+// Parasite Eve 1 Scene Script (room_437)
+room_script room_437 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        DestroySelf();
+    }
+
+    actor_script actor_1 {
+        ClearScreenFadeFlag40();
+        Wait(1);
+        if (global[ROOM] == 381) {
+            LoadGeomState(1);
+        } else {
+            LoadGeomState(0);
+        }
+        SetFadeColor(0x1E);
+        WaitScreenFade();
+        Wait(1);
+        SpawnThread(@label_0066);
+        Wait(1);
+        Wait(888);
+        StartScreenFade(60);
+        WaitScreenFade();
+        ChangeRoom(0xA9400048);
+        ExitThread();
+    @label_0066:
+        while (1) {
+            CheckPadInput(PAD_PRESSED, 0x20000000, local[0]);
+            if (local[0] != 0) {
+                StartScreenFade(30);
+                WaitScreenFade();
+                ChangeRoom(0xA9400048);
+            }
+            Wait(1);
+        }
+    }
+}

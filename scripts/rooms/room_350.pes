@@ -1,0 +1,217 @@
+// Parasite Eve 1 Scene Script (room_350)
+room_script room_350 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        HideActor();
+        Wait(1);
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+        LockPlayerInput();
+        PauseSceneEvents();
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        if (global[AREA] <= 128) {
+            LoadGeomState(1);
+            SetFogNearFar(160, 116, 1);
+        }
+        if (global[AREA] == 312) {
+            LoadGeomState(2);
+            SetFogNearFar(160, 116, 1);
+        }
+        Wait(5);
+        SetFadeColor(0x3C);
+        Wait(40);
+        RunInventoryCommand(1107, 0, 0, local[9], local[8]);
+        RunInventoryCommand(1108, local[9], 0, local[8], local[8]);
+        RunInventoryCommand(1110, 0, 0, local[11], local[10]);
+        RunInventoryCommand(1111, local[11], 0, local[10], local[10]);
+        AkaoCmd(0x12C, 1105, 0, 128, 127, room[17]);
+        AkaoCmd(0x12C, 1106, 0, 128, 127, room[17]);
+        WaitScreenFade();
+        Wait(1);
+    @label_00E6:
+        CheckPadInput(PAD_PRESSED, 0x100, local[2]);
+        if (local[2] != 0) {
+            if (global[ROOM] != 998) {
+                if (global[8] != 0) {
+                    if (global[8] > 0) {
+                        if (global[AREA] == 128) {
+                            global[310] = 0;
+                            GetGameTimeCounter(2, local[12]);
+                            local[16] = local[12];
+                            local[12] = global[310];
+                            ConvertFramesToHMS(local[16], local[13], local[14], local[15]);
+                            local[17] = local[13] * 60 + local[14];
+                            if (local[17] > 100) {
+                                global[311] = 100;
+                            } else if (local[17] > 70) {
+                                global[311] = 700 - (local[17] - 70) * 40;
+                            } else if (local[17] > 60) {
+                                global[311] = 700 - (local[17] - 60) * 30;
+                            } else if (local[17] > 50) {
+                                global[311] = 700 - (local[17] - 50) * 20;
+                            } else if (local[17] > 40) {
+                                global[311] = 800 - (local[17] - 40) * 10;
+                            } else if (local[17] == 40) {
+                                global[311] = 800;
+                            } else if (local[17] < 40) {
+                                global[311] = 800 + (40 - local[17]) * 5;
+                            }
+                            if (global[311] < 100) {
+                                global[311] = 100;
+                            }
+                            global[311] = 800;
+                        }
+                        if (global[AREA] == 312) {
+                            GetGameTimeCounter(2, local[12]);
+                            local[16] = local[12] - global[310];
+                            global[310] = local[12];
+                            ConvertFramesToHMS(local[16], local[13], local[14], local[15]);
+                            local[17] = local[13] * 60 + local[14];
+                            if (local[17] > 160) {
+                                global[311] = 100;
+                            } else if (local[17] > 130) {
+                                global[311] = 900 - (local[17] - 130) * 40;
+                            } else if (local[17] > 120) {
+                                global[311] = 900 - (local[17] - 120) * 30;
+                            } else if (local[17] > 110) {
+                                global[311] = 900 - (local[17] - 110) * 20;
+                            } else if (local[17] > 100) {
+                                global[311] = 1000 - (local[17] - 100) * 10;
+                            } else if (local[17] == 100) {
+                                global[311] = 1000;
+                            } else if (local[17] < 100) {
+                                global[311] = 1000 + (100 - local[17]) * 5;
+                            }
+                            global[311] = 1200;
+                        }
+                        if (global[AREA] == 432) {
+                            GetGameTimeCounter(2, local[12]);
+                            local[16] = local[12] - global[310];
+                            global[310] = local[12];
+                            ConvertFramesToHMS(local[16], local[13], local[14], local[15]);
+                            local[17] = local[13] * 60 + local[14];
+                            if (local[17] > 180) {
+                                global[311] = 100;
+                            } else if (local[17] > 150) {
+                                global[311] = 900 - (local[17] - 150) * 40;
+                            } else if (local[17] > 140) {
+                                global[311] = 900 - (local[17] - 140) * 30;
+                            } else if (local[17] > 130) {
+                                global[311] = 900 - (local[17] - 130) * 20;
+                            } else if (local[17] > 120) {
+                                global[311] = 1000 - (local[17] - 120) * 10;
+                            } else if (local[17] == 120) {
+                                global[311] = 1000;
+                            } else if (local[17] < 120) {
+                                global[311] = 1000 + (120 - local[17]) * 5;
+                            }
+                            global[311] = 2000;
+                        }
+                        if (global[AREA] == 536) {
+                            GetGameTimeCounter(2, local[12]);
+                            local[16] = local[12] - global[310];
+                            global[310] = local[12];
+                            ConvertFramesToHMS(local[16], local[13], local[14], local[15]);
+                            local[17] = local[13] * 60 + local[14];
+                            if (local[17] > 180) {
+                                global[311] = 100;
+                            } else if (local[17] > 150) {
+                                global[311] = 900 - (local[17] - 150) * 40;
+                            } else if (local[17] > 140) {
+                                global[311] = 900 - (local[17] - 140) * 30;
+                            } else if (local[17] > 130) {
+                                global[311] = 900 - (local[17] - 130) * 20;
+                            } else if (local[17] > 120) {
+                                global[311] = 1000 - (local[17] - 120) * 10;
+                            } else if (local[17] == 120) {
+                                global[311] = 1000;
+                            } else if (local[17] < 120) {
+                                global[311] = 1000 + (120 - local[17]) * 5;
+                            }
+                            global[311] = 2000;
+                        }
+                        if (global[AREA] == 723) {
+                            GetGameTimeCounter(2, local[12]);
+                            local[16] = local[12] - global[310];
+                            global[310] = local[12];
+                            ConvertFramesToHMS(local[16], local[13], local[14], local[15]);
+                            local[17] = local[13] * 60 + local[14];
+                            if (local[17] > 180) {
+                                global[311] = 100;
+                            } else if (local[17] > 150) {
+                                global[311] = 1900 - (local[17] - 150) * 40;
+                            } else if (local[17] > 140) {
+                                global[311] = 1900 - (local[17] - 140) * 30;
+                            } else if (local[17] > 130) {
+                                global[311] = 1900 - (local[17] - 130) * 20;
+                            } else if (local[17] > 120) {
+                                global[311] = 2000 - (local[17] - 120) * 10;
+                            } else if (local[17] == 120) {
+                                global[311] = 2000;
+                            } else if (local[17] < 120) {
+                                global[311] = 2000 + (120 - local[17]) * 5;
+                            }
+                            global[311] = 3000;
+                        }
+                    }
+                    if (global[AREA] == 756) {
+                        if (global[8] == 1) {
+                            global[311] = 3000;
+                        }
+                        if (global[8] >= 2) {
+                            GetGameTimeCounter(2, local[12]);
+                            local[16] = local[12] - global[310];
+                            global[310] = local[12];
+                            ConvertFramesToHMS(local[16], local[13], local[14], local[15]);
+                            local[17] = local[13] * 60 + local[14];
+                            if (local[17] > 100) {
+                                global[311] = 100;
+                            } else if (local[17] > 70) {
+                                global[311] = 700 - (local[17] - 70) * 40;
+                            } else if (local[17] > 60) {
+                                global[311] = 700 - (local[17] - 60) * 30;
+                            } else if (local[17] > 50) {
+                                global[311] = 700 - (local[17] - 50) * 20;
+                            } else if (local[17] > 40) {
+                                global[311] = 800 - (local[17] - 40) * 10;
+                            } else if (local[17] == 40) {
+                                global[311] = 800;
+                            } else if (local[17] < 40) {
+                                global[311] = 800 + (40 - local[17]) * 5;
+                            }
+                            global[311] = 1000;
+                        }
+                    }
+                    RunInventoryCommand(1118, global[311], global[311], global[311], global[311]);
+                }
+                EnablePlayerMovement();
+                OpenTextbox(182); // "Will you save your progress? / <FB:09>2 Yes / No"
+                WaitTextbox(182);
+                DisablePlayerMovement();
+                GetChoiceResult(local[4]);
+                if (local[4] == 0) {
+                    global[ROOM] = 998;
+                    OpenMemCardDialog();
+                }
+            }
+            StartScreenFade(60);
+            WaitScreenFade();
+            if (global[AREA] <= 128) {
+                global[ROOM] = 0;
+                global[AREA] = 136;
+                ChangeRoom(0xA8004148);
+            }
+            if (global[AREA] == 312) {
+                global[AREA] = 320;
+                ChangeRoom(0xA8009148);
+            }
+        }
+        Wait(1);
+        goto @label_00E6;
+    }
+}

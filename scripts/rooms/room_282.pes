@@ -1,0 +1,1017 @@
+// Parasite Eve 1 Scene Script (room_282)
+room_script room_282 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(80, 115, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00D0);
+        SetEventHandler(EVENT_TOUCH, @label_00CC);
+        ScaleShadowRadius(0xE147);
+        SetMoveFactor(0x10000);
+        SetHitCylinderRadius(0x00480000);
+        Wait(1);
+        if (global[ROOM] == 282) {
+            SetEntityVec3(VEC3_POS, 3333.0fp, 0.0fp, -400.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        } else if (global[ROOM] == 284) {
+            SetEntityVec3(VEC3_POS, 1310.0fp, 0.0fp, -4844.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+        } else {
+            SetEntityVec3(VEC3_POS, 3132.0fp, 0.0fp, -446.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        }
+        Wait(1);
+    @label_00C8:
+        ExitThread();
+    @label_00CC:
+        ExitThread();
+    @label_00D0:
+        GetThreadTarget14(local[6]);
+        if (local[6] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SnapToSpawnPosition();
+            SetAnim(0);
+            ExitThread();
+        }
+        if (local[6] == 255) {
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            goto @label_00C8;
+        }
+        if (local[6] == 0) {
+            if (global[47] & 4096) {
+                if (room[18] == 1) {
+                    PauseSceneEvents();
+                    PauseSceneEvents();
+                    LockPlayerInput();
+                    StopActorMotion();
+                    SetAnim(21);
+                    SetAnim(23);
+                    TurnTowardPoint(3315.0fp, -100.0fp, 90);
+                    MoveTowardPoint(3315.0fp, -100.0fp, 90);
+                    TurnTowardPoint(3325.0fp, -72.0fp, 50);
+                    SetMoveFactor(0x16666);
+                    SetAnimStep(0x16666);
+                    LockPlayerMoveMask(2);
+                    SetAnim(34);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(35);
+                    WaitAnimEnd();
+                    OpenTextbox(80); // "{Aya}. ,,,I can't make it in / time from here!"
+                    WaitTextbox(80);
+                    SetAnimStep(0xFFFF0000);
+                    SetAnim(34);
+                    SetAnimFrame(35);
+                    PlayAnimToFrame(0);
+                    WaitAnimEnd();
+                    SetAnimStep(0x10000);
+                    SetMoveFactor(0x10000);
+                    SetAnim(23);
+                    TurnTowardPoint(3333.0fp, -400.0fp, 88);
+                    MoveTowardPoint(3333.0fp, -400.0fp, 88);
+                    room[18] = 0;
+                    SetAnim(21);
+                    UnlockPlayerInput();
+                    ResumeSceneEvents();
+                }
+            } else if (room[18] == 1) {
+                KillOtherThreads();
+                PauseSceneEvents();
+                PauseSceneEvents();
+                LockPlayerInput();
+                StopActorMotion();
+                SetAnim(21);
+                SetAnim(23);
+                TurnTowardPoint(3315.0fp, -100.0fp, 90);
+                MoveTowardPoint(3315.0fp, -100.0fp, 90);
+                TurnTowardPoint(3325.0fp, -72.0fp, 50);
+                SetMoveFactor(0x16666);
+                SetAnimStep(0x16666);
+                Wait(5);
+                LockPlayerMoveMask(2);
+                SetAnim(34);
+                SetAnimFrame(0);
+                PlayAnimToFrame(35);
+                WaitAnimEnd();
+                StartScreenFade(14);
+                SetAnim(35);
+                SetAnimFrame(0);
+                PlayAnimToFrame(39);
+                global[ROOM] = 283;
+                WaitScreenFade();
+                ChangeRoom(0xA8048148);
+            }
+        }
+        if (local[6] == 1) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            SetFadeColor(2);
+            SetAnim(23);
+            TurnTowardPoint(1088.0fp, -4772.0fp, 90);
+            MoveTowardPoint(1088.0fp, -4772.0fp, 90);
+            TurnTowardPoint(888.0fp, -4772.0fp, 50);
+            SetMoveFactor(0x13333);
+            SetAnimStep(0x13333);
+            LockPlayerMoveMask(2);
+            SetAnim(34);
+            SetAnimFrame(0);
+            PlayAnimToFrame(35);
+            WaitAnimEnd();
+            PlayFieldSfx(6, 0, 8);
+            StartScreenFade(15);
+            SetAnim(35);
+            SetAnimFrame(0);
+            PlayAnimToFrame(39);
+            WaitScreenFade();
+            StartScreenFade(5);
+            global[ROOM] = 283;
+            StartScreenFade(1);
+            ChangeRoom(0xA8048248);
+        }
+        if (local[6] == 12) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            SetAnim(23);
+            TurnTowardPoint(1088.0fp, -4772.0fp, 90);
+            MoveTowardPoint(1088.0fp, -4772.0fp, 90);
+            TurnTowardPoint(888.0fp, -4772.0fp, 50);
+            SetMoveFactor(0x10000);
+            SetAnimStep(0xE666);
+            Wait(5);
+            LockPlayerMoveMask(2);
+            SetAnim(34);
+            SetAnimFrame(0);
+            PlayAnimToFrame(35);
+            WaitAnimEnd();
+            StartScreenFade(14);
+            SetAnim(35);
+            SetAnimFrame(0);
+            PlayAnimToFrame(39);
+            global[ROOM] = 283;
+            WaitScreenFade();
+            LoadGeomState(1);
+            SetFadeColor(0xF);
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+            Wait(8);
+            PlayFieldSfx(2, 0, 30);
+            ExitThread();
+        }
+        if (local[6] == 31) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            SetAnim(23);
+            MoveTowardPoint(1088.0fp, -4772.0fp, 90);
+            TurnTowardPoint(888.0fp, -4772.0fp, 50);
+            SetMoveFactor(0x10000);
+            SetAnimStep(0xE666);
+            SetAnim(34);
+            SetAnimFrame(0);
+            PlayAnimToFrame(35);
+            WaitAnimEnd();
+            OpenTextbox(80); // "{Aya}. ,,,I can't make it in / time from here!"
+            WaitTextbox(80);
+            SetAnimStep(0xFFFF0000);
+            SetAnim(34);
+            SetAnimFrame(35);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+            SetAnimStep(0x10000);
+            SetAnim(22);
+            TurnTowardPoint(1289.0fp, -4684.0fp, 45);
+            MoveTowardPoint(1289.0fp, -4684.0fp, 45);
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+        }
+        if (local[6] == 3) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            PlayFieldSfx(6, 0, 8);
+            StartScreenFade(40);
+            SetAnim(19);
+            SetAnimFrame(0);
+            PlayAnimToFrame(24);
+            WaitAnimEnd();
+            AkaoCmd(0xD9, 0, 0, 0, 0, local[5]);
+            WaitScreenFade();
+            global[ROOM] = 283;
+            ChangeRoom(0xA8083448);
+        }
+        if (local[6] == 13) {
+            PauseSceneEvents();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            TurnTowardPoint(2000.0fp, -3150.0fp, 73);
+            SetAnim(38);
+            SetAnimFrame(0);
+            PlayAnimToFrame(47);
+            WaitAnimEnd();
+            OpenTextbox(75); // "{Aya}. If the boiler pressure / shoots up,,, | I can blow the ship to bits,,,!"
+            WaitTextbox(75);
+            SetAnimStep(0x8000);
+            SetAnim(39);
+            SetAnimFrame(0);
+            PlayAnimToFrame(14);
+            WaitAnimEnd();
+            AkaoCmd(0x12C, 2633, 0, 128, 64, local[5]);
+            SetAnim(39);
+            SetAnimFrame(0);
+            PlayAnimToFrame(14);
+            WaitAnimEnd();
+            AkaoCmd(0x12C, 2633, 0, 128, 64, local[5]);
+            SetAnim(39);
+            SetAnimFrame(0);
+            PlayAnimToFrame(14);
+            WaitAnimEnd();
+            AkaoCmd(0x12C, 2633, 0, 128, 64, local[5]);
+            SetAnim(39);
+            SetAnimFrame(0);
+            PlayAnimToFrame(14);
+            WaitAnimEnd();
+            AkaoCmd(0x12C, 2633, 0, 128, 64, local[5]);
+            SpawnActor(7, 0, 0.0fp, 0.0fp, 0.0fp);
+            SetAnimStep(0x30000);
+            SetAnim(40);
+            SetAnimFrame(0);
+            PlayAnimToFrame(56);
+            WaitAnimEnd();
+            PlayFieldSfx(1, 0, 26);
+            Wait(123);
+            OpenTextbox(76); // "{Aya}. Do y'know where we are?"
+            WaitTextbox(76);
+            PlayFieldSfx(6, 0, 32);
+            Wait(1);
+            PlayFieldSfx(6, 0, 34);
+            Wait(15);
+            SetAnimStep(0x10000);
+            PlayFieldSfx(1, 0, 14);
+            Wait(1);
+            CameraSnapToActor(2, 0, 88);
+            SetAnim(21);
+            ExitThread();
+        }
+        if (local[6] == 17) {
+            KillOtherThreads();
+            PlayFieldSfx(1, 0, 27);
+            PauseSceneEvents();
+            StartScreenFade(88);
+            WaitScreenFade();
+            PlayFieldSfx(6, 0, 8);
+            Wait(1);
+            PlayFieldSfx(1, 0, 9);
+            ExitThread();
+        }
+        if (local[6] == 5) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0x193, 1032, 1024, 0, 0, local[0]);
+        AkaoCmd(0xC8, 22, 0, 0, 0, local[0]);
+        AkaoCmd(0xCD, 22, 48, 0, 0, local[0]);
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(6, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(5, 0, 0.0fp, 0.0fp, 0.0fp);
+        DisableCollisionTriangle(63);
+        DisableCollisionTriangle(0);
+        SetEventHandler(EVENT_INTERACT, @label_0098);
+        Wait(1);
+        SetMeshFadeLevel(112);
+        SetFadeColor(0x1E);
+        PlayFieldSfx(0, 0, 255);
+        SpawnThread(@label_03B4);
+        ExitThread();
+    @label_0098:
+        GetThreadTarget14(local[8]);
+        if (local[8] == 9) {
+            KillOtherThreads();
+            AkaoCmd(0xC9, 61, 0, 0, 0, local[0]);
+            PlayFieldSfx(2, 0, 6);
+            PlayFieldSfx(3, 0, 7);
+            PlayFieldSfx(0, 0, 5);
+            PlayFieldSfx(6, 0, 8);
+            PlayFieldSfx(4, 0, 24);
+            PlayFieldSfx(5, 0, 18);
+            PlayFieldSfx(7, 0, 20);
+            Wait(5);
+            ReloadSceneData(43);
+            Noop3();
+            Noop1(16383);
+            WaitDrawIdle();
+            global[ROOM] = 283;
+            ChangeRoom(0xA8083448);
+            ExitThread();
+        }
+        if (local[8] == 14) {
+            Wait(1);
+            LoadGeomState(0);
+            Wait(1);
+            OpenTextbox(77); // "{Aya}. We're in Hell's Kitchen!"
+            WaitTextbox(77);
+            PlayFieldSfx(0, 0, 255);
+            Wait(255);
+            SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+            ExitThread();
+        }
+        if (local[8] == 25) {
+            SetFogNearFar(356, 247, 1);
+            WaitDiscIdle();
+            SetFogNearFar(355, 247, 1);
+            WaitDiscIdle();
+            Wait(1);
+            SetFogNearFar(354, 247, 1);
+            WaitDiscIdle();
+            SetFogNearFar(355, 248, 1);
+            WaitDiscIdle();
+            Wait(1);
+            SetFogNearFar(356, 247, 1);
+            WaitDiscIdle();
+            Wait(1);
+            SetFogNearFar(355, 247, 1);
+            WaitDiscIdle();
+            Wait(1);
+        }
+        if (local[8] == 26) {
+            Wait(88);
+            SetFogNearFar(160, 126, 1);
+            WaitDiscIdle();
+            SetFogNearFar(160, 128, 1);
+            WaitDiscIdle();
+            Wait(1);
+            SetFogNearFar(160, 126, 1);
+            WaitDiscIdle();
+            SetFogNearFar(160, 128, 1);
+            WaitDiscIdle();
+            Wait(1);
+            SetFogNearFar(160, 126, 1);
+            WaitDiscIdle();
+            Wait(1);
+            SetFogNearFar(160, 128, 1);
+            WaitDiscIdle();
+            Wait(1);
+            ResetCameraToPlayer();
+        }
+        if (local[8] == 27) {
+            while (1) {
+                SetFogNearFar(355, 247, 15);
+                WaitDiscIdle();
+                SetFogNearFar(345, 247, 2);
+                WaitDiscIdle();
+                SetFogNearFar(374, 247, 3);
+                WaitDiscIdle();
+                SetFogNearFar(355, 248, 2);
+                WaitDiscIdle();
+                SetFogNearFar(326, 247, 3);
+                WaitDiscIdle();
+                SetFogNearFar(380, 260, 2);
+                WaitDiscIdle();
+                SetFogNearFar(374, 247, 3);
+                WaitDiscIdle();
+                SetFogNearFar(355, 248, 2);
+                WaitDiscIdle();
+                SetFogNearFar(326, 247, 3);
+                WaitDiscIdle();
+                SetFogNearFar(380, 260, 2);
+                WaitDiscIdle();
+                SetFogNearFar(374, 247, 3);
+                WaitDiscIdle();
+                SetFogNearFar(355, 248, 2);
+                WaitDiscIdle();
+                SetFogNearFar(326, 247, 3);
+                WaitDiscIdle();
+                SetFogNearFar(380, 260, 2);
+                WaitDiscIdle();
+                SetFogNearFar(374, 247, 3);
+                WaitDiscIdle();
+                SetFogNearFar(355, 248, 2);
+                WaitDiscIdle();
+                SetFogNearFar(326, 247, 3);
+                WaitDiscIdle();
+                SetFogNearFar(380, 260, 2);
+                WaitDiscIdle();
+            }
+        }
+    @label_03B4:
+        SceneCmd(2401, 255, 0, 0, 0, 0, 0, local[7]);
+        SceneCmd(2402, 0x08880000, 0xFEB10000, 0xF2FB0000, 24, 20, 0, local[7]);
+        Wait(31);
+        goto @label_03B4;
+    }
+
+    actor_script actor_2 {
+        SetHitCylinder(80, 15, 255);
+        AkaoCmd(0x196, 2, 0, 1024, 0, local[7]);
+        AkaoCmd(0x196, 2, 15, 1025, 0, local[7]);
+        AkaoCmd(0x196, 6, 0, 1024, 0, local[7]);
+        AkaoCmd(0x196, 6, 60, 1025, 0, local[7]);
+        SetEventHandler(EVENT_INTERACT, @label_01B4);
+        SetEventHandler(EVENT_TOUCH, @label_0124);
+        ScaleShadowRadius(0x8000);
+        SetMoveSpeed(0x10000);
+        SetHitCylinderRadius(0x006F0000);
+        if (global[ROOM] == 284) {
+            SetEntityVec3(VEC3_POS, 3225.0fp, -1728.0fp, -160.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            Wait(1);
+            local[17] = 65536;
+            goto @label_00DE;
+        } else {
+            SetEntityVec3(VEC3_POS, 3000.0fp, 0.0fp, -500.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            Wait(1);
+            local[17] = 0x00180000;
+            goto @label_00DE;
+        }
+    @label_00DE:
+        local[17] = local[17] - 65536;
+        if (local[17] <= 1) {
+            local[17] = 65536;
+        }
+        Wait(25);
+        SetMoveFactor(local[17]);
+        goto @label_00DE;
+        ExitThread();
+    @label_0124:
+        GetThreadTargets18_1C(local[0], local[1]);
+        if (local[0] == 0) {
+            KillOtherThreads();
+            PlayFieldSfx(0, 0, 254);
+            PauseSceneEvents();
+            StopActorMotion();
+            DisableActorRendering();
+            SetAnimStep(0x20000);
+            AkaoCmd(0x12C, 1024, 0, 128, 127, local[5]);
+            SetAnim(5);
+            SetAnimFrame(50);
+            PlayAnimToFrame(71);
+            WaitAnimEnd();
+            SetAnimStep(0x30000);
+            PlayFieldSfx(0, 0, 3);
+            SetAnim(5);
+            SetAnimFrame(0);
+            PlayAnimToFrame(49);
+            WaitAnimEnd();
+            ExitThread();
+        }
+        ExitThread();
+    @label_01B4:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 11) {
+            SetEntityVec3(VEC3_MOTION, 0, 0x00226666, 0);
+            SetAnimStep(0x18000);
+            SetAnim(5);
+            SetAnimFrame(20);
+            PlayAnimToFrame(40);
+            WaitAnimEnd();
+            AkaoCmd(0x12C, 2640, 0, 128, 127, local[7]);
+            SetAnimStep(0x10000);
+            SetAnim(5);
+            SetAnimFrame(40);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+            SetAnimStep(0x20000);
+            SetAnim(7);
+            SetAnimFrame(0);
+            PlayAnimToFrame(149);
+            WaitAnimEnd();
+            SetAnim(6);
+            MoveTowardPoint(2785.0fp, -2345.0fp, 360);
+            SetAnimStep(0x30000);
+            SetAnim(7);
+            SetAnimFrame(0);
+            PlayAnimToFrame(149);
+            WaitAnimEnd();
+            SetAnimStep(0x20000);
+            SetAnim(7);
+            SetAnimFrame(0);
+            PlayAnimToFrame(73);
+            WaitAnimEnd();
+            SetAnimStep(0x10000);
+            SetAnim(7);
+            SetAnimFrame(73);
+            PlayAnimToFrame(123);
+            WaitAnimEnd();
+            DetachAllChildren();
+            PlayFieldSfx(3, 0, 29);
+            SetAnim(2);
+            MoveTowardPoint(2785.0fp, -2626.0fp, 88);
+            SetAnim(6);
+        }
+        if (local[3] == 2) {
+            SetAnim(6);
+            CameraSnapToActor(0, 0, 73);
+            CameraTrackActorZoom(0, 0, 360);
+        }
+        if (local[3] == 16) {
+            KillOtherThreads();
+            StopActorMotion();
+            SetAnim(6);
+            EnableActorCollision();
+            MoveTowardPoint(2785.0fp, -2323.0fp, 88);
+            CameraSnapToActor(0, 0, 24);
+            SetAnim(6);
+            CameraTrackActorZoom(0, 0, 360);
+        }
+        if (local[3] == 28) {
+            KillOtherThreads();
+            StopActorMotion();
+            SetAnim(6);
+            EnableActorCollision();
+            MoveTowardPoint(2644.0fp, -4321.0fp, 88);
+            CameraSnapToActor(0, 0, 24);
+            SetAnim(6);
+            CameraTrackActorZoom(0, 0, 360);
+        }
+        if (local[3] == 15) {
+            KillOtherThreads();
+            StopActorMotion();
+            EnableActorCollision();
+            SetAnim(6);
+            CameraTrackActorZoom(0, 0, 360);
+        }
+        if (local[3] == 23) {
+            KillOtherThreads();
+            StopActorMotion();
+            SetAnim(6);
+            EnableActorCollision();
+            MoveTowardPoint(2644.0fp, -4321.0fp, 88);
+            MoveTowardPoint(2262.0fp, -4304.0fp, 88);
+            CameraSnapToActor(0, 0, 24);
+            SetAnim(6);
+            CameraTrackActorZoom(0, 0, 360);
+        }
+        if (local[3] == 22) {
+            KillOtherThreads();
+            StopActorMotion();
+            SetAnim(6);
+            EnableActorCollision();
+            MoveTowardPoint(2644.0fp, -4321.0fp, 88);
+            MoveTowardPoint(2262.0fp, -4304.0fp, 88);
+            MoveTowardPoint(818.0fp, -4184.0fp, 88);
+            CameraSnapToActor(0, 0, 24);
+            SetAnim(6);
+            CameraTrackActorZoom(0, 0, 360);
+        }
+        if (local[3] == 30) {
+            SetEntityVec3(VEC3_MOTION, 0, 0x00226666, 0);
+            SetAnimStep(0x18000);
+            SetAnim(5);
+            SetAnimFrame(20);
+            PlayAnimToFrame(40);
+            WaitAnimEnd();
+            AkaoCmd(0x12C, 2640, 0, 128, 127, local[7]);
+            SetAnimStep(0x10000);
+            SetAnim(5);
+            SetAnimFrame(40);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+            SetAnimStep(0x20000);
+            SetAnim(7);
+            SetAnimFrame(0);
+            PlayAnimToFrame(149);
+            WaitAnimEnd();
+            SetAnim(6);
+            MoveTowardPoint(2785.0fp, -1948.0fp, 360);
+            LoadGeomState(0);
+            SetFogNearFar(352, 214, 1);
+            SetAnimStep(0x30000);
+            SetAnim(7);
+            SetAnimFrame(0);
+            PlayAnimToFrame(149);
+            WaitAnimEnd();
+            SetAnimStep(0x20000);
+            SetAnim(7);
+            SetAnimFrame(0);
+            PlayAnimToFrame(73);
+            WaitAnimEnd();
+            SetAnimStep(0x10000);
+            SetAnim(7);
+            SetAnimFrame(73);
+            PlayAnimToFrame(123);
+            WaitAnimEnd();
+            DetachAllChildren();
+            PlayFieldSfx(3, 0, 29);
+            SetAnim(2);
+            MoveTowardPoint(2785.0fp, -2626.0fp, 360);
+            StartScreenFade(15);
+            MoveTowardPoint(2785.0fp, -2727.0fp, 360);
+            global[47] = global[47] | 2048;
+            ChangeRoom(0xA8048248);
+        }
+        if (local[3] == 6) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetHitCylinder(95, 145, 5);
+        SetEventHandler(EVENT_INTERACT, @label_007C);
+        DisableActorRendering();
+        EnableActorCollision();
+        ScaleShadowRadius(0x8000);
+        SetMoveSpeed(0x10000);
+        if (global[ROOM] == 284) {
+            SetEntityVec3(VEC3_POS, 3225.0fp, -1728.0fp, -160.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        } else {
+            SetEntityVec3(VEC3_POS, 3000.0fp, 0.0fp, -500.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        }
+        SetParentActor(2, 0);
+        ExitThread();
+    @label_007C:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 7) {
+            DestroySelf();
+        }
+        if (local[3] == 29) {
+            StopActorMotion();
+            SetAnimInterpRate(123);
+            SetAnimStep(0xB333);
+            SetAnim(7);
+            SetAnimFrame(73);
+            PlayAnimToFrame(123);
+            WaitAnimEnd();
+            SetAnimStep(0xFFFF0000);
+            SetAnim(7);
+            SetAnimFrame(123);
+            PlayAnimToFrame(73);
+            WaitAnimEnd();
+            SetAnimStep(0x10000);
+            ExitThread();
+        }
+    }
+
+    actor_script actor_4 {
+        SetEventHandler(EVENT_INTERACT, @label_0474);
+        Wait(1);
+    @label_000E:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInPolygon(local[0], local[2], 7, @poly_03E4, local[15]);
+        if (local[15] == 1) {
+            if (!(global[47] & 65536)) {
+                PlayFieldSfx(2, 0, 15);
+                global[47] = global[47] | 65536;
+                global[47] = global[47] & 0xFFFDFFFF;
+                global[47] = global[47] & 0xFFFBFFFF;
+                global[47] = global[47] & 0xFFEFFFFF;
+                global[47] = global[47] & 0xFFF7FFFF;
+            }
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInPolygon(local[0], local[2], 9, @poly_0400, local[16]);
+        if (local[16] == 1) {
+            if (!(global[47] & 0x00020000)) {
+                PlayFieldSfx(2, 0, 16);
+                global[47] = global[47] & 0xFFFEFFFF;
+                global[47] = global[47] | 0x00020000;
+                global[47] = global[47] & 0xFFFBFFFF;
+                global[47] = global[47] & 0xFFEFFFFF;
+                global[47] = global[47] & 0xFFF7FFFF;
+            }
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInPolygon(local[0], local[2], 9, @poly_0424, local[17]);
+        if (local[17] == 1) {
+            if (!(global[47] & 0x00040000)) {
+                PlayFieldSfx(2, 0, 28);
+                global[47] = global[47] & 0xFFFEFFFF;
+                global[47] = global[47] & 0xFFFDFFFF;
+                global[47] = global[47] | 0x00040000;
+                global[47] = global[47] & 0xFFEFFFFF;
+                global[47] = global[47] & 0xFFF7FFFF;
+            }
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInPolygon(local[0], local[2], 6, @poly_0448, local[18]);
+        if (local[18] == 1) {
+            if (!(global[47] & 0x00100000)) {
+                PlayFieldSfx(2, 0, 23);
+                global[47] = global[47] & 0xFFFEFFFF;
+                global[47] = global[47] & 0xFFFDFFFF;
+                global[47] = global[47] & 0xFFFBFFFF;
+                global[47] = global[47] | 0x00100000;
+                global[47] = global[47] & 0xFFF7FFFF;
+            }
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInPolygon(local[0], local[2], 5, @poly_0460, local[19]);
+        if (local[19] == 1) {
+            if (!(global[47] & 0x00080000)) {
+                PlayFieldSfx(2, 0, 22);
+                global[47] = global[47] & 0xFFFEFFFF;
+                global[47] = global[47] & 0xFFFDFFFF;
+                global[47] = global[47] & 0xFFFBFFFF;
+                global[47] = global[47] & 0xFFEFFFFF;
+                global[47] = global[47] | 0x00080000;
+            }
+        }
+        Wait(1);
+        goto @label_000E;
+        polygon @poly_03E4 {
+            (3100.0fp, -2550.0fp),
+            (2323.0fp, -2276.0fp),
+            (2323.0fp, -3500.0fp),
+            (2850.0fp, -4111.0fp),
+            (3050.0fp, -4111.0fp),
+            (3400.0fp, -4006.0fp),
+            (3400.0fp, -3200.0fp),
+        }
+        polygon @poly_0400 {
+            (3150.0fp, -2500.0fp),
+            (2300.0fp, -2169.0fp),
+            (1979.0fp, -1851.0fp),
+            (-100.0fp, -1851.0fp),
+            (-100.0fp, -550.0fp),
+            (600.0fp, -100.0fp),
+            (3920.0fp, 10.0fp),
+            (3585.0fp, -2373.0fp),
+            (3333.0fp, -2323.0fp),
+        }
+        polygon @poly_0424 {
+            (2850.0fp, -4110.0fp),
+            (3050.0fp, -4110.0fp),
+            (3323.0fp, -4200.0fp),
+            (3250.0fp, -4911.0fp),
+            (2450.0fp, -4911.0fp),
+            (2450.0fp, -4656.0fp),
+            (2088.0fp, -4070.0fp),
+            (2088.0fp, -3795.0fp),
+            (2391.0fp, -3822.0fp),
+        }
+        polygon @poly_0448 {
+            (2050.0fp, -4110.0fp),
+            (2400.0fp, -4638.0fp),
+            (1581.0fp, -4662.0fp),
+            (1570.0fp, -4911.0fp),
+            (1000.0fp, -4911.0fp),
+            (1107.0fp, -4038.0fp),
+        }
+        polygon @poly_0460 {
+            (1035.0fp, -4032.0fp),
+            (911.0fp, -4902.0fp),
+            (0.0fp, -4902.0fp),
+            (0.0fp, -1919.0fp),
+            (1122.0fp, -1919.0fp),
+        }
+    @label_0474:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 24) {
+            DestroySelf();
+        }
+    }
+
+    actor_script actor_5 {
+        SetEventHandler(EVENT_INTERACT, @label_00F4);
+        Wait(1);
+    @label_000E:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[5]);
+        TestPointInQuad(2500.0fp, -3400.0fp, 2500.0fp, -2700.0fp, 2235.0fp, -2700.0fp, 2235.0fp, -3400.0fp, local[0], local[2], local[6]);
+        if (local[6] == 1) {
+            if (!(global[47] & 4096)) {
+                CheckPadInput(PAD_PRESSED, 0x100, local[7]);
+                if (local[7] != 0) {
+                    GetActorPositionByType(5, 0, 0, local[0], local[3], local[2], local[5]);
+                    if (local[3] >= 256 && local[3] <= 1792) {
+                        PlayFieldSfx(0, 0, 13);
+                        global[47] = global[47] | 4096;
+                    }
+                }
+            }
+        }
+        Wait(1);
+        goto @label_000E;
+    @label_00F4:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 18) {
+            DestroySelf();
+        }
+    }
+
+    actor_script actor_6 {
+        local[0] = 45;
+        Wait(1);
+        SetEventHandler(EVENT_INTERACT, @label_0158);
+    @label_0016:
+        GetActorPositionByType(0, 0, 0, local[3], local[4], local[5], local[6]);
+        TestPointInQuad(3240.0fp, -40.0fp, 3240.0fp, -222.0fp, 3500.0fp, -222.0fp, 3500.0fp, -40.0fp, local[3], local[5], local[8]);
+        if (local[8] == 1) {
+            if (room[18] == 0) {
+                room[18] = 1;
+                PlayFieldSfx(0, 0, 0);
+            }
+        }
+        GetActorPositionByType(0, 0, 0, local[3], local[4], local[5], local[6]);
+        TestPointInQuad(1000.0fp, -4600.0fp, 1000.0fp, -4900.0fp, 1200.0fp, -4900.0fp, 1200.0fp, -4600.0fp, local[3], local[5], local[8]);
+        if (local[8] == 1) {
+            if (global[47] & 4096) {
+                PlayFieldSfx(0, 0, 1);
+                ExitThread();
+            }
+        }
+        GetActorPositionByType(0, 0, 0, local[3], local[4], local[5], local[6]);
+        TestPointInQuad(1000.0fp, -4600.0fp, 1000.0fp, -4900.0fp, 1200.0fp, -4900.0fp, 1200.0fp, -4600.0fp, local[3], local[5], local[8]);
+        if (local[8] == 1) {
+            if (!(global[47] & 4096)) {
+                PlayFieldSfx(0, 0, 12);
+                ExitThread();
+            }
+        }
+        Wait(1);
+        goto @label_0016;
+    @label_0158:
+        GetThreadTarget14(local[7]);
+        if (local[7] == 8) {
+            DestroySelf();
+        }
+        if (local[7] == 32) {
+            AkaoCmd(0xD0, 0, 0, 0, 0, local[1]);
+            AkaoCmd(0xC9, 22, 0, 0, 0, local[1]);
+            Wait(1);
+            AkaoCmd(0x198, 61, 1, 0, 0, local[1]);
+        }
+        if (local[7] == 34) {
+        @label_01D4:
+            SceneCmd(2700, 159, 0, 0, 0, 0, 0, local[2]);
+            StartScreenFadeRect(8, 128, 0, 0, 0);
+            Wait(local[0]);
+            SceneCmd(2700, 0, 0, 0, 0, 0, 0, local[2]);
+            StartScreenFadeRect(15, 0, 0, 0, 1);
+            Wait(local[0]);
+            local[0] = local[0] - 1;
+            if (local[0] == 5) {
+                KillOtherThreads();
+                PlayFieldSfx(0, 0, 17);
+                ExitThread();
+            }
+            goto @label_01D4;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_7 {
+        SetEventHandler(EVENT_INTERACT, @label_00C8);
+        Wait(1);
+    @label_000E:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[4]);
+        TestPointInQuad(2250.0fp, -3500.0fp, 2250.0fp, -1900.0fp, 2676.0fp, -1900.0fp, 2676.0fp, -3500.0fp, local[0], local[2], local[5]);
+        if (local[5] == 1) {
+            if (!(global[47] & 1024)) {
+                room[17] = 1;
+                SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+                SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+                PlayFieldSfx(2, 0, 11);
+                Wait(1);
+                LoadGeomState(1);
+                global[47] = global[47] | 1024;
+            }
+        }
+        Wait(1);
+        goto @label_000E;
+    @label_00C8:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 20) {
+            DestroySelf();
+        }
+    }
+
+    actor_script actor_8 {
+        SetEventHandler(EVENT_INTERACT, @label_03EC);
+        SetHitCylinder(0, 0, 0);
+        SetEventHandler(EVENT_TOUCH, @label_00EC);
+        EnableActorCollision();
+        SetEntityVec3(VEC3_POS, 618.0fp, -16.0fp, -4759.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 992, 0);
+        SetMoveSpeed(0x10000);
+        SetActorFlag400();
+        SetHitCylinderRadius(0x00A00000);
+        Wait(1);
+        Random(local[0], 0, 100);
+        if (local[0] > 9) {
+            local[0] = 30;
+            if (local[0] > 19) {
+                local[0] = 30;
+            }
+        } else {
+            local[0] = 31;
+        }
+        if (global[85] & 0x01000000) {
+            SetAnim(2);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        } else {
+            SetAnim(0);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+        }
+        Wait(1);
+        ExitThread();
+    @label_00EC:
+        if (room[0] & 8) {
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[10], local[15], local[11], local[15]);
+        GetEntityVec3(VEC3_POS, local[13], local[15], local[14]);
+        Atan2(local[14] - local[11], local[13] - local[10], local[1]);
+        local[1] = 4096 - (local[1] + 1024) & 4095;
+        GetActorPositionByType(5, 0, 0, local[15], local[12], local[15], local[15]);
+        local[1] = local[1] - local[12] & 4095;
+        if (local[1] > 768 && local[1] < 3328) {
+            ExitThread();
+        }
+        GetThreadTargets18_1C(local[2], local[3]);
+        if (local[2] == 0) {
+            CheckPadInput(PAD_PRESSED, 0x100, local[4]);
+            if (local[4] != 0) {
+                PlayFieldSfx(0, 0, 254);
+                if (global[85] & 0x01000000) {
+                    OpenTextbox(2); // "Drop an item here? / <FB:09>2 Yes / No"
+                    WaitTextbox(2);
+                    GetChoiceResult(local[6]);
+                    if (local[6] == 0) {
+                        RunSubSceneWithTimeout(0, local[8]);
+                        Wait(1);
+                        if (local[8] != -1) {
+                            global[155] = local[8];
+                            AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                            SetAnim(3);
+                            SetAnimFrame(0);
+                            PlayAnimToFrame(30);
+                            WaitAnimEnd();
+                            global[85] = global[85] & 0xFEFFFFFF;
+                        }
+                    }
+                } else {
+                    AkaoCmd(0x15F, 1113, 0, 0, 0, local[6]);
+                    SetAnim(1);
+                    SetAnimFrame(0);
+                    PlayAnimToFrame(30);
+                    WaitAnimEnd();
+                    global[85] = global[85] | 0x01000000;
+                    if (global[155] == 0) {
+                        local[9] = local[0];
+                    } else {
+                        local[9] = global[155];
+                    }
+                    GiveItem(local[9], local[8]);
+                    if (local[8] == 0) {
+                        ShowReceivedItemPopup(local[9]);
+                        global[155] = 0;
+                    } else {
+                        OpenTextbox(3); // "Your inventory is full, | Will you replace an item? / <FB:09>2 Yes / No"
+                        WaitTextbox(3);
+                        GetChoiceResult(local[6]);
+                        if (local[6] == 0) {
+                            RunSubSceneWithTimeout(local[9], local[8]);
+                            if (local[8] != -1) {
+                                ShowReceivedItemPopup(local[9]);
+                                global[155] = local[8];
+                            }
+                            Wait(1);
+                        }
+                        AkaoCmd(0x15F, 1114, 0, 0, 0, local[6]);
+                        SetAnim(3);
+                        SetAnimFrame(0);
+                        PlayAnimToFrame(30);
+                        WaitAnimEnd();
+                        global[85] = global[85] & 0xFEFFFFFF;
+                    }
+                }
+                PlayFieldSfx(0, 0, 255);
+            }
+        }
+        ExitThread();
+    @label_03EC:
+        GetThreadTarget14(local[5]);
+        if (local[5] == 10) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+}

@@ -1,0 +1,925 @@
+// Parasite Eve 1 Scene Script (room_090)
+room_script room_090 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(100, 125, 20);
+        SceneCmd(2601, 112, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_0BC0);
+        SetEventHandler(EVENT_TOUCH, @label_0BBC);
+        SetActorFlag400();
+        LockPlayerMoveMask(2);
+        SetEntityVec3(VEC3_POS, -261.0fp, 0.0fp, -72.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        SetAnim(35);
+        SetAnimFrame(0);
+        PlayAnimToFrame(0);
+        WaitAnimEnd();
+        Wait(1);
+        Wait(90);
+        SetAnim(35);
+        SetAnimFrame(0);
+        PlayAnimToFrame(69);
+        WaitAnimEnd();
+        Wait(60);
+        SetAnim(35);
+        SetAnimFrame(69);
+        PlayAnimToFrame(165);
+        WaitAnimEnd();
+        Wait(60);
+        PlayFieldSfx(2, 0, 1);
+        Wait(60);
+        OpenTextbox(25); // "Maeda. Oh,,,! You're finally awake!"
+        WaitTextbox(25);
+        SetAnim(36);
+        SetAnimFrame(0);
+        PlayAnimToFrame(75);
+        WaitAnimEnd();
+        OpenTextbox(26); // "{Aya}. ,,,Who are you?"
+        WaitTextbox(26);
+        OpenTextbox(27); // "Maeda. I'm,,, Kunihiko Maeda, / I'm a scientist from Japan,"
+        PlayFieldSfx(2, 0, 4);
+        WaitTextbox(27);
+        OpenTextbox(28); // ""He found you,""
+        WaitTextbox(28);
+        SetAnim(42);
+        SetAnimFrame(0);
+        PlayAnimToFrame(21);
+        WaitAnimEnd();
+        PlayFieldSfx(3, 0, 22);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        OpenTextbox(29); // "{Aya}. Daniel!"
+        SetAnim(43);
+        SetAnimFrame(0);
+        PlayAnimToFrame(30);
+        WaitTextbox(29);
+        PlayFieldSfx(3, 0, 38);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        OpenTextbox(30); // "Daniel. There's no one out there / but cops,,, It's a ghost town,"
+        PlayFieldSfx(3, 0, 18);
+        WaitTextbox(30);
+        OpenTextbox(31); // "Never seen anything like it, / Pretty creepy: if ya ask me,,,"
+        PlayFieldSfx(3, 0, 14);
+        WaitTextbox(31);
+        OpenTextbox(32); // "{Aya}. Where's Eve?! What / happened to the people in / Central Park?"
+        SetAnim(43);
+        SetAnimFrame(0);
+        PlayAnimToFrame(30);
+        WaitTextbox(32);
+        Wait(60);
+        PlayFieldSfx(3, 0, 13);
+        OpenTextbox(33); // "Daniel. Ben was okay,,, but,,,"
+        WaitTextbox(33);
+        Wait(30);
+        PlayFieldSfx(3, 0, 47);
+        OpenTextbox(34); // "the rest of the audience,,, Well: / they just,,, disappeared,"
+        WaitTextbox(34);
+        OpenTextbox(35); // "{Aya}. ,,,,,,"
+        WaitTextbox(35);
+        SetAnim(42);
+        SetAnimFrame(21);
+        PlayAnimToFrame(48);
+        WaitAnimEnd();
+        PlayFieldSfx(2, 0, 3);
+        OpenTextbox(36); // "Maeda. Disappeared? You mean they / weren't ignited?"
+        WaitTextbox(36);
+        OpenTextbox(37); // "{Aya}. They all melted into / slime,,, and became,,, one big / mass,,,"
+        SetAnim(32);
+        SetAnimFrame(0);
+        PlayAnimToFrame(45);
+        WaitTextbox(37);
+        OpenTextbox(38); // "Daniel. ,,,,,,"
+        WaitTextbox(38);
+        PlayFieldSfx(3, 0, 48);
+        AkaoCmd(0x191, 25, 1, 0, 0, room[17]);
+        Wait(60);
+        PlayFieldSfx(2, 0, 4);
+        OpenTextbox(39); // "Maeda. That's something new,,, / Nothing like that happened in Japan"
+        WaitTextbox(39);
+        OpenTextbox(40); // "{Aya}. Japan?"
+        SetAnim(32);
+        SetAnimFrame(0);
+        PlayAnimToFrame(45);
+        WaitTextbox(40);
+        OpenTextbox(41); // "Maeda. A similar incident occurred / several years ago in Japan, | Although it wasn't a..."
+        PlayFieldSfx(2, 0, 3);
+        WaitTextbox(41);
+        AkaoCmd(0xC8, 25, 0, 0, 0, room[17]);
+        AkaoCmd(0xCD, 25, 0, 0, 0, room[17]);
+        AkaoCmd(0xCF, 25, 180, 0, 96, room[17]);
+        OpenTextbox(42); // "{Aya}. What?!"
+        SetAnim(31);
+        SetAnimFrame(0);
+        PlayAnimToFrame(60);
+        WaitTextbox(42);
+        OpenTextbox(43); // "Daniel. Hey! Give us the details!"
+        PlayFieldSfx(3, 0, 14);
+        WaitTextbox(43);
+        PlayFieldSfx(2, 0, 5);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        Wait(30);
+        OpenTextbox(44); // "Maeda. It all started when a / scientist's wife was involved in a / car accident,"
+        PlayFieldSfx(2, 0, 6);
+        WaitTextbox(44);
+        OpenTextbox(45); // "The scientist tried to culture her / liver cells in order to keep her / alive,"
+        PlayFieldSfx(2, 0, 7);
+        WaitTextbox(45);
+        PlayFieldSfx(2, 0, 42);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        Wait(30);
+        OpenTextbox(46); // "Maeda. The scientist named those / cells,,, Eve,,,"
+        PlayFieldSfx(2, 0, 6);
+        WaitTextbox(46);
+        OpenTextbox(47); // "{Aya}. Eve?!"
+        WaitTextbox(47);
+        PlayFieldSfx(2, 0, 39);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        OpenTextbox(48); // "Maeda. The liver cells multiplied / and her mitochondria eventually / took over her phy..."
+        PlayFieldSfx(2, 0, 6);
+        WaitTextbox(48);
+        OpenTextbox(49); // "{Aya}. ,,,!!"
+        WaitTextbox(49);
+        Wait(60);
+        OpenTextbox(50); // "Maeda. After acquiring the / scientist's sperm: Eve tried to / give birth to an ultimat..."
+        PlayFieldSfx(2, 0, 11);
+        WaitTextbox(50);
+        OpenTextbox(51); // "{Aya}. Ultimate Being,,,? / What kind of "being",,,?"
+        SetAnim(31);
+        SetAnimFrame(0);
+        PlayAnimToFrame(60);
+        WaitTextbox(51);
+        OpenTextbox(52); // "Maeda. "She":the being who mutated / from the liver cells: couldn't / maintain her body..."
+        PlayFieldSfx(2, 0, 6);
+        WaitTextbox(52);
+        OpenTextbox(53); // "By the way: before the car accident / occurred: the wife had registered / to have her o..."
+        PlayFieldSfx(2, 0, 7);
+        WaitTextbox(53);
+        PlayFieldSfx(2, 0, 40);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        PlayFieldSfx(2, 0, 11);
+        OpenTextbox(54); // "Maeda. So after the accident: her / kidneys were transplanted into a / young girl,,,"
+        WaitTextbox(54);
+        OpenTextbox(55); // "And Eve implanted a fertilized egg / in the young girl who gave birth to / ,,,an Ultima..."
+        PlayFieldSfx(2, 0, 6);
+        WaitTextbox(55);
+        PlayFieldSfx(2, 0, 10);
+        OpenTextbox(56); // "I was extremely interested in this / and went to his lab so that I could / continue res..."
+        WaitTextbox(56);
+        PlayFieldSfx(2, 0, 41);
+        Wait(60);
+        OpenTextbox(57); // "Maeda. After hearing about this / incident: I had to fly over here,"
+        PlayFieldSfx(2, 0, 7);
+        WaitTextbox(57);
+        PlayFieldSfx(3, 0, 14);
+        OpenTextbox(58); // "Daniel. What the hell is going on / HERE?!"
+        WaitTextbox(58);
+        PlayFieldSfx(2, 0, 10);
+        OpenTextbox(59); // "Maeda. I wish I could explain more,"
+        WaitTextbox(59);
+        AkaoCmd(0xCF, 25, 60, 127, 0, room[17]);
+        Wait(60);
+        AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+        OpenTextbox(35); // "{Aya}. ,,,,,,"
+        WaitTextbox(35);
+        PlayFieldSfx(3, 0, 26);
+        Wait(30);
+        OpenTextbox(60); // "Daniel. ,,,{Aya}: are you OK?"
+        PlayFieldSfx(3, 0, 13);
+        WaitTextbox(60);
+        Wait(30);
+        SetAnim(42);
+        SetAnimFrame(0);
+        PlayAnimToFrame(21);
+        WaitAnimEnd();
+        OpenTextbox(61); // "{Aya}. Yeah,,, I'm fine,,,"
+        SetAnim(43);
+        SetAnimFrame(0);
+        PlayAnimToFrame(30);
+        WaitTextbox(61);
+        OpenTextbox(62); // "Daniel. I thought that monster had / gotten a hold of you! Thought it / was too late,,,"
+        PlayFieldSfx(3, 0, 14);
+        WaitTextbox(62);
+        SetAnim(42);
+        SetAnimFrame(21);
+        PlayAnimToFrame(48);
+        WaitAnimEnd();
+        Wait(60);
+        OpenTextbox(63); // "{Aya}. When I felt Eve,,, / something inside of me felt like / it was being,,,"
+        SetAnim(32);
+        SetAnimFrame(0);
+        PlayAnimToFrame(45);
+        WaitTextbox(63);
+        OpenTextbox(64); // "Maeda. You felt you were about to / be ignited: correct?"
+        PlayFieldSfx(2, 0, 7);
+        WaitTextbox(64);
+        Wait(60);
+        PlayFieldSfx(3, 0, 49);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        Wait(30);
+        OpenTextbox(65); // "Daniel. No: she's,,, Well: she's / the only one that isn't affected,"
+        PlayFieldSfx(3, 0, 13);
+        WaitTextbox(65);
+        SetAnim(44);
+        SetAnimFrame(0);
+        PlayAnimToFrame(50);
+        PlayFieldSfx(2, 0, 23);
+        OpenTextbox(66); // "Maeda. What?!"
+        WaitTextbox(66);
+        Wait(60);
+        PlayFieldSfx(2, 0, 12);
+        Wait(60);
+        OpenTextbox(67); // "Maeda. I,,, I,,, don't understand,"
+        WaitTextbox(67);
+        AkaoCmd(0x191, 26, 1, 0, 0, room[17]);
+        Wait(45);
+        OpenTextbox(68); // "{Aya}. I,,, I think I may be / a monster,,, Like HER!"
+        WaitTextbox(68);
+        AkaoCmd(0xC8, 26, 0, 0, 0, room[17]);
+        PlayFieldSfx(2, 0, 37);
+        PlayFieldSfx(3, 0, 43);
+        room[19] = 0;
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        OpenTextbox(69); // "Daniel. What?! What are you saying: / {Aya}?!"
+        PlayFieldSfx(3, 0, 14);
+        WaitTextbox(69);
+        SetAnim(44);
+        SetAnimFrame(50);
+        PlayAnimToFrame(72);
+        WaitAnimEnd();
+        SetAnim(33);
+        SetAnimFrame(0);
+        PlayAnimToFrame(20);
+        WaitAnimEnd();
+        SetAnim(34);
+        OpenTextbox(70); // "{Aya}. I don't know, What if,,, / What if I end up killing you?!"
+        WaitTextbox(70);
+        Wait(30);
+        OpenTextbox(71); // "Daniel. Aw: shut up! You know / that's not,,,"
+        PlayFieldSfx(3, 0, 13);
+        WaitTextbox(71);
+        SetAnim(38);
+        SetAnimFrame(0);
+        PlayAnimToFrame(90);
+        Wait(30);
+        OpenTextbox(72); // "{Aya}. Please: Daniel! I don't / know! I just don't know anymore!"
+        WaitTextbox(72);
+        OpenTextbox(73); // "Please go away! Just,,, Just stay / away from me!!"
+        SetAnim(37);
+        SetAnimFrame(0);
+        PlayAnimToFrame(52);
+        WaitTextbox(73);
+        Wait(60);
+        PlayFieldSfx(3, 0, 13);
+        OpenTextbox(74); // "Daniel. {Aya},,,"
+        WaitTextbox(74);
+        SetAnim(37);
+        SetAnimFrame(53);
+        PlayAnimToFrame(90);
+        WaitAnimEnd();
+        SetAnim(22);
+        TurnTowardPoint(-261.0fp, 215.0fp, 45);
+        SetAnim(21);
+        Wait(30);
+        SetAnim(41);
+        SetAnimFrame(0);
+        PlayAnimToFrame(54);
+        WaitAnimEnd();
+        OpenTextbox(75); // "{Aya}. Please,,,"
+        WaitTextbox(75);
+        Wait(60);
+        room[19] = 0;
+        PlayFieldSfx(2, 0, 10);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        Wait(30);
+        PlayFieldSfx(2, 0, 11);
+        OpenTextbox(76); // "Maeda. Yes, I understand your point,"
+        WaitTextbox(76);
+        Wait(30);
+        PlayFieldSfx(2, 0, 24);
+        Wait(60);
+        PlayFieldSfx(3, 0, 25);
+        OpenTextbox(77); // "Daniel. H: hey! Where do you think / YOU'RE going?!"
+        WaitTextbox(77);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        AkaoCmd(0xCF, 26, 90, 127, 0, room[17]);
+        PlayFieldSfx(2, 0, 50);
+        PlayFieldSfx(3, 0, 49);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        Wait(60);
+        OpenTextbox(78); // "{Aya}. Even if I am a monster: / I don't EVER want to kill you: / Daniel,,, please,,,!"
+        SetAnim(39);
+        SetAnimFrame(0);
+        PlayAnimToFrame(70);
+        WaitAnimEnd();
+        WaitTextbox(78);
+        OpenTextbox(79); // "I,,, I could never forgive myself / if I killed,,, you,,,"
+        SetAnim(39);
+        SetAnimFrame(0);
+        PlayAnimToFrame(70);
+        WaitAnimEnd();
+        WaitTextbox(79);
+        Wait(60);
+        AkaoCmd(0xC9, 26, 0, 0, 0, room[17]);
+        PlayFieldSfx(3, 0, 26);
+        Wait(120);
+        OpenTextbox(80); // "Daniel. {Aya},,, You're no / monster,"
+        PlayFieldSfx(3, 0, 14);
+        WaitTextbox(80);
+        PlayFieldSfx(3, 0, 27);
+        room[19] = 0;
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        Wait(60);
+        PlayFieldSfx(3, 0, 45);
+        OpenTextbox(81); // "Daniel. You're my best partner: / {Aya} Brea! I'll be by your / side,,, always: {Aya},,,,"
+        WaitTextbox(81);
+        PlayFieldSfx(3, 0, 46);
+        Wait(60);
+        PlayFieldSfx(3, 0, 28);
+        while (room[19] == 0) {
+            Wait(1);
+        }
+        room[19] = 0;
+        Wait(30);
+        SetAnim(30);
+        SetAnimFrame(0);
+        PlayAnimToFrame(22);
+        WaitAnimEnd();
+        Wait(60);
+        OpenTextbox(35); // "{Aya}. ,,,,,,"
+        WaitTextbox(35);
+        SetAnim(30);
+        SetAnimFrame(22);
+        PlayAnimToFrame(45);
+        WaitAnimEnd();
+        SnapToSpawnPosition();
+        SetAnim(41);
+        SetAnimFrame(0);
+        PlayAnimToFrame(54);
+        WaitAnimEnd();
+        Wait(60);
+        OpenTextbox(82); // "{Aya}. When I touched Eve,,, | That feeling,,, | Was it Maya?,,, | But Maya died in the..."
+        WaitTextbox(82);
+        OpenTextbox(83); // "No: it just couldn't be,,,!"
+        SetAnim(40);
+        SetAnimFrame(0);
+        PlayAnimToFrame(60);
+        WaitAnimEnd();
+        WaitTextbox(83);
+        Wait(30);
+        AkaoCmd(0x12F, room[20], 0, 90, 0, room[17]);
+        StartScreenFade(90);
+        WaitScreenFade();
+        AkaoCmd(0x12D, room[20], 0, 0, 0, room[17]);
+        Wait(30);
+        global[AREA] = 312;
+        global[ROOM] = 91;
+        ChangeRoom(0xA80650C8);
+        ExitThread();
+    @label_0BBC:
+        ExitThread();
+    @label_0BC0:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[4] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        AkaoCmd(0xD9, 0, 0, 0, 0, room[17]);
+        AkaoCmd(0x193, 1004, 1012, 0, 0, room[17]);
+        AkaoCmd(0x12C, 2359, 0, 128, 127, room[20]);
+        AkaoCmd(0x15E, 256, 72, 2048, 32, room[17]);
+        SceneCmd(2700, 255, 235, 205, 0, 0, 0, room[17]);
+        SetCameraBaseAngle(0, 32);
+        SetMeshFadeLevel(112);
+        ClearScreenFadeFlag40();
+        Wait(1);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        LockPlayerInput();
+        SetGeomEntryFlags(0, 0x10);
+        SetGeomEntryFlags(1, 0x10);
+        SetGeomEntryFlags(3, 0x10);
+        SetGeomEntryFlags(4, 0x10);
+        SetGeomEntryFlags(5, 0x10);
+        SetGeomFlagSlot(0, 1);
+        SetGeomFlagSlot(1, 1);
+        SetGeomFlagSlot(3, 1);
+        SetGeomFlagSlot(4, 1);
+        SetGeomFlagSlot(5, 1);
+        SetFadeColor(0x5A);
+        Wait(1);
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetHitCylinder(105, 130, 20);
+        SceneCmd(2601, 112, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_0072);
+        EnableActorCollision();
+        AkaoCmd(0x196, 1, 0, 1012, 0, room[17]);
+        AkaoCmd(0x196, 1, 18, 1013, 0, room[17]);
+        SetEntityVec3(VEC3_POS, -621.0fp, 0.0fp, -627.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 3264, 0);
+        SetAnim(14);
+        Wait(1);
+        ExitThread();
+    @label_0072:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 1) {
+            KillOtherThreads();
+            SetAnim(15);
+            SetAnimFrame(0);
+            PlayAnimToFrame(90);
+            WaitAnimEnd();
+        }
+        if (local[4] == 2) {
+            KillOtherThreads();
+            SetAnim(16);
+            SetAnimFrame(0);
+            PlayAnimToFrame(60);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[4] == 3) {
+            KillOtherThreads();
+            SetAnim(18);
+            SetAnimFrame(0);
+            PlayAnimToFrame(90);
+            WaitAnimEnd();
+        }
+        if (local[4] == 4) {
+            KillOtherThreads();
+            SetAnim(19);
+            SetAnimFrame(0);
+            PlayAnimToFrame(90);
+            WaitAnimEnd();
+        }
+        if (local[4] == 5) {
+            KillOtherThreads();
+            SetAnim(17);
+            SetAnimFrame(0);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+            SnapToSpawnPosition();
+            SetEntityVec3(VEC3_ROT, 0, 2752, 0);
+            SetAnim(0);
+            room[19] = 1;
+        }
+        if (local[4] == 42) {
+            KillOtherThreads();
+            SetAnim(1);
+            CameraSnapToActor(3, 0, 35);
+            SetAnim(0);
+            room[19] = 1;
+        }
+        if (local[4] == 6) {
+            KillOtherThreads();
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(80);
+            WaitAnimEnd();
+        }
+        if (local[4] == 7) {
+            KillOtherThreads();
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+        }
+        if (local[4] == 8) {
+            KillOtherThreads();
+            SetAnim(5);
+            SetAnimFrame(0);
+            PlayAnimToFrame(80);
+            WaitAnimEnd();
+        }
+        if (local[4] == 9) {
+            KillOtherThreads();
+            SetAnim(7);
+            SetAnimFrame(0);
+            PlayAnimToFrame(80);
+            WaitAnimEnd();
+        }
+        if (local[4] == 21) {
+            KillOtherThreads();
+            SetAnim(6);
+            SetAnimFrame(0);
+            PlayAnimToFrame(80);
+            WaitAnimEnd();
+        }
+        if (local[4] == 10) {
+            KillOtherThreads();
+            SetAnim(8);
+            SetAnimFrame(0);
+            PlayAnimToFrame(90);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[4] == 11) {
+            KillOtherThreads();
+            SetAnim(10);
+            SetAnimFrame(0);
+            PlayAnimToFrame(65);
+            WaitAnimEnd();
+        }
+        if (local[4] == 12) {
+            KillOtherThreads();
+            SetAnim(11);
+            SetAnimFrame(0);
+            PlayAnimToFrame(60);
+            WaitAnimEnd();
+        }
+        if (local[4] == 37) {
+            KillOtherThreads();
+            SetAnim(11);
+            SetAnimFrame(60);
+            PlayAnimToFrame(120);
+            WaitAnimEnd();
+            SetAnim(1);
+            CameraSnapToActor(0, 0, 35);
+            SetAnim(0);
+        }
+        if (local[4] == 23) {
+            KillOtherThreads();
+            SetAnim(9);
+            SetAnimFrame(0);
+            PlayAnimToFrame(18);
+            WaitAnimEnd();
+        }
+        if (local[4] == 24) {
+            KillOtherThreads();
+            EnableActorCollision();
+            DisableActorRendering();
+            SetAnim(1);
+            TurnTowardPoint(159.0fp, -811.0fp, 45);
+            MoveTowardPoint(159.0fp, -811.0fp, 45);
+            SetAnim(1);
+            TurnTowardPoint(371.0fp, -826.0fp, 45);
+            MoveTowardPoint(371.0fp, -826.0fp, 45);
+            SetAnim(1);
+            TurnTowardPoint(648.0fp, 33.0fp, 45);
+            MoveTowardPoint(648.0fp, 33.0fp, 45);
+            SetAnim(1);
+            TurnTowardPoint(812.0fp, 33.0fp, 45);
+            MoveTowardPoint(812.0fp, 33.0fp, 45);
+            StopActorMotion();
+            room[19] = 1;
+        }
+        if (local[4] == 50) {
+            KillOtherThreads();
+            SetAnim(1);
+            TurnTowardPoint(1065.0fp, 96.0fp, 45);
+            SetAnim(20);
+            SetAnimFrame(0);
+            PlayAnimToFrame(36);
+            AkaoCmd(0x12C, 2357, 0, 191, 127, room[17]);
+            SetGeomEntryField8(2, 32768);
+            SetGeomFlagSlot(2, 1);
+            Wait(36);
+            SnapToSpawnPosition();
+            SetAnim(1);
+            TurnTowardPoint(1065.0fp, 96.0fp, 180);
+            MoveTowardPoint(1065.0fp, 96.0fp, 180);
+            room[19] = 1;
+            DestroySelf();
+        }
+        if (local[4] == 29) {
+            KillOtherThreads();
+            SetAnim(12);
+            SetAnimFrame(0);
+            PlayAnimToFrame(21);
+            WaitAnimEnd();
+        }
+        if (local[4] == 30) {
+            KillOtherThreads();
+            SetAnim(12);
+            SetAnimFrame(21);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+        }
+        if (local[4] == 31) {
+            KillOtherThreads();
+            SetAnim(12);
+            SetAnimFrame(0);
+            PlayAnimToFrame(21);
+            WaitAnimEnd();
+        }
+        if (local[4] == 32) {
+            KillOtherThreads();
+            SetAnim(12);
+            SetAnimFrame(21);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+        }
+        if (local[4] == 39) {
+            KillOtherThreads();
+            SetAnim(1);
+            TurnTowardPoint(-279.0fp, -598.0fp, 90);
+            MoveTowardPoint(-279.0fp, -598.0fp, 90);
+            SetAnim(0);
+            room[19] = 1;
+        }
+        if (local[4] == 40) {
+            KillOtherThreads();
+            SetAnim(1);
+            TurnTowardPoint(-105.0fp, -673.0fp, 90);
+            MoveTowardPoint(-105.0fp, -673.0fp, 90);
+            SetAnim(0);
+            room[19] = 1;
+        }
+        if (local[4] == 41) {
+            KillOtherThreads();
+            SetAnim(1);
+            CameraSnapToActor(0, 0, 35);
+            SetAnim(0);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetHitCylinder(100, 130, 20);
+        SceneCmd(2601, 112, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_007C);
+        SetEventHandler(EVENT_TOUCH, @label_0078);
+        AkaoCmd(0x196, 1, 0, 1004, 0, room[17]);
+        AkaoCmd(0x196, 1, 18, 1005, 0, room[17]);
+        EnableActorCollision();
+        DisableActorRendering();
+        SetEntityVec3(VEC3_POS, 1238.0fp, 0.0fp, 18.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 832, 0);
+        Wait(1);
+    @label_0074:
+        ExitThread();
+    @label_0078:
+        ExitThread();
+    @label_007C:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 13) {
+            KillOtherThreads();
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(60);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 14) {
+            KillOtherThreads();
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 47) {
+            KillOtherThreads();
+            SetAnim(7);
+            SetAnimFrame(0);
+            PlayAnimToFrame(40);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 48) {
+            KillOtherThreads();
+            SetAnim(7);
+            SetAnimFrame(40);
+            PlayAnimToFrame(80);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 18) {
+            KillOtherThreads();
+            SetAnim(8);
+            SetAnimFrame(0);
+            PlayAnimToFrame(60);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 19) {
+            KillOtherThreads();
+            SetAnim(13);
+            SetAnimFrame(0);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 20) {
+            KillOtherThreads();
+            SetAnim(14);
+            SetAnimFrame(0);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 22) {
+            KillOtherThreads();
+            AkaoCmd(0x12C, 2357, 0, 191, 127, room[17]);
+            SetGeomFlagSlot(2, 1);
+            Wait(30);
+            SetAnim(1);
+            TurnTowardPoint(839.0fp, 33.0fp, 180);
+            MoveTowardPoint(839.0fp, 33.0fp, 180);
+            SetAnim(10);
+            SetAnimFrame(0);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+            SetGeomEntryField8(2, -32768);
+            SetGeomFlagSlot(2, 1);
+            SetMenuSlotEntry(2, 5, 0);
+            SetAnim(10);
+            SetAnimFrame(45);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+            AkaoCmd(0x12C, 2358, 0, 191, 127, room[17]);
+            SetAnim(10);
+            SetAnimFrame(70);
+            PlayAnimToFrame(90);
+            WaitAnimEnd();
+            Wait(30);
+            SnapToSpawnPosition();
+            SetAnim(0);
+            room[19] = 1;
+            goto @label_0074;
+        }
+        if (local[4] == 38) {
+            KillOtherThreads();
+            SetAnim(1);
+            TurnTowardPoint(323.0fp, -177.0fp, 180);
+            MoveTowardPoint(323.0fp, -177.0fp, 180);
+            SetAnim(0);
+            room[19] = 1;
+            goto @label_0074;
+        }
+        if (local[4] == 25) {
+            KillOtherThreads();
+            SetAnim(1);
+            CameraSnapToActor(2, 0, 45);
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(60);
+            WaitAnimEnd();
+            SetAnim(0);
+            goto @label_0074;
+        }
+        if (local[4] == 26) {
+            KillOtherThreads();
+            SetAnim(1);
+            CameraSnapToActor(0, 0, 35);
+            SetAnim(0);
+            goto @label_0074;
+        }
+        if (local[4] == 27) {
+            KillOtherThreads();
+            SetAnim(1);
+            TurnTowardPoint(-50.0fp, -156.0fp, 90);
+            MoveTowardPoint(-50.0fp, -156.0fp, 90);
+            SetAnim(0);
+            StopActorMotion();
+            room[19] = 1;
+            goto @label_0074;
+        }
+        if (local[4] == 43) {
+            KillOtherThreads();
+            SetAnim(12);
+            SetAnimFrame(0);
+            PlayAnimToFrame(30);
+            WaitAnimEnd();
+            SetAnim(1);
+            CameraSnapToActor(0, 0, 90);
+            SetAnim(0);
+            room[19] = 1;
+            goto @label_0074;
+        }
+        if (local[4] == 45) {
+            KillOtherThreads();
+            SetAnim(9);
+            SetAnimFrame(0);
+            PlayAnimToFrame(42);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 46) {
+            KillOtherThreads();
+            SetAnim(9);
+            SetAnimFrame(42);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 28) {
+            KillOtherThreads();
+            SetAnim(1);
+            TurnTowardPoint(1365.0fp, 100.0fp, 45);
+            MoveTowardPoint(1365.0fp, 100.0fp, 45);
+            AkaoCmd(0x12C, 2358, 0, 191, 127, room[17]);
+            SetGeomEntryField8(2, -32768);
+            SetGeomFlagSlot(2, 1);
+            SetMenuSlotEntry(2, 5, 0);
+            HideActor();
+            room[19] = 1;
+            goto @label_0074;
+        }
+        if (local[4] == 33) {
+            KillOtherThreads();
+            SetAnim(13);
+            SetAnimFrame(0);
+            PlayAnimToFrame(22);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 34) {
+            KillOtherThreads();
+            SetAnim(13);
+            SetAnimFrame(22);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 35) {
+            KillOtherThreads();
+            SetAnim(13);
+            SetAnimFrame(0);
+            PlayAnimToFrame(22);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 36) {
+            KillOtherThreads();
+            SetAnim(13);
+            SetAnimFrame(22);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+            goto @label_0074;
+        }
+        if (local[4] == 49) {
+            KillOtherThreads();
+            SetAnim(1);
+            CameraSnapToActor(2, 0, 45);
+            SetAnim(0);
+            room[19] = 1;
+            goto @label_0074;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_4 {
+        SetHitCylinder(25, 40, 160);
+        EnableActorCollision();
+        SetMoveSpeed(0xB333);
+        ScaleShadowRadius(0x9999);
+        SetEntityVec3(VEC3_POS, 373.0fp, 0.0fp, 444.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        Wait(1);
+        ExitThread();
+    }
+}

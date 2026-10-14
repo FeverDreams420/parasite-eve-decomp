@@ -1,0 +1,1288 @@
+// Parasite Eve 1 Scene Script (room_293)
+room_script room_293 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(115, 165, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00C8);
+        SetEventHandler(EVENT_TOUCH, @label_00C4);
+        if (global[5] == 23) {
+            SetEntityVec3(VEC3_POS, -671.0fp, 0.0fp, -92.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+        }
+        if (global[5] == 21) {
+            SetEntityVec3(VEC3_POS, 756.0fp, 0.0fp, -92.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+        }
+        if (global[ROOM] == 13) {
+            SetEntityVec3(VEC3_POS, 7.0fp, 0.0fp, 63.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+            global[ROOM] = 294;
+        }
+        Wait(1);
+        ExitThread();
+    @label_00C4:
+        ExitThread();
+    @label_00C8:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[4] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+        }
+        if (local[4] == 7) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[5] = 21;
+            SelectWorldMapDestination(21);
+        }
+        if (local[4] == 8) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[5] = 23;
+            SelectWorldMapDestination(23);
+        }
+        if (local[4] == 10) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            SetAnim(22);
+            TurnTowardPoint(0.0fp, 623.0fp, 45);
+            SetAnim(21);
+            AkaoCmd(0x12C, 2523, 0, 128, 68, room[20]);
+            SetGeomEntryField8(0, 8519);
+            SetGeomFlagSlot(0, 1);
+            SetGeomEntryField8(1, 8519);
+            SetGeomFlagSlot(1, 1);
+            SetAnim(30);
+            SetAnimFrame(0);
+            PlayAnimToFrame(18);
+            WaitAnimEnd();
+            if (global[4] >= 2) {
+                if (global[4] <= 10) {
+                    if (!(global[7] & 2)) {
+                        AkaoCmd(0xCF, 9, 30, 127, 0, room[20]);
+                    }
+                }
+            }
+            if (global[4] >= 11) {
+                if (global[4] <= 20) {
+                    if (!(global[7] & 4)) {
+                        AkaoCmd(0xCF, 29, 30, 127, 0, room[20]);
+                    }
+                }
+            }
+            if (global[4] >= 21) {
+                if (global[4] <= 30) {
+                    if (!(global[7] & 8)) {
+                        AkaoCmd(0xCF, 10, 30, 127, 0, room[20]);
+                    }
+                }
+            }
+            if (global[4] >= 31) {
+                if (global[4] <= 40) {
+                    if (!(global[7] & 256)) {
+                        AkaoCmd(0xCF, 11, 30, 127, 0, room[20]);
+                    }
+                }
+            }
+            if (global[4] >= 41) {
+                if (global[4] <= 50) {
+                    if (!(global[7] & 512)) {
+                        AkaoCmd(0xCF, 12, 30, 127, 0, room[20]);
+                    }
+                }
+            }
+            if (global[4] >= 51) {
+                if (global[4] <= 60) {
+                    if (!(global[7] & 1024)) {
+                        AkaoCmd(0xCF, 15, 30, 127, 0, room[20]);
+                    }
+                }
+            }
+            if (global[4] >= 61) {
+                if (global[4] <= 70) {
+                    if (!(global[7] & 2048)) {
+                        AkaoCmd(0xCF, 6, 30, 127, 0, room[20]);
+                    }
+                }
+            }
+            StartScreenFade(60);
+            EnableActorCollision();
+            SetAnim(31);
+            TurnTowardPoint(1.0fp, 565.0fp, 180);
+            MoveTowardPoint(1.0fp, 565.0fp, 180);
+            WaitScreenFade();
+            AkaoCmd(0xD9, 0, 0, 0, 0, room[20]);
+            local[16] = global[4];
+            if (local[16] < 2) {
+                local[16] = 2;
+            }
+            if (local[16] <= 10) {
+                local[8] = (global[81] + local[16]) % 9;
+                case_if (local[8] == 0) {
+                    local[9] = 3;
+                    goto @label_061A;
+                    goto @label_0534;
+                }
+                case_if (local[8] == 1) {
+                @label_0534:
+                    local[9] = 6;
+                    goto @label_061A;
+                    goto @label_0552;
+                }
+                case_if (local[8] == 2) {
+                @label_0552:
+                    local[9] = 9;
+                    goto @label_061A;
+                    goto @label_0570;
+                }
+                case_if (local[8] == 3) {
+                @label_0570:
+                    local[9] = 1;
+                    goto @label_061A;
+                    goto @label_058E;
+                }
+                case_if (local[8] == 4) {
+                @label_058E:
+                    local[9] = 5;
+                    goto @label_061A;
+                    goto @label_05AC;
+                }
+                case_if (local[8] == 5) {
+                @label_05AC:
+                    local[9] = 4;
+                    goto @label_061A;
+                    goto @label_05CA;
+                }
+                case_if (local[8] == 6) {
+                @label_05CA:
+                    local[9] = 2;
+                    goto @label_061A;
+                    goto @label_05E8;
+                }
+                case_if (local[8] == 7) {
+                @label_05E8:
+                    local[9] = 8;
+                    goto @label_061A;
+                    goto @label_0606;
+                }
+                case_if (local[8] == 8) {
+                @label_0606:
+                    local[9] = 7;
+                    goto @label_061A;
+                    goto @label_061A;
+                }
+            }
+        @label_061A:
+            if (local[16] > 10) {
+                local[8] = (global[81] + local[16] + (local[16] - 1) / 10) % 10;
+                case_if (local[8] == 0) {
+                    local[9] = 0 + (local[16] - 1) / 10 * 10;
+                    goto @label_097E;
+                    goto @label_06CA;
+                }
+                case_if (local[8] == 1) {
+                @label_06CA:
+                    local[9] = 4 + (local[16] - 1) / 10 * 10;
+                    goto @label_097E;
+                    goto @label_0718;
+                }
+                case_if (local[8] == 2) {
+                @label_0718:
+                    local[9] = 8 + (local[16] - 1) / 10 * 10;
+                    goto @label_097E;
+                    goto @label_0766;
+                }
+                case_if (local[8] == 3) {
+                @label_0766:
+                    local[9] = 1 + (local[16] - 1) / 10 * 10;
+                    goto @label_097E;
+                    goto @label_07B4;
+                }
+                case_if (local[8] == 4) {
+                @label_07B4:
+                    local[9] = 5 + (local[16] - 1) / 10 * 10;
+                    goto @label_097E;
+                    goto @label_0802;
+                }
+                case_if (local[8] == 5) {
+                @label_0802:
+                    local[9] = 2 + (local[16] - 1) / 10 * 10;
+                    goto @label_097E;
+                    goto @label_0850;
+                }
+                case_if (local[8] == 6) {
+                @label_0850:
+                    local[9] = 9 + (local[16] - 1) / 10 * 10;
+                    goto @label_097E;
+                    goto @label_089E;
+                }
+                case_if (local[8] == 7) {
+                @label_089E:
+                    local[9] = 7 + (local[16] - 1) / 10 * 10;
+                    goto @label_097E;
+                    goto @label_08EC;
+                }
+                case_if (local[8] == 8) {
+                @label_08EC:
+                    local[9] = 6 + (local[16] - 1) / 10 * 10;
+                    goto @label_097E;
+                    goto @label_093A;
+                }
+                case_if (local[8] == 9) {
+                @label_093A:
+                    local[9] = 3 + (local[16] - 1) / 10 * 10;
+                    goto @label_097E;
+                    goto @label_097E;
+                }
+            }
+        @label_097E:
+            case_if (local[9] == 1) {
+                local[11] = 0;
+                local[12] = 777;
+                local[13] = 12;
+                local[14] = 18;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_09C6;
+            }
+            case_if (local[9] == 2) {
+            @label_09C6:
+                local[11] = 777;
+                local[12] = 6;
+                local[13] = 13;
+                local[14] = 777;
+                local[15] = 24;
+                goto @label_1A62;
+                goto @label_0A04;
+            }
+            case_if (local[9] == 3) {
+            @label_0A04:
+                local[11] = 777;
+                local[12] = 7;
+                local[13] = 14;
+                local[14] = 19;
+                local[15] = 25;
+                goto @label_1A62;
+                goto @label_0A42;
+            }
+            case_if (local[9] == 4) {
+            @label_0A42:
+                local[11] = 777;
+                local[12] = 8;
+                local[13] = 777;
+                local[14] = 20;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_0A80;
+            }
+            case_if (local[9] == 5) {
+            @label_0A80:
+                local[11] = 1;
+                local[12] = 9;
+                local[13] = 15;
+                local[14] = 777;
+                local[15] = 26;
+                goto @label_1A62;
+                goto @label_0ABE;
+            }
+            case_if (local[9] == 6) {
+            @label_0ABE:
+                local[11] = 2;
+                local[12] = 10;
+                local[13] = 777;
+                local[14] = 21;
+                local[15] = 27;
+                goto @label_1A62;
+                goto @label_0AFC;
+            }
+            case_if (local[9] == 7) {
+            @label_0AFC:
+                local[11] = 3;
+                local[12] = 777;
+                local[13] = 16;
+                local[14] = 22;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_0B3A;
+            }
+            case_if (local[9] == 8) {
+            @label_0B3A:
+                local[11] = 4;
+                local[12] = 11;
+                local[13] = 17;
+                local[14] = 777;
+                local[15] = 28;
+                goto @label_1A62;
+                goto @label_0B78;
+            }
+            case_if (local[9] == 9) {
+            @label_0B78:
+                local[11] = 5;
+                local[12] = 777;
+                local[13] = 777;
+                local[14] = 23;
+                local[15] = 29;
+                goto @label_1A62;
+                goto @label_0BB6;
+            }
+            case_if (local[9] == 10) {
+            @label_0BB6:
+                local[11] = 777;
+                local[12] = 35;
+                local[13] = 777;
+                local[14] = 44;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_0BF4;
+            }
+            case_if (local[9] == 11) {
+            @label_0BF4:
+                local[11] = 30;
+                local[12] = 777;
+                local[13] = 39;
+                local[14] = 777;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_0C32;
+            }
+            case_if (local[9] == 12) {
+            @label_0C32:
+                local[11] = 777;
+                local[12] = 200;
+                local[13] = 777;
+                local[14] = 777;
+                local[15] = 49;
+                goto @label_1A62;
+                goto @label_0C70;
+            }
+            case_if (local[9] == 13) {
+            @label_0C70:
+                local[11] = 31;
+                local[12] = 36;
+                local[13] = 777;
+                local[14] = 45;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_0CAE;
+            }
+            case_if (local[9] == 14) {
+            @label_0CAE:
+                local[11] = 32;
+                local[12] = 777;
+                local[13] = 40;
+                local[14] = 777;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_0CEC;
+            }
+            case_if (local[9] == 15) {
+            @label_0CEC:
+                local[11] = 777;
+                local[12] = 777;
+                local[13] = 777;
+                local[14] = 46;
+                local[15] = 50;
+                goto @label_1A62;
+                goto @label_0D2A;
+            }
+            case_if (local[9] == 16) {
+            @label_0D2A:
+                local[11] = 777;
+                local[12] = 37;
+                local[13] = 41;
+                local[14] = 777;
+                local[15] = 51;
+                goto @label_1A62;
+                goto @label_0D68;
+            }
+            case_if (local[9] == 17) {
+            @label_0D68:
+                local[11] = 33;
+                local[12] = 777;
+                local[13] = 42;
+                local[14] = 47;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_0DA6;
+            }
+            case_if (local[9] == 18) {
+            @label_0DA6:
+                local[11] = 777;
+                local[12] = 38;
+                local[13] = 777;
+                local[14] = 48;
+                local[15] = 52;
+                goto @label_1A62;
+                goto @label_0DE4;
+            }
+            case_if (local[9] == 19) {
+            @label_0DE4:
+                local[11] = 34;
+                local[12] = 777;
+                local[13] = 43;
+                local[14] = 777;
+                local[15] = 53;
+                goto @label_1A62;
+                goto @label_0E22;
+            }
+            case_if (local[9] == 20) {
+            @label_0E22:
+                local[11] = 777;
+                local[12] = 59;
+                local[13] = 777;
+                local[14] = 777;
+                local[15] = 73;
+                goto @label_1A62;
+                goto @label_0E60;
+            }
+            case_if (local[9] == 21) {
+            @label_0E60:
+                local[11] = 54;
+                local[12] = 777;
+                local[13] = 777;
+                local[14] = 69;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_0E9E;
+            }
+            case_if (local[9] == 22) {
+            @label_0E9E:
+                local[11] = 777;
+                local[12] = 777;
+                local[13] = 64;
+                local[14] = 777;
+                local[15] = 201;
+                goto @label_1A62;
+                goto @label_0EDC;
+            }
+            case_if (local[9] == 23) {
+            @label_0EDC:
+                local[11] = 777;
+                local[12] = 60;
+                local[13] = 777;
+                local[14] = 70;
+                local[15] = 74;
+                goto @label_1A62;
+                goto @label_0F1A;
+            }
+            case_if (local[9] == 24) {
+            @label_0F1A:
+                local[11] = 55;
+                local[12] = 777;
+                local[13] = 777;
+                local[14] = 202;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_0F58;
+            }
+            case_if (local[9] == 25) {
+            @label_0F58:
+                local[11] = 777;
+                local[12] = 61;
+                local[13] = 65;
+                local[14] = 777;
+                local[15] = 75;
+                goto @label_1A62;
+                goto @label_0F96;
+            }
+            case_if (local[9] == 26) {
+            @label_0F96:
+                local[11] = 56;
+                local[12] = 777;
+                local[13] = 66;
+                local[14] = 777;
+                local[15] = 76;
+                goto @label_1A62;
+                goto @label_0FD4;
+            }
+            case_if (local[9] == 27) {
+            @label_0FD4:
+                local[11] = 57;
+                local[12] = 62;
+                local[13] = 777;
+                local[14] = 71;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_1012;
+            }
+            case_if (local[9] == 28) {
+            @label_1012:
+                local[11] = 777;
+                local[12] = 63;
+                local[13] = 67;
+                local[14] = 777;
+                local[15] = 77;
+                goto @label_1A62;
+                goto @label_1050;
+            }
+            case_if (local[9] == 29) {
+            @label_1050:
+                local[11] = 58;
+                local[12] = 777;
+                local[13] = 68;
+                local[14] = 72;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_108E;
+            }
+            case_if (local[9] == 30) {
+            @label_108E:
+                local[11] = 777;
+                local[12] = 777;
+                local[13] = 777;
+                local[14] = 94;
+                local[15] = 203;
+                goto @label_1A62;
+                goto @label_10CC;
+            }
+            case_if (local[9] == 31) {
+            @label_10CC:
+                local[11] = 777;
+                local[12] = 84;
+                local[13] = 88;
+                local[14] = 777;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_110A;
+            }
+            case_if (local[9] == 32) {
+            @label_110A:
+                local[11] = 78;
+                local[12] = 777;
+                local[13] = 777;
+                local[14] = 204;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_1148;
+            }
+            case_if (local[9] == 33) {
+            @label_1148:
+                local[11] = 79;
+                local[12] = 85;
+                local[13] = 777;
+                local[14] = 95;
+                local[15] = 98;
+                goto @label_1A62;
+                goto @label_1186;
+            }
+            case_if (local[9] == 34) {
+            @label_1186:
+                local[11] = 777;
+                local[12] = 205;
+                local[13] = 89;
+                local[14] = 777;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_11C4;
+            }
+            case_if (local[9] == 35) {
+            @label_11C4:
+                local[11] = 80;
+                local[12] = 777;
+                local[13] = 777;
+                local[14] = 206;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_1202;
+            }
+            case_if (local[9] == 36) {
+            @label_1202:
+                local[11] = 81;
+                local[12] = 777;
+                local[13] = 90;
+                local[14] = 96;
+                local[15] = 99;
+                goto @label_1A62;
+                goto @label_1240;
+            }
+            case_if (local[9] == 37) {
+            @label_1240:
+                local[11] = 777;
+                local[12] = 86;
+                local[13] = 91;
+                local[14] = 777;
+                local[15] = 100;
+                goto @label_1A62;
+                goto @label_127E;
+            }
+            case_if (local[9] == 38) {
+            @label_127E:
+                local[11] = 82;
+                local[12] = 777;
+                local[13] = 92;
+                local[14] = 97;
+                local[15] = 101;
+                goto @label_1A62;
+                goto @label_12BC;
+            }
+            case_if (local[9] == 39) {
+            @label_12BC:
+                local[11] = 83;
+                local[12] = 87;
+                local[13] = 93;
+                local[14] = 777;
+                local[15] = 102;
+                goto @label_1A62;
+                goto @label_12FA;
+            }
+            case_if (local[9] == 40) {
+            @label_12FA:
+                local[11] = 777;
+                local[12] = 777;
+                local[13] = 112;
+                local[14] = 207;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_1338;
+            }
+            case_if (local[9] == 41) {
+            @label_1338:
+                local[11] = 208;
+                local[12] = 209;
+                local[13] = 777;
+                local[14] = 777;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_1376;
+            }
+            case_if (local[9] == 42) {
+            @label_1376:
+                local[11] = 777;
+                local[12] = 777;
+                local[13] = 210;
+                local[14] = 777;
+                local[15] = 120;
+                goto @label_1A62;
+                goto @label_13B4;
+            }
+            case_if (local[9] == 43) {
+            @label_13B4:
+                local[11] = 103;
+                local[12] = 777;
+                local[13] = 113;
+                local[14] = 777;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_13F2;
+            }
+            case_if (local[9] == 44) {
+            @label_13F2:
+                local[11] = 211;
+                local[12] = 107;
+                local[13] = 777;
+                local[14] = 777;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_1430;
+            }
+            case_if (local[9] == 45) {
+            @label_1430:
+                local[11] = 777;
+                local[12] = 777;
+                local[13] = 212;
+                local[14] = 777;
+                local[15] = 121;
+                goto @label_1A62;
+                goto @label_146E;
+            }
+            case_if (local[9] == 46) {
+            @label_146E:
+                local[11] = 777;
+                local[12] = 108;
+                local[13] = 114;
+                local[14] = 116;
+                local[15] = 122;
+                goto @label_1A62;
+                goto @label_14AC;
+            }
+            case_if (local[9] == 47) {
+            @label_14AC:
+                local[11] = 104;
+                local[12] = 109;
+                local[13] = 777;
+                local[14] = 117;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_14EA;
+            }
+            case_if (local[9] == 48) {
+            @label_14EA:
+                local[11] = 105;
+                local[12] = 110;
+                local[13] = 115;
+                local[14] = 118;
+                local[15] = 123;
+                goto @label_1A62;
+                goto @label_1528;
+            }
+            case_if (local[9] == 49) {
+            @label_1528:
+                local[11] = 106;
+                local[12] = 111;
+                local[13] = 777;
+                local[14] = 119;
+                local[15] = 124;
+                goto @label_1A62;
+                goto @label_1566;
+            }
+            case_if (local[9] == 50) {
+            @label_1566:
+                local[11] = 213;
+                local[12] = 777;
+                local[13] = 777;
+                local[14] = 777;
+                local[15] = 140;
+                goto @label_1A62;
+                goto @label_15A4;
+            }
+            case_if (local[9] == 51) {
+            @label_15A4:
+                local[11] = 777;
+                local[12] = 777;
+                local[13] = 214;
+                local[14] = 777;
+                local[15] = 215;
+                goto @label_1A62;
+                goto @label_15E2;
+            }
+            case_if (local[9] == 52) {
+            @label_15E2:
+                local[11] = 777;
+                local[12] = 128;
+                local[13] = 777;
+                local[14] = 216;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_1620;
+            }
+            case_if (local[9] == 53) {
+            @label_1620:
+                local[11] = 777;
+                local[12] = 777;
+                local[13] = 133;
+                local[14] = 777;
+                local[15] = 141;
+                goto @label_1A62;
+                goto @label_165E;
+            }
+            case_if (local[9] == 54) {
+            @label_165E:
+                local[11] = 777;
+                local[12] = 777;
+                local[13] = 217;
+                local[14] = 136;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_169C;
+            }
+            case_if (local[9] == 55) {
+            @label_169C:
+                local[11] = 777;
+                local[12] = 129;
+                local[13] = 777;
+                local[14] = 777;
+                local[15] = 218;
+                goto @label_1A62;
+                goto @label_16DA;
+            }
+            case_if (local[9] == 56) {
+            @label_16DA:
+                local[11] = 125;
+                local[12] = 130;
+                local[13] = 777;
+                local[14] = 137;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_1718;
+            }
+            case_if (local[9] == 57) {
+            @label_1718:
+                local[11] = 126;
+                local[12] = 777;
+                local[13] = 134;
+                local[14] = 138;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_1756;
+            }
+            case_if (local[9] == 58) {
+            @label_1756:
+                local[11] = 127;
+                local[12] = 131;
+                local[13] = 135;
+                local[14] = 777;
+                local[15] = 142;
+                goto @label_1A62;
+                goto @label_1794;
+            }
+            case_if (local[9] == 59) {
+            @label_1794:
+                local[11] = 777;
+                local[12] = 132;
+                local[13] = 777;
+                local[14] = 139;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_17D2;
+            }
+            case_if (local[9] == 60) {
+            @label_17D2:
+                local[11] = 219;
+                local[12] = 777;
+                local[13] = 777;
+                local[14] = 158;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_1810;
+            }
+            case_if (local[9] == 61) {
+            @label_1810:
+                local[11] = 777;
+                local[12] = 777;
+                local[13] = 220;
+                local[14] = 221;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_184E;
+            }
+            case_if (local[9] == 62) {
+            @label_184E:
+                local[11] = 143;
+                local[12] = 148;
+                local[13] = 153;
+                local[14] = 777;
+                local[15] = 162;
+                goto @label_1A62;
+                goto @label_188C;
+            }
+            case_if (local[9] == 63) {
+            @label_188C:
+                local[11] = 777;
+                local[12] = 149;
+                local[13] = 154;
+                local[14] = 159;
+                local[15] = 163;
+                goto @label_1A62;
+                goto @label_18CA;
+            }
+            case_if (local[9] == 64) {
+            @label_18CA:
+                local[11] = 777;
+                local[12] = 222;
+                local[13] = 777;
+                local[14] = 223;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_1908;
+            }
+            case_if (local[9] == 65) {
+            @label_1908:
+                local[11] = 777;
+                local[12] = 150;
+                local[13] = 155;
+                local[14] = 777;
+                local[15] = 164;
+                goto @label_1A62;
+                goto @label_1946;
+            }
+            case_if (local[9] == 66) {
+            @label_1946:
+                local[11] = 144;
+                local[12] = 151;
+                local[13] = 777;
+                local[14] = 160;
+                local[15] = 165;
+                goto @label_1A62;
+                goto @label_1984;
+            }
+            case_if (local[9] == 67) {
+            @label_1984:
+                local[11] = 145;
+                local[12] = 777;
+                local[13] = 156;
+                local[14] = 161;
+                local[15] = 777;
+                goto @label_1A62;
+                goto @label_19C2;
+            }
+            case_if (local[9] == 68) {
+            @label_19C2:
+                local[11] = 146;
+                local[12] = 152;
+                local[13] = 157;
+                local[14] = 777;
+                local[15] = 166;
+                goto @label_1A62;
+                goto @label_1A00;
+            }
+            case_if (local[9] == 69) {
+            @label_1A00:
+                local[11] = 147;
+                local[12] = 777;
+                local[13] = 777;
+                local[14] = 777;
+                local[15] = 224;
+                goto @label_1A62;
+                goto @label_1A62;
+            }
+            local[11] = 777;
+            local[12] = 777;
+            local[13] = 777;
+            local[14] = 777;
+            local[15] = 777;
+            goto @label_1A62;
+        @label_1A62:
+            GetGameTimeCounter(1, local[17]);
+            local[17] = local[17] / 8 & 3;
+            local[6] = 0;
+            if (local[16] <= 10) {
+                case_if (local[17] == 0) {
+                    local[6] = 0;
+                    goto @label_1B1E;
+                    goto @label_1ACE;
+                }
+                case_if (local[17] == 1) {
+                @label_1ACE:
+                    local[6] = 0;
+                    goto @label_1B1E;
+                    goto @label_1AEC;
+                }
+                case_if (local[17] == 2) {
+                @label_1AEC:
+                    local[6] = 0;
+                    goto @label_1B1E;
+                    goto @label_1B0A;
+                }
+                case_if (local[17] == 3) {
+                @label_1B0A:
+                    local[6] = 0;
+                    goto @label_1B1E;
+                    goto @label_1B1E;
+                }
+            }
+        @label_1B1E:
+            if (local[16] > 10 && local[16] <= 20) {
+                case_if (local[17] == 0) {
+                    local[6] = 0;
+                    goto @label_1BC2;
+                    goto @label_1B72;
+                }
+                case_if (local[17] == 1) {
+                @label_1B72:
+                    local[6] = 0;
+                    goto @label_1BC2;
+                    goto @label_1B90;
+                }
+                case_if (local[17] == 2) {
+                @label_1B90:
+                    local[6] = 1;
+                    goto @label_1BC2;
+                    goto @label_1BAE;
+                }
+                case_if (local[17] == 3) {
+                @label_1BAE:
+                    local[6] = 1;
+                    goto @label_1BC2;
+                    goto @label_1BC2;
+                }
+            }
+        @label_1BC2:
+            if (local[16] > 20 && local[16] <= 30) {
+                case_if (local[17] == 0) {
+                    local[6] = 0;
+                    goto @label_1C66;
+                    goto @label_1C16;
+                }
+                case_if (local[17] == 1) {
+                @label_1C16:
+                    local[6] = 1;
+                    goto @label_1C66;
+                    goto @label_1C34;
+                }
+                case_if (local[17] == 2) {
+                @label_1C34:
+                    local[6] = 1;
+                    goto @label_1C66;
+                    goto @label_1C52;
+                }
+                case_if (local[17] == 3) {
+                @label_1C52:
+                    local[6] = 2;
+                    goto @label_1C66;
+                    goto @label_1C66;
+                }
+            }
+        @label_1C66:
+            if (local[16] > 30 && local[16] <= 40) {
+                case_if (local[17] == 0) {
+                    local[6] = 1;
+                    goto @label_1D0A;
+                    goto @label_1CBA;
+                }
+                case_if (local[17] == 1) {
+                @label_1CBA:
+                    local[6] = 1;
+                    goto @label_1D0A;
+                    goto @label_1CD8;
+                }
+                case_if (local[17] == 2) {
+                @label_1CD8:
+                    local[6] = 2;
+                    goto @label_1D0A;
+                    goto @label_1CF6;
+                }
+                case_if (local[17] == 3) {
+                @label_1CF6:
+                    local[6] = 2;
+                    goto @label_1D0A;
+                    goto @label_1D0A;
+                }
+            }
+        @label_1D0A:
+            if (local[16] > 40 && local[16] <= 50) {
+                case_if (local[17] == 0) {
+                    local[6] = 1;
+                    goto @label_1DAE;
+                    goto @label_1D5E;
+                }
+                case_if (local[17] == 1) {
+                @label_1D5E:
+                    local[6] = 2;
+                    goto @label_1DAE;
+                    goto @label_1D7C;
+                }
+                case_if (local[17] == 2) {
+                @label_1D7C:
+                    local[6] = 2;
+                    goto @label_1DAE;
+                    goto @label_1D9A;
+                }
+                case_if (local[17] == 3) {
+                @label_1D9A:
+                    local[6] = 3;
+                    goto @label_1DAE;
+                    goto @label_1DAE;
+                }
+            }
+        @label_1DAE:
+            if (local[16] > 50 && local[16] <= 60) {
+                case_if (local[17] == 0) {
+                    local[6] = 2;
+                    goto @label_1E52;
+                    goto @label_1E02;
+                }
+                case_if (local[17] == 1) {
+                @label_1E02:
+                    local[6] = 3;
+                    goto @label_1E52;
+                    goto @label_1E20;
+                }
+                case_if (local[17] == 2) {
+                @label_1E20:
+                    local[6] = 3;
+                    goto @label_1E52;
+                    goto @label_1E3E;
+                }
+                case_if (local[17] == 3) {
+                @label_1E3E:
+                    local[6] = 4;
+                    goto @label_1E52;
+                    goto @label_1E52;
+                }
+            }
+        @label_1E52:
+            if (local[16] > 60) {
+                case_if (local[17] == 0) {
+                    local[6] = 3;
+                    goto @label_1EDE;
+                    goto @label_1E8E;
+                }
+                case_if (local[17] == 1) {
+                @label_1E8E:
+                    local[6] = 3;
+                    goto @label_1EDE;
+                    goto @label_1EAC;
+                }
+                case_if (local[17] == 2) {
+                @label_1EAC:
+                    local[6] = 4;
+                    goto @label_1EDE;
+                    goto @label_1ECA;
+                }
+                case_if (local[17] == 3) {
+                @label_1ECA:
+                    local[6] = 4;
+                    goto @label_1EDE;
+                    goto @label_1EDE;
+                }
+            }
+        @label_1EDE:
+            room[20] = local[11];
+            room[20] = local[12];
+            room[20] = local[13];
+            room[20] = local[14];
+            room[20] = local[15];
+            if (local[6] == 0) {
+                ChangeRoom(0xA80492C8);
+            }
+            if (local[6] == 1) {
+                ChangeRoom(0xA8083248);
+            }
+            if (local[6] == 2) {
+                ChangeRoom(0xA80832C8);
+            }
+            if (local[6] == 3) {
+                ChangeRoom(0xA8083348);
+            }
+            if (local[6] == 4) {
+                ChangeRoom(0xA80833C8);
+            }
+            room[22] = 1;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        GetEquipSlotState(global[4]);
+        if (global[4] >= 2 && global[4] <= 10) {
+            if (global[7] & 2) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, local[0]);
+            } else {
+                AkaoCmd(0xC8, 9, 0, 0, 0, room[20]);
+            }
+        }
+        if (global[4] >= 11 && global[4] <= 20) {
+            if (global[7] & 4) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, local[0]);
+            } else {
+                AkaoCmd(0xC8, 29, 0, 0, 0, room[20]);
+            }
+        }
+        if (global[4] >= 21 && global[4] <= 30) {
+            if (global[7] & 8) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, local[0]);
+            } else {
+                AkaoCmd(0xC8, 10, 0, 0, 0, room[20]);
+            }
+        }
+        if (global[4] >= 31 && global[4] <= 40) {
+            if (global[7] & 256) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, local[0]);
+            } else {
+                AkaoCmd(0xC8, 11, 0, 0, 0, room[20]);
+            }
+        }
+        if (global[4] >= 41 && global[4] <= 50) {
+            if (global[7] & 512) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, local[0]);
+            } else {
+                AkaoCmd(0xC8, 12, 0, 0, 0, room[20]);
+            }
+        }
+        if (global[4] >= 51 && global[4] <= 60) {
+            if (global[7] & 1024) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, local[0]);
+            } else {
+                AkaoCmd(0xC8, 15, 0, 0, 0, room[20]);
+                AkaoCmd(0x190, 15, 0, 0, 0, room[20]);
+            }
+        }
+        if (global[4] >= 61 && global[4] <= 70) {
+            if (global[7] & 2048) {
+                AkaoCmd(0xD9, 0, 0, 0, 0, local[0]);
+            } else {
+                AkaoCmd(0xC8, 6, 0, 0, 0, room[20]);
+                AkaoCmd(0x190, 6, 0, 0, 0, room[20]);
+            }
+        }
+        AkaoCmd(0x193, 1002, 1024, 0, 0, room[20]);
+        LockPlayerInput();
+        SetMeshFadeLevel(76);
+        SetEventHandler(EVENT_INTERACT, @label_0376);
+        SetCameraBaseAngle(0, 112);
+        ClearScreenFadeFlag40();
+        Wait(1);
+        ClearRenderFlagsC0();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        DisableCollisionTriangle(10);
+        DisableCollisionTriangle(11);
+        DisableCollisionTriangle(12);
+        Wait(1);
+        SetFadeColor(0x1E);
+        PlayFieldSfx(0, 0, 255);
+        Wait(1);
+    @label_0372:
+        ExitThread();
+    @label_0376:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 252) {
+            PlayFieldSfx(2, 0, 251);
+            goto @label_0372;
+        }
+        if (local[4] == 253) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            goto @label_0372;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetEventHandler(EVENT_INTERACT, @label_0162);
+        Wait(1);
+    @label_000E:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[4]);
+        TestPointInQuad(-1415.0fp, 287.0fp, -1415.0fp, -951.0fp, -812.0fp, -951.0fp, -812.0fp, 287.0fp, local[0], local[2], local[5]);
+        if (local[5] == 1) {
+            PlayFieldSfx(0, 0, 7);
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[4]);
+        TestPointInQuad(1048.0fp, 302.0fp, 1048.0fp, -778.0fp, 1143.0fp, -778.0fp, 1143.0fp, 302.0fp, local[0], local[2], local[5]);
+        if (local[5] == 1) {
+            PlayFieldSfx(0, 0, 8);
+            ExitThread();
+        }
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[4]);
+        TestPointInQuad(-70.0fp, 207.0fp, -70.0fp, 82.0fp, 95.0fp, 82.0fp, 95.0fp, 207.0fp, local[0], local[2], local[5]);
+        if (local[5] == 1) {
+            GetActorPositionByType(5, 0, 0, local[0], local[1], local[2], local[5]);
+            if (local[1] >= 1536) {
+                if (local[1] <= 2560) {
+                    PlayFieldSfx(0, 0, 10);
+                    while (room[22] == 0) {
+                        Wait(1);
+                    }
+                    room[22] = 0;
+                }
+            }
+        }
+        Wait(1);
+        goto @label_000E;
+    @label_0162:
+        GetThreadTarget14(local[7]);
+        if (local[7] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+}

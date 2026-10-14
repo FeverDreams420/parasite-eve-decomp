@@ -1,0 +1,239 @@
+// Parasite Eve 1 Scene Script (room_135)
+room_script room_135 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(105, 125, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00EA);
+        if (global[ROOM] == 130) {
+            SetEntityVec3(VEC3_POS, -2350.0fp, 0.0fp, 800.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        } else if (global[ROOM] == 133) {
+            SetEntityVec3(VEC3_POS, -2500.0fp, 0.0fp, -1700.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        } else {
+            if (global[ROOM] == 139) {
+                SetEntityVec3(VEC3_POS, -2350.0fp, 0.0fp, 200.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+                goto @label_00E6;
+            } else {
+                SetEntityVec3(VEC3_POS, -2350.0fp, 0.0fp, 800.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+                goto @label_00E6;
+            }
+            Wait(1);
+        }
+    @label_00E6:
+        ExitThread();
+    @label_00EA:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            goto @label_00E6;
+        }
+        if (local[3] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            goto @label_00E6;
+        }
+        if (local[3] == 1) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[ROOM] = 136;
+            ChangeRoom(0xA8023048);
+            ExitThread();
+        }
+        if (local[3] == 2) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            SetAnim(22);
+            TurnTowardPoint(-2450.0fp, -2400.0fp, 128);
+            MoveTowardPoint(-2450.0fp, -2400.0fp, 128);
+            ExitThread();
+        }
+        if (local[3] == 3) {
+            EnableActorCollision();
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            GetActorPositionByType(0, 0, 0, local[8], local[9], local[10], local[11]);
+            TestPointInQuad(-2125.0fp, 120.0fp, -2125.0fp, 100.0fp, -2145.0fp, 100.0fp, -2145.0fp, 120.0fp, local[8], local[10], local[6]);
+            if (local[6] != 1) {
+                SetAnim(22);
+                TurnTowardPoint(-2135.0fp, 110.0fp, 128);
+                MoveTowardPoint(-2135.0fp, 110.0fp, 128);
+            }
+            SetAnim(22);
+            TurnTowardPoint(-1800.0fp, 110.0fp, 64);
+            SetAnim(21);
+            SetAnim(37);
+            SetAnimFrame(0);
+            PlayAnimToFrame(14);
+            WaitAnimEnd();
+            AkaoCmd(0x15F, 2488, 0, 0, 0, room[17]);
+            SetAnim(37);
+            SetAnimFrame(14);
+            PlayAnimToFrame(18);
+            WaitAnimEnd();
+            EnableActorCollision();
+            PlayFieldSfx(2, 0, 3);
+            SetAnim(38);
+            TurnTowardPoint(-1800.0fp, 110.0fp, 128);
+            MoveTowardPoint(-1800.0fp, 110.0fp, 128);
+            ExitThread();
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        LockPlayerInput();
+        if (global[AREA] == 308) {
+            StartScreenFadeRect(120, 128, 128, 128, 1);
+            WaitScreenFade();
+            Wait(60);
+            OpenTextbox(18); // "{Aya}. ,,,,,,?"
+            WaitTextbox(18);
+            Wait(60);
+            StartScreenFadeRect(60, 255, 255, 255, 1);
+            WaitScreenFade();
+            ChangeRoom(0xA8022348);
+            ExitThread();
+        }
+        if (global[ROOM] == 147) {
+            AkaoCmd(0xC8, 35, 0, 0, 0, room[18]);
+            StartScreenFadeRect(30, 128, 128, 128, 1);
+            WaitScreenFade();
+            Wait(15);
+            AkaoCmd(0x12C, 1105, 0, 128, 127, room[17]);
+            AkaoCmd(0x12C, 1106, 0, 128, 127, room[17]);
+            StartScreenFadeRect(30, 255, 255, 255, 1);
+            WaitScreenFade();
+            ChangeRoom(0xA8022348);
+            ExitThread();
+        }
+        AkaoCmd(0x193, 1020, 1016, 0, 0, room[17]);
+        if (global[AREA] < 488) {
+            AkaoCmd(0xC8, 10, 0, 0, 0, room[17]);
+        } else {
+            AkaoCmd(0xC8, 9, 0, 0, 0, room[17]);
+        }
+        SetCameraBaseAngle(0, 4048);
+        EnablePlayerMovement();
+        SetEventHandler(EVENT_INTERACT, @label_0174);
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetFadeColor(0x1E);
+        PlayFieldSfx(0, 0, 255);
+        Wait(1);
+    @label_0170:
+        ExitThread();
+    @label_0174:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 252) {
+            PlayFieldSfx(2, 0, 251);
+            goto @label_0170;
+        }
+        if (local[3] == 253) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            goto @label_0170;
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetEventHandler(EVENT_INTERACT, @label_0216);
+        DisableCollisionTriangle(12);
+        Wait(1);
+        SpawnThread(@label_002A);
+        SpawnThread(@label_0084);
+        SpawnThread(@label_00F6);
+        ExitThread();
+    @label_002A:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-2650.0fp, 1000.0fp, -2650.0fp, 1300.0fp, -2000.0fp, 1300.0fp, -2000.0fp, 1000.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            PlayFieldSfx(0, 0, 1);
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_002A;
+    @label_0084:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-2650.0fp, -1900.0fp, -2650.0fp, -2200.0fp, -2000.0fp, -2200.0fp, -2000.0fp, -1900.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            PlayFieldSfx(0, 0, 2);
+            StartScreenFade(30);
+            WaitScreenFade();
+            global[ROOM] = 136;
+            ChangeRoom(0xA80231C8);
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_0084;
+    @label_00F6:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-2150.0fp, 300.0fp, -2150.0fp, 0.0fp, -1900.0fp, 0.0fp, -1900.0fp, 300.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            GetActorPositionByType(5, 0, 0, local[3], local[1], local[3], local[3]);
+            if (local[1] >= 2560 && local[1] <= 3584) {
+                EnableCollisionTriangle(12);
+                Wait(1);
+                PlayFieldSfx(0, 0, 3);
+                ExitThread();
+            }
+        }
+        Wait(1);
+        goto @label_00F6;
+    @label_019A:
+        Wait(12);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 1);
+        SetGeomEntryField8(0, 0);
+        Wait(12);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 2);
+        SetGeomEntryField8(0, 0);
+        Wait(6);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 3);
+        SetGeomEntryField8(0, 0);
+        Wait(6);
+        SetGeomFlagSlot(0, 1);
+        SetGeomEntryLimit(0, 4);
+        SetGeomEntryField8(0, 0);
+        ExitThread();
+    @label_0216:
+        GetThreadTarget14(local[5]);
+        if (local[5] == 251) {
+            DestroySelf();
+        }
+        if (local[5] == 3) {
+            SpawnThread(@label_019A);
+            Wait(60);
+            StartScreenFade(30);
+            Wait(30);
+            global[ROOM] = 136;
+            ChangeRoom(0xA80234C8);
+            ExitThread();
+        }
+        ExitThread();
+        ExitThread();
+    }
+}

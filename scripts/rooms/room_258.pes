@@ -1,0 +1,298 @@
+// Parasite Eve 1 Scene Script (room_258)
+room_script room_258 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(90, 120, 20);
+        SetEventHandler(EVENT_INTERACT, @label_0060);
+        SetEventHandler(EVENT_TOUCH, @label_005C);
+        ScaleShadowRadius(0x9999);
+        if (global[AREA] < 352) {
+            LockPlayerMoveMask(2);
+        }
+        SetEntityVec3(VEC3_POS, -47.0fp, 0.0fp, -11581.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2064, 0);
+        Wait(1);
+        ExitThread();
+    @label_005C:
+        ExitThread();
+    @label_0060:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[3] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+        }
+        if (local[3] == 5) {
+            KillOtherThreads();
+            SetAnim(29);
+            SetAnimFrame(0);
+            PlayAnimToFrame(22);
+            WaitAnimEnd();
+        }
+        if (local[3] == 6) {
+            KillOtherThreads();
+            SetAnim(29);
+            SetAnimFrame(22);
+            PlayAnimToFrame(45);
+            WaitAnimEnd();
+        }
+        if (local[3] == 10) {
+            KillOtherThreads();
+            SetAnim(30);
+            SetAnimFrame(0);
+            PlayAnimToFrame(13);
+            WaitAnimEnd();
+        }
+        if (local[3] == 11) {
+            KillOtherThreads();
+            SetAnim(30);
+            SetAnimFrame(13);
+            PlayAnimToFrame(185);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        SetEventHandler(EVENT_INTERACT, @label_006A);
+        LockPlayerInput();
+        PauseSceneEvents();
+        SetCameraBaseAngle(3088, 3360);
+        ClearScreenFadeFlag40();
+        Wait(1);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(4, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        Wait(1);
+        ExitThread();
+    @label_006A:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 14) {
+            PlayFieldSfx(0, 0, 251);
+            PlayFieldSfx(2, 0, 251);
+            PlayFieldSfx(3, 0, 251);
+            Wait(5);
+            ReloadSceneData(27);
+            Noop3();
+            AkaoCmd(0x199, 136, 0, 0, 0, room[17]);
+            WaitDrawIdle();
+            global[AREA] = 678;
+            global[ROOM] = 259;
+            SceneCmd(2101, 0, 0, 0, 0, 0, 0, room[17]);
+            ChangeRoom(0xA80454C8);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetHitCylinder(90, 100, 20);
+        SetEventHandler(EVENT_INTERACT, @label_0300);
+        ScaleShadowRadius(0x9999);
+        SetEntityVec3(VEC3_POS, -450.0fp, 0.0fp, -12009.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2432, 0);
+        SetAnim(12);
+        SetAnimFrame(32);
+        PlayAnimToFrame(32);
+        WaitAnimEnd();
+        Wait(1);
+        if (global[AREA] < 678) {
+            Wait(5);
+            SetFadeColor(0x1E);
+            WaitScreenFade();
+            PlayFieldSfx(3, 0, 8);
+            OpenTextbox(100); // "Daniel. No! Lorraine,,, / Lorraine can't be a part of that / THING!!"
+            WaitTextbox(100);
+            SetAnim(12);
+            SetAnimFrame(32);
+            PlayAnimToFrame(65);
+            WaitAnimEnd();
+            OpenTextbox(101); // "Maeda. The huge creature,,, or no: / those CELLS! That must be where / Eve's giving birth!"
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(80);
+            WaitTextbox(101);
+            PlayFieldSfx(0, 0, 5);
+            OpenTextbox(102); // "{Aya}. Where she's giving / birth?!"
+            WaitTextbox(102);
+            OpenTextbox(103); // "Maeda. Yes,,, the huge creature will / act as a barrier to protect the / Ultimate Being,,,"
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(70);
+            WaitTextbox(103);
+            Wait(30);
+            PlayFieldSfx(0, 0, 6);
+            Wait(30);
+            StartScreenFade(30);
+            WaitScreenFade();
+            PlayFieldSfx(1, 0, 14);
+            DestroySelf();
+        }
+        if (global[AREA] == 678) {
+            SetAnim(8);
+            SetAnimFrame(0);
+            PlayAnimToFrame(0);
+            WaitAnimEnd();
+            AkaoCmd(0xCF, 18, 60, 127, 0, room[17]);
+            SetFadeColor(0x1E);
+            WaitScreenFade();
+            Wait(30);
+            PlayFieldSfx(3, 0, 4);
+            OpenTextbox(104); // "Daniel. Lorraine!"
+            WaitTextbox(104);
+            AkaoCmd(0xC9, 18, 0, 0, 0, room[17]);
+            AkaoCmd(0x198, 60, 1, 0, 0, room[17]);
+            AkaoCmd(0xCD, 60, 80, 0, 0, room[17]);
+            PlayFieldSfx(0, 0, 10);
+            OpenTextbox(105); // "{Aya}. !! / The helicopter's coming!"
+            WaitTextbox(105);
+            SetAnim(8);
+            SetAnimFrame(0);
+            PlayAnimToFrame(60);
+            WaitAnimEnd();
+            SetAnim(9);
+            SetAnimFrame(0);
+            PlayAnimToFrame(42);
+            Wait(20);
+            OpenTextbox(106); // "Maeda. Everyone duck!!! Cover your / heads and,,,"
+            WaitTextbox(106);
+            PlayFieldSfx(0, 0, 11);
+            PlayFieldSfx(3, 0, 12);
+            while (room[19] == 0) {
+                Wait(1);
+            }
+            room[19] = 0;
+            Wait(240);
+            PlayFieldSfx(4, 0, 3);
+            while (room[19] == 0) {
+                Wait(1);
+            }
+            room[19] = 0;
+            OpenTextbox(107); // "Soldier. Officer Brea of the NYPD: / correct? | Ma'am! / It is my duty to accompany you..."
+            WaitTextbox(107);
+            PlayFieldSfx(4, 0, 13);
+            Wait(30);
+            PlayFieldSfx(3, 0, 7);
+            OpenTextbox(108); // "Daniel. Accompany her,,,? To the / WHAT,,,?!"
+            WaitTextbox(108);
+            Wait(30);
+            SetAnim(10);
+            SetAnimFrame(0);
+            PlayAnimToFrame(30);
+            WaitAnimEnd();
+            Wait(60);
+            AkaoCmd(0xCF, 60, 60, 80, 0, room[17]);
+            StartScreenFade(60);
+            WaitScreenFade();
+            AkaoCmd(0xC9, 60, 0, 0, 0, room[17]);
+            global[AREA] = 680;
+            ChangeRoom(0xA80470C8);
+        }
+        ExitThread();
+    @label_0300:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 9) {
+            KillOtherThreads();
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+        }
+        if (local[3] == 251) {
+            KillOtherThreads();
+            DestroySelf();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        SetHitCylinder(100, 90, 30);
+        SetEventHandler(EVENT_INTERACT, @label_003A);
+        ScaleShadowRadius(0x8000);
+        SetEntityVec3(VEC3_POS, 325.0fp, 0.0fp, -11161.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2128, 0);
+        Wait(1);
+        ExitThread();
+    @label_003A:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 8) {
+            KillOtherThreads();
+            SetAnim(4);
+            SetAnimFrame(0);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+        }
+        if (local[3] == 4) {
+            KillOtherThreads();
+            SetAnim(8);
+            SetAnimFrame(0);
+            PlayAnimToFrame(50);
+            WaitAnimEnd();
+        }
+        if (local[3] == 12) {
+            KillOtherThreads();
+            SetAnim(9);
+            SetAnimFrame(0);
+            PlayAnimToFrame(170);
+            WaitAnimEnd();
+        }
+        if (local[3] == 7) {
+            KillOtherThreads();
+            SetEntityVec3(VEC3_ROT, 0, 80, 0);
+            SetAnim(3);
+            SetAnimFrame(0);
+            PlayAnimToFrame(60);
+            WaitAnimEnd();
+        }
+        if (local[3] == 251) {
+            KillOtherThreads();
+            DestroySelf();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_4 {
+        SetHitCylinder(90, 130, 20);
+        SetEventHandler(EVENT_INTERACT, @label_003E);
+        ScaleShadowRadius(0x9999);
+        EnableActorCollision();
+        SetEntityVec3(VEC3_POS, -195.0fp, 0.0fp, -15921.0fp);
+        SetEntityVec3(VEC3_ROT, 0, 2304, 0);
+        Wait(1);
+        ExitThread();
+    @label_003E:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 3) {
+            KillOtherThreads();
+            SetMoveFactor(0x160000);
+            SetAnim(2);
+            TurnTowardPoint(-139.0fp, -13666.0fp, 90);
+            MoveTowardPoint(-139.0fp, -13666.0fp, 90);
+            SetAnim(8);
+            SetAnimFrame(0);
+            PlayAnimToFrame(25);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        if (local[3] == 13) {
+            KillOtherThreads();
+            SetAnim(8);
+            SetAnimFrame(25);
+            PlayAnimToFrame(70);
+            WaitAnimEnd();
+            room[19] = 1;
+        }
+        ExitThread();
+    }
+}

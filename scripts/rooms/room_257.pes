@@ -1,0 +1,401 @@
+// Parasite Eve 1 Scene Script (room_257)
+room_script room_257 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(95, 120, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        Wait(1);
+        ScaleShadowRadius(0xB333);
+        SetMoveSpeed(0xCCCC);
+        SetEventHandler(EVENT_INTERACT, @label_00CA);
+        SetEventHandler(EVENT_TOUCH, @label_00C6);
+        if (global[ROOM] == 237) {
+            SetEntityVec3(VEC3_POS, -1.5fp, 0.0fp, -197.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        } else if (global[ROOM] == 250) {
+            SetEntityVec3(VEC3_POS, -1.5fp, 0.0fp, -197.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        } else {
+            SetEntityVec3(VEC3_POS, 0.0fp, 0.0fp, 0.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        }
+        Wait(1);
+        ExitThread();
+    @label_00C6:
+        ExitThread();
+    @label_00CA:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 254) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[4] == 255) {
+            ResumeSceneEvents();
+            SetAnim(21);
+            UnlockPlayerInput();
+        }
+        if (local[4] == 2) {
+            GetActorPositionByType(0, 0, 0, local[7], local[8], local[9], local[5]);
+            SetEntityVec3(VEC3_POS, local[7], local[8], local[9]);
+        }
+        if (local[4] == 3) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            TurnTowardPoint(-408.0fp, -450.0fp, 45);
+            SetAnim(32);
+            SetAnimFrame(0);
+            PlayAnimToFrame(54);
+            WaitAnimEnd();
+            CloseTextbox(23);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        ClearScreenFadeFlag40();
+        PauseSceneEvents();
+        LockPlayerInput();
+        AkaoCmd(0x193, 1000, 1000, 0, 0, room[19]);
+        SetCameraBaseAngle(2048, 2048);
+        SetGeomEntryVisible(6, 1);
+        SetGeomEntryVisible(8, 1);
+        SetGeomEntryVisible(10, 1);
+        SetGeomEntryVisible(12, 1);
+        SetGeomEntryPos(4, 0, 0, 256);
+        SetGeomEntryPos(1, 0, 0, 64);
+        SetGeomEntryPos(6, 0, 0, 80);
+        SetGeomEntryPos(8, 0, 0, 80);
+        SetGeomEntryPos(10, 0, 0, 80);
+        SetGeomEntryPos(12, 0, 0, 80);
+        SetGeomEntryPos(5, 0, 0, 80);
+        SetGeomEntryPos(7, 0, 0, 80);
+        SetGeomEntryPos(9, 0, 0, 80);
+        SetGeomEntryPos(11, 0, 0, 80);
+        SetMeshFadeLevel(112);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(3, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetEventHandler(EVENT_INTERACT, @label_0172);
+        Wait(1);
+        room[22] = 0;
+        if (global[36] & 32) {
+            PlayFieldSfx(1, 0, 7);
+        }
+        if (global[36] & 128) {
+            PlayFieldSfx(1, 0, 9);
+        }
+        SetGeomEntryVisible(1, 0);
+        SetGeomEntryVisible(4, 1);
+        room[22] = 1;
+        SetFadeColor(0x1E);
+        WaitScreenFade();
+        ResumeSceneEvents();
+        UnlockPlayerInput();
+        ExitThread();
+    @label_0172:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 3) {
+            SetFogNearFar(160, 128, 15);
+            WaitDiscIdle();
+            SetFogNearFar(160, 120, 15);
+            WaitDiscIdle();
+            CloseTextbox(23);
+        }
+        if (local[3] == 4) {
+            Wait(4);
+            AkaoCmd(0x12C, 2714, 0, 127, 127, room[19]);
+            SetGeomEntryVisible(1, 0);
+            SetGeomEntryVisible(2, 1);
+            Wait(4);
+            SetGeomEntryVisible(2, 0);
+            SetGeomEntryVisible(3, 1);
+            Wait(4);
+            SetGeomEntryVisible(3, 0);
+            SetGeomEntryVisible(4, 1);
+            Wait(4);
+            CloseTextbox(23);
+        }
+        if (local[3] == 5) {
+            Wait(4);
+            AkaoCmd(0x12C, 2714, 0, 127, 127, room[19]);
+            SetGeomEntryVisible(4, 0);
+            SetGeomEntryVisible(3, 1);
+            Wait(4);
+            SetGeomEntryVisible(3, 0);
+            SetGeomEntryVisible(2, 1);
+            Wait(4);
+            SetGeomEntryVisible(2, 0);
+            SetGeomEntryVisible(1, 1);
+            Wait(4);
+            CloseTextbox(23);
+        }
+        if (local[3] == 6) {
+            SetGeomEntryVisible(5, 1);
+            SetGeomEntryVisible(7, 0);
+            SetGeomEntryVisible(9, 0);
+            SetGeomEntryVisible(11, 0);
+            CloseTextbox(23);
+        }
+        if (local[3] == 7) {
+            SetGeomEntryVisible(5, 0);
+            SetGeomEntryVisible(7, 1);
+            SetGeomEntryVisible(9, 0);
+            SetGeomEntryVisible(11, 0);
+            CloseTextbox(23);
+        }
+        if (local[3] == 8) {
+            SetGeomEntryVisible(5, 0);
+            SetGeomEntryVisible(7, 0);
+            SetGeomEntryVisible(9, 1);
+            SetGeomEntryVisible(11, 0);
+            CloseTextbox(23);
+        }
+        if (local[3] == 9) {
+            SetGeomEntryVisible(5, 0);
+            SetGeomEntryVisible(7, 0);
+            SetGeomEntryVisible(9, 0);
+            SetGeomEntryVisible(11, 1);
+            CloseTextbox(23);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        Wait(1);
+        local[6] = 0;
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-291.0fp, -246.0fp, -291.0fp, -125.0fp, -146.0fp, -125.0fp, -146.0fp, -246.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1 && local[6] == 0) {
+                GetActorPositionByType(5, 0, 0, local[0], local[1], local[2], local[3]);
+                if (local[1] >= 0 && local[1] <= 1024) {
+                    CheckPadInput(PAD_PRESSED, 0x100, local[5]);
+                    if (local[5] != 0 && local[6] == 0) {
+                        local[6] = 1;
+                        PlayFieldSfx(0, 0, 254);
+                        SetTextboxRect(16, 138, 288, 78);
+                        OpenStyledTextbox(172); // "<FB:09>5 1F / 2F / 3F / 4F / Cancel"
+                        WaitTextbox(172);
+                        GetChoiceResult(local[7]);
+                        case_if (local[7] == 0) {
+                            PlayFieldSfx(0, 0, 3);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 16) {
+                                EnablePlayerMovement();
+                                OpenTextbox(173); // "{Aya}. ,,,It won't open,"
+                                WaitTextbox(173);
+                                DisablePlayerMovement();
+                            } else {
+                                if (room[22] == 1) {
+                                    PlayFieldSfx(1, 0, 5);
+                                    OpenTextbox(23); // "<FB:07><F6>"
+                                    WaitTextbox(23);
+                                    room[22] = 0;
+                                    DisableCollisionTriangle(10);
+                                    DisableCollisionTriangle(11);
+                                }
+                                global[36] = global[36] | 16;
+                                global[36] = global[36] & -33;
+                                global[36] = global[36] & -65;
+                                global[36] = global[36] & -129;
+                                PlayFieldSfx(1, 0, 6);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 3);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                Wait(20);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                EnablePlayerMovement();
+                                OpenTextbox(173); // "{Aya}. ,,,It won't open,"
+                                WaitTextbox(173);
+                                DisablePlayerMovement();
+                            }
+                            goto @label_06A2;
+                            goto @label_027A;
+                        }
+                        case_if (local[7] == 1) {
+                        @label_027A:
+                            PlayFieldSfx(0, 0, 3);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 32) {
+                            } else {
+                                if @reg(1) (room[22] == 1) {
+                                    PlayFieldSfx(1, 0, 5);
+                                    OpenTextbox(23); // "<FB:07><F6>"
+                                    WaitTextbox(23);
+                                    room[22] = 0;
+                                }
+                                global[36] = global[36] & -17;
+                                global[36] = global[36] | 32;
+                                global[36] = global[36] & -65;
+                                global[36] = global[36] & -129;
+                                PlayFieldSfx(1, 0, 7);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 3);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                Wait(20);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                PlayFieldSfx(1, 0, 4);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                room[22] = 1;
+                                EnableCollisionTriangle(10);
+                                EnableCollisionTriangle(11);
+                            }
+                            goto @label_06A2;
+                            goto @label_03CE;
+                        }
+                        case_if (local[7] == 2) {
+                        @label_03CE:
+                            PlayFieldSfx(0, 0, 3);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 64) {
+                                EnablePlayerMovement();
+                                OpenTextbox(173); // "{Aya}. ,,,It won't open,"
+                                WaitTextbox(173);
+                                DisablePlayerMovement();
+                            } else {
+                                if (room[22] == 1) {
+                                    PlayFieldSfx(1, 0, 5);
+                                    OpenTextbox(23); // "<FB:07><F6>"
+                                    WaitTextbox(23);
+                                    room[22] = 0;
+                                    DisableCollisionTriangle(10);
+                                    DisableCollisionTriangle(11);
+                                }
+                                global[36] = global[36] & -17;
+                                global[36] = global[36] & -33;
+                                global[36] = global[36] | 64;
+                                global[36] = global[36] & -129;
+                                PlayFieldSfx(1, 0, 8);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 3);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                Wait(20);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                EnablePlayerMovement();
+                                OpenTextbox(173); // "{Aya}. ,,,It won't open,"
+                                WaitTextbox(173);
+                                DisablePlayerMovement();
+                            }
+                            goto @label_06A2;
+                            goto @label_052C;
+                        }
+                        case_if (local[7] == 3) {
+                        @label_052C:
+                            PlayFieldSfx(0, 0, 3);
+                            OpenTextbox(23); // "<FB:07><F6>"
+                            WaitTextbox(23);
+                            if (global[36] & 128) {
+                            } else {
+                                if @reg(1) (room[22] == 1) {
+                                    PlayFieldSfx(1, 0, 5);
+                                    OpenTextbox(23); // "<FB:07><F6>"
+                                    WaitTextbox(23);
+                                    room[22] = 0;
+                                }
+                                global[36] = global[36] & -17;
+                                global[36] = global[36] & -33;
+                                global[36] = global[36] & -65;
+                                global[36] = global[36] | 128;
+                                PlayFieldSfx(1, 0, 9);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12C, 2715, 0, 127, 127, local[9]);
+                                PlayFieldSfx(1, 0, 3);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                AkaoCmd(0x12D, local[9], 0, 0, 0, room[19]);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                Wait(20);
+                                AkaoCmd(0x12C, 2716, 0, 127, 127, room[19]);
+                                PlayFieldSfx(1, 0, 4);
+                                OpenTextbox(23); // "<FB:07><F6>"
+                                WaitTextbox(23);
+                                room[22] = 1;
+                                EnableCollisionTriangle(10);
+                                EnableCollisionTriangle(11);
+                            }
+                            goto @label_06A2;
+                            goto @label_0690;
+                        }
+                        case_if (local[7] == 4) {
+                        @label_0690:
+                            goto @label_06A2;
+                            goto @label_06A2;
+                        }
+                        goto @label_06A2;
+                    @label_06A2:
+                        PlayFieldSfx(0, 0, 255);
+                        local[6] = 0;
+                    }
+                }
+            }
+            Wait(1);
+        }
+        ExitThread();
+    }
+
+    actor_script actor_3 {
+        Wait(1);
+        local[6] = 0;
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(183.0fp, -297.0fp, 183.0fp, -441.0fp, -186.0fp, -441.0fp, -186.0fp, -297.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1 && local[6] == 0) {
+                local[6] = 1;
+                if (global[36] & 32) {
+                    if (room[22] == 1) {
+                        local[6] = 1;
+                        PlayFieldSfx(0, 0, 254);
+                        StartScreenFade(30);
+                        WaitScreenFade();
+                        global[ROOM] = 258;
+                        ChangeRoom(0xA80433C8);
+                    }
+                } else {
+                    if (room[22] == 0) {
+                        PlayFieldSfx(0, 0, 2);
+                    }
+                    local[6] = 0;
+                }
+                if (global[36] & 128) {
+                    if (room[22] == 1) {
+                        local[6] = 1;
+                        PlayFieldSfx(0, 0, 254);
+                        StartScreenFade(30);
+                        WaitScreenFade();
+                        global[ROOM] = 258;
+                        ChangeRoom(0xA8045048);
+                    }
+                } else {
+                    if (room[22] == 0) {
+                        PlayFieldSfx(0, 0, 2);
+                    }
+                    local[6] = 0;
+                }
+            }
+            Wait(1);
+        }
+        ExitThread();
+    }
+}

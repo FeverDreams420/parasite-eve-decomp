@@ -1,0 +1,101 @@
+// Parasite Eve 1 Scene Script (room_207)
+room_script room_207 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(105, 110, 20);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        Wait(1);
+        ScaleShadowRadius(0xB333);
+        SetEventHandler(EVENT_INTERACT, @label_00F4);
+        SetEventHandler(EVENT_TOUCH, @label_00F0);
+        if (global[ROOM] == 232 || global[ROOM] == 222) {
+            SetEntityVec3(VEC3_POS, 978.0fp, 0.0fp, -1000.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        } else if (global[ROOM] == 234 || global[ROOM] == 200) {
+            SetEntityVec3(VEC3_POS, -500.0fp, 0.0fp, 3468.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        } else {
+            SetEntityVec3(VEC3_POS, 0.0fp, 0.0fp, 0.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 0, 0);
+        }
+        Wait(1);
+        ExitThread();
+    @label_00F0:
+        ExitThread();
+    @label_00F4:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 254) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+        }
+        if (local[4] == 255) {
+            ResumeSceneEvents();
+            SetAnim(21);
+            UnlockPlayerInput();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        ClearScreenFadeFlag40();
+        PauseSceneEvents();
+        LockPlayerInput();
+        AkaoCmd(0x193, 1002, 1002, 0, 0, room[19]);
+        SetCameraBaseAngle(0, 0);
+        SetMeshFadeLevel(112);
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        SetEventHandler(EVENT_INTERACT, @label_0070);
+        Wait(1);
+        SetFadeColor(0x1E);
+        WaitScreenFade();
+        ResumeSceneEvents();
+        UnlockPlayerInput();
+        ExitThread();
+    @label_0070:
+        GetThreadTarget14(local[3]);
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetEventHandler(EVENT_INTERACT, @label_012E);
+        Wait(1);
+        local[6] = 0;
+        while (1) {
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(480.0fp, -1800.0fp, 1476.0fp, -580.0fp, 1763.0fp, -580.0fp, 1060.0fp, -2000.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1 && local[6] == 0) {
+                local[6] = 1;
+                PauseSceneEvents();
+                LockPlayerInput();
+                StartScreenFade(30);
+                WaitScreenFade();
+                global[ROOM] = 208;
+                ChangeRoom(0xA8042148);
+            }
+            GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+            TestPointInQuad(-600.0fp, 2768.0fp, -600.0fp, 4168.0fp, -800.0fp, 4168.0fp, -800.0fp, 2768.0fp, local[0], local[2], local[4]);
+            if (local[4] == 1 && local[6] == 0) {
+                local[6] = 1;
+                PauseSceneEvents();
+                LockPlayerInput();
+                StartScreenFade(16);
+                WaitScreenFade();
+                global[ROOM] = 208;
+                ChangeRoom(0xA8040048);
+            }
+            Wait(1);
+        }
+        ExitThread();
+    @label_012E:
+        GetThreadTarget14(local[9]);
+        if (local[9] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+}

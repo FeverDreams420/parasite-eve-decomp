@@ -1,0 +1,161 @@
+// Parasite Eve 1 Scene Script (room_072)
+room_script room_072 {
+    spawn_table { (1, 0) }
+
+    actor_script actor_0 {
+        SetHitCylinder(120, 120, 10);
+        SceneCmd(2601, 128, 0, 0, 0, 0, 0, local[0]);
+        SetEventHandler(EVENT_INTERACT, @label_00EA);
+        if (global[ROOM] == 68) {
+            SetEntityVec3(VEC3_POS, -8500.0fp, -3476.0fp, -5600.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+        } else if (global[ROOM] == 74) {
+            SetEntityVec3(VEC3_POS, -8100.0fp, -3476.0fp, -4500.0fp);
+            SetEntityVec3(VEC3_ROT, 0, 1024, 0);
+        } else {
+            if (global[ROOM] == 76) {
+                SetEntityVec3(VEC3_POS, -8500.0fp, -3476.0fp, -3500.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 3072, 0);
+                goto @label_00E6;
+            } else {
+                SetEntityVec3(VEC3_POS, -8500.0fp, -3476.0fp, -5800.0fp);
+                SetEntityVec3(VEC3_ROT, 0, 2048, 0);
+                goto @label_00E6;
+            }
+            Wait(1);
+        }
+    @label_00E6:
+        ExitThread();
+    @label_00EA:
+        GetThreadTarget14(local[4]);
+        if (local[4] == 10) {
+            LockPlayerInput();
+            SetEntityVec3(VEC3_MOTION, 0, 0, 0);
+            SetAnim(22);
+            MoveTowardPoint(-8700.0fp, -7100.0fp, 128);
+        }
+        if (local[4] == 11) {
+            LockPlayerInput();
+            SetEntityVec3(VEC3_MOTION, 0, 0, 0);
+            SetAnim(22);
+            MoveTowardPoint(-7650.0fp, -4400.0fp, 128);
+            Wait(10);
+            SetAnim(22);
+            MoveTowardPoint(-7650.0fp, -6700.0fp, 128);
+        }
+        if (local[4] == 12) {
+            LockPlayerInput();
+            SetEntityVec3(VEC3_MOTION, 0, 0, 0);
+            SetAnim(22);
+            MoveTowardPoint(-8100.0fp, -2400.0fp, 128);
+        }
+        if (local[4] == 254) {
+            KillOtherThreads();
+            PauseSceneEvents();
+            LockPlayerInput();
+            StopActorMotion();
+            SetAnim(21);
+            ExitThread();
+        }
+        if (local[4] == 255) {
+            KillOtherThreads();
+            SetAnim(21);
+            UnlockPlayerInput();
+            ResumeSceneEvents();
+            ExitThread();
+        }
+        ExitThread();
+        ExitThread();
+    }
+
+    actor_script actor_1 {
+        SetMeshFadeLevel(64);
+        SetCameraBaseAngle(600, 656);
+        AkaoCmd(0x193, 1016, 1016, 0, 0, room[17]);
+        SetEventHandler(EVENT_INTERACT, @label_009E);
+        ClearScreenFadeFlag40();
+        SpawnActor(0, 0, 0.0fp, 0.0fp, 0.0fp);
+        SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+        Wait(1);
+        if (global[AREA] >= 240) {
+            AkaoCmd(0xC8, 29, 0, 0, 0, room[17]);
+        } else {
+            AkaoCmd(0xC8, 9, 0, 0, 0, room[17]);
+        }
+        ResumeSceneEvents();
+        SetFadeColor(0x1E);
+        Wait(30);
+        UnlockPlayerInput();
+        ExitThread();
+    @label_009E:
+        GetThreadTarget14(local[3]);
+        if (local[3] == 252) {
+            KillThread(local[5]);
+            PlayFieldSfx(2, 0, 251);
+            ExitThread();
+        }
+        if (local[3] == 253) {
+            SpawnActor(2, 0, 0.0fp, 0.0fp, 0.0fp);
+            AkaoCmd(0x12C, 2302, 0, 128, 127, room[17]);
+            ExitThread();
+        }
+        ExitThread();
+    }
+
+    actor_script actor_2 {
+        SetEventHandler(EVENT_INTERACT, @label_017A);
+        Wait(1);
+        SpawnThread(@label_0024);
+        SpawnThread(@label_0096);
+        SpawnThread(@label_0108);
+        ExitThread();
+    @label_0024:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-9500.0fp, -6000.0fp, -9500.0fp, -7600.0fp, -7600.0fp, -7600.0fp, -7600.0fp, -6000.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            Wait(30);
+            global[ROOM] = 73;
+            ChangeRoom(0xA8006448);
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_0024;
+    @label_0096:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-7500.0fp, -4800.0fp, -7500.0fp, -4000.0fp, -7900.0fp, -4000.0fp, -7900.0fp, -4800.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            Wait(30);
+            global[ROOM] = 73;
+            ChangeRoom(0xA8007248);
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_0096;
+    @label_0108:
+        GetActorPositionByType(0, 0, 0, local[0], local[1], local[2], local[3]);
+        TestPointInQuad(-9500.0fp, -3300.0fp, -9500.0fp, -2900.0fp, -7600.0fp, -2900.0fp, -7600.0fp, -3300.0fp, local[0], local[2], local[4]);
+        if (local[4] == 1) {
+            PauseSceneEvents();
+            LockPlayerInput();
+            StartScreenFade(30);
+            Wait(30);
+            global[ROOM] = 73;
+            ChangeRoom(0xA8007348);
+            ExitThread();
+        }
+        Wait(1);
+        goto @label_0108;
+    @label_017A:
+        GetThreadTarget14(local[6]);
+        if (local[6] == 251) {
+            DestroySelf();
+        }
+        ExitThread();
+    }
+}
