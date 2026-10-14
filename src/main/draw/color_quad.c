@@ -50,9 +50,9 @@ void Draw_AllocColorQuad(int width, int height) {
     int tileWidth;
     int tileHeight;
     int tileCode;
-    register u32 modeMask24 asm("$4");
+    u32 modeMask24;
     u32 modeMaskTop;
-    u32 *modeOt;
+    u32 *linkOt;
     u32 modeTag;
     u32 secondTag;
     register u32 linkHigh asm("$2");
@@ -130,9 +130,10 @@ void Draw_AllocColorQuad(int width, int height) {
     ot = g_DrawOrderingTableEntry;
     packet->tag = (firstTag & maskTop) | (*ot & mask24);
     linkHigh = *ot & maskTop;
+    linkOt = ot;
     old = g_DrawPacketCursor;
     link.packet = packet;
-    *ot = linkHigh | (link.word & mask24);
+    *linkOt = linkHigh | (link.word & mask24);
 
     second = 0;
     next = old + sizeof(RenderGouraudQuad);
@@ -223,7 +224,8 @@ void Draw_AllocColorQuad(int width, int height) {
     tile->code = tileCode | 2;
     ot = g_DrawOrderingTableEntry;
     tile->tag = (tile->tag & tileMaskTop) | (*ot & tileMask24);
-    linkHigh = *ot & tileMaskTop;
+    modeMaskTop = *ot & tileMaskTop;
+    linkHigh = modeMaskTop;
     old = g_DrawPacketCursor;
     link.packet = tile;
     *ot = linkHigh | (link.word & tileMask24);
@@ -245,11 +247,12 @@ void Draw_AllocColorQuad(int width, int height) {
     packetValue = 0x400000;
     modeMaskTop = 0xFF000000;
     modeTag = drawMode->tag;
-    modeOt = g_DrawOrderingTableEntry;
+    linkOt = g_DrawOrderingTableEntry;
     packetValue |= shadedColorLow;
     g_DrawPrimColor = color;
     g_DrawColorShaded = packetValue;
-    drawMode->tag = (modeTag & modeMaskTop) | (*modeOt & modeMask24);
+    drawMode->tag = (modeTag & modeMaskTop) | (*linkOt & modeMask24);
     link.packet = drawMode;
-    *modeOt = (*modeOt & modeMaskTop) | (link.word & modeMask24);
+    modeMask24 &= link.word;
+    *linkOt = (*linkOt & modeMaskTop) | modeMask24;
 }
