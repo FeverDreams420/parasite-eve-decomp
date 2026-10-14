@@ -53,7 +53,7 @@ void Scene_LoadSceneData(void) {
     SceneCopyCursor src;
     SceneCopyCursor dst;
     u8 *end;
-    register u8 *copyEnd asm("$8");
+    u32 copyEnd;
 
     rect.w = 0x3FF;
     rect.x = 0;
@@ -93,19 +93,21 @@ restart2:
     src.bytes = state->scene_load_scratch;
     dst.bytes = g_StartupResourceBlob;
     if ((src.word | dst.word) & 3) {
-        copyEnd = src.bytes + 0x10A50;
+        copyEnd = 0x10A50;
+        copyEnd += src.word;
         do {
             *dst.unaligned = *src.unaligned;
             src.bytes += 0x10;
             dst.bytes += 0x10;
-        } while (src.bytes != copyEnd);
+        } while (src.word != copyEnd);
     } else {
-        copyEnd = src.bytes + 0x10A50;
+        copyEnd = 0x10A50;
+        copyEnd += src.word;
         do {
             *dst.aligned = *src.aligned;
             src.bytes += 0x10;
             dst.bytes += 0x10;
-        } while (src.bytes != copyEnd);
+        } while (src.word != copyEnd);
     }
 
     state->startup_resource_blob = g_StartupResourceBlob;
