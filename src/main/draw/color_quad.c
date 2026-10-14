@@ -37,7 +37,7 @@ void Draw_AllocColorQuad(int width, int height) {
     register u32 *ot asm("$3");
     u32 firstTag;
     int firstY;
-    register s16 firstRight asm("$4");
+    s16 firstRight;
     int firstBottom;
     int firstLeft;
     int coordinate;
@@ -125,7 +125,8 @@ void Draw_AllocColorQuad(int width, int height) {
     packet->x2 = firstLeft;
     packet->x0 = firstLeft;
     packet->y3 = firstBottom;
-    packet->y2 = packet->y3;
+    firstY = packet->y3;
+    packet->y2 = firstY;
 
     maskTop = 0xFF000000;
     ot = g_DrawOrderingTableEntry;
