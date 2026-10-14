@@ -285,7 +285,7 @@ void Render_SetupColorTable(int inputIndex, int inputStyle, short *inputValues)
         g_TextboxEntries[i].control.flags &= ~0x100000;
         {
             int reciprocal = 0x66666667;
-            asm("" : : "r"(reciprocal), "r"(index));
+            asm("" : : "r"(reciprocal));
         }
         g_TextboxEntries[i].control.flags &= ~0x200000;
         if (style) {

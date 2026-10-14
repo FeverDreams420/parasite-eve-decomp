@@ -558,7 +558,7 @@ void Draw_AllocTexturedQuad(int code) {
         vBase += 0xC;
         cursorX += half;
         cursorY++;
-        asm volatile("" : "=r"(cursorX), "=r"(cursorY) : "0"(cursorX), "1"(cursorY));
+        asm volatile("" : "=r"(cursorX) : "0"(cursorX));
         prim->u3 = uBase;
         prim->u1 = prim->u3;
         prim->x0 = cursorX;
