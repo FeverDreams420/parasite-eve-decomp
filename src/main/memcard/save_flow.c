@@ -256,8 +256,9 @@ int MemCard_PollTransferDelay(void) {
     int one;
     int reset;
     int value;
+    /* Shared scratch for the pending-port test and the timer clamp. */
     int clamped;
-    register int final_value asm("$4");
+    int final_value;
 
     count = 0;
     reset = 12;
@@ -277,7 +278,8 @@ int MemCard_PollTransferDelay(void) {
 
     pending = g_MemCardConnectPending;
     __asm__ volatile("" : "=r"(pending) : "0"(pending));
-    if (pending[0] != 0 && g_MemCardPortStates[0].cardState != 4) {
+    clamped = pending[0] != 0;
+    if (clamped && g_MemCardPortStates[0].cardState != 4) {
     } else if (*(pending + 1) != 0 && g_MemCardPortStates[1].cardState != 4) {
     } else {
         final_value = g_MemCardConnectDebounce;
@@ -289,7 +291,8 @@ int MemCard_PollTransferDelay(void) {
         *(pending + 1) = 0;
         pending[0] = 0;
     }
-    return g_MemCardConnectDebounce > 0;
+    final_value = g_MemCardConnectDebounce > 0;
+    return final_value;
 }
 
 void _card_clear(int arg0);
