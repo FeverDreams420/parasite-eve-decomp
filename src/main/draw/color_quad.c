@@ -41,7 +41,7 @@ void Draw_AllocColorQuad(int width, int height) {
     int firstLeft;
     int secondRight;
     register int secondTop asm("$5");
-    int secondBottom;
+    u32 secondBottom;
     int secondBound;
     int tileY;
     register u32 tileMask24 asm("$5");
@@ -152,7 +152,6 @@ void Draw_AllocColorQuad(int width, int height) {
     asm volatile("" : "=r"(secondRight), "=r"(secondTop)
         : "0"(secondRight), "1"(secondTop));
     secondBottom = shadeOffset + 0xAD;
-    asm volatile("" : "=r"(secondBottom) : "0"(secondBottom));
     mask24 = 0xFFFFFF;
     darkColor = 0x303030;
     darkerColor = 0x181818;
@@ -186,7 +185,8 @@ void Draw_AllocColorQuad(int width, int height) {
     tileMask24 = 0xFF000000;
     ot = g_DrawOrderingTableEntry;
     packet->tag = (secondTag & tileMask24) | (*ot & mask24);
-    linkHigh = *ot & tileMask24;
+    secondBottom = *ot & tileMask24;
+    linkHigh = secondBottom;
     old = g_DrawPacketCursor;
     link.packet = packet;
     *ot = linkHigh | (link.word & mask24);
