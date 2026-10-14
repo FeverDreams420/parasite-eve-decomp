@@ -60,7 +60,7 @@ s32 MenuCard_LinkEffect(s32 mode, MemcardLinkState *state) {
         offsetPtr = &offset;
         __asm__("" : : "r"(offsetPtr));
         opacity = 128; entity = D_8009D254;
-        __asm__("" : "=r"(entity), "=r"(opacity) : "0"(entity), "1"(opacity) : "$17");
+        __asm__("" : "=r"(opacity) : "0"(opacity) : "$17");
         firstPtr = &first;
         state->opacity = opacity; state->phase = 0; state->timer = 0;
         __asm__("" : : : "memory");
