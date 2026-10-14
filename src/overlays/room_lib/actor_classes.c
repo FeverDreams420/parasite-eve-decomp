@@ -217,7 +217,7 @@ void RoomLib_ArmHandlerD(RoomEnt *o) {
 
 void RoomLib_HandlerD(RoomEnt *o) {
     RoomEnt *ent = o;
-    RoomLibHandlerDState *state = (RoomLibHandlerDState *)&o->sub;
+    RoomLibHandlerDState *const state = (RoomLibHandlerDState *)&o->sub;
     short *scratch;
     RoomLink *link = o->link;
     char *left;
@@ -228,7 +228,6 @@ void RoomLib_HandlerD(RoomEnt *o) {
     int work;
     int rot_word;
 
-    asm("" : : "r"(state) : "$18");
     scratch = (short *)0x1F800000;
 
     if (ent->t1A == 0) {
