@@ -14,7 +14,7 @@
  * scheduled before the store (lev 10..25). */
 
 /* Slot of the first glyph group whose code matches, or 255. */
-static inline unsigned char Font_FindCodeSlot(FontGlyphTable *table, unsigned short code)
+static inline unsigned char Font_FindCodeSlot(FontGlyphTable *table, unsigned char code)
 {
     unsigned char selected;
     int i, count;
@@ -27,7 +27,6 @@ static inline unsigned char Font_FindCodeSlot(FontGlyphTable *table, unsigned sh
     groups = &table->groups;
     if (i < count) {
         int limit;
-        code &= 255;
         limit = count;
         do {
             if (groups->codes[i] == code) {
@@ -272,7 +271,6 @@ u8 Render_StepFontLoad(void) {
     Render_LoadFontGlyph(code);
 
     digit = (u8)(g_FontSelectionCodeIndex % 10) != 0;
-    asm("" : "=r"(digit) : "0"(digit));
     g_FontSelectionState.selected = Font_FindCodeSlot(g_FontSelectionState.table, digit);
     __asm__ volatile("" : "=m"(g_FontSelectionState) : "m"(g_FontSelectionState));
     result = g_FontSelectionState.table;
