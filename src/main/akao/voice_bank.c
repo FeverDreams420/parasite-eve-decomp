@@ -1011,7 +1011,9 @@ void Seq_SlideTrackPitch(AkaoBankPitchSlideCommand *arg0) {
 }
 
 void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *arg0) {
-    register int raw asm("$2");
+    int raw;
+    /* Shared scratch for a target word or the secondary-bank step. */
+    int value;
     int duration;
     int selector;
     AkaoSequencerBank *track;
@@ -1034,7 +1036,8 @@ void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *arg0) {
         start &= 0x7F;
         start <<= 16;
         track->pitch_current = start;
-        raw = arg0->target;
+        value = arg0->target;
+        raw = value;
         raw &= 0x7F;
         delta = raw << 16;
         delta -= start;
@@ -1056,7 +1059,8 @@ void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *arg0) {
                 delta -= start;
                 base = g_AkaoVoiceStateTable2;
                 state->secondary.pitch_slide_duration = duration;
-                next_track = track + 1;
+                value = 1;
+                next_track = track + value;
                 g_AkaoCurTrack = next_track;
                 state->secondary.pitch_delta = delta / duration;
                 Seq_MarkDirtyTracks(base);
