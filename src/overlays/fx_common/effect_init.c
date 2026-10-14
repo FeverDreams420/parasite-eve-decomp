@@ -511,7 +511,7 @@ void FxCommon_InitScene(void)
                 nextPointIndex = ++pointIndex;
                 (*secondSlot)->state[3] = point->z;
                 pairedNode = *secondSlot;
-                asm("" : "=r"(nodeIndex), "=r"(point) : "0"(nodeIndex), "1"(point), "r"(pointList), "r"(pointCount), "r"(pairedNode));
+                asm("" : "=r"(nodeIndex), "=r"(point) : "0"(nodeIndex), "1"(point), "r"(pointList), "r"(pairedNode));
                 g_FxCommonRouteNodeCount = nodeIndex + 1;
                 /* Byte view retains the retail ordering after the pool-index store. */
                 *(u16 *)((u8 *)pairedNode + PE1_OFFSETOF(FxCommonNode, value2C)) = (u16) (*(u16 *)((u8 *)pairedNode + PE1_OFFSETOF(FxCommonNode, value2C)) + 0x800);
