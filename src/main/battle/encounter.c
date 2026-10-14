@@ -1164,10 +1164,10 @@ void Battle_PhaseInitEnemyTurn(void) {
             register int topGreen asm("$8") = 0x3D;
             register int topBlue asm("$7") = 0x81;
             register int bottomRed asm("$6") = 0x83;
-            register int bottomGreen asm("$5") = 0x13;
+            int bottomGreen = 0x13;
             int bottomBlue = 1;
             g_BattlePeGauges[g_ActiveDrawSlot][1].r0 = topRed;
-            asm volatile("" : : "r"(topRed), "r"(topGreen), "r"(topBlue), "r"(bottomRed), "r"(bottomGreen), "r"(bottomBlue));
+            asm volatile("" : : "r"(bottomBlue));
             g_BattlePeGauges[g_ActiveDrawSlot][1].g0 = topGreen;
             g_BattlePeGauges[g_ActiveDrawSlot][1].b0 = topBlue;
             g_BattlePeGauges[g_ActiveDrawSlot][1].r1 = bottomRed;
@@ -1182,10 +1182,10 @@ void Battle_PhaseInitEnemyTurn(void) {
             g_BattlePeGauges[g_ActiveDrawSlot][1].b3 = bottomBlue;
         } else if ((g_FrameRngCounter & 3) == 1) {
             register int red asm("$6") = 0xC1;
-            register int green asm("$5") = 0x28;
+            int green = 0x28;
             int blue = 0x41;
             g_BattlePeGauges[g_ActiveDrawSlot][1].r0 = red;
-            asm volatile("" : : "r"(red), "r"(green), "r"(blue));
+            asm volatile("" : : "r"(blue));
             g_BattlePeGauges[g_ActiveDrawSlot][1].g0 = green;
             g_BattlePeGauges[g_ActiveDrawSlot][1].b0 = blue;
             g_BattlePeGauges[g_ActiveDrawSlot][1].r1 = red;
@@ -1203,10 +1203,10 @@ void Battle_PhaseInitEnemyTurn(void) {
             register int topGreen asm("$8") = 0x13;
             register int topBlue asm("$7") = 1;
             register int bottomRed asm("$6") = 0xFF;
-            register int bottomGreen asm("$5") = 0x3D;
+            int bottomGreen = 0x3D;
             int bottomBlue = 0x81;
             g_BattlePeGauges[g_ActiveDrawSlot][1].r0 = topRed;
-            asm volatile("" : : "r"(topRed), "r"(topGreen), "r"(topBlue), "r"(bottomRed), "r"(bottomGreen), "r"(bottomBlue));
+            asm volatile("" : : "r"(bottomBlue));
             g_BattlePeGauges[g_ActiveDrawSlot][1].g0 = topGreen;
             g_BattlePeGauges[g_ActiveDrawSlot][1].b0 = topBlue;
             g_BattlePeGauges[g_ActiveDrawSlot][1].r1 = bottomRed;
@@ -1221,10 +1221,10 @@ void Battle_PhaseInitEnemyTurn(void) {
             g_BattlePeGauges[g_ActiveDrawSlot][1].b3 = bottomBlue;
         } else if ((g_FrameRngCounter & 3) == 3) {
             register int red asm("$6") = 0xC1;
-            register int green asm("$5") = 0x28;
+            int green = 0x28;
             int blue = 0x41;
             g_BattlePeGauges[g_ActiveDrawSlot][1].r0 = red;
-            asm volatile("" : : "r"(red), "r"(green), "r"(blue));
+            asm volatile("" : : "r"(blue));
             g_BattlePeGauges[g_ActiveDrawSlot][1].g0 = green;
             g_BattlePeGauges[g_ActiveDrawSlot][1].b0 = blue;
             g_BattlePeGauges[g_ActiveDrawSlot][1].r1 = red;
@@ -1334,11 +1334,11 @@ void Battle_PhaseHitReaction(void) {
             register int topGreen asm("$8") = 0x46;
             register int topBlue asm("$7") = 0x82;
             register int bottomRed asm("$6") = 0x9F;
-            register int bottomGreen asm("$5") = 0xFF;
+            int bottomGreen = 0xFF;
             int bottomBlue = 0xF9;
             g_BattleAtbGauges[g_ActiveDrawSlot].r0 = 0;
             g_BattleAtbGauges[g_ActiveDrawSlot].g0 = topGreen;
-            asm volatile("" : : "r"(topGreen), "r"(topBlue), "r"(bottomRed), "r"(bottomGreen), "r"(bottomBlue));
+            asm volatile("" : : "r"(bottomBlue));
             g_BattleAtbGauges[g_ActiveDrawSlot].b0 = topBlue;
             g_BattleAtbGauges[g_ActiveDrawSlot].r1 = bottomRed;
             g_BattleAtbGauges[g_ActiveDrawSlot].g1 = bottomGreen;
@@ -1354,12 +1354,12 @@ void Battle_PhaseHitReaction(void) {
             asm("" : : "i"(0));
             g_BattleAtbMarkers[g_ActiveDrawSlot].sprite.color.bytes.b = bottomBlue;
         } else if ((g_FrameRngCounter & 3) == 1) {
-            register int red asm("$5") = 0x50;
+            int red = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
             g_BattleAtbGauges[g_ActiveDrawSlot].r0 = red;
             g_BattleAtbGauges[g_ActiveDrawSlot].g0 = green;
-            asm volatile("" : : "r"(red), "r"(green), "r"(blue));
+            asm volatile("" : : "r"(blue));
             g_BattleAtbGauges[g_ActiveDrawSlot].b0 = blue;
             g_BattleAtbGauges[g_ActiveDrawSlot].r1 = red;
             g_BattleAtbGauges[g_ActiveDrawSlot].g1 = green;
