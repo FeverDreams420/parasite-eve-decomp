@@ -165,7 +165,7 @@ int Render_DrawSpriteEntry(GeomEntry *input)
                     }
                 }
                 if ((u16)(draw_x + 15) < 0x14F) {
-                        register s32 draw_y asm("$5");
+                        s16 draw_y;
                         {
                             u32 word_y = *position_cursor;
                             s32 y = scroll_y + ((word_y >> 12) & 0x3FF);
