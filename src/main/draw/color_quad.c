@@ -52,7 +52,6 @@ void Draw_AllocColorQuad(int width, int height) {
     int tileCode;
     register u32 modeMask24 asm("$4");
     u32 modeMaskTop;
-    register u32 modeColor1 asm("$8");
     register u32 modeColor2 asm("$7");
     u32 *modeOt;
     u32 modeTag;
@@ -60,7 +59,7 @@ void Draw_AllocColorQuad(int width, int height) {
     register u32 linkHigh asm("$2");
     /* The ratio divisor is consumed before this scratch holds the base color. */
     int value;
-    int darkerColor;
+    int color;
     DrawPrimLink link;
 
     first = 0;
@@ -156,7 +155,7 @@ void Draw_AllocColorQuad(int width, int height) {
     secondBottom = shadeOffset + 0xAD;
     mask24 = 0xFFFFFF;
     value = 0x303030;
-    darkerColor = 0x181818;
+    color = 0x181818;
     secondTag = packet->tag;
     packet->r2 = 0xFF;
     packet->r0 = 0xFF;
@@ -185,7 +184,7 @@ void Draw_AllocColorQuad(int width, int height) {
 
     shadedColorLow = 0x4040;
     g_DrawPrimColor = value;
-    g_DrawColorShaded = darkerColor;
+    g_DrawColorShaded = color;
     g_DrawTextDimmed = 0;
     ot = g_DrawOrderingTableEntry;
     packet->tag = (secondTag & tileMask24) | (*ot & mask24);
@@ -242,13 +241,13 @@ void Draw_AllocColorQuad(int width, int height) {
         SetDrawTPage(drawMode, 0, 0, 0);
     }
     modeMask24 = 0xFFFFFF;
-    modeColor1 = 0x808080;
+    color = 0x808080;
     modeColor2 = 0x400000;
     modeMaskTop = 0xFF000000;
     modeTag = drawMode->tag;
     modeOt = g_DrawOrderingTableEntry;
     modeColor2 |= shadedColorLow;
-    g_DrawPrimColor = modeColor1;
+    g_DrawPrimColor = color;
     g_DrawColorShaded = modeColor2;
     drawMode->tag = (modeTag & modeMaskTop) | (*modeOt & modeMask24);
     link.packet = drawMode;
