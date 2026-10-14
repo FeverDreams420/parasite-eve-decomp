@@ -457,7 +457,6 @@ void MenuCard_CreateImageGroup(void) {
         node->x = 0; node->y = 0; node->width = 0; node->height = 0;
         node->intensity = 0; node->targetY = 0; node->stepY = 0;
         node->parameter = 0; node->kind = 0; node->freePending = 0;
-        __asm__("" : : : "memory");
         imageData = (MemcardImage *)(g_MemcardImageBundle + g_MemcardImageOffsets[7]);
         node->kind = kind;
         node->image = imageData;
