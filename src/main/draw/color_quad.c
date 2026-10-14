@@ -28,6 +28,7 @@ void Draw_AllocColorQuad(int width, int height) {
     int stackPad[2];
     u8 *old, *next;
     int shadeOffset;
+    int shadedColorLow;
     int ratio;
     int minimum;
     int widthSmaller;
@@ -181,6 +182,7 @@ void Draw_AllocColorQuad(int width, int height) {
     coordinate = packet->y3;
     packet->y2 = coordinate;
 
+    shadedColorLow = 0x4040;
     g_DrawPrimColor = value;
     g_DrawColorShaded = darkerColor;
     g_DrawTextDimmed = 0;
@@ -241,11 +243,10 @@ void Draw_AllocColorQuad(int width, int height) {
     modeMask24 = 0xFFFFFF;
     modeColor1 = 0x808080;
     modeColor2 = 0x400000;
-    asm volatile("" : "=r"(modeColor2) : "0"(modeColor2));
     modeMaskTop = 0xFF000000;
     modeTag = drawMode->tag;
     modeOt = g_DrawOrderingTableEntry;
-    modeColor2 |= 0x4040;
+    modeColor2 |= shadedColorLow;
     g_DrawPrimColor = modeColor1;
     g_DrawColorShaded = modeColor2;
     drawMode->tag = (modeTag & modeMaskTop) | (*modeOt & modeMask24);
