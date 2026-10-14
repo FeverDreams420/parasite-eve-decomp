@@ -39,7 +39,7 @@ void Draw_AllocColorQuad(int width, int height) {
     register s16 firstRight asm("$4");
     int firstBottom;
     int firstLeft;
-    int secondRight;
+    int coordinate;
     s16 secondTop;
     u32 secondBottom;
     int secondBound;
@@ -147,9 +147,8 @@ void Draw_AllocColorQuad(int width, int height) {
     }
 
     packet = second;
-    secondRight = ratio + 0xE5;
+    coordinate = ratio + 0xE5;
     secondTop = shadeOffset + 0xAA;
-    asm volatile("" : "=r"(secondRight) : "0"(secondRight));
     secondBottom = shadeOffset + 0xAD;
     mask24 = 0xFFFFFF;
     darkColor = 0x303030;
@@ -171,13 +170,15 @@ void Draw_AllocColorQuad(int width, int height) {
     secondBound = 0x11D;
     packet->y1 = secondTop;
     packet->y0 = packet->y1;
-    packet->x2 = secondRight;
+    packet->x2 = coordinate;
     tileMask24 = 0xFF000000;
     packet->x0 = packet->x2;
     packet->x3 = secondBound;
     packet->x1 = secondBound;
     packet->y3 = secondBottom;
-    packet->y2 = packet->y3;
+    /* The X stores are complete; reuse the coordinate scratch for Y. */
+    coordinate = packet->y3;
+    packet->y2 = coordinate;
 
     g_DrawPrimColor = darkColor;
     g_DrawColorShaded = darkerColor;
