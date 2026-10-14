@@ -77,10 +77,7 @@ int Render_MoveGridCursor(PrimObj *obj, u32 *entries, u8 ascending, u8 restart) 
             value = entries[i];
             if (ENTRY_Y(value) == bestY && (int)ENTRY_X(value) < bestX) {
                 bestX = ENTRY_X(value);
-                /* The output barrier keeps best's reference weight so the
-                 * allocator ranks it ahead of found and later. */
                 best = i;
-                asm volatile("" : "=r"(best) : "0"(best));
             }
         }
     } else {
@@ -136,7 +133,9 @@ int Render_MoveGridCursor(PrimObj *obj, u32 *entries, u8 ascending, u8 restart) 
                 for (i = 0; i < obj->count; i++) {
                     value = entries[i];
                     if (ENTRY_Y(value) == g_GridCursorY + step && bestX < (int)ENTRY_X(value)) {
-                        bestX = ENTRY_X(value);
+                        /* Save X through the scratch before installing the new index. */
+                        best = ENTRY_X(value);
+                        bestX = best;
                         best = i;
                         found = 1;
                     }
