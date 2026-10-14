@@ -316,7 +316,7 @@ void FieldFx_DrawShapeQuads(GteShortVector *position, GteRotation *rotation,
             {
                 register GteShortVector *v1 = &vertex[1];
                 register GteShortVector *v2 asm("$2") = &vertex[2];
-                asm volatile("" : "=r"(v1), "=r"(v2) : "0"(v1), "1"(v2));
+                asm volatile("" : "=r"(v1) : "0"(v1));
                 gte_lwc2_0_0(vertex);
                 gte_lwc2_1_4(vertex);
                 gte_lwc2_2_0(v1);
