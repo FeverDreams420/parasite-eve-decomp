@@ -89,7 +89,6 @@ void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbit
     valueNeg42 = -0x2A;
     PE1_COMPILER_LAUNDER(value128a);
     PE1_COMPILER_LAUNDER(value128b);
-    PE1_COMPILER_LAUNDER(value32);
     g_RoomOrbitParticlePacket.offset = value;
     value = 0x60;
     g_RoomOrbitBurstPacket.r = value;
@@ -98,9 +97,9 @@ void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbit
     matrixArg = &state->matrix;
     PE1_COMPILER_USE(matrixArg);
     g_RoomOrbitBurstPacket.offset = valueNeg42;
+    g_RoomOrbitParticlePacket.depth = value128a;
     g_RoomOrbitShadowPacket.offset = valueNeg42;
     g_RoomOrbitSpritePacket.offset = valueNeg42;
-    g_RoomOrbitParticlePacket.depth = value128a;
     g_RoomOrbitBurstPacket.depth = value128a;
     g_RoomOrbitParticlePacket.code = 0;
     g_RoomOrbitParticlePacket.mode = 0;
