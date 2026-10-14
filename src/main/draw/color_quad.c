@@ -36,7 +36,7 @@ void Draw_AllocColorQuad(int width, int height) {
     register u32 *ot asm("$3");
     u32 firstTag;
     int firstY;
-    register int firstRight asm("$4");
+    register s16 firstRight asm("$4");
     int firstBottom;
     int firstLeft;
     int secondRight;
@@ -98,7 +98,6 @@ void Draw_AllocColorQuad(int width, int height) {
     }
     firstY = shadeOffset + 0xAA;
     firstRight = ratio + 0xE5;
-    asm volatile("" : "=r"(firstRight) : "0"(firstRight));
     firstBottom = shadeOffset + 0xAD;
     mask24 = 0xFFFFFF;
     firstTag = packet->tag;
