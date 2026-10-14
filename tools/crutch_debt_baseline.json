@@ -27,7 +27,7 @@
     "aliases": 0,
     "asm_bodies": 0,
     "asm_constrained_units": 0,
-    "barriers": 238,
+    "barriers": 237,
     "byte_pointer_arithmetic": 50,
     "dead_code": 0,
     "declaration_overrides": 0,

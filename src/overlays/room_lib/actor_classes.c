@@ -298,7 +298,6 @@ void RoomLib_HandlerD(RoomEnt *o) {
     gte_ldrotmatrix((void *)((int)scratch | 0x28));
     gte_ldv0((void *)scratch);
     gte_mvmva();
-    asm("" : "=r"(scratch) : "0"(scratch));
     gte_stmac(((RoomLibMotionWork *)scratch)->rotated);
     state->motion[0] += ((RoomLibMotionWork *)scratch)->rotated[0] << 12;
     state->motion[2] += ((RoomLibMotionWork *)scratch)->rotated[2] << 12;
