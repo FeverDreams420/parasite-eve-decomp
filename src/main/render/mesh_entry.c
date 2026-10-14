@@ -120,9 +120,9 @@ int Render_TransformPoint(GeomEntry *entry, int x, int y, int depth) {
     /* Keeps the unclamped x copy apart from the sum the clamp truncates;
      * the pins reproduce retail moving the entry to $t0 and reusing $a0
      * for y, which local allocation otherwise swaps. */
-    asm volatile("" : "=r"(sum) : "0"(sum));
     depthWord >>= 20;
-    depth += depthWord;
+    bound = depthWord;
+    depth += (unsigned int)bound;
 
     bound = current->bounds.minX;
     minimum = bound;
