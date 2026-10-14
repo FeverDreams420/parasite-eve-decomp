@@ -797,7 +797,7 @@ retry:
             do {
                 unsigned id;
                 union { Pe1GameState *state; u32 address; } destination;
-                asm("" : "=r"(record) : "0"(record), "r"(offsetMask));
+                asm("" : "=r"(record) : "0"(record));
                 id = record->source.bytes.id;
                 /* The row id indexes the flattened bank row table. */
                 destination.state = state;
