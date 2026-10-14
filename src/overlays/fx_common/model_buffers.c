@@ -984,7 +984,6 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                                 orderBuffer->allocation[scratchpad->orderingDepth].packed;
                             firstQuadOtWord &= quadLengthMask;
                             firstQuadOtAddress = ((u32)var_t1_2) & quadAddressMask;
-                            asm volatile("" : "=r"(firstQuadOtAddress) : "0"(firstQuadOtAddress));
                             orderBuffer->allocation[scratchpad->orderingDepth].packed =
                                 firstQuadOtWord | firstQuadOtAddress;
                         }
