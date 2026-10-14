@@ -61,7 +61,6 @@ typedef struct RoomOrbitSetEntity {
 
 void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbitSetState *state) {
     FieldActor *owner;
-    void *allocation;
     RenderMatrix *source;
     RenderMatrix *matrixArg;
     register void *callObject asm("$4");
@@ -69,7 +68,8 @@ void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbit
     u16 value128a;
     u8 value128b;
     int value32;
-    int packetValue;
+    /* Asset address during lookup, then packet mode and color. */
+    int workValue;
     int valueNeg42;
 
     FieldFx_SetScriptContext(state);
@@ -77,20 +77,19 @@ void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbit
     state->owner = owner;
     source = owner->render_object.matrices;
     state->matrix = *source;
-    allocation = Asset_SearchByKeyType(0x24);
+    workValue = Asset_SearchByKeyType(0x24);
 
     callObject = object;
-    state->asset.allocation = allocation;
+    state->asset.allocation = (void *)workValue;
     value = -0x29;
     value128a = 0x80;
     value128b = 0x80;
     value32 = 0x20;
-    packetValue = 1;
+    workValue = 1;
     valueNeg42 = -0x2A;
     PE1_COMPILER_LAUNDER(value128a);
     PE1_COMPILER_LAUNDER(value128b);
     PE1_COMPILER_LAUNDER(value32);
-    PE1_COMPILER_LAUNDER(packetValue);
     g_RoomOrbitParticlePacket.offset = value;
     value = 0x60;
     g_RoomOrbitBurstPacket.r = value;
@@ -111,21 +110,21 @@ void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbit
     g_RoomOrbitParticlePacket.b = value128b;
     g_RoomOrbitParticlePacket.zero = 0;
     g_RoomOrbitBurstPacket.code = value32;
-    g_RoomOrbitBurstPacket.mode = packetValue;
+    g_RoomOrbitBurstPacket.mode = workValue;
     g_RoomOrbitBurstPacket.g = value;
     g_RoomOrbitBurstPacket.b = value;
     g_RoomOrbitBurstPacket.zero = 0;
     g_RoomOrbitShadowPacket.code = value32;
-    g_RoomOrbitShadowPacket.mode = packetValue;
+    g_RoomOrbitShadowPacket.mode = workValue;
     g_RoomOrbitShadowPacket.depth = 0;
     g_RoomOrbitShadowPacket.r = 0;
     g_RoomOrbitShadowPacket.g = 0;
     g_RoomOrbitShadowPacket.b = 0;
     g_RoomOrbitShadowPacket.zero = 0;
-    packetValue = value128b;
+    workValue = value128b;
     g_RoomOrbitSpritePacket.code = 0;
     g_RoomOrbitSpritePacket.mode = 0;
-    g_RoomOrbitSpritePacket.r = packetValue;
+    g_RoomOrbitSpritePacket.r = workValue;
     g_RoomOrbitSpritePacket.g = value128b;
     g_RoomOrbitSpritePacket.b = value128b;
     g_RoomOrbitSpritePacket.zero = 0;
