@@ -692,8 +692,8 @@ void Akao_UpdateVoiceMask(AkaoU8 *new_base) {
     AkaoTrack *track;
     AkaoTrack *active;
     AkaoSequencerBank *bank;
-    register unsigned int bit asm("$7");
-    register unsigned int remaining asm("$8");
+    unsigned int bit;
+    unsigned int remaining;
     unsigned int mask;
     unsigned int voice_mask;
     unsigned int updated;
@@ -722,14 +722,11 @@ void Akao_UpdateVoiceMask(AkaoU8 *new_base) {
     magic_flags = 0x1ff93;
     reset_duration = 4;
     duration = &track->pan_duration;
-    /* Keep the loop constants live before loading the sequencer bank. */
-    asm volatile("" : "=r"(remaining), "=r"(bit), "=r"(magic_flags),
-                      "=r"(reset_duration), "=r"(duration)
-                    : "0"(remaining), "1"(bit), "2"(magic_flags),
-                      "3"(reset_duration), "4"(duration));
+    /* Keep the reset value live before loading the sequencer bank. */
+    asm volatile("" : "=r"(reset_duration) : "0"(reset_duration));
     loaded_bank = g_AkaoCurTrack;
     key_on_state = g_AkaoVoiceKeyOnState;
-    asm("" : "=r"(bank) : "0"(loaded_bank), "r"(key_on_state));
+    asm("" : "=r"(bank) : "0"(loaded_bank));
     old_status = bank->status_flags;
     allocation = bank->allocated_voice_mask;
     bank->sequence_base = new_base;
