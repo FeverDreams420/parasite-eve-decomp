@@ -1073,11 +1073,11 @@ void Battle_PhaseInitEnemyTurn(void) {
             register int topGreen asm("$8") = 0x46;
             register int topBlue asm("$7") = 0x82;
             register int bottomRed asm("$6") = 0x9F;
-            register int bottomGreen asm("$5") = 0xFF;
+            int bottomGreen = 0xFF;
             int bottomBlue = 0xF9;
             g_BattleAtbGauges[g_ActiveDrawSlot].r0 = 0;
             g_BattleAtbGauges[g_ActiveDrawSlot].g0 = topGreen;
-            asm volatile("" : : "r"(topGreen), "r"(topBlue), "r"(bottomRed), "r"(bottomGreen), "r"(bottomBlue));
+            asm volatile("" : : "r"(bottomBlue));
             g_BattleAtbGauges[g_ActiveDrawSlot].b0 = topBlue;
             g_BattleAtbGauges[g_ActiveDrawSlot].r1 = bottomRed;
             g_BattleAtbGauges[g_ActiveDrawSlot].g1 = bottomGreen;
