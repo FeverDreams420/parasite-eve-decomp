@@ -61,7 +61,7 @@ int CdRom_ReadAssetSectors(unsigned kind, unsigned int index, int channel, void 
                 u32 first;
                 entries = table + byteOffset;
                 first = *(u16 *)entry;
-                asm("" : "=r"(first) : "0"(first), "r"(entries) : "memory");
+                asm("" : "=r"(first) : "0"(first) : "memory");
                 scaledIndex = ((volatile SceneSectorDirectory *)entries)->offsets[1];
                 asm("" : "=r"(scaledIndex) : "0"(scaledIndex) : "memory");
                 scaledIndex -= entry[0];
