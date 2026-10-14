@@ -225,14 +225,14 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
 
                 {
                     int raw;
-                    int final_mod;
-                    register int final_count asm("$6");
+                    int final_count;
                     int final_existing;
                     int bit_existing;
                     raw = item_a->tailData[mod_index];
                     raw &= 0x1F;
-                    final_mod = raw - 8;
-                    if ((unsigned int)final_mod >= 3) goto return_one;
+                    /* The earlier scan is finished; reuse its count for the requested slot. */
+                    count = raw - 8;
+                    if ((unsigned int)count >= 3) goto return_one;
                     raw = item_b->tailCount;
                     i = 0;
                     if (raw > 0) {
@@ -251,7 +251,7 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
                         }
                         if (i < item_b->tailCount) {
                             bit_existing = 1 << final_existing;
-                            mask = bit_existing - (1 << final_mod);
+                            mask = bit_existing - (1 << count);
                         }
                     }
                 }
