@@ -78,8 +78,8 @@ void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, RoomEruptionActor
     int asset;
     register RoomEnt *callOwner asm("$4");
     int depth;
-    int color;
-    int offset;
+    u8 color;
+    s16 offset;
     int modeB;
     RoomEruptionActor *workState;
     RoomSpriteMatrix *workMatrix;
@@ -104,8 +104,9 @@ void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, RoomEruptionActor
     g_RoomEruptionGlowPacket.mode = 3;
     {
         int minus50;
-        asm volatile("" : "=r"(minus50), "=r"(depth), "=r"(color)
-                     : "0"(-50), "1"(0x80), "2"(0x80));
+        minus50 = -50;
+        depth = 0x80;
+        asm volatile("" : "=r"(color) : "0"((u8)0x80));
         g_RoomEruptionGlowPacket.offset = minus50;
     }
     g_RoomEruptionRingPacket.code = 0x20;
@@ -114,8 +115,8 @@ void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, RoomEruptionActor
     g_RoomEruptionShadowPacket.code = 0x40;
     {
         int two;
-        asm volatile("" : "=r"(two), "=r"(offset)
-                     : "0"(2), "1"(-41));
+        two = 2;
+        asm volatile("" : "=r"(offset) : "0"((s16)-41));
         g_RoomEruptionShadowPacket.mode = two;
     }
     g_RoomEruptionDebrisPacket.code = 0x47;
