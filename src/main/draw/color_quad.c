@@ -57,7 +57,8 @@ void Draw_AllocColorQuad(int width, int height) {
     u32 modeTag;
     u32 secondTag;
     register u32 linkHigh asm("$2");
-    int darkColor;
+    /* The ratio divisor is consumed before this scratch holds the base color. */
+    int value;
     int darkerColor;
     DrawPrimLink link;
 
@@ -88,7 +89,8 @@ void Draw_AllocColorQuad(int width, int height) {
         int scaled;
         if (widthSmaller) secondMinimum = w;
         scaled = secondMinimum * 56;
-        ratio = scaled / h;
+        value = h;
+        ratio = scaled / value;
     }
     } else {
         ratio = 0;
@@ -151,9 +153,8 @@ void Draw_AllocColorQuad(int width, int height) {
     secondTop = shadeOffset + 0xAA;
     secondBottom = shadeOffset + 0xAD;
     mask24 = 0xFFFFFF;
-    darkColor = 0x303030;
+    value = 0x303030;
     darkerColor = 0x181818;
-    asm volatile("" : "=r"(darkerColor) : "0"(darkerColor));
     secondTag = packet->tag;
     packet->r2 = 0xFF;
     packet->r0 = 0xFF;
@@ -180,7 +181,7 @@ void Draw_AllocColorQuad(int width, int height) {
     coordinate = packet->y3;
     packet->y2 = coordinate;
 
-    g_DrawPrimColor = darkColor;
+    g_DrawPrimColor = value;
     g_DrawColorShaded = darkerColor;
     g_DrawTextDimmed = 0;
     ot = g_DrawOrderingTableEntry;
