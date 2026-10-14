@@ -95,7 +95,7 @@ void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbit
     value = 0x60;
     g_RoomOrbitBurstPacket.r = value;
     value = 0x40;
-    asm volatile("" : "=r"(state) : "0"(state), "r"(value));
+    asm volatile("" : "=r"(state) : "0"(state));
     matrixArg = &state->matrix;
     PE1_COMPILER_USE(matrixArg);
     g_RoomOrbitBurstPacket.offset = valueNeg42;
