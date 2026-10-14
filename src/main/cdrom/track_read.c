@@ -51,7 +51,7 @@ int CdRom_ReadAssetSectors(unsigned kind, unsigned int index, int channel, void 
     entry = (u16 *)(scaledIndex + entries);
     do
     {
-        asm("" : "=r"(blocking), "=r"(kind) : "0"(blocking), "1"(kind));
+        asm("" : "=r"(blocking) : "0"(blocking));
         archiveLba = &((SceneSectorDirectory *)g_SceneSectorDirectory)->base_lba;
         switch (state->cd_read_phase)
         {
@@ -193,7 +193,6 @@ int CdRom_ReadAssetSectors(unsigned kind, unsigned int index, int channel, void 
                 busy = 1;
                 remainingSnapshot = g_CdReadRemainingSectors;
                 finished = (blocking ^ 1) & 1;
-                asm("" : : "r"(busy), "r"(finished) : "memory");
                 remaining = remainingSnapshot;
                 transferred = g_CdReadChunkSectors;
                 workValue = 7;
