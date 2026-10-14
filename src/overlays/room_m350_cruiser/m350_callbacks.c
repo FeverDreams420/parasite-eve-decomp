@@ -851,7 +851,6 @@ int RoomM350_RushController(int event,State *state)
             }
         }
 apply_cruise_speed:
-        asm volatile("");
         speed=state->speed; target=state->targetSpeed;
         {
             register int next asm("$3")=speed;
