@@ -40,7 +40,7 @@ void Draw_AllocColorQuad(int width, int height) {
     int firstBottom;
     int firstLeft;
     int secondRight;
-    register s16 secondTop asm("$5");
+    s16 secondTop;
     u32 secondBottom;
     int secondBound;
     int tileY;
@@ -172,6 +172,7 @@ void Draw_AllocColorQuad(int width, int height) {
     packet->y1 = secondTop;
     packet->y0 = packet->y1;
     packet->x2 = secondRight;
+    tileMask24 = 0xFF000000;
     packet->x0 = packet->x2;
     packet->x3 = secondBound;
     packet->x1 = secondBound;
@@ -181,7 +182,6 @@ void Draw_AllocColorQuad(int width, int height) {
     g_DrawPrimColor = darkColor;
     g_DrawColorShaded = darkerColor;
     g_DrawTextDimmed = 0;
-    tileMask24 = 0xFF000000;
     ot = g_DrawOrderingTableEntry;
     packet->tag = (secondTag & tileMask24) | (*ot & mask24);
     secondBottom = *ot & tileMask24;
