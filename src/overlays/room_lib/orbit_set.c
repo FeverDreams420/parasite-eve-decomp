@@ -70,7 +70,7 @@ void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbit
     u8 value128b;
     int value32;
     int packetValue;
-    register int valueNeg42 asm("$5");
+    int valueNeg42;
 
     FieldFx_SetScriptContext(state);
     owner = object->owner;
@@ -103,10 +103,10 @@ void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbit
     g_RoomOrbitSpritePacket.offset = valueNeg42;
     g_RoomOrbitParticlePacket.depth = value128a;
     g_RoomOrbitBurstPacket.depth = value128a;
-    g_RoomOrbitSpritePacket.depth = value128a;
     g_RoomOrbitParticlePacket.code = 0;
     g_RoomOrbitParticlePacket.mode = 0;
     g_RoomOrbitParticlePacket.r = value128b;
+    g_RoomOrbitSpritePacket.depth = value128a;
     g_RoomOrbitParticlePacket.g = value128b;
     g_RoomOrbitParticlePacket.b = value128b;
     g_RoomOrbitParticlePacket.zero = 0;
