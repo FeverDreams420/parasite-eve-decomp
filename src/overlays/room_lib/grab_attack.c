@@ -106,8 +106,8 @@ void RoomEffect_GrabStartOnProximity(RoomMotionTrigger *arg) {
         RoomGrabPoint *sp = (RoomGrabPoint *)0x1F800008;
         s32 v;
         s32 s;
-        /* Retain the negated sine in the call-argument register. */
-        register s32 neg asm("$4");
+        /* Reuse the distance result scratch for the negative sine below. */
+        s32 result;
         FieldActor *p;
         RenderMatrix *rotationMatrix;
         FieldActor *actor;
@@ -115,7 +115,8 @@ void RoomEffect_GrabStartOnProximity(RoomMotionTrigger *arg) {
         Render_FindAnimEntry(&arg->source_actor->render_object, 6, sp);
         sp->x <<= 16;
         sp->z <<= 16;
-        if (FieldFx_GetDistanceXZ((Vec3Fixed *)&GRAB_PLAYER->pos_x, (Vec3Fixed *)sp) >= 0x100) {
+        result = FieldFx_GetDistanceXZ((Vec3Fixed *)&GRAB_PLAYER->pos_x, (Vec3Fixed *)sp);
+        if (result >= 0x100) {
             return;
         }
         arg->callback = RoomEffect_GrabHold;
@@ -129,7 +130,7 @@ void RoomEffect_GrabStartOnProximity(RoomMotionTrigger *arg) {
         actor->render_object.flags_9C |= 0x400;
         s = rcos(0xC00);
         v = rsin(0xC00);
-        neg = -v;
+        result = -v;
 
         p = GRAB_PLAYER;
         rotationMatrix = &p->render_object.model_matrix;
@@ -143,7 +144,7 @@ void RoomEffect_GrabStartOnProximity(RoomMotionTrigger *arg) {
         v = -0xC0;
         rotationMatrix->translation[2] = v;
         rotationMatrix->rotation[0][0] = s;
-        rotationMatrix->rotation[0][1] = neg;
+        rotationMatrix->rotation[0][1] = result;
         rotationMatrix->rotation[1][1] = s;
         rotationMatrix->translation[1] = 0;
         rotationMatrix->rotation[2][1] = 0;
