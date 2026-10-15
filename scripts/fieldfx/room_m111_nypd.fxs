@@ -1,0 +1,43 @@
+// Parasite Eve 1 - FieldFx VM Module `room_m111_nypd`
+// Scripts: 1 | Total Words: 26 (104 bytes)
+// VRAM: 0x80190104 | Words: 26 (104 bytes)
+// Tables: init=g_RoomInitList, draw=g_RoomDrawList, update=g_RoomUpdateList, sizes=g_RoomSpawnLayout
+// Slots:
+//   [0] init=RoomLib_InitPairedGlowSprite, draw=RoomLib_PairedGlowNopA, update=RoomLib_TickPairedGlowTimer, size=0x30
+//   [1] init=RoomLib_InitPairedEmitterWithSound, draw=RoomLib_UpdatePairedEmitter, update=RoomLib_TickPairedGlowA, size=0x140
+//   [2] init=RoomLib_PairedGlowNopB, draw=RoomLib_PairedGlowNopC, update=RoomLib_PairedGlowNopD, size=0x12C
+//   [3] init=RoomLib_ResetPairedGlowScale, draw=RoomLib_DrawPairedGlowSprite, update=RoomLib_UpdatePairedGlowSprite, size=0x14
+//   [4] init=RoomLib_InitPairedEmitter, draw=RoomLib_TransformPairedEmitter, update=RoomLib_TickPairedGlowB, size=0x140
+fieldfx_script g_RoomScript {
+    r0 = 25;
+    vars[0] = r0;
+    r1 = 60;
+    r2 = 60;
+    r3 = 64;
+    r4 = 170;
+    r5 = 40;
+    r6 = 250;
+    start_slot(0); // init=RoomLib_InitPairedGlowSprite, draw=RoomLib_PairedGlowNopA, update=RoomLib_TickPairedGlowTimer, size=0x30
+    r0 = 0;
+@label_000A:
+    if (r0 == 14) goto @label_0011;
+    if (r0 == 16) goto @label_0017;
+    if (r0 == 24) goto @label_0017;
+    if (r0 == 30) goto @label_0019;
+@label_000E:
+    r0 += 1;
+    wait(0);
+    goto @label_000A;
+@label_0011:
+    start_slot(1); // init=RoomLib_InitPairedEmitterWithSound, draw=RoomLib_UpdatePairedEmitter, update=RoomLib_TickPairedGlowA, size=0x140
+    wait(3);
+    start_slot(4); // init=RoomLib_InitPairedEmitter, draw=RoomLib_TransformPairedEmitter, update=RoomLib_TickPairedGlowB, size=0x140
+    goto @label_000E;
+    start_slot(2); // init=RoomLib_PairedGlowNopB, draw=RoomLib_PairedGlowNopC, update=RoomLib_PairedGlowNopD, size=0x12C
+    goto @label_000E;
+@label_0017:
+    start_slot(3); // init=RoomLib_ResetPairedGlowScale, draw=RoomLib_DrawPairedGlowSprite, update=RoomLib_UpdatePairedGlowSprite, size=0x14
+    goto @label_000E;
+@label_0019:
+    halt;
+}

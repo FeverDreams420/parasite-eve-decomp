@@ -1,0 +1,127 @@
+// Parasite Eve 1 - FieldFx VM Module `room_m174_sewer2`
+// Scripts: 2 | Total Words: 83 (332 bytes)
+// VRAM: 0x80196CE0 | Words: 35 (140 bytes)
+// Tables: init=g_RoomInitList, draw=g_RoomDrawList, update=g_RoomUpdateList, sizes=g_RoomSpawnLayout
+// Slots:
+//   [0] init=RoomEffect_GlowOrbCaptureOwner, draw=RoomEffect_GlowOrbControllerDraw, update=RoomEffect_GlowOrbControllerUpdate, size=0x0
+//   [1] init=RoomEffect_GlowOrbSpawnerInit, draw=RoomEffect_GlowOrbSpawnerDraw, update=RoomEffect_GlowOrbSpawnerUpdate, size=0x4
+//   [2] init=RoomEffect_GlowOrbInit, draw=RoomEffect_GlowOrbDraw, update=RoomEffect_GlowOrbUpdate, size=0x44
+//   [3] init=RoomEffect_GlowOrbFlashInit, draw=RoomEffect_GlowOrbFlashDraw, update=RoomEffect_GlowOrbFlashUpdate, size=0x18
+fieldfx_script g_RoomGlowOrbScript {
+    start_slot(0); // init=RoomEffect_GlowOrbCaptureOwner, draw=RoomEffect_GlowOrbControllerDraw, update=RoomEffect_GlowOrbControllerUpdate, size=0x0
+    r0 = vars[1];
+    if (r0 == 0) goto @label_0014;
+    if (r0 == 1) goto @label_0005;
+    goto @label_0022;
+@label_0005:
+    r4 = 512;
+    start_slot(2); // init=RoomEffect_GlowOrbInit, draw=RoomEffect_GlowOrbDraw, update=RoomEffect_GlowOrbUpdate, size=0x44
+    wait(3);
+    r4 = 256;
+    start_slot(2); // init=RoomEffect_GlowOrbInit, draw=RoomEffect_GlowOrbDraw, update=RoomEffect_GlowOrbUpdate, size=0x44
+    wait(3);
+    r4 = 0;
+    start_slot(2); // init=RoomEffect_GlowOrbInit, draw=RoomEffect_GlowOrbDraw, update=RoomEffect_GlowOrbUpdate, size=0x44
+    wait(3);
+    r4 = -256;
+    start_slot(2); // init=RoomEffect_GlowOrbInit, draw=RoomEffect_GlowOrbDraw, update=RoomEffect_GlowOrbUpdate, size=0x44
+    wait(3);
+    r4 = -512;
+    start_slot(2); // init=RoomEffect_GlowOrbInit, draw=RoomEffect_GlowOrbDraw, update=RoomEffect_GlowOrbUpdate, size=0x44
+    goto @label_0022;
+@label_0014:
+    r4 = -512;
+    start_slot(2); // init=RoomEffect_GlowOrbInit, draw=RoomEffect_GlowOrbDraw, update=RoomEffect_GlowOrbUpdate, size=0x44
+    wait(3);
+    r4 = -256;
+    start_slot(2); // init=RoomEffect_GlowOrbInit, draw=RoomEffect_GlowOrbDraw, update=RoomEffect_GlowOrbUpdate, size=0x44
+    wait(3);
+    r4 = 0;
+    start_slot(2); // init=RoomEffect_GlowOrbInit, draw=RoomEffect_GlowOrbDraw, update=RoomEffect_GlowOrbUpdate, size=0x44
+    wait(3);
+    r4 = 256;
+    start_slot(2); // init=RoomEffect_GlowOrbInit, draw=RoomEffect_GlowOrbDraw, update=RoomEffect_GlowOrbUpdate, size=0x44
+    wait(3);
+    r4 = 512;
+    start_slot(2); // init=RoomEffect_GlowOrbInit, draw=RoomEffect_GlowOrbDraw, update=RoomEffect_GlowOrbUpdate, size=0x44
+@label_0022:
+    halt;
+}
+
+// VRAM: 0x80196E4C | Words: 48 (192 bytes)
+// Tables: init=g_RoomDropFieldSpawnData, draw=g_RoomDropFieldDrawList, update=g_RoomDropFieldUpdateList, sizes=g_RoomDropFieldSpawnScript
+// Slots:
+//   [0] init=RoomEffect_DropFieldInit, draw=RoomEffect_DropFieldNop, update=RoomEffect_DropFieldTick, size=0x5C
+//   [1] init=RoomEffect_InitStageSpawn, draw=RoomEffect_DrawStageSpawn, update=RoomEffect_UpdateStageSpawn, size=0x8
+//   [2] init=RoomEffect_InitSpinSprite, draw=RoomEffect_DrawSpinSprite, update=RoomEffect_UpdateSpinSprite, size=0x18
+//   [3] init=RoomEffect_InitDoubleSprite, draw=RoomEffect_DrawDoubleSprite, update=RoomEffect_UpdateDoubleSprite, size=0x18
+//   [4] init=RoomEffect_InitRingPair, draw=RoomEffect_DrawRingPair, update=RoomEffect_UpdateRingPair, size=0x18
+//   [5] init=RoomEffect_InitStagedMotion, draw=RoomEffect_DrawStagedMotion, update=RoomEffect_UpdateStagedMotion, size=0xF0
+//   [6] init=RoomEffect_InitModelSprite, draw=RoomEffect_DrawModelSprite, update=RoomEffect_UpdateModelSprite, size=0x14
+//   [7] init=RoomEffect_InitIdleSlot, draw=RoomEffect_DrawIdleSlot, update=RoomEffect_UpdateIdleSlot, size=0x4
+//   [8] init=RoomEffect_InitDropField, draw=RoomEffect_DrawDropField, update=RoomEffect_UpdateDropField, size=0x188
+//   [9] init=RoomEffect_InitBeamPair, draw=RoomEffect_DrawBeamPair, update=RoomEffect_UpdateBeamPair, size=0x38
+//   [10] init=RoomEffect_InitQuadSprites, draw=RoomEffect_DrawQuadSprites, update=RoomEffect_UpdateQuadSprites, size=0x84
+//   [11] init=RoomEffect_InitIdleSlot2, draw=RoomEffect_DrawIdleSlot2, update=RoomEffect_UpdateIdleSlot2, size=0x60
+//   [12] init=RoomEffect_InitEightParticles, draw=RoomEffect_DrawEightParticles, update=RoomEffect_UpdateEightParticles, size=0xBC
+fieldfx_script g_RoomDropFieldScript {
+    start_slot(0); // init=RoomEffect_DropFieldInit, draw=RoomEffect_DropFieldNop, update=RoomEffect_DropFieldTick, size=0x5C
+    r0 = 0;
+    r1 = vars[7];
+    if (r1 == 0) goto @label_0007;
+    if (r1 == 1) goto @label_0019;
+    if (r1 == 2) goto @label_0024;
+    goto @label_002F;
+@label_0007:
+    if (r0 == 0) goto @label_0017;
+    r1 = vars[4];
+    if (r0 == 26) goto @label_0012;
+    r1 = vars[5];
+    if (r0 == 51) goto @label_0012;
+    r1 = vars[6];
+    if (r0 == 71) goto @label_0012;
+    if (r0 == 100) goto @label_002F;
+@label_000F:
+    r0 += 1;
+    wait(0);
+    goto @label_0007;
+@label_0012:
+    start_slot(9); // init=RoomEffect_InitBeamPair, draw=RoomEffect_DrawBeamPair, update=RoomEffect_UpdateBeamPair, size=0x38
+    start_slot(10); // init=RoomEffect_InitQuadSprites, draw=RoomEffect_DrawQuadSprites, update=RoomEffect_UpdateQuadSprites, size=0x84
+    wait(2);
+    start_slot(8); // init=RoomEffect_InitDropField, draw=RoomEffect_DrawDropField, update=RoomEffect_UpdateDropField, size=0x188
+    goto @label_000F;
+@label_0017:
+    start_slot(12); // init=RoomEffect_InitEightParticles, draw=RoomEffect_DrawEightParticles, update=RoomEffect_UpdateEightParticles, size=0xBC
+    goto @label_000F;
+@label_0019:
+    r1 = 0;
+    if (r0 == 30) goto @label_001F;
+    if (r0 == 31) goto @label_002F;
+@label_001C:
+    r0 += 1;
+    wait(0);
+    goto @label_0019;
+@label_001F:
+    start_slot(9); // init=RoomEffect_InitBeamPair, draw=RoomEffect_DrawBeamPair, update=RoomEffect_UpdateBeamPair, size=0x38
+    start_slot(10); // init=RoomEffect_InitQuadSprites, draw=RoomEffect_DrawQuadSprites, update=RoomEffect_UpdateQuadSprites, size=0x84
+    wait(2);
+    start_slot(8); // init=RoomEffect_InitDropField, draw=RoomEffect_DrawDropField, update=RoomEffect_UpdateDropField, size=0x188
+    goto @label_001C;
+@label_0024:
+    r1 = 0;
+    if (r0 == 30) goto @label_002A;
+    if (r0 == 31) goto @label_002F;
+@label_0027:
+    r0 += 1;
+    wait(0);
+    goto @label_0024;
+@label_002A:
+    start_slot(9); // init=RoomEffect_InitBeamPair, draw=RoomEffect_DrawBeamPair, update=RoomEffect_UpdateBeamPair, size=0x38
+    start_slot(10); // init=RoomEffect_InitQuadSprites, draw=RoomEffect_DrawQuadSprites, update=RoomEffect_UpdateQuadSprites, size=0x84
+    wait(2);
+    start_slot(8); // init=RoomEffect_InitDropField, draw=RoomEffect_DrawDropField, update=RoomEffect_UpdateDropField, size=0x188
+    goto @label_0027;
+@label_002F:
+    halt;
+}

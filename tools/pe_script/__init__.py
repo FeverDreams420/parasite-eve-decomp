@@ -1,12 +1,17 @@
 """Parasite Eve 1 Script Compiler, Decompiler, and Opcode Mapping Package."""
 
 from tools.pe_script.compiler import (
+    compile_fieldfx_module,
     compile_fieldfx_script,
     compile_task_block,
 )
 from tools.pe_script.decompiler import (
+    FieldFxScriptEntry,
+    FieldFxSlotHandler,
+    decompile_fieldfx_module,
     decompile_fieldfx_script,
     decompile_task_block,
+    extract_all_fieldfx_modules,
     extract_room_from_pe_img,
 )
 from tools.pe_script.mapping import (
@@ -21,13 +26,19 @@ from tools.pe_script.mapping import (
 __all__ = [
     "ENUM_GROUPS",
     "EXPR_OPS",
+    "FieldFxScriptEntry",
+    "FieldFxSlotHandler",
     "GLOBAL_VARS",
     "OPCODE_SPECS",
     "OPCODES_BY_ID",
     "OPCODES_BY_NAME",
+    "compile_fieldfx_module",
     "compile_fieldfx_script",
     "compile_task_block",
+    "decompile_fieldfx_module",
     "decompile_fieldfx_script",
     "decompile_task_block",
+    "extract_all_fieldfx_modules",
     "extract_room_from_pe_img",
 ]
+

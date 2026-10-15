@@ -1,0 +1,63 @@
+// Parasite Eve 1 - FieldFx VM Module `room_m401_chrysler`
+// Scripts: 2 | Total Words: 33 (132 bytes)
+// VRAM: 0x8019535C | Words: 14 (56 bytes)
+// Tables: init=g_RoomThreeParticleInitList, draw=g_RoomThreeParticleDrawList, update=g_RoomThreeParticleUpdateList, sizes=g_RoomThreeParticleSpawnLayout
+// Slots:
+//   [0] init=RoomLib_InitThreeParticlePackets, draw=RoomLib_ThreeParticleNop3, update=RoomLib_UpdateThreeParticleTimer, size=0x30
+//   [1] init=RoomLib_InitThreeTransformParticles, draw=RoomLib_DrawThreeTransformParticles, update=RoomLib_UpdateDebrisTriplet, size=0xB4
+fieldfx_script g_RoomThreeParticleScript {
+    start_slot(0); // init=RoomLib_InitThreeParticlePackets, draw=RoomLib_ThreeParticleNop3, update=RoomLib_UpdateThreeParticleTimer, size=0x30
+    r0 = 0;
+@label_0002:
+    if (r0 == 41) goto @label_0007;
+    if (r0 == 42) goto @label_000D;
+@label_0004:
+    r0 += 1;
+    wait(0);
+    goto @label_0002;
+@label_0007:
+    r1 = 1;
+    start_slot(1); // init=RoomLib_InitThreeTransformParticles, draw=RoomLib_DrawThreeTransformParticles, update=RoomLib_UpdateDebrisTriplet, size=0xB4
+    wait(8);
+    r1 = 0;
+    start_slot(1); // init=RoomLib_InitThreeTransformParticles, draw=RoomLib_DrawThreeTransformParticles, update=RoomLib_UpdateDebrisTriplet, size=0xB4
+    goto @label_0004;
+@label_000D:
+    halt;
+}
+
+// VRAM: 0x80195414 | Words: 19 (76 bytes)
+// Tables: init=g_RoomInitList, draw=g_RoomDrawList, update=g_RoomUpdateList, sizes=g_RoomSpawnLayout
+// Slots:
+//   [0] init=RoomEffect_FallingBurstInit, draw=RoomEffect_FallingBurstNop, update=RoomEffect_FallingBurstTick, size=0x14
+//   [1] init=RoomEffect_InitFallingSprite, draw=RoomEffect_DrawFallingSprite, update=RoomEffect_UpdateFallingSprite, size=0x18
+//   [2] init=RoomEffect_InitImpactShimmer, draw=RoomEffect_DrawImpactShimmer, update=RoomEffect_UpdateImpactShimmer, size=0x18
+//   [3] init=RoomEffect_InitGroundPulse, draw=RoomEffect_DrawGroundPulse, update=RoomEffect_UpdateGroundPulse, size=0xC
+//   [4] init=RoomEffect_InitImpactParticles, draw=RoomEffect_DrawImpactParticles, update=RoomEffect_UpdateImpactParticles, size=0xA8
+fieldfx_script g_RoomScript {
+    start_slot(0); // init=RoomEffect_FallingBurstInit, draw=RoomEffect_FallingBurstNop, update=RoomEffect_FallingBurstTick, size=0x14
+    r0 = 0;
+@label_0002:
+    if (r0 == 0) goto @label_0008;
+    if (r0 == 40) goto @label_000F;
+    if (r0 == 50) goto @label_0012;
+@label_0005:
+    r0 += 1;
+    wait(0);
+    goto @label_0002;
+@label_0008:
+    r2 = vars[0];
+@label_0009:
+    r1 = 0;
+    start_slot(1); // init=RoomEffect_InitFallingSprite, draw=RoomEffect_DrawFallingSprite, update=RoomEffect_UpdateFallingSprite, size=0x18
+    wait(4);
+    r2 -= 1;
+    if (r2 != 0) goto @label_0009;
+    goto @label_0005;
+@label_000F:
+    r1 = 1;
+    start_slot(1); // init=RoomEffect_InitFallingSprite, draw=RoomEffect_DrawFallingSprite, update=RoomEffect_UpdateFallingSprite, size=0x18
+    goto @label_0005;
+@label_0012:
+    halt;
+}

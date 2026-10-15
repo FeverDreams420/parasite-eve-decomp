@@ -1,0 +1,13 @@
+// Parasite Eve 1 - FieldFx VM Module `room_m295_chrysler`
+// Scripts: 1 | Total Words: 4 (16 bytes)
+// VRAM: 0x80193208 | Words: 4 (16 bytes)
+// Tables: init=g_RoomInitList, draw=g_RoomDrawList, update=g_RoomUpdateList, sizes=g_RoomSpawnLayout
+// Slots:
+//   [0] init=RoomLib_InitTwelveEffectPackets, draw=RoomLib_TwelveEffectNop3, update=RoomLib_UpdateTwelveElementTimer, size=0x30
+//   [1] init=RoomLib_InitTwelveElementEffect, draw=RoomLib_DrawTwelveElementEffect, update=RoomLib_TickTwelveElementCounters, size=0x120
+fieldfx_script g_RoomScript {
+    wait(13);
+    start_slot(0); // init=RoomLib_InitTwelveEffectPackets, draw=RoomLib_TwelveEffectNop3, update=RoomLib_UpdateTwelveElementTimer, size=0x30
+    start_slot(1); // init=RoomLib_InitTwelveElementEffect, draw=RoomLib_DrawTwelveElementEffect, update=RoomLib_TickTwelveElementCounters, size=0x120
+    halt;
+}

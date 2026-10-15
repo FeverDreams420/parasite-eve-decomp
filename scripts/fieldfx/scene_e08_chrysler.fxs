@@ -1,0 +1,173 @@
+// Parasite Eve 1 - FieldFx VM Module `scene_e08_chrysler`
+// Scripts: 4 | Total Words: 101 (404 bytes)
+// VRAM: 0x801986C8 | Words: 12 (48 bytes)
+// Tables: init=g_RoomInitList, draw=g_RoomDrawList, update=g_RoomUpdateList, sizes=g_RoomSpawnLayout
+// Slots:
+//   [0] init=SceneE08_InitContext, draw=SceneE08_DrawContext, update=SceneE08_UpdateContext, size=0x28
+//   [1] init=SceneE08_InitGlowRings, draw=SceneE08_DrawGlowRings, update=SceneE08_UpdateGlowRings, size=0x26C
+//   [2] init=SceneE08_InitParticleCluster, draw=SceneE08_DrawParticleCluster, update=SceneE08_UpdateParticleCluster, size=0x25A
+fieldfx_script g_RoomScript {
+    start_slot(0); // init=SceneE08_InitContext, draw=SceneE08_DrawContext, update=SceneE08_UpdateContext, size=0x28
+    r0 = 0;
+@label_0002:
+    if (r0 == 0) goto @label_0007;
+    if (r0 == 1) goto @label_000B;
+@label_0004:
+    r0 += 1;
+    wait(0);
+    goto @label_0002;
+@label_0007:
+    start_slot(1); // init=SceneE08_InitGlowRings, draw=SceneE08_DrawGlowRings, update=SceneE08_UpdateGlowRings, size=0x26C
+    wait(10);
+    start_slot(2); // init=SceneE08_InitParticleCluster, draw=SceneE08_DrawParticleCluster, update=SceneE08_UpdateParticleCluster, size=0x25A
+    goto @label_0004;
+@label_000B:
+    halt;
+}
+
+// VRAM: 0x8019877C | Words: 26 (104 bytes)
+// Tables: init=g_SceneE08OrbInitList, draw=g_SceneE08OrbDrawList, update=g_SceneE08OrbUpdateList, sizes=g_SceneE08OrbSpawnLayout
+// Slots:
+//   [0] init=SceneE08_InitOrbContext, draw=SceneE08_DrawOrbContext, update=SceneE08_UpdateOrbContext, size=0x30
+//   [1] init=SceneE08_InitFadeSlots, draw=SceneE08_DrawFadeSlots, update=func_801905F8, size=0x48
+//   [2] init=SceneE08_InitPlayerOrb, draw=SceneE08_DrawPlayerOrb, update=SceneE08_UpdatePlayerOrb, size=0xAC
+//   [3] init=SceneE08_InitRingSprites, draw=SceneE08_DrawRingSprites, update=SceneE08_UpdateRingSprites, size=0x10
+fieldfx_script g_SceneE08OrbScript {
+    r1 = 6;
+    start_slot(0); // init=SceneE08_InitOrbContext, draw=SceneE08_DrawOrbContext, update=SceneE08_UpdateOrbContext, size=0x30
+    r0 = 0;
+@label_0003:
+    r2 = 0;
+    if (r0 == 34) goto @label_0017;
+    r2 = 100;
+    if (r0 == 36) goto @label_0017;
+    r2 = -100;
+    if (r0 == 38) goto @label_0017;
+    r2 = 200;
+    if (r0 == 40) goto @label_0017;
+    r2 = -200;
+    if (r0 == 42) goto @label_0017;
+    r2 = 300;
+    if (r0 == 44) goto @label_0017;
+    r2 = -300;
+    if (r0 == 46) goto @label_0017;
+    if (r0 == 50) goto @label_0019;
+@label_0012:
+    r0 += 1;
+    wait(0);
+    goto @label_0003;
+    start_slot(1); // init=SceneE08_InitFadeSlots, draw=SceneE08_DrawFadeSlots, update=func_801905F8, size=0x48
+    goto @label_0012;
+@label_0017:
+    start_slot(2); // init=SceneE08_InitPlayerOrb, draw=SceneE08_DrawPlayerOrb, update=SceneE08_UpdatePlayerOrb, size=0xAC
+    goto @label_0012;
+@label_0019:
+    halt;
+}
+
+// VRAM: 0x80198930 | Words: 35 (140 bytes)
+// Tables: init=g_SceneE08SlotsInitList, draw=g_SceneE08SlotsDrawList, update=g_SceneE08SlotsUpdateList, sizes=g_SceneE08SlotsSpawnLayout
+// Slots:
+//   [0] init=SceneE08_InitSlotsContext, draw=SceneE08_DrawSlotsContext, update=SceneE08_UpdateSlotsContext, size=0x28
+//   [1] init=SceneE08_InitCentreGlow, draw=SceneE08_DrawCentreGlow, update=SceneE08_UpdateCentreGlow, size=0x10
+//   [2] init=SceneE08_InitRadialRibbons, draw=SceneE08_DrawRadialRibbons, update=SceneE08_UpdateRadialRibbons, size=0x280
+//   [3] init=SceneE08_InitParticleSlots, draw=SceneE08_DrawParticleSlots, update=SceneE08_UpdateParticleSlots, size=0x5C
+//   [4] init=SceneE08_InitRingEffect, draw=SceneE08_DrawRingEffect, update=SceneE08_UpdateRingEffect, size=0x18
+//   [5] init=SceneE08_InitSpiralRibbons, draw=SceneE08_DrawSpiralRibbons, update=SceneE08_UpdateSpiralRibbons, size=0x2A0
+//   [6] init=SceneE08_InitScreenFade, draw=SceneE08_DrawScreenFade, update=SceneE08_UpdateScreenFade, size=0x8
+//   [7] init=SceneE08_InitOrbitParticles, draw=SceneE08_DrawOrbitParticles, update=SceneE08_UpdateOrbitParticles, size=0x140
+//   [8] init=SceneE08_InitGlowModel, draw=SceneE08_DrawGlowModel, update=SceneE08_UpdateGlowModel, size=0x1C
+//   [9] init=SceneE08_InitLimbBeams, draw=SceneE08_DrawLimbBeams, update=SceneE08_UpdateLimbBeams, size=0x30
+fieldfx_script g_SceneE08SlotsScript {
+    r0 = 0;
+    vars[1] = r0;
+    start_slot(0); // init=SceneE08_InitSlotsContext, draw=SceneE08_DrawSlotsContext, update=SceneE08_UpdateSlotsContext, size=0x28
+    r0 = 0;
+    start_slot(9); // init=SceneE08_InitLimbBeams, draw=SceneE08_DrawLimbBeams, update=SceneE08_UpdateLimbBeams, size=0x30
+    wait(30);
+    r1 = vars[1];
+    if (r1 == 0) goto @label_0022;
+    if (r1 == 1) goto @label_000A;
+    goto @label_0022;
+@label_000A:
+    if (r0 == 0) goto @label_001C;
+    if (r0 == 5) goto @label_0018;
+    if (r0 == 15) goto @label_001A;
+    if (r0 == 75) goto @label_001E;
+    if (r0 == 120) goto @label_0020;
+    if (r0 == 145) goto @label_0016;
+    if (r0 == 250) goto @label_0022;
+@label_0011:
+    r0 += 1;
+    wait(0);
+    goto @label_000A;
+    start_slot(7); // init=SceneE08_InitOrbitParticles, draw=SceneE08_DrawOrbitParticles, update=SceneE08_UpdateOrbitParticles, size=0x140
+    goto @label_0011;
+@label_0016:
+    start_slot(6); // init=SceneE08_InitScreenFade, draw=SceneE08_DrawScreenFade, update=SceneE08_UpdateScreenFade, size=0x8
+    goto @label_0011;
+@label_0018:
+    start_slot(2); // init=SceneE08_InitRadialRibbons, draw=SceneE08_DrawRadialRibbons, update=SceneE08_UpdateRadialRibbons, size=0x280
+    goto @label_0011;
+@label_001A:
+    start_slot(5); // init=SceneE08_InitSpiralRibbons, draw=SceneE08_DrawSpiralRibbons, update=SceneE08_UpdateSpiralRibbons, size=0x2A0
+    goto @label_0011;
+@label_001C:
+    start_slot(3); // init=SceneE08_InitParticleSlots, draw=SceneE08_DrawParticleSlots, update=SceneE08_UpdateParticleSlots, size=0x5C
+    goto @label_0011;
+@label_001E:
+    start_slot(4); // init=SceneE08_InitRingEffect, draw=SceneE08_DrawRingEffect, update=SceneE08_UpdateRingEffect, size=0x18
+    goto @label_0011;
+@label_0020:
+    start_slot(8); // init=SceneE08_InitGlowModel, draw=SceneE08_DrawGlowModel, update=SceneE08_UpdateGlowModel, size=0x1C
+    goto @label_0011;
+@label_0022:
+    halt;
+}
+
+// VRAM: 0x80198A64 | Words: 28 (112 bytes)
+// Tables: init=g_SceneE08LayeredSpriteInitList, draw=g_SceneE08LayeredSpriteDrawList, update=g_SceneE08LayeredSpriteUpdateList, sizes=g_SceneE08LayeredSpriteSpawnLayout
+// Slots:
+//   [0] init=SceneE08_InitLayeredSpriteContext, draw=SceneE08_DrawLayeredSpriteContext, update=SceneE08_UpdateLayeredSpriteContext, size=0x30
+//   [1] init=SceneE08_InitTrailGlow, draw=SceneE08_DrawTrailGlow, update=SceneE08_UpdateTrailGlow, size=0x90
+//   [2] init=SceneE08_InitLayeredSprite, draw=SceneE08_DrawLayeredSprite, update=SceneE08_UpdateLayeredSprite, size=0xE0
+//   [3] init=SceneE08_InitSpinningGlow, draw=SceneE08_DrawSpinningGlow, update=SceneE08_UpdateSpinningGlow, size=0x24
+//   [4] init=SceneE08_InitExpandingGlow, draw=SceneE08_DrawExpandingGlow, update=SceneE08_UpdateExpandingGlow, size=0x18
+//   [5] init=SceneE08_InitArmGlow, draw=SceneE08_DrawArmGlow, update=SceneE08_UpdateArmGlow, size=0x2C
+fieldfx_script g_SceneE08LayeredSpriteScript {
+    start_slot(0); // init=SceneE08_InitLayeredSpriteContext, draw=SceneE08_DrawLayeredSpriteContext, update=SceneE08_UpdateLayeredSpriteContext, size=0x30
+    start_slot(5); // init=SceneE08_InitArmGlow, draw=SceneE08_DrawArmGlow, update=SceneE08_UpdateArmGlow, size=0x2C
+    r0 = 0;
+@label_0003:
+    if (r0 == 2) goto @label_000E;
+    if (r0 == 10) goto @label_0017;
+    if (r0 == 18) goto @label_0017;
+    if (r0 == 26) goto @label_0017;
+    if (r0 == 20) goto @label_0010;
+    if (r0 == 24) goto @label_0019;
+    if (r0 == 28) goto @label_0019;
+    if (r0 == 110) goto @label_001B;
+@label_000B:
+    r0 += 1;
+    wait(0);
+    goto @label_0003;
+@label_000E:
+    start_slot(1); // init=SceneE08_InitTrailGlow, draw=SceneE08_DrawTrailGlow, update=SceneE08_UpdateTrailGlow, size=0x90
+    goto @label_000B;
+@label_0010:
+    r2 = 28;
+    r3 = 0;
+    start_slot(2); // init=SceneE08_InitLayeredSprite, draw=SceneE08_DrawLayeredSprite, update=SceneE08_UpdateLayeredSprite, size=0xE0
+    r2 = 60;
+    r3 = 1;
+    start_slot(2); // init=SceneE08_InitLayeredSprite, draw=SceneE08_DrawLayeredSprite, update=SceneE08_UpdateLayeredSprite, size=0xE0
+    goto @label_000B;
+@label_0017:
+    start_slot(3); // init=SceneE08_InitSpinningGlow, draw=SceneE08_DrawSpinningGlow, update=SceneE08_UpdateSpinningGlow, size=0x24
+    goto @label_000B;
+@label_0019:
+    start_slot(4); // init=SceneE08_InitExpandingGlow, draw=SceneE08_DrawExpandingGlow, update=SceneE08_UpdateExpandingGlow, size=0x18
+    goto @label_000B;
+@label_001B:
+    halt;
+}

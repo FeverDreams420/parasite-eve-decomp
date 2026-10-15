@@ -1,0 +1,16 @@
+// Parasite Eve 1 - FieldFx VM Module `room_m049_nypd`
+// Scripts: 1 | Total Words: 2 (8 bytes)
+// VRAM: 0x80192BE8 | Words: 2 (8 bytes)
+// Tables: init=g_RoomInitList, draw=g_RoomDrawList, update=g_RoomUpdateList, sizes=g_RoomSpawnLayout
+// Slots:
+//   [0] init=RoomEffect_InitEffectSequenceSprites, draw=RoomEffect_EffectSequenceNopA, update=RoomEffect_ConfigureEffectSequence, size=0x28
+//   [1] init=RoomEffect_InitVariant38, draw=RoomEffect_DrawVariant38, update=RoomEffect_UpdatePairedSprite, size=0x38
+//   [2] init=RoomEffect_InitVariant38Pulse, draw=RoomEffect_DrawVariant38Pulse, update=RoomEffect_UpdatePairedSpriteBurst, size=0x38
+//   [3] init=RoomEffect_InitVariant290, draw=RoomEffect_DrawVariant290, update=RoomEffect_UpdateSparkleHeight, size=0x38
+//   [4] init=RoomEffect_InitVariantD, draw=RoomEffect_DrawVariantD, update=RoomEffect_UpdateTransformedSparkle, size=0x38
+//   [5] init=RoomEffect_EffectSequenceNopB, draw=RoomEffect_DrawEffectGlow, update=RoomEffect_EffectSequenceNopC, size=0x38
+//   [6] init=RoomEffect_SpawnDriftingEffect, draw=RoomEffect_DrawScaledEffect, update=RoomEffect_UpdateDriftingEffect, size=0x38
+fieldfx_script g_RoomScript {
+    start_slot(0); // init=RoomEffect_InitEffectSequenceSprites, draw=RoomEffect_EffectSequenceNopA, update=RoomEffect_ConfigureEffectSequence, size=0x28
+    halt;
+}

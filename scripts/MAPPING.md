@@ -310,3 +310,23 @@
 | `0xEE` (`238`) | `OpenEquipMenu` | `Script_BeginSceneTransition` | `int` | Open equipment menu screen and yield until closed |
 | `0xEF` (`239`) | `OpenSaveLoadMenu` | `Script_OpenSaveLoadMenu` | `int` | Open save/load menu screen and yield until closed |
 | `0xF0` (`240`) | `GetPlayerInputFlag` | `Script_GetPlayerInputFlag` | `int` | Read player input status flag into out_flag |
+
+## 6. FieldFx VM Opcodes (`FieldFx_RunScript` in `src/main/fieldfx/object_script.c`)
+
+Each instruction is a 32-bit word `(op << 16) | (operand & 0xFFFF)`. After executing a non-halting instruction, `SCRIPT->pc++` runs, so relative branch offsets `(s8)(op & 0xFF)` target `target_pc = pc + rel + 1`.
+
+| Word / High 16-bit `op` | DSL Syntax | C Semantics (`FieldFx_RunScript`) |
+| :--- | :--- | :--- |
+| `0xFFFFFFFF` (`-1`) | `halt;` | `SCRIPT->halted = 1; stopped = 1;` |
+| `0xFFFFFFFE` (`-2`) | `nop;` | No-op (`command = 0`) |
+| `0xFFFFFFFD` (`-3`) | `free_all_slots;` | `FieldFx_FreeAllSlots()` |
+| `0x0001` | `start_slot(slot_id);` | `FieldFx_StartSlot(obj, (u8)operand, sizes, init_handlers)` |
+| `0x0002` | `wait(frames);` | `SCRIPT->wait = operand; stopped = 1;` |
+| `0x0010..0x001F` | `rN = imm16;` | `SCRIPT->regs[op - 0x10] = (s16)operand;` |
+| `0x0020..0x002F` | `rN += imm16;` | `SCRIPT->regs[op - 0x20] += (s16)operand;` |
+| `0x0030..0x003F` | `rN -= imm16;` | `SCRIPT->regs[op - 0x30] -= (s16)operand;` |
+| `0x0040..0x004F` | `rN = vars[idx];` | `SCRIPT->regs[op - 0x40] = SCRIPT->vars[(u16)operand];` |
+| `0x0050..0x005F` | `vars[idx] = rN;` | `SCRIPT->vars[(u16)operand] = SCRIPT->regs[op - 0x50];` |
+| `0x1000..0x1FFF` | `if (rN == imm16) goto @label;` | `if (SCRIPT->regs[(op >> 8) & 0xF] == (s16)operand) SCRIPT->pc += (s8)op;` |
+| `0x2000..0x2FFF` | `if (rN != imm16) goto @label;` | `if (SCRIPT->regs[(op >> 8) & 0xF] != (s16)operand) SCRIPT->pc += (s8)op;` |
+| `0x3000..0x3FFF` | `goto @label;` | `SCRIPT->pc += (s8)op;` |

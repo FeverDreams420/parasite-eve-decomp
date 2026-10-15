@@ -1,0 +1,307 @@
+// Parasite Eve 1 - FieldFx VM Module `main_exe`
+// Scripts: 8 | Total Words: 190 (760 bytes)
+// VRAM: 0x800E0928 | Words: 25 (100 bytes)
+// Tables: init=g_GlowEffectInitList, draw=g_GlowEffectDrawList, update=g_GlowEffectUpdateList, sizes=g_GlowEffectSlotSizes
+// Slots:
+//   [0] init=GlowEffect_InitOwner, draw=GlowEffect_DrawNop, update=GlowEffect_UpdateEnd, size=0x0
+//   [1] init=GlowEffect_InitParticle, draw=GlowEffect_DrawParticle, update=GlowEffect_UpdateParticle, size=0x18
+//   [2] init=GlowEffect_InitFlareLayers, draw=GlowEffect_DrawFlareLayers, update=GlowEffect_UpdateFlareLayers, size=0x30
+//   [3] init=GlowEffect_InitCoreGlow, draw=GlowEffect_DrawPointGlow, update=GlowEffect_UpdateCoreGlow, size=0x10
+//   [4] init=GlowEffect_InitGroundGlow, draw=GlowEffect_DrawGroundGlow, update=GlowEffect_UpdateGroundGlow, size=0x10
+//   [5] init=GlowEffect_InitHaloGlow, draw=GlowEffect_DrawHaloGlow, update=GlowEffect_UpdateHaloGlow, size=0x30
+fieldfx_script g_GlowEffectScript {
+    r10 = 0;
+    r11 = 0;
+    r12 = 0;
+@label_0003:
+    r15 = vars[0];
+    if (r15 == 2) goto @label_0018;
+    if (r15 == 1) goto @label_000D;
+    wait(0);
+    if (r10 != 0) goto @label_0003;
+    r11 += 1;
+    if (r11 != 10) goto @label_0003;
+    r10 = 1;
+    r11 = 0;
+    goto @label_0003;
+@label_000D:
+    r15 = 0;
+    vars[0] = r15;
+    start_slot(0); // init=GlowEffect_InitOwner, draw=GlowEffect_DrawNop, update=GlowEffect_UpdateEnd, size=0x0
+    start_slot(1); // init=GlowEffect_InitParticle, draw=GlowEffect_DrawParticle, update=GlowEffect_UpdateParticle, size=0x18
+    start_slot(2); // init=GlowEffect_InitFlareLayers, draw=GlowEffect_DrawFlareLayers, update=GlowEffect_UpdateFlareLayers, size=0x30
+    start_slot(3); // init=GlowEffect_InitCoreGlow, draw=GlowEffect_DrawPointGlow, update=GlowEffect_UpdateCoreGlow, size=0x10
+    if (r10 == 0) goto @label_0016;
+    start_slot(4); // init=GlowEffect_InitGroundGlow, draw=GlowEffect_DrawGroundGlow, update=GlowEffect_UpdateGroundGlow, size=0x10
+    start_slot(5); // init=GlowEffect_InitHaloGlow, draw=GlowEffect_DrawHaloGlow, update=GlowEffect_UpdateHaloGlow, size=0x30
+@label_0016:
+    r10 = 0;
+    goto @label_0003;
+@label_0018:
+    halt;
+}
+
+// VRAM: 0x800E0A50 | Words: 13 (52 bytes)
+// Tables: init=g_GlowEffectBInitList, draw=g_GlowEffectBDrawList, update=g_GlowEffectBUpdateList, sizes=g_GlowEffectBSlotSizes
+// Slots:
+//   [0] init=GlowEffectB_InitOwner, draw=GlowEffectB_DrawNop, update=GlowEffectB_UpdateEnd, size=0x0
+//   [1] init=GlowEffectB_InitParticle, draw=GlowEffectB_DrawParticle, update=GlowEffectB_UpdateParticle, size=0x18
+//   [2] init=GlowEffectB_InitFlareLayers, draw=GlowEffectB_DrawFlareLayers, update=GlowEffectB_UpdateFlareLayers, size=0x30
+//   [3] init=GlowEffectB_InitPointGlow, draw=GlowEffectB_DrawPointGlow, update=GlowEffectB_UpdatePointGlow, size=0x10
+fieldfx_script g_GlowEffectBScript {
+@label_0000:
+    r15 = vars[0];
+    if (r15 == 2) goto @label_000C;
+    if (r15 == 1) goto @label_0005;
+    wait(0);
+    goto @label_0000;
+@label_0005:
+    r15 = 0;
+    vars[0] = r15;
+    start_slot(0); // init=GlowEffectB_InitOwner, draw=GlowEffectB_DrawNop, update=GlowEffectB_UpdateEnd, size=0x0
+    start_slot(1); // init=GlowEffectB_InitParticle, draw=GlowEffectB_DrawParticle, update=GlowEffectB_UpdateParticle, size=0x18
+    start_slot(2); // init=GlowEffectB_InitFlareLayers, draw=GlowEffectB_DrawFlareLayers, update=GlowEffectB_UpdateFlareLayers, size=0x30
+    start_slot(3); // init=GlowEffectB_InitPointGlow, draw=GlowEffectB_DrawPointGlow, update=GlowEffectB_UpdatePointGlow, size=0x10
+    goto @label_0000;
+@label_000C:
+    halt;
+}
+
+// VRAM: 0x800E0B38 | Words: 12 (48 bytes)
+// Tables: init=g_GlowEffectCInitList, draw=g_GlowEffectCDrawList, update=g_GlowEffectCUpdateList, sizes=g_GlowEffectCSlotSizes
+// Slots:
+//   [0] init=GlowEffectC_InitOwner, draw=GlowEffectC_DrawNop, update=GlowEffectC_UpdateEnd, size=0x0
+//   [1] init=GlowEffectC_InitParticle, draw=GlowEffectC_DrawParticle, update=GlowEffectC_UpdateParticle, size=0x18
+//   [2] init=GlowEffectC_InitFlareLayers, draw=GlowEffectC_DrawFlareLayers, update=GlowEffectC_UpdateFlareLayers, size=0x30
+fieldfx_script g_GlowEffectCScript {
+@label_0000:
+    r15 = vars[0];
+    if (r15 == 2) goto @label_000B;
+    if (r15 == 1) goto @label_0005;
+    wait(0);
+    goto @label_0000;
+@label_0005:
+    r15 = 0;
+    vars[0] = r15;
+    start_slot(0); // init=GlowEffectC_InitOwner, draw=GlowEffectC_DrawNop, update=GlowEffectC_UpdateEnd, size=0x0
+    start_slot(1); // init=GlowEffectC_InitParticle, draw=GlowEffectC_DrawParticle, update=GlowEffectC_UpdateParticle, size=0x18
+    start_slot(2); // init=GlowEffectC_InitFlareLayers, draw=GlowEffectC_DrawFlareLayers, update=GlowEffectC_UpdateFlareLayers, size=0x30
+    goto @label_0000;
+@label_000B:
+    halt;
+}
+
+// VRAM: 0x800E0C88 | Words: 25 (100 bytes)
+// Tables: init=g_FourLayerGlowInitList, draw=g_FourLayerGlowDrawList, update=g_FourLayerGlowUpdateList, sizes=g_FourLayerGlowSlotSizes
+// Slots:
+//   [0] init=FourLayerGlow_InitOwner, draw=FourLayerGlow_DrawNop, update=FourLayerGlow_UpdateEnd, size=0x0
+//   [1] init=FourLayerGlow_InitParticle, draw=FourLayerGlow_DrawParticle, update=FourLayerGlow_UpdateParticle, size=0x18
+//   [2] init=FourLayerGlow_InitFlareLayers, draw=FourLayerGlow_DrawFlareLayers, update=FourLayerGlow_UpdateFlareLayers, size=0x30
+//   [3] init=FourLayerGlow_InitTwinGlow, draw=FourLayerGlow_DrawTwinGlow, update=FourLayerGlow_UpdateTwinGlow, size=0x18
+//   [4] init=FourLayerGlow_InitGroundGlow, draw=FourLayerGlow_DrawGroundGlow, update=FourLayerGlow_UpdateGroundGlow, size=0x10
+//   [5] init=FourLayerGlow_InitHaloGlow, draw=FourLayerGlow_DrawHaloGlow, update=FourLayerGlow_UpdateHaloGlow, size=0x30
+fieldfx_script g_FourLayerGlowScript {
+    r10 = 0;
+    r11 = 0;
+    r12 = 0;
+@label_0003:
+    r15 = vars[0];
+    if (r15 == 2) goto @label_0018;
+    if (r15 == 1) goto @label_000D;
+    wait(0);
+    if (r10 != 0) goto @label_0003;
+    r11 += 1;
+    if (r11 != 10) goto @label_0003;
+    r10 = 1;
+    r11 = 0;
+    goto @label_0003;
+@label_000D:
+    r15 = 0;
+    vars[0] = r15;
+    start_slot(0); // init=FourLayerGlow_InitOwner, draw=FourLayerGlow_DrawNop, update=FourLayerGlow_UpdateEnd, size=0x0
+    start_slot(1); // init=FourLayerGlow_InitParticle, draw=FourLayerGlow_DrawParticle, update=FourLayerGlow_UpdateParticle, size=0x18
+    start_slot(2); // init=FourLayerGlow_InitFlareLayers, draw=FourLayerGlow_DrawFlareLayers, update=FourLayerGlow_UpdateFlareLayers, size=0x30
+    start_slot(3); // init=FourLayerGlow_InitTwinGlow, draw=FourLayerGlow_DrawTwinGlow, update=FourLayerGlow_UpdateTwinGlow, size=0x18
+    if (r10 == 0) goto @label_0016;
+    start_slot(4); // init=FourLayerGlow_InitGroundGlow, draw=FourLayerGlow_DrawGroundGlow, update=FourLayerGlow_UpdateGroundGlow, size=0x10
+    start_slot(5); // init=FourLayerGlow_InitHaloGlow, draw=FourLayerGlow_DrawHaloGlow, update=FourLayerGlow_UpdateHaloGlow, size=0x30
+@label_0016:
+    r10 = 0;
+    goto @label_0003;
+@label_0018:
+    halt;
+}
+
+// VRAM: 0x800E0D6C | Words: 55 (220 bytes)
+// Tables: init=g_PointSpriteInitList, draw=g_PointSpriteDrawList, update=g_PointSpriteUpdateList, sizes=g_PointSpriteSlotSizes
+// Slots:
+//   [0] init=PointSprite_InitRisingStreak, draw=PointSprite_DrawRisingStreak, update=PointSprite_UpdateRisingStreak, size=0xC
+//   [1] init=FieldFx_InitRadialEntries, draw=FieldFx_ProcessInterleavedPoints, update=PointSprite_UpdateRadialParticles, size=0x126
+//   [2] init=PointSprite_InitGroundRing, draw=PointSprite_DrawGroundRing, update=PointSprite_UpdateGroundRing, size=0xC
+//   [3] init=PointSprite_InitBillboard, draw=PointSprite_DrawBillboardFlash, update=PointSprite_UpdateBillboardFlash, size=0xC
+//   [4] init=FieldFx_InitScatteredParticles, draw=FieldFx_ProcessPointTriples, update=PointSprite_UpdateScatteredParticles, size=0xC8
+//   [5] init=PointSprite_InitOrientedFlash, draw=PointSprite_DrawOrientedFlash, update=PointSprite_UpdateOrientedFlash, size=0xC
+fieldfx_script g_PointSpriteScript {
+    r0 = vars[0];
+    if (r0 == 0) goto @label_0004;
+    if (r0 == 1) goto @label_0016;
+    if (r0 == 2) goto @label_0026;
+@label_0004:
+    start_slot(5); // init=PointSprite_InitOrientedFlash, draw=PointSprite_DrawOrientedFlash, update=PointSprite_UpdateOrientedFlash, size=0xC
+    wait(4);
+    start_slot(2); // init=PointSprite_InitGroundRing, draw=PointSprite_DrawGroundRing, update=PointSprite_UpdateGroundRing, size=0xC
+    r3 = 32;
+    r4 = 32;
+    r5 = 32;
+    start_slot(1); // init=FieldFx_InitRadialEntries, draw=FieldFx_ProcessInterleavedPoints, update=PointSprite_UpdateRadialParticles, size=0x126
+    wait(4);
+    r0 = 128;
+    r1 = 128;
+    r2 = 128;
+    start_slot(0); // init=PointSprite_InitRisingStreak, draw=PointSprite_DrawRisingStreak, update=PointSprite_UpdateRisingStreak, size=0xC
+    wait(2);
+    start_slot(3); // init=PointSprite_InitBillboard, draw=PointSprite_DrawBillboardFlash, update=PointSprite_UpdateBillboardFlash, size=0xC
+    start_slot(4); // init=FieldFx_InitScatteredParticles, draw=FieldFx_ProcessPointTriples, update=PointSprite_UpdateScatteredParticles, size=0xC8
+    wait(8);
+    start_slot(0); // init=PointSprite_InitRisingStreak, draw=PointSprite_DrawRisingStreak, update=PointSprite_UpdateRisingStreak, size=0xC
+    halt;
+@label_0016:
+    start_slot(5); // init=PointSprite_InitOrientedFlash, draw=PointSprite_DrawOrientedFlash, update=PointSprite_UpdateOrientedFlash, size=0xC
+    start_slot(2); // init=PointSprite_InitGroundRing, draw=PointSprite_DrawGroundRing, update=PointSprite_UpdateGroundRing, size=0xC
+    wait(4);
+    r0 = 64;
+    r1 = 64;
+    r2 = 0;
+    start_slot(0); // init=PointSprite_InitRisingStreak, draw=PointSprite_DrawRisingStreak, update=PointSprite_UpdateRisingStreak, size=0xC
+    start_slot(0); // init=PointSprite_InitRisingStreak, draw=PointSprite_DrawRisingStreak, update=PointSprite_UpdateRisingStreak, size=0xC
+    wait(3);
+    start_slot(0); // init=PointSprite_InitRisingStreak, draw=PointSprite_DrawRisingStreak, update=PointSprite_UpdateRisingStreak, size=0xC
+    wait(2);
+    start_slot(3); // init=PointSprite_InitBillboard, draw=PointSprite_DrawBillboardFlash, update=PointSprite_UpdateBillboardFlash, size=0xC
+    start_slot(4); // init=FieldFx_InitScatteredParticles, draw=FieldFx_ProcessPointTriples, update=PointSprite_UpdateScatteredParticles, size=0xC8
+    wait(8);
+    start_slot(0); // init=PointSprite_InitRisingStreak, draw=PointSprite_DrawRisingStreak, update=PointSprite_UpdateRisingStreak, size=0xC
+    halt;
+@label_0026:
+    start_slot(5); // init=PointSprite_InitOrientedFlash, draw=PointSprite_DrawOrientedFlash, update=PointSprite_UpdateOrientedFlash, size=0xC
+    start_slot(2); // init=PointSprite_InitGroundRing, draw=PointSprite_DrawGroundRing, update=PointSprite_UpdateGroundRing, size=0xC
+    wait(4);
+    r0 = 64;
+    r1 = 0;
+    r2 = 64;
+    start_slot(0); // init=PointSprite_InitRisingStreak, draw=PointSprite_DrawRisingStreak, update=PointSprite_UpdateRisingStreak, size=0xC
+    start_slot(0); // init=PointSprite_InitRisingStreak, draw=PointSprite_DrawRisingStreak, update=PointSprite_UpdateRisingStreak, size=0xC
+    wait(3);
+    start_slot(0); // init=PointSprite_InitRisingStreak, draw=PointSprite_DrawRisingStreak, update=PointSprite_UpdateRisingStreak, size=0xC
+    wait(2);
+    start_slot(3); // init=PointSprite_InitBillboard, draw=PointSprite_DrawBillboardFlash, update=PointSprite_UpdateBillboardFlash, size=0xC
+    start_slot(4); // init=FieldFx_InitScatteredParticles, draw=FieldFx_ProcessPointTriples, update=PointSprite_UpdateScatteredParticles, size=0xC8
+    wait(8);
+    start_slot(0); // init=PointSprite_InitRisingStreak, draw=PointSprite_DrawRisingStreak, update=PointSprite_UpdateRisingStreak, size=0xC
+    halt;
+    halt;
+}
+
+// VRAM: 0x800E0EB8 | Words: 24 (96 bytes)
+// Tables: init=g_BurstEffectInitList, draw=g_BurstEffectDrawList, update=g_BurstEffectUpdateList, sizes=g_BurstEffectSlotSizes
+// Slots:
+//   [0] init=BurstEffect_InitTarget, draw=BurstEffect_DrawNop0, update=BurstEffect_UpdateEnd, size=0x0
+//   [1] init=BurstEffect_InitGroundGlow, draw=BurstEffect_DrawGroundGlow, update=BurstEffect_UpdateGroundGlow, size=0x10
+//   [2] init=FieldFx_InitRandomOffsetPairs, draw=BurstEffect_DrawSparkPairs, update=BurstEffect_UpdateSparkPairs, size=0x30
+//   [3] init=BurstEffect_InitSparkPoint, draw=BurstEffect_DrawSparkPoint, update=BurstEffect_UpdateSparkPoint, size=0x10
+//   [4] init=BurstEffect_InitNop4, draw=BurstEffect_DrawNop4, update=BurstEffect_UpdateEnd4, size=0xFFFF
+fieldfx_script g_BurstEffectScript {
+    r12 = 0;
+@label_0001:
+    r15 = vars[0];
+    if (r15 == 3) goto @label_0015;
+    if (r15 == 2) goto @label_0017;
+    if (r15 == 1) goto @label_0007;
+    wait(0);
+    goto @label_0001;
+@label_0007:
+    r15 = 0;
+    vars[0] = r15;
+    r14 = 0;
+    r13 = 0;
+@label_000B:
+    start_slot(0); // init=BurstEffect_InitTarget, draw=BurstEffect_DrawNop0, update=BurstEffect_UpdateEnd, size=0x0
+    if (r12 != 0) goto @label_000F;
+    start_slot(1); // init=BurstEffect_InitGroundGlow, draw=BurstEffect_DrawGroundGlow, update=BurstEffect_UpdateGroundGlow, size=0x10
+    start_slot(3); // init=BurstEffect_InitSparkPoint, draw=BurstEffect_DrawSparkPoint, update=BurstEffect_UpdateSparkPoint, size=0x10
+@label_000F:
+    start_slot(2); // init=FieldFx_InitRandomOffsetPairs, draw=BurstEffect_DrawSparkPairs, update=BurstEffect_UpdateSparkPairs, size=0x30
+    r12 += 1;
+    if (r12 != 4) goto @label_0013;
+    r12 = 0;
+@label_0013:
+    if (r14 == 0) goto @label_000B;
+    goto @label_0001;
+@label_0015:
+    free_all_slots;
+    goto @label_0001;
+@label_0017:
+    halt;
+}
+
+// VRAM: 0x800E0F6C | Words: 18 (72 bytes)
+// Tables: init=g_BurstEffectBInitList, draw=g_BurstEffectBDrawList, update=g_BurstEffectBUpdateList, sizes=g_BurstEffectBSlotSizes
+// Slots:
+//   [0] init=BurstEffectB_InitTarget, draw=BurstEffectB_DrawNop, update=BurstEffectB_UpdateEnd, size=0x0
+//   [1] init=BurstEffectB_InitSparkCloud, draw=BurstEffectB_DrawSparkCloud, update=BurstEffectB_UpdateSparkCloud, size=0x70
+//   [2] init=BurstEffectB_InitSparkPoint, draw=BurstEffectB_DrawSparkPoint, update=BurstEffectB_UpdateSparkPoint, size=0x10
+fieldfx_script g_BurstEffectBScript {
+@label_0000:
+    r15 = vars[0];
+    if (r15 == 3) goto @label_000F;
+    if (r15 == 2) goto @label_0011;
+    if (r15 == 1) goto @label_0006;
+    wait(0);
+    goto @label_0000;
+@label_0006:
+    r15 = 0;
+    vars[0] = r15;
+    r14 = 0;
+    r13 = 0;
+@label_000A:
+    start_slot(0); // init=BurstEffectB_InitTarget, draw=BurstEffectB_DrawNop, update=BurstEffectB_UpdateEnd, size=0x0
+    start_slot(1); // init=BurstEffectB_InitSparkCloud, draw=BurstEffectB_DrawSparkCloud, update=BurstEffectB_UpdateSparkCloud, size=0x70
+    start_slot(2); // init=BurstEffectB_InitSparkPoint, draw=BurstEffectB_DrawSparkPoint, update=BurstEffectB_UpdateSparkPoint, size=0x10
+    if (r14 == 0) goto @label_000A;
+    goto @label_0000;
+@label_000F:
+    free_all_slots;
+    goto @label_0000;
+@label_0011:
+    halt;
+}
+
+// VRAM: 0x800E0FFC | Words: 18 (72 bytes)
+// Tables: init=g_BurstEffectCInitList, draw=g_BurstEffectCDrawList, update=g_BurstEffectCUpdateList, sizes=g_BurstEffectCSlotSizes
+// Slots:
+//   [0] init=BurstEffectC_InitTarget, draw=BurstEffectC_DrawNop, update=BurstEffectC_UpdateEnd, size=0x0
+//   [1] init=BurstEffectC_InitTimedSpark, draw=BurstEffectC_DrawTimedSpark, update=BurstEffectC_UpdateTimedSpark, size=0xC
+fieldfx_script g_BurstEffectCScript {
+@label_0000:
+    r15 = vars[0];
+    if (r15 == 2) goto @label_0011;
+    if (r15 == 1) goto @label_0005;
+    wait(0);
+    goto @label_0000;
+@label_0005:
+    r15 = 0;
+    vars[0] = r15;
+    r14 = 0;
+    r13 = 0;
+@label_0009:
+    start_slot(0); // init=BurstEffectC_InitTarget, draw=BurstEffectC_DrawNop, update=BurstEffectC_UpdateEnd, size=0x0
+    start_slot(1); // init=BurstEffectC_InitTimedSpark, draw=BurstEffectC_DrawTimedSpark, update=BurstEffectC_UpdateTimedSpark, size=0xC
+    wait(2);
+    start_slot(1); // init=BurstEffectC_InitTimedSpark, draw=BurstEffectC_DrawTimedSpark, update=BurstEffectC_UpdateTimedSpark, size=0xC
+    wait(2);
+    start_slot(1); // init=BurstEffectC_InitTimedSpark, draw=BurstEffectC_DrawTimedSpark, update=BurstEffectC_UpdateTimedSpark, size=0xC
+    if (r14 == 0) goto @label_0009;
+    goto @label_0000;
+@label_0011:
+    halt;
+}

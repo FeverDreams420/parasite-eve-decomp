@@ -713,12 +713,9 @@ def compile_task_block(source: str) -> bytes:
 # ---------------------------------------------------------------------------
 # VM 2: FieldFx Script Compiler
 # ---------------------------------------------------------------------------
-def compile_fieldfx_script(source: str) -> list[int]:
-    """Compile a `fieldfx_script` block back into a list of 32-bit unsigned words."""
-    tokens = tokenize(source)
-    c = ScriptCompiler(tokens)
+def _compile_one_fieldfx_block(c: ScriptCompiler) -> tuple[str, list[int]]:
     c.eat("fieldfx_script")
-    c.eat("IDENT")
+    name = c.eat("IDENT").value
     c.eat("{")
 
     labels: dict[str, int] = {}
@@ -816,6 +813,33 @@ def compile_fieldfx_script(source: str) -> list[int]:
             words.append(data[0] & 0xFFFFFFFF)
         else:
             hi_prefix, lbl, operand = data
-            rel = (labels[lbl] - pc) & 0xFF
+            rel = (labels[lbl] - pc - 1) & 0xFF
             words.append(((hi_prefix | rel) << 16) | (operand & 0xFFFF))
+    return name, words
+
+
+def compile_fieldfx_script(source: str) -> list[int]:
+    """Compile a single `fieldfx_script` block back into a list of 32-bit unsigned words."""
+    tokens = tokenize(source)
+    c = ScriptCompiler(tokens)
+    _, words = _compile_one_fieldfx_block(c)
     return words
+
+
+def compile_fieldfx_module(source: str) -> list[tuple[str, list[int]]]:
+    """Compile a `.fxs` module file containing one or more `fieldfx_script` blocks."""
+    tokens = tokenize(source)
+    c = ScriptCompiler(tokens)
+    has_wrapper = False
+    if c.cur().value == "fieldfx_module":
+        c.eat("fieldfx_module")
+        c.eat("IDENT")
+        c.eat("{")
+        has_wrapper = True
+    results: list[tuple[str, list[int]]] = []
+    while c.cur().kind != "EOF" and c.cur().value != "}":
+        results.append(_compile_one_fieldfx_block(c))
+    if has_wrapper:
+        c.eat("}")
+    return results
+

@@ -1,0 +1,35 @@
+// Parasite Eve 1 - FieldFx VM Module `scene_e04_chrysler`
+// Scripts: 1 | Total Words: 18 (72 bytes)
+// VRAM: 0x80191FF8 | Words: 18 (72 bytes)
+// Tables: init=g_RoomEruptionInitList, draw=g_RoomEruptionDrawList, update=g_RoomEruptionUpdateList, sizes=g_RoomEruptionSpawnLayout
+// Slots:
+//   [0] init=RoomEffect_GroundEruptionInit, draw=RoomEffect_GroundEruptionNop, update=RoomEffect_GroundEruptionTick, size=0x30
+//   [1] init=RoomEffect_GroundEruptionInitColumn, draw=RoomEffect_GroundEruptionTransformColumn, update=RoomEffect_GroundEruptionUpdateColumn, size=0x128
+//   [2] init=RoomEffect_GroundEruptionInitGlow, draw=RoomEffect_GroundEruptionDrawGlow, update=RoomEffect_GroundEruptionUpdateGlow, size=0xC
+//   [3] init=RoomEffect_GroundEruptionInitRing, draw=RoomEffect_GroundEruptionDrawRing, update=RoomEffect_GroundEruptionUpdateRing, size=0x10C
+//   [4] init=RoomEffect_GroundEruptionInitShadow, draw=RoomEffect_GroundEruptionDrawShadow, update=RoomEffect_GroundEruptionNop2, size=0x88
+//   [5] init=RoomEffect_GroundEruptionInitDebris, draw=RoomEffect_GroundEruptionDrawDebris, update=RoomEffect_GroundEruptionUpdateDebris, size=0x8C
+fieldfx_script g_RoomEruptionScript {
+    start_slot(0); // init=RoomEffect_GroundEruptionInit, draw=RoomEffect_GroundEruptionNop, update=RoomEffect_GroundEruptionTick, size=0x30
+    r0 = 0;
+@label_0002:
+    if (r0 == 0) goto @label_0007;
+    if (r0 == 1) goto @label_0011;
+@label_0004:
+    r0 += 1;
+    wait(0);
+    goto @label_0002;
+@label_0007:
+    start_slot(1); // init=RoomEffect_GroundEruptionInitColumn, draw=RoomEffect_GroundEruptionTransformColumn, update=RoomEffect_GroundEruptionUpdateColumn, size=0x128
+    start_slot(3); // init=RoomEffect_GroundEruptionInitRing, draw=RoomEffect_GroundEruptionDrawRing, update=RoomEffect_GroundEruptionUpdateRing, size=0x10C
+    start_slot(5); // init=RoomEffect_GroundEruptionInitDebris, draw=RoomEffect_GroundEruptionDrawDebris, update=RoomEffect_GroundEruptionUpdateDebris, size=0x8C
+    start_slot(5); // init=RoomEffect_GroundEruptionInitDebris, draw=RoomEffect_GroundEruptionDrawDebris, update=RoomEffect_GroundEruptionUpdateDebris, size=0x8C
+    start_slot(5); // init=RoomEffect_GroundEruptionInitDebris, draw=RoomEffect_GroundEruptionDrawDebris, update=RoomEffect_GroundEruptionUpdateDebris, size=0x8C
+    start_slot(5); // init=RoomEffect_GroundEruptionInitDebris, draw=RoomEffect_GroundEruptionDrawDebris, update=RoomEffect_GroundEruptionUpdateDebris, size=0x8C
+    start_slot(5); // init=RoomEffect_GroundEruptionInitDebris, draw=RoomEffect_GroundEruptionDrawDebris, update=RoomEffect_GroundEruptionUpdateDebris, size=0x8C
+    start_slot(5); // init=RoomEffect_GroundEruptionInitDebris, draw=RoomEffect_GroundEruptionDrawDebris, update=RoomEffect_GroundEruptionUpdateDebris, size=0x8C
+    start_slot(5); // init=RoomEffect_GroundEruptionInitDebris, draw=RoomEffect_GroundEruptionDrawDebris, update=RoomEffect_GroundEruptionUpdateDebris, size=0x8C
+    goto @label_0004;
+@label_0011:
+    halt;
+}

@@ -906,7 +906,35 @@ def extract_room_from_pe_img(
 # ---------------------------------------------------------------------------
 # VM 2: FieldFx Room Effect Script Decompiler (`FieldFx_RunScript`)
 # ---------------------------------------------------------------------------
-def decompile_fieldfx_script(words: list[int] | tuple[int, ...], name: str = "fieldfx_0") -> str:
+@dataclass(frozen=True)
+class FieldFxSlotHandler:
+    slot_id: int
+    init_fn: str
+    draw_fn: str
+    update_fn: str
+    size: int
+
+
+@dataclass(frozen=True)
+class FieldFxScriptEntry:
+    module: str
+    name: str
+    vram: int
+    words: list[int]
+    slots: dict[int, FieldFxSlotHandler]
+    init_list_sym: str = ""
+    draw_list_sym: str = ""
+    update_list_sym: str = ""
+    spawn_layout_sym: str = ""
+
+
+def decompile_fieldfx_script(
+    words: list[int] | tuple[int, ...],
+    name: str = "fieldfx_0",
+    slots: dict[int, FieldFxSlotHandler] | None = None,
+    vram: int | None = None,
+    table_syms: tuple[str, str, str, str] | None = None,
+) -> str:
     """Decompile a 32-bit `FieldFx_RunScript` word array into readable DSL."""
     targets: set[int] = set()
     for pc, w in enumerate(words):
@@ -918,9 +946,21 @@ def decompile_fieldfx_script(words: list[int] | tuple[int, ...], name: str = "fi
             rel = op & 0xFF
             if rel >= 0x80:
                 rel -= 0x100
-            targets.add(pc + rel)
+            targets.add(pc + rel + 1)
 
-    lines: list[str] = [f"fieldfx_script {name} {{"]
+    lines: list[str] = []
+    if vram is not None:
+        lines.append(f"// VRAM: 0x{vram:08X} | Words: {len(words)} ({len(words) * 4} bytes)")
+    if table_syms and any(table_syms):
+        init_s, draw_s, upd_s, lay_s = table_syms
+        lines.append(f"// Tables: init={init_s}, draw={draw_s}, update={upd_s}, sizes={lay_s}")
+    if slots:
+        lines.append("// Slots:")
+        for sid, sh in sorted(slots.items()):
+            lines.append(
+                f"//   [{sid}] init={sh.init_fn}, draw={sh.draw_fn}, update={sh.update_fn}, size=0x{sh.size:X}"
+            )
+    lines.append(f"fieldfx_script {name} {{")
     for pc, w in enumerate(words):
         if pc in targets:
             lines.append(f"@label_{pc:04X}:")
@@ -938,7 +978,11 @@ def decompile_fieldfx_script(words: list[int] | tuple[int, ...], name: str = "fi
         operand = u & 0xFFFF
         s_operand = operand - 0x10000 if operand & 0x8000 else operand
         if op == 0x0001:
-            lines.append(f"    start_slot({s_operand});")
+            comment = ""
+            if slots and s_operand in slots:
+                sh = slots[s_operand]
+                comment = f" // init={sh.init_fn}, draw={sh.draw_fn}, update={sh.update_fn}, size=0x{sh.size:X}"
+            lines.append(f"    start_slot({s_operand});{comment}")
         elif op == 0x0002:
             lines.append(f"    wait({s_operand});")
         elif 0x0010 <= op <= 0x001F:
@@ -954,18 +998,304 @@ def decompile_fieldfx_script(words: list[int] | tuple[int, ...], name: str = "fi
         elif 0x1000 <= op <= 0x1FFF:
             reg = (op >> 8) & 0xF
             rel = (op & 0xFF) - 0x100 if (op & 0xFF) >= 0x80 else (op & 0xFF)
-            lines.append(f"    if (r{reg} == {s_operand}) goto @label_{pc + rel:04X};")
+            lines.append(f"    if (r{reg} == {s_operand}) goto @label_{pc + rel + 1:04X};")
         elif 0x2000 <= op <= 0x2FFF:
             reg = (op >> 8) & 0xF
             rel = (op & 0xFF) - 0x100 if (op & 0xFF) >= 0x80 else (op & 0xFF)
-            lines.append(f"    if (r{reg} != {s_operand}) goto @label_{pc + rel:04X};")
+            lines.append(f"    if (r{reg} != {s_operand}) goto @label_{pc + rel + 1:04X};")
         elif 0x3000 <= op <= 0x3FFF:
             rel = (op & 0xFF) - 0x100 if (op & 0xFF) >= 0x80 else (op & 0xFF)
             if operand != 0:
-                lines.append(f"    goto @label_{pc + rel:04X} ({s_operand});")
+                lines.append(f"    goto @label_{pc + rel + 1:04X} ({s_operand});")
             else:
-                lines.append(f"    goto @label_{pc + rel:04X};")
+                lines.append(f"    goto @label_{pc + rel + 1:04X};")
         else:
             lines.append(f"    raw_word(0x{u:08X});")
     lines.append("}")
     return "\n".join(lines) + "\n"
+
+
+def decompile_fieldfx_module(module_name: str, entries: list[FieldFxScriptEntry]) -> str:
+    """Decompile all `FieldFx` scripts of a binary module (`main_exe` or overlay) into a `.fxs` file."""
+    total_words = sum(len(e.words) for e in entries)
+    header = [
+        f"// Parasite Eve 1 - FieldFx VM Module `{module_name}`",
+        f"// Scripts: {len(entries)} | Total Words: {total_words} ({total_words * 4} bytes)",
+        "",
+    ]
+    blocks: list[str] = []
+    for entry in entries:
+        blk = decompile_fieldfx_script(
+            entry.words,
+            name=entry.name,
+            slots=entry.slots,
+            vram=entry.vram,
+            table_syms=(
+                entry.init_list_sym,
+                entry.draw_list_sym,
+                entry.update_list_sym,
+                entry.spawn_layout_sym,
+            ),
+        )
+        blocks.append(blk.rstrip("\n"))
+    return "\n".join(header) + "\n\n".join(blocks) + "\n"
+
+
+def _read_fieldfx_script_words(buf: bytes, off: int) -> list[int]:
+    words: list[int] = []
+    max_target = 0
+    pc = 0
+    while pc < 256 and off + (pc + 1) * 4 <= len(buf):
+        w = struct.unpack_from("<I", buf, off + pc * 4)[0]
+        words.append(w)
+        if w not in (0xFFFFFFFF, 0xFFFFFFFE, 0xFFFFFFFD):
+            op = w >> 16
+            if 0x1000 <= op <= 0x3FFF:
+                rel = (op & 0xFF) - 0x100 if (op & 0xFF) >= 0x80 else (op & 0xFF)
+                target = pc + rel + 1
+                if target > max_target:
+                    max_target = target
+        if w == 0xFFFFFFFF and pc >= max_target:
+            if words.count(0xFFFFFFFF) > 1 and off + (pc + 2) * 4 <= len(buf):
+                nw = struct.unpack_from("<I", buf, off + (pc + 1) * 4)[0]
+                if nw == 0xFFFFFFFF:
+                    words.append(nw)
+            break
+        pc += 1
+    return words
+
+
+def _extract_reg_imm32(words: tuple[int, ...], start_idx: int, end_idx: int, target_reg: int) -> int | None:
+    hi: dict[int, int] = {}
+    val: int | None = None
+    for j in range(start_idx, end_idx):
+        ins = words[j]
+        op = ins >> 26
+        rs = (ins >> 21) & 0x1F
+        rt = (ins >> 16) & 0x1F
+        imm = ins & 0xFFFF
+        simm = imm - 0x10000 if imm & 0x8000 else imm
+        if op == 0x0F:
+            hi[rt] = imm << 16
+            if rt == target_reg:
+                val = hi[rt]
+        elif op == 0x09 and rs in hi:
+            hi[rt] = (hi[rs] + simm) & 0xFFFFFFFF
+            if rt == target_reg:
+                val = hi[rt]
+        elif op == 0x0D and rs in hi:
+            hi[rt] = (hi[rs] | imm) & 0xFFFFFFFF
+            if rt == target_reg:
+                val = hi[rt]
+        elif op == 0x25 and (rs == 0 or rt == 0):
+            rd = (ins >> 11) & 0x1F
+            src = rs if rt == 0 else rt
+            if src in hi:
+                hi[rd] = hi[src]
+                if rd == target_reg:
+                    val = hi[rd]
+    return val
+
+
+def _find_fieldfx_classes_in_buf(
+    buf: bytes, base_vram: int
+) -> list[tuple[int, int, int, int, int, int]]:
+    jal_get_slot = 0x0C0308BE      # FieldFx_GetSlot (0x800C22F8)
+    jal_register = 0x0C030905      # FieldFx_Register (0x800C2414)
+    jal_update_slots = 0x0C030947  # FieldFx_UpdateSlots (0x800C251C)
+    jal_run_script = 0x0C0309D6    # FieldFx_RunScript (0x800C2758)
+
+    n = len(buf) // 4
+    words = struct.unpack_from(f"<{n}I", buf, 0)
+    classes: list[tuple[int, int, int, int, int, int]] = []
+    plant_indices = [i for i, w in enumerate(words) if w == jal_get_slot]
+    for idx, i in enumerate(plant_indices):
+        next_i = plant_indices[idx + 1] if idx + 1 < len(plant_indices) else min(n, i + 250)
+        hi: dict[int, int] = {}
+        script_addr = 0
+        for j in range(i + 1, min(n, i + 10)):
+            ins = words[j]
+            op = ins >> 26
+            rs = (ins >> 21) & 0x1F
+            rt = (ins >> 16) & 0x1F
+            imm = ins & 0xFFFF
+            simm = imm - 0x10000 if imm & 0x8000 else imm
+            if op == 0x0F:
+                hi[rt] = imm << 16
+            elif op == 0x09 and rs in hi:
+                hi[rt] = (hi[rs] + simm) & 0xFFFFFFFF
+            elif op == 0x2B and rs == 2 and simm == 0 and rt in hi:
+                script_addr = hi[rt]
+                break
+        draw_list = update_list = init_list = spawn_layout = 0
+        for k in range(i + 1, next_i):
+            if words[k] == jal_register and not draw_list:
+                draw_list = _extract_reg_imm32(words, max(i, k - 12), min(n, k + 2), 5) or 0
+            elif words[k] == jal_update_slots and not update_list:
+                update_list = _extract_reg_imm32(words, max(i, k - 12), min(n, k + 2), 5) or 0
+            elif words[k] == jal_run_script and not init_list:
+                init_list = _extract_reg_imm32(words, max(i, k - 12), min(n, k + 2), 5) or 0
+                spawn_layout = _extract_reg_imm32(words, max(i, k - 12), min(n, k + 2), 6) or 0
+                break
+        classes.append((base_vram + i * 4, script_addr, init_list, draw_list, update_list, spawn_layout))
+    return classes
+
+
+def _read_ptr_table(buf: bytes, off: int) -> list[int]:
+    res: list[int] = []
+    for i in range(64):
+        if off + (i + 1) * 4 > len(buf):
+            break
+        w = struct.unpack_from("<I", buf, off + i * 4)[0]
+        if w == 0xFFFFFFFF or w == 0 or not (0x80010000 <= w < 0x80200000):
+            break
+        res.append(w)
+    return res
+
+
+def extract_all_fieldfx_modules(repo_root: Any) -> dict[str, list[FieldFxScriptEntry]]:
+    """Extract all 84 `FieldFx` scripts across `main_exe` and all 63 room/scene overlays."""
+    import re
+    from pathlib import Path
+
+    root = Path(repo_root)
+    pe_img = (root / "disc/extracted/PE.IMG").read_bytes()
+    main_exe = (root / "disc/extracted/SLUS_006.62").read_bytes()
+
+    main_syms: dict[int, str] = {}
+    sym_main_path = root / "configs/USA/sym.main.txt"
+    if sym_main_path.exists():
+        for line in sym_main_path.read_text().splitlines():
+            m = re.match(r"^(\w+)\s*=\s*0x([0-9A-Fa-f]+)", line)
+            if m:
+                main_syms[int(m.group(2), 16)] = m.group(1)
+
+    modules: dict[str, list[FieldFxScriptEntry]] = {}
+
+    # 1. Extract 8 global FieldFx scripts from main.exe (SLUS_006.62)
+    main_buf = main_exe[0x800:]
+    main_base = 0x80010000
+    main_entries: list[FieldFxScriptEntry] = []
+    for _, s_vram, init_vram, draw_vram, upd_vram, lay_vram in _find_fieldfx_classes_in_buf(
+        main_buf, main_base
+    ):
+        s_off = s_vram - main_base
+        words = _read_fieldfx_script_words(main_buf, s_off)
+        inits = _read_ptr_table(main_buf, init_vram - main_base)
+        draws = _read_ptr_table(main_buf, draw_vram - main_base)
+        updates = _read_ptr_table(main_buf, upd_vram - main_base)
+        slot_count = max(len(inits), len(draws), len(updates))
+        lay_off = lay_vram - main_base
+        sizes = [
+            struct.unpack_from("<H", main_buf, lay_off + i * 2)[0]
+            for i in range(slot_count)
+        ]
+        slots: dict[int, FieldFxSlotHandler] = {}
+        for sid in range(slot_count):
+            i_addr = inits[sid] if sid < len(inits) else 0
+            d_addr = draws[sid] if sid < len(draws) else 0
+            u_addr = updates[sid] if sid < len(updates) else 0
+            slots[sid] = FieldFxSlotHandler(
+                slot_id=sid,
+                init_fn=main_syms.get(i_addr, f"0x{i_addr:08X}"),
+                draw_fn=main_syms.get(d_addr, f"0x{d_addr:08X}"),
+                update_fn=main_syms.get(u_addr, f"0x{u_addr:08X}"),
+                size=sizes[sid] if sid < len(sizes) else 0,
+            )
+        s_name = main_syms.get(s_vram, f"g_FieldFxScript_{s_vram:08X}")
+        main_entries.append(
+            FieldFxScriptEntry(
+                module="main_exe",
+                name=s_name,
+                vram=s_vram,
+                words=words,
+                slots=slots,
+                init_list_sym=main_syms.get(init_vram, f"0x{init_vram:08X}"),
+                draw_list_sym=main_syms.get(draw_vram, f"0x{draw_vram:08X}"),
+                update_list_sym=main_syms.get(upd_vram, f"0x{upd_vram:08X}"),
+                spawn_layout_sym=main_syms.get(lay_vram, f"0x{lay_vram:08X}"),
+            )
+        )
+    modules["main_exe"] = main_entries
+
+    # 2. Extract all 76 overlay FieldFx scripts across the 63 overlays in PE.IMG
+    dd_re = re.compile(
+        r"dd\s+if=\S+\s+of=\S+\s+bs=(?P<bs>\d+)\s+skip=(?P<skip>\d+)\s+count=(?P<count>\d+)"
+    )
+    for cfg_path in sorted((root / "configs/USA/overlays").glob("*.yaml")):
+        mod_name = cfg_path.stem
+        txt = cfg_path.read_text()
+        m_dd = dd_re.search(txt)
+        m_vram = re.search(r"vram:\s*0x([0-9A-Fa-f]+)", txt)
+        if not m_dd or not m_vram:
+            continue
+        vram_base = int(m_vram.group(1), 16)
+        img_off = int(m_dd.group("bs")) * int(m_dd.group("skip"))
+        img_size = int(m_dd.group("bs")) * int(m_dd.group("count"))
+        classes = _find_fieldfx_classes_in_buf(pe_img[img_off : img_off + img_size], vram_base)
+        if not classes:
+            continue
+
+        ovl_syms: dict[int, str] = dict(main_syms)
+        if mod_name == "scene_e08_chrysler":
+            ovl_syms[0x80191DB8] = "SceneE08_InitParticleSlots"
+        for sp in (
+            root / f"configs/USA/overlays/sym.{mod_name}.txt",
+            root / f"linkers/USA/overlays/link_symbols.{mod_name}.txt",
+        ):
+            if sp.exists():
+                for line in sp.read_text().splitlines():
+                    m1 = re.match(r"^(\w+)\s*=\s*0x([0-9A-Fa-f]+)", line)
+                    if m1:
+                        ovl_syms[int(m1.group(2), 16)] = m1.group(1).split("__")[0]
+                    m2 = re.match(r"^(\w+)\s*=\s*OVERLAY_WINDOW_ROOM\s*\+\s*0x([0-9A-Fa-f]+)", line)
+                    if m2:
+                        ovl_syms[0x8018EFE8 + int(m2.group(2), 16)] = m2.group(1).split("__")[0]
+
+        mod_entries: list[FieldFxScriptEntry] = []
+        used_names: set[str] = set()
+        for _, s_vram, init_vram, draw_vram, upd_vram, lay_vram in classes:
+            s_off = img_off + (s_vram - vram_base)
+            words = _read_fieldfx_script_words(pe_img, s_off)
+            inits = _read_ptr_table(pe_img, img_off + (init_vram - vram_base))
+            draws = _read_ptr_table(pe_img, img_off + (draw_vram - vram_base))
+            updates = _read_ptr_table(pe_img, img_off + (upd_vram - vram_base))
+            slot_count = max(len(inits), len(draws), len(updates))
+            lay_off = img_off + (lay_vram - vram_base)
+            sizes = [
+                struct.unpack_from("<H", pe_img, lay_off + i * 2)[0]
+                for i in range(slot_count)
+            ]
+            slots = {}
+            for sid in range(slot_count):
+                i_addr = inits[sid] if sid < len(inits) else 0
+                d_addr = draws[sid] if sid < len(draws) else 0
+                u_addr = updates[sid] if sid < len(updates) else 0
+                slots[sid] = FieldFxSlotHandler(
+                    slot_id=sid,
+                    init_fn=ovl_syms.get(i_addr, f"0x{i_addr:08X}"),
+                    draw_fn=ovl_syms.get(d_addr, f"0x{d_addr:08X}"),
+                    update_fn=ovl_syms.get(u_addr, f"0x{u_addr:08X}"),
+                    size=sizes[sid] if sid < len(sizes) else 0,
+                )
+            s_name = ovl_syms.get(s_vram, f"g_FieldFxScript_{s_vram:08X}")
+            if s_name in used_names:
+                s_name = f"{s_name}_{s_vram:08X}"
+            used_names.add(s_name)
+            mod_entries.append(
+                FieldFxScriptEntry(
+                    module=mod_name,
+                    name=s_name,
+                    vram=s_vram,
+                    words=words,
+                    slots=slots,
+                    init_list_sym=ovl_syms.get(init_vram, f"0x{init_vram:08X}"),
+                    draw_list_sym=ovl_syms.get(draw_vram, f"0x{draw_vram:08X}"),
+                    update_list_sym=ovl_syms.get(upd_vram, f"0x{upd_vram:08X}"),
+                    spawn_layout_sym=ovl_syms.get(lay_vram, f"0x{lay_vram:08X}"),
+                )
+            )
+        modules[mod_name] = mod_entries
+
+    return modules
+

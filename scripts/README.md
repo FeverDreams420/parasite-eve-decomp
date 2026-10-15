@@ -1,11 +1,90 @@
-# Parasite Eve 1 — Decompiled Room Scripts (`.pes`)
+# Parasite Eve 1 — Decompiled Scripts (`.pes` & `.fxs`)
 
+## 1. Scene VM (`Script_RunQueue`) — Room Scripts (`scripts/rooms/*.pes`)
 - **Total valid rooms**: `414` (out of `450` entries in `g_RoomSectorTable`)
 - **Total actor scripts**: `2,411`
 - **Total binary script size**: `9,411,076` bytes (`100%` byte-matching round-trip)
+
+## 2. FieldFx VM (`FieldFx_RunScript`) — Effect Scripts (`scripts/fieldfx/*.fxs`)
+- **Total binary modules**: `64` (`main_exe` + `63` room/scene overlays)
+- **Total FieldFx scripts**: `84` (`8` global in `main.exe` + `76` in overlays)
+- **Total FieldFx bytecode size**: `1,619` words (`6,476` bytes, `100%` byte-matching round-trip)
 - **Central Opcode & Variable Mapping**: [`MAPPING.md`](MAPPING.md)
 
-## Room Script Index
+---
+
+## FieldFx Script Index (`scripts/fieldfx/`)
+
+| Script File | Module | Scripts | Slots | Words (Bytes) | Script Symbols (VRAM) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| [`main_exe.fxs`](fieldfx/main_exe.fxs) | `main_exe` | `8` | `35` | `190` (`760` B) | `g_GlowEffectScript` (`0x800E0928`), `g_GlowEffectBScript` (`0x800E0A50`), `g_GlowEffectCScript` (`0x800E0B38`), `g_FourLayerGlowScript` (`0x800E0C88`), `g_PointSpriteScript` (`0x800E0D6C`), `g_BurstEffectScript` (`0x800E0EB8`), `g_BurstEffectBScript` (`0x800E0F6C`), `g_BurstEffectCScript` (`0x800E0FFC`) |
+| [`room_m034_sewer.fxs`](fieldfx/room_m034_sewer.fxs) | `room_m034_sewer` | `1` | `4` | `35` (`140` B) | `g_RoomGlowOrbScript` (`0x8018FF98`) |
+| [`room_m049_nypd.fxs`](fieldfx/room_m049_nypd.fxs) | `room_m049_nypd` | `1` | `7` | `2` (`8` B) | `g_RoomScript` (`0x80192BE8`) |
+| [`room_m050_nypd.fxs`](fieldfx/room_m050_nypd.fxs) | `room_m050_nypd` | `1` | `7` | `2` (`8` B) | `g_RoomScript` (`0x80192BE8`) |
+| [`room_m065_central_park.fxs`](fieldfx/room_m065_central_park.fxs) | `room_m065_central_park` | `1` | `2` | `14` (`56` B) | `g_RoomThreeParticleScript` (`0x80190040`) |
+| [`room_m075_central_park.fxs`](fieldfx/room_m075_central_park.fxs) | `room_m075_central_park` | `1` | `5` | `30` (`120` B) | `g_RoomScript` (`0x80193F90`) |
+| [`room_m080_central_park.fxs`](fieldfx/room_m080_central_park.fxs) | `room_m080_central_park` | `1` | `5` | `30` (`120` B) | `g_RoomScript` (`0x80193F90`) |
+| [`room_m082_central_park.fxs`](fieldfx/room_m082_central_park.fxs) | `room_m082_central_park` | `1` | `5` | `30` (`120` B) | `g_RoomScript` (`0x80193F90`) |
+| [`room_m085_central_park.fxs`](fieldfx/room_m085_central_park.fxs) | `room_m085_central_park` | `1` | `2` | `14` (`56` B) | `g_RoomThreeParticleScript` (`0x80190040`) |
+| [`room_m087_central_park.fxs`](fieldfx/room_m087_central_park.fxs) | `room_m087_central_park` | `1` | `2` | `14` (`56` B) | `g_RoomThreeParticleScript` (`0x80193534`) |
+| [`room_m090_soho.fxs`](fieldfx/room_m090_soho.fxs) | `room_m090_soho` | `1` | `7` | `2` (`8` B) | `g_RoomScript` (`0x80192BE8`) |
+| [`room_m107_nypd.fxs`](fieldfx/room_m107_nypd.fxs) | `room_m107_nypd` | `1` | `5` | `26` (`104` B) | `g_RoomScript` (`0x801935F8`) |
+| [`room_m111_nypd.fxs`](fieldfx/room_m111_nypd.fxs) | `room_m111_nypd` | `1` | `5` | `26` (`104` B) | `g_RoomScript` (`0x80190104`) |
+| [`room_m114_nypd.fxs`](fieldfx/room_m114_nypd.fxs) | `room_m114_nypd` | `1` | `5` | `26` (`104` B) | `g_RoomScript` (`0x801935F8`) |
+| [`room_m118_nypd.fxs`](fieldfx/room_m118_nypd.fxs) | `room_m118_nypd` | `1` | `5` | `26` (`104` B) | `g_RoomScript` (`0x80190104`) |
+| [`room_m122_nypd.fxs`](fieldfx/room_m122_nypd.fxs) | `room_m122_nypd` | `1` | `5` | `26` (`104` B) | `g_RoomScript` (`0x80190F4C`) |
+| [`room_m137_hospital.fxs`](fieldfx/room_m137_hospital.fxs) | `room_m137_hospital` | `1` | `5` | `19` (`76` B) | `g_RoomScript` (`0x80190EA0`) |
+| [`room_m140_hospital.fxs`](fieldfx/room_m140_hospital.fxs) | `room_m140_hospital` | `1` | `5` | `19` (`76` B) | `g_RoomScript` (`0x80190EA0`) |
+| [`room_m141_hospital.fxs`](fieldfx/room_m141_hospital.fxs) | `room_m141_hospital` | `1` | `6` | `18` (`72` B) | `g_RoomEruptionScript` (`0x8019205C`) |
+| [`room_m146_hospital.fxs`](fieldfx/room_m146_hospital.fxs) | `room_m146_hospital` | `2` | `11` | `37` (`148` B) | `g_RoomEruptionScript` (`0x801924C8`), `g_RoomScript` (`0x80192580`) |
+| [`room_m147_hospital.fxs`](fieldfx/room_m147_hospital.fxs) | `room_m147_hospital` | `1` | `5` | `19` (`76` B) | `g_RoomScript` (`0x80190EA0`) |
+| [`room_m153_hospital.fxs`](fieldfx/room_m153_hospital.fxs) | `room_m153_hospital` | `1` | `6` | `18` (`72` B) | `g_RoomEruptionScript` (`0x8019553C`) |
+| [`room_m154_hospital.fxs`](fieldfx/room_m154_hospital.fxs) | `room_m154_hospital` | `1` | `6` | `18` (`72` B) | `g_RoomEruptionScript` (`0x8019553C`) |
+| [`room_m167_sewer2.fxs`](fieldfx/room_m167_sewer2.fxs) | `room_m167_sewer2` | `1` | `2` | `4` (`16` B) | `g_RoomScript` (`0x80193208`) |
+| [`room_m168_sewer2.fxs`](fieldfx/room_m168_sewer2.fxs) | `room_m168_sewer2` | `1` | `2` | `4` (`16` B) | `g_RoomScript` (`0x80193208`) |
+| [`room_m169_sewer2.fxs`](fieldfx/room_m169_sewer2.fxs) | `room_m169_sewer2` | `1` | `2` | `4` (`16` B) | `g_RoomScript` (`0x80193208`) |
+| [`room_m173_sewer2.fxs`](fieldfx/room_m173_sewer2.fxs) | `room_m173_sewer2` | `1` | `2` | `4` (`16` B) | `g_RoomScript` (`0x80193208`) |
+| [`room_m174_sewer2.fxs`](fieldfx/room_m174_sewer2.fxs) | `room_m174_sewer2` | `2` | `17` | `83` (`332` B) | `g_RoomGlowOrbScript` (`0x80196CE0`), `g_RoomDropFieldScript` (`0x80196E4C`) |
+| [`room_m178_sewer2.fxs`](fieldfx/room_m178_sewer2.fxs) | `room_m178_sewer2` | `1` | `2` | `4` (`16` B) | `g_RoomScript` (`0x80193208`) |
+| [`room_m186_subway.fxs`](fieldfx/room_m186_subway.fxs) | `room_m186_subway` | `2` | `6` | `33` (`132` B) | `g_RoomScript` (`0x801941BC`), `g_RoomOrbitSetScript` (`0x80194230`) |
+| [`room_m187_subway.fxs`](fieldfx/room_m187_subway.fxs) | `room_m187_subway` | `1` | `4` | `29` (`116` B) | `g_RoomOrbitSetScript` (`0x8019000C`) |
+| [`room_m295_chrysler.fxs`](fieldfx/room_m295_chrysler.fxs) | `room_m295_chrysler` | `1` | `2` | `4` (`16` B) | `g_RoomScript` (`0x80193208`) |
+| [`room_m299_chrysler.fxs`](fieldfx/room_m299_chrysler.fxs) | `room_m299_chrysler` | `1` | `2` | `4` (`16` B) | `g_RoomScript` (`0x80193208`) |
+| [`room_m309_chrysler.fxs`](fieldfx/room_m309_chrysler.fxs) | `room_m309_chrysler` | `1` | `2` | `4` (`16` B) | `g_RoomScript` (`0x80193208`) |
+| [`room_m310_chrysler.fxs`](fieldfx/room_m310_chrysler.fxs) | `room_m310_chrysler` | `1` | `2` | `4` (`16` B) | `g_RoomScript` (`0x80193208`) |
+| [`room_m324_hospital.fxs`](fieldfx/room_m324_hospital.fxs) | `room_m324_hospital` | `1` | `5` | `19` (`76` B) | `g_RoomScript` (`0x80190EA0`) |
+| [`room_m327_hospital.fxs`](fieldfx/room_m327_hospital.fxs) | `room_m327_hospital` | `1` | `5` | `19` (`76` B) | `g_RoomScript` (`0x80190EA0`) |
+| [`room_m328_hospital.fxs`](fieldfx/room_m328_hospital.fxs) | `room_m328_hospital` | `1` | `6` | `18` (`72` B) | `g_RoomEruptionScript` (`0x8019205C`) |
+| [`room_m344_museum.fxs`](fieldfx/room_m344_museum.fxs) | `room_m344_museum` | `1` | `7` | `2` (`8` B) | `g_RoomScript` (`0x80192BE8`) |
+| [`room_m348_sewer.fxs`](fieldfx/room_m348_sewer.fxs) | `room_m348_sewer` | `1` | `13` | `48` (`192` B) | `g_RoomDropFieldScript` (`0x80192928`) |
+| [`room_m374_central_park.fxs`](fieldfx/room_m374_central_park.fxs) | `room_m374_central_park` | `1` | `7` | `2` (`8` B) | `g_RoomScript` (`0x80192BE8`) |
+| [`room_m383_chrysler.fxs`](fieldfx/room_m383_chrysler.fxs) | `room_m383_chrysler` | `2` | `17` | `83` (`332` B) | `g_RoomGlowOrbScript` (`0x80196CE0`), `g_RoomDropFieldScript` (`0x80196E4C`) |
+| [`room_m385_chrysler.fxs`](fieldfx/room_m385_chrysler.fxs) | `room_m385_chrysler` | `2` | `6` | `33` (`132` B) | `g_RoomScript` (`0x801941BC`), `g_RoomOrbitSetScript` (`0x80194230`) |
+| [`room_m388_chrysler.fxs`](fieldfx/room_m388_chrysler.fxs) | `room_m388_chrysler` | `2` | `6` | `33` (`132` B) | `g_RoomScript` (`0x801941BC`), `g_RoomOrbitSetScript` (`0x80194230`) |
+| [`room_m389_chrysler.fxs`](fieldfx/room_m389_chrysler.fxs) | `room_m389_chrysler` | `2` | `6` | `33` (`132` B) | `g_RoomScript` (`0x801941BC`), `g_RoomOrbitSetScript` (`0x80194230`) |
+| [`room_m391_chrysler.fxs`](fieldfx/room_m391_chrysler.fxs) | `room_m391_chrysler` | `1` | `2` | `14` (`56` B) | `g_RoomThreeParticleScript` (`0x8019437C`) |
+| [`room_m392_chrysler.fxs`](fieldfx/room_m392_chrysler.fxs) | `room_m392_chrysler` | `1` | `5` | `19` (`76` B) | `g_RoomScript` (`0x801944F4`) |
+| [`room_m393_chrysler.fxs`](fieldfx/room_m393_chrysler.fxs) | `room_m393_chrysler` | `2` | `7` | `33` (`132` B) | `g_RoomThreeParticleScript` (`0x80194688`), `g_RoomScript` (`0x80194740`) |
+| [`room_m394_chrysler.fxs`](fieldfx/room_m394_chrysler.fxs) | `room_m394_chrysler` | `1` | `2` | `14` (`56` B) | `g_RoomThreeParticleScript` (`0x8019437C`) |
+| [`room_m395_chrysler.fxs`](fieldfx/room_m395_chrysler.fxs) | `room_m395_chrysler` | `1` | `2` | `14` (`56` B) | `g_RoomThreeParticleScript` (`0x8019437C`) |
+| [`room_m396_chrysler.fxs`](fieldfx/room_m396_chrysler.fxs) | `room_m396_chrysler` | `2` | `7` | `33` (`132` B) | `g_RoomThreeParticleScript` (`0x80194688`), `g_RoomScript` (`0x80194740`) |
+| [`room_m399_chrysler.fxs`](fieldfx/room_m399_chrysler.fxs) | `room_m399_chrysler` | `1` | `2` | `14` (`56` B) | `g_RoomThreeParticleScript` (`0x80194208`) |
+| [`room_m401_chrysler.fxs`](fieldfx/room_m401_chrysler.fxs) | `room_m401_chrysler` | `2` | `7` | `33` (`132` B) | `g_RoomThreeParticleScript` (`0x8019535C`), `g_RoomScript` (`0x80195414`) |
+| [`room_m402_chrysler.fxs`](fieldfx/room_m402_chrysler.fxs) | `room_m402_chrysler` | `1` | `2` | `14` (`56` B) | `g_RoomThreeParticleScript` (`0x80194208`) |
+| [`scene_e02_chrysler.fxs`](fieldfx/scene_e02_chrysler.fxs) | `scene_e02_chrysler` | `1` | `6` | `18` (`72` B) | `g_RoomEruptionScript` (`0x801954EC`) |
+| [`scene_e04_chrysler.fxs`](fieldfx/scene_e04_chrysler.fxs) | `scene_e04_chrysler` | `1` | `6` | `18` (`72` B) | `g_RoomEruptionScript` (`0x80191FF8`) |
+| [`scene_e05_chrysler.fxs`](fieldfx/scene_e05_chrysler.fxs) | `scene_e05_chrysler` | `1` | `6` | `18` (`72` B) | `g_RoomEruptionScript` (`0x80191FF8`) |
+| [`scene_e08_chrysler.fxs`](fieldfx/scene_e08_chrysler.fxs) | `scene_e08_chrysler` | `4` | `23` | `101` (`404` B) | `g_RoomScript` (`0x801986C8`), `g_SceneE08OrbScript` (`0x8019877C`), `g_SceneE08SlotsScript` (`0x80198930`), `g_SceneE08LayeredSpriteScript` (`0x80198A64`) |
+| [`scene_e09_chrysler.fxs`](fieldfx/scene_e09_chrysler.fxs) | `scene_e09_chrysler` | `1` | `5` | `30` (`120` B) | `g_RoomScript` (`0x80194C78`) |
+| [`scene_e10_chrysler.fxs`](fieldfx/scene_e10_chrysler.fxs) | `scene_e10_chrysler` | `1` | `5` | `30` (`120` B) | `g_RoomScript` (`0x80194C78`) |
+| [`scene_e11_chrysler.fxs`](fieldfx/scene_e11_chrysler.fxs) | `scene_e11_chrysler` | `1` | `5` | `26` (`104` B) | `g_RoomScript` (`0x80191A70`) |
+| [`scene_e12_chrysler.fxs`](fieldfx/scene_e12_chrysler.fxs) | `scene_e12_chrysler` | `1` | `5` | `26` (`104` B) | `g_RoomScript` (`0x80191A70`) |
+| [`scene_e13_chrysler.fxs`](fieldfx/scene_e13_chrysler.fxs) | `scene_e13_chrysler` | `1` | `5` | `26` (`104` B) | `g_RoomScript` (`0x80191A70`) |
+| [`scene_e14_chrysler.fxs`](fieldfx/scene_e14_chrysler.fxs) | `scene_e14_chrysler` | `1` | `5` | `26` (`104` B) | `g_RoomScript` (`0x80190D88`) |
+
+---
+
+## Room Script Index (`scripts/rooms/`)
 
 | Script File | Room ID | Actors | Spawns | Binary Size | Dialogues | Sample Dialogue |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |

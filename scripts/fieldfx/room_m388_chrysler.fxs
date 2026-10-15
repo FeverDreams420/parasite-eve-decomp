@@ -1,0 +1,58 @@
+// Parasite Eve 1 - FieldFx VM Module `room_m388_chrysler`
+// Scripts: 2 | Total Words: 33 (132 bytes)
+// VRAM: 0x801941BC | Words: 4 (16 bytes)
+// Tables: init=g_RoomInitList, draw=g_RoomDrawList, update=g_RoomUpdateList, sizes=g_RoomSpawnLayout
+// Slots:
+//   [0] init=RoomLib_InitTwelveEffectPackets, draw=RoomLib_TwelveEffectNop3, update=RoomLib_UpdateTwelveElementTimer, size=0x30
+//   [1] init=RoomLib_InitTwelveElementEffect, draw=RoomLib_DrawTwelveElementEffect, update=RoomLib_TickTwelveElementCounters, size=0x120
+fieldfx_script g_RoomScript {
+    wait(13);
+    start_slot(0); // init=RoomLib_InitTwelveEffectPackets, draw=RoomLib_TwelveEffectNop3, update=RoomLib_UpdateTwelveElementTimer, size=0x30
+    start_slot(1); // init=RoomLib_InitTwelveElementEffect, draw=RoomLib_DrawTwelveElementEffect, update=RoomLib_TickTwelveElementCounters, size=0x120
+    halt;
+}
+
+// VRAM: 0x80194230 | Words: 29 (116 bytes)
+// Tables: init=g_RoomOrbitSetInitList, draw=g_RoomOrbitSetDrawList, update=g_RoomOrbitSetUpdateList, sizes=g_RoomOrbitSetSpawnLayout
+// Slots:
+//   [0] init=RoomEffect_OrbitSetInit, draw=RoomEffect_OrbitSetDraw, update=RoomEffect_OrbitSetUpdate, size=0x28
+//   [1] init=RoomEffect_InitOrbitParticles, draw=RoomEffect_DrawOrbitParticles, update=RoomEffect_UpdateOrbitParticles, size=0x8C
+//   [2] init=RoomEffect_InitOrbitBurst, draw=RoomEffect_DrawOrbitBurst, update=RoomEffect_UpdateOrbitBurst, size=0xDA
+//   [3] init=RoomEffect_InitOrbitSprite, draw=RoomEffect_DrawOrbitSprite, update=RoomEffect_UpdateOrbitSprite, size=0x18
+fieldfx_script g_RoomOrbitSetScript {
+    start_slot(0); // init=RoomEffect_OrbitSetInit, draw=RoomEffect_OrbitSetDraw, update=RoomEffect_OrbitSetUpdate, size=0x28
+    r0 = 0;
+@label_0002:
+    if (r0 == 20) goto @label_0007;
+    if (r0 == 21) goto @label_001C;
+@label_0004:
+    r0 += 1;
+    wait(0);
+    goto @label_0002;
+@label_0007:
+    r2 = vars[0];
+    if (r2 == 0) goto @label_000A;
+    start_slot(2); // init=RoomEffect_InitOrbitBurst, draw=RoomEffect_DrawOrbitBurst, update=RoomEffect_UpdateOrbitBurst, size=0xDA
+@label_000A:
+    start_slot(1); // init=RoomEffect_InitOrbitParticles, draw=RoomEffect_DrawOrbitParticles, update=RoomEffect_UpdateOrbitParticles, size=0x8C
+    wait(4);
+    start_slot(1); // init=RoomEffect_InitOrbitParticles, draw=RoomEffect_DrawOrbitParticles, update=RoomEffect_UpdateOrbitParticles, size=0x8C
+    r2 = vars[0];
+    if (r2 == 0) goto @label_001B;
+    wait(2);
+    r1 = 1;
+    start_slot(3); // init=RoomEffect_InitOrbitSprite, draw=RoomEffect_DrawOrbitSprite, update=RoomEffect_UpdateOrbitSprite, size=0x18
+    wait(8);
+    r1 = 0;
+    start_slot(3); // init=RoomEffect_InitOrbitSprite, draw=RoomEffect_DrawOrbitSprite, update=RoomEffect_UpdateOrbitSprite, size=0x18
+    wait(8);
+    r1 = 1;
+    start_slot(3); // init=RoomEffect_InitOrbitSprite, draw=RoomEffect_DrawOrbitSprite, update=RoomEffect_UpdateOrbitSprite, size=0x18
+    wait(8);
+    r1 = 0;
+    start_slot(3); // init=RoomEffect_InitOrbitSprite, draw=RoomEffect_DrawOrbitSprite, update=RoomEffect_UpdateOrbitSprite, size=0x18
+@label_001B:
+    goto @label_0004;
+@label_001C:
+    halt;
+}

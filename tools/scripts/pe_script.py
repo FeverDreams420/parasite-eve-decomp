@@ -21,8 +21,13 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from tools.pe_script.compiler import compile_task_block
-from tools.pe_script.decompiler import decompile_task_block, extract_room_from_pe_img
+from tools.pe_script.compiler import compile_fieldfx_module, compile_task_block
+from tools.pe_script.decompiler import (
+    decompile_fieldfx_module,
+    decompile_task_block,
+    extract_all_fieldfx_modules,
+    extract_room_from_pe_img,
+)
 from tools.pe_script.mapping import (
     ENUM_GROUPS,
     EXPR_OPS,
@@ -104,6 +109,29 @@ def format_mapping_markdown() -> str:
         lines.append(
             f"| `0x{op_id:02X}` (`{op_id}`) | `{spec.name}` | `{spec.c_symbol}` | `{sig}` | {spec.doc} |"
         )
+
+    lines.extend([
+        "",
+        "## 6. FieldFx VM Opcodes (`FieldFx_RunScript` in `src/main/fieldfx/object_script.c`)",
+        "",
+        "Each instruction is a 32-bit word `(op << 16) | (operand & 0xFFFF)`. After executing a non-halting instruction, `SCRIPT->pc++` runs, so relative branch offsets `(s8)(op & 0xFF)` target `target_pc = pc + rel + 1`.",
+        "",
+        "| Word / High 16-bit `op` | DSL Syntax | C Semantics (`FieldFx_RunScript`) |",
+        "| :--- | :--- | :--- |",
+        "| `0xFFFFFFFF` (`-1`) | `halt;` | `SCRIPT->halted = 1; stopped = 1;` |",
+        "| `0xFFFFFFFE` (`-2`) | `nop;` | No-op (`command = 0`) |",
+        "| `0xFFFFFFFD` (`-3`) | `free_all_slots;` | `FieldFx_FreeAllSlots()` |",
+        "| `0x0001` | `start_slot(slot_id);` | `FieldFx_StartSlot(obj, (u8)operand, sizes, init_handlers)` |",
+        "| `0x0002` | `wait(frames);` | `SCRIPT->wait = operand; stopped = 1;` |",
+        "| `0x0010..0x001F` | `rN = imm16;` | `SCRIPT->regs[op - 0x10] = (s16)operand;` |",
+        "| `0x0020..0x002F` | `rN += imm16;` | `SCRIPT->regs[op - 0x20] += (s16)operand;` |",
+        "| `0x0030..0x003F` | `rN -= imm16;` | `SCRIPT->regs[op - 0x30] -= (s16)operand;` |",
+        "| `0x0040..0x004F` | `rN = vars[idx];` | `SCRIPT->regs[op - 0x40] = SCRIPT->vars[(u16)operand];` |",
+        "| `0x0050..0x005F` | `vars[idx] = rN;` | `SCRIPT->vars[(u16)operand] = SCRIPT->regs[op - 0x50];` |",
+        "| `0x1000..0x1FFF` | `if (rN == imm16) goto @label;` | `if (SCRIPT->regs[(op >> 8) & 0xF] == (s16)operand) SCRIPT->pc += (s8)op;` |",
+        "| `0x2000..0x2FFF` | `if (rN != imm16) goto @label;` | `if (SCRIPT->regs[(op >> 8) & 0xF] != (s16)operand) SCRIPT->pc += (s8)op;` |",
+        "| `0x3000..0x3FFF` | `goto @label;` | `SCRIPT->pc += (s8)op;` |",
+    ])
     return "\n".join(lines) + "\n"
 
 
@@ -112,7 +140,9 @@ def cmd_decompile_all(args: argparse.Namespace) -> int:
     main_exe = Path(args.main_exe).read_bytes()
     out_dir = Path(args.output)
     rooms_dir = out_dir / "rooms"
+    fieldfx_dir = out_dir / "fieldfx"
     rooms_dir.mkdir(parents=True, exist_ok=True)
+    fieldfx_dir.mkdir(parents=True, exist_ok=True)
 
     valid_rooms = iter_valid_room_ids(main_exe)
     total_actors = 0
@@ -146,18 +176,61 @@ def cmd_decompile_all(args: argparse.Namespace) -> int:
             f"| [`room_{room_id:03d}.pes`](rooms/room_{room_id:03d}.pes) | `{room_id}` | `{count}` | `{spawn_cnt}` | `{len(task_block):,}` B | `{len(dialogues)}` | {first_dlg} |"
         )
 
+    # Export all 64 FieldFx modules (84 scripts across main_exe + 63 overlays)
+    fx_modules = extract_all_fieldfx_modules(REPO_ROOT)
+    fx_total_scripts = 0
+    fx_total_words = 0
+    fx_index_rows: list[str] = []
+
+    for mod_name, entries in fx_modules.items():
+        fxs_text = decompile_fieldfx_module(mod_name, entries)
+        if args.verify:
+            compiled = compile_fieldfx_module(fxs_text)
+            if len(compiled) != len(entries):
+                raise RuntimeError(f"FieldFx script count mismatch in {mod_name}")
+            for (c_name, c_words), entry in zip(compiled, entries):
+                if c_name != entry.name or c_words != entry.words:
+                    raise RuntimeError(f"FieldFx word mismatch in {mod_name}.{entry.name}")
+        fxs_file = fieldfx_dir / f"{mod_name}.fxs"
+        fxs_file.write_text(fxs_text, encoding="utf-8")
+
+        mod_words = sum(len(e.words) for e in entries)
+        fx_total_scripts += len(entries)
+        fx_total_words += mod_words
+        script_names = ", ".join(f"`{e.name}` (`0x{e.vram:08X}`)" for e in entries)
+        total_slots = sum(len(e.slots) for e in entries)
+        fx_index_rows.append(
+            f"| [`{mod_name}.fxs`](fieldfx/{mod_name}.fxs) | `{mod_name}` | `{len(entries)}` | `{total_slots}` | `{mod_words}` (`{mod_words * 4}` B) | {script_names} |"
+        )
+
     mapping_md = out_dir / "MAPPING.md"
     mapping_md.write_text(format_mapping_markdown(), encoding="utf-8")
 
     readme_lines = [
-        "# Parasite Eve 1 — Decompiled Room Scripts (`.pes`)",
+        "# Parasite Eve 1 — Decompiled Scripts (`.pes` & `.fxs`)",
         "",
+        "## 1. Scene VM (`Script_RunQueue`) — Room Scripts (`scripts/rooms/*.pes`)",
         f"- **Total valid rooms**: `{len(valid_rooms)}` (out of `{ROOM_TABLE_COUNT}` entries in `g_RoomSectorTable`)",
         f"- **Total actor scripts**: `{total_actors:,}`",
         f"- **Total binary script size**: `{total_bytes:,}` bytes (`100%` byte-matching round-trip)",
+        "",
+        "## 2. FieldFx VM (`FieldFx_RunScript`) — Effect Scripts (`scripts/fieldfx/*.fxs`)",
+        f"- **Total binary modules**: `{len(fx_modules)}` (`main_exe` + `{len(fx_modules) - 1}` room/scene overlays)",
+        f"- **Total FieldFx scripts**: `{fx_total_scripts}` (`8` global in `main.exe` + `{fx_total_scripts - 8}` in overlays)",
+        f"- **Total FieldFx bytecode size**: `{fx_total_words:,}` words (`{fx_total_words * 4:,}` bytes, `100%` byte-matching round-trip)",
         "- **Central Opcode & Variable Mapping**: [`MAPPING.md`](MAPPING.md)",
         "",
-        "## Room Script Index",
+        "---",
+        "",
+        "## FieldFx Script Index (`scripts/fieldfx/`)",
+        "",
+        "| Script File | Module | Scripts | Slots | Words (Bytes) | Script Symbols (VRAM) |",
+        "| :--- | :--- | :--- | :--- | :--- | :--- |",
+        *fx_index_rows,
+        "",
+        "---",
+        "",
+        "## Room Script Index (`scripts/rooms/`)",
         "",
         "| Script File | Room ID | Actors | Spawns | Binary Size | Dialogues | Sample Dialogue |",
         "| :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
@@ -167,9 +240,30 @@ def cmd_decompile_all(args: argparse.Namespace) -> int:
     (out_dir / "README.md").write_text("\n".join(readme_lines), encoding="utf-8")
 
     print(
-        f"Decompiled {len(valid_rooms)} rooms ({total_actors} actor scripts, "
-        f"{total_bytes:,} bytes) -> {out_dir}"
+        f"Decompiled {len(valid_rooms)} Scene VM rooms ({total_actors} actor scripts, "
+        f"{total_bytes:,} bytes) and {len(fx_modules)} FieldFx modules "
+        f"({fx_total_scripts} scripts, {fx_total_words * 4:,} bytes) -> {out_dir}"
     )
+    return 0
+
+
+def cmd_decompile_fieldfx(args: argparse.Namespace) -> int:
+    fx_modules = extract_all_fieldfx_modules(REPO_ROOT)
+    if args.module:
+        if args.module not in fx_modules:
+            raise KeyError(f"Unknown FieldFx module {args.module!r}. Available: {sorted(fx_modules)}")
+        text = decompile_fieldfx_module(args.module, fx_modules[args.module])
+        if args.output:
+            Path(args.output).write_text(text, encoding="utf-8")
+        else:
+            sys.stdout.write(text)
+        return 0
+    out_dir = Path(args.output or (DEFAULT_SCRIPTS_DIR / "fieldfx"))
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for mod_name, entries in fx_modules.items():
+        text = decompile_fieldfx_module(mod_name, entries)
+        (out_dir / f"{mod_name}.fxs").write_text(text, encoding="utf-8")
+    print(f"Exported {len(fx_modules)} FieldFx module files -> {out_dir}")
     return 0
 
 
@@ -229,7 +323,7 @@ def cmd_verify_all(args: argparse.Namespace) -> int:
     total_rooms = 0
     total_actors = 0
     total_bytes = 0
-    failures: list[tuple[int, str]] = []
+    failures: list[tuple[str, str]] = []
 
     for room_id in iter_valid_room_ids(main_exe):
         total_rooms += 1
@@ -262,20 +356,37 @@ def cmd_verify_all(args: argparse.Namespace) -> int:
                         else:
                             diff_msg = f"actor_{a_i} word len {len(w1)} != {len(w2)}"
                         break
-                failures.append((room_id, diff_msg))
+                failures.append((f"room_{room_id:03d}", diff_msg))
                 print(f"[FAIL] Room {room_id:03d}: {diff_msg}")
         except Exception as exc:
-            failures.append((room_id, str(exc)))
+            failures.append((f"room_{room_id:03d}", str(exc)))
             print(f"[ERROR] Room {room_id:03d}: {exc}")
 
+    fx_modules = extract_all_fieldfx_modules(REPO_ROOT)
+    fx_total_scripts = 0
+    fx_total_words = 0
+    for mod_name, entries in fx_modules.items():
+        try:
+            fxs_text = decompile_fieldfx_module(mod_name, entries)
+            compiled = compile_fieldfx_module(fxs_text)
+            for (c_name, c_words), entry in zip(compiled, entries):
+                fx_total_scripts += 1
+                fx_total_words += len(entry.words)
+                if c_name != entry.name or c_words != entry.words:
+                    failures.append((f"fieldfx:{mod_name}.{entry.name}", "word mismatch"))
+                    print(f"[FAIL] FieldFx {mod_name}.{entry.name}: word mismatch")
+        except Exception as exc:
+            failures.append((f"fieldfx:{mod_name}", str(exc)))
+            print(f"[ERROR] FieldFx {mod_name}: {exc}")
+
     print(
-        f"\nVerified {total_rooms} rooms, {total_actors} actor scripts, "
-        f"{total_bytes:,} bytes total."
+        f"\nVerified {total_rooms} Scene VM rooms ({total_actors} actor scripts, {total_bytes:,} bytes) "
+        f"and {len(fx_modules)} FieldFx modules ({fx_total_scripts} scripts, {fx_total_words * 4:,} bytes)."
     )
     if failures:
-        print(f"FAILED: {len(failures)} room(s) had mismatches.")
+        print(f"FAILED: {len(failures)} target(s) had mismatches.")
         return 1
-    print("SUCCESS: 100% byte-for-byte match across all rooms and actor scripts!")
+    print("SUCCESS: 100% byte-for-byte match across all Scene VM and FieldFx VM scripts!")
     return 0
 
 
@@ -285,16 +396,21 @@ def cmd_dump_mapping(args: argparse.Namespace) -> int:
 
 
 def main() -> int:
-    p = argparse.ArgumentParser(description="Parasite Eve 1 Script Decompiler & Compiler (.pes)")
+    p = argparse.ArgumentParser(description="Parasite Eve 1 Script Decompiler & Compiler (.pes / .fxs)")
     sub = p.add_subparsers(dest="cmd", required=True)
 
-    p_da = sub.add_parser("decompile-all", help="Decompile all 414 rooms from PE.IMG into a directory")
+    p_da = sub.add_parser("decompile-all", help="Decompile all 414 Scene VM rooms and all 64 FieldFx modules into scripts/")
     p_da.add_argument("-o", "--output", default=str(DEFAULT_SCRIPTS_DIR), help="Output directory (default: scripts/)")
     p_da.add_argument("--pe-img", default=str(DEFAULT_PE_IMG), help="Path to PE.IMG")
     p_da.add_argument("--main-exe", default=str(DEFAULT_MAIN_EXE), help="Path to main.exe")
     p_da.add_argument("--no-dialogues", action="store_true", help="Omit dialogue comments")
     p_da.add_argument("--verify", action="store_true", help="Verify 100%% byte match while exporting")
     p_da.set_defaults(func=cmd_decompile_all)
+
+    p_dfx = sub.add_parser("decompile-fieldfx", help="Decompile FieldFx VM scripts (.fxs)")
+    p_dfx.add_argument("module", nargs="?", help="Optional module name (e.g. main_exe, scene_e08_chrysler)")
+    p_dfx.add_argument("-o", "--output", help="Output file or directory")
+    p_dfx.set_defaults(func=cmd_decompile_fieldfx)
 
     p_dr = sub.add_parser("decompile-room", help="Decompile a room from PE.IMG")
     p_dr.add_argument("room_id", type=int, help="Room ID (0..449)")
@@ -320,7 +436,7 @@ def main() -> int:
     p_vr.add_argument("--main-exe", default=str(DEFAULT_MAIN_EXE), help="Path to main.exe")
     p_vr.set_defaults(func=cmd_verify_room)
 
-    p_va = sub.add_parser("verify-all", help="Verify round-trip byte match for all 414 rooms")
+    p_va = sub.add_parser("verify-all", help="Verify round-trip byte match for all 414 rooms and 84 FieldFx scripts")
     p_va.add_argument("--pe-img", default=str(DEFAULT_PE_IMG), help="Path to PE.IMG")
     p_va.add_argument("--main-exe", default=str(DEFAULT_MAIN_EXE), help="Path to main.exe")
     p_va.set_defaults(func=cmd_verify_all)
@@ -334,3 +450,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+

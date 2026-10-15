@@ -1,0 +1,50 @@
+// Parasite Eve 1 - FieldFx VM Module `room_m080_central_park`
+// Scripts: 1 | Total Words: 30 (120 bytes)
+// VRAM: 0x80193F90 | Words: 30 (120 bytes)
+// Tables: init=g_RoomInitList, draw=g_RoomDrawList, update=g_RoomUpdateList, sizes=g_RoomSpawnLayout
+// Slots:
+//   [0] init=RoomEffect_MotionParticlesInit, draw=RoomEffect_MotionParticlesNop, update=RoomEffect_MotionParticlesTick, size=0x70
+//   [1] init=RoomEffect_MotionParticlesAnchor, draw=RoomEffect_DrawAnchoredSpriteQuad, update=RoomEffect_StepSpriteQuad, size=0x14
+//   [2] init=RoomEffect_InitSpritePair, draw=RoomEffect_DrawAnchoredSpritePair, update=RoomEffect_StepSpritePair, size=0x12C
+//   [3] init=RoomEffect_SeedMotionParticles, draw=RoomEffect_DrawMotionParticles, update=RoomEffect_UpdateParticleMotion, size=0x184
+//   [4] init=RoomEffect_InitParticleRenderPair, draw=RoomEffect_DrawParticleRenderPair, update=RoomEffect_UpdateParticleRenderPair, size=0xE0
+fieldfx_script g_RoomScript {
+    r0 = 4096;
+    vars[0] = r0;
+    r0 = 400;
+    vars[1] = r0;
+    start_slot(0); // init=RoomEffect_MotionParticlesInit, draw=RoomEffect_MotionParticlesNop, update=RoomEffect_MotionParticlesTick, size=0x70
+    r0 = 0;
+@label_0006:
+    if (r0 == 0) goto @label_0010;
+    if (r0 == 16) goto @label_0014;
+    if (r0 == 14) goto @label_0010;
+    if (r0 == 42) goto @label_0012;
+    if (r0 == 46) goto @label_001A;
+    if (r0 == 81) goto @label_0017;
+    if (r0 == 90) goto @label_001D;
+@label_000D:
+    r0 += 1;
+    wait(0);
+    goto @label_0006;
+@label_0010:
+    start_slot(1); // init=RoomEffect_MotionParticlesAnchor, draw=RoomEffect_DrawAnchoredSpriteQuad, update=RoomEffect_StepSpriteQuad, size=0x14
+    goto @label_000D;
+@label_0012:
+    start_slot(2); // init=RoomEffect_InitSpritePair, draw=RoomEffect_DrawAnchoredSpritePair, update=RoomEffect_StepSpritePair, size=0x12C
+    goto @label_000D;
+@label_0014:
+    r1 = 0;
+    start_slot(3); // init=RoomEffect_SeedMotionParticles, draw=RoomEffect_DrawMotionParticles, update=RoomEffect_UpdateParticleMotion, size=0x184
+    goto @label_000D;
+@label_0017:
+    r1 = 1;
+    start_slot(3); // init=RoomEffect_SeedMotionParticles, draw=RoomEffect_DrawMotionParticles, update=RoomEffect_UpdateParticleMotion, size=0x184
+    goto @label_000D;
+@label_001A:
+    r1 = 0;
+    start_slot(4); // init=RoomEffect_InitParticleRenderPair, draw=RoomEffect_DrawParticleRenderPair, update=RoomEffect_UpdateParticleRenderPair, size=0xE0
+    goto @label_000D;
+@label_001D:
+    halt;
+}
