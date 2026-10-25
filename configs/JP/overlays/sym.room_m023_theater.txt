@@ -1,0 +1,14 @@
+g_RoomScriptRecord__room_m023_theater = 0x80190758;
+RoomLib_SetTaskVar0__room_m023_theater = 0x80190644; // type:func
+RoomM023_DriftPulseCallback = 0x8018F004; // type:func
+RoomM023_ScatterEmitter = 0x8018F3C8; // type:func
+RoomM023_JointGlow = 0x8018F710; // type:func
+RoomM023_JointBeacon = 0x8018FC14; // type:func
+g_RoomM023Effects = 0x80190720;
+g_RoomM023SectionHeader = 0x8018EFE8;
+g_RoomM023_D_801981F8 = 0x801981F8;
+g_RoomM023JointAnchor = 0x8018EFF4;
+g_RoomM023RingBandColor = 0x8018EFFC;
+g_RoomM023StarFanColor = 0x8018F000;
+g_RoomM023BeaconColorTrack = 0x801906F0;
+g_RoomM023BeaconModel = 0x80190760;

@@ -1,0 +1,112 @@
+SECTIONS
+{
+    HIDDEN(__romPos = 0);
+    room_m082_central_park_ROM_START = __romPos;
+    room_m082_central_park_VRAM = ADDR(.room_m082_central_park);
+    .room_m082_central_park (OVERLAY_WINDOW_ROOM + 0x0) : AT(room_m082_central_park_ROM_START) SUBALIGN(4)
+    {
+        FILL(0x00000000);
+        room_m082_central_park_RODATA_START = .;
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/room_m082_central_park.rodata.s.o(.rodata);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles.c.o(.rodata);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles_2.c.o(.rodata);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/actor_classes.c.o(.rodata);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/RoomLib_HandlerCArgsData_80192FD4.rodata.s.o(.rodata);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_plant_script.c.o(.rodata);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_spawn.c.o(.rodata);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_register_draw_list.c.o(.rodata);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_register_tables_gated.c.o(.rodata);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_close_target.c.o(.rodata);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_nop6.c.o(.rodata);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_nop0.c.o(.rodata);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles_3.c.o(.rodata);
+        . = ALIGN(., 4);
+        room_m082_central_park_RODATA_END = .;
+        room_m082_central_park_RODATA_SIZE = ABSOLUTE(room_m082_central_park_RODATA_END - room_m082_central_park_RODATA_START);
+        room_m082_central_park_TEXT_START = .;
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_plant_script.c.o(.text);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_spawn.c.o(.text);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_register_draw_list.c.o(.text);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_register_tables_gated.c.o(.text);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_close_target.c.o(.text);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_nop6.c.o(.text);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_nop0.c.o(.text);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles.c.o(.text);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles_2.c.o(.text);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles_3.c.o(.text);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/actor_classes.c.o(.text);
+        . = ALIGN(., 4);
+        room_m082_central_park_TEXT_END = .;
+        room_m082_central_park_TEXT_SIZE = ABSOLUTE(room_m082_central_park_TEXT_END - room_m082_central_park_TEXT_START);
+        room_m082_central_park_DATA_START = .;
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/room_m082_central_park.rodata.s.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles.c.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles_2.c.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/actor_classes.c.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/RoomLib_HandlerCArgsData_80192FD4.rodata.s.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_plant_script.c.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_spawn.c.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_register_draw_list.c.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_register_tables_gated.c.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_close_target.c.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_nop6.c.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_nop0.c.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles_3.c.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80193F20.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/RoomLib_TableA_8018F23C.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80193F50.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80193F68.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80193F74.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80193F90.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80194008.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/actor_class_table.c.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_801940B8.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_801940BC.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_801940C0.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_801940C8.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80194370.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80194618.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_8019461C.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80194620.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80194628.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_8019462C.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80194630.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80194638.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_8019463C.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80194640.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_80194648.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_8019464C.data.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/room_m082_central_park/D_80194650.s.o(.data);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/D_801C01F0.data.s.o(.data);
+        . = ALIGN(., 4);
+        room_m082_central_park_DATA_END = .;
+        room_m082_central_park_DATA_SIZE = ABSOLUTE(room_m082_central_park_DATA_END - room_m082_central_park_DATA_START);
+        room_m082_central_park_BSS_START = .;
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/room_m082_central_park.rodata.s.o(.bss);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles.c.o(.bss);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles_2.c.o(.bss);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/actor_classes.c.o(.bss);
+        build/JP/overlays/room_m082_central_park/asm/JP/overlays/room_m082_central_park/data/RoomLib_HandlerCArgsData_80192FD4.rodata.s.o(.bss);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_plant_script.c.o(.bss);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_spawn.c.o(.bss);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_register_draw_list.c.o(.bss);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_register_tables_gated.c.o(.bss);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_close_target.c.o(.bss);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_nop6.c.o(.bss);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/class_nop0.c.o(.bss);
+        build/JP/overlays/room_m082_central_park/src/jp/overlays/room_lib/motion_particles_3.c.o(.bss);
+        . = ALIGN(., 4);
+        room_m082_central_park_BSS_END = .;
+        room_m082_central_park_BSS_SIZE = ABSOLUTE(room_m082_central_park_BSS_END - room_m082_central_park_BSS_START);
+    }
+    __romPos += SIZEOF(.room_m082_central_park);
+    __romPos = ALIGN(__romPos, 4);
+    . = ALIGN(., 4);
+    room_m082_central_park_ROM_END = __romPos;
+    room_m082_central_park_VRAM_END = .;
+
+    /DISCARD/ :
+    {
+        *(*);
+    }
+}

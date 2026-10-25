@@ -46,10 +46,10 @@ render/mesh_list,asm,5244
 render/frame_update,asm,2620
 asset/tim_textures,c,1444
 asset/unload_table,c,484
-scene/room_load,asm,9152
+scene/room_load,c,9152
 cdrom/track_read,c,3700
 cdrom/scene_assets,c,3464
-pm/process,asm,4600
+pm/process,c,4600
 render/wireframe,c,2292
 draw/gpu_regs,asm,92
 draw/prim_queue,asm,100

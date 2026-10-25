@@ -1,0 +1,13 @@
+RoomLib_WindowClassNop0 = 0x8018F054; // type:func
+RoomLib_InitWindowClass = 0x8018F05C; // type:func
+RoomLib_ConfigureWindowClass = 0x8018F0D0; // type:func
+RoomLib_WindowClassNop3 = 0x8018F248; // type:func
+RoomLib_UpdateWindowClass = 0x8018F250; // type:func
+RoomLib_ArmWindowClass = 0x8018F2BC; // type:func
+RoomLib_WindowHandler = 0x8018F320; // type:func
+RoomLib_WindowArrived = 0x8018FD14; // type:func
+RoomLib_ReleaseWindowClass = 0x8018FD5C; // type:func
+RoomLib_WindowClassNop6 = 0x8018FDD4; // type:func
+g_RoomM063SectionHeader = 0x8018EFE8;
+g_RoomM063_D_8018FDF8 = 0x8018FDF8;
+g_RoomClassTable__room_m063_central_park = 0x8018FDDC; // size:0x1C allow_addend:true

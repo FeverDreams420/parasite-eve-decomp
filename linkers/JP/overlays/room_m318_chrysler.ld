@@ -1,0 +1,114 @@
+SECTIONS
+{
+    HIDDEN(__romPos = 0);
+    room_m318_chrysler_ROM_START = __romPos;
+    room_m318_chrysler_VRAM = ADDR(.room_m318_chrysler);
+    .room_m318_chrysler (OVERLAY_WINDOW_ROOM + 0x0) : AT(room_m318_chrysler_ROM_START) SUBALIGN(4)
+    {
+        FILL(0x00000000);
+        room_m318_chrysler_RODATA_START = .;
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/room_m318_chrysler.rodata.s.o(.rodata);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_lib/actor_classes.c.o(.rodata);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/RoomLib_HandlerCArgsData_80191614.rodata.s.o(.rodata);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_m318_chrysler/m318.c.o(.rodata);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_lib/script_arg.c.o(.rodata);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_m318_chrysler/m318_player_gate.c.o(.rodata);
+        . = ALIGN(., 4);
+        room_m318_chrysler_RODATA_END = .;
+        room_m318_chrysler_RODATA_SIZE = ABSOLUTE(room_m318_chrysler_RODATA_END - room_m318_chrysler_RODATA_START);
+        room_m318_chrysler_TEXT_START = .;
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_lib/actor_classes.c.o(.text);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_m318_chrysler/m318.c.o(.text);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_lib/script_arg.c.o(.text);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_m318_chrysler/m318_player_gate.c.o(.text);
+        . = ALIGN(., 4);
+        room_m318_chrysler_TEXT_END = .;
+        room_m318_chrysler_TEXT_SIZE = ABSOLUTE(room_m318_chrysler_TEXT_END - room_m318_chrysler_TEXT_START);
+        room_m318_chrysler_DATA_START = .;
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/room_m318_chrysler.rodata.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_lib/actor_classes.c.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/RoomLib_HandlerCArgsData_80191614.rodata.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_m318_chrysler/m318.c.o(.data);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_lib/script_arg.c.o(.data);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_m318_chrysler/m318_player_gate.c.o(.data);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_lib/actor_class_table.c.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199444.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199464.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_8019948C.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801994BC.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801994EC.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199524.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199548.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199580.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801995B8.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801995BC.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801995DC.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801995FC.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199624.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_8019965C.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199674.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_8019969C.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801996D4.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801996EC.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_8019970C.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199744.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199770.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199798.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801997C0.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801997F8.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_8019980C.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199844.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199868.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199890.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801998B8.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801998F0.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801998F4.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801998F8.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801998FC.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199900.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199904.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199908.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_8019990C.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199910.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199914.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199918.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_8019991C.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199920.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199924.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199928.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/RoomSlotA_80199294.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199930.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199934.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/g_RoomM318ScriptArg2.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_8019993C.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_80199940.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/room_m318_chrysler/D_80199944.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801C01E0.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/room_m318_chrysler/D_801C01F8.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/D_801EB1B8.data.s.o(.data);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/room_m318_chrysler/D_801EB230.s.o(.data);
+        . = ALIGN(., 4);
+        room_m318_chrysler_DATA_END = .;
+        room_m318_chrysler_DATA_SIZE = ABSOLUTE(room_m318_chrysler_DATA_END - room_m318_chrysler_DATA_START);
+        room_m318_chrysler_BSS_START = .;
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/room_m318_chrysler.rodata.s.o(.bss);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_lib/actor_classes.c.o(.bss);
+        build/JP/overlays/room_m318_chrysler/asm/JP/overlays/room_m318_chrysler/data/RoomLib_HandlerCArgsData_80191614.rodata.s.o(.bss);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_m318_chrysler/m318.c.o(.bss);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_lib/script_arg.c.o(.bss);
+        build/JP/overlays/room_m318_chrysler/src/jp/overlays/room_m318_chrysler/m318_player_gate.c.o(.bss);
+        . = ALIGN(., 4);
+        room_m318_chrysler_BSS_END = .;
+        room_m318_chrysler_BSS_SIZE = ABSOLUTE(room_m318_chrysler_BSS_END - room_m318_chrysler_BSS_START);
+    }
+    __romPos += SIZEOF(.room_m318_chrysler);
+    __romPos = ALIGN(__romPos, 4);
+    . = ALIGN(., 4);
+    room_m318_chrysler_ROM_END = __romPos;
+    room_m318_chrysler_VRAM_END = .;
+
+    /DISCARD/ :
+    {
+        *(*);
+    }
+}

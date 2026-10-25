@@ -8,6 +8,7 @@ Usage: us_jp_diff.py <us main.exe> <jp SLPS_012.30> <nm -S -n output> <out.csv>
 """
 import struct, sys, csv, collections
 
+CODE2 = (0x800C22F8, 0x800E0060)      # field-effect code (fieldfx/*) after the data blocks
 DATA_START = 0x80094528     # USA: file offset 0x84D28 (.data of psyq/libc/sprintf)
 
 
@@ -35,7 +36,7 @@ def main():
     for line in open(nm):
         a, s, name = line.split()
         addr = int(a, 16); size = int(s, 16)
-        if size < 8 or addr < base or addr >= DATA_START: continue   # nm lists data labels as T too
+        if size < 8 or addr < base or (addr >= DATA_START and not CODE2[0] <= addr < CODE2[1]): continue   # nm lists data labels as T too
         size &= ~3
         o = addr - base
         ub = U[0x800 + o:0x800 + o + size]; jb = J[0x800 + o:0x800 + o + size]

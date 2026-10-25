@@ -1,0 +1,16 @@
+g_RoomM349FlareY = 0x80190196;
+g_RoomM349FlareZ = 0x80190198;
+g_RoomM349FlareRadius = 0x8019019C;
+g_RoomM349FlarePeriod = 0x801901A0;
+g_RoomM349FlareLastFrame = 0x801901A4;
+RoomM349_FlareSparkCallback = 0x8018F010; // type:func
+RoomM349_FlareRing = 0x8018F7C4; // type:func
+RoomM349_SetFlareParams = 0x801900D0; // type:func
+g_RoomM349FlareEffects = 0x8019015C;
+g_RoomM349FlareParams = 0x80190194;
+g_RoomM349SectionHeader = 0x8018EFE8;
+g_RoomM349_D_801C01E0 = 0x801C01E0;
+g_RoomM349SparkRotationBase = 0x8018EFF4;
+g_RoomM349FlareColor = 0x8018EFFC;
+g_RoomM349JointGlowAnchorNegY = 0x8018F000;
+g_RoomM349JointGlowAnchorPosY = 0x8018F008;

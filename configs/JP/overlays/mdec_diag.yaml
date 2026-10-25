@@ -1,0 +1,110 @@
+# vram: every internal jal resolves at this base; this is the linked PSY-Q
+# libpress/BUILD/VLC fragment, not a room-slot block.
+name: mdec_diag.bin
+sha1: 23aae29671df8bd69230db93f252e081d33f188d
+options:
+  basename: mdec_diag
+  target_path: original/JP/overlays/sys_reset.bin
+  base_path: ../../..
+  platform: psx
+  compiler: GCC
+  asm_path: asm/JP/overlays/mdec_diag
+  src_path: src/jp/overlays/mdec_diag
+  build_path: build/JP/overlays/mdec_diag
+  ld_script_path: linkers/JP/overlays/mdec_diag.ld
+  undefined_funcs_auto_path: linkers/JP/overlays/undefined_funcs_auto.mdec_diag.txt
+  symbol_addrs_path:
+    - configs/JP/overlays/sym.mdec_diag.txt
+    - configs/JP/sym.main.txt
+  undefined_syms_auto_path: linkers/JP/overlays/undefined_syms_auto.mdec_diag.txt
+  find_file_boundaries: True
+  disassemble_all: True
+  asm_function_macro: glabel
+  asm_jtbl_label_macro: jlabel
+  asm_data_macro: dlabel
+  generate_asm_macros_files: False
+  section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
+  subalign: 4
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+segments:
+  - name: mdec_diag_diagnostics
+    type: code
+    start: 0x0
+    vram: 0x8010B7B8
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0x0, data, mdec_diag_diagnostics]
+  - name: mdec_diag_expand
+    type: code
+    start: 0x54
+    vram: 0x8010B80C
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0x54, c, vlc_build]
+  - name: mdec_diag_decoder_padding
+    type: code
+    start: 0x138
+    vram: 0x8010B8F0
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0x138, data, mdec_diag_decoder_padding]
+  - name: mdec_diag_mdec
+    type: code
+    start: 0x144
+    vram: 0x8010B8FC
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0x144, c, decdct]
+      - [0x610, c, mdec_wait]
+      - [0x738, c, mdec_status]
+  - name: mdec_diag_vlc_padding
+    type: code
+    start: 0x7CC
+    vram: 0x8010BF84
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0x7CC, data, mdec_diag_vlc_padding]
+  - name: mdec_diag_vlc
+    type: code
+    start: 0x7D4
+    vram: 0x8010BF8C
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0x7D4, c, vlc]
+  - name: mdec_diag_vlc_c_padding
+    type: code
+    start: 0xB68
+    vram: 0x8010C320
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0xB68, data, mdec_diag_vlc_c_padding]
+  - name: mdec_diag_vlc_c
+    type: code
+    start: 0xB74
+    vram: 0x8010C32C
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0xB74, c, vlc_c]
+      - [0xF04, data, mdec_diag_tables]
+  - [0x13000]
+# source slice: scanner, extended through decoder code/tables to sector 965
+# extract locally with: dd if=disc/extracted/PE.IMG of=original/JP/overlays/sys_reset.bin bs=2048 skip=926 count=38

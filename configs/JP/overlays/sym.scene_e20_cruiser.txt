@@ -1,0 +1,7 @@
+
+g_SceneE20FlareStreakColor = 0x8018EFF4;
+g_SceneE20FlareGlowColor = 0x8018EFF8;
+g_SceneE20OrbBeamColor = 0x8018EFFC;
+g_SceneE20OrbEdgeColor = 0x8018F000;
+g_SceneE20OrbFlashColorOdd = 0x8018F004;
+g_SceneE20OrbFlashColorEven = 0x8018F008;

@@ -1,0 +1,46 @@
+name: fx_field.bin
+sha1: ef162b4bd9a6a68d90460b8ad5c64c524f902ab1
+options:
+  basename: fx_field
+  target_path: original/JP/overlays/fx_field.bin
+  base_path: ../../..
+  platform: psx
+  compiler: GCC
+  asm_path: asm/JP/overlays/fx_field
+  src_path: src/jp/overlays/fx_field
+  build_path: build/JP/overlays/fx_field
+  ld_script_path: linkers/JP/overlays/fx_field.ld
+  undefined_funcs_auto_path: linkers/JP/overlays/undefined_funcs_auto.fx_field.txt
+  undefined_syms_auto_path: linkers/JP/overlays/undefined_syms_auto.fx_field.txt
+  symbol_addrs_path:
+    - configs/JP/overlays/sym.fx_field.txt
+    - configs/JP/sym.main.txt
+  find_file_boundaries: True
+  disassemble_all: True
+  asm_function_macro: glabel
+  asm_jtbl_label_macro: jlabel
+  asm_data_macro: dlabel
+  generate_asm_macros_files: False
+  section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
+  subalign: 4
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+segments:
+  - name: fx_field
+    type: code
+    start: 0x0
+    vram: 0x8018EFE8
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      # Header words and the trailing state/parameter table are data, not code.
+      - [0x0, rodata, fx_field_header]
+      - [0xC, .rodata, ../room_lib/orbit_flare]
+      - [0x1C, c, ../room_lib/orbit_flare]
+      - [0xC6C, c, ../room_lib/script_args]
+      - {start: 0xC90, type: data, name: fx_field_data, linker_section_order: .text, linker_section: .code_data}
+  - [0x1000]
+# extract locally with: dd if=disc/extracted/PE.IMG of=original/JP/overlays/fx_field.bin bs=2048 skip=10990 count=2

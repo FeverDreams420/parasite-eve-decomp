@@ -22,6 +22,7 @@ math/fixed_round
 math/sqrt_approx
 menu/input_queue
 menu/item_use_panel
+pm/process
 psyq/libapi/a07
 psyq/libapi/a08
 psyq/libapi/a09
@@ -232,6 +233,7 @@ render/font
 render/font_load
 render/mesh_entry
 render/wireframe
+scene/room_load
 script/actor_opcodes
 script/node_actions
 script/node_pool

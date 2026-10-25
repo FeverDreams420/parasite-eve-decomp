@@ -31,7 +31,7 @@ ends = [e[0] for e in ent[1:]] + [END]
 def vram(o): return BASE + o - 0x800
 tus = []                                   # candidate C TUs
 for (o, t, n), e in zip(ent, ends):
-    if t != "c" or not (TEXT0 <= o < DATA0): continue
+    if t != "c" or not (TEXT0 <= o < DATA0 or 0xB2AF8 <= o < 0xD0860): continue
     a, b = vram(o), vram(e)
     if any(a <= d < b for d in different) or n in data_names: continue
     fm = [(f, j) for f, j in mapped if a <= f < b]

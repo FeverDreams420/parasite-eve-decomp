@@ -2,6 +2,7 @@
 
 VERSION    ?= USA
 BASENAME   := main
+export PE_VERSION := $(VERSION)
 TARGET_SHA := 452fb033f2eaa4b18aa20a5bca60b8125af3a37b
 ifeq ($(VERSION),JP)
 TARGET_SHA := 411bd943982140a9772ff23f90a2587e2724cac8
@@ -22,6 +23,9 @@ TARGET_BIN := assets/$(VERSION)/$(BASENAME).exe
 PE_IMG     := disc/extracted/PE.IMG
 PE_IMG_SHA := 146c0ce7308bf9fdc2ba5a84230e198db0663f3b
 PE_IMG_OUT := $(BUILD)/PE.IMG
+ifeq ($(VERSION),JP)
+PE_IMG     := disc/jp/extracted/PE.IMG
+endif
 OVERLAY    ?= fx_field
 OVERLAY_CONFIG_DIR ?= configs/$(VERSION)/overlays
 OVERLAY_CONFIGS = $(wildcard $(OVERLAY_CONFIG_DIR)/*.yaml)

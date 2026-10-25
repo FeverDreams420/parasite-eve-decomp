@@ -28,9 +28,11 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-TABLE = ROOT / "linkers" / "USA" / "overlay_windows.txt"
-MAIN_CONFIG = ROOT / "configs" / "USA" / "main.yaml"
-OVERLAY_CONFIGS = ROOT / "configs" / "USA" / "overlays"
+import os
+VERSION = os.environ.get("PE_VERSION", "USA")        # the Makefile exports VERSION
+TABLE = ROOT / "linkers" / VERSION / "overlay_windows.txt"
+MAIN_CONFIG = ROOT / "configs" / VERSION / "main.yaml"
+OVERLAY_CONFIGS = ROOT / "configs" / VERSION / "overlays"
 BASE_SYMBOL = "overlay_windows_VRAM"
 
 ENTRY_RE = re.compile(
@@ -102,6 +104,10 @@ def segment_fields(config_text: str, segment: str) -> dict[str, str]:
 def block_bounds(main_config: Path = MAIN_CONFIG) -> tuple[int, int]:
     """Retail [start, end) of the window block from main's splat config."""
     text = main_config.read_text()
+    if "name: overlay_windows" not in text:      # JP: main is one asm blob; the block is pinned by symbols
+        sy = (ROOT / "linkers" / VERSION / "undefined_syms_manual.txt").read_text()
+        return (int(re.search(r"overlay_windows_VRAM = (0x[0-9A-Fa-f]+);", sy).group(1), 16),
+                int(re.search(r"overlay_windows_VRAM_END = (0x[0-9A-Fa-f]+);", sy).group(1), 16))
     fields = segment_fields(text, "overlay_windows")
     start, vram = int(fields["start"], 0), int(fields["vram"], 0)
     ends = re.findall(r"^  - \[(0x[0-9A-Fa-f]+)\]\s*$", text, re.M)
@@ -141,7 +147,7 @@ def main_labels(sym_file: Path) -> set[int]:
 
 
 def check(table: WindowTable, configs: Path = OVERLAY_CONFIGS,
-          sym_file: Path = ROOT / "configs" / "USA" / "sym.main.txt") -> list[str]:
+          sym_file: Path = ROOT / "configs" / VERSION / "sym.main.txt") -> list[str]:
     """Problems: overlay segments outside the block, windows that are neither
     an overlay's load address nor a buffer main names."""
     problems = []

@@ -1,0 +1,110 @@
+SECTIONS
+{
+    HIDDEN(__romPos = 0);
+    room_m392_chrysler_ROM_START = __romPos;
+    room_m392_chrysler_VRAM = ADDR(.room_m392_chrysler);
+    .room_m392_chrysler (OVERLAY_WINDOW_ROOM + 0x0) : AT(room_m392_chrysler_ROM_START) SUBALIGN(4)
+    {
+        FILL(0x00000000);
+        room_m392_chrysler_RODATA_START = .;
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/room_m392_chrysler.rodata.s.o(.rodata);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/falling_sprite_burst.c.o(.rodata);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/actor_classes.c.o(.rodata);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/line_burst.c.o(.rodata);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_nop0.c.o(.rodata);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_plant_script.c.o(.rodata);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_spawn.c.o(.rodata);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_register_draw_list.c.o(.rodata);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_register_tables.c.o(.rodata);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_close_target.c.o(.rodata);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_nop6.c.o(.rodata);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/script_slot.c.o(.rodata);
+        . = ALIGN(., 4);
+        room_m392_chrysler_RODATA_END = .;
+        room_m392_chrysler_RODATA_SIZE = ABSOLUTE(room_m392_chrysler_RODATA_END - room_m392_chrysler_RODATA_START);
+        room_m392_chrysler_TEXT_START = .;
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_nop0.c.o(.text);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_plant_script.c.o(.text);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_spawn.c.o(.text);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_register_draw_list.c.o(.text);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_register_tables.c.o(.text);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_close_target.c.o(.text);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_nop6.c.o(.text);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/falling_sprite_burst.c.o(.text);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/actor_classes.c.o(.text);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/line_burst.c.o(.text);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/script_slot.c.o(.text);
+        . = ALIGN(., 4);
+        room_m392_chrysler_TEXT_END = .;
+        room_m392_chrysler_TEXT_SIZE = ABSOLUTE(room_m392_chrysler_TEXT_END - room_m392_chrysler_TEXT_START);
+        room_m392_chrysler_DATA_START = .;
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/room_m392_chrysler.rodata.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/falling_sprite_burst.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/actor_classes.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/line_burst.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_nop0.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_plant_script.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_spawn.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_register_draw_list.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_register_tables.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_close_target.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_nop6.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/script_slot.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_80194484.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/RoomLib_TableA_8018F278.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801944B4.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801944CC.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801944D8.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/RoomLib_TableB_8018F220.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/actor_class_table.c.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801945E8.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_80194608.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/RoomLib_SlotTable.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946C0.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946C4.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946C8.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946D0.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946D4.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946D8.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946E0.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946E4.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946E8.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946F0.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946F4.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801946F8.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_80194700.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_80194704.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/room_m392_chrysler/D_80194708.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/D_801C162C.data.s.o(.data);
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/room_m392_chrysler/D_801C1650.s.o(.data);
+        . = ALIGN(., 4);
+        room_m392_chrysler_DATA_END = .;
+        room_m392_chrysler_DATA_SIZE = ABSOLUTE(room_m392_chrysler_DATA_END - room_m392_chrysler_DATA_START);
+        room_m392_chrysler_BSS_START = .;
+        build/JP/overlays/room_m392_chrysler/asm/JP/overlays/room_m392_chrysler/data/room_m392_chrysler.rodata.s.o(.bss);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/falling_sprite_burst.c.o(.bss);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/actor_classes.c.o(.bss);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/line_burst.c.o(.bss);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_nop0.c.o(.bss);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_plant_script.c.o(.bss);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_spawn.c.o(.bss);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_register_draw_list.c.o(.bss);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_register_tables.c.o(.bss);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_close_target.c.o(.bss);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/class_nop6.c.o(.bss);
+        build/JP/overlays/room_m392_chrysler/src/jp/overlays/room_lib/script_slot.c.o(.bss);
+        . = ALIGN(., 4);
+        room_m392_chrysler_BSS_END = .;
+        room_m392_chrysler_BSS_SIZE = ABSOLUTE(room_m392_chrysler_BSS_END - room_m392_chrysler_BSS_START);
+    }
+    __romPos += SIZEOF(.room_m392_chrysler);
+    __romPos = ALIGN(__romPos, 4);
+    . = ALIGN(., 4);
+    room_m392_chrysler_ROM_END = __romPos;
+    room_m392_chrysler_VRAM_END = .;
+
+    /DISCARD/ :
+    {
+        *(*);
+    }
+}

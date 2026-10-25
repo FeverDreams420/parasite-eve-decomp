@@ -1,0 +1,9 @@
+RoomEffect_OrbitFlareDrift = 0x8018F004; // type:func
+RoomEffect_OrbitFlareController = 0x8018F20C; // type:func
+g_RoomM013_D_8018FC78 = 0x8018FC78;
+g_RoomM013ScriptArgB = 0x8018FCF0;
+g_RoomM013ScriptArgC = 0x8018FCF4;
+g_RoomM013SectionHeader = 0x8018EFE8;
+RoomLib_SetArgs3__room_m013_theater = 0x8018FC54; // type:func
+g_RoomScriptArgs__room_m013_theater = 0x8018FCEC;
+g_RoomM013OrbitFlareEffects = 0x8018FCB4;

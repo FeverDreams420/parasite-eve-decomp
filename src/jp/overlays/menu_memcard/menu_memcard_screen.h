@@ -1,0 +1,62 @@
+#ifndef MENU_MEMCARD_SCREEN_H
+#define MENU_MEMCARD_SCREEN_H
+
+#include "common.h"
+#include "pe1/psyq_gpu.h"
+
+/* One of the two full-screen buffers the memory card screens flip between. */
+typedef struct MemcardScreenBuffer {
+    DRAWENV draw;      /* 0x00 */
+    DISPENV disp;      /* 0x5C */
+    RECT overlay;      /* 0x70 area refreshed from overlayImage */
+    RECT dirty;        /* 0x78 area the image nodes covered last frame */
+    u8 pad80[0x8000];
+    u8 overlayImage[1]; /* 0x8080 */
+} MemcardScreenBuffer;
+PE1_STATIC_ASSERT(PE1_OFFSETOF(MemcardScreenBuffer, overlay) == 0x70,
+                  memcard_screen_overlay_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(MemcardScreenBuffer, dirty) == 0x78,
+                  memcard_screen_dirty_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(MemcardScreenBuffer, overlayImage) == 0x8080,
+                  memcard_screen_overlay_image_offset);
+PE1_STATIC_ASSERT(sizeof(MemcardScreenBuffer) == 0x8084,
+                  memcard_screen_buffer_size);
+
+typedef struct MemcardSprite {
+    u8 addr[3];
+    u8 len;
+    u8 r0, g0, b0, code;
+    s16 x0, y0;
+    u8 u0, v0;
+    u16 clut;
+    s16 w, h;
+} MemcardSprite;
+
+typedef struct MemcardDrawTPage {
+    u32 tag;
+    u32 code;
+} MemcardDrawTPage;
+
+/* A TIM image block: byte size, VRAM rectangle, pixels. */
+typedef struct MemcardTimBlock {
+    u32 size;
+    RECT rect;
+    u32 data[1];
+} MemcardTimBlock;
+
+typedef struct MemcardTim {
+    u32 id;
+    u32 flags;
+    MemcardTimBlock clut;
+} MemcardTim;
+
+extern MemcardScreenBuffer *g_MemcardScreenBuffers[2];
+extern MemcardScreenBuffer *g_MemcardCurrentScreen;
+extern s32 g_MemcardScreenPage;
+extern u8 g_MemcardImageBundle[];
+extern s32 g_MemcardImageOffsetsView4; /* separate view of g_MemcardImageOffsets[4]: a shared base folds the relocation differently */
+
+void SetDispMask(s32 mask);
+void ResetGraph(s32 mode);
+
+#endif

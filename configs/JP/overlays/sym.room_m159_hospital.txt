@@ -1,0 +1,6 @@
+RoomLib_SlotTable__room_m159_hospital = 0x8018FE94;
+RoomEffect_LineBurstParticle = 0x8018F008; // type:func
+RoomEffect_LineBurstController = 0x8018F3A4; // type:func
+g_RoomM159SectionHeader = 0x8018EFE8;
+RoomLib_SlotSet__room_m159_hospital = 0x8018FDF8; // type:func
+g_RoomM159LineBurstEffects = 0x8018FE5C;
