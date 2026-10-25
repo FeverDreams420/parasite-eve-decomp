@@ -1,0 +1,5 @@
+# name,jp_address: functions the masked search cannot place (changed in JP); found by sequence similarity
+Inv_DispatchCommand,0x8005cf18
+func_801216C4,0x80121184
+func_80121C04,0x801216C4
+func_801223A8,0x80121E68

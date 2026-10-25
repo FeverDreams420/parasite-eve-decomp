@@ -8,7 +8,7 @@ options:
   compiler: GCC
 
   asm_path: asm/JP/main
-  src_path: src/main
+  src_path: src/jp/main
   o_path: ../../lib
   build_path: build/JP
 
@@ -69,5 +69,14 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x800, asm, jp/text]
+      - [0x800, .rodata, script/value_ops]
+      - [0x89C, rodata, jp/rodata_a]
+      - [0x8A0, .rodata, script/actor_opcodes]
+      - [0xE8C, rodata, jp/rodata_b]
+      - [0x2A0C, asm, jp/text_b]
+      - [0x2CF8, c, script/node_pool]
+      - [0x3050, c, script/value_ops]
+      - [0x39E8, c, script/node_actions]
+      - [0x4A28, c, script/actor_opcodes]
+      - [0x7110, asm, jp/text_c]
   - [0x1EE800]

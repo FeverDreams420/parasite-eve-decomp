@@ -8,6 +8,9 @@ Usage: us_jp_diff.py <us main.exe> <jp SLPS_012.30> <nm -S -n output> <out.csv>
 """
 import struct, sys, csv, collections
 
+DATA_START = 0x80094528     # USA: file offset 0x84D28 (.data of psyq/libc/sprintf)
+
+
 def words(b):
     b = b[:len(b) & ~3]
     return struct.unpack('<%dI' % (len(b) // 4), b)
@@ -25,14 +28,14 @@ def main():
     U = open(us, 'rb').read(); J = open(jp, 'rb').read()
     base = 0x80010000
     jm = [mask(w) for w in words(J[0x800:])]
-    index = collections.defaultdict(list)     # masked 4-word window -> offsets
-    for i in range(len(jm) - 3):
-        index[tuple(jm[i:i + 4])].append(i)
-    rows = []; cnt = collections.Counter()
+    index = collections.defaultdict(list)     # masked 2-word window -> offsets
+    for i in range(len(jm) - 1):
+        index[(jm[i], jm[i + 1])].append(i)
+    rows = []; cnt = collections.Counter(); prev_end = 0   # JP code keeps the USA function order
     for line in open(nm):
         a, s, name = line.split()
         addr = int(a, 16); size = int(s, 16)
-        if size < 8 or addr < base: continue
+        if size < 8 or addr < base or addr >= DATA_START: continue   # nm lists data labels as T too
         size &= ~3
         o = addr - base
         ub = U[0x800 + o:0x800 + o + size]; jb = J[0x800 + o:0x800 + o + size]
@@ -42,10 +45,13 @@ def main():
             if [mask(w) for w in words(jb)] == um: cls = 'relocated'; where = addr
             else:
                 cls = 'different'; where = 0
-                if len(um) >= 8:
-                    for i in index.get(tuple(um[:4]), []):
-                        if jm[i:i + len(um)] == um:
-                            cls = 'shifted'; where = base + i * 4; break
+                # several matches (small bodies): take the one nearest the USA offset
+                hits = [i for i in index.get((um[0], um[1]), []) if jm[i:i + len(um)] == um]
+                if hits:
+                    after = [i for i in hits if base + i * 4 >= prev_end]
+                    pick = min(after, key=lambda i: i) if after else min(hits, key=lambda i: abs(i * 4 - o))
+                    cls = 'shifted'; where = base + pick * 4
+        if where: prev_end = where + size
         cnt[cls] += 1
         rows.append((hex(addr), name, size, cls, hex(where) if where else ''))
     with open(out, 'w', newline='') as f:

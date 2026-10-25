@@ -85,7 +85,7 @@ split:
 	@$(PY) -m splat split $(SPLAT_CFG)
 	@find $(ASM_DIR) -name '*.data.s' -o -name '*.rodata.s' | xargs $(PY) tools/scripts/collapse_zero_data.py
 	@if [ "$(VERSION)" != JP ]; then $(PY) tools/scripts/ld_postpass.py $(LD_SCRIPT) $(ASM_DIR)/header.s; \
-	else $(PY) tools/scripts/jp_asm_fixup.py $(ASM_DIR)/jp/text.s sd ld sdc1 ldc1 sdc2 ldc2; fi
+	else for f in $(ASM_DIR)/jp/text_*.s; do $(PY) tools/scripts/jp_asm_fixup.py $$f sd ld sdc1 ldc1 sdc2 ldc2; done; fi
 	@grep -rl 'INCLUDE_ASM(' src/main --include='*.c' 2>/dev/null | xargs touch 2>/dev/null || true
 
 split-if-needed:
