@@ -21,6 +21,10 @@ for l in open("configs/USA/sym.main.txt"):
     else: seen_addr[ja] = n; split.append(f"{n} = 0x{ja:08X}; // type:func")
     seen_name.add(n)
 split.append("_ramsize = 0x8009C838; // size:0x4"); seen_name.add("_ramsize")
+# asm that calls a function now compiled from C needs the name even though no asm label defines it
+for l in split[2:]:
+    m = re.match(r"(\w+) = (0x\w+);", l)
+    if m: alias.append(f"{m.group(1)} = {m.group(2)};")
 open("configs/JP/sym.main.txt", "w").write("\n".join(split) + "\n")
 
 import importlib.util

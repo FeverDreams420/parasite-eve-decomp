@@ -35,10 +35,11 @@ def search(a, n=24):
 
 
 OVR = {l.split(',')[0]: int(l.split(',')[1], 16) for l in open('configs/JP/function_overrides.csv') if l.strip() and not l.startswith('#')}
+HEADERS = [open(os.path.join(r, f), encoding='latin-1').read().splitlines() for r, _, fs in os.walk('include') for f in fs if f.endswith('.h')]
 tok = re.compile(r"\b(func|D|jtbl|jlabel)_([0-9A-F]{8})\b")
 
 for rel in sys.argv[3:]:
-    t = open(rel).read(); miss = []
+    t = open(rel, encoding="latin-1").read(); miss = []
     def sub(m):
         a = int(m.group(2), 16)
         ja = OVR.get(m.group(0)) or (fmap.get(a) if m.group(1) == "func" else best.get(a))
@@ -46,7 +47,23 @@ for rel in sys.argv[3:]:
         if ja is None: miss.append(m.group(0)); return m.group(0)
         return f"{m.group(1)}_{ja:08X}"
     out = tok.sub(sub, t)
+    # declarations of retargeted names live in shared headers: re-declare them under the JP name
+    olds = {m.group(0) for m in tok.finditer(t)} - {m.group(0) for m in tok.finditer(out)}
+    extra = []
+    for old in sorted(olds):
+        new = tok.sub(sub, old)
+        if re.search(r"\b%s\b[^;\n]*;" % old, t) and re.search(r"(extern|void|int|u\d+|s\d+)[^\n;]*\b%s\b[^\n]*;" % old, t): continue   # declared here
+        for h in HEADERS:
+            for ln in h:
+                if re.search(r"\b%s\b" % old, ln) and ln.rstrip().endswith(";") and "(" not in ln.split(old)[0][-1:]:
+                    extra.append(ln.replace(old, new).rstrip()); break
+            else: continue
+            break
+    if extra:
+        k = [m.end() for m in re.finditer(r"^#include.*\n", out, re.M)]
+        pos = k[-1] if k else 0
+        out = out[:pos] + "\n".join(dict.fromkeys(extra)) + "\n" + out[pos:]
     dst = rel.replace("src/main/", "src/jp/main/", 1)
     os.makedirs(os.path.dirname(dst), exist_ok=True)
-    open(dst, "w").write(out)
+    open(dst, "w", encoding="latin-1").write(out)
     print(dst, "unmapped:", sorted(set(miss)) or "-")

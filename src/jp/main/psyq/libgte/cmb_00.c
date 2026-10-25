@@ -1,0 +1,38 @@
+/* PSY-Q LIBGTE CMB_00: RotTransPers4. */
+
+#include "common.h"
+#include "pe1/gte.h"
+
+long RotTransPers4(void *v0, void *v1, void *v2, void *v3,
+                   void * volatile sxy0, void * volatile sxy1,
+                   void * volatile sxy2, void * volatile sxy3,
+                   void * volatile p, void * volatile flag) {
+    int first_flags;
+    register int flags asm("$8");
+    int result;
+    register void *gte_out0 asm("$8");
+    register void *gte_out1 asm("$9");
+    register void *gte_out2 asm("$10");
+
+    gte_ldv0(v0);
+    gte_ldv1(v1);
+    gte_ldv2(v2);
+    gte_rtpt();
+    gte_bind_three_outputs(sxy0, sxy1, sxy2);
+    gte_stsxy3(gte_out0, gte_out1, gte_out2);
+    gte_getflag(first_flags);
+
+    gte_ldv0(v3);
+    gte_rtps_three_outputs();
+    gte_bind_three_outputs(sxy3, p, flag);
+    gte_stsxy2(gte_out0);
+    gte_stir0(gte_out1);
+    gte_getflag(flags);
+    gte_getsz3(result);
+    flags |= first_flags;
+    *(s32 *)gte_out2 = flags;
+    asm volatile("" : : : "memory");
+    return result >> 2;
+}
+
+static unsigned int tail_alignment_69B7C[] __attribute__((section(".text"))) = { 0x00000000, 0x00000000 };
