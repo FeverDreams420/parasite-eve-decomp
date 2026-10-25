@@ -58,5 +58,5 @@ g_RoomM100ScriptArgC = 0x80193290;
 g_RoomM100_D_801A81E8 = 0x801A81E8;
 RoomLib_SetArgs3__room_m100_nypd = 0x80193148; // type:func
 g_RoomScriptArgs__room_m100_nypd = 0x80193288;
-g_RoomClassTable__room_m100_nypd = 0x8019316C; // size:0xA8 allow_addend:true
+g_RoomClassTable__room_m100_nypd = 0x80192DF4; // size:0xA8 allow_addend:true
 g_RoomM100OrbitFlareEffects = 0x80193250;

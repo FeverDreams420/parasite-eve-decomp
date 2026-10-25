@@ -34,11 +34,22 @@ if os.path.exists("build/JP/overlay_amap.json"):        # addresses the overlays
     import json
     for k, v in json.load(open("build/JP/overlay_amap.json")).items():
         if int(k) < 0x8010B000: best.setdefault(int(k), v)
+import bisect
+keys = sorted(k for k in best if k >= 0x80094528)          # data region: the delta is constant between neighbours
+
+
+def guess(a):
+    """A data symbol nothing pairs up: take the delta of its nearest mapped neighbour below (checked by the overlay build)."""
+    i = bisect.bisect_right(keys, a) - 1
+    return a + best[keys[i]] - keys[i] if i >= 0 and a - keys[i] < 0x400 else None
+
+
 for f in ("configs/USA/sym.main.txt", "configs/USA/sym.main_only.txt"):
     for l in open(f):
         m = re.match(r"\s*(\w+)\s*=\s*0x([0-9A-Fa-f]+);", l)
-        if m and m.group(1) not in seen_name and int(m.group(2), 16) in best:
-            seen_name.add(m.group(1)); alias.append(f"{m.group(1)} = 0x{best[int(m.group(2), 16)]:08X};")
+        if m and m.group(1) not in seen_name:
+            a = int(m.group(2), 16); ja = best.get(a) or (guess(a) if a >= 0x80094528 else None)
+            if ja: seen_name.add(m.group(1)); alias.append(f"{m.group(1)} = 0x{ja:08X};")
 for l in open("configs/JP/function_overrides.csv"):
     if l.strip() and not l.startswith("#"):
         n, a = l.strip().split(",")

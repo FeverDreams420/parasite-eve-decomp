@@ -76,4 +76,4 @@ g_SceneE25ScriptArgC = 0x80193294;
 RoomLib_SetArgs3__scene_e25_chrysler = 0x80193118; // type:func
 g_RoomScriptArgs__scene_e25_chrysler = 0x8019328C;
 g_RoomClassTable__scene_e25_chrysler = 0x8019313C; // size:0xA8 allow_addend:true
-g_SceneE25FlashSpriteEffects = 0x80193254;
+g_SceneE25FlashSpriteEffects = 0x80192EDC;

@@ -36,3 +36,14 @@ names map to one JP address the first is kept). The target exe is copied to
 
 `tools/scripts/jp_asm_fixup.py` rewrites `sd`/`ld`/`sdc2`... lines that splat mis-decodes
 inside data to `.word`, because GAS expands them and shifts every later address.
+
+## JP overlays
+
+`docs/jp_overlay_map.csv` locates every USA overlay slice in the JP `PE.IMG` (small offset deltas;
+`tools/scripts/jp_overlay_map.py`). `tools/scripts/jp_overlay_gen.py` writes `configs/JP/overlays/*.yaml`
+from the USA configs (JP offsets and sha1, window vrams moved, symbol addresses mapped through the pairs
+of USA/JP instruction operands) and ports the sources to `src/jp/overlays` (`jp_port_c.py --overlay`).
+`tools/scripts/jp_overlay_check.py --all` builds and checks them: 187 of 190 overlay slices match
+byte for byte (two slices have no config; `menu_memcard` is JP code that differs after offset 0x6B4C).
+JP moved the overlay windows: mdec_diag and menu_memcard by -0x540, boot_display by -0x400, the rest
+stays (`linkers/JP/overlay_windows.txt`).

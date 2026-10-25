@@ -64,4 +64,4 @@ RoomLib_UpdateTimedRender = 0x80192CE0; // type:func
 RoomLib_ControlTimedSpawn = 0x80192E78; // type:func
 RoomLib_TimedRenderTable = 0x801932A0;
 g_RoomM332SectionHeader = 0x8018EFE8;
-g_RoomClassTable__room_m332_hospital = 0x801931BC; // size:0xA8 allow_addend:true
+g_RoomClassTable__room_m332_hospital = 0x80192E44; // size:0xA8 allow_addend:true

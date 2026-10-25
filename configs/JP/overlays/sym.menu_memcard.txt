@@ -4,21 +4,21 @@ MenuCard_StopVideo = 0x8012AD9C; // type:func
 
 // Second names of the two screen buffer pointers (g_MemcardScreenBuffers[0], [1]):
 // list_screen.c reads them through separate symbols to keep retail reloads.
-// provide: g_MemcardFirstDrawScreen = 0x801D11BC;
-// provide: g_MemcardSecondScreen = 0x801D11C0;
+// provide: g_MemcardFirstDrawScreen = 0x801CEDFC;
+// provide: g_MemcardSecondScreen = 0x801CEE00;
 
 // The fade unit's functions as the screen unit addresses them: the screen
 // code stores them in image-node callbacks 0x4C above the fade unit's link
 // addresses (the fade code links 0x4C below the screen's base, see
 // menu_memcard.yaml). Each entry is one fade.c function, in order; the
 // spacing equals the function sizes.
-// provide: g_MenuCardInitFadeForNodeEntry = 0x80192F98;
-// provide: g_MenuCardUpdateFadeCounterEntry = 0x80192FE8;
-// provide: g_MenuCardAdvanceFadeEntry = 0x80193084;
-// provide: g_MenuCardUpdateFadeDisplayEntry = 0x801930D8;
-// provide: g_MenuCardDecreaseFadeEntry = 0x8019316C;
+// provide: g_MenuCardInitFadeForNodeEntry = 0x80192C20;
+// provide: g_MenuCardUpdateFadeCounterEntry = 0x80192C70;
+// provide: g_MenuCardAdvanceFadeEntry = 0x80192D0C;
+// provide: g_MenuCardUpdateFadeDisplayEntry = 0x80192D60;
+// provide: g_MenuCardDecreaseFadeEntry = 0x80192DF4;
 // provide: g_MenuCardCreateFadeImageNodeEntry = 0x8019319C;
-// provide: g_MenuCardAttachFadePayloadEntry = 0x801931BC;
+// provide: g_MenuCardAttachFadePayloadEntry = 0x80192E44;
 // provide: g_MenuCardStepFadeToImagesEntry = 0x80193200;
 
 // The first video player's file table (video.c, 47 VideoEntry records of
@@ -92,22 +92,22 @@ DecDCTin = 0x8010BA60; // type:func
 DecDCTout = 0x8010BADC; // type:func
 DecDCToutCallback = 0x8010BB98; // type:func
 DecDCTvlc2 = 0x8010C35C; // type:func
-g_MemcardScreenBuffers = 0x801D11BC;
-g_MemcardCurrentScreen = 0x801D11C4;
-g_MemcardScreenPage = 0x801D11C8;
-g_MemcardPrevPad = 0x801D11B8;
+g_MemcardScreenBuffers = 0x801CEDFC;
+g_MemcardCurrentScreen = 0x801CEE04;
+g_MemcardScreenPage = 0x801CEE08;
+g_MemcardPrevPad = 0x801CEDF8;
 g_MemcardImageNodePool = 0x801D11CC;
-g_MemcardFreeImageNodes = 0x801D136C;
-g_MemcardActiveNodeHead = 0x801D1370;
+g_MemcardFreeImageNodes = 0x801CEFAC;
+g_MemcardActiveNodeHead = 0x801CEFB0;
 g_MemcardActiveNodeTail = 0x801D1374;
-g_MemcardPendingNodeHead = 0x801D1378;
-g_MemcardPendingNodeTail = 0x801D137C;
-g_MemcardScreenTimer = 0x801D1380;
-g_MemcardImageOffsets = 0x80193258;
+g_MemcardPendingNodeHead = 0x801CEFB8;
+g_MemcardPendingNodeTail = 0x801CEFBC;
+g_MemcardScreenTimer = 0x801CEFC0;
+g_MemcardImageOffsets = 0x80192EE0;
 g_MemcardGlintOrigin = 0x801F1F28;
 g_MemcardCosineColor = 0x801F1F30;
 g_MemcardSineColor = 0x801F1F34;
-g_MenuCardScreenVideoEntry = 0x801D11AC;
+g_MenuCardScreenVideoEntry = 0x801CEA20;
 g_MenuCardScreenVideoLastTime = 0x801D11B0;
 g_MenuCardScreenSavedDispEnv = 0x801D1384;
 g_MenuCardVideoEntry = 0x801222A4;

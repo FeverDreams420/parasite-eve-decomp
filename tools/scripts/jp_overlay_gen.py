@@ -13,7 +13,7 @@ names = sys.argv[3:]
 PE = "/Users/hasik/Projects/parasite-pc/disc/jp/extracted/PE.IMG"
 rows = {r["name"]: r for r in csv.DictReader(open("docs/jp_overlay_map.csv"))}
 if names == ["--all"]:
-    names = [n for n, r in rows.items() if float(r["masked_ratio"]) >= 0.95 and os.path.exists(f"configs/USA/overlays/{n}.yaml")]
+    names = [n for n, r in rows.items() if float(r["masked_ratio"]) >= float(os.environ.get("JP_MIN_RATIO", "0.95")) and os.path.exists(f"configs/USA/overlays/{n}.yaml")]
 # JP window deltas (USA window start, delta): see linkers/JP/overlay_windows.txt
 DELTAS = [(0x8010BCF8, 0x80120D00, -0x540), (0x80120D00, 0x80122FA4, -0x540), (0x80122FA4, 0x80170000, -0x400)]
 def shift(v):
@@ -27,7 +27,7 @@ MEM = set(range(0x20, 0x2F)) | {0x31, 0x39, 0x32, 0x3A}
 votes = defaultdict(Counter)
 
 
-def pair_scan(b, vram):
+def pair_scan(b, gp):
     """Linear scan of an overlay image: (address, word index) of every lui/%lo, jal and j target."""
     out = {}; hi = {}
     sg = lambda v: v - 0x10000 if v & 0x8000 else v
@@ -36,21 +36,31 @@ def pair_scan(b, vram):
         if op in (2, 3): out[i] = (x & 0x3FFFFFF) << 2 | 0x80000000
         elif op == 0x0F: hi[rt] = im << 16
         elif op in MEM or op in (0x09, 0x0D):
-            if rs in hi: out[i] = (hi[rs] + (im if op == 0x0D else sg(im))) & 0xFFFFFFFF
+            if rs == 28 and op in MEM: out[i] = (gp + sg(im)) & 0xFFFFFFFF      # $gp-relative small data
+            elif rs in hi: out[i] = (hi[rs] + (im if op == 0x0D else sg(im))) & 0xFFFFFFFF
         if op == 0 and (x & 0x3F) == 0x21 and (rs in hi or ((x >> 16) & 31) in hi): hi[(x >> 11) & 31] = hi[rs] if rs in hi else hi[(x >> 16) & 31]
         if op in (2, 3) or x == 0x03E00008: hi = {}
     return out
 
 
 def learn(u, j, vram):
-    a, b = pair_scan(u, vram), pair_scan(j, vram)
+    a, b = pair_scan(u, 0x8009CD70), pair_scan(j, 0x8009C838)
     for i, p in a.items():
         if i in b and p >= 0x80010000: votes[p][b[i]] += 1
 
 
-def amap(v):
+def best_vote(v):
+    """Most voted JP address whose distance from the USA one is plausible (the builds differ by small shifts)."""
     c = votes.get(v)
-    return c.most_common(1)[0][0] if c else shift(v)
+    if not c: return None
+    for jp, n in c.most_common():
+        if abs(jp - v) <= 0x4000: return jp
+    return None
+
+
+def amap(v):
+    b = best_vote(v)
+    return b if b is not None else shift(v)
 
 
 def shift_text(s):
@@ -74,14 +84,14 @@ for l in open("configs/JP/function_overrides.csv"):
     if l.strip() and not l.startswith("#"): k, v = l.strip().split(","); ovr[k] = v
 for r in csv.DictReader(open("docs/us_jp_function_map.csv")):
     a = int(r["address"], 16)
-    if r["class"] == "different" and a in votes and votes[a].most_common(1)[0][1] >= 1: ovr[r["name"]] = "0x%08X" % votes[a].most_common(1)[0][0]
+    if r["class"] == "different" and best_vote(a) is not None: ovr[r["name"]] = "0x%08X" % best_vote(a)
 with open("configs/JP/function_overrides.csv", "w") as f:
     f.write("# name,jp_address: functions the masked search cannot place; entries refined from overlay call sites\n")
     f.writelines(f"{k},{v}\n" for k, v in ovr.items())
 import json
 os.makedirs("configs/JP/overlays", exist_ok=True)
 os.makedirs("build/JP", exist_ok=True)
-json.dump({str(k): c.most_common(1)[0][0] for k, c in votes.items()}, open("build/JP/overlay_amap.json", "w"))
+json.dump({str(k): best_vote(k) for k in votes if best_vote(k) is not None}, open("build/JP/overlay_amap.json", "w"))
 os.environ["JP_AMAP"] = "build/JP/overlay_amap.json"
 USA_WIN = {"MDEC_DIAG": 0x8010BCF8, "MENU_MEMCARD": 0x80120D00, "BOOT_DISPLAY": 0x80122FA4, "FX_SECTOR17": 0x80170000, "ROOM": 0x8018EFE8, "TASK_PROGRAM": 0x801ED7F8}
 JP_WIN = {k: shift(v) for k, v in USA_WIN.items()}

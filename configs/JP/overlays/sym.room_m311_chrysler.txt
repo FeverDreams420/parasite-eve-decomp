@@ -57,5 +57,5 @@ g_RoomM311SectionHeader = 0x8018EFE8;
 g_RoomM311ScriptArgC = 0x80193290;
 RoomLib_SetArgs3__room_m311_chrysler = 0x80193148; // type:func
 g_RoomScriptArgs__room_m311_chrysler = 0x80193288;
-g_RoomClassTable__room_m311_chrysler = 0x8019316C; // size:0xA8 allow_addend:true
+g_RoomClassTable__room_m311_chrysler = 0x80192DF4; // size:0xA8 allow_addend:true
 g_RoomM311OrbitFlareEffects = 0x80193250;

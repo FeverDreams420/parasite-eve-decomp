@@ -60,4 +60,4 @@ g_RoomM162ScriptArgC = 0x80193294;
 RoomLib_SetArgs3__room_m162_chinatown = 0x80193118; // type:func
 g_RoomScriptArgs__room_m162_chinatown = 0x8019328C;
 g_RoomClassTable__room_m162_chinatown = 0x8019313C; // size:0xA8 allow_addend:true
-g_RoomM162FlashSpriteEffects = 0x80193254;
+g_RoomM162FlashSpriteEffects = 0x80192EDC;

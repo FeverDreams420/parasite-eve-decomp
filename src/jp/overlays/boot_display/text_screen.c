@@ -1,7 +1,6 @@
 #include "pe1/boot_display.h"
 
 #include "text_screen_externs.h"
-extern void func_8012522C(void);
 
 void BootDisplay_RunDisplay(void) {
     u32 state;
@@ -14,7 +13,7 @@ void BootDisplay_RunDisplay(void) {
     }
     g_BootDisplayCallbacks->init();
     if (!(g_GameStateFlags & 0x10000)) {
-        func_8012522C();
+        func_8012562C();
         BootDisplay_StartPlayback();
         if (g_GameStateFlags & 0x20000) {
             Spu_SetVoiceVolume(144);

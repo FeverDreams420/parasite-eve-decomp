@@ -1,0 +1,8 @@
+D_80093DB4 = 0x80093DB4;
+_ramsize = 0x8009C838;
+D_800B0924 = 0x800B0924;
+g_RoomM118PairedGlowSpriteG = 0x80190189;
+g_RoomM118PairedGlowSpriteB = 0x8019018A;
+g_RoomM118PairedGlowSpriteClut = 0x8019018D;
+g_RoomM118PairedGlowSpriteFlip = 0x8019018E;
+g_RoomM118PairedGlowSpriteDepth = 0x80190192;
