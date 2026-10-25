@@ -192,3 +192,7 @@ docs/RETROSPECTIVE_METRICS.md
 tools/gas-2.7/
 tools/gas-2.8.1/
 tools/binutils-2.45/
+asm/JP/
+linkers/JP/main.ld
+linkers/JP/undefined_addr_aliases.main.txt
+linkers/JP/undefined_*_auto.*.txt

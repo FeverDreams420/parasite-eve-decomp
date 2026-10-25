@@ -22,3 +22,17 @@ than a different program. Two single functions sit 17.7 KB away
 
 A JP target therefore needs its own address map (symbols and link order) but can
 share most C with the USA build. Next steps are in the commit that follows this one.
+
+## JP target (`make VERSION=JP`)
+
+JP is a separate target, not a mode of the USA build: `configs/JP/`, `linkers/JP/`,
+`build/JP/`, and (later) its own sources under `src/jp/`.
+
+Stage 1 is done: `make VERSION=JP split build check` reassembles `SLPS_012.30` byte for
+byte (sha1 411bd943...) from one splat asm segment, with the USA function names carried
+over to their JP addresses (`configs/JP/sym.main.txt`, 1,6xx functions; where several USA
+names map to one JP address the first is kept). The target exe is copied to
+`assets/JP/main.exe` (ignored, like `assets/USA`).
+
+`tools/scripts/jp_asm_fixup.py` rewrites `sd`/`ld`/`sdc2`... lines that splat mis-decodes
+inside data to `.word`, because GAS expands them and shifts every later address.

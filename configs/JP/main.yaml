@@ -1,0 +1,73 @@
+name: Main Executable (SLPS_012.30) - Parasite Eve (JP) Disc 1
+sha1: 411bd943982140a9772ff23f90a2587e2724cac8
+options:
+  basename: main
+  target_path: assets/JP/main.exe
+  base_path: ../..
+  platform: psx
+  compiler: GCC
+
+  asm_path: asm/JP/main
+  src_path: src/main
+  o_path: ../../lib
+  build_path: build/JP
+
+  ld_script_path: linkers/JP/main.ld
+  # Include ordinary C function sections, including the unpadded GAS 2.7 TU.
+  ld_wildcard_sections: True
+
+  migrate_rodata_to_functions: False
+  find_file_boundaries: True
+
+  # Runtime GP setup in __SN_ENTRY_POINT @ 0x8007209C. gp_value serves the
+  # retail disassembly; the link derives $gp from the layout: retail's $gp is
+  # the start of the .sdata run, whose first word is the startup's _ramsize.
+  gp_value: 0x8009C838
+  ld_gp_expression: _ramsize
+
+  o_as_suffix: False
+  use_legacy_include_asm: False
+
+  asm_function_macro: glabel
+  asm_jtbl_label_macro: jlabel
+  asm_data_macro: dlabel
+  generate_asm_macros_files: False
+
+  section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - configs/JP/sym.main.txt
+  undefined_funcs_auto_path: linkers/JP/undefined_funcs_auto.main.txt
+  undefined_syms_auto_path: linkers/JP/undefined_syms_auto.main.txt
+
+  subalign: 4
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  ld_bss_is_noload: True
+
+# PSX EXE layout for SLPS_012.30:
+#   header   0x000000 - 0x000800
+#   .text   @ vram 0x80010000, size 0x1EE000, ends @ 0x801FE000
+#           (the size is PSX_EXE_TEXT_SIZE, computed by the link)
+#   entry PC = 0x80072020
+#   stack top = 0x801FFFF0 (PSX_EXE_STACK_TOP, tools/scripts/ld_postpass.py)
+# data/bss not declared in header — game manages them at runtime.
+segments:
+  - name: header
+    type: header
+    start: 0x0
+
+  - name: main
+    type: code
+    start: 0x800
+    vram: 0x80010000
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0x800, asm, jp/text]
+  - [0x1EE800]

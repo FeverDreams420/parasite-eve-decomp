@@ -1,8 +1,11 @@
 # parasite-pc — Parasite Eve (PS1, SLUS-006.62) matching decompilation.
 
-VERSION    := USA
+VERSION    ?= USA
 BASENAME   := main
 TARGET_SHA := 452fb033f2eaa4b18aa20a5bca60b8125af3a37b
+ifeq ($(VERSION),JP)
+TARGET_SHA := 411bd943982140a9772ff23f90a2587e2724cac8
+endif
 
 ROOT       := $(abspath .)
 PY         ?= $(if $(wildcard $(ROOT)/.venv/bin/python),$(ROOT)/.venv/bin/python,python3)
@@ -11,6 +14,9 @@ SPLAT_CFG  := configs/$(VERSION)/$(BASENAME).yaml
 BUILD      := build/$(VERSION)
 ASM_DIR    := asm/$(VERSION)/$(BASENAME)
 SRC_DIR    := src/$(BASENAME)
+ifeq ($(VERSION),JP)
+SRC_DIR    := src/jp/$(BASENAME)
+endif
 LD_SCRIPT  := linkers/$(VERSION)/$(BASENAME).ld
 TARGET_BIN := assets/$(VERSION)/$(BASENAME).exe
 PE_IMG     := disc/extracted/PE.IMG
@@ -78,7 +84,8 @@ split:
 	rm -rf $(ASM_DIR) $(LD_SCRIPT) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_ALIASES)
 	@$(PY) -m splat split $(SPLAT_CFG)
 	@find $(ASM_DIR) -name '*.data.s' -o -name '*.rodata.s' | xargs $(PY) tools/scripts/collapse_zero_data.py
-	@$(PY) tools/scripts/ld_postpass.py $(LD_SCRIPT) $(ASM_DIR)/header.s
+	@if [ "$(VERSION)" != JP ]; then $(PY) tools/scripts/ld_postpass.py $(LD_SCRIPT) $(ASM_DIR)/header.s; \
+	else $(PY) tools/scripts/jp_asm_fixup.py $(ASM_DIR)/jp/text.s sd ld sdc1 ldc1 sdc2 ldc2; fi
 	@grep -rl 'INCLUDE_ASM(' src/main --include='*.c' 2>/dev/null | xargs touch 2>/dev/null || true
 
 split-if-needed:
