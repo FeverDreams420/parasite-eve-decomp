@@ -8,7 +8,7 @@ options:
   platform: psx
   compiler: GCC
   asm_path: asm/JP/overlays/boot_display
-  src_path: src/jp/overlays/boot_display
+  src_path: src-jp/overlays/boot_display
   build_path: build/JP/overlays/boot_display
   ld_script_path: linkers/JP/overlays/boot_display.ld
   undefined_funcs_auto_path: linkers/JP/overlays/undefined_funcs_auto.boot_display.txt

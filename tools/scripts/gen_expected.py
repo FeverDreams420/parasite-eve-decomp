@@ -43,7 +43,8 @@ except ImportError:  # imported as tools.scripts.gen_expected by unit tests
     from tools.scripts.source_quality import classify
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-VERSION = "USA"
+VERSION = __import__("os").environ.get("PE_VERSION", "USA")
+SRC = "src-jp" if VERSION == "JP" else "src"       # the JP target keeps its own tree
 # Where the executable is loaded. Anything the disassembler names below this
 # cannot be a pointer into the image, so it must have been a plain constant.
 VRAM_START = 0x80010000
@@ -91,7 +92,7 @@ class Module:
 
     @property
     def src_lead(self):
-        return "src/main/" if self.name == "main" else "src/overlays/%s/" % self.name
+        return SRC + "/main/" if self.name == "main" else SRC + "/overlays/%s/" % self.name
 
     def unit_name(self, source):
         """The manifest subsegment name of a C source path (src/...c).
@@ -116,6 +117,8 @@ def modules(only, overlays):
             name = cfg.stem
             if overlays and name not in overlays:
                 continue
+            if name in os.environ.get("PE_SKIP_OVERLAYS", "").split(","):
+                continue          # a module that does not reproduce its retail binary
             out.append(
                 Module(
                     name,
@@ -789,7 +792,7 @@ def process_module(module, shared, assembler, workers):
         source_kind = None
         valid_functions = None
         unit_kinds = kinds
-        if relative.startswith("src/"):
+        if relative.startswith(SRC + "/"):
             # A unit built from C is <name>.c.o; the disassembly is <name>.s.
             unit = module.unit_name(relative.removesuffix(".o"))
             source = asm_root / ("%s.s" % unit)

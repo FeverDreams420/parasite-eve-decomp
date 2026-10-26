@@ -39,7 +39,8 @@ except ImportError:  # imported as tools.scripts.objdiff_config by unit tests
     from tools.scripts.source_quality import classify
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-VERSION = "USA"
+VERSION = __import__("os").environ.get("PE_VERSION", "USA")
+SRC = "src-jp" if VERSION == "JP" else "src"       # the JP target keeps its own tree
 
 SCHEMA = "https://raw.githubusercontent.com/encounter/objdiff/main/config.schema.json"
 
@@ -138,14 +139,14 @@ def module_units(name, config_path, skip):
     if name == "main":
         map_path = ROOT / "build" / VERSION / "main.map"
         build_prefix = "build/%s/" % VERSION
-        src_lead = "src/main/"
+        src_lead = SRC + "/main/"
         asm_lead = "asm/%s/main/" % VERSION
         site_lead = "main/"
         category = main_category
     else:
         map_path = ROOT / "build" / VERSION / "overlays" / name / ("%s.map" % name)
         build_prefix = "build/%s/overlays/%s/" % (VERSION, name)
-        src_lead = "src/overlays/%s/" % name
+        src_lead = SRC + "/overlays/%s/" % name
         asm_lead = "asm/%s/overlays/%s/" % (VERSION, name)
         site_lead = "overlays/%s/" % name
         fixed = overlay_category(name)
@@ -161,11 +162,11 @@ def module_units(name, config_path, skip):
         if not obj.startswith(build_prefix):
             continue
         relative = obj[len(build_prefix):]
-        if relative.startswith("src/"):
+        if relative.startswith(SRC + "/"):
             # A shared overlay library unit (src/overlays/room_lib/) is
             # compiled into each overlay that links it; the site keeps the
             # overlay prefix so every instance is its own unit.
-            lead = src_lead if relative.startswith(src_lead) else "src/overlays/"
+            lead = src_lead if relative.startswith(src_lead) else SRC + "/overlays/"
             site = site_lead + relative[len(lead):].removesuffix(".c.o")
             source = relative.removesuffix(".o")
             source_kind = classify(ROOT / source)
@@ -206,8 +207,8 @@ def config(units):
         "build_base": True,
         "options": {"combineTextSections": True},
         "watch_patterns": [
-            "src/**/*.c",
-            "src/**/*.h",
+            SRC + "/**/*.c",
+            SRC + "/**/*.h",
             "include/**/*.h",
             "asm/**/*.s",
             "configs/**/*.yaml",
@@ -237,6 +238,7 @@ def main(argv=None):
     names = ["main"] + sorted(
         cfg.stem for cfg in (ROOT / "configs" / VERSION / "overlays").glob("*.yaml")
     )
+    names = [n for n in names if n not in __import__("os").environ.get("PE_SKIP_OVERLAYS", "").split(",")]
     for name in names:
         config_path = (
             ROOT / "configs" / VERSION / "main.yaml"

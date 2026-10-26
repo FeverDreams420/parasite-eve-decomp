@@ -49,3 +49,26 @@ builds and checks them: 186 of 188 match byte for byte. `menu_memcard` is JP cod
 differs after offset 0x6B4C, and `boot_display` is off by 4 in about 190 window-relative
 operands (open). JP moved the overlay windows: mdec_diag and menu_memcard by -0x540,
 boot_display by -0x400, the rest stay (`linkers/JP/overlay_windows.txt`).
+
+## JP match report
+
+The USA report pipeline runs for JP with `PE_VERSION=JP` (`gen_expected.py`, `objdiff_config.py`;
+`SRC` is `src-jp` there). `menu_memcard` and `boot_display` do not reproduce their retail
+binaries and their retail disassembly overlaps itself, so they are left out with
+`PE_SKIP_OVERLAYS=menu_memcard,boot_display` and added back as unmatched (85 functions, 48,124 bytes,
+taken from the USA report):
+
+    PE_VERSION=JP PE_SKIP_OVERLAYS=menu_memcard,boot_display make VERSION=JP expected objdiff-config
+    tools/objdiff/objdiff-cli report generate -p . -o build/JP/report.json
+
+| | functions matched | code bytes matched |
+| --- | ---: | ---: |
+| Main: game code | 416 of 1834 (22.7%) | 99,024 of 1,940,800 (5.1%) |
+| Main: PsyQ libraries | 434 of 566 (76.7%) | 61,400 of 73,040 (84.1%) |
+| Room overlays | 7929 of 7929 | 2,390,640 of 2,390,640 |
+| Battle scene overlays | 1194 of 1194 | 407,388 of 407,388 |
+| System overlays | 25 of 25 | 6,916 of 6,916 |
+| **Total, with the two overlays added back** | **9998 of 11,633 (85.9%)** | **2,965,368 of 4,866,908 (60.9%)** |
+
+USA is 100% of 11,646 functions. The code-byte figure counts the asm data blobs of main as
+code, as the USA report does, so it is dominated by the unconverted main.
