@@ -30,13 +30,17 @@ does not automatically apply to the other, because the same C has to produce dif
 bytes in each.
 
 `make VERSION=JP split build check` reassembles `SLPS_012.30` byte for byte (sha1
-411bd943...). `configs/JP/main.yaml` lists which units are C (243 translation units, taken
+411bd943...). `configs/JP/main.yaml` lists which units are C (269 translation units, taken
 from the USA ones that are byte-identical in JP) and which are asm (`jp/text_*`);
 `configs/JP/sym.main.txt` holds the JP addresses of the names. The target exe is copied to
 `assets/JP/main.exe` (ignored, like `assets/USA`).
 
 `tools/scripts/jp_asm_fixup.py` rewrites `sd`/`ld`/`sdc2`... lines that splat mis-decodes
 inside data to `.word`, because GAS expands them and shifts every later address.
+
+A converted unit that calls a function whose JP address differs needs that name pinned in
+`linkers/JP/undefined_syms_manual.txt`, and absolute addresses in the C (`0x80070E0C`) need their JP
+value by hand (`src-jp/main/draw/prim_queue.c`).
 
 To convert another unit, write `src-jp/main/<unit>.c`, change its line in `configs/JP/main.yaml`
 from `asm` to `c`, and run `make VERSION=JP split build check`.
@@ -63,12 +67,12 @@ taken from the USA report):
 
 | | functions matched | code bytes matched |
 | --- | ---: | ---: |
-| Main: game code | 416 of 1834 (22.7%) | 99,024 of 1,940,800 (5.1%) |
-| Main: PsyQ libraries | 434 of 566 (76.7%) | 61,400 of 73,040 (84.1%) |
+| Main: game code | 679 of 1809 (37.5%) | 216,256 of 1,934,932 (11.2%) |
+| Main: PsyQ libraries | 462 of 594 (77.8%) | 67,936 of 78,920 (86.1%) |
 | Room overlays | 7929 of 7929 | 2,390,640 of 2,390,640 |
 | Battle scene overlays | 1194 of 1194 | 407,388 of 407,388 |
 | System overlays | 25 of 25 | 6,916 of 6,916 |
-| **Total, with the two overlays added back** | **9998 of 11,633 (85.9%)** | **2,965,368 of 4,866,908 (60.9%)** |
+| **Total, with the two overlays added back** | **10,289 of 11,636 (88.4%)** | **3,089,136 of 4,866,920 (63.5%)** |
 
 USA is 100% of 11,646 functions. The code-byte figure counts the asm data blobs of main as
 code, as the USA report does, so it is dominated by the unconverted main.
