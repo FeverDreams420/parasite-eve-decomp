@@ -30,7 +30,7 @@ does not automatically apply to the other, because the same C has to produce dif
 bytes in each.
 
 `make VERSION=JP split build check` reassembles `SLPS_012.30` byte for byte (sha1
-411bd943...). `configs/JP/main.yaml` lists which units are C (269 translation units, taken
+411bd943...). `configs/JP/main.yaml` lists which units are C (291 translation units, taken
 from the USA ones that are byte-identical in JP) and which are asm (`jp/text_*`);
 `configs/JP/sym.main.txt` holds the JP addresses of the names. The target exe is copied to
 `assets/JP/main.exe` (ignored, like `assets/USA`).
@@ -40,7 +40,8 @@ inside data to `.word`, because GAS expands them and shifts every later address.
 
 A converted unit that calls a function whose JP address differs needs that name pinned in
 `linkers/JP/undefined_syms_manual.txt`, and absolute addresses in the C (`0x80070E0C`) need their JP
-value by hand (`src-jp/main/draw/prim_queue.c`).
+value by hand (`src-jp/main/draw/prim_queue.c`). Undefined data names (the PsyQ CD/DS state, SPU
+registers) are pinned there too, at their JP addresses.
 
 To convert another unit, write `src-jp/main/<unit>.c`, change its line in `configs/JP/main.yaml`
 from `asm` to `c`, and run `make VERSION=JP split build check`.
@@ -67,12 +68,12 @@ taken from the USA report):
 
 | | functions matched | code bytes matched |
 | --- | ---: | ---: |
-| Main: game code | 679 of 1809 (37.5%) | 216,256 of 1,934,932 (11.2%) |
-| Main: PsyQ libraries | 462 of 594 (77.8%) | 67,936 of 78,920 (86.1%) |
+| Main: game code | 800 of 1797 (44.5%) | 250,268 of 1,932,572 (13.0%) |
+| Main: PsyQ libraries | 523 of 611 (85.6%) | 78,612 of 81,296 (96.7%) |
 | Room overlays | 7929 of 7929 | 2,390,640 of 2,390,640 |
 | Battle scene overlays | 1194 of 1194 | 407,388 of 407,388 |
 | System overlays | 25 of 25 | 6,916 of 6,916 |
-| **Total, with the two overlays added back** | **10,289 of 11,636 (88.4%)** | **3,089,136 of 4,866,920 (63.5%)** |
+| **Total, with the two overlays added back** | **10,471 of 11,641 (89.9%)** | **3,133,824 of 4,866,936 (64.4%)** |
 
 USA is 100% of 11,646 functions. The code-byte figure counts the asm data blobs of main as
 code, as the USA report does, so it is dominated by the unconverted main.
