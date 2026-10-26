@@ -1,0 +1,8 @@
+@@ -611,7 +611,6 @@
+ 
+ void Menu_DrawItemIcon(int arg0) {
+     Draw_StatePush();
+-    Draw_OffsetCursor(2, 0);
+     Draw_AllocTexturedQuad(g_MenuItemIconGlyphTable[arg0]);
+     Draw_StatePop();
+ }

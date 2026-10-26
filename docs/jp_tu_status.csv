@@ -33,6 +33,7 @@ draw/pipeline,asm,648
 boot/frame_loop,asm,1284
 menu/equip_screen,asm,3160
 menu/item_detail,asm,1028
+menu/lists,asm,4504
 battle/commands,asm,3524
 item/swap,asm,5736
 menu/item_use_panel,c,344

@@ -33,7 +33,8 @@ tus = []                                   # candidate C TUs
 for (o, t, n), e in zip(ent, ends):
     if t != "c" or not (TEXT0 <= o < DATA0 or 0xB2AF8 <= o < 0xD0860): continue
     a, b = vram(o), vram(e)
-    if any(a <= d < b for d in different) or n in data_names: continue
+    patched = os.path.exists(f"configs/JP/patches/{n}.patch")      # hand-edited for JP: the changed functions are covered
+    if (any(a <= d < b for d in different) and not patched) or n in data_names: continue
     fm = [(f, j) for f, j in mapped if a <= f < b]
     if not fm: continue
     f, j = fm[0]
@@ -70,8 +71,13 @@ def build():
     return r
 
 os.makedirs("src/jp/main", exist_ok=True)
-for n in sorted(conv):
+def port(n):
     subprocess.run([sys.executable, "tools/scripts/jp_port_c.py", US, JP, f"src/main/{n}.c"], capture_output=True)
+    pf = f"configs/JP/patches/{n}.patch"
+    if os.path.exists(pf): subprocess.run(["patch", "-s", f"src/jp/main/{n}.c", pf], check=True)
+
+
+for n in sorted(conv): port(n)
 
 for it in range(12):
     pieces = gen_yaml(conv)
@@ -95,13 +101,18 @@ for it in range(12):
         print(f"iter {it}: {len(bad & conv)} TUs fail to compile/link", sorted(bad & conv)[:5]); conv -= bad; continue
     if r.returncode:
         print("\n".join(l for l in out.splitlines() if "rror" in l or "undefined" in l)[-3000:]); break
+    resized = False
     wrong = set()                          # a TU whose code size differs shifts everything after it
     for tu in pieces:
         o = f"build/JP/src/jp/main/{tu['name']}.c.o"
         if os.path.exists(o):
             sz = subprocess.run(["mipsel-none-elf-size", "-A", o], capture_output=True, text=True).stdout
             m = re.search(r"^\.text\s+(\d+)", sz, re.M)
-            if m and int(m.group(1)) != tu["len"]: wrong.add(tu["name"])
+            if m and int(m.group(1)) != tu["len"]:
+                if os.path.exists(f"configs/JP/patches/{tu['name']}.patch") and not tu.get("resized"):
+                    tu["len"] = int(m.group(1)); tu["resized"] = True; resized = True      # the patch changed the code size
+                else: wrong.add(tu["name"])
+    if resized and not wrong: print(f"iter {it}: layout resized for patched units"); continue
     if wrong:
         print(f"iter {it}: {len(wrong)} TUs have a different code size"); conv -= wrong; continue
     a, b = open("build/JP/main.exe", "rb").read(), open("assets/JP/main.exe", "rb").read()
@@ -111,6 +122,9 @@ for it in range(12):
         print(f"iter {it}: exe identical, {len(conv)} TUs from C"); break
     print(f"iter {it}: {len(diff)} differing words, dropping {len(drop)} TUs")
     if not drop: print("unattributed diffs at", [hex(vram(i)) for i in diff[:10]]); break
+    keep = set(os.environ.get("JP_KEEP", "").split(","))
+    if drop & keep:
+        print("kept TU differs at", [hex(vram(i)) for i in diff[:8]], "; units", sorted(drop & keep)); break
     conv -= drop
 open(conv_file, "w").write("\n".join(sorted(conv)) + "\n")
 if REPORT:
