@@ -7,7 +7,7 @@ options:
   platform: psx
   compiler: GCC
   asm_path: asm/JP/overlays/scene_e04_chrysler
-  src_path: src/jp/overlays/scene_e04_chrysler
+  src_path: src-jp/overlays/scene_e04_chrysler
   build_path: build/JP/overlays/scene_e04_chrysler
   ld_script_path: linkers/JP/overlays/scene_e04_chrysler.ld
   undefined_funcs_auto_path: linkers/JP/overlays/undefined_funcs_auto.scene_e04_chrysler.txt

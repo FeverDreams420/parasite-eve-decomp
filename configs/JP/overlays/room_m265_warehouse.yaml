@@ -7,7 +7,7 @@ options:
   platform: psx
   compiler: GCC
   asm_path: asm/JP/overlays/room_m265_warehouse
-  src_path: src/jp/overlays/room_m265_warehouse
+  src_path: src-jp/overlays/room_m265_warehouse
   build_path: build/JP/overlays/room_m265_warehouse
   ld_script_path: linkers/JP/overlays/room_m265_warehouse.ld
   undefined_funcs_auto_path: linkers/JP/overlays/undefined_funcs_auto.room_m265_warehouse.txt

@@ -7,7 +7,7 @@ options:
   platform: psx
   compiler: GCC
   asm_path: asm/JP/overlays/menu_memcard
-  src_path: src/jp/overlays/menu_memcard
+  src_path: src-jp/overlays/menu_memcard
   build_path: build/JP/overlays/menu_memcard
   ld_script_path: linkers/JP/overlays/menu_memcard.ld
   symbol_addrs_path:

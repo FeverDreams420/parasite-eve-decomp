@@ -16,7 +16,7 @@ BUILD      := build/$(VERSION)
 ASM_DIR    := asm/$(VERSION)/$(BASENAME)
 SRC_DIR    := src/$(BASENAME)
 ifeq ($(VERSION),JP)
-SRC_DIR    := src/jp/$(BASENAME)
+SRC_DIR    := src-jp/$(BASENAME)
 endif
 LD_SCRIPT  := linkers/$(VERSION)/$(BASENAME).ld
 TARGET_BIN := assets/$(VERSION)/$(BASENAME).exe
@@ -109,6 +109,11 @@ $(BUILD)/asm/%.s.o: asm/%.s
 
 # Compile C with PSYQ GCC 2.7.2 → maspsx → GNU as.
 $(BUILD)/src/%.c.o: src/%.c | $(BUILD)
+	@mkdir -p $(dir $@)
+	$(CC_WRAPPER) $< $@
+
+# The JP target keeps its own sources in src-jp/.
+$(BUILD)/src-jp/%.c.o: src-jp/%.c | $(BUILD)
 	@mkdir -p $(dir $@)
 	$(CC_WRAPPER) $< $@
 
@@ -313,7 +318,7 @@ overlay-build: overlay-split
 	    $(AS) -EL -G0 -mips4 -32 -no-pad-sections -Iinclude -I$(OVERLAY_ASM_DIR) \
 	        -o "$$obj" "$$asm" || exit $$?; \
 	done
-	@grep -o '$(OVERLAY_BUILD)/src/[^ ()]*\.c\.o' $(OVERLAY_LD) | sort -u | while read obj; do \
+	@grep -o '$(OVERLAY_BUILD)/src[-a-z]*/[^ ()]*\.c\.o' $(OVERLAY_LD) | sort -u | while read obj; do \
 	    src="$${obj#$(OVERLAY_BUILD)/}"; src="$${src%.o}"; \
 	    mkdir -p "$$(dirname "$$obj")"; \
 	    $(CC_WRAPPER) "$$src" "$$obj" -DPE_OVERLAY=$(OVERLAY) || exit $$?; \

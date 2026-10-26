@@ -7,7 +7,7 @@ options:
   platform: psx
   compiler: GCC
   asm_path: asm/JP/overlays/room_m159_hospital
-  src_path: src/jp/overlays/room_m159_hospital
+  src_path: src-jp/overlays/room_m159_hospital
   build_path: build/JP/overlays/room_m159_hospital
   ld_script_path: linkers/JP/overlays/room_m159_hospital.ld
   undefined_funcs_auto_path: linkers/JP/overlays/undefined_funcs_auto.room_m159_hospital.txt

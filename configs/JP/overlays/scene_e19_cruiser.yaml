@@ -7,7 +7,7 @@ options:
   platform: psx
   compiler: GCC
   asm_path: asm/JP/overlays/scene_e19_cruiser
-  src_path: src/jp/overlays/scene_e19_cruiser
+  src_path: src-jp/overlays/scene_e19_cruiser
   build_path: build/JP/overlays/scene_e19_cruiser
   ld_script_path: linkers/JP/overlays/scene_e19_cruiser.ld
   undefined_funcs_auto_path: linkers/JP/overlays/undefined_funcs_auto.scene_e19_cruiser.txt

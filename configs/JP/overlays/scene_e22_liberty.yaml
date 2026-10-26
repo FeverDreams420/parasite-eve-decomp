@@ -7,7 +7,7 @@ options:
   platform: psx
   compiler: GCC
   asm_path: asm/JP/overlays/scene_e22_liberty
-  src_path: src/jp/overlays/scene_e22_liberty
+  src_path: src-jp/overlays/scene_e22_liberty
   build_path: build/JP/overlays/scene_e22_liberty
   ld_script_path: linkers/JP/overlays/scene_e22_liberty.ld
   undefined_funcs_auto_path: linkers/JP/overlays/undefined_funcs_auto.scene_e22_liberty.txt

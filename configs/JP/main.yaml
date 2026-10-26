@@ -8,7 +8,7 @@ options:
   compiler: GCC
 
   asm_path: asm/JP/main
-  src_path: src/jp/main
+  src_path: src-jp/main
   o_path: ../../lib
   build_path: build/JP
 

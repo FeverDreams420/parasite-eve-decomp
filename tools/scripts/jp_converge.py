@@ -2,7 +2,7 @@
 """Convert USA C translation units to the JP target and keep only those that match.
 
 1. every USA `c` text subsegment without a function that changed in JP is a candidate;
-2. its source is copied to src/jp/main with address-named symbols retargeted
+2. its source is copied to src-jp/main with address-named symbols retargeted
    (jp_port_c.py), and a JP configs/JP/main.yaml is generated around the candidates;
 3. the JP exe is built and compared with SLPS_012.30; TUs that contain a differing
    word, or that emit their own .data/.bss, go back to asm; repeat until stable.
@@ -70,33 +70,33 @@ def build():
     r = subprocess.run(["make", "-k", "-j8", "VERSION=JP", "build"], capture_output=True, text=True, errors="replace")
     return r
 
-os.makedirs("src/jp/main", exist_ok=True)
+os.makedirs("src-jp/main", exist_ok=True)
 def port(n):
     subprocess.run([sys.executable, "tools/scripts/jp_port_c.py", US, JP, f"src/main/{n}.c"], capture_output=True)
     pf = f"configs/JP/patches/{n}.patch"
-    if os.path.exists(pf): subprocess.run(["patch", "-s", f"src/jp/main/{n}.c", pf], check=True)
+    if os.path.exists(pf): subprocess.run(["patch", "-s", f"src-jp/main/{n}.c", pf], check=True)
 
 
 for n in sorted(conv): port(n)
 
 for it in range(12):
     pieces = gen_yaml(conv)
-    for root, _, fs in os.walk("src/jp/main"):          # make globs every .c: keep only the converted ones
+    for root, _, fs in os.walk("src-jp/main"):          # make globs every .c: keep only the converted ones
         for f in fs:
-            rel = os.path.relpath(os.path.join(root, f), "src/jp/main")
+            rel = os.path.relpath(os.path.join(root, f), "src-jp/main")
             if f.endswith(".c") and rel[:-2] not in conv: os.remove(os.path.join(root, f))
     r = build()
     out = r.stdout + r.stderr
-    bad = set(re.findall(r"\*\*\* \[build/JP/src/jp/main/([\w/]+)\.c\.o\]", out))
-    bad |= set(re.findall(r"build/JP/src/jp/main/([\w/]+)\.c\.o: in function", out))
+    bad = set(re.findall(r"\*\*\* \[build/JP/src-jp/main/([\w/]+)\.c\.o\]", out))
+    bad |= set(re.findall(r"build/JP/src-jp/main/([\w/]+)\.c\.o: in function", out))
     cur = None
     for ln in out.splitlines():              # ld prints the owning object once per run of errors
-        m = re.search(r"build/JP/src/jp/main/([\w/]+)\.c\.o: in function", ln)
+        m = re.search(r"build/JP/src-jp/main/([\w/]+)\.c\.o: in function", ln)
         if m: cur = m.group(1)
         elif "undefined reference" in ln and cur: bad.add(cur)
     for sym in set(re.findall(r"undefined reference to `(\w+)'", out)):      # no owner printed: grep the sources
         for n in list(conv):
-            if re.search(r"\b%s\b" % sym, open(f"src/jp/main/{n}.c", encoding="latin-1").read()): bad.add(n)
+            if re.search(r"\b%s\b" % sym, open(f"src-jp/main/{n}.c", encoding="latin-1").read()): bad.add(n)
     if bad & conv:
         print(f"iter {it}: {len(bad & conv)} TUs fail to compile/link", sorted(bad & conv)[:5]); conv -= bad; continue
     if r.returncode:
@@ -104,7 +104,7 @@ for it in range(12):
     resized = False
     wrong = set()                          # a TU whose code size differs shifts everything after it
     for tu in pieces:
-        o = f"build/JP/src/jp/main/{tu['name']}.c.o"
+        o = f"build/JP/src-jp/main/{tu['name']}.c.o"
         if os.path.exists(o):
             sz = subprocess.run(["mipsel-none-elf-size", "-A", o], capture_output=True, text=True).stdout
             m = re.search(r"^\.text\s+(\d+)", sz, re.M)

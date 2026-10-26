@@ -9,7 +9,7 @@ options:
   platform: psx
   compiler: GCC
   asm_path: asm/JP/overlays/mdec_diag
-  src_path: src/jp/overlays/mdec_diag
+  src_path: src-jp/overlays/mdec_diag
   build_path: build/JP/overlays/mdec_diag
   ld_script_path: linkers/JP/overlays/mdec_diag.ld
   undefined_funcs_auto_path: linkers/JP/overlays/undefined_funcs_auto.mdec_diag.txt

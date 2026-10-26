@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Copy a USA C source to src/jp/main and retarget its address-named symbols.
+"""Copy a USA C source to src-jp/main and retarget its address-named symbols.
 
 `func_XXXXXXXX` and `D_XXXXXXXX` names encode USA addresses; the JP build has other
 objects at those addresses. Each token is rewritten to the JP address of the same
@@ -73,7 +73,7 @@ for rel in sys.argv[3:]:
         inc = [m.end() for m in re.finditer(r"^#include.*\n", out, re.M) if first < 0 or m.end() <= first]
         pos = inc[-1] if inc else 0
         out = out[:pos] + decl + "\n" + out[pos:]
-    dst = rel.replace("src/main/", "src/jp/main/", 1).replace("src/overlays/", "src/jp/overlays/", 1)
+    dst = rel.replace("src/main/", "src-jp/main/", 1).replace("src/overlays/", "src-jp/overlays/", 1)
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     open(dst, "w", encoding="latin-1").write(out)
     print(dst, "unmapped:", sorted(set(miss)) or "-")

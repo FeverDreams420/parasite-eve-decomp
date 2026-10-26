@@ -3,7 +3,7 @@
 
 Only overlays whose JP slice has the USA size and layout are handled (masked word ratio in
 docs/jp_overlay_map.csv). Window vrams move by the JP window deltas; sources are copied to
-src/jp/overlays with main addresses retargeted.
+src-jp/overlays with main addresses retargeted.
 Usage: jp_overlay_gen.py <usa exe> <jp exe> <name>... | --all
 """
 import csv, hashlib, os, re, subprocess, sys
@@ -118,7 +118,7 @@ for n in names:
     t = t.replace(f"skip={m.group(2)}", f"skip={jo // bs}")
     t = re.sub(r"^(\s+vram: )(0x[0-9A-Fa-f]+)", lambda x: x.group(1) + "0x%08X" % shift(int(x.group(2), 16)), t, flags=re.M)
     sp = re.search(r"src_path: (\S+)", t).group(1)
-    t = t.replace(f"src_path: {sp}", "src_path: " + sp.replace("src/overlays", "src/jp/overlays"))
+    t = t.replace(f"src_path: {sp}", "src_path: " + sp.replace("src/overlays", "src-jp/overlays"))
     open(f"configs/JP/overlays/{n}.yaml", "w").write(t)
     sym = f"configs/USA/overlays/sym.{n}.txt"
     if os.path.exists(sym): open(f"configs/JP/overlays/sym.{n}.txt", "w").write(shift_text(open(sym).read()))
@@ -134,7 +134,7 @@ for n in names:
     if os.path.isdir(d):
         for f in os.listdir(d):
             if not f.endswith(".c") and os.path.isfile(os.path.join(d, f)):
-                dst = os.path.join(d.replace("src/overlays", "src/jp/overlays"), f)
+                dst = os.path.join(d.replace("src/overlays", "src-jp/overlays"), f)
                 os.makedirs(os.path.dirname(dst), exist_ok=True)
                 open(dst, "wb").write(open(os.path.join(d, f), "rb").read())
 import glob
@@ -147,6 +147,6 @@ subprocess.run([sys.executable, "tools/scripts/jp_port_c.py", "--overlay", US, J
 for r, _, fs in os.walk("src/overlays"):
     for f in fs:
         if not f.endswith((".c", ".h")):
-            dst = os.path.join(r.replace("src/overlays", "src/jp/overlays"), f); os.makedirs(os.path.dirname(dst), exist_ok=True)
+            dst = os.path.join(r.replace("src/overlays", "src-jp/overlays"), f); os.makedirs(os.path.dirname(dst), exist_ok=True)
             open(dst, "wb").write(open(os.path.join(r, f), "rb").read())
 print(len(names), "overlays generated")

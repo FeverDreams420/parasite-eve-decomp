@@ -26,7 +26,7 @@ share most C with the USA build. Next steps are in the commit that follows this 
 ## JP target (`make VERSION=JP`)
 
 JP is a separate target, not a mode of the USA build: `configs/JP/`, `linkers/JP/`,
-`build/JP/`, and (later) its own sources under `src/jp/`.
+`build/JP/`, and (later) its own sources under `src-jp/`.
 
 Stage 1 is done: `make VERSION=JP split build check` reassembles `SLPS_012.30` byte for
 byte (sha1 411bd943...) from one splat asm segment, with the USA function names carried
@@ -42,7 +42,7 @@ inside data to `.word`, because GAS expands them and shifts every later address.
 `docs/jp_overlay_map.csv` locates every USA overlay slice in the JP `PE.IMG` (small offset deltas;
 `tools/scripts/jp_overlay_map.py`). `tools/scripts/jp_overlay_gen.py` writes `configs/JP/overlays/*.yaml`
 from the USA configs (JP offsets and sha1, window vrams moved, symbol addresses mapped through the pairs
-of USA/JP instruction operands) and ports the sources to `src/jp/overlays` (`jp_port_c.py --overlay`).
+of USA/JP instruction operands) and ports the sources to `src-jp/overlays` (`jp_port_c.py --overlay`).
 `tools/scripts/jp_overlay_check.py --all` builds and checks them: 187 of 190 overlay slices match
 byte for byte (two slices have no config; `menu_memcard` is JP code that differs after offset 0x6B4C).
 JP moved the overlay windows: mdec_diag and menu_memcard by -0x540, boot_display by -0x400, the rest

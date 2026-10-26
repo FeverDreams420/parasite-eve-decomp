@@ -1986,6 +1986,4 @@ DecDCTin = 0x8010BA60;
 DecDCTout = 0x8010BADC;
 DecDCToutCallback = 0x8010BB98;
 DecDCTvlc2 = 0x8010C35C;
-MenuCard_FlipScreenPages = 0x80127448;
 MenuCard_ResetDisplayState = 0x8012A448;
-MenuCard_StopVideo = 0x8012AD9C;

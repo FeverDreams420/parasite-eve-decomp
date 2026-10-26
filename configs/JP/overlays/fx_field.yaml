@@ -7,7 +7,7 @@ options:
   platform: psx
   compiler: GCC
   asm_path: asm/JP/overlays/fx_field
-  src_path: src/jp/overlays/fx_field
+  src_path: src-jp/overlays/fx_field
   build_path: build/JP/overlays/fx_field
   ld_script_path: linkers/JP/overlays/fx_field.ld
   undefined_funcs_auto_path: linkers/JP/overlays/undefined_funcs_auto.fx_field.txt
