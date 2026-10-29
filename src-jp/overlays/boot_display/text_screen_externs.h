@@ -9,7 +9,7 @@ extern u32 g_GameStateFlags, g_FieldPadPressed;
 extern u32 g_FieldPadBits;
 extern s32 g_BootDisplayDone;
 extern u32 g_BootDisplayFrameCounter;
-extern void func_8012562C(void);
+extern void func_8012522C(void);
 s32 BootDisplay_DrawTextBlock(void);
 extern void Field_HandleStateTransition(void);
 #endif /* PE1_EXT_TEXT_SCREEN */

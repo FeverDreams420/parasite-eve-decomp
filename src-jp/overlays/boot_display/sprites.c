@@ -4,6 +4,8 @@
 
 #include "sprites_externs.h"
 
+void func_8012422C(void *primitive, u16 x, u16 y, s32 u, s32 v);
+
 void BootDisplay_InitDisplayResources(void) {
     s16 rect[4];
     char *resource;
@@ -206,7 +208,7 @@ void BootDisplay_QueueTintedSprite(u16 x, u16 y, u8 color) {
     char *primitive = g_BootDisplayPrimitiveCursor;
     s32 packed = BootDisplay_GetGlyphIndex(color);
 
-    func_8012462C(primitive, x, y, (packed & 15) << 4, packed & 0xF0);
+    func_8012422C(primitive, x, y, (packed & 15) << 4, packed & 0xF0);
     AddPrim(g_BootDisplayOrderingTable + 0x2C, primitive);
     g_BootDisplayPrimitiveCursor += 0x1C;
 }
