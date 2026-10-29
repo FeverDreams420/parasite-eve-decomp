@@ -75,12 +75,12 @@ taken from the USA report):
 
 | | functions matched | code bytes matched |
 | --- | ---: | ---: |
-| Main: game code | 1335 of 2333 (57.2%) | 404,056 of 1,932,572 (20.9%) |
+| Main: game code | 1558 of 2333 (66.8%) | 446,776 of 1,932,572 (23.1%) |
 | Main: PsyQ libraries | 523 of 611 (85.6%) | 78,612 of 81,296 (96.7%) |
 | Room overlays | 7929 of 7929 | 2,390,640 of 2,390,640 |
 | Battle scene overlays | 1194 of 1194 | 407,388 of 407,388 |
 | System overlays | 25 of 25 | 6,916 of 6,916 |
-| **Total, with the two overlays added back** | **11,091 of 12,177 (91.1%)** | **3,335,736 of 4,866,936 (68.5%)** |
+| **Total, with the two overlays added back** | **11,314 of 12,177 (92.9%)** | **3,378,456 of 4,866,936 (69.4%)** |
 
 USA is 100% of 11,646 functions. The code-byte figure counts the asm data blobs of main as
 code, as the USA report does, so it is dominated by the unconverted main.
