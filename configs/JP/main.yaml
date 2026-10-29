@@ -616,8 +616,22 @@ segments:
       - [0x7DA9C, c, psyq/libapi/a10]
       - [0x7DAAC, c, akao/sequencer]
       - [0x8138C, asm, jp/text_8138C]
+  - [0xB2388]
+  # The field engine starts at the image's `_end`; a segment of its own keeps the
+  # section order (as in the USA config).
+  - name: field_engine
+    type: code
+    start: 0xB2388
+    vram: 0x800C1B88
+    align: 4
+    subalign: 4
+    bss_size: 0x0
+    subsegments:
+      - [0xB2388, rodata, jp/ro_B2388]
+      - [0xB23E8, .rodata, fieldfx/sprite_render]
+      - [0xB23FC, rodata, jp/ro_B23FC]
       - [0xB25B8, c, fieldfx/object_script]
-      - [0xB316C, asm, jp/text_B316C]
+      - [0xB316C, c, fieldfx/sprite_render]
       - [0xB6170, c, fieldfx/collision]
       - [0xB701C, c, fieldfx/model]
       - [0xB7E60, c, fieldfx/glow]

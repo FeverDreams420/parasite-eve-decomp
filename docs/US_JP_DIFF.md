@@ -75,12 +75,12 @@ taken from the USA report):
 
 | | functions matched | code bytes matched |
 | --- | ---: | ---: |
-| Main: game code | 1677 of 2333 (71.9%) | 486,832 of 1,932,572 (25.2%) |
+| Main: game code | 1690 of 2333 (72.4%) | 499,124 of 1,932,012 (25.8%) |
 | Main: PsyQ libraries | 523 of 611 (85.6%) | 78,612 of 81,296 (96.7%) |
 | Room overlays | 7929 of 7929 | 2,390,640 of 2,390,640 |
 | Battle scene overlays | 1194 of 1194 | 407,388 of 407,388 |
 | System overlays | 25 of 25 | 6,916 of 6,916 |
-| **Total, with the two overlays added back** | **11,433 of 12,177 (93.9%)** | **3,418,512 of 4,866,936 (70.2%)** |
+| **Total, with the two overlays added back** | **11,446 of 12,177 (94.0%)** | **3,430,804 of 4,866,376 (70.5%)** |
 
 USA is 100% of 11,646 functions. The code-byte figure counts the asm data blobs of main as
 code, as the USA report does, so it is dominated by the unconverted main.
@@ -96,5 +96,5 @@ The field-effect engine (`fieldfx/object_script`, `collision`, `model`, `glow`, 
 `task_list`, `sprite_effects`, `emitters`, `vector`, `angle`: 280 functions) is built from C at
 JP offsets (USA offset minus 0x540). Splitting that code out of the single asm block made
 objdiff see its functions, so the function total grew (12,177 against 11,641) while the
-matched count rose; `sprite_render` and `geometry` are still asm because their jump-table
-rodata sits inside the engine's data block.
+matched count rose; `sprite_render` is built from C too, in a `field_engine` segment of its own as in the USA
+config (its jump table sits before the engine's text); `geometry` is still asm.
