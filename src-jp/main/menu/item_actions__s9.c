@@ -158,7 +158,30 @@ static inline int Menu_CanEquipSelection(int selection)
             usable = 1;
     }
     return usable;
-}inline void Menu_CreateEquipItemSelectionView(MenuWidgetNode *parent);
+}
+
+/* Same panel as Menu_CreateEquipItemSelectionView. */
+static inline void Menu_CreateEquipItemSelectionView(MenuWidgetNode *parent)
+{
+    MenuWidgetNode *root;
+    MenuWidgetNode *node;
+
+    root = MenuWidget_CreateSimpleNode(5, parent, 0, 0);
+    node = MenuWidget_CreateNode(5, root, root);
+    root->draw = Menu_StepEquipSlotSelect;
+    root->update = Menu_StepSkillScreen;
+    node->draw = Menu_DrawSoundTestList;
+    if (g_MenuLayoutLocked != 0)
+        MenuWidget_ClearColumnLayout(node);
+    else if (g_InvItemUsableFlag == 0)
+        MenuWidget_SetColumnLayout(node, 0x12);
+    if (node->cursor_x >= 0)
+        MenuWidget_SetCurrentNode(node);
+    root->disabled = 1;
+    node = MenuWidget_CreateNode(0x1B, root, root);
+    node->draw = Menu_DrawItemListInvPanel;
+    MenuWidget_ClearColumnLayout(node);
+}
 
 
 /* Input handler of the inventory item list: up returns to the equipment
