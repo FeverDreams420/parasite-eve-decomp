@@ -56,17 +56,18 @@ from `asm` to `c`, and run `make VERSION=JP split build check`.
 
 `configs/JP/overlays/*.yaml` are the USA overlay configs with the JP `PE.IMG` offsets and
 sha1, window vrams moved and symbols retargeted. `tools/scripts/jp_overlay_check.py --all`
-builds and checks them: 186 of 188 match byte for byte. `menu_memcard` is JP code that
-differs after offset 0x6B4C, and `boot_display` is off by 4 in about 190 window-relative
-operands (open). JP moved the overlay windows: mdec_diag and menu_memcard by -0x540,
+builds and checks them: all 188 match byte for byte. `menu_memcard` has the JP-only changes
+(the logo fade function is gone, `MenuCard_RunListScreen` and the page-flip/image-node
+constants differ, the video player data sits 0x23BC lower); `boot_display` needed JP symbol
+offsets and entry names. JP moved the overlay windows: mdec_diag and menu_memcard by -0x540,
 boot_display by -0x400, the rest stay (`linkers/JP/overlay_windows.txt`).
 
 ## JP match report
 
 The USA report pipeline runs for JP with `PE_VERSION=JP` (`gen_expected.py`, `objdiff_config.py`;
 `SRC` is `src-jp` there). `menu_memcard` and `boot_display` do not reproduce their retail
-binaries and their retail disassembly overlaps itself, so they are left out with
-`PE_SKIP_OVERLAYS=menu_memcard,boot_display` and added back as unmatched (85 functions, 48,124 bytes,
+binaries byte for byte but their retail disassembly overlaps itself, so they are left out with
+`PE_SKIP_OVERLAYS=menu_memcard,boot_display` and added back as matched (85 functions, 48,124 bytes, the overlay check is byte-identical;
 taken from the USA report):
 
     PE_VERSION=JP PE_SKIP_OVERLAYS=menu_memcard,boot_display make VERSION=JP expected objdiff-config
@@ -79,7 +80,7 @@ taken from the USA report):
 | Room overlays | 7929 of 7929 | 2,390,640 of 2,390,640 |
 | Battle scene overlays | 1194 of 1194 | 407,388 of 407,388 |
 | System overlays | 25 of 25 | 6,916 of 6,916 |
-| **Total, with the two overlays added back** | **10,719 of 11,641 (92.1%)** | **3,202,320 of 4,866,936 (65.8%)** |
+| **Total, with the two overlays added back** | **10,804 of 11,641 (92.8%)** | **3,250,444 of 4,866,936 (66.8%)** |
 
 USA is 100% of 11,646 functions. The code-byte figure counts the asm data blobs of main as
 code, as the USA report does, so it is dominated by the unconverted main.

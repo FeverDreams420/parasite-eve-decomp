@@ -17,9 +17,9 @@ MenuCard_StopVideo = 0x8012AD9C; // type:func
 // provide: g_MenuCardAdvanceFadeEntry = 0x80192D0C;
 // provide: g_MenuCardUpdateFadeDisplayEntry = 0x80192D60;
 // provide: g_MenuCardDecreaseFadeEntry = 0x80192DF4;
-// provide: g_MenuCardCreateFadeImageNodeEntry = 0x8019319C;
+// provide: g_MenuCardCreateFadeImageNodeEntry = 0x80192E24;
 // provide: g_MenuCardAttachFadePayloadEntry = 0x80192E44;
-// provide: g_MenuCardStepFadeToImagesEntry = 0x80193200;
+// provide: g_MenuCardStepFadeToImagesEntry = 0x80192E88;
 
 // The first video player's file table (video.c, 47 VideoEntry records of
 // 0x14 bytes) and the file names its records point at ("\FMV000.STR;1"

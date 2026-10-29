@@ -24,7 +24,6 @@ extern u8 *g_CdLoadAreaBase;
 extern RenderBufferPrefix D_800B08F8;
 extern u8 g_MenuCardCreateFadeImageNodeEntry[];
 
-void MenuCard_ShowLogoFade(void);
 void Draw_InitBuffers(void);
 void GameTime_InitCounter0(void);
 void GameTime_InitCounter2(void);

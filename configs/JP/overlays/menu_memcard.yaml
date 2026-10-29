@@ -70,29 +70,29 @@ segments:
       - [0x6B04, c, page_flip]
       - [0x6C78, c, image_nodes]
       - [0x7874, c, list_screen]
-      - [0x9108, c, video_playback]
-  - [0xA7A8]
+      - [0x8D90, c, video_playback]
+  - [0xA430]
   # The fade code resolves its local jumps at the 0x801887A4 link base, 0x4C
   # (the size of the copied event-flag handler) below the video player's.
   - name: menu_memcard_fade
     type: code
-    start: 0xA7A8
-    vram: 0x80192F4C
+    start: 0xA430
+    vram: 0x80192BD4
     align: 4
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0xA7A8, c, fade]
-  - [0xAA64]
+      - [0xA430, c, fade]
+  - [0xA6EC]
   - name: menu_memcard_tail
     type: code
-    start: 0xAA64
+    start: 0xA6EC
     vram: 0x8012B3A8
     align: 4
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - {start: 0xAA64, type: data, name: menu_memcard_data, linker_section_order: .text, linker_section: .code_data}
+      - {start: 0xA6EC, type: data, name: menu_memcard_data, linker_section_order: .text, linker_section: .code_data}
   - [0xB000]
 # source slice: scanner
 # extract locally with: dd if=disc/extracted/PE.IMG of=original/JP/overlays/menu_memcard.bin bs=2048 skip=964 count=22

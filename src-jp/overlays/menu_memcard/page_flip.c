@@ -26,8 +26,8 @@ void MenuCard_FlipScreenPages(void) {
         g_MemcardCurrentScreen = g_MemcardScreenBuffers[page];
         g_MemcardScreenPage = page;
         main_rect.x = 0;
-        y = 0x14;
-        if (page == 0) y = 0x104;
+        y = 0x13;
+        if (page == 0) y = 0x103;
         main_rect.w = 0x1E0;
         main_rect.h = 0xCC;
         main_rect.y = y;

@@ -118,7 +118,7 @@ SECTIONS
 
     menu_memcard_fade_ROM_START = __romPos;
     menu_memcard_fade_VRAM = ADDR(.menu_memcard_fade);
-    .menu_memcard_fade (OVERLAY_WINDOW_ROOM + 0x3F64) : AT(menu_memcard_fade_ROM_START) SUBALIGN(4)
+    .menu_memcard_fade (OVERLAY_WINDOW_ROOM + 0x3BEC) : AT(menu_memcard_fade_ROM_START) SUBALIGN(4)
     {
         FILL(0x00000000);
         menu_memcard_fade_RODATA_START = .;

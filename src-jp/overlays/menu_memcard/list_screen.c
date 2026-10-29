@@ -100,107 +100,6 @@ void MenuCard_HandleListInput(void) {
     g_MemcardPrevPad = pad;
 }
 
-/* Fade a two-part logo in and out over 480 frames on the flipping screens. */
-void MenuCard_ShowLogoFade(void) {
-    MemcardSprite sprites[2][2];
-    MemcardDrawTPage tpages[2][2];
-    RECT overlay;
-    MemcardTim *tim;
-    MemcardTimBlock *block;
-    MemcardSprite *sprite;
-    MemcardDrawTPage *tpage;
-    s32 i;
-    s32 page;
-    s32 shade;
-
-    tim = (MemcardTim *)&g_MemcardImageBundle[g_MemcardImageOffsets[8]];
-    LoadImage(&tim->clut.rect, tim->clut.data);
-    block = &tim->clut;
-    block = (MemcardTimBlock *)((u32 *)block + (block->size >> 2));
-    LoadImage(&block->rect, block->data);
-    DrawSync(0);
-
-    for (i = 0; i < 2; i++) {
-        sprite = sprites[i & 1];
-        tpage = tpages[i & 1];
-        SetDrawTPage(tpage, 0, 0, 0x18);
-        sprite->len = 4;
-        sprite->code = 0x64;
-        sprite->x0 = 0x20;
-        sprite->y0 = 0x58;
-        sprite->u0 = sprite->v0 = 0;
-        sprite->clut = 0x7800;
-        sprite->w = 0x100;
-        sprite->h = 0x40;
-        sprite++;
-        SetDrawTPage(tpage + 1, 0, 0, 0x19);
-        sprite->len = 4;
-        sprite->code = 0x64;
-        sprite->x0 = 0x11C;
-        sprite->y0 = 0x50;
-        sprite->u0 = sprite->v0 = 0;
-        sprite->clut = 0x7800;
-        sprite->w = 8;
-        sprite->h = 0x50;
-    }
-
-    {
-        MemcardScreenBuffer *first = g_MemcardScreenBuffers[0];
-        MemcardScreenBuffer *second = g_MemcardScreenBuffers[1];
-
-        second->disp.isrgb24 = 0;
-        first->disp.isrgb24 = 0;
-    }
-    SetDispMask(1);
-
-    for (i = 0; i < 480; i++) {
-        page = g_MemcardScreenPage == 0;
-        g_MemcardScreenPage = page;
-        g_MemcardCurrentScreen = g_MemcardScreenBuffers[page];
-        sprite = sprites[i & 1];
-        tpage = tpages[i & 1];
-        if (i < 32) {
-            shade = i * 4;
-        } else if (i < 424) {
-            if (i >= 392) {
-                shade = (424 - i) * 4;
-            } else {
-                shade = 0x80;
-            }
-        } else {
-            shade = 0;
-        }
-        sprite->r0 = sprite->g0 = sprite->b0 = shade;
-        DrawPrim(tpage);
-        DrawPrim(sprite);
-        sprite++;
-        sprite->r0 = sprite->g0 = sprite->b0 = shade;
-        DrawSync(0);
-        if (g_MemcardCurrentScreen->overlay.w > 0) {
-            overlay = g_MemcardCurrentScreen->overlay;
-            overlay.x = overlay.x * 3 >> 1;
-            if (g_MemcardScreenPage == 0) {
-                overlay.y += 240;
-            }
-            overlay.w = overlay.w * 3 >> 1;
-            LoadImage(&overlay, g_MemcardCurrentScreen->overlayImage);
-        }
-        VSync(0);
-        ResetGraph(1);
-        PutDrawEnv(&g_MemcardCurrentScreen->draw);
-        PutDispEnv(&g_MemcardCurrentScreen->disp);
-    }
-
-    SetDispMask(0);
-    {
-        MemcardScreenBuffer *first = g_MemcardScreenBuffers[0];
-        MemcardScreenBuffer *second = g_MemcardScreenBuffers[1];
-
-        second->disp.isrgb24 = 1;
-        first->disp.isrgb24 = 1;
-    }
-}
-
 /* Run the title/card-selection screen, then restore the game display.
  * Five pins and the header's two symbol views retain retail allocation. */
 s32 MenuCard_RunListScreen(void) {
@@ -280,10 +179,6 @@ s32 MenuCard_RunListScreen(void) {
         DrawSync(0);
         VSync(0);
         VSync(0);
-        if (g_LogoFadePlayed == 0) {
-            g_LogoFadePlayed = 1;
-            MenuCard_ShowLogoFade();
-        }
         if (titleMode != 0) {
             if (MenuCard_PlayVideo(1) != 0) {
                 waitFrames = 0;
@@ -305,22 +200,22 @@ s32 MenuCard_RunListScreen(void) {
             rect.x = 0;
             rect.y = 0;
             rect.w = 0x1E0;
-            rect.h = 0x14;
+            rect.h = 0x13;
             ClearImage(&rect, 0, 0, 0);
             rect.x = 0;
-            rect.y = 0xE0;
+            rect.y = 0xDF;
             rect.w = 0x1E0;
-            rect.h = 0x10;
+            rect.h = 0x11;
             ClearImage(&rect, 0, 0, 0);
             rect.x = 0;
             rect.y = 0xF0;
             rect.w = 0x1E0;
-            rect.h = 0x14;
+            rect.h = 0x13;
             ClearImage(&rect, 0, 0, 0);
             rect.x = 0;
-            rect.y = 0x1D0;
+            rect.y = 0x1CF;
             rect.w = 0x1E0;
-            rect.h = 0x10;
+            rect.h = 0x11;
             ClearImage(&rect, 0, 0, 0);
             initialPage = g_MemcardScreenPage == 0;
             g_MemcardScreenPage = initialPage;
