@@ -75,12 +75,12 @@ taken from the USA report):
 
 | | functions matched | code bytes matched |
 | --- | ---: | ---: |
-| Main: game code | 1048 of 1797 (58.3%) | 318,764 of 1,932,572 (16.5%) |
+| Main: game code | 1335 of 2333 (57.2%) | 404,056 of 1,932,572 (20.9%) |
 | Main: PsyQ libraries | 523 of 611 (85.6%) | 78,612 of 81,296 (96.7%) |
 | Room overlays | 7929 of 7929 | 2,390,640 of 2,390,640 |
 | Battle scene overlays | 1194 of 1194 | 407,388 of 407,388 |
 | System overlays | 25 of 25 | 6,916 of 6,916 |
-| **Total, with the two overlays added back** | **10,804 of 11,641 (92.8%)** | **3,250,444 of 4,866,936 (66.8%)** |
+| **Total, with the two overlays added back** | **11,091 of 12,177 (91.1%)** | **3,335,736 of 4,866,936 (68.5%)** |
 
 USA is 100% of 11,646 functions. The code-byte figure counts the asm data blobs of main as
 code, as the USA report does, so it is dominated by the unconverted main.
@@ -91,3 +91,10 @@ A USA translation unit whose JP build differs in some functions is built as seve
 `<tu>__s*.c` hold runs of functions identical to USA, `<tu>__g*.c` hold functions decompiled
 by hand against the JP bytes (JP behaviour differs from USA), and `__x*` files hold JP-only
 functions. Each is a `c` unit placed at its JP address in `configs/JP/main.yaml`.
+
+The field-effect engine (`fieldfx/object_script`, `collision`, `model`, `glow`, `burst`,
+`task_list`, `sprite_effects`, `emitters`, `vector`, `angle`: 280 functions) is built from C at
+JP offsets (USA offset minus 0x540). Splitting that code out of the single asm block made
+objdiff see its functions, so the function total grew (12,177 against 11,641) while the
+matched count rose; `sprite_render` and `geometry` are still asm because their jump-table
+rodata sits inside the engine's data block.
