@@ -3911,3 +3911,4 @@ g_TextboxNameGlyphBuf = 0x8009C85C;
 g_TextboxNameGlyphCount = 0x8009C863;
 g_MemCardSearchPatternPtr = 0x80092230;
 D_800F32D8 = 0x800F2D98;
+g_TextboxFontPages = 0x8009113C;
