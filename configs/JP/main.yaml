@@ -273,7 +273,7 @@ segments:
       - [0x51838, c, draw/wipe]
       - [0x52900, c, menu/widget__s0]
       - [0x52E14, c, menu/widget__g43]
-      - [0x53028, asm, jp/text_53028]
+      - [0x53028, c, menu/widget__s1]
       - [0x5417C, c, menu/widget__g44]
       - [0x54AC8, c, menu/widget__s2]
       - [0x55664, c, script/sfx_queue]
