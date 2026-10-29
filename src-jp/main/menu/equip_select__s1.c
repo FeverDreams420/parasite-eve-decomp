@@ -39,15 +39,6 @@ int g_MenuSpendArrowDirection;
 #undef NULL
 
 
-/* The retail display clamps only the upper bound; negative totals survive. */
-static inline int clampedStatTotal(ItemDataRecord *item, int index)
-{
-    int value = item->baseStats[index] + item->bonusStats[index];
-    if (value > 999)
-        value = 999;
-    return value;
-}
-
 void Menu_CreateInventoryListView(MenuWidgetNode *parent) {
     MenuWidgetNode *root;
     MenuWidgetNode *node;

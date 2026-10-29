@@ -88,38 +88,6 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
     return output;
 }
 
-static inline ItemDataRecord *LookupArmorTrackedItem(int index) {
-    int value, saved;
-    ItemDataRecord *result;
-    /* Match the shared armor pointer across reserve scanning and rollback. */
-    register ItemDataRecord *output asm("$16") = 0;
-
-    if (index >= 0 && index < g_InvSlotLimit) {
-        value = g_InvItemPtr[index];
-        saved = value;
-        if (value - 0x100U < 0x80U) {
-            result = &g_InventoryRuntime.equipment[value - 0x100];
-        } else {
-            if (value - 1U < 0xFFU) {
-                result = Item_LookupBaseData(value - 1);
-            } else if (saved - 0x200U < 9U) {
-                result = &((ItemDataRecord *)g_KeyItemDataTable)[saved];
-            } else {
-                result = 0;
-            }
-        }
-        output = result;
-    }
-    return output;
-}
-
-static inline int FilteredSlot(int index) {
-    int slot;
-    if (index >= 0 && index < g_InvPackedListCount) slot = g_InvPackedList[index];
-    else slot = 0;
-    return slot;
-}
-
 /* Historical name: checks free capacity against the armor-derived reserve.
  * Also selects Aya's inventory and optionally returns the required reserve. */
 int Inv_GetActiveSlotCount(int *out) {
@@ -222,72 +190,6 @@ void Inv_BuildStorageDisplay(void) {
     *LookupTrackedItem(g_InvSavedSelectionIndex0) = g_InvSavedSelectionRecord0;
     RestoreList(g_InvSavedSelectionFromStorage1);
     *LookupTrackedItem(g_InvSavedSelectionIndex1) = g_InvSavedSelectionRecord1;
-}
-
-static inline ItemDataRecord *LookupActiveItem(int index) {
-    int value, saved;
-    ItemDataRecord *result;
-
-    if (index >= 0 && index < g_InvSlotLimit) {
-        value = g_InvItemPtr[index];
-        saved = value;
-        if (value - 0x100U < 0x80U) {
-            result = &g_InventoryRuntime.equipment[value - 0x100];
-        } else {
-            if (value - 1U < 0xFFU) {
-                return Item_LookupBaseData(value - 1);
-            }
-            if (saved - 0x200U < 9U) {
-                result = &((ItemDataRecord *)g_KeyItemDataTable)[saved];
-            } else {
-                result = 0;
-            }
-        }
-        return result;
-    }
-    return 0;
-}
-
-/* Ammunition pool record. An inline call keeps the index scaled before the
- * table address is added, as retail does; a direct &g_InvSpecialItemRecords[kind - 5]
- * folds the -5 into the address (lev 16). */
-static inline ItemDataRecord *AmmoPoolRecord(int index) {
-    return &g_InvSpecialItemRecords[index];
-}
-static inline void ClampAmmo(ItemDataRecord *item) {
-    int current = item->ammo;
-    if (item->baseStats[2] + item->bonusStats[2] < 1000 ?
-        item->baseStats[2] + item->bonusStats[2] < current : 999 < current) item->ammo = (item->baseStats[2] + item->bonusStats[2] < 1000 ?
-        item->baseStats[2] + (u16)item->bonusStats[2] : 999);
-}
-static inline void DeleteSlot(int slot) {
-    int id = g_InvItemPtr[slot];
-    g_InvItemPtr[slot] = 0;
-    if (id >= 256) g_InventoryRuntime.equipment[id - 256].iconId = 0;
-}
-static inline int ItemKind(int slot) {
-    ItemDataRecord *item = LookupActiveItem(slot);
-    if (item) return item->kind;
-    return 0;
-}
-static inline int FindWeapon(int kind, int excluded) {
-    s16 *slot = g_InvItemPtr;
-    s16 *skip = slot + excluded;
-    while (slot < g_InvItemPtr + g_InvSlotLimit) {
-        if (slot != skip && Inv_LookupItemRecordScaled(*slot)->kind == kind) break;
-        ++slot;
-    }
-    if (slot < g_InvItemPtr + g_InvSlotLimit) return slot - g_InvItemPtr;
-    return -1;
-}
-static inline void SetTracked(unsigned index, int value) {
-    if (index < 4) g_InventoryRuntime.tracked[index] = value;
-}
-static inline int GetTracked(unsigned index) {
-    return index < 4 ? g_InventoryRuntime.tracked[index] : -1;
-}
-static inline int IsList(s16 *list) {
-    return g_InvItemPtr == list;
 }
 
 int g_MenuBattleEquipMode;

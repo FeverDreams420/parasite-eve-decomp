@@ -74,12 +74,19 @@ taken from the USA report):
 
 | | functions matched | code bytes matched |
 | --- | ---: | ---: |
-| Main: game code | 986 of 1797 (54.9%) | 286,128 of 1,932,572 (14.8%) |
+| Main: game code | 1048 of 1797 (58.3%) | 318,764 of 1,932,572 (16.5%) |
 | Main: PsyQ libraries | 523 of 611 (85.6%) | 78,612 of 81,296 (96.7%) |
 | Room overlays | 7929 of 7929 | 2,390,640 of 2,390,640 |
 | Battle scene overlays | 1194 of 1194 | 407,388 of 407,388 |
 | System overlays | 25 of 25 | 6,916 of 6,916 |
-| **Total, with the two overlays added back** | **10,657 of 11,641 (91.5%)** | **3,169,684 of 4,866,936 (65.1%)** |
+| **Total, with the two overlays added back** | **10,719 of 11,641 (92.1%)** | **3,202,320 of 4,866,936 (65.8%)** |
 
 USA is 100% of 11,646 functions. The code-byte figure counts the asm data blobs of main as
 code, as the USA report does, so it is dominated by the unconverted main.
+
+## JP-specific functions
+
+A USA translation unit whose JP build differs in some functions is built as several files:
+`<tu>__s*.c` hold runs of functions identical to USA, `<tu>__g*.c` hold functions decompiled
+by hand against the JP bytes (JP behaviour differs from USA), and `__x*` files hold JP-only
+functions. Each is a `c` unit placed at its JP address in `configs/JP/main.yaml`.

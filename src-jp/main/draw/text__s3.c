@@ -74,19 +74,6 @@ static inline void PushCursor(void)
     }
 }
 
-/* Saves a known cursor position: the entry is filled before the stack moves. */
-static inline void SaveCursor(int x, int y)
-{
-    DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
-    if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
-        stack->x = x;
-        stack->y = y;
-        g_TextCursorStack = (int *)(stack + 1);
-    } else {
-        Inv_BoundsCheckAssertStub(2);
-    }
-}
-
 static inline void PopCursor(void)
 {
     DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
@@ -131,33 +118,6 @@ static inline RenderTexturedQuad *AllocBarQuad(void)
         prim->color.bytes.code = 0x2C;
     }
     return prim;
-}
-
-static inline int DecodeGlyph(int input) {
-    register int code asm("$4") = input;
-    int glyph;
-    glyph = (u8)code;
-    if (g_TextRenderMode) {
-        int page = g_TextRenderMode << 8;
-        glyph += page;
-        g_TextRenderMode = 0;
-    }
-    if ((u8)code >= 250) {
-        g_TextRenderMode = (u8)code - 250;
-        glyph = -1;
-    }
-    return glyph;
-}
-
-/* Draws text from the current cursor position without saving it first. */
-static inline void PrintTextHere(u8 *text) {
-    if (text) {
-        SaveCursor(g_TextCursorX, g_TextCursorY);
-        while (*text != 255) {
-            Draw_AllocTexturedQuad(*text++);
-        }
-        PopCursor();
-    }
 }
 
 void Draw_SetFontVariant(int variant) {
@@ -435,21 +395,6 @@ void Draw_AllocTexturedRect(int value, int width)
     for (i = 0; i < width; i++) {
         Draw_AllocTexturedQuad(Digit(i < width - 1, value / divisor));
         divisor /= 10;
-    }
-}
-
-/* Moves the cursor and saves the new position. */
-static inline void PushCursorAt(int x, int y)
-{
-    DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
-
-    SetCursor(x, y);
-    if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
-        stack->x = x;
-        stack->y = y;
-        g_TextCursorStack = (int *)(stack + 1);
-    } else {
-        Inv_BoundsCheckAssertStub(2);
     }
 }
 

@@ -95,61 +95,6 @@ void Draw_StatePop(void) {
     }
 }
 
-/* The glyph renderers move the cursor at g_TextCursorX/g_TextCursorY and save it on
- * the same stack as Draw_StatePush. */
-static inline void SetCursor(int x, int y)
-{
-    g_TextCursorX = x;
-    g_TextCursorY = y;
-}
-
-/* Moves the cursor right by `dx`, rewriting y as the stored pair. */
-static inline void AdvanceCursor(int dx)
-{
-    int x = g_TextCursorX;
-    int y = g_TextCursorY;
-
-    g_TextCursorX = x + dx;
-    g_TextCursorY = y;
-}
-
-static inline void PushCursor(void)
-{
-    DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
-    if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
-        int x = g_TextCursorX, y = g_TextCursorY;
-        g_TextCursorStack = (int *)(stack + 1);
-        stack->x = x;
-        stack->y = y;
-    } else {
-        Inv_BoundsCheckAssertStub(2);
-    }
-}
-
-/* Saves a known cursor position: the entry is filled before the stack moves. */
-static inline void SaveCursor(int x, int y)
-{
-    DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
-    if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
-        stack->x = x;
-        stack->y = y;
-        g_TextCursorStack = (int *)(stack + 1);
-    } else {
-        Inv_BoundsCheckAssertStub(2);
-    }
-}
-
-static inline void PopCursor(void)
-{
-    DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
-    if ((DrawTextCursorPair *)g_TextCursorStackBottom < stack) {
-        g_TextCursorStack = (int *)(stack - 1);
-        SetCursor(stack[-1].x, stack[-1].y);
-    } else {
-        Inv_BoundsCheckAssertStub(3);
-    }
-}
-
 unsigned int g_DrawPrimColor;
 unsigned int g_DrawColorShaded;
 
@@ -435,67 +380,6 @@ static inline RenderTexturedQuad *AllocBarQuad(void)
         prim->color.bytes.code = 0x2C;
     }
     return prim;
-}
-
-static inline int DecodeGlyph(int input) {
-    register int code asm("$4") = input;
-    int glyph;
-    glyph = (u8)code;
-    if (g_TextRenderMode) {
-        int page = g_TextRenderMode << 8;
-        glyph += page;
-        g_TextRenderMode = 0;
-    }
-    if ((u8)code >= 250) {
-        g_TextRenderMode = (u8)code - 250;
-        glyph = -1;
-    }
-    return glyph;
-}
-
-/* Draws text from the current cursor position without saving it first. */
-static inline void PrintTextHere(u8 *text) {
-    if (text) {
-        SaveCursor(g_TextCursorX, g_TextCursorY);
-        while (*text != 255) {
-            Draw_AllocTexturedQuad(*text++);
-        }
-        PopCursor();
-    }
-}
-
-static inline void PrintSign(u8 *text)
-{
-    if (text) {
-        PushCursor();
-        while (*text != 255) {
-            Draw_AllocTexturedQuad(*text++);
-        }
-        PopCursor();
-    }
-}
-
-static inline int Digit(int leading, int value)
-{
-    if (!leading || value != 0) {
-        return (u8)(value % 10);
-    }
-    return 15;
-}
-
-/* Moves the cursor and saves the new position. */
-static inline void PushCursorAt(int x, int y)
-{
-    DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
-
-    SetCursor(x, y);
-    if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
-        stack->x = x;
-        stack->y = y;
-        g_TextCursorStack = (int *)(stack + 1);
-    } else {
-        Inv_BoundsCheckAssertStub(2);
-    }
 }
 
 /* One textured quad of the bar: glyph texels starting `u` columns into the
